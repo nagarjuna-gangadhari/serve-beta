@@ -1,0 +1,12 @@
+Dear {{user}},
+
+You have shown interest in Other Skills offering. Please find Below Details for the same:
+
+Task name: {{subject|safe}}
+Offering Type: Other Skills
+Category: {{category}}
+Status: Approved
+
+Thanks & Regards
+
+

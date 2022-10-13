@@ -1,0 +1,362 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+{% block head_styles %}
+{{ block.super }}
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="/static/css/mytrainings.css"/>
+<style>
+
+
+label{
+font-size:16px;
+color: white;
+font-weight:bold;
+
+
+}
+
+.form{
+
+
+}
+
+.hdr{ width:104.2%;height:130px;  
+    background-color: #F25A22;
+    margin-left:-20px;margin-right:-20px;
+    box-shadow:0 10px 8px -6px black;
+}
+.hdr > h1{  color:white; 
+padding-top:25px;
+font-size:40px;
+font-weight:bold;
+width: 46%;
+  display: inline-block;
+  margin-left: 5%;
+  text-align: center;
+ }
+
+ol>li{ padding:20px;  }
+
+
+div#form > form > div#form1 > label::after, div#form > form label::after{
+content:'*';
+display:inline;
+color:red;
+
+}
+
+div.hdr::before{
+display:inline;
+content: '◥';
+float:left;
+margin-top:123px;
+font-size:25px;
+
+}
+
+div.hdr::after{
+content: '◤';
+display:inlin-block;
+float:right;
+font-size:25px;
+margin-top:123px;
+right: 0;
+  position: absolute;
+    margin-right: -19px;
+}
+
+.hdr > #img1{
+
+
+border: 0;
+  position: relative;
+  height: 100%;
+  float: left;
+
+}
+.hdr > #img2{
+
+
+  border: 0;
+  position: relative;
+  height: 100%;
+  float: right;
+  display:inline-block;
+  margin-right:30px;
+}
+</style>
+{% endblock %}
+
+{% block doc_ready %}
+{{ block.super }}
+
+
+
+
+{% endblock %}
+{% block head_scripts %}
+{{ block.super }}
+{% endblock %}
+{% block body_container %}
+{{ block.super }}
+<div style='background-color:white;max-height:1500px;min-height:1080px;width:100%;padding-bottom:15px;'>
+<div class='hdr'>
+<img id='img1' alt="waiting to learn" src='/static/images/waiting_to_learn.png' />
+<h1>Children are waiting to Learn</h1>
+<img id='img2' alt="clock alarm" src='/static/images/clock_alarm.png' />
+
+</div>
+
+<div id='instr' style='width:100%;float:left;height:155px;margin:30px 20px;display:inline-block;'>
+<p>Hello <span style='color:blue'> {{ user_name|capfirst }}</span>,</p>
+<br><br>
+<p style="font-size:20px;">You can take up any one subject and start teaching the children.</p>
+<br><br>
+<p>A Volunteer takes two classes a week.</p>
+<br>
+<br>
+<p>Language Preferred&nbsp:&nbsp<span style="color:blue;font-size:15px;">{% if user_lang %}{{user_lang}}{% else %} Please update preferred language( in your profile ).{% endif %} </span> </p>
+</div>
+
+<div id='form' style='width:53.5%;float:left;height:450px;border-radius:10px;background-color:#389B39;margin:20px 10px 15px 20px;color:white;'>
+<input type='checkbox' name='flag' style='margin:30px 10px 0px 30px;' id='avial_flag'><label style='margin-bottom:30px;display:inline;padding-left:10px;'>Sorry! I am not Available Now</label>
+<br>
+<br>
+<form  style='margin:10px 30px 30px 30px;'>
+<input type='hidden' id='user_id'  value={{ user_id }}>
+<div  id='form1' >
+
+<label class='main-form' style="display:inline;margin-right:73px;margin-bottom:30px;">Select a Village  </label>:<select id='offer_sel'  class='main-form' style="margin-bottom:20px;margin-left:57px;width:175px;">
+<option value=''>Select</option>
+{% for ent in centers %}
+
+     <option value='{{ ent.center_id}}' >{{ ent.center_name}}( {{ ent.center_state }} )</option>
+
+
+
+{% endfor %}
+</select>
+
+<p style='font-size:11px; font-style:italic;'>( If you don't find a slot that suits you in a Village, please select a different Village. )</p>
+<br>
+<label style='display:inline;margin-right:91px;margin-bottom:30px;'  class='main-form'>Class Time 1    </label>:<select style='margin-left:63px;margin-bottom:30px;width:175px;' class='main-form'  id='slot1' >
+
+
+</select>
+
+<br>
+
+<label style='display:inline;margin-right:91px;margin-bottom:30px;'  class='main-form'>Class Time 2    </label>:<select  class='main-form' id='slot2' style='margin-left:61px;margin-bottom:30px;width:175px;' >
+
+
+</select><br>
+<label style='display:inline;margin-right:82px;margin-bottom:30px;'  class='main-form'>Select Course    </label>:<select  class='main-form' id='course_sel' style='margin-left:60px;margin-bottom:30px;width:175px;' >  
+
+
+</select>
+
+</div>
+<br>
+<label style='display:inline;margin-right:76px;margin-bottom:30px;' id='avail_label'  >Available From</label>: <input type='text' id='datepicker'  name='avail_from' style='margin-left:53px;width:175px;margin-bottom:30px;'>
+<br><br>
+<input id='sub_btn' type='submit' value="Confirm" class='btn' style="font-size:16px;width:41%;margin-top:-14px;margin-left:254px;" >
+</form>
+
+
+
+</div>
+
+
+
+
+<div id='ack_success' style='display:none;margin-left:50px;height:196px;width:45%;float:left;margin-top:57px;background-color:white;text-align:center;border:5px solid green;margin-bottom:'>
+<p style='margin-top:86px;'></p>
+</div>
+<div id='ack_failure' style='height:196px;display:none;width:45%;margin-left:50px;float:left;margin-top:57px;background-color:white;text-align:center;border:5px solid red;'>
+<p style='margin-top:86px;' ></p>
+</div>
+
+<div class='add' style='float:right;margin-right:23px;margin-top:19px;border-radius: 10px;margin-bottom:10px;padding: 10px 0px;text-align: center;background-color:#FFDECD;width:40%;display:inline-block;'>
+<p>Click below to Watch, how a class happens:</p>
+<a href='#videomodal'  data-toggle="modal"> <img src="/static/images/digi_c.png" style='cursor:pointer;width:92%;border-radius:10px;margin-top:19px;' /></a>
+<div style="padding:20px 5px;height:93px; ">
+   <p style='font-size:18px;'> About class :</p></br>
+   <p style="font-size:14px;">This is a recording of a class at our Tikratoli village in Jharkhand. The teacher is connected from Boston, USA, teaching 7th standard Science. Medium of instruction is Hindi
+</p>
+
+</div>
+</div>
+
+
+
+
+<div id='videomodal' class="modal hide" style="max-height:500px; min-height:200px;background-color:white;overflow-y:auto;">
+<a class="close" data-dismiss="modal" style="color:black;float:right;cursor:pointer;position:absolute;top:0px;right:0px;">X</a>
+<div  style='width:96.5%;height:20px;background-color:#F15A28;color:white;padding:10px;'>eVidyaloka ClassRoom</div>
+<iframe width="555" height="436" style=""
+src="https://www.youtube.com/embed/THyfdA8rttQ">
+</iframe>
+
+</div>
+
+
+
+
+
+<!--<div class='add' style='float:right;margin-right:20px;margin-top:20px;display:inline-block;position:absolute'>
+<p>Click below to Watch, how a class happens:</p>
+<iframe width="370" height="276" style="border-radius:10px;"
+src="https://www.youtube.com/embed/THyfdA8rttQ">
+</iframe>
+</div>-->
+
+<div style="border:3px solid violet; border-radius:10px;width:90.5%;margin:0px 20px;clear:both;height:200px;position:relative;padding:20px;display:block;">
+
+<h3 style='text-align:center;font-size:18px;'> Instructions:  </h3>
+<ol>
+<li> Please select Class Time 1 and Class Time 2 on two different days of the week. </li>
+<li> If you don't find a Time slot of your suiting, please try by selecting a different village.</li>
+<li> The selected timings will remain intact through the year and you will have an option to review every 6 weeks.</li>
+
+
+
+</ol>
+</div>
+
+</div>
+{% endblock %}
+
+
+
+
+
+{% block bottom_scripts %}
+{{ block.super }}
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
+
+<script>
+  $(function() {
+      $( "#datepicker" ).datepicker();
+        });
+          </script>
+
+
+
+
+<script>
+
+$(document).ready(function(){
+
+var centers_p_offers1 = {{ centers_p_offers }};
+var j_p_offers = JSON.parse(JSON.stringify(centers_p_offers1));
+console.log(j_p_offers);
+
+    $('#videomodal').on('hidden.bs.modal', function () {
+        alert('hello');
+        $('#videomodal').get(0).stopVideo();
+    });
+
+$('#offer_sel').change(function(){
+    $('#course_sel').html('');
+    $('#slot1,#slot2').html('');
+    var cent = $(this).val();
+    if( cent.toString() in j_p_offers ){
+        var off_list = j_p_offers[cent];
+        $.each(off_list,function(key,value){
+            var id = this.offer_id;
+            var name = this.offer_name;
+       $('#course_sel').append('<option value='+id+'  >'+name+'</option>');
+        
+        });
+    
+    
+    }
+    if(cent!=''){
+    $.post('/get_slots/',{'center':cent},function(resp){console.log(resp);
+    if(resp.toString()!='No Slots Available'){
+    if(resp.length==1){
+     $('#slot1').append('<option value='+resp[0].id+'  >'+resp[0].slot+'</option>');
+       $('#slot2').html('<option value="">No more slots available</option>')
+
+    }
+    else{
+    $.each(resp,function(key,value){
+       var id = this.id;
+       var slot = this.slot;
+       $('#slot1,#slot2').append('<option value='+id+'  >'+slot+'</option>');
+
+
+    });
+     }
+
+    }else{
+       $('#slot1,#slot2').html('<option value="">No Slots Available</option>')
+    }
+    });
+}
+
+});
+
+$('#avial_flag').click(function(){
+    var q = this.checked;
+    if(q){
+    $('#form1').slideUp();
+    $('#avail_label').text('But I am Available? - From').css('margin-right','26px');
+    $('#datepicker').css('margin-left','20px');
+    }else{ $('#form1').slideDown();
+    $('#avail_label').text('Available From').css('margin-right','76px');
+    $('#datepicker').css('margin-left','54px');
+    }
+});
+
+
+$('#sub_btn').click(function(e){
+   e.preventDefault();
+   var avail_flag=$('#avial_flag').prop('checked');
+   console.log('clicked');
+   if(avail_flag){
+   var avail_from = $('#datepicker').val();
+   if(avail_from!=""){
+   var user_id = $('#user_id').val();
+   $.post('/grab_slot/',{'avail_flag':'True','avail_from':avail_from,'user_id':user_id,csrfmiddlewaretoken: document.getElementsByName("csrfmiddlewaretoken")[0].value},function(resp){
+   console.log(resp);
+   }).done(function(){$('#form').hide();$('#ack_success').find('p').text('Preference Updated Successfully.');$('#ack_success').show(); }).fail(function(){$('#form').hide();$('#ack_failure').find('p').text('Some Error Occured! Please try after some time..');$('#ack_failure').show();});
+   }else{
+   evd.show_msg('Please fill your Available date..');
+}
+
+   }else{
+   var slot1 = $('#slot1').val();
+   var slot2 = $('#slot2').val();
+   var user_id = $('#user_id').val();
+   var avail_from = $('#datepicker').val();
+   var offer = $('#offer_sel').find("option:selected").data('offer');
+   var sel_offer = $('#course_sel').find('option:selected').val();
+   if(slot1!=null && user_id!=null && slot2!=null && slot1 !="No Slots Available" && avail_from!=''){
+   $.post('/grab_slot/',{'avail_flag':'False','avail_from':avail_from,'slot1':slot1,'slot2':slot2,'user_id':user_id,'offer':offer,'sel_offer':sel_offer,csrfmiddlewaretoken: document.getElementsByName("csrfmiddlewaretoken")[0].value},function(resp){
+   console.log(resp);
+   var map = '#';
+   if(resp.map!=null){map=resp.map;  }
+   var success_html = '<p>Your Center is '+resp.center+' located at <a href='+map+' target=_blank> '+resp.state+'</a></p> <p>Subject : '+resp.offer_name+' </p> <p>Timings : '+resp.timings+' </p><br><p>Your  Coordinator:</P><p>'+resp.coord+', will reach out to you shortly, for the start of the class.</p><p>His/Her Skype id : '+resp.skype+'</p>';
+   console.log(success_html);
+   $('#ack_success').html(success_html).css({'padding':'10px','text-align':'left'});
+}).done(function(){$('#form').hide();$('#ack_success').show(); }).fail(function(){$('#form').hide();$('#ack_failure').find('p').text('Some Error Occured! Please try after some time..');$('#ack_failure').show();});
+   }else{
+   evd.show_msg('Please fill in the required fields..');
+
+}
+}
+
+} );
+
+
+
+                            });
+</script>
+
+{% endblock %}
+
+

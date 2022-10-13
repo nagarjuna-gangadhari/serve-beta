@@ -1,0 +1,79 @@
+{% extends "footer_base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+        .subcontent .sub-menu {
+            padding:10px 20px;
+        }
+        .subcontent ul {
+            margin-top:10px;
+        }
+        .subcontent ul li {
+            font-size:14px;
+        }
+        .sub-menu p {
+            margin-bottom:10px;
+        }
+        .subcontent ul {
+            margin-bottom:0px;
+        }
+        .sub-menu .blue {
+            color:#f2a587;
+        }
+        .blue {
+            color: #11BEEE;
+            text-shadow: 0 -1px #f2a587,0 1px
+        }
+    </style>
+{% endblock %}
+
+{% block leftnav_list %}
+<!--    <li><a href="/intro/" class="about-1"><span>Intro</span></a></li>
+    <li><a href="/selfpaced/" class="about-6"><span>Self Trainings</span></a></li>
+    <li><a href="/code_conduct/" class="about-2"><span>Code of Conduct</span></a></li>-->
+   <li><a href="/aidsntools/" class="about-6"><span>Aids & tools</span></a></li>
+   <li><a href="/mytrainings/" class="about-6"><span>My Trainings</span></a></li>
+   <li><a href="/curriculumreview/" class="about-6"><span>Curriculum Review</span></a></li>
+
+{% endblock %}
+{% block top_content %}
+    <div class="top clearfix">
+        <div class="intro">
+            <h1>Curriculum Review</h1>
+        </div>
+    </div>
+{% endblock %}
+{% block bottom_content %}
+    <div class="paper-bg-wrapper">
+        <div class="paper-bg">
+            <div class="subcontent">
+               <p>
+                  <a href="http://www.textbooksonline.tn.nic.in/" target="_blank"><span><h6>TamilNadu State Board Books</h6></span></a>
+               </p><br>
+               <p>
+                   <a href="http://apscert.gov.in/ebookapp/ebook_page.jsp" target="_blank"><span><h6>Andhra Pradesh State Board Books</h6></span></a>
+               </p><br>
+               <p>
+                   <a href="http://epathshala.nic.in/e-pathshala-4/flipbook/" target="_blank"><span><h6>Jharkhand State Board Books (NCERT)</h6></span> </a>
+               </p><br> 
+               <p>
+                   <a href="https://drive.google.com/folderview?id=0B4m07xnDF8JpfnVCanV0T1JSNHRnWFdFT0J2YndDZ2o0VUtLQmhpM1ByQVJtZXFoWFVFNzA&usp=drive_web" target="_blank"><span><h6>English Foundation Curriculum (for all State boards)</h6></span> </a>
+               </p><br>
+               <p>
+                   <a href="https://drive.google.com/folderview?id=0B8KYRcQ9Px6OfmMwN216Szk5OTEwVGkwV0dvYW1kMS1yYmdqSlRRZmxwNDF2MlBVLTV3ZDg&usp=sharing" target="_blank"><span><h6>Karnataka State Board Books</h6></span> </a>
+               </p><br>
+               <p>
+                   <a href="http://www.wbsed.gov.in/wbsed/welcome.html" target="_blank"><span><h6>West Bengal State Board Books</h6></span> </a>
+               </p><br>
+               <p>
+                   <a href="http://cart.ebalbharati.in/BalBooks/ebook.aspx" target="_blank"><span><h6>Maharashtra State Board Books</h6></span> </a>
+               </p><br>
+               <p>
+                   <a href="http://www.opepa.in/website/e-textbook.aspx" target="_blank"><span><h6>Odisha State Board Books</h6></span> </a>
+               </p><br>
+             </div>
+        </div>
+    </div>
+{% endblock %}
+

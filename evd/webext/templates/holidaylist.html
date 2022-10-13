@@ -1,0 +1,501 @@
+{% extends "base.html" %}
+
+{% block head_scripts %}
+ {{ block.super }}
+
+{% endblock %}
+
+
+{% block head_styles %}
+    {{ block.super }}
+        <style>
+        .submitForm {
+        margin : 16px 5px;
+        }
+        label {
+        min-width: 39% !important;
+        text-align:center;
+        }
+        textArealabel {
+        min-width: 11% !important;
+        text-align:center;
+        }
+        .divrow{
+        margin-bottom:20px;
+        }
+        .errorlist {
+        color: red;
+        padding-left: 42%;
+        padding-top: 2%;
+        }
+        thead{
+        background-color: #525A99 !important;
+        color: white;
+        }
+        th {
+            text-align: center;
+        }
+        .fa-2x {
+            font-size: 1.5em;
+        }
+
+        </style>
+
+    {% endblock %}
+
+    {% block doc_ready %}
+        {{ block.super }}
+    {% endblock %}
+
+
+    {% block body_container%}
+        {{ block.super }}
+            <div class="col-sm-12 col-md-12 col-lg-12" style="background-color:#fff">
+                <div class="col-sm-12 col-md-12 col-lg-12" style="background-color: #27A3E2;;width: 102%;margin-left: -15px;height: 61px;">
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <h3 style="color:white;"><b>Holidays List</b></h3>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 " align="right" style="margin-top: 13px;">
+                        <button class="btn btn-success" type="submit" onclick="addHolyDayModel();" id="id_addholiday" value="addholiday"
+                            style="color:white;"> <a href='#id_addholiday1' style="color: white;font-size: 13px;
+                                font-family: '';vertical-align: inherit;text-decoration: none;">Add Holiday</a></button>
+                    </div>
+                    <hr />
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12" style="margin-top: 39px;">
+                    <form method="post">
+                    {% csrf_token %}
+                        <div class="row divrow">
+                            <div class="fieldWrapper col-md-2 col-sm-2">
+                                {{ holiday_form.board.label_tag }}<span style="color:red">*</span> {{ holiday_form.board }}
+                                {{ holiday_form.board.errors }}
+                            </div>
+                            <div class="fieldWrapper col-md-2 col-sm-2">
+                                {{ holiday_form.academic.label_tag }}<span style="color:red">*</span> {{ holiday_form.academic }}
+                                {{ holiday_form.academic.errors }}
+                            </div>
+                            <div class="fieldWrapper col-md-2 col-sm-2">
+                                {{ holiday_form.calender.label_tag }}<span style="color:red">*</span> {{ holiday_form.calender }}
+                                {{ holiday_form.calender.errors }}
+                            </div>
+                            <div class="fieldWrapper col-md-2 col-sm-2">
+                                {{ holiday_form.district.label_tag }} {{ holiday_form.district }}
+                            </div>
+                            <div class="fieldWrapper col-md-2 col-sm-2">
+                                {{ holiday_form.center.label_tag }} {{ holiday_form.center }}
+                            </div>
+
+                            <div class="fieldWrapper col-md-2 col-sm-2">
+                                <div class="fieldWrapper col-md-offset-6 col-sm-offset-6 col-md-4 col-sm-4" style="margin-left:15px;margin-top:10px;">
+                                    <button class="submitForm btn btn-success" type="submit" id="id_holidays">Submit</button>
+                                    <!-- {% if list_view %}
+                                    <button class="btn btn-success" type="submit" id="id_addholiday" value="addholiday" style="margin-top: -88px;color:white;margin-left: 134px;">
+                                    <a href='#id_addholiday1' style="color: white;font-size: 13px;
+                                    font-family: '';vertical-align: inherit;">Add
+                                    Holiday</a></button>
+                                    {% endif %} -->
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <br>
+                </div>
+
+                <div>
+                    <table class="table table-bordered" id="myTable">
+                        <thead style="background-color:#27A3E2 !important;">
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>View / Delete</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for val in holidays %}
+                            <tr>
+                                <td id="ed_date_{{val.id}}">{{val.day_date}}</td>
+                                <td id="des_{{val.id}}">{{val.description}}</td>
+
+                                <td nowrap=""><a href="#" id="update_holiday_{{val.id}}" onclick="edit_holiday('{{val.id}}')" title="Edit Holiday"><i
+                                class="fa fa-edit fa-2x"></i></a> &nbsp; &nbsp;
+                                <a href="#" onclick="delete_holiday('{{val.id}}')" title="Delete Holiday"><i class="fa fa-trash fa-2x "></i></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        {% if not holidays %}
+                        <tbody>
+                            <tr>
+                                <th colspan="24" class="text-center" id="spanmessage">No records found</th>
+                            </tr>
+                        </tbody>
+                        {% endif %}
+                    </table>
+                    <div>
+                        {% if list_view %}
+                        <button class="btn btn-success" type="submit" style="float: right;"> <a href="/v2/holidaylist" style="color:white">Back</a></button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="myModal" class="modal hide" style="overflow:visible;min-height:321px;width:960px !important;left:37% !important;">
+                <div style="background-color: #27A3E2 !important;" class="header">
+                    <p>Add Holiday</p>
+                    <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+                </div>
+
+                <div class="col-sm-12 col-md-12 col-lg-12" id = "add_holiday">
+                    <form style="border: 0px solid #333;">
+                        {% csrf_token %}
+                        <div class="row divrow">
+                            <div class="fieldWrapper col-md-6 col-sm-6">
+                                <label for="id_board">Board</label>
+                                <span style="color:red;"></span>
+                                <select id="board_id" style="display:inline !important;min-width: 160px;max-width: 57%;margin-bottom:unset;width: 100%;" required="required" class="form-control" name="board">
+                                
+                                </select>
+                                <!-- {{ holiday_form.board.label_tag }}<span style="color:red;">*</span> {{ holiday_form.board }}
+                                {{ holiday_form.board.errors }} -->
+                            </div>
+                            <div class="fieldWrapper col-md-6 col-sm-6">
+                                <label for="id_board">Academic Year</label>
+                                <span style="color:red;"></span>
+                                <select id="academic_id" style="display:inline !important;min-width: 160px;max-width: 57%;margin-bottom:unset;width: 100%;" required="required" class="form-control" name="board">
+                                
+                                </select>
+                                <!-- {{ holiday_form.academic.label_tag }}<span style="color:red;">*</span> {{ holiday_form.academic }}
+                                {{ holiday_form.academic.errors }} -->
+                            </div>
+
+                        </div>
+ 
+                        <br>
+                        <div class="row divrow">
+                            <div class="fieldWrapper col-md-6 col-sm-6">
+                                <label for="id_calender">Calender</label>
+                                <span style="color:red;"></span>
+                                <select id="calender_id" style="display:inline !important;min-width: 160px;max-width: 57%;margin-bottom:unset;width: 100%;" required="required" class="form-control" name="board">
+                                </select>
+                            </div>
+                            <div class="fieldWrapper col-md-6 col-sm-6">
+                                <label for="id_launch_date">Date</label>
+                                <span style="color:red;margin-left: -67px;"></span> 
+                                <input id="id_launch_date" style="display:inline !important;max-width: 57%;margin-bottom:unset;margin-left: 66px;" type="date" class="form-control" name="launch_date">
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="row divrow">
+                            <div class="fieldWrapper col-md-6 col-sm-6">
+                                <label for="id_district">District</label>
+                                <span style="color:red"></span>
+                                <select id="district_id" style="display:inline !important;min-width: 160px;max-width: 57%;margin-bottom:unset;width: 100%;margin-left: 1px;" required="required" class="form-control" name="board">
+                                </select>
+                            </div>
+                            <div class="fieldWrapper col-md-6 col-sm-6">
+                                <label for="id_district">Center</label>
+                                <span style="color:red"></span>
+                                <select id="center_id" style="display:inline !important;min-width: 160px;max-width: 57%;margin-bottom:unset;width: 100%;margin-left: 1px;" required="required" class="form-control" name="board">
+                                </select> 
+                            </div>
+                        </div>
+
+                        <br>
+                        <div class="row divrow">
+                            <div class="fieldWrapper col-md-6 col-sm-6">
+                                <label for="id_district">Description</label><span style="color:red;margin-left: -46px;"></span>
+                                <textarea style="display:inline !important;max-width: 57%;margin-bottom:-32px;margin-left:48px;" rows="2" name="description" id="id_description" cols="40" class="form-control"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="fieldWrapper" style="margin-top: 34px;margin-left: -45px;">
+                            <div class="fieldWrapper col-md-offset-6 col-sm-offset-6 col-md-4 col-sm-4">
+                                <button class=" btn btn-success" type="button" style="margin-top:28px;" onclick="addHoliday()">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                    <p class="text-danger">*All fields are mandatory</p>
+                </div>
+            </div>
+
+            <div id="edit_holiday" class="modal hide" style="overflow:visible;min-height:314px;width:659px !important;left:48% !important;">
+                <div class="header">
+                    <p>Edit Holiday</p>
+                    <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+                </div>
+
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <form style="border: 0px solid #333;">
+                        {% csrf_token %}
+                        <div class="column">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <span>Date</span>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="text" name="edit_date" id="edit_date" required="true">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <span>Description</span>
+                                </div>
+                                <div class="col-md-9">
+                                    <textarea rows="4" cols="50" name="edit_description" id="edit_description" required="true"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fieldWrapper" style="margin-top: 34px;margin-left: -45px;">
+                            <div class="fieldWrapper col-md-offset-6 col-sm-offset-6 col-md-4 col-sm-4">
+                                <button class=" btn btn-success" type="button" style="margin-top:0px;" id="edit_id" onclick="save_holiday()">Submit</button>
+                            </div>
+                        </div>
+                    </form> 
+                </div>
+            </div>
+{% endblock %}
+
+{% block bottom_scripts %}
+{{ block.super }}
+
+
+
+<script>
+    $(document).ready(function () {
+    $('#id_launch_date').prop('type', 'date');
+
+    $(".save_edited_data").hide()
+    $(".inner.clearfix").css("width", "85%");
+
+    $("#id_board").on('change', function () {
+        $("#id_center").empty();
+        $("#id_calender").empty();
+        $.get("/v2/getacademic_year/?board=" + this.value, function (resp) {
+            $("#id_academic").empty();
+            $('#id_academic').append('<option value="">Select Academic Year</option>');
+            $.each(resp, function (i, resp) {
+                $('#id_academic').append('<option value="' + resp[0] + '">' + resp[1] + '</option>');
+            });
+        });
+        $.get("/v2/get_academic_years_by_board?board_name=" + this.value, function (resp) {
+            $("#id_district").empty();
+            $('#id_district').append('<option value="">Select District</option>');
+            $.each(resp.district, function (i, resp) { 
+                $('#id_district').append('<option value="' + resp + '">' + resp + '</option>');
+            });
+        });
+ });
+
+
+ $("#id_academic").on('change', function () {
+    var board = $("#id_board").children("option:selected").val()
+    $.get("/v2/getcalender/?board=" + board + "&academic_yr=" + this.value, function (resp) {
+        $("#id_calender").empty();
+        $('#id_calender').append('<option value="">Select Calender</option>');
+        $.each(resp, function (i, resp) {
+            $('#id_calender').append('<option value="' + resp[0] + '">' + resp[1] + '</option>');
+        });
+    });
+ });
+
+ $("#id_district").on('change', function () {
+    $.get("/v2/getdistrict/?district=" + this.value, function (resp) {
+        $("#id_center").empty();
+        $('#id_center').append('<option value="">Select Center</option>');
+        $.each(resp, function (i, resp) {
+            $('#id_center').append('<option value="' + resp[0] + '">' + resp[1] + '</option>');
+        });
+    });
+ });
+
+
+ });
+
+
+
+function addHoliday() {
+    event.preventDefault();
+    var calender_id = $('#calender_id').val();
+    var district = $('#district_id').val();
+    var center = $('#center_id').val();
+    var date = $('#id_launch_date').val();
+    var description = $('#id_description').val();
+    if ( description == "" || !date || !center || !district || !calender_id ) {
+        alert('All fields are mandatory.');
+        return false;
+    }
+    var csrf_daa = $('input[name=csrfmiddlewaretoken]').val()
+    var obj = { 'district': district, 'center': center, 'centerList': centerList, 'date': date, 'description': description, 'calender_id': calender_id, "csrfmiddlewaretoken": csrf_daa }
+    $.post("/v2/addholiday/", obj, function (data) {
+        if (data['status'] == "success") {
+            alert("Holiday is added successfully.");
+            $('#myModal').modal('hide');
+            window.location = "/v2/holidaylist";
+        }
+        else {
+            alert('An error occurred. Please try again.\n\nIf error persists contact eVidyaloka support.');
+        }
+    });
+}
+
+
+ // function edit_holiday(val_id){
+ // $(".edit_existing_data_"+val_id).hide();
+ // $(".save_edited_data_"+val_id).show();
+ // }
+
+ function edit_holiday(id) {
+    var day = 'ed_date_' + id
+    var desc = 'des_' + id
+    var description = $('#' + desc).text();
+    var edit_day = $('#' + day).text();
+    $("#edit_date").empty();
+    $('#edit_date').datepicker({ dateFormat: 'dd/mm/yy' });
+    $("#edit_date").datepicker("setDate", edit_day);
+    $("#edit_id").val(id);
+    $("#edit_description").val(description);
+    $('#edit_holiday').modal('show');
+
+ }
+ function save_holiday(id) {
+    // $(".edit_existing_data_"+id).show();
+    // $(".save_edited_data_"+id).hide();
+    var description = $('#edit_description').val();
+    var edit_day = $('#edit_date').val();
+    var id = $('#edit_id').val();
+    var day = 'ed_date_' + id
+    var date = $('#' + day).text();
+    console.log('*****************', date)
+    var csrf_data = $('input[name=csrfmiddlewaretoken]').val()
+    var obj = { 'id': id, "csrfmiddlewaretoken": csrf_data, "description": description, 'day': edit_day }
+    console.log('#######', obj);
+    $.post('/v2/updateHoliday/', obj, function (resp) {
+        location.reload();
+    });
+ }
+
+
+ function delete_holiday(id) {
+    var del = confirm("Are you sure you want to Delete ?");
+    if (del == true) {
+    var csrf_data = $('input[name=csrfmiddlewaretoken]').val()
+    var obj = { 'id': id, "csrfmiddlewaretoken": csrf_data }
+    $.post('/v2/deleteHoliday/', obj, function (resp) {
+    // console.log('response',resp)
+    // alert(resp);
+        location.reload();
+    });
+
+ }
+
+
+ }
+ function addHolyDayModel() {
+    var board_id = $("#id_board").val();
+    var calender_id = $('#id_calender').val();
+    var academic_id = $("#id_academic").val();
+    
+    $.get("/v2/get_holidaysList_to_add_holiday", { 'board_id': board_id, 'academic_id': academic_id, 'calender_id': calender_id }, function (data) {
+        var add_holiday_html = '';
+        add_holiday_html+='<option value=" "> Select Board </option>';
+        $.each(data.board_list, function (i, resp) {
+            if (board_id == resp){
+                add_holiday_html+='<option selected value="' + resp + '">' + resp + '</option>';
+            }else{
+                add_holiday_html+='<option value="' + resp + '">' + resp + '</option>';
+            }
+        });
+        $('#board_id').empty();
+        $('#board_id').append(add_holiday_html);
+        var academic_list_html = '';
+        if (Object.keys(data.academic_list).length>0){
+            academic_list_html+='<option value=" ">Select Academic Year</option>';
+            $.map(data.academic_list, function(value, index) {
+                if (academic_id == index){
+                    academic_list_html+='<option selected value="' + index + '">' + value + '</option>';
+                }else{
+                    academic_list_html+='<option value="' + index + '">' + value + '</option>';
+                }
+            });
+            $('#academic_id').empty();
+            $('#academic_id').append(academic_list_html);
+        }
+        if (Object.keys(data.calender_list).length>0){
+            var calender_list_html = '';
+            calender_list_html+='<option value="">Select Calender </option>';
+            $.map(data.calender_list, function(value, index) {
+                calender_list_html+='<option value="' + index + '">' + value + '</option>';
+            });
+            $('#calender_id').empty();
+            $('#calender_id').append(calender_list_html);
+        }
+        getAcademicYear();
+    });
+    $('#myModal').modal('show');
+ }
+
+ function getAcademicYear(){
+
+    $.get("/v2/get_academic_years_by_board", { 'board_name': $("#board_id").val() }, function (data) {
+        var academic_list_html = '';
+        academic_list_html+='<option value=" ">Select Academic Year</option>';
+        $.map(data.academic_json, function(value, index) {
+            academic_list_html+='<option value="' + index + '">' + value + '</option>';
+        });
+        $('#academic_id').empty();
+        $('#academic_id').append(academic_list_html);
+        var add_district_html = ''; 
+        add_district_html+='<option value=" ">Select District</option>';
+        $.each(data.district, function (i, resp) {
+            add_district_html+='<option value="' + resp + '">' + resp + '</option>';
+        });
+        // var add_center_html ='<option value=" ">Select Center</option>';
+        // $.map(data.center_json, function(value, index) {
+        // add_center_html+='<option value="' + index + '">' + value + '</option>';
+        // });
+        // $('#center_id').empty();
+        // $('#center_id').append(add_center_html);
+        
+        $('#district_id').empty();
+        $('#district_id').append(add_district_html);
+    
+    });
+
+ }
+
+ $("#board_id").on('change', function () {
+    getAcademicYear();
+ });
+
+ $('#academic_id').on('change', function () {
+    $.get("/v2/get_calender_by_academic_id", {'board_name':$("#board_id").val(),'academic_id':$('#academic_id').val() }, function (data) {
+        var calender_list_html = ''; 
+        calender_list_html+='<option value=" ">Select Calender </option>';
+        $.map(data, function(value, index) {
+            calender_list_html+='<option value="' + index + '">' + value + '</option>';
+        });
+        $('#calender_id').empty();
+        $('#calender_id').append(calender_list_html);
+    });
+
+ });
+ var centerList = []
+ $('#district_id').on('change', function () {
+    $.get("/v2/get_centers_by_district", {'district':$("#district_id").val()}, function (data) {
+        var add_center_html ='<option value=" ">Select Center</option> <option value="All">All</option>';
+        $.map(data.center_json, function(value, index) {
+        add_center_html+='<option value="' + index + '">' + value + '</option>';
+        centerList.push(index)
+    });
+    $('#center_id').empty();
+    $('#center_id').append(add_center_html);
+ });
+
+ });
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,7 @@
+Dear {{username}},<br><br><br>
+
+You have been assigned to review Chapter {{topic_name}}, for  {{grade}} {{subject}} from {{board}} board in {{language}}! <br><br>
+
+Please follow the prescribed template for review. The deadline for giving the review feedback is {{date}}.<br><br>
+
+Please contact {{content_admin_email}} for any clarification or queries.<br><br><br>

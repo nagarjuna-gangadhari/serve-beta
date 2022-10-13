@@ -1,0 +1,495 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+{% block head_title %}eVidyaLoka{% endblock %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/calendar/jquery-ui-1.8.17.custom.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.tmpl.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+                var date = new Date();
+                var d = date.getDate();
+                var m = date.getMonth();
+                var y = date.getFullYear();
+                var get_future_date = function(curr_date, offset_month){
+                    return new Date(curr_date.setMonth(curr_date.getMonth() + offset_month));
+                };
+                var render_events = function(month){
+                    $.get("/get_events/?month="+month,function(resp){
+                        var user_sessions = resp[0].user_sessions,
+                            other_sessions = resp[0].other_sessions;
+                        user_sessions = user_sessions.concat(other_sessions);
+                        other_sessions = [];
+                        var event_html = "<li>${grade} ${subject} ${center} - ${date}, ${start}</li>";
+                        $.template("event_template", event_html);
+                        if(user_sessions.length > 0){
+                            $("#calendar").append("<div class='user_sessions'><p>Your classes</p><ul></ul></div>");
+                            $.tmpl("event_template", user_sessions).appendTo("div.user_sessions ul");
+                        }
+                        if(other_sessions.length > 0){
+                            $("#calendar").append("<div class='other_sessions'><p>Other classes</p><ul></ul></div>");
+                            $.tmpl("event_template", other_sessions).appendTo("div.other_sessions ul");
+                        }
+                        var curr_month = calendar.fullCalendar("getDate").getMonth();
+                        var day_mapping = ["mon","tue","wed","thu","fri","sat","sun"];
+                        var pin_it = function(pin_color){
+                                this.start = new Date(this.start);
+                                var cur_day = this.day;
+                                var cur_date = parseInt(this.date.slice(0,-6));
+                                var day_cells = calendar.find(".fc-"+ day_mapping[cur_day]).not(".fc-other-month,.fc-widget-header");
+                                var that = this;
+                                var cur_data_event_id = null;
+                                (function(cur_date,that){
+                                    $.each(day_cells.find("div.fc-day-number"),function(){
+                                        cur_data_event_id = $(this).parents("td").attr("data-event-id");
+                                        if(parseInt($(this).text()) == cur_date ){
+                                            var image = null;
+
+                                            if(pin_color == "green" && !$(this).next("div.fc-day-content").find("img.green-pin").length > 0)
+                                                image = "<img class='pin green-pin' style='float:right;' src='/static/images/green_dot.png'/>";
+
+                                            else if(pin_color == "red" && !$(this).next("div.fc-day-content").find("img.red-pin").length > 0)
+                                                image = "<img class='pin red-pin' style='float:right;' src='/static/images/red_dot.png'/>";
+
+                                            if(image)
+                                                $(this).next("div.fc-day-content").children("div").append(image);
+
+                                            if(cur_data_event_id && cur_data_event_id.length > 0)
+                                                cur_data_event_id += "%3B" + that.id;
+
+                                            else
+                                                cur_data_event_id = that.id;
+
+                                            $(this).parents("td").attr({ "data-event-id": cur_data_event_id });
+                                        }
+                                    });
+                                }(cur_date,that));
+                        }
+                        $.each(user_sessions,function(i,v){
+                           pin_it.apply(this,["green"]);
+                        });
+                        $.each(other_sessions,function(i,v){
+                           pin_it.apply(this,["red"]);
+                        });
+                    });
+                },
+                clear_pins = function(){
+                    $("img.pin").remove();
+                    $("img.pin").parents("td").removeAttr("data-event-id");
+                },
+                clear_events = function(){
+                    $("div.user_sessions").remove();
+                    $("div.other_sessions").remove();
+                    $("div.single_sessions").remove();
+                },
+                render_event = function(id){
+                    $.get("/get_event/?id="+id,function(resp){
+                        var curr_events = resp[0];
+                        curr_events = curr_events.user_sessions.concat(curr_events.other_sessions)
+                        var curr_event = null;
+                        for(var index in curr_events){
+                            curr_event = curr_events[index];
+                            $("#calendar").append("<div class='single_sessions'><p class='event-name'>"+ curr_event.grade +" "+ curr_event.subject +"</p><div style='clear:both'></div><p style='display:block;font-style:italic;margin-bottom:10px;float:left'>"+ curr_event.date +" "+ curr_event.start +", "+ curr_event.center +"</p><div style='clear:both'></div></div>");
+                        }
+                    });
+                };
+                window.calendar = $("#calendar").fullCalendar({
+                        theme: false,
+                        header: {
+                                left: 'prev',
+                                center: 'title',
+                                right: 'next'
+                        },
+                        selectable: true,
+                        editable: true,
+                        dragOpacity: 0.2,
+                        columnFormat: {
+                                    month: 'ddd',    // Mon
+                                    week: 'ddd d/M', // Mon 9/7
+                                    day: 'dddd d/M'  // Monday 9/7
+                        },
+                        eventSources: [
+                            {
+                                events: [],
+                            }
+                        ],
+                        eventMouseover: function(event, jsEvent, view) {
+                               if (view.name !== 'agendaDay') {
+                                    $(jsEvent.target).attr('title', event.title);
+                                }
+                                return false;
+                        },
+                        eventRender: function(e, ele){
+                            console.log(e);
+                            console.log(ele);
+                        },
+                        dayClick: function(date, allDay, jsEvent, view) {
+                            console.log(this);
+                            clear_events();
+                            if($(this).attr("data-event-id")){
+                                render_event($(this).attr("data-event-id"));
+                            }
+                            return false;
+                        }
+                });
+                var loaded_month = calendar.fullCalendar("getDate").getMonth() + 1;
+                render_events(loaded_month);
+                $("td.fc-header-left > span.fc-button").click(function(){
+                    clear_pins();
+                    clear_events();
+                    render_events(--loaded_month);
+                });
+                $("td.fc-header-right > span.fc-button").click(function(){
+                    clear_pins();
+                    clear_events();
+                    render_events(++loaded_month);
+                });
+                $("ul.custom-select li").toggle(function(){
+                    $("ul.custom-select > li.focus-f").not($(this)).trigger("click");
+                    $(this).addClass("focus-f");
+                },function(){
+                    $(this).removeClass("focus-f");
+                });
+                $("html").click(function(){
+                    $("ul.custom-select li.focus-f").trigger("click");
+                });
+                $("ul.custom-select li span.dropdown a").click(function(){
+                    $(this).parent("span.dropdown").prev().text($(this).text());
+                    window.location = $(this).attr("href");
+                });
+                $("select.make-admin").change(function(){
+                    var $assign_center = $("select.assign-center option:selected"),
+                        $assign_teacher = $("select.assign-admin option:selected");
+                    if($(this).val() != "None" && $(this).siblings().eq(0).val()!= "None")
+                    {
+                         $(this).siblings("[rel='ajax-link']").fadeIn("fast").attr({"href": "assign_center?center_id="+$assign_center.val()+"&user_id="+$assign_teacher.val()});
+                    }
+                    else{
+                        $(this).siblings("[rel='ajax-link']").hide();
+                    }
+                });
+                $("select.assign-center").change(function(){
+                    var $assign_center = $("select.assign-center option:selected"),
+                        $assign_teacher = $("select.assign-admin option:selected");
+
+                    var center_map = {
+                        {% for center in centers %}
+                            "{{ center.name }}": "{{ center_admins|fetch:forloop.counter0 }}"{% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                    };
+                    var selected_index = $(this).children(":selected").index(),
+                        selected = $(this).children(":selected"),
+                        selected_sibling = $(this).siblings().eq(0).children().eq(selected_index);
+                        $(this).siblings().eq(0).children("[data-related='"+center_map[selected.text()]+"']").attr({"selected": "selected"});
+                    if(!selected.hasClass("no-admin") || $(this).siblings().eq(0).val() == "None"){
+                        $(this).siblings("[rel='ajax-link']").hide();
+                    }
+                    else {
+                            $(this).siblings("[rel='ajax-link']").children("span").text("confirm").fadeIn("fast").attr({"href": "assign_center?center_id="+$assign_center.val()+"&user_id="+$assign_teacher.val()});
+                    }
+
+                });
+                $("select.assign-admin").change(function(){
+                    var $assign_center = $("select.assign-center option:selected"),
+                        $assign_teacher = $("select.assign-admin option:selected");
+                    $(this).siblings("[rel='ajax-link']").children("span").text("confirm").attr({"href": "assign_center?center_id="+ $assign_center.val() +"&user_id="+ $assign_teacher.val()});
+                });
+        });
+    </script>
+
+{% endblock %}
+
+{% block doc_ready %}
+    evd.assign_center = function(resp){
+        var $center = $("select.assign-center option:selected"),
+            $admin = $("select.assign-admin option:selected");
+        if(resp == "added")
+            evd.show_msg($center.css({"color": "#333"}).text() +" is assigned succesfully to "+ $admin.text());
+        else
+            evd.show_msg("Center admin for "+ $center.css({"color": "red"}).text() + " is removed");
+
+        $(this).fadeOut("fast");
+    }
+{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <link rel='stylesheet' type='text/css' href='/static/css/calendar/fullcalendar.1.5.3.min.css'/>
+    <link rel="stylesheet" type="text/css" href="/static/css/calendar/theme.css" />
+    <style type='text/css'>
+        ul.custom-select > li > span.dropdown {
+            display: none;
+        }
+        ul.custom-select > li.focus-f > span.dropdown {
+            display: inline;
+            z-index: 1000;
+        }
+
+        #calendar {
+                width: 368px;
+                font-size: 10px;
+                float: left;
+                background: #f5f5f5;
+                border: 1px solid #BDBDBD;
+            }
+        #calendar > div.fc-content {
+            margin-bottom: 10px;
+        }
+        .fc-header-title h2 {
+                font-size: 18px;
+                margin-top: -10px;
+                white-space: normal !important;
+                font-weight: bold;
+           }
+        .fc-view-month .fc-event, .fc-view-agendaWeek .fc-event {
+                font-size: 10px;
+                overflow: hidden;
+                height: 15px;
+           }
+        .fc-view-agendaWeek .fc-event-vert {
+                font-size: 10px;
+                overflow: hidden;
+                width: 25px !important;
+          }
+        .fc-agenda-axis {
+                width: 20px !important;
+                font-size: .7em;
+          }
+        .fc-button-content {
+                padding: 0;
+          }
+        .fc-widget-header, .fc-widget-content {
+            border: none !important;
+        }
+        .fc-widget-content > div {
+            position: relative !important;
+        }
+        .fc-border-separate th, .fc-border-separate td {
+            border-left: 1px solid #DDD !important;
+            border-bottom: 1px solid #DDD !important;
+        }
+        .fc-border-separate td {
+            width: 26px;
+            height: 26px;
+            border-spacing: 0px;
+            border-collapse: collapse;
+        }
+        .fc-border-separate th.fc-first, .fc-border-separate td.fc-first {
+            border-left: 0px !important;
+        }
+
+        .fc-widget-content > div > .fc-day-number{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -9px;
+            margin-top: -5px;
+        }
+        table.fc-border-separate {
+            width: 305px !important;
+            margin: 10px auto 0px auto;
+            font-size: 12px;
+            font-weight: bold;
+            color: #bcbcbc;
+        }
+        table.fc-border-separate td.fc-first > div{
+            min-height: 30px !important;
+        }
+        th.fc-widget-header > div, td.fc-widget-content > div {
+            width: 42px;
+            height: 25px;
+            cursor: pointer;
+        }
+        table.fc-header {
+            background: transparent url('/static/images/cal_header.png') top left no-repeat;
+            height: 83px;
+            background-position: -3px 0px;
+        }
+        td.fc-header-left > span.fc-button-prev, td.fc-header-right > span.fc-button-next {
+            -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)" !important;
+            filter: alpha(opacity=0) !important;
+            -moz-opacity:0 !important;
+            -khtml-opacity: 0 !important;
+            opacity: 0 !important;
+            width: 27px;
+            height: 27px;
+        }
+        td.fc-header-left > span.fc-button-prev {
+            margin-left: 19px;
+            margin-top: 23px;
+        }
+        td.fc-header-right > span.fc-button-next {
+            margin-right: 16px;
+            margin-top: 22px;
+        }
+        td.fc-header-left > span.fc-button-prev > span.fc-button-inner > span.fc-button-content{
+            width: 28px;
+            height: 25px;
+            background: black !important;
+        }
+        .fc-header-title {
+            padding-top:38px;
+            color:white;
+        }
+        div.user_sessions, div.other_sessions, div.single_sessions {
+            width: 305px;
+            margin: 10px auto;
+        }
+        div.single_sesssio
+        table.fc-border-separate > tbody > tr > td.fc-today {
+            background: transparent;
+            color: #555;
+        }
+        table.fc-border-separate > thead > tr > th {
+            padding-bottom: 10px;
+            color: #F15A22;
+            width: 26px !important;
+        }
+        div.user_sessions > p, div.other_sessions > p {
+            margin-bottom: 10px;
+            color: #F15A22;
+            font-size: 12px;
+        }
+        div.user_sessions > ul > li, div.other_sessions > ul > li {
+            padding: 5px 5px 5px 15px;
+            background-position: 0 50%;
+            font-size: 12px;
+            font-style: italic;
+        }
+        div.user_sessions > ul > li {
+            background: transparent url('/static/images/green_dot.png') top left no-repeat;
+            background-position: 0 50%;
+        }
+        div.other_sessions > ul > li {
+            background: transparent url('/static/images/red_dot.png') top left no-repeat;
+            background-position: 0 50%;
+        }
+        div.single_sessions > p.event-name {
+            margin-bottom: 10px;
+            color: #F15A22;
+            font-size: 12px;
+            float: left;
+        }
+        div.single_sessions > p.event-by {
+            float:left;
+            margin-left: 10px;
+            font-size: 10px;
+        }
+        div.note-box {
+            margin: 10px 0px;
+            background: #f9f9f9;
+            border-radius: 4px;
+            border: 1px solid #bdbdbd;
+            min-height: 150px;
+        }
+        div.note-box.notification {
+            margin-bottom:10px;
+        }
+        div.note-box.notification, div.note-box.next-class {
+            margin-top: 0px;
+        }
+        td.fc-today {
+            background: transparent;
+            color: #777;
+        }
+        div.note-box > h3 {
+            border-bottom: 1px solid #F3D6CB;
+            font-size: 12px;
+            padding:10px 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        div.note-box {
+            position: relative;
+        }
+        div.note-box  a.btn {
+            font-weight: normal;
+            font-size: 12px;
+            padding: 0px 5px;
+            cursor: pointer;
+        }
+        div.note-box div.upcoming-class {
+            width: 558px;
+            position: absolute;
+            margin-top: -15px;
+            top: 50%;
+        }
+        div.note-box .icon {
+            background-color: transparent;
+            background-image: url("/static/img/glyphicons-halflings.png");
+            background-repeat: no-repeat;
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+        }
+        .icon.prev {
+            background-position: -432px -72px;
+            float:left;
+        }
+        .icon.next {
+            background-position: -456px -72px;
+            float: right;
+        }
+        div.note-box div.pagination {
+            float:right;
+            height: 16px;
+            overflow:hidden;
+            width: 40px;
+        }
+        div.note-box ul {
+            width: 558px;
+        }
+        a.btn.disabled {
+            background: #f15a22;
+        }
+        ul.cycle > li {
+            display: none;
+        }
+        .prev, .next {
+            cursor: pointer;
+        }
+        .assign-btn {
+        font-size: 15px;
+        height: 20px;
+        line-height: 0px;
+        margin: 10px 0px 10px 0px;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block body_container %}
+<div id="content" class="clearfix">
+    <div class="dashboard-container" style="padding-top:45px">
+        <div class="inner clearfix">
+            <div>
+                <ul class="dashboard-breadcrumb">
+                    <li class="header">
+                        <a href="#">Admin</a>
+                        <span class="divider">&gt;</span>
+                    </li>
+                    <li>
+                        <a href="/user_profile">My Profile</a>
+                        <span class="divider">|</span>
+                    </li>
+                     <li>
+                        <a href="/teacherdash/">My Teacher dashboard</a>
+                    </li>
+                </ul>
+            <div>
+            <div class="dashboard-inner-container">
+                <div class="dashboard-notifications-container" style="width:560px;min-height:500px;float:left;padding-right:10px">
+                </div>
+                <div class="dashboard-calendar-container" style="width:370px;min-height:500px;float:left">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

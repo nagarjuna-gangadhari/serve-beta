@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block body_container %}
+<div class="row">
+    <div class="span12">
+        <h1>Activation Complete!</h1>
+    </div>
+    <script>
+        window.location = "/";
+    </script>
+</div>
+{% endblock body_container %}

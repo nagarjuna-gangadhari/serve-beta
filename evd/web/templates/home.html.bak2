@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+  <style>
+    #slide-1 {
+      background: transparent url('/static/images/slide1-bg.png') no-repeat center top;
+    }
+    div.demand-container {
+      width: 940px;
+      margin-top: 25px;
+      margin-left: auto;
+      margin-right: auto;
+      overflow: hidden;
+    }
+    div.demand-container > div {
+      width: 60px;
+      height: 61px;
+      float: left;
+      margin-left: 25px;
+    }
+    div.demand-container > p {
+      float: left;
+      margin-left: 15px;
+      margin-top: 15px;
+      font-size: 30px !important;
+      line-height: 36px !important;
+    }
+    div.demand-container > p > b {
+      color: #F15A22;
+    }
+    #slide-3, .heroslide {
+      background: transparent url('/static/images/paper_bg4.gif') repeat-x 0 -153px !important;
+    }
+  </style>
+{% endblock %}
+
+{% block head_scripts %}
+{{ block.super }}
+  <script>
+    $(window).load(function(){
+        //load carousel images
+
+            //homepage carousel
+            $('#load-carousel').delay(500).fadeOut('slow', function(){
+                var theCarousel = $('#carousel ul');
+                theCarousel.cycle({
+                    fx      : 'fade',
+                    speed   : 750,
+                    timeout : 0,
+                    pager   : '#pager',
+                    timeout : 7000,
+                    before: function(currSlideElement, nextSlideElement, options, forwardFlag){
+                        $('#carousel li').removeClass('animIn animOut');
+                        $(currSlideElement).addClass('animOut');
+                    },
+                    after: function(currSlideElement, nextSlideElement, options, forwardFlag){
+                        $('#carousel li').removeClass('animIn animOut');
+                        $(nextSlideElement).addClass('animIn');
+                    },
+                    onPagerEvent : function(){
+                        theCarousel.cycle('pause');
+                    }
+                });
+
+
+                $(document).keydown(function(e){
+                    if (e.keyCode == 37) {
+                        theCarousel.cycle('prev');
+                        theCarousel.cycle('pause');
+                        return false;
+                    } else if(e.keyCode == 39){
+                        theCarousel.cycle('next');
+                        theCarousel.cycle('pause');
+                        return false;
+                    }
+                });
+
+                $('#pager a:last').addClass('last');
+                $('#pager').width(($('#pager a').outerWidth(true) * $('#pager a').length)-8);
+            });
+
+    });
+  </script>
+{% endblock %}
+
+{% block body_container %}
+  <div id="content" class="clearfix" style="padding-bottom:0px">
+      <noscript>&lt;style type="text/css"&gt; #load-carousel {display:none;}
+      &lt;/style&gt;</noscript>
+
+      <div id="homepage">
+        <div id="carousel-container" class="clearfix">
+          <div id="load-carousel" class="clearfix"></div>
+
+          <div id="carousel">
+            <ul>
+              <li id="slide-1" style=
+              "position: absolute; top: 0px; left: 0px; display: block; z-index: 4; opacity: 1; width: 1423px; height: 450px;"
+              class="animIn">
+                <h2><strong>Welcome to eVidyaloka.</strong><br />
+                We are a new non-profit organisation<br />
+                focuses on transforming the education landscape<br />
+                in the rural and remote regions of the India</h2>
+
+                <h2 class="line2">We ignite passions and help students<br />
+                find relevance in school.</h2>
+
+                <div class="inset">
+                  <a href="/test2/" class="classy-button">Visit our centers</a>
+                </div>
+              </li>
+
+              <li id="slide-3" style=
+              "position: absolute; top: 0px; left: 0px; display: none; z-index: 5; opacity: 0; width: 1423px; height: 450px;"
+              class="">
+                <div class="line"></div>
+
+                <div class="demand-container" style="margin-top:60px;">
+                  <div style=
+                  "background: transparent url('/static/images/student.png') top left no-repeat;"></div>
+
+                  <p><b>{{ student1 }}</b> from {{ center1 }} wants to learn {{ sub_stu1 }}</p>
+                </div>
+
+                <div class="demand-container">
+                  <div style=
+                  "background: transparent url('/static/images/students.png') top left no-repeat;">
+                  </div>
+
+                  <p><b>{{ num1 }}+</b> Students of {{ center2 }} wants to learn {{ sub_stu2 }}</p>
+                </div>
+
+                <div class="demand-container">
+                  <div style=
+                  "background: transparent url('/static/images/school.png') top left no-repeat;"></div>
+
+                  <p>{{ count }} Schools in <b>{{ center1 }}</b> are lacking {{ sub_stu1 }} teachers</p>
+                </div>
+
+                <div class="demand-container">
+                  <div style=
+                  "background: transparent url('/static/images/students.png') top left no-repeat;">
+                  </div>
+
+                  <p><b>{{ num2 }}+</b> Students from {{ center1 }} wants to learn {{ sub_stu1 }}</p>
+                </div>
+              </li>
+            </ul>
+
+            <div class="carousel-shadow-left carousel-shadow"></div>
+
+            <div class="carousel-shadow-right carousel-shadow"></div>
+
+            <div id="pager" class="clearfix" style="width: 60px;"></div>
+          </div>
+        </div>
+{% endblock %}

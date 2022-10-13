@@ -1,0 +1,126 @@
+
+<html lang="en">
+    <head>
+    <style>
+   .btn {
+       background-color: #4CAF50; /* Green */
+       border: none;
+       color: white;
+       padding: 7px 10px;
+       text-align: center;
+       text-decoration: none;
+       display: inline-block;
+       font-size: 16px;
+       margin: 4px 2px;
+       cursor: pointer;
+       width: 12%;
+   }
+   
+   .syllabus {background-color: #f44336;} /* Red */
+   .community {background-color: #9166ca;} /* voilet */ 
+   .tool {background-color: #88b54e;} /* Green */
+   .task {background-color: #3ea5be;} /* Blue */ 
+   .center-data b{
+    color: #1016dc;
+   }
+   .center-data p{
+    color: #e40f22;
+   }
+   
+   
+   </style>
+    </head>
+    <body>
+    <p>Dear {{ user }},</p>
+    <p>Please find below the details to help you prepare for your sessions.</p>
+    <p><b>Background of the Students:</b></p>
+    <p>The students are from government schools in remote villages, they lack the infrastructure and manpower -
+     the teachers. </p>
+     <p>Therefore, it is recommended that you understand the knowledge level of the students before you proceed with the syllabus. </p>
+     <p>A brief revision of the basics will also help you to build a rapport with the students, enhance their confidence and motivate them to learn more.</p>
+    <p>Example: A 6th standard student may need to be taught basics of multiplication,
+     students in 8th may need to be taught how to construct basic sentences etc. 
+   You may know more about the various tools to teach, syllabus,
+    the volunteer community and tasks by clicking the below buttons.</p>
+    <div>
+       <a class="btn syllabus" href="http://wikividya.evidyaloka.org"
+           target="_blank">Syllabus</a>
+       <a class=" btn community" href="http://evidyaloka.facebook.com"
+           target="_blank">Community</a>
+       <br>
+       <a class="btn tool" href="http://www.evidyaloka.org/aidsntools/">Tools
+           to Teach</a>
+       <a class=" btn task " href="http://www.evidyaloka.org/task_list/"
+           target="_blank">My Tasks</a>
+   </div>
+   
+   <div class='center-data'>
+   <p><b>Village:</b>{{center.village}}</p>
+   <p><b>District:</b>{{center.district}} </p>
+   <p><b>Center Admin:</b> {{center.admin.first_name}}  {{center.admin.last_name}}  {% if center_details %}({{center_details.phone}} , {{center.admin.email}} ,{{center_details.skype_id}}) {% endif %}</p>
+   <p><b> Grade: </b>{{grade}}</p>
+   <p><b>Subject: </b>{{subjects}}</p>
+   <p><b>Days:</b>  {{days}}</p>
+   <p><b>School Skype ID:</b>{{center.skype_id}}</p>
+   <p><b>Class Assistant: </b>{{assistant.first_name}}  {{assistant.last_name}}  ({{assistant_details.phone}})</p>
+   </div>
+   
+   
+       <p>
+    You may also login at www.evidyaloka.org/myevidyaloka to view the details of the center, the point of contact for the center and the timetable.
+   </p>
+   <b>Suggestions to prepare for first two classes:</b>
+   <p>
+   1. Show the children where they are located (school) and where you are located (your city) via Google Maps, using Screen Share on Skype.<br>
+   2. Tell them about yourself (the students love hearing stories about their teachers, their experiences in school, their current job, their qualification, how much they've studied to reach their current position).<br>
+   3. Ask them about their hobbies, the games they like to play, and what’d want to become when they are older etc.<br>
+   4. Any playful/moral story's cartoon video in the local language.<br>
+   5. Story Telling: https://drive.google.com/drive/folders/0B4m07xnDF8JpfnVCanV0T1JSNHRnWFdFT0J2YndDZ2o0VUtLQmhpM1ByQVJtZXFoWFVFNzA?usp=sharing
+   </p>
+   <p>Please feel free to reach out to the State Coordinator 
+   {% if center.state == 'Tamil Nadu' %}
+   
+       Gayathri Ramesh for any further queries:</p>
+       Email ID: gayathri.ramesh@evidyaloka.org<br>
+       Skype: bgayathriramesh<br>
+       Phone: 09444126474
+       
+   {% elif center.state == 'Andhra Pradesh' or center.state == 'Telengana'  %}
+   
+       Mallikharjuna for any further queries:</p>
+       Email ID: mallikharjuna.m@evidyaloka.org<br>
+       Phone: 7036737427
+       
+   {% elif center.state == 'Jharkhand' %}
+   
+       Tahamul Hussain or Diwakar Kumar for any further queries:</p>     
+       Email ID: tahamul.hussain@evidyaloka.org or diwakar.kumar@evidyaloka.org<br>
+       
+       
+   {% elif center.state == 'Karnataka' %}
+   
+       Avanthi Ashwini and Shruthi JN  for any further queries:</p>
+       Email ID: ashwini.avanthi@evidyaloka.org , shruthi.jn@evidyaloka.org <br>
+       Skype: avanthi.ashwini , shruthigowda.jn<br>
+       Phone: 07411302286 , 09611190041 
+       
+   {% elif center.state == 'West Bengal' %}
+   
+       Rinki Chowdhury for any further queries:</p>
+       Email ID: rinki.chowdhury@evidyaloka.org  <br>
+       Skype: rinki.chowdhury_1<br>
+       Phone: 09552440313 
+       
+   {% elif center.state == 'Maharashtra' %}
+   
+       Deepak Bhaga for any further queries:</p>
+       Email ID: deepak.bhagat@evidyaloka.org<br>
+       Phone: 8087337073
+       
+   {% endif %}
+   <br><br><br><br><br>
+   <a href="https://www.evidyaloka.org/static/eV_circle_time.pdf" target="_blank" style=""><img src="https://www.evidyaloka.org/static/eV_circle_time.png" alt="evcircle" width="360" height="600" srcset=""></a>
+   
+   
+    </body>
+    

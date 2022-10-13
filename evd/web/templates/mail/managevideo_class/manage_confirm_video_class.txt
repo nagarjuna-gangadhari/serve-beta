@@ -1,0 +1,59 @@
+<html lang="en">
+ <head>
+ <style>
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.button1 {background-color: rgba(3, 186, 0, 0.98);} /* Blue */
+</style>
+ </head>
+ <body>
+
+<p>Dear {{author}},</p>
+
+<p>Many many students in the rural communities will benefit from the video capsules that you create and share.</p>
+
+<p>We are pleased to confirm that the Chapter - {{topic}}, of  {{grade}} {{subject}} from {{board}} board has been successfully assigned to you to create the video classes for.</p>
+
+<p><b>The subtopics for the chapter are:</b></p>
+{% for ent in subtopic_list %}
+{{ent.name}}<br>
+ {% endfor %}
+
+
+<p>Please share the  URLs of {{sub_topic_count}} videos associated with the {{topic}} on or before {{tomorrow_formatted}}</p>
+
+<p>You may submit the  URL for the completed videos here.<a href=" https://www.evidyaloka.org/v2/video_assignment"> https://www.evidyaloka.org/v2/video_assignment</a></p>
+
+<p>You may know more about what various tools to create the video, the syllabus to teach in each video and the flow by clicking the following buttons.</p>
+
+<p><b>Text Book Link-<b>wikividya.evidyaloka.org</p>
+<p><b>Template-<b>www.evidyaloka.org/static/video_class_management/Video_ClassGuidelines.pdf</p>
+<p><b>Guideline:<b>www.evidyaloka.org/static/video_class_management/Template_for_Video_Capsule.pdf</p>
+<p><b>Sample Reference videos:<b> https://www.youtube.com/watch?v=ui7sHfaLc0c&list=PLbdxk95Fm6Yw4sIwgXYW8mSIUE_Z-DJFZ</p>
+<p>Please login at www.evidyaloka.org/myevidyaloka to view the details of the booked chapter, and the guiding videos.</p>
+
+<p>Please feel free to reach out to us for further queries.</p>
+<p>Email id: rini.jose@evidyaloka.org</p>
+<p>Phone no:7696349226</p>
+
+
+<p>With Regards,</p>
+<p>eVidyaloka Team</p>
+<a href="/?home=true"> <img src="/static/images/evl_logo.png" style="border-radius: 100%;"width="55px" height="55px"></a>	
+<p>www.evidyaloka.org</p>
+<p>Skype: evidyaloka.helpdesk | Phone: 080 - 40903939 | Email: videoclass@evidyaloka.org</p>
+
+
+
+

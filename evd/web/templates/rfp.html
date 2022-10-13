@@ -1,0 +1,278 @@
+ {% extends "intermediate_base.html" %}
+ {% load tags %}
+ {% block head_title %}eVidyaloka{% endblock %}
+ {% block head_styles %}
+   {{ block.super }}
+
+
+ <style>
+ thk{ font-weight:bold; color:black;  }
+ .thick{ font-weight: bold; color:black }
+ .listpad { padding-left:40px; padding-bottom:10px; }
+ td{ padding:10px; width:50%; }
+ a { font-size: 14px; }
+ p{
+ font-size:15px;
+text-align: justify;
+    text-justify: inter-word;
+ }
+ h1{  font-size:18px;  color:black; font-weight:bold; }
+ </style>
+ {% endblock %}
+  {% block head_scripts %}
+  {{ block.super }}
+  {% endblock %}
+  {% block body_container %}
+
+  <link href="/static/css_new/login_modal.css" rel="stylesheet">
+  <script src="/static/js_new/login_function.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+        var $partner_modal = $('#partner-signup-trigger');
+    });
+  </script>
+
+  <div style="background-color:white;margin-bottom:20px; padding:20px;">
+
+  <table style="border-spacing: 10px;">
+<tr>
+    <h1 style="color:#F15A22;text-align:center;font-size:20px; ">How does the partnership with eVidyaloka works</h1> 
+    <button class="btn btn-info btn-md already" style="position:relative;float:right;top:-27px;" data-toggle="modal" data-target="#partner-modal" id="partner-signup-trig">Register</button>
+      <td>
+    <h1 >  Introduction   </h1><br>
+    <p><thk>eVidyaloka Trust</thk> is registered non-profit Trust, based out of Bangalore. Our Vision is To Create<thk style="font-size:13px;"> A KNOWLEDGEABLE & EMPOWERED RURAL INDIA THROUGH QUALITY EDUCATION.</thk> We strive to achieve with a Mission of - CONNECTING PASSIONATE VOLUNTEERS TO PROVIDE QUALITY EDUCATION FOR RURAL CHILDREN, using Technology.</p>
+    <br>
+  <b>Project Purpose & Description </b>
+  <br>
+  <p><thk stlye="font-style:italic">Scenario:</thk> The quality of education of children studying in the Government Schools in rural Villages are quite poorly reflected in their learning levels. Hence the children going out of these schools undergo various social challenges. This poor quality of education is primarily due to shortage of quality Teachers in these villages, apart from various other reasons.</p>
+  <br>
+<p><thk stlye="font-style:italic">Solution: </thk>eVidyaloka addresses this gap by connecting Teaching Volunteers of high quality from across the world with the rural Villages; using Digital Classroom technology. Subjects taught are Science, Mathematics and Basic English, based on State Board curriculum in the local language medium for 5th to 8th standard students. This will be a supplementary offering, in addition to the ongoing classes in the Government school.</p>
+  <br>
+  <p><thk stlye="font-style:italic">How it works:</thk> A digital classroom with broadband internet, is setup in one of the classrooms in the Govt School. Volunteer Teachers from across different locations connect via Skype to teach the students. Both the students and teacher can see each other live, in real time and interact. eVidyaloka in the backend manages the complete running of the online virtual school operations. It involves identification of teachers, planning of time tables and curriculum, delivery of classes, Track student’s learning outcome, handle feedback etc.  </p>
+  <br>
+  <p>A detailed Digital Classroom Handbook can be downloaded from the Annexures section, for your reference.</P><br>
+  </td>
+  <td>
+   <img src="/static/images/class1.png" />
+   <br><br>
+<b>Project Scope</b>
+<br>
+<p>In the current Academic Year 2018-19, eVidyaloka programme is running in 160 centers across Jharkhand, Andhra Pradesh Tamil Nadu, Karnataka, West Bengal, Maharasthra, UP, Bihar, Odisha and Uttarakhand through 21 different partner NGOs in the respective villages. Details can be obtained here:<a href="/v2/centerNew/" target="_blank"> www.evidyaloka.org/centers</a> </p><br>
+<p>
+For the upcoming Academic Year 17-18, the plan is to expand to 200 centers where there is a dire shortage of teachers and interested Partners NGOs, who can work with the local government schools and make this quality education service available in their villages.
+</p><br>
+<b>Roles & Responsibilities</b>
+<br>
+<p><thk>Partner</thk> will be responsible for all the Local management activities ranging from working closely with the school administration, establishing the Digital Classroom, Identifying a Class Assistant, Applying for Broadband connection, Managing operations and maintenance of the Digital Classroom availability and safety of children, physical infrastructure upkeep, local utilities like Electricity, Water and Internet maintenance and any other local logistics support required for the project in the Village.</p>
+<br>
+<p><thk>eVidyaloka</thk> will be responsible for all the Remote management activities ranging from Providing Digital Classroom infrastructure, Sourcing and managing the Teachers, Class schedules, Content management, Operations governance, Evaluations, Managing feedbacks etc.
+A detailed Terms of Engagement shall be shared on expression of Interest.
+</p>
+<br>
+
+
+      </td>
+      </tr>
+      </table>
+      </div>
+  <div style="background-color:white;margin-bottom:20px;padding:20px;">
+
+  <table style="border-spacing: 10px;">
+<tr>
+
+      <td>
+     <img src="/static/images/cow.png" height=162px width=430px  />
+     <br><br>
+
+      <!-- <h2>Cost & Budget</h2>
+      <br>
+      <p class="thick">For one School:</p>
+      <ul class="listpad" >
+      <li style='text-align:justify;justify:inter-word'> -    Digital Classroom One time setup cost: Rs. 65,000 (CPU, 32” LED, Camera, Speakers, Modem & UPS)    </li>
+      <li style='text-align:justify;justify:inter-word'> - Monthly Center Operating & Platform Cost: Rs. 7000 pm (Broadband bill , Class Assistant, Maintenance etc)</li>
+      <li style='text-align:justify;justify:inter-word'>- Other back end Operating & Platform Cost: Rs. 10,000 pm (eVidyaloka backend operations)</li>
+      </ul>
+      <p class="thick">Overall Setting up and Operating cost: Rs. 2,65,000 </p>
+      <p>School Side Cost : Rs. 1.49 Lakhs.</p>
+      <p>eVidyaloka Side cost: Rs. 1.16 Lakhs</p>
+      <p>eVidyaloka will raise funds for most part of the Project Cost, Partners are expected to contribute a minimum 15% of the total cost. This can be in the form of equipment, broadband bill, class assistant etc.</p>
+ -->      <br>
+     <br>
+      <b>Partner Evaluation Criteria:</b>
+      <br>
+      <p>Min. Eligibility Criteria of a Partner Organization: </p>
+      <ul  class="listpad">
+      <li>- A registered non-profit organization with 80G/12A.   </li>
+      <li>- Have ongoing projects with strong field presence in the proposed areas (need not be in the specific villages) </li>
+      <li> -    Have long term commitment (at least 3 to 5 years) in the village/region </li>
+      </ul>
+      <br>
+     </td>
+     <td>
+
+     <br>
+     <b>Annexures:</b>
+     <br>
+     <p class="thick" >Reference Documents:  Click to Download</P>
+     <ul class="listpad">
+     <li> <a href="http://www.evidyaloka.org/static/downloads/Digital_Classroom_Playbook-v0.3.pdf" target="_blank">-&nbsp Digital Classroom Playbook</a>(how it works)</li>
+     <li> <a href="http://www.evidyaloka.org/static/downloads/eVidyaloka_School_Identification_Template.docx" target="_blank">-&nbsp School Identification Template</a><p style="font-size:12px;display:inline;">(to be submitted later)</p></li>
+     <li><a href="http://www.evidyaloka.org/static/downloads/eVidyaloka-%5bPartner%5d-Terms_of_Engagement.docx" target="_blank">- Standard Terms of Engagement</a></li>
+     <li><a href="http://www.evidyaloka.org/static/downloads/Reference_permission_letter_from_Govt.jpg" target="_blank">- Sample Permission Letter (from Govt.)</a></li>
+     </ul>
+
+     <p class="thick" >View a Recorded Class here (4mins): </p>
+     <ul class="listpad">
+       -&nbsp <a href ="http://goo.gl/W8YBMp" target="_blank">http://goo.gl/W8YBMp</a>
+       </ul>
+
+     <p class="thick" >Children Views can be heard here:</p>
+      <ul class="listpad">
+      -&nbsp <a href ="http://goo.gl/eMHkHy" target="_blank">http://goo.gl/eMHkHy</a>
+      </ul>
+      
+      <p class="thick" >Views from our Online Teaching Volunteers:</p>
+      <ul class="listpad">
+       -&nbsp <a href ="http://goo.gl/cJG7Op" target="_blank">http://goo.gl/cJG7Op</a>
+      </ul><br>
+
+       <p class="thick" >Contact Details:<p>
+      <p>Contact Person: Venkat Sriraman</p>
+      <p> Email: <a href="venkat.sriraman@evidyaloka.org">venkat.sriraman@evidyaloka.org</a></p>
+      <p>Phone: +91 80 40903939</p>
+      <p>Website: <a href="http://www.evidyaloka.org" target="_blank">www.evidyaloka.org</a></p>
+      <br>
+      <img src="/static/images/thank_child.png" height=301px width=432px />
+       
+
+
+     </ul>
+<br><br><br><br>
+
+      </td>
+</tr>
+</table>
+  </div>
+
+<style>
+    .form-error::-webkit-input-placeholder {
+      color: #4a4a4a
+    }
+    .form-error:-moz-placeholder {
+      color: #4a4a4a
+    }
+    .form p.note {
+      font-size: 12px;
+      color: #bcbcbc;
+      font-family: 'PlutoCondRegularItalic';
+      text-align: center;
+      margin: 13px auto 0;
+      width: 90%
+    }
+    .form{
+    display: block;
+    margin-top: 0em;
+    }
+    input, textarea {
+    font-size: 12px;
+    display: block;
+    width: 80%;
+    height: 100%;
+    padding: 5px 0px;
+    margin-bottom: 20px;
+    background: none;
+    background-image: none;
+    border: 1px solid #a0b3b0;
+    }
+    .modal-dialog{
+        width : 700px;
+        max-width: 700px;
+    }
+    .form{
+        max-width : 700px;
+    }
+    label{
+        font-weight: normal; !important
+    }
+</style>
+
+<!-- Partner Signup Form-->
+    <div id="partner-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="position: relative;">
+            <div class="">
+                <button type="button" class="close" data-dismiss="modal"style="padding:10px;font-size:30px;color:#000">&times;</button>
+            </div>
+            <div style="border:5px solid rgb(98, 94, 94)">
+                <div class="form">
+                    <form id="partner-signup-trigger" align="center" style="padding:5px 20px 0px 33px; text-align:left;" >
+                    <span id="partnertype" class="hide">Volunteer Partner</span>
+                    {% csrf_token %}
+                        <input type="hidden" name="next" value='/myevidyaloka/'/>
+                        <h1>Welcome!</h1>
+                        <p style="position: relative;right: -180px;margin: 11px;">Please fill in the details to get started</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                            <input name="name" class="form-control" placeholder = "Your name" type="text" required=""/>
+                            </div>
+                            <div class="col-md-6">
+                                <input name="name_of_organization" class="form-control" placeholder = "Organization Name" type="text" required=""/>
+                            </div>
+                        </div>
+                        <div id='ajax_loader'
+                             style="position: fixed; left: 48%; top: 48%; display: none; z-index: 999;">
+                            <img src="/static/img_new/ajax-loader.gif"/>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type='email' class="form-control" name='email' placeholder="Organization Email" type="text" required=""/>
+                            </div>
+                            <div class="col-md-6">
+                                <input type='phone' class="form-control" name='phone' placeholder="Organization Phone" type="text" required=""/>
+                            </div>
+                        </div>
+                        <input type='address' style="width:580px;" class="form-control" name='address' placeholder="Address" type="text" required=""/>
+                        <div class="row" style="left: 17px;">
+                            <div>
+                                <h5 style="position: relative;top: -8px;font-weight: bolder;">Contact Person Details</h5>
+                                <span style="font-size:12px;">(An user will be created based on the below details and assigned as default Partner Admin)</span>
+                            </div>
+                            <input type='poc_name' style="width:580px;" class="form-control" name='poc_name' placeholder="Full Name" type="text" required=""/>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type='poc_email' class="form-control" name='poc_email' placeholder="Email" type="text" required=""/>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type='poc_phone' class="form-control" name='poc_phone' placeholder="Phone" type="text" required=""/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="left:17px;">
+                            <h5 style="position: relative;top: -8px;font-weight: bolder;">Select Partner Types</h5>
+                            <div class="row" style="top:10px;">
+                                <div class="col-md-4">
+                                    <input type="checkbox" id="Volunteering Partner" name="ptype" value="Volunteering Partner"/>
+                                    <label for="Volunteering Partner">Would like to engage for Online volunteering opporutnities</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="checkbox" id="Delivery Partner" name="ptype" value="Delivery Partner" checked="checked"/>
+                                    <label for="Delivery Partner">Would like to start eVidyaloka Digital classroom in the village school</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="checkbox" id="Funding Partner" name="ptype" value="Funding Partner"/>
+                                    <label for="Funding Partner">Would like to enagage and Understand Funding Opportunities</label>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <button id="partner-signup" class="btn btn-success" style="margin-bottom:22px;width:580px;position: relative;top: 22px;">Sign Up</button>
+                        <br>
+                    </form>
+                </div>
+            </div>
+    </div>
+    </div>
+
+    <!-- PartnerSignup Done-->
+
+  {% endblock %}
+

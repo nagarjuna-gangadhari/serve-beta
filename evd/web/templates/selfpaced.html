@@ -1,0 +1,67 @@
+{% extends "footer_base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+        .subcontent .sub-menu {
+            padding:10px 20px;
+        }
+        .subcontent ul {
+            margin-top:10px;
+        }
+        .subcontent ul li {
+            font-size:14px;
+        }
+        .sub-menu p {
+            margin-bottom:10px;
+        }
+        .subcontent ul {
+            margin-bottom:0px;
+        }
+        .sub-menu .blue {
+            color:#f2a587;
+        }
+        .blue {
+            color: #11BEEE;
+            text-shadow: 0 -1px #f2a587,0 1px
+        }
+    </style>
+{% endblock %}
+
+{% block leftnav_list %}
+    <li><a href="/intro/" class="about-1"><span>Intro</span></a></li>
+    <li><a href="/code_conduct/" class="about-2"><span>Code of Conduct</span></a></li>
+    <li><a href="/aidsntools/" class="about-6"><span>Aids & tools</span></a></li>
+    <li><a href="/selfpaced/" class="about-6"><span>Self Trainings</span></a></li>
+    <li><a href="/curriculumreview/" class="about-6"><span>Curriculum Review</span></li>
+{% endblock %}
+{% block top_content %}
+    <div class="top clearfix">
+        <div class="intro">
+            <h1>Self Paced Trainings</h1>
+        </div>
+    </div>
+{% endblock %}
+{% block bottom_content %}
+    <div class="paper-bg-wrapper">
+        <div class="paper-bg">
+            <div class="subcontent">
+                <b><a href="https://www.youtube.com/playlist?list=PLbdxk95Fm6YyHf_vXHjSuC2l4QUOoHNq5"><span>Teacher Trainings Videos</span></a></b>
+                <br>
+                <br>
+               <b>Teacher's Handbook<b>
+                <br>
+                <br>
+                    <iframe style='width:725px;height:700px' src='http://online.fliphtml5.com/dpgf/disx/'  seamless='seamless' scrolling='no' frameborder='0' allowtransparency='true' allowfullscreen webkitAllowfullscreen mozAllowfullscreen></iframe> 
+                <br>
+                <br>
+                <b>Framework for Effective Teaching<b>
+                <br>
+                <br>
+                     <iframe style='width:725px;height:700px' src='http://online.fliphtml5.com/dpgf/yiae/'  seamless='seamless' scrolling='no' frameborder='0' allowtransparency='true' allowfullscreen webkitAllowfullscreen mozAllowfullscreen></iframe>
+                <br>
+                <br>
+            </div>
+        </div>
+    </div>
+{% endblock %}

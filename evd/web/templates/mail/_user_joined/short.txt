@@ -1,0 +1,2 @@
+{{user.first_name}} {{user.last_name}} joined on {{user.date_joined}}.
+

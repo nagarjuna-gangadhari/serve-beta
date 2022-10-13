@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block head_styles %}
+{{ block.super }}
+<style>
+#piktowrapper-embed {
+
+  margin-bottom: 50px;
+}
+img{
+    width: 100%;
+}
+</style>
+{% endblock %}
+
+{% block top_bar %}
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+{% block footer %}
+{% endblock %}
+{% block body_container %}
+
+
+
+
+
+<div style="cursor:all-scroll" id="piktowrapper-embed">
+    <div class="pikto-canvas-wrap">
+        <div class="pikto-canvas"></div>
+    </div>
+</div>
+<script>
+    (function(d){
+        var js, id="pikto-embed-js", ref=d.getElementsByTagName("script")[0];
+        if (d.getElementById(id)) {return;}
+        js=d.createElement("script"); js.id=id; js.async=true;
+        js.src="https://magic.piktochart.com/assets/embedding/embed.js?UID=1031045-winter";
+        ref.parentNode.insertBefore(js, ref);
+    }(document));
+    $(document).ready(function(){
+        window.setTimeout(footer_adjust(), 5000);
+    });
+</script>
+{% endblock %}

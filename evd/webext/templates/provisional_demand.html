@@ -1,0 +1,1808 @@
+{% extends "base.html" %}
+{% load filters %}
+{% load tags %}
+
+{% block head_title %}Provisional Demand{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_container %}
+
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/fontawesome.min.css">
+
+    <style>
+		::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+		color: white;
+		opacity: 0.8; /* Firefox */
+		}
+
+		:-ms-input-placeholder { /* Internet Explorer 10-11 */
+		color: white;
+		}
+
+		::-ms-input-placeholder { /* Microsoft Edge */
+		color: white;
+		}
+
+        ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+          font-family: sans-serif;
+        }
+
+        .ui-datepicker-title {
+            color: black;
+        }
+
+        select.ui-datepicker-month, select.ui-datepicker-year {
+            width: 45% !important;
+            font-family: sans-serif;
+            font-weight: normal;
+        }
+		input[type='radio'] {
+  -webkit-appearance:none;
+  width:15px;
+  height:15px;
+  border-radius:50%;
+  outline:none;
+  box-shadow:0 0 5px 0px gray inset;
+}
+
+input[type='radio']:hover {
+  box-shadow:0 0 5px 0px brown inset;
+}
+
+input[type='radio']:before {
+  content:'';
+  display:block;
+  width:60%;
+  height:60%;
+  margin: 20% auto;
+  border-radius:50%;
+}
+input[type='radio']:checked:before {
+  background:brown;
+}
+        .ui-datepicker-month {
+            margin-right: 2px !important;
+        }
+
+        .bottom_margin_px {
+			margin-bottom: 2px;
+		}
+
+		.timing_slot{
+			border: 1px solid #d3d3d3;
+			padding: 10px;
+			border-radius: 5px;
+		}
+
+        .center_div {
+			margin: 0 auto;
+		}
+
+		.days_table{
+			text-align: center;
+			font-size: 14px;
+			color: black;
+			font-family: sans-serif;
+		}
+
+		.days_table label{
+			color: black;
+			font-family: sans-serif;
+		}
+
+		.days_table input[type=checkbox] {
+			color: black;
+			font-family: sans-serif;
+			position: initial;
+			margin-left: -60px;
+			margin-top: -23px;
+			padding: 5px;
+			height: unset;
+		}
+
+        #add_demand_btn_container {
+            width: 100%;
+        }
+
+		.collapsible {
+			border: none;
+			background-color: #27A3E2;
+			border-radius: 5px;
+			cursor: pointer;
+			text-align: left;
+			padding: 12px;
+			width: inherit;
+			font-size: 16px;
+			font-family: sans-serif;
+			color: white;
+			outline: none;
+		}
+
+		.active, .collapsible:hover {
+			background-color: #035E8C;
+			color: white;
+		}
+
+		.new_booking_form {
+			border: 2px solid #27A3E2;
+			border-radius: 5px;
+		}
+
+		.options_container {
+			width: 90%;
+			margin-top: 24px;
+		}
+
+		input.larger {
+	      width: 10px;
+	      height: 10px;
+	    }
+
+		.row_child {
+			width: 35%;
+			height: inherit;
+			padding-left: 6px;
+			outline: none;
+			border-radius: 5px;
+			border: 1px solid rgb(166, 166, 166);
+		}
+
+		.popup_row_child {
+			width: 100%;
+			height: 30px;
+			padding-left: 6px;
+			outline: none;
+			border-radius: 5px;
+			border: 1px solid rgb(166, 166, 166);
+		}
+
+		.row_container {
+			height: 30px;
+			font-size: 16px;
+		}
+
+        fieldset {
+            overflow: hidden
+        }
+
+		.radio-buttons {
+          clear: none;
+        }
+
+        .radio-buttons label {
+          float: left;
+          clear: none;
+          display: block;
+          padding: 0px 1em 0px 3px;
+        }
+
+		input[type=radio],
+        input.radio {
+          float: left;
+          clear: none;
+          margin: 2px 0 0 2px;
+        }
+
+        #provisional_demand_lists {
+            width: 1200px;
+            margin-left: -130px;
+        }
+
+		#start_date {
+		    display: inline-block;
+		}
+
+		#teachers_count {
+			border: 1px solid rgb(166, 166, 166);
+			border-radius: 5px;
+			outline: none;
+			padding-left: 6px;
+			display: inline-block;
+		}
+
+		select {
+			outline: none;
+			font-size: 12px;
+		}
+
+		.btn-primary {
+			background-color: #27A3E2;
+			border-color: #27A3E2;
+		}
+
+		.option_label {
+			width: 10%;
+			color: black;
+			text-align: right;
+			margin-right: 10px;
+			font-family: sans-serif;
+		}
+
+		.popup_option_label {
+			width: 100%;
+			color: black;
+			text-align: right;
+			font-family: sans-serif;
+		}
+
+		#volunteer_list_table {
+		    max-height: 240px;
+		}
+
+		.table-fixed tbody {
+			height: 200px;
+			overflow-y: auto;
+			width: 100%;
+		}
+
+		.table-fixed thead,
+		.table-fixed tbody,
+		.table-fixed tr,
+		.table-fixed td,
+		.table-fixed th {
+			display: block;
+		}
+
+		.day_from {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 0px !important;
+        }
+
+		.table-fixed tr:after {
+			content: "";
+			display: block;
+			visibility: hidden;
+			clear: both;
+		}
+
+		.table-fixed tbody td,
+		.table-fixed thead > tr > th {
+			float: left;
+		}
+
+		.table > thead > tr > th,
+		.table > thead > tr > td {
+			font-size: .9em;
+			font-weight: 400;
+			border-bottom: 0;
+			letter-spacing: 1px;
+			vertical-align: top;
+			padding: 8px;
+			background: #27A3E2;
+			text-transform: uppercase;
+			color: #ffffff;
+		}
+
+		.demand_details_popup, .demand_view_popup, .demand_convert_popup {
+			background:transparent;
+			cursor:pointer;
+			display:none;
+			/*height: 100%;*/
+			top: 50px;
+			position:fixed;
+			text-align:center;
+			width:100%;
+			z-index:10000;
+			margin-left: -17%;
+		}
+
+		.demand_convert_popup > div {
+		    background-color: #fff;
+			box-shadow: 5px 5px 30px #000000;
+			display: inline-block;
+			height: auto;
+			max-width: 865px;
+			vertical-align: middle;
+			width: 100%;
+			position: relative;
+			border-radius: 5px;
+			overflow-y: 2px;
+			overflow-x: 2px;
+			padding: 15px 2%;
+			margin-top: 100px;
+		}
+
+		.demand_view_popup > div {
+			background-color: #fff;
+			box-shadow: 5px 5px 30px #000000;
+			display: inline-block;
+			height: auto;
+			max-width: 865px;
+			vertical-align: middle;
+			width: 100%;
+			position: relative;
+			border-radius: 5px;
+			overflow-y: 2px;
+			overflow-x: 2px;
+			padding: 15px 2%;
+			margin-top: 100px;
+		}
+
+		.demand_details_popup > div {
+			background-color: #fff;
+			box-shadow: 5px 5px 30px #000000;
+			display: inline-block;
+			height: auto;
+			max-width: 865px;
+			/*min-height: 480px;*/
+			vertical-align: middle;
+			width: 100%;
+			position: relative;
+			border-radius: 5px;
+			overflow-y: 2px;
+			overflow-x: 2px;
+			padding: 15px 2%;
+			margin-top: 100px;
+		}
+
+		.popupHeading{
+			/* background-color: #27A3E2;
+			margin-left: -85px;
+			margin-right: -84px;
+			margin-top: -14px;
+			border-top-left-radius: 2%;
+			padding: 13px; */
+			border: none;
+			text-align: center;
+			font-size: 16px;
+			font-family: sans-serif;
+			color: black;
+			font-weight: bold;
+		}
+
+		.popupCloseButton {
+			background-color: #fff;
+			border: 3px solid #27A3E2;
+			border-radius: 50px;
+			cursor: pointer;
+			display: inline-block;
+			font-family: arial;
+			font-weight: bold;
+			position: absolute;
+			top: -12px;
+			right: -12px;
+			font-size: 25px;
+			line-height: 25px;
+			width: 30px;
+			height: 30px;
+			text-align: center;
+		}
+
+		.popupCloseButton:hover {
+			color:white;
+			background-color: #27A3E2;
+			border: 3px solid white;
+		}
+
+		#demand_table_body tr:hover td {
+			background-color: #27A3E2;
+			color: white;
+		}
+
+		body {
+			background-color:snow;
+		}
+
+		tbody > td {
+			color: black;
+		}
+
+		.icon-bar {
+			width: 100%; /* Full-width */
+			background-color: #E0E1E3;
+			overflow: auto; /* Overflow due to float */
+			float: right;
+		}
+
+		.icon-bar div {
+			float: right; /* Float links side by side */
+			text-align: center; /* Center-align text */
+			width: 3.5%;
+			padding: 3px 0; /* Some top and bottom padding */
+			transition: all 0.3s ease; /* Add transition for hover effects */
+			color: white; /* White text color */
+			font-size: 18px; /* Increased font size */
+			color: #555555;
+		}
+
+		.icon-bar div:hover {
+			color: white;
+			background-color: #27A3E2; /* Add a hover color */
+		}
+
+		.active {
+			background-color: #4CAF50; /* Add an active/current color */
+		}
+
+	</style>
+	
+
+	<script>
+
+		var no_of_marked_checkboxes = 0;
+		var demand_popup_course_id = 0;
+		var demand_popup_center_id = 0;
+		var demand_popup_booked_count = 0;
+        var demand_popup_board = '';
+		var conversion_data = {};
+
+		var max_pages = 1;
+		var min_pages = 1;
+
+		var booked_volunteers_list = [];
+
+		// Firefox 1.0+
+        var isFirefox = typeof InstallTrigger !== 'undefined';
+
+		$(document).ready(function() {
+
+			if ( $("#empty_list_row").css("display") === undefined ) {
+				$("#new_booking_form").css("display", "none");
+				$("#accordian").text("+");
+			}
+
+			$("#add_demand_btn_container").click(function() {
+				if ( $("#new_booking_form").css("display") === "block" ) {
+					$("#new_booking_form").css("display", "none");
+					$("#accordian").text("+");
+				} else {
+					$("#new_booking_form").css("display", "block");
+					$("#accordian").text("-");
+				}
+			});
+
+			$("#save_demand").click(function(evt) {
+				//console.log("***** Save Demand ******");
+				if ( $("#boards").val() == "" || $("#subjects").val() == "" || $("#grade").val() == "" ||
+					$("#teachers_count").val() == "" || $("#teachers_count").val() == "0" || $("#start_date").val() == "" ) {
+					var message = "Please fill all the information";
+					if ( $("#teachers_count").val() == "0" ) {
+						message += ". Number of teachers required shouldn't be 0";
+					}
+					alert(message);
+					return false;
+				}
+
+				var time_slot = get_selected_time_window(); //$("#time_slot").val();
+
+				var slots = {
+				    'Monday': time_slot,
+				    'Tuesday': time_slot,
+				    'Wednesday': time_slot,
+				    'Thursday': time_slot,
+				    'Friday': time_slot,
+				    'Saturday': time_slot
+				}
+
+				var post_data = {'csrfmiddlewaretoken': getCookieValue('csrftoken'), 'board': $("#boards").val(),
+					'subject': $("#subjects").val(), 'grade': $("#grade").val(),
+					'no_of_teachers': $("#teachers_count").val(), 'start_date': $("#start_date").val(), 'slots': JSON.stringify(slots)}
+
+				$.post("/v2/add_provisional_demand/", post_data, function(response) {
+					//console.log("***** ADD PROVISIONAL DEMAND *****\n" + response);
+					alert(response['message']);
+					window.location = '/v2/provisional_demand/'
+				});
+			});
+
+			if ( document.getElementById("empty_list_row") == null ) {
+				document.getElementById("control_icons").removeAttribute("hidden");
+			}
+
+			$('.popupCloseButton').click(function() {
+			    close_popup_display();
+			});
+
+			$('input[name=table_row_checkbox]').change(function() {
+				if ($(this).is(':checked')) {
+					no_of_marked_checkboxes += 1;
+				} else {
+					no_of_marked_checkboxes -= 1;
+					if ( no_of_marked_checkboxes < 0 ) {
+					    no_of_marked_checkboxes = 0;
+					}
+				}
+				update_icon_bar(no_of_marked_checkboxes);
+			});
+
+            if ( !isFirefox ) {
+                var container = document.querySelector('#details_popup');
+                var checkboxesAll = container.querySelectorAll('input[type="checkbox"]');
+                for ( var i = 0; i < checkboxesAll.length; ++i ) {
+                    checkboxesAll[i].style['marginLeft'] = "0px"
+                }
+            }
+
+            $(function() {
+            	$( "#start_date" ).datepicker({minDate:0, dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true});
+            	$( "#start_date" ).click(function(e){
+                	$( "#start_date" ).datepicker("toggle");
+            	});
+         	});
+
+         	$(function() {
+            	$( "#update_start_date" ).datepicker({minDate: 0, dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true});
+            	$( "#update_start_date" ).click(function(e){
+                	$( "#update_start_date" ).datepicker("toggle");
+            	});
+         	});
+
+         	$(function() {
+            	$( "#update_end_date" ).datepicker({minDate: 0, dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true});
+            	$( "#update_end_date" ).click(function(e){
+                	$( "#update_end_date" ).datepicker("toggle");
+            	});
+         	});
+
+            $(function() {
+            	$( "#convert_start_date" ).datepicker({minDate: 0, dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true});
+            	$( "#convert_start_date" ).click(function(e){
+                	$( "#convert_start_date" ).datepicker("toggle");
+            	});
+         	});
+
+         	$(function() {
+            	$( "#convert_end_date" ).datepicker({minDate: 0, dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true});
+            	$( "#convert_end_date" ).click(function(e){
+                	$( "#convert_end_date" ).datepicker("toggle");
+            	});
+         	});
+
+         	$("#convert_slot_time_1").on('change keydown paste input', function(){
+                validate_time_input("#convert_slot_time_1", $("#convert_slot_time_1").val());
+            });
+
+            $("#convert_slot_time_2").on('change keydown paste input', function(){
+                validate_time_input("#convert_slot_time_2", $("#convert_slot_time_2").val());
+            });
+
+            $("#volunteers_list").change(function() {
+                var volunteer = this.value;
+                var details = conversion_data[volunteer];
+
+                var temp = (details['start_date']).split(' ')[0]
+                $("#convert_start_date").val(temp);
+                temp = (details['end_date']).split(' ')[0]
+                $("#convert_end_date").val(temp);
+
+                var days = Object.keys(details['slots']);
+                sorted_days = sort_days(days);
+
+                $("#convert_slot_day_1").val(sorted_days[0]);
+                $("#convert_slot_day_2").val(sorted_days[1]);
+
+                var time = (details['slots'][sorted_days[0]]).split("-")
+                time = (time[0]).substring(0, 5) + " - " + (time[1]).substring(0, 5)
+
+                $("#convert_slot_time_1").val(time)
+
+                time = (details['slots'][sorted_days[1]]).split("-")
+                time = (time[0]).substring(0, 5) + " - " + (time[1]).substring(0, 5)
+
+                $("#convert_slot_time_2").val(time)
+            });
+
+         	$("#boards").change(function() {
+                    time_window_check_handler();
+         	    }
+         	);
+
+         	$("#subjects").change(function() {
+                    time_window_check_handler();
+         	    }
+         	);
+
+         	$("#grade").change(function() {
+                    time_window_check_handler();
+         	    }
+         	);
+
+         	$("#slot_7am").change(function() {
+                reset_radio_buttons();
+                this.checked = true;
+         	});
+
+         	$("#slot_9am").change(function() {
+                reset_radio_buttons();
+                this.checked = true;
+         	});
+
+         	$("#slot_11am").change(function() {
+                reset_radio_buttons();
+                this.checked = true;
+         	});
+
+         	$("#slot_1pm").change(function() {
+                reset_radio_buttons();
+                this.checked = true;
+         	});
+
+         	$("#slot_2pm").change(function() {
+                reset_radio_buttons();
+                this.checked = true;
+         	});
+
+         	$("#slot_7pm").change(function() {
+                reset_radio_buttons();
+                this.checked = true;
+         	});
+
+         	$("#update_slot_7am").change(function() {
+                reset_radio_buttons(false);
+                this.checked = true;
+         	});
+
+         	$("#update_slot_9am").change(function() {
+                reset_radio_buttons(false);
+                this.checked = true;
+         	});
+
+         	$("#update_slot_11am").change(function() {
+                reset_radio_buttons(false);
+                this.checked = true;
+         	});
+
+         	$("#update_slot_1pm").change(function() {
+                reset_radio_buttons(false);
+                this.checked = true;
+         	});
+
+         	$("#update_slot_2pm").change(function() {
+                reset_radio_buttons(false);
+                this.checked = true;
+         	});
+
+         	$("#update_slot_7pm").change(function() {
+                reset_radio_buttons(false);
+                this.checked = true;
+         	});
+
+         	$("#pagination").hide();
+         	$("#prev_page").click(function() {
+         	    var current_page = parseInt($("#page_number").val());
+         	    if (current_page > min_pages) {
+                    $("#page_number").val(parseInt($("#page_number").val()) - 1);
+                    update_booked_volunteer_page(current_page - 2);
+                }
+         	});
+
+         	$("#next_page").click(function() {
+         	    var current_page = parseInt($("#page_number").val());
+
+         	    if (current_page < max_pages) {
+         	        update_booked_volunteer_page(current_page);
+                    $("#page_number").val(parseInt($("#page_number").val()) + 1);
+                }
+         	});
+
+         	checkboxes = document.getElementsByName('table_row_checkbox');
+			var count = checkboxes.length;
+			for ( var i = 0; i < count; ++i ) {
+				checkboxes[i].checked = false;
+			}
+			
+			$("#icon_convert").hide();
+
+		});   /* END of document.ready */
+
+		function time_window_check_handler() {
+		    if ( $("#boards").val() != "" && $("#subjects").val() != "" && $("#grade").val() != "" ) {
+		        var board_name = $("#boards").val();
+		        var subject = $("#subjects").val();
+		        var grade = $("#grade").val();
+                $.get('/v2/get_slot_time/?board=' + board_name + '&subject=' + subject + '&grade=' + grade, function(response) {
+                    var time_slot = response['time'];
+                    reset_radio_buttons();
+                    if ( time_slot != "" ) {
+                        var radio_buttons = $("#time_window :radio");
+                        for (var i = 0; i < radio_buttons.length; ++i) {
+                            if (time_slot === radio_buttons[i].value) {
+                                radio_buttons[i].checked = true;
+                            }
+                            //radio_buttons[i].disabled = true;
+                        }
+                    } else {
+                        $("#slot_9am").prop('checked', true);
+                    }
+                });
+		    }
+		}
+
+        function update_booked_volunteer_page(page_number, size = 10) {
+            //console.log("update_booked_volunteer_page " + page_number);
+            $("#volunteer_list_table tbody").empty();
+		    $("#empty_vol_list").hide();
+
+		    var start_index = page_number * size;
+		    var end_index = (page_number + 1) * size;
+		    if ( end_index > booked_volunteers_list.length ) {
+		        end_index = booked_volunteers_list.length;
+		    }
+
+		    for ( var i = start_index; i < end_index; ++i ) {
+                var trow = '<tr style="height: 33px; background-color: #E0E1E3;">';
+				var timeSlotsObj = booked_volunteers_list[i]['slots']
+				var timeSlots = ''
+				for(var key in timeSlotsObj){
+					var k = String(key).substring(0,3)
+					var v = String(timeSlotsObj[key]).slice(0,5)+String(timeSlotsObj[key].slice(8,14))
+					timeSlots = timeSlots + k + ':' + v + ","
+				}
+				timeSlots = timeSlots.slice(0,-1)
+                trow += '<td class="col-xs-1" style="text-align: center; color: black">' + booked_volunteers_list[i]['id'] + '</td>';
+                trow += '<td class="col-xs-4" style="text-align: center; color: black">' + booked_volunteers_list[i]['name'] + '</td>';
+                trow += '<td class="col-xs-2" style="text-align: center; color: black">' + booked_volunteers_list[i]['role_outcome'] + '</td>';
+                trow += '<td class="col-xs-2" style="text-align: center; color: black">' + booked_volunteers_list[i]['user_pref'] + '</td>';
+				trow += '<td class="col-xs-2" style="text-align: center; color: black">' + timeSlots + '</td>';
+                trow += '<td class="col-xs-1" style="text-align: center; color: black" data-toggle="modal" data-target="#taskModel" onclick="drop_slots_provisional_demand(' + booked_volunteers_list[i]['id'] + ',' + booked_volunteers_list[i]['offering_id'] + ')"><i class="fa fa-trash"></i></td>';
+                trow += '</tr>'
+
+                $("#volunteer_list_table").show();
+                $("#volunteer_list_table").append(trow);
+		    }
+        }
+
+		function reset_radio_buttons(is_main=true) {
+		    if (is_main === true) {
+                $("#slot_7am").prop('checked', false);
+                $("#slot_9am").prop('checked', false);
+                $("#slot_11am").prop('checked', false);
+                $("#slot_1pm").prop('checked', false);
+                $("#slot_2pm").prop('checked', false);
+                $("#slot_7pm").prop('checked', false);
+                $("#slot_7am").prop('disabled', false);
+                $("#slot_9am").prop('disabled', false);
+                $("#slot_11am").prop('disabled', false);
+                $("#slot_1pm").prop('disabled', false);
+                $("#slot_2pm").prop('disabled', false);
+                $("#slot_7pm").prop('disabled', false);
+		    }
+		    else {
+                $("#update_slot_7am").prop('checked', false);
+                $("#update_slot_9am").prop('checked', false);
+                $("#update_slot_11am").prop('checked', false);
+                $("#update_slot_1pm").prop('checked', false);
+                $("#update_slot_2pm").prop('checked', false);
+                $("#update_slot_7pm").prop('checked', false);
+                $("#update_slot_7am").prop('disabled', false);
+                $("#update_slot_9am").prop('disabled', false);
+                $("#update_slot_11am").prop('disabled', false);
+                $("#update_slot_1pm").prop('disabled', false);
+                $("#update_slot_2pm").prop('disabled', false);
+                $("#update_slot_7pm").prop('disabled', false);
+		    }
+		}
+
+		function get_selected_time_window(is_main=true) {
+		    var ret_val = '';
+		    if (is_main === true) {
+		        var radio_buttons = $("#time_window :radio");
+		    } else {
+		        var radio_buttons = $("#update_time_window :radio");
+		    }
+         	for (var i = 0; i < radio_buttons.length; ++i) {
+         	    if (radio_buttons[i].checked) {
+                    ret_val = radio_buttons[i].value;
+                    break;
+         	    }
+         	}
+         	return ret_val;
+		}
+
+		function close_popup_display() {
+		    demand_popup_course_id = 0;
+            demand_popup_booked_count = 0;
+            demand_popup_board = '';
+            $('.demand_details_popup').hide();
+            $('.demand_view_popup').hide();
+            $('.demand_convert_popup').hide();
+
+            conversion_data = {};
+            $("#conversion_title").text("");
+            $("#convert_slot_time_1").prop("title", "");
+            $("#convert_slot_time_2").prop("title", "");
+            $("#convert_slot_time_1").css("border", "1px solid rgb(166, 166, 166)");
+            $("#convert_slot_time_2").css("border", "1px solid rgb(166, 166, 166)");
+
+            max_pages = 1;
+            min_pages = 1;
+            booked_volunteers_list = [];
+            $("#no_of_pages_label").val("");
+            $("#pagination").hide();
+		}
+
+		function update_icon_bar(count) {
+			if (count > 1) {
+				$("#icon_edit").hide();
+				$("#icon_view").hide();
+				//$("#icon_convert").hide();
+			} else {
+				$("#icon_edit").show();
+				$("#icon_view").show();
+				//$("#icon_convert").show();
+			}
+			if ( count == 0 ) {
+				select_all_checkbox = document.getElementsByName('select_all_checkbox');
+				select_all_checkbox[0].checked = false;
+			}
+		}
+
+		function select_all_checkboxes_toggle(source) {
+			checkboxes = document.getElementsByName('table_row_checkbox');
+			var count = checkboxes.length;
+			for ( var i = 0; i < count; ++i ) {
+				checkboxes[i].checked = source.checked;
+			}
+			if ( source.checked ) {
+				no_of_marked_checkboxes = count;
+				update_icon_bar(count);
+			} else {
+			    no_of_marked_checkboxes = 0;
+				update_icon_bar(0);
+			}
+		}
+
+		function delete_provisional_demands() {
+			var rows = document.getElementById("pdc_table").rows;
+			var ids_list = []
+			var boards_list = []
+			var grades_list = []
+			var subjects_list = []
+			var required_list = []
+			var time_list = []
+			var user_list = []
+			for ( var idx = 0; idx < rows.length; ++idx ) {
+			    // if ( rows[idx].id != "header_0" ) {
+			    //     ids_list.push(rows[idx].id)
+			    // }
+				if ((rows[idx].cells[0]).getElementsByTagName('input')[0].checked) {
+
+						ids_list.push(rows[idx].id);
+						boards_list.push(String(rows[idx].cells[2].innerHTML))
+						grades_list.push(String(rows[idx].cells[3].innerHTML))
+						subjects_list.push(String(rows[idx].cells[4].innerHTML))
+						required_list.push(String(rows[idx].cells[5].innerHTML))
+						time_list.push(String(rows[idx].cells[6].innerHTML))
+				}
+			}
+
+			if ( ids_list.length > 0 ) {
+				var delete_confirmation = confirm("Are you sure to delete all selected provisional demands?" +
+				"\n\nPlease note, provisionally booked demands, if any, will not be deleted.\n\n" +
+				"Release booked demands first to delete all.");
+				if ( delete_confirmation ) {
+					$.post('/v2/delete_provisional_demand/', {'csrfmiddlewaretoken': getCookieValue('csrftoken'),
+						'id': ids_list,'boards':boards_list,'grades':grades_list,'subjects':subjects_list,'required':required_list,'times':time_list}, function(response) {
+							alert(response['message']);
+							window.location = '/v2/provisional_demand/'
+						}
+					);
+				}
+			}
+		}
+
+		function handle_row_selection() {
+		    var rows = document.getElementById("pdc_table").rows;
+			var selected_demand_id = 0;
+			var idx = 0;
+			for ( idx = 0;idx < rows.length; ++idx ) {
+				if ((rows[idx].cells[0]).getElementsByTagName('input')[0].checked) {
+					if ( "Course ID" != rows[idx].cells[1].innerHTML ) {
+						selected_demand_id = rows[idx].cells[1].innerHTML;
+						break;
+					}
+				}
+			}
+
+			var board = rows[idx].cells[2].innerHTML;
+			var grade = rows[idx].cells[3].innerHTML;
+			var subject = rows[idx].cells[4].innerHTML;
+			// var start_date = rows[idx].cells[6].innerHTML;
+			var count = rows[idx].cells[5].innerHTML;
+			var booked_count = rows[idx].cells[7].innerHTML;
+
+			//console.log(board, grade, subject, count, booked_count, rows[idx].id, selected_demand_id);
+
+			return {'center_id': rows[idx].id, 'course': selected_demand_id, 'board': board.trim(), 'subject': subject, 'grade': grade, 'start_date': "", 'count': count, 'booked_count': booked_count}
+		}
+
+		function view_provisional_demands() {
+		    var data = handle_row_selection();
+
+            if (parseInt(data['booked_count']) < 1 || parseInt(data['count']) < 1) {
+                alert("No provisionally booked demands to view");
+                return 0;
+            }
+		    demand_popup_course_id = data['course'];
+			document.getElementById("grade/subject").innerHTML = data['board']+'-'+data['grade']+"-"+data['subject']
+
+		    $('.demand_view_popup').show();
+		    $("#volunteer_list_table tbody").empty();
+		    $("#empty_vol_list").hide();
+            $.get('/v2/provisional_volunteers_list/?center=' + data['center_id'] + '&course_id=' + data['course'] + '&board=' + data['board'], function(response) {
+                var vol_list = response['volunteers'];
+                var loop_length = vol_list.length;
+				var slot_list = []
+				for(i=0;i<loop_length;i++){
+					slot_list.push(vol_list[i]['slots'])
+				}
+                // console.log("Number of booked volunteers " + JSON.stringify(slot_list[0]));
+                booked_volunteers_list = vol_list;
+                if ( loop_length > 10 ) {
+                    max_pages = Math.trunc(loop_length/10);//loop_length / 10;
+                    if ( loop_length % 10 > 0 ) {
+                        max_pages += 1;
+                    }
+                }
+                //console.log("MAX PAGES " + max_pages);
+                if ( max_pages > 1 ) {
+                    $("#pagination").show();
+                    $("#no_of_pages_label").text(" of " + max_pages + " pages");
+                }
+
+                update_booked_volunteer_page(0);
+
+                if ( vol_list.length == 0 ) {
+                    $("#empty_vol_list").show();
+                    $("#volunteer_list_table").hide();
+                }
+            });
+		}
+
+		function validate_time_input(instance_name, user_input) {
+            var format_1 = "[0-9][0-9]:[0-9][0-9] - [0-9][0-9]:[0-9][0-9]";
+            var format_2 = "[0-9][0-9]:[0-9][0-9]-[0-9][0-9]:[0-9][0-9]";
+            var check_1 = user_input.match(format_1);
+            var check_2 = user_input.match(format_2);
+            if (check_1 == null && check_2 == null) {
+                $(instance_name).prop("title", "Expected format is HH:MM - HH:MM. Ex: 09:00 - 10:00");
+                $(instance_name).css("border", '2px solid');
+                $(instance_name).css("border-color", 'red');
+            } else {
+                $(instance_name).css("border", '1px solid rgb(166, 166, 166)');
+                var slots = (check_1 != null) ? user_input.split(" - ") : user_input.split("-");
+                if ( slots[0] >= slots[1] ) {
+                    $(instance_name).prop("title", "Start time should be less than End time");
+                    $(instance_name).css("border", '2px solid');
+                    $(instance_name).css("border-color", 'red');
+                } else {
+                    $(instance_name).prop("title", "");
+                }
+            }
+		}
+
+		function set_dictionary_data(key, target, source, is_center) {
+		    if (is_center) {
+		        target[key]['dc'] = source['dc']
+		        target[key]['fc'] = source['fc']
+		    } else {
+                target[key]['offering'] = source['offering_id']
+                target[key]['start_date'] = source['offer_start']
+                target[key]['end_date'] = source['offer_end']
+                target[key]['slots'] = source['slots']
+		    }
+		}
+
+		function sort_days(days) {
+		    var temp = []
+            for ( var i = 0; i < days.length; ++i ) {
+                if ( days[i] == "Monday") {
+                    temp[1] = "Monday";
+                } else if (days[i] == 'Tuesday') {
+                    temp[2] = "Tuesday";
+                } else if ( days[i] == "Wednesday") {
+                    temp[3] = "Wednesday";
+                } else if (days[i] == 'Thursday') {
+                    temp[4] = "Thursday";
+                } else if ( days[i] == "Friday") {
+                    temp[5] = "Friday";
+                } else if (days[i] == 'Saturday') {
+                    temp[6] = "Saturday";
+                }
+            }
+
+            temp = temp.filter(Boolean)
+            return (temp);
+		}
+
+		function convert_provisional_demand() {
+            var data = handle_row_selection();
+
+            if (parseInt(data['booked_count']) < 1) {
+                alert("No provisionally booked demands to convert");
+                return 0;
+            }
+
+		    demand_popup_course_id = data['course'];
+		    demand_popup_board = data['board']
+
+		    var conversion_title = demand_popup_board + ' - ' + 'Grade ' + data['grade'] + ' - ' + data['subject'];
+		    $("#conversion_title").text(conversion_title);
+
+            $("#demand_convert_popup").show();
+            $("#volunteers_list").empty();
+            $("#centers_list").empty();
+            var volunteers_list = document.getElementById("volunteers_list");
+            var centers_list = document.getElementById("centers_list");
+            $.get('/v2/provisional_volunteers_list/?center=' + data['center_id'] + '&course_id=' + data['course'] + '&board=' + data['board'] + '&convert=1', function(response) {
+                var volunteers = response['volunteers'];
+                var active_centers = response['centers'];
+
+                for (var i = 0; i < volunteers.length; ++i) {
+					var opt = document.createElement("option");
+					var key = volunteers[i]['id'] + "-" + volunteers[i]['name']
+					conversion_data[key] = {}
+					set_dictionary_data(key, conversion_data, volunteers[i], false)
+					opt.value = key;
+					opt.innerHTML = volunteers[i]['name'] + ' (' + volunteers[i]['id'] + ')';
+					if (i == 0) {
+					    opt.selected = true;
+					    var temp = (volunteers[i]['offer_start']).split(' ')[0]
+					    $("#convert_start_date").val(temp);
+					    temp = (volunteers[i]['offer_end']).split(' ')[0]
+					    $("#convert_end_date").val(temp);
+
+                        var days = Object.keys(volunteers[i]['slots']);
+                        sorted_days = sort_days(days);
+
+                        $("#convert_slot_day_1").val(sorted_days[0]);
+                        $("#convert_slot_day_2").val(sorted_days[1]);
+
+                        var time = (volunteers[i]['slots'][sorted_days[0]]).split("-")
+                        time = (time[0]).substring(0, 5) + " - " + (time[1]).substring(0, 5)
+
+                        $("#convert_slot_time_1").val(time)
+
+                        time = (volunteers[i]['slots'][sorted_days[1]]).split("-")
+                        time = (time[0]).substring(0, 5) + " - " + (time[1]).substring(0, 5)
+
+                        $("#convert_slot_time_2").val(time)
+					}
+					volunteers_list.appendChild(opt);
+				}
+
+				for (var i = 0; i < active_centers.length; ++i) {
+				    if (active_centers[i]['name'].search("Provisional") != -1) {
+				        continue;
+				    }
+				    var key = active_centers[i]['id'] + "-" + active_centers[i]['name']
+				    conversion_data[key] = {}
+				    set_dictionary_data(key, conversion_data, active_centers[i], true);
+					var opt = document.createElement("option");
+					opt.value = key;
+					opt.innerHTML = active_centers[i]['name'] + ' (' + active_centers[i]['id'] + ')';
+					centers_list.appendChild(opt);
+				}
+            });
+
+		}
+
+		function assign_center_to_demand() {
+		    var volunteer_key = $("#volunteers_list").val();
+		    var center_key = $("#centers_list").val();
+		    var vol_details = conversion_data[volunteer_key];
+		    var center_details = conversion_data[center_key];
+
+            var board = demand_popup_board;
+            var course = demand_popup_course_id;
+            var demand = $("#conversion_title").text();
+            var offering = vol_details['offering'];
+            var center_id = center_key.split("-")[0];
+            var center_name = center_key.split("-")[1];
+            var start_date = $("#convert_start_date").val();
+            var end_date = $("#convert_end_date").val();
+            var day_1 = String($("#convert_slot_day_1").val());
+            var time_1 = String($("#convert_slot_time_1").val());
+            var day_2 = String($("#convert_slot_day_2").val());
+            var time_2 = String($("#convert_slot_time_2").val());
+            var slots = {};
+            slots[day_1] = time_1;
+            slots[day_2] = time_2;
+			if (day_2 == "null" || day_1 =="null"){
+				alert("You have selected only one slot, please select another slot to confirm")
+				return false;
+			}
+
+            if ( String($("#convert_slot_time_1").attr("title")) != "" || String($("#convert_slot_time_2").attr("title")) != "" ) {
+                alert("Please correct the errors in Time Slots.\nEnsure HH:MM - HH:MM format.\nCheck if start time mentioned is higher than end time");
+                return false;
+            }
+
+            var volunteer_name = volunteer_key.split("-")[1];
+
+            var message = "You are about to convert provisional demand.\n\nDemand: " + demand + "\n\nVolunteer: " + volunteer_name + "\n\n";
+            message += "Assign to center: " + center_name + "\n\nDate Range: " + start_date + " - " + end_date + "\n\n";
+            message += "Slots booked: " + day_1 + " " + time_1 + " & " + day_2 + " " + time_2 + "\n\n";
+            message += "Select OK to confirm or CANCEL to edit your selection";
+
+            if ( confirm(message) ) {
+                $.post("/v2/convert_provisional_demand/",
+                    {
+                        'csrfmiddlewaretoken': getCookieValue('csrftoken'),
+                        'board': board,
+                        'course': course,
+                        'offering': offering,
+                        'volunteer': volunteer_key.split("-")[0],
+                        'center': center_key.split("-")[0],
+                        'center_name': center_name,
+                        'start_date': start_date,
+                        'end_date': end_date,
+                        'slots': JSON.stringify(slots)
+                    },
+                    function (response) {
+                        var message = response['message'];
+                        if ( response['status'] == "failure" ) {
+                            alert(message);
+                        } else {
+                            close_popup_display();
+                            window.location = response['redirect'];
+                        }
+                    }
+                );
+            }
+		}
+
+		function edit_provisional_demand() {
+		    var data = handle_row_selection();
+
+			$('.demand_details_popup').show();
+			//fetch_provisional_demand_details(data['course'], data['board'], data['subject'], data['grade'], data['start_date'], data['count'], data['booked_count']);
+			fetch_provisional_demand_details(data);
+		}
+
+		function getCookieValue(a) {
+			var b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+			return b ? b.pop() : '';
+		}
+
+		//function fetch_provisional_demand_details(course_id, board, subject, grade, start_date, count, booked_count) {
+		function fetch_provisional_demand_details(dict_data) {
+		    demand_popup_center_id = dict_data['center_id']
+		    demand_popup_course_id = dict_data['course'];
+		    demand_popup_booked_count = dict_data['booked_count'];
+		    var selected_center_id = dict_data['center_id']
+
+			$.get('/v2/provisional_demand/?center=' + selected_center_id + '&course_id=' + dict_data['course'] + '&board=' + dict_data['board'], function(response) {
+			    //console.log("***** SELECTED BOARD ****** |" + board + "|");
+				var boards_list = document.getElementById("update_board");
+				$("#update_board").empty();
+				for (var i = 0; i < response['boards'].length; ++i) {
+					var opt = document.createElement("option");
+					opt.value = response['boards'][i];
+					opt.innerHTML = response['boards'][i];
+					//console.log("***** BOARD RESPONSE ***** |" + response['boards'][i] + "|");
+					if (dict_data['board'] == response['boards'][i]) {
+					    //console.log("FOUND BOARD MATCH");
+						opt.selected = "selected";
+					}
+					boards_list.appendChild(opt);
+				}
+				$("#update_board").prop('disabled', true);
+
+				var subjects_list = document.getElementById("update_subject");
+				$("#update_subject").empty();
+				for (var i = 0; i < response['subjects'].length; ++i) {
+					var opt = document.createElement("option");
+					opt.value = response['subjects'][i];
+					opt.innerHTML = response['subjects'][i];
+					if (dict_data['subject'] == response['subjects'][i]) {
+						opt.selected = "selected";
+					}
+					subjects_list.appendChild(opt);
+				}
+				$("#update_subject").prop('disabled', true);
+
+				var grades_list = document.getElementById("update_grade");
+				for ( var i = 0; i < grades_list.options.length; ++i ) {
+				    if ( grades_list.options[i].value == dict_data['grade'] ) {
+				        grades_list.options[i].selected = true;
+				        break;
+				    }
+				}
+				$("#update_grade").prop('disabled', true);
+
+				var demand_start_date = document.getElementById("update_start_date");
+				demand_start_date.value = response['start_date'];
+
+				var demand_end_date = document.getElementById("update_end_date");
+				demand_end_date.value = response['end_date'];
+
+				var required_teachers_count = document.getElementById("update_teachers_count");
+				required_teachers_count.value = dict_data['count'];
+
+                reset_radio_buttons(false);
+				var start_time = response['start_time']
+				var end_time = response['end_time']
+				var time_slot = start_time + "-" + end_time;
+				var radio_buttons = $("#update_time_window :radio");
+                for (var i = 0; i < radio_buttons.length; ++i) {
+                    if (time_slot === radio_buttons[i].value) {
+                        radio_buttons[i].checked = true;
+                        break;
+                    }
+                }
+			});
+		}
+
+		function drop_provisional_demand() {
+			user_id = document.getElementById('user_id').innerHTML
+			offering_id = document.getElementById('offering_id').innerHTML
+
+			var ele = document.getElementsByName('opt'); 
+              
+            for(i = 0; i < ele.length; i++) { 
+                if(ele[i].checked) 
+                reason = ele[i].value
+            } 
+			console.log("Ddddd",user_id,offering_id,reason)
+			$("#reason_button").text("Please wait");
+                $.post('/v2/drop_provisional_booking/',
+                {
+                    'csrfmiddlewaretoken': getCookieValue('csrftoken'),
+                    'user_id': user_id,
+					'offering_id': offering_id,
+					'reason':reason
+                },
+                function(response) {
+                    alert(response['message']);
+                    if ( response['status'] == 0 ) {
+                        $('.demand_view_popup').hide();
+                        window.location = "/v2/provisional_demand/";
+                    }
+                });
+		    
+		}
+		function drop_slots_provisional_demand(user_id, offering_id){
+				document.getElementById('user_id').innerHTML=user_id
+				document.getElementById('offering_id').innerHTML=offering_id
+		}
+		function update_provisional_demand() {
+		    var center_id = demand_popup_center_id;
+		    var id = demand_popup_course_id;
+		    var board = $("#update_board").val();
+		    var subject = $("#update_subject").val();
+		    var grade = $("#update_grade").val();
+		    var start_date = $("#update_start_date").val();
+		    var end_date = $("#update_end_date").val();
+		    var count = $("#update_teachers_count").val();
+		    var booked_count = demand_popup_booked_count;
+		    var time_slot = get_selected_time_window(false);
+
+		    var slots = {
+                'Monday': time_slot,
+                'Tuesday': time_slot,
+                'Wednesday': time_slot,
+                'Thursday': time_slot,
+                'Friday': time_slot,
+                'Saturday': time_slot
+            }
+
+			$.post('/v2/update_provisional_demand/', {'csrfmiddlewaretoken': getCookieValue('csrftoken'), 'center': center_id, 'id': id,
+				'board': board, 'end_date': end_date, 'start_date': start_date, 'grade': grade, 'no_of_teachers': count, 'subject': subject, 'booked_count': booked_count, 'slot': JSON.stringify(slots), 'time_window': time_slot},
+				function(response) {
+					demand_popup_course_id = 0;
+					demand_popup_booked_count = 0;
+				    $('.demand_details_popup').hide();
+				    alert(response['message']);
+				    window.location = "/v2/provisional_demand/"
+				}
+			);
+		}
+		function searchFunction(id) {
+			var input, filter, table, tr, td, i, txtValue;
+			input = document.getElementById(id);
+			filter = input.value.toUpperCase();
+			table = document.getElementById("pdc_table");
+			tr = table.getElementsByTagName("tr");
+			if (id == "searchBoard") {
+				n = 2
+			} else if (id == "searchGrade") {
+				n = 3
+			} else if (id == "searchSubject") {
+				n = 4
+			} else if (id == "searchRequired") {
+				n = 5
+			} else if (id == "searchTime") {
+				n = 6
+			} else if (id == "searchBooked") {
+				n = 7
+			} else if (id == "searchAddedBy") {
+				n = 8
+			} else if (id == "searchPublishedDate"){
+				n = 9
+			}
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[n];
+				if (td) {
+					txtValue = td.textContent || td.innerText;
+					if (txtValue.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}
+			}
+		}
+		$( document ).ready(function() {
+			var req_count = 0
+			var book_count = 0
+			var required_count_list = document.getElementsByClassName("reqCount")
+			var booked_count_list = document.getElementsByClassName("bookCount")
+			for(i=0;i<required_count_list.length;i++){
+				req_count = req_count + Number(required_count_list[i].innerHTML)
+			}
+			for(i=0;i<booked_count_list.length;i++){
+				book_count = book_count + Number(booked_count_list[i].innerHTML)
+			}
+			$("#required_count").html(req_count)
+			$("#booked_count").html(book_count)
+
+		});
+
+		function download_table_as_csv(table_id) {
+			var rows = document.querySelectorAll('table#' + table_id + ' tr');
+			var csv = [];
+			for (var i = 0; i < rows.length; i++) {
+				var row = [], cols = rows[i].querySelectorAll('td, th');
+				for (var j = 0; j < cols.length; j++) {
+					var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+					data = data.replace(/"/g, '""');
+					row.push('"' + data + '"');
+				}
+				csv.push(row.join(';'));
+			}
+			var csv_string = csv.join('\n');
+			var filename = 'Provisional_demand_table' + '_' + new Date().toLocaleDateString() + '.csv';
+			var link = document.createElement('a');
+			link.style.display = 'none';
+			link.setAttribute('target', '_blank');
+			link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+			link.setAttribute('download', filename);
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		}
+
+		function download_pdData_as_csv(){
+			var pdStr = String(document.getElementById('pdStr').innerHTML)
+			var csv_string = pdStr;
+			var filename = 'Provisional_demand_dump' + '_' + new Date().toLocaleDateString() + '.csv';
+			var link = document.createElement('a');
+			link.style.display = 'none';
+			link.setAttribute('target', '_blank');
+			link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+			link.setAttribute('download', filename);
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+
+		}
+	</script>
+
+    <div class="center_div" style="margin-top: 2.5%;">
+        <div id="add_demand_btn_container"  style="width: 940px; overflow-x: auto;">
+		    <button type="button" class="collapsible bottom_margin_px">Add Demand<span id="accordian" style="float: right;">-</span></button>
+	    </div>
+
+        <div id="new_booking_form" class="center_div new_booking_form" style="width: 940px;">
+            <div class="center_div options_container">
+                <div class="row_container">
+                    <label class="option_label">Boards</label>
+                    <select id="boards" class="row_child">
+                        <option value="">Select Board</option>
+                        {% for board in boards %}
+                            <option value="{{ board }}">{{ board }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label class="option_label" style="margin-left: 5%">Start Date</label>
+                    <input id="start_date" type="text" placeholder="yyyy-mm-dd" class="row_child" style="font-family: sans-serif;">
+                </div>
+
+                <br>
+
+                <div class="row_container">
+                    <label class="option_label">Subjects</label>
+                    <select id="subjects" class="row_child">
+                        <option value="">Select Subject</option>
+
+                        {% for subject in subjects %}
+                            <option value="{{ subject }}">{{ subject }}</option>
+                        {% endfor %}
+
+                    </select>
+
+                    <label class="option_label" style="margin-left: 5%">Grade</label>
+                    <select id="grade" class="row_child">
+                        <option value="">Select Grade</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+
+                <br>
+
+                <div class="row_container">
+                    <label class="option_label">Teachers</label>
+                    <input id="teachers_count" type="number" placeholder="Required" min="" class="row_child" value=""
+                           oninput="this.value = Math.abs(this.value)" style="font-family: sans-serif;">
+                </div>
+
+                <br>
+
+                <fieldset>
+                    <label style="font-size:12px; color: black; font-weight: bold; font-family: sans-serif; float: left; margin-left: 9px; margin-right: 5px;">Time Window</label>
+                    <div id="time_window" class="radio-buttons" style="margin-left: 1.25%;">
+                        <input type="radio" id="slot_7am" name="slot_7am" value="07:00:00-08:00:00" class="radio" style="width: 3%; height: auto;">
+                        <label for="slot_7am" style="font-weight: normal; font-family: sans-serif;">07AM to 09AM</label>
+                        <input type="radio" id="slot_9am" name="slot_9am" value="09:00:00-10:00:00" class="radio" style="width: 3%; height: auto;">
+                        <label for="slot_9am" style="font-weight: normal; font-family: sans-serif;">09AM to 11AM</label>
+                        <input type="radio" id="slot_11am" name="slot_11am" value="11:00:00-12:00:00" class="radio" style="width: 3%; height: auto;">
+                        <label for="slot_11am" style="font-weight: normal; font-family: sans-serif;">11AM to 01PM</label>
+                        <input type="radio" id="slot_1pm" name="slot_1pm" value="13:00:00-14:00:00" class="radio" style="width: 3%; height: auto;">
+                        <label for="slot_1pm" style="font-weight: normal; font-family: sans-serif;">01PM to 03PM</label>
+                        <input type="radio" id="slot_2pm" name="slot_2pm" value="14:00:00-15:00:00" class="radio" style="width: 3%; height: auto;">
+                        <label for="slot_2pm" style="font-weight: normal; font-family: sans-serif;">02PM to 04PM</label>
+                        <input type="radio" id="slot_7pm" name="slot_7pm" value="19:00:00-20:00:00" class="radio" style="width: 3%; height: auto;">
+                        <label for="slot_7pm" style="font-weight: normal; font-family: sans-serif;">07PM to 09PM</label>
+                        <br>
+                    </div>
+                </fieldset>
+
+                <br>
+
+                <div style="margin: 0 auto;text-align: center;">
+                    <button id="save_demand" class="btn btn-primary btn-sv" type="button">Save</button>
+                </div>
+                <br>
+            </div>
+	    </div>
+
+        <div id="provisional_demand_lists" class="center_div col-xs-11" style="margin-top:2.5%">
+            <div class="icon-bar" id="control_icons" hidden>
+				<div id="icon_delete" title="Delete" onclick="delete_provisional_demands()"><i class="fa fa-trash"></i></div>
+                <div id="icon_edit" title="Edit" onclick="edit_provisional_demand()"><i class="fa fa-edit"></i></div>
+				<div id="icon_view" title="View" onclick="view_provisional_demands()"><i class="fa fa-eye"></i></div>
+				<!-- <button onclick="download_table_as_csv('pdc_table');"><i class="fa fa-download"></i>PD Table data</button> -->
+				<button onclick="download_pdData_as_csv()"><i class="fa fa-download"></i>PD Dump</button>
+                <div id="icon_convert" title="Convert" onclick="convert_provisional_demand()"><i class="fa fa-send"></i></div>
+            </div>
+            <table id="pdc_table" class="table table-fixed">
+                <thead>
+                    <tr id="header_0" style="background-color: #27A3E2;;">
+                        <th class="col-xs-1">
+                            <input type="checkbox" name="select_all_checkbox"  style="position:initial;height: unset;"
+                                   onclick="select_all_checkboxes_toggle(this)">
+                        </th>
+<!--                        <th class="col-xs-1" style="text-align: center !important;">ID</th>-->
+<!--                        <th class="col-xs-1" style="text-align: center !important;">Board</th>-->
+<!--                        <th class="col-xs-2" style="text-align: center !important;">Subject</th>-->
+<!--                        <th class="col-xs-1" style="text-align: center !important;">Grade</th>-->
+<!--                        <th class="col-xs-2" style="text-align: center !important;">Start Date</th>-->
+                        <th class="col-xs-1" style="text-align: center !important; display: none">Course ID</th>
+                        <th class="col-xs-1" style="text-align: center !important;">Board</th>
+                        <th class="col-xs-1" style="text-align: center !important;">Grade</th>
+                        <th class="col-xs-1" style="text-align: center !important;">Subject</th>
+                        <th class="col-xs-1" style="text-align: center !important;">Required</th>
+                        <th class="col-xs-2" style="text-align: center !important;">Time</th>
+                        <th class="col-xs-1" style="text-align: center !important; width: 8.3%;">Booked</th>
+						<th class="col-xs-2" style="text-align: center !important;">Added By</th>
+						<th class="col-xs-2" style="text-align: center !important;">Published Date</th>
+						<th class="col-xs-1" style="text-align: center !important;"><input type='text' style="display: none;"></th>
+						<th class="col-xs-1" style="text-align: center !important;"><input type='text' placeholder="Board" id="searchBoard" onkeyup="searchFunction(this.id)"></th>
+						<th class="col-xs-1" style="text-align: center !important;"><input type='text' placeholder="Grade" id="searchGrade" onkeyup="searchFunction(this.id)"></th>
+						<th class="col-xs-1" style="text-align: center !important;"><input type='text' placeholder="Subject" id="searchSubject" onkeyup="searchFunction(this.id)"></th>
+						<th class="col-xs-1" style="text-align: center !important;"><input type='text' placeholder="Required" id="searchRequired" onkeyup="searchFunction(this.id)"></th>
+						<th class="col-xs-2" style="text-align: center !important;"><input type='text' placeholder="Time" id="searchTime" onkeyup="searchFunction(this.id)"></th>
+						<th class="col-xs-1" style="text-align: center !important; width: 8.3%;"><input type='text' placeholder="Booked" id="searchBooked" onkeyup="searchFunction(this.id)"></th>
+						<th class="col-xs-2" style="text-align: center !important;"><input type='text' placeholder="Added By" id="searchAddedBy" onkeyup="searchFunction(this.id)"></th>
+						<th class="col-xs-2" style="text-align: center !important;"><input type='text' placeholder="Published Date" id="searchPublishedDate" onkeyup="searchFunction(this.id)"></th>
+					</tr>
+					
+				</thead>
+				<!-- <tr>
+					<th style="text-align: center !important;"></th>
+					<th class="col-xs-1" ><input type='text'></th>
+					<th class="col-xs-1" style="text-align: center !important;"><input type='text'></th>
+					<th class="col-xs-1" style="text-align: center !important;"><input type='text'></th>
+					<th class="col-xs-2" style="text-align: center !important;"><input type='text'></th>
+					<th class="col-xs-1" style="text-align: center !important;"><input type='text'></th>
+					<th class="col-xs-2" style="text-align: center !important;"><input type='text'></th>
+					<th class="col-xs-1" style="text-align: center !important;"><input type='text'></th>
+					<th class="col-xs-3" style="text-align: center !important;"><input type='text'></th>
+				</tr> -->
+                <tbody id="demand_table_body">
+                    {% if no_of_demands == 0 %}
+                    <tr>
+                        <td id="empty_list_row" class="col-xs-12" style="background-color:#E0E1E3 !important;font-size:18px !important;text-align:center;">No provisional demands</td>
+                    </tr>
+                    {% else %}
+                        {% for pdc in provisional_demands %}
+                        <tr id={{ pdc.center_id }} style="background-color: #EBECEE; font-size:15px !important; cursor: pointer;">
+                            <td class="col-xs-1">
+                                <input type="checkbox" name="table_row_checkbox" style="position:unset;height: unset;">
+                            </td>
+                            {% for key, value in pdc.items %}
+                                {% if key == 'course_id' %}
+                                    <td class="col-xs-1" style="text-align: center !important; display: none">{{ value }}</td>
+                                {% elif key == 'board' %}
+                                    <td class="col-xs-1" style="text-align: center !important;">{{ value }}</td>
+                                {% elif key == 'grade' %}
+                                    <td class="col-xs-1" style="text-align: center !important;">{{ value }}</td>
+                                {% elif key == 'subject' %}
+                                    <td class="col-xs-1" style="text-align: center !important;">{{ value }}</td>
+                                {% elif key == 'count' %}
+                                    <td class="col-xs-1 reqCount" style="text-align: center !important;">{{ value }}</td>
+                                {% elif key == 'time' %}
+                                    <td class="col-xs-2" style="text-align: center !important;">{{ value }}</td>
+                                {% elif key == 'booked_count' %}
+                                    <td class="col-xs-1 bookCount" style="text-align: center !important;">{{ value }}</td>
+                                {% elif key == 'added_by' %}
+									<td class="col-xs-2" style="max-width: 25%; text-align: center !important; overflow:hidden; text-overflow: ellipsis; white-space: nowrap;">{{ value }}</td>
+								{% elif key == 'published_date' %}
+									<td class="col-xs-2" style="text-align: center !important;">{{ value }}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+				</tbody>
+			</table>
+			<table>
+				<tfoot>
+					<tr>
+						<td class="col-xs-3" style="font-weight: bold;">Required Total:</td>
+						<td class="col-xs-3" id="required_count" style="font-weight: bold;"></td>
+						<td class="col-xs-3" style="font-weight: bold;">Booked Total:</td>
+						<td class="col-xs-3" id="booked_count" style="font-weight: bold;"></td>
+					</tr>
+				</tfoot>
+			</table>
+			<p id="pdStr" style="display: none;">{{pdStr}}</p>
+        </div>
+
+    </div>
+
+    <div class="demand_convert_popup center_div" id="demand_convert_popup">
+
+        <div>
+            <div class="popupCloseButton">&times;</div>
+            <div class="popupHeading">Provisional Demand - Conversion</div>
+
+            <div id="conversion_title" style="margin-top: 10px;"></div>
+
+            <div>
+                <div class="row_container" style="margin-top: 20px;">
+                    <div class="col-xs-2"><label class="popup_option_label">Volunteer</label></div>
+                    <div class="col-xs-4"><select id="volunteers_list" class="popup_row_child"></select></div>
+                    <div class="col-xs-2"><label class="popup_option_label">Assign To</label></div>
+                    <div class="col-xs-4"><select id="centers_list" class="popup_row_child"></select></div>
+                </div>
+
+                <div class="row_container" style="margin-top: 20px;">
+                    <div class="col-xs-2"><label class="popup_option_label">Start Date</label></div>
+                    <div class="col-xs-4"><input id="convert_start_date" type="text" placeholder="yyyy-mm-dd"
+                                                 class="popup_row_child" style="margin-bottom: 0px !important;"></div>
+                    <div class="col-xs-2"><label class="popup_option_label">End Date</label></div>
+                    <div class="col-xs-4"><input id="convert_end_date" type="text" placeholder="yyyy-mm-dd"
+                                                 class="popup_row_child" style="margin-bottom: 0px !important;"></div>
+                </div>
+
+                <hr>
+
+                    <div class="row_container">
+                        <div class="col-xs-2"><label class="popup_option_label">Booked Days</label></div>
+                        <div class="col-xs-4">
+                            <select id="convert_slot_day_1" class="popup_row_child">
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-2"><label class="popup_option_label">Slot Time (24 Hour Format)</label></div>
+                        <div class="col-xs-4">
+                            <input id="convert_slot_time_1" title="" placeholder="HH:MM - HH:MM" style="width: 100%; padding-left: 2.5%">
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="row_container">
+                        <div class="col-xs-2"><label class="popup_option_label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></div>
+                        <div class="col-xs-4">
+                            <select id="convert_slot_day_2" class="popup_row_child">
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xs-2"><label class="popup_option_label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></div>
+                        <div class="col-xs-4">
+                            <input id="convert_slot_time_2" title="" placeholder="HH:MM - HH:MM" style="width: 100%; padding-left: 2.5%">
+                        </div>
+                    </div>
+
+                <div class="col-xs-12" style="margin-top: 20px;">
+                    <button class="btn btn-primary btn-sv" type="button" onclick="assign_center_to_demand()">Convert</button><br>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="demand_view_popup center_div" id="demand_view_popup">
+		<div style="margin-top:-1%;margin-left: -14%;">
+			<div class="popupCloseButton">&times;</div>
+			<div class="popupHeading">Provisional Demand - Volunteers</div><br>
+			<div id='grade/subject'></div>
+
+            <div id="demand_vol_table" class="col-xs-8 timing_slot" style="margin-left:5%; margin-right:5%; width:90%;">
+                <table id="volunteer_list_table">
+                    <thead style="background-color: #27A3E2">
+                        <tr style="height: 33px;">
+                            <th class="col-xs-1" style="text-align: center !important; color: white">ID</th>
+                            <th class="col-xs-4" style="text-align: center !important; color: white">Name</th>
+                            <th class="col-xs-2" style="text-align: center !important; color: white">Role Outcome</th>
+							<th class="col-xs-2" style="text-align: center !important; color: white">Change Pref.</th>
+							<th class="col-xs-2" style="text-align: center !important; color: white">Time slots</th>
+                            <th class="col-xs-1" style="text-align: center !important; color: white">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody style="overflow-y: scroll">
+
+                    </tbody>
+                </table>
+				<div class="modal fade" id="taskModel" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-Task">
+						<h4 class="modal-title" id="exampleModalLabel">Request For
+							Help :</h4>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" class='rsnOptionsDiv'>
+						<div class="radio">
+							<label style="font-size: 13px;"><input type="radio"
+								name="opt" class='resonOpt' required="required" value='The language for the chosen center does not match with your preferred language'>The language for the chosen center does not match with your preferred language</label>
+						</div>
+						<div class="radio">
+							<label style="font-size: 13px;"><input type="radio"
+								name="opt" class='resonOpt'  required="required" value=' You have not completed the on-boarding steps to start teaching'> You have not completed the on-boarding steps to start teaching</label>
+						</div>
+						<div class="radio">
+							<label style="font-size: 13px;"><input type="radio"
+								name="opt" class='resonOpt'  required="required" value=' timings could not be offered for the selected course in this center'> timings could not be offered for the selected course in this center</label>
+						</div>
+						<div class="radio">
+							<label style="font-size: 13px;    margin-right: 164px;"><input type="radio"
+								name="opt" class='resonOpt'  required="required" value='Assigned to another center'>Assigned to another center</label>
+						</div>
+						<div class="radio">
+							<label style="font-size: 13px;margin-right: 173px;"><input type="radio"
+								name="opt" class='resonOpt' required="required" value='Assigned to content work'>Assigned to content work</label>
+						</div>
+						<div class="radio">
+							<label style="font-size: 13px;margin-right: 178px;"><input type="radio"
+								name="opt" class='resonOpt' required="required" value='Cant start teaching now'>Cant start teaching now</label>
+						</div>
+						<div class="radio">
+							<label style="font-size: 13px;margin-right: 237px;"><input type="radio"
+								name="opt" class='resonOpt' required="required" value='Not reachable'>Not reachable</label>
+						</div>
+						<div class="radio">
+							<label style="font-size: 13px;margin-right: 185px;"><input type="radio"
+								name="opt" class='resonOpt' required="required" value='Discontinued teaching'>Discontinued teaching</label>
+						</div>
+						<div class="radio">
+							<label style="font-size: 13px;margin-right: 185px;"><input type="radio"
+								name="opt" class='resonOpt' required="required" value='Volunteer is not interested due to personal reasons'>Volunteer is not interested due to personal reasons</label>
+						</div>
+						<div class="radio">
+							<label style="font-size: 13px;margin-right: 185px;"><input type="radio"
+								name="opt" class='resonOpt' required="required" value='Volunteer is not interested due to personal reasons'>Volunteer is not interested due to personal reasons</label>
+						</div>
+						<p style="display: none;" id='offering_id'></p>
+						<p style="display: none;" id ='user_id'></p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-success" id = "reason_button"  onclick="drop_provisional_demand()">Submit</button>
+					</div>
+				</div>
+			</div>
+			</div>
+                <div id="empty_vol_list" style="font-size:16px; ">No volunteer booked provisional slots</div>
+            </div>
+
+            <div id="pagination" style="display: inline;">
+                <button id="prev_page">-</button>
+                <input id="page_number" type="text" min="1" value="1" style="display: inline; width: 45px; text-align: center; padding: 2px; margin-top: 10px; margin-bottom: 2px;">
+                <button id="next_page">+</button>
+                <label id="no_of_pages_label" style="font-weight: normal; font-family: sans-serif; color: grey"></label>
+            </div>
+		</div>
+		
+    </div>
+
+    <div class="demand_details_popup center_div" id="details_popup">
+		<div>
+			<div class="popupCloseButton">&times;</div>
+            <div class="popupHeading">Edit Demand</div>
+            <div>
+                <div class="row_container" style="margin-top: 20px;">
+                    <div class="col-xs-2"><label class="popup_option_label">Board</label></div>
+                    <div class="col-xs-4"><select id="update_board" class="popup_row_child"></select></div>
+                    <div class="col-xs-2"><label class="popup_option_label">Subject</label></div>
+                    <div class="col-xs-4"><select id="update_subject" class="popup_row_child"></select></div>
+                </div>
+                <div class="row_container" style="margin-top: 10px;">
+                    <div class="col-xs-2"><label class="popup_option_label">Grade</label></div>
+                    <div class="col-xs-4">
+                        <select id="update_grade" class="popup_row_child">
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-2"><label class="popup_option_label">Start Date</label></div>
+                    <div class="col-xs-4"><input id="update_start_date" type="text" placeholder="yyyy-mm-dd"
+                                                 class="popup_row_child" style="margin-bottom: 0px !important;"></div>
+                </div>
+                <div class="row_container" style="margin-top: 10px;">
+                    <div class="col-xs-2"><label class="popup_option_label">End Date</label></div>
+                    <div class="col-xs-4"><input id="update_end_date" type="text" placeholder="yyyy-mm-dd"
+                                                 class="popup_row_child" style="margin-bottom: 0px !important;"></div>
+                    <div class="col-xs-2"><label class="popup_option_label">No. of Teachers</label></div>
+                    <div class="col-xs-4"><input id="update_teachers_count" type="number" placeholder="Required" min="1"
+                                                 style="margin-bottom: 0px !important;" class="popup_row_child" value="" oninput="this.value = Math.abs(this.value)"></div>
+                </div>
+                <br>
+                <fieldset>
+                    <label style="font-size:12px; color: black; font-weight: bold; font-family: sans-serif; float: left; margin-left: 9px; margin-right: 5px;">Time</label>
+                    <div id="update_time_window" class="radio-buttons" style="margin-left: 1.25%;">
+                        <input type="radio" id="update_slot_7am" name="update_slot_7am" value="07:00:00-08:00:00" class="radio" style="width: 3%; height: auto;">
+                        <label for="update_slot_7am" style="font-weight: normal; font-family: sans-serif;">07AM to 09AM</label>
+                        <input type="radio" id="update_slot_9am" name="update_slot_9am" value="09:00:00-10:00:00" class="radio" style="width: 3%; height: auto;">
+                        <label for="update_slot_9am" style="font-weight: normal; font-family: sans-serif;">09AM to 11AM</label>
+                        <input type="radio" id="update_slot_11am" name="update_slot_11am" value="11:00:00-12:00:00" class="radio" style="width: 3%; height: auto;">
+                        <label for="update_slot_11am" style="font-weight: normal; font-family: sans-serif;">11AM to 01PM</label>
+                        <input type="radio" id="update_slot_1pm" name="update_slot_1pm" value="13:00:00-14:00:00" class="radio" style="width: 3%; height: auto;">
+                        <label for="update_slot_1pm" style="font-weight: normal; font-family: sans-serif;">01PM to 03PM</label>
+                        <input type="radio" id="update_slot_2pm" name="update_slot_2pm" value="14:00:00-15:00:00" class="radio" style="width: 3%; height: auto;">
+                        <label for="update_slot_2pm" style="font-weight: normal; font-family: sans-serif;">02PM to 04PM</label>
+                        <input type="radio" id="update_slot_7pm" name="update_slot_7pm" value="19:00:00-20:00:00" class="radio" style="width: 3%; height: auto;">
+                        <label for="update_slot_7pm" style="font-weight: normal; font-family: sans-serif;">07PM to 09PM</label>
+                        <br>
+                    </div>
+                </fieldset>
+
+                <div class="col-xs-12" style="margin-top: 20px;">
+                    <button class="btn btn-primary btn-sv" type="button" onclick="update_provisional_demand()">Update</button><br>
+                </div>
+
+			</div>
+		</div>
+	</div>
+	
+{% endblock %}

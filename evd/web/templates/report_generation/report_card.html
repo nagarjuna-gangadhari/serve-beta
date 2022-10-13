@@ -1,0 +1,434 @@
+<!DOCTYPE HTML PUBLIC>
+{% load filters %}
+<html>
+    <head>
+        <title>eVidyaloka</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+    @page {
+        size: letter A4;
+        margin: 1cm;
+        @frame content_frame{
+            -pdf-frame-content: body;
+            left : 30pt;
+            top : 30pt;
+            right : 30pt;
+            bottom : 30pt;
+            border : 1px solid black;
+        }
+
+
+        @frame content_frame {
+                -pdf-frame-content: head;
+            left: 40pt;
+            right: 40pt;
+            top: 38pt;
+            height: 20pt;
+        }
+        @frame content_frame {
+            -pdf-frame-content: basic;
+            left: 40pt;
+            right: 40pt;
+            top: 56pt;
+            height: 100pt;
+            border : 1px solid black;
+        }
+        @frame content_frame {
+            -pdf-frame-content: pic;
+            left: 40pt;
+            top: 56pt;
+            width : 100pt;
+            height: 100pt;
+            padding : 5pt;
+            border : 1px solid black;
+        }
+        @frame content_frame {
+            -pdf-frame-content: basic_details1;
+            left: 140pt;
+            width: 200pt;
+            top: 56pt;
+            height: 100pt;
+            padding : 12pt;
+            border : 1px solid black;
+        }
+        @frame content_frame {
+            -pdf-frame-content: basic_details2;
+            left: 340pt;
+            width: 215pt;
+            top: 56pt;
+            height: 100pt;
+            padding : 12pt;
+            border : 1px solid black;
+        }
+        @frame content_frame {
+            -pdf-frame-content: desc;
+            left: 40pt;
+            right: 90pt;
+            top: 156pt;
+            height: 50pt;
+            padding : 10pt;
+        }
+        @frame content_frame{
+            -pdf-frame-content : logo;
+            left: 505pt;
+            right: 40pt;
+            top: 156pt;
+            height: 50pt;
+            padding-top : 10pt;
+        }
+        @frame content_frame{
+            -pdf-frame-content : desc_wrap;
+            left: 40pt;
+            right: 40pt;
+            top: 156pt;
+            height: 50pt;
+            padding-top : 10pt;
+            border : 1px solid black;
+        }
+        @frame content_frame {
+            -pdf-frame-content: period;
+            left: 40pt;
+            right: 40pt;
+            top: 206pt;
+            height: 30pt;
+            padding-left : 60pt;
+            padding-top : 10pt;
+            border : 1px solid black;
+        }
+        @frame content_frame {
+            -pdf-frame-content: period_img;
+            left: 40pt;
+            width: 50pt;
+            top: 206pt;
+            height: 30pt;
+            padding-left : 5pt;
+            padding-top : 5pt;
+        }
+        @frame content_frame {
+            -pdf-frame-content: attendance;
+            left: 40pt;
+            width: 200pt;
+            top: 256pt;
+            height: 100pt;
+            padding-left : 10pt;
+            padding-top : 10pt;
+            border : 1px solid black;
+        }
+        @frame content_frame {
+            -pdf-frame-content: legend_att;
+            left: 50pt;
+            width: 70pt;
+            top: 247pt;
+            height: 23pt;
+            padding-top : 5pt;
+        }
+        @frame content_frame {
+            -pdf-frame-content: attend_table ;
+            left: 40pt;
+            width: 190pt;
+            top: 266pt;
+            height: 100pt;
+            padding-left : 10pt;
+            padding-top : 10pt;
+        }
+        @frame content_frame {
+            -pdf-frame-content: diagnostics;
+            left: 250pt;
+            right: 40pt;
+            top: 256pt;
+            height: 100pt;
+            padding-left : 10pt;
+            padding-top : 10pt;
+            border : 1px solid black;
+        }
+        @frame content_frame {
+            -pdf-frame-content: legend_diag;
+            right: 50pt;
+            width: 70pt;
+            top: 247pt;
+            height: 23pt;
+            padding-top : 5pt;
+        }
+        @frame content_frame {
+            -pdf-frame-content: diag_table ;
+            left: 250pt;
+            right:40pt;
+            top: 266pt;
+            height: 100pt;
+            padding-left : 10pt;
+            padding-right : 10pt;
+            padding-top : 10pt;
+        }
+        @frame content_frame {
+            -pdf-frame-content: scholastics;
+            left: 40pt;
+            right: 40pt;
+            top: 366pt;
+            height: 140pt;
+            padding-left : 10pt;
+            padding-top : 10pt;
+            border : 1px solid black;
+        }
+        @frame content_frame {
+            -pdf-frame-content: legend_schol;
+            left: 50pt;
+            width: 70pt;
+            top: 357pt;
+            height: 23pt;
+            padding-top : 5pt;
+        }
+        @frame content_frame {
+            -pdf-frame-content: schol_table ;
+            left: 40pt;
+            right:40pt;
+            top: 376pt;
+            height: 170pt;
+            padding-left : 10pt;
+            padding-top : 10pt;
+            padding-right : 10pt;
+        }
+        @frame content_frame {
+            -pdf-frame-content: coscholastics;
+            left: 40pt;
+            right: 40pt;
+            top: 506pt;
+            height: 170pt;
+            padding-left : 10pt;
+            padding-top : 10pt;
+            border : 1px solid black;
+        }
+        @frame content_frame {
+            -pdf-frame-content: legend_coschol;
+            left: 50pt;
+            width: 80pt;
+            top: 497pt;
+            height: 23pt;
+            padding-top : 5pt;
+        }
+        @frame content_frame {
+            -pdf-frame-content: coschol_table ;
+            left: 40pt;
+            right:40pt;
+            top: 506pt;
+            height: 170pt;
+            padding-left : 10pt;
+            padding-right : 10pt;
+            padding-top : 10pt;
+        }
+        @frame content_frame {
+            -pdf-frame-content: comments;
+            left: 40pt;
+            right: 40pt;
+            top: 676pt;
+            height: 140pt;
+            padding-left : 10pt;
+            padding-top : 10pt;
+            border : 1px solid black;
+        }
+        @frame content_frame {
+            -pdf-frame-content: legend_comments;
+            left: 50pt;
+            width: 70pt;
+            top: 667pt;
+            height: 23pt;
+            padding-top : 5pt;
+        }
+        @frame content_frame {
+            -pdf-frame-content: comments_table;
+            left: 40pt;
+            right:40pt;
+            top: 676pt;
+            height: 140pt;
+            padding-left : 10pt;
+            {% if comments|length > 0 %}
+                 padding-top : 10pt;
+                 text-align : justify;
+            {% else %}
+                 padding-top : 40pt;
+                 text-align : center;
+                 padding-left : 100pt;
+            {% endif %}
+        }
+        @frame content_frame {
+            -pdf-frame-content: comments_img;
+            left: 440pt;
+            right:60pt;
+            top: 676pt;
+            height: 100pt;
+            padding-left : 10pt;
+            padding-top : 20pt;
+
+        }
+    }
+    #head{
+        text-align:center; 
+        color : #286090;
+        font-size : 9px;
+        font-family : Arizonia-Regular;
+    }
+    #legend_att,#legend_schol,#legend_coschol,#legend_diag,#legend_comments{
+        text-align : center;
+            font-size: 14px; 
+            background-color:white;
+            color : #EC971F;
+    }
+    #logo{
+        border-left: 3px solid red;
+        text-align : center;
+    }
+    #pic{
+        color : white;
+        text-align : center;
+    }
+    #basic_details{
+        background-color: yellow;
+        width : 100px;
+    }
+    th{
+        height : 30px;
+        font-size : 10px;
+        color : #34495e;
+    }
+</style>
+    </head>
+    <body>
+        <div id='head' >
+            <p style='font-size:14px;'>Student Report Card</p>
+        </div>
+        <div id='basic' >
+            <div id='pic'>
+                <img src="{{ photo }}" alt="image" width="150px" height="150px"  />
+            </div>
+            <div id='basic_details1'>
+                <table >
+                {% for k,v in basic1.items %}
+                        <tr style='font-family:Helvetica Neue,Helvetica,Arial,sans-serif;line-height:20px;font-size:10px;'><td style='color:#34495e'>{{ k|title }}   <td> :</td></td><td style='width:200px;'>    {{ v|title }}</td></tr>
+                {% endfor %}
+                </table>
+            </div>
+            <div id='basic_details2'>
+                <table>
+                {% for k,v in basic2.items %}
+                        <tr style='font-family:Helvetica Neue,Helvetica,Arial,sans-serif;line-height:25px;font-size:10px;'><td style='color:#34495e'>{{ k|title }}   <td> :</td></td><td>    {{ v|title }}</td></tr>
+                {% endfor %}
+                </table>
+            </div>
+            <div id='desc_wrap' >
+            <div id='desc' style='width:200px;'>
+                <p style='font-size:10px;text-align:justify;justify:inter-word;'> eVidyaloka is a not for profit organization registered under the Trusts Act. It focuses on transforming the education landscape in the rural and remote regions of the India.</p>
+            </div>
+                <div id='logo'>
+                    <img src='/static/images/evidyalogo.png' width='50px' height='50px' />
+                </div>
+            </div>
+            <div id='period'>
+                <p style='font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:10px;'>
+                    {{aytitle}}
+                </p>
+            </div>
+            <div id='period_img'>
+                <img src='/static/images/report_calender.jpg' width='50px' height='30px' \>
+            </div>
+        </div>
+        <div id='attendance'>
+             <div id='legend_att'>Attendance</div>
+             <div id='attend_table'>
+                {% if attendance %}
+                <table style='text-align:center;'>
+                    <tr>
+                        <th>Course</th>
+                        <th>Present</th>
+                        <th>Absent</th>
+                    </tr>
+                    {% for ent in attendance %}
+                        <tr><td style='text-align:left;width:200px;'>{{ent.name}}</td><td>{{ent.present}}</td><td>{{ent.absent}}</td></tr>
+                    {% endfor %}
+                </table>
+                {% else %}
+                    <p> No Data Available </p>
+                 {% endif %}
+             </div>
+        </div>
+
+        <div id='diagnostics'>
+             <div id='legend_diag'>Diagnostics</div>
+             <div id='diag_table'>
+                {% if diag %}
+                <table style='text-align:center;'>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Level Scored</th>
+                    </tr>
+                    {% for ent in diag %}
+                        <tr><td style='text-align:left;width:200px;'>{{ent.subject}}</td><td>{{ent.eval_date}}</td><td>{{ent.agg_level}}</td></tr>
+                    {% endfor %}
+                </table>
+                 {% else %}
+                    <p> No Data Available </p>
+                 {% endif %}
+             </div>
+        </div>
+        <div id='scholastics'>
+             <div id='legend_schol'>Scholastic</div>
+             <div id='schol_table'>
+                {% if schol %}
+                <table style='text-align:center;'>
+                    <tr>
+                        <th>Subject</th>
+                        <th> Present</th>
+                        <th>Actual Marks</th>
+                        <th>Total Marks</th>
+                        <th>Assessed Date</th>
+                    </tr>
+                    {% for ent in schol %}
+                        <tr><td style='text-align:left;width:200px;'>{{ent.subject}}</td><td>{{ent.is_present}}</td><td>{{ent.obtained_marks}}</td><td>{{ent.total_marks}}</td><td>{{ent.eval_date}}<td></tr>
+                    {% endfor %}
+                </table>
+                 {% else %}
+                    <p> No Data Available </p>
+                 {% endif %}
+             </div>
+        </div>
+        <div id='coscholastics'>
+             <div id='legend_coschol'>Co-Scholastic</div>
+             <div id='coschol_table'>
+                {% if teachers %}
+                <table style='text-align:center;'>
+                    <tr>
+                        <th>Attribute</th>
+                        {% for ent in teachers %}
+                            <th>{{ent}}</th>
+                        {% endfor %}
+                    </tr>
+                    {% for k,v in coschol.items %}
+                       <tr>
+                          <td style='text-align:left'>{{k}}</td>
+                          {% for rec in teachers %}
+                                 <td>{{v|keyvalue:rec}}</td>
+                          {% endfor %}
+                       </tr>
+                    {% endfor %}
+                </table>
+                 {% else %}
+                    <p > No Data Available </p>
+                 {% endif %}
+             </div>
+        </div>
+        <div id='comments'>
+             <div id='legend_comments'>Comments</div>
+             <div id='comments_table'>
+                {% if comments|length > 0 %}
+                    {% for v in comments %}
+                        {% if v != '' %}<p style='font-size:10px;' >◘ {{v|capfirst}}</p><br>{%endif %}
+                    {% endfor %}
+                {% else %}
+                    <p style='font-size:16px;font-face:Arizonia-Regular' >All the Best for your Bright Future...</P>
+                {% endif %}
+             </div>
+        </div>
+        <div id='comments_img'>
+            <img src='/static/images/report_comments.png' height='100px' width='100px;'>
+        </div>
+    </body>
+</html>

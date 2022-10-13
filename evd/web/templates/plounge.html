@@ -1,0 +1,213 @@
+{% extends "base.html" %} {% load static %} {% block body_container2 %}
+<link rel="stylesheet" href="/static/css/tailwind.min.css">
+<style>
+    a,
+    a:hover,
+    a:focus,
+    a:active {
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .hide_unhide {
+        display: none;
+    }
+    
+    @media screen and (min-width: 800px) {
+        .hide_unhide {
+            display: block;
+        }
+    }
+</style>
+<script src="/static/css/fontawesome/js/all.min.js"></script>
+<div {% if request.user.is_authenticated %}{% else %}class="mt-12 md:mt-24 bg-gray-100" {% endif %}>
+</div>
+
+<!-- component -->
+<div class="bg-gradient-to-b from-white to-black">
+    <!-- Section Hero -->
+    <div class="pt-14">
+        <h1 class="mt-8 text-center text-4xl md:text-6xl text-blue-600 font-bold">Welcome to eVidyaloka Partner Lounge</h1>
+        <div class="md:flex md:justify-around md:space-x-8 md:px-10">
+            <!-- box-1 -->
+            <div class="mt-16 py-4 px-4 bg-white w-full md:w-2/5 bg-white rounded-lg shadow-lg hover:shadow-xl transform md:hover:scale-110 transition duration-500 mx-auto md:mx-0">
+                <div class="w-sm flex flex-col items-center">
+                    <img class="w-full" src="/static/web/img/plounge/tttinfo.png" alt="" />
+                    <div class="mt-4 text-green-600 text-center">
+                        <h1 class="text-xl font-bold">Learn Through Television</h1>
+                        <p class="mt-4 text-gray-600">Through our Teach through Television Program (TTT), we are transforming the educational landscape of rural India! Engaging and curated content is telecast through our Partner Cable networks and is broadcast across the country.</p>
+                        <div class="mt-8 mb-4 p-4 rounded-full bg-green-600 text-white tracking-widest hover:bg-green-500 transition duration-200" onclick="window.location.href='/tttinfo'">MORE</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- box-2 -->
+            <div class="mt-16 py-4 px-4 bg-white w-full md:w-2/5 bg-white rounded-lg shadow-lg hover:shadow-xl transform md:hover:scale-110 transition duration-500 mx-auto md:mx-0">
+                <div class="w-sm flex flex-col items-center">
+                    <img class="w-full" src="/static/web/img/plounge/evl_india_map.png" alt="" />
+                    <div class="mt-4 text-green-600 text-center">
+                        <h1 class="text-xl font-bold">eVidyaloka Presence</h1>
+                        <p class="mt-4 text-gray-600">eVidyaloka is operational in 11 states across various districts and creates an impact in the children's educational experience in the villages. If you want to introduce eVidyaloka program in your area, join us as a network partner.
+                            Call 080-47091716</p>
+                        <div class="mt-8 mb-4 p-4 rounded-full bg-green-600 text-white tracking-widest hover:bg-green-500 transition duration-200" type="button" onclick="toggleModal('modal-example-regular')">VIEW</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid place-items-center mx-auto p-20 sm:my-auto space-y-10">
+        <h1 class="text-2xl font-semibold text-white">Stay connected on Social Media</h1>
+        <div class="flex justify-center items-center space-x-8">
+            <a class="bg-blue-500 p-2 md:px-8 md:py-4 font-semibold text-white text-4xl flex items-center space-x-2 rounded-lg" href="https://www.facebook.com/eVidyaloka/" target="_blank" type="button">
+                <div class="flex items-center"><i class="fab fa-facebook"></i></div>
+                <span class="hide_unhide">Facebook</span>
+            </a>
+            <a class="bg-blue-300 p-2 md:px-8 md:py-4 font-semibold text-white text-4xl flex items-center space-x-2 rounded-lg" href="https://twitter.com/evidyaloka" target="_blank" type="button">
+                <div class="flex items-center"><i class="fab fa-twitter"></i></div>
+                <span class="hide_unhide">Twitter</span>
+            </a>
+            <a class="bg-blue-600 p-2 md:px-8 md:py-4 font-semibold text-white text-4xl flex items-center space-x-2 rounded-lg" href="https://in.linkedin.com/company/evidyaloka-trust" target="_blank" type="button">
+                <div class="flex items-center"><i class="fab fa-linkedin"></i></div>
+                <span class="hide_unhide">LinkedIn</span>
+            </a>
+            <a class="bg-pink-600 p-2 md:px-8 md:py-4 font-semibold text-white text-4xl flex items-center space-x-2 rounded-lg" href="https://www.instagram.com/evidyaloka/?hl=en" target="_blank" type="button">
+                <div class="flex items-center"><i class="fab fa-instagram"></i></div>
+                <span class="hide_unhide">Instagram</span>
+            </a>
+            <a class="bg-red-600 p-2 md:px-8 md:py-4 font-semibold text-white text-4xl flex items-center space-x-2 rounded-lg" href="https://www.youtube.com/c/eVidyalokatv/featured" target="_blank" type="button">
+                <div class="flex items-center"><i class="fab fa-youtube"></i></div>
+                <span class="hide_unhide">Youtube</span>
+            </a>
+            <a class="bg-green-300 p-2 md:px-8 md:py-4 font-semibold text-white text-4xl flex items-center space-x-2 rounded-lg" href="https://linktr.ee/eVidyaloka" target="_blank" type="button">
+                <div class="flex items-center"><i class="fas fa-tree"></i></div>
+                <span class="hide_unhide">Linktree</span>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="h-4/5 py-8">
+        <div class="justify-center ">
+            <div class="text-center text-4xl text-white font-bold ">Watch the videos below to know more</div>
+            <div class="flex items-center space-y-4 justify-around flex-col md:flex-row mt-10 ">
+                <div class="bg-gray-600 mx-2 md:mx-4 p-2 shadow-xl rounded-lg aspect-w-16 aspect-h-9">
+                    <iframe class="aspect-w-16 aspect-h-9" src="https://www.youtube.com/embed/4Y1aGTZGpCA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="bg-gray-600 mx-2 md:mx-4 p-2 shadow-xl rounded-lg aspect-w-16 aspect-h-9">
+                    <iframe src="https://www.youtube.com/embed/04f434wt7zs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="bg-gray-600 mx-2 md:mx-4 p-2 shadow-xl rounded-lg aspect-w-16 aspect-h-9">
+                    <iframe src="https://www.youtube.com/embed/Gx5oL-tkzFg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="bg-gray-600 mx-2 md:mx-4 p-2 shadow-xl rounded-lg aspect-w-16 aspect-h-9">
+                    <iframe src="https://www.youtube.com/embed/q5B2FiAc_Co" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- component -->
+<div class="bg-black text-white">
+    <div class="container mx-auto flex flex-col items-start md:flex-row ">
+        <div class="flex flex-col w-full sticky md:top-36 lg:w-1/3 mt-2 md:mt-12 px-8">
+            <p class="ml-2 md:text-2 text-yellow-300 uppercase tracking-loose">Events</p>
+            <p class="text-3xl md:text-4xl leading-normal md:leading-relaxed mb-2">eVidyaloka Upcoming events</p>
+            <!-- <p class="text-sm md:text-base text-gray-50 mb-4">lets rock on roll </p> -->
+        </div>
+        <div class="ml-0 md:ml-12 lg:w-2/3 sticky">
+            <div class="container mx-auto w-full h-full">
+                <div class="relative wrap overflow-hidden p-10 h-full">
+                    <div class="border-4 border-yellow-300 absolute h-full rounded-sm right-0 md:right-1/2"></div>
+                    <div class="mb-8 flex justify-between md:flex-row-reverse items-center w-full left-timeline">
+                        <div class="order-1 md:w-5/12"></div>
+                        <div class="order-1 md:w-5/12 px-1 py-4 text-right">
+                            <p class="mb-3 text-lg text-yellow-300">28 & 31 Aug, 2021</p>
+                            <h4 class="mb-3 font-bold text-lg md:text-2xl">National Partner Summit</h4>
+                            <p class="mb-6 text-sm md:text-base text-gray-50 text-opacity-100">
+                                The board of trustees and management of eVidyaloka are pleased to invite you to ROSHNI 2021 - National Partner Summit on
+                            </p>
+                            <a href="/nps" class="bg-transparent my-2 hover:bg-yellow-300 text-yellow-300 hover:text-black rounded shadow hover:shadow-lg py-2 px-4 border border-yellow-300 hover:border-transparent">Explore Now</a>
+
+                        </div>
+                    </div>
+
+                    <div class="mb-20 flex justify-between items-center w-full left-timeline">
+                        <div class="order-1 md:w-5/12"></div>
+                        <div class="order-1 md:w-5/12 px-1 py-4 text-right">
+                            <p class="mb-3 text-lg text-yellow-300"> 5 Sep, 2021</p>
+                            <h4 class="mb-3 font-bold text-lg md:text-2xl">Teacher's Day</h4>
+                            <p class="mb-6 text-sm md:text-base leading-snug text-gray-50 text-opacity-100">
+                                Teachers' Day is a special day for the appreciation of teachers, and may include celebrations to honor them for their special contributions at eVidyaloka.
+                            </p>
+                            <a href="#" class="bg-transparent my-2 hover:bg-yellow-300 text-yellow-300 hover:text-black rounded shadow hover:shadow-lg py-2 px-4 border border-yellow-300 hover:border-transparent">Explore Now</a>
+
+                        </div>
+                    </div>
+
+                    <!-- <div class="mb-8 flex justify-between items-center w-full right-timeline">
+                        <div class="order-1 w-5/12"></div>
+
+                        <div class="order-1  w-5/12 px-1 py-4">
+                            <p class="mb-3 text-base text-yellow-300">12 May, 2021</p>
+                            <h4 class="mb-3 font-bold  text-lg md:text-2xl text-left">Prize Distribution</h4>
+                            <p class="text-sm md:text-base leading-snug text-gray-50 text-opacity-100">
+                                The winners will be contacted by our team for their addresses and the winning goodies will be sent at their addresses.
+                            </p>
+                        </div>
+                    </div> -->
+                </div>
+                <img class="mx-auto -mt-36 md:-mt-36" src="https://user-images.githubusercontent.com/54521023/116968861-ef21a000-acd2-11eb-95ac-a34b5b490265.png" />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Modal -->
+<div class="hidden  overflow-x-hidden overflow-y-auto absolute inset-0 z-50 md:mt-96 outline-none focus:outline-none justify-center items-center " id="modal-example-regular">
+    <div class="relative w-full my-6 mx-auto ">
+        <!--content-->
+        <div class="rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none ">
+            <!--header-->
+            <div class="flex  items-center p-5 text-center rounded-lg">
+                <h3 class="text-3xl flex text-center font-semibold">eVidyaloka Presence</h3>
+                <div class="p-1 mr-8 ml-auto bg-transparent text-gray-300 float-right text-3xl leading-none font-semibold outline-none focus:outline-none " onclick="toggleModal( 'modal-example-regular')">
+                    <span class="bg-transparent h-6 w-6 text-4xl text-red-400 block outline-none focus:outline-none ">
+                    <i class="fas fa-times "></i>
+                </span>
+                </div>
+            </div>
+            <!--body-->
+            <div class="relative p-2 flex-auto ">
+                <img class="w-full " src="/static/web/img/plounge/evl_india_map.svg" alt=" ">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %} {% block bottom_scripts %} {{ block.super }}
+<script type="text/javascript ">
+    function toggleModal(modalID) {
+        document.getElementById(modalID).classList.toggle("hidden");
+        document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+        document.getElementById(modalID).classList.toggle("flex");
+        document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+    }
+</script>
+
+
+{% endblock %}

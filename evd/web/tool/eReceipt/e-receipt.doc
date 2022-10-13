@@ -1,0 +1,31 @@
+﻿1. Open Home folder  and go to eReceipt folder
+2. Place all xls file(s)(need be to processed) in Process_Excels Folder
+3. Open Terminal
+       i.  Go to eReceipt Folder.
+                cmd: cd eReceipt
+       
+       ii. Command to process all the xls files in Process_Excels Folder:
+        python e-receipt.py
+
+       iii. Command to run a particular xls file present in Process_Excels Folder:
+         python e-receipt.py -f <xls_file_name> (xls_file must be present in Process_Excels Folder)
+
+4. Use --pdf-type multiple to generate the final pdf file without sending any emails.
+	       python e-receipt.py --pdf-type multiple (by default it is individual)
+
+5. Once Processing is completed, then all the processed excel files will be moved to Processed_Excels folder.
+6. Old pdf files are available in Pdf_files folder
+7. Added new folder Failed_recs, which contains files with error records (Failed records while processing)
+8. finally the final pdf file is moved to final_pdf_files folder.
+
+Note:
+        * Date must be in DD-MM-YYYY format.
+        * Excel file extension must be .xls
+
+Need to Install below Packages:
+
+1. TermColor:
+	Cmd: sudo pip install termcolor
+
+2. PdfTk:
+	Cmd: sudo apt-get install pdftk

@@ -1,0 +1,7 @@
+Dear {{username}},<br><br><br>
+
+We regret to inform you that the chapter: {{topic_name}}, for  {{grade}} {{subject}} from {{board}} in {{language}} could not be assigned to you.<br><br>
+
+Reason {{reason}}<br><br>
+
+Request you to reach out to the Email id: <content.development@evidyaloka.org> for further support. <br><br><br>

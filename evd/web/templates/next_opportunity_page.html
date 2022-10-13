@@ -1,0 +1,94 @@
+{% extends 'new_ui.html' %}
+
+<style>
+
+    .inside_content {
+        font-size: 15px;
+        margin-top: -69%;
+        margin-left: 15%;
+        font-weight: bold;
+    }
+
+
+</style>
+{% block content %}
+
+<section>
+<div style=" margin-top: 8%;margin-left: 4%;">Home >> My eVidyaloka</div>
+<div class="container" style="width:93%;margin-top: 2%;background-color:white;">
+    <div class="row">
+        <div class="col-sm-2">
+            <div> <button type="button" class="btn btn-success">Profile<i class="fa fa-pencil" aria-hidden="true"></i></button></div><br>
+            <div style="margin-top: -10%;">  <button type="button" class="btn btn-success">Settings</button></div>
+            <div style="margin-top: 2%;"><button type="button"  class="btn btn-success">Logout</button></div>
+        </div>
+
+         <div class="col-sm-2">
+              <span><i class="fa fa-television" aria-hidden="true"
+                       style="font-size:150px;color:red;margin-left:2%"></i>
+               <p class="" style="font-size:15px;margin-top: -72%;margin-left: 15%; font-weight: bold;">1st Step:-<br>Share your <br> interest<br>
+                 </p></span>
+
+            </div>
+
+            <div class="col-sm-2">
+
+              <span><i class="fa fa-television" aria-hidden="true"
+                       style="font-size:150px;color:red;margin-left:2%"></i>
+               <p class="step1" style="font-size:15px;margin-top: -72%;margin-left: 15%; font-weight: bold;">2nd Step:-<br>Schedule a <br> discussion online<br>
+                 </p></span>
+
+            </div>
+
+            <div class="col-sm-2">
+
+              <span><i class="fa fa-television" aria-hidden="true"
+                        style="font-size:150px;color:red;margin-left:2%"></i>
+               <p class="step1" style="font-size:15px;margin-top: -72%;margin-left: 15%; font-weight: bold;">3rd Step:-<br>Select an <br>opportunity<br>
+                 </p></span>
+
+            </div>
+            <div class="col-sm-1">
+                <i class="fa fa-arrow-circle-right" aria-hidden="true"
+                   style="font-size:50px;margin-top: 39px; margin-left: -20px;"></i></div>
+            <div class="col-sm-2" style="    margin-left: -5%;margin-top: 3%;">
+                <span style="font-size:25px;font-size:15px;margin-top: -54%;"> Start <br>teaching/Contributing <br>online</span>
+            </div>
+
+        </div><br><br>
+    <div class="row">
+        <div class="text-center" align="center"><p style="font-size:20px;font-weight:bold;">You are now on Step3, the last step! You need to choose the class slot that you
+            <br> want to teach</p></div>
+
+        <div class="col-md-2" style="width:28%;margin-left:39%;text-align: center;background: #31b2de;padding:12px;margin-bottom:25px;color:white;">
+            <a style="font-family:serif;font-size: 26px;color:white;" href="/v2/slot_page">Select an opportunity</a></div>
+
+    </div>
+    <div class="row">
+        <div class="text-center" align="center"><p style="font-size:20px;font-weight:bold;">If you want to chnage the nature of your contribution at any point, you can<br> click the button below </p></div>
+        <div class="col-md-2" style="width:16%;margin-left:45%;text-align: center;background: #31b2de;padding:12px;margin-bottom:25px;color:white;">
+            <a style="font-family:serif;font-size: 26px;color:white;" href="#">Contribution <i class="fa fa-pencil" aria-hidden="true"></i></a>
+        </div>
+
+    </div>
+    <div class="row">
+
+        <div class="col-sm-3"><span><h3>Volunteer Helpline</h3><img style="width: 59%;height: 10%;" src="/static/images/telephone.jpg" alt="image"></span></div>
+        <div class="col-sm-3">  <span>  <h3>Check out the curriculum</h3><img style="width: 83%;" src="/static/images/book_image.jpeg" alt="image"></span></div>
+        <div class="col-sm-3">   <span> <h3>Connect with the community</h3><img style="width: 83%;" src="/static/images/community.jpeg" alt="image"></span></div>
+        <div class="col-sm-3">   <span> <h3>Explore eV Centers</h3><img style="width: 88%;" src="/static/images/centers.jpg" alt="image"></span></div>
+    </div>
+    <br>
+     <div>
+         <div class="col-sm-3"></div>
+         <div class="col-sm-3"><span><h3>Browse Opportunity</h3><img style="width: 83%;" src="/static/images/opportunity.jpg" alt="image"></span></div>
+         <div class="col-sm-3"><span><h3>Get Training</h3><img style="width: 100%;" src="/static/images/chalk-board.jpg" alt="image"></span></div>
+         <div class="col-sm-3"></div>
+
+    </div>
+
+    </div>
+
+</div>
+    </section>
+{% endblock content %}

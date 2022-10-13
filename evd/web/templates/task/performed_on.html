@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+    <style>
+.tab-content>div:last-child {
+	display: block !important;
+}
+
+.btn-pref .btn {
+	-webkit-border-radius: 0 !important;
+}
+
+.input-group {
+	position: relative;
+	display: block;
+	border-collapse: separate;
+	padding-bottom:0;
+}
+
+.input-group-addon {
+	padding: 6px 12px;
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 1;
+	color: #555;
+	text-align: center;
+	background-color: #eee;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	color: red;
+	display: block;
+	text-align: left;
+}
+.rowCss {
+        margin-right:2%;
+        margin-left:2%;
+ } 
+label {
+    display: block;
+    float:   left;
+    font-size: 15px;
+    margin-left:10%;
+}
+input{
+   width:50%;
+   padding:0 0px 0 0px;
+   border: 0;
+   font-size: 15px;
+}
+</style>
+
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+{% endblock %}
+
+{% block body_container %}
+    {{ block.super }}
+    {% include "code_conduct_modal.html" %}
+<div class="container-fluid new_dash_container">
+	<div class="col-md-12" role="main" style="min-height: 714px;">
+		<form action="" id="formId" method="post">
+			<div class="basic_profile col-xs-12 col-sm-12 col-md-12">
+				<div class='col-xs-12 col-sm-12 col-md-12'>
+					<div class='section_title'>
+						{{fl}} {% ifequal flag 'true' %}
+						<h3>Assigned To</h3>
+						{% endifequal %} {% ifequal flag 'false' %}
+						<h3>Performed On</h3>
+						{% endifequal %}
+						<hr>
+					</div>
+				</div>
+				<div class="row rowCss">
+					<div class="col-xs-4">
+						<label>Name :</label> {% if user.first_name %} <label style="font-weight:normal"> {{user.first_name}} 
+							{% endif %}
+						 {% if user.last_name %} {{user.last_name}}</label>
+							{% endif %}
+					</div>
+					<div class="col-xs-4">
+						<label>Email Id :</label> <label style="font-weight:normal">{{user.email}}</label>
+					</div>
+					<div class="col-xs-4">
+						<label>Date Of Joining :</label><label style="font-weight:normal">{{user.date_joined|date:'d-m-Y'}}</label>
+					</div>
+				</div>
+				<div class="row rowCss">
+					<div class="col-xs-4">
+						<label>State :</label> <label style="font-weight:normal">{{userDetails.state}}</label> 
+					</div>
+					<div class="col-xs-4">
+						<label>City :</label> <label style="font-weight:normal">{{userDetails.city}}</label> 
+					</div>
+				</div><br>
+				<div class=" rowCss well">
+					<div class="row rowCss">
+						<div class="col-md-4 col-sm-6 col-xs-12">
+							<h3>Open Activities</h3>
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-12"></div>
+						<div class="col-md-2 col-xs-12">
+							<div class="input-group" align="left">
+							 {% if cur_user.is_superuser  %}
+							 <a href="/create_task/">
+								<button type="button" class="btn btn-primary"
+									style="background: #337DFF;">
+									<i class="fa fa-plus"></i> Add New Task
+								</button>
+							</a>
+							{% endif%}
+							</div>
+						</div>
+					</div>
+					<table id="openActivites_tableId" class="table table-striped ">
+						<thead>
+							<tr>
+								<th>Due Date</th>
+								<th>Status</th>
+								<th>Subject</th>
+								<th>Priority</th>
+								<th>Assigned To</th>
+								<th>Created By</th>
+								<th>Last Modified</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for activity in openActivity %}
+							<tr>
+								<td>{{activity.dueDate|date:'d-m-Y'}}</td>
+								<td>{{activity.taskStatus}}</td>
+								<td>{{activity.subject}}</td>
+								<td>{{activity.priority}}</td>
+								<td>{{activity.assignedTo}}</td>
+								<td>{{activity.taskCreatedBy_userId}}</td>
+								<td>{{activity.taskUpdatedDate|date:'d-m-Y'}}</td>
+								 {% if cur_user.is_superuser  %}
+								<td><a href="/edit_task/?id={{activity.id}}">&nbsp;Edit</a></td>
+								 {% else %}
+									     {% if  activity.assignedTo == cur_user.username  %}
+										      <td><a href="/edit_task/?id={{activity.id}}">&nbsp;Edit</a></td>
+										  {% else %}
+										    <td><a class="disabled" >&nbsp;Edit</a></td>
+										{% endif %}	
+								{% endif %}	
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<div class=" rowCss well">
+					<div class="row rowCss">
+						<div class="col-md-4 col-sm-6 col-xs-12">
+							<h3>Activity History</h3>
+						</div>
+					</div>
+					<table id="activityHistory_tableId" class="table table-striped ">
+						<thead>
+							<tr>
+								<th>Due Date</th>
+								<th>Status</th>
+								<th>Subject</th>
+								<th>Priority</th>
+								<th>Assign To</th>
+								<th>Created By</th>
+								<th>Last Modified</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for historyActivity in history %}
+							<tr>
+
+								<td>{{historyActivity.dueDate|date:'d-m-Y'}}</td>
+								<td>{{historyActivity.taskStatus}}</td>
+								<td>{{historyActivity.subject}}</td>
+								<td>{{historyActivity.priority}}</td>
+								<td>{{historyActivity.assignedTo}}</td>
+								<td>{{historyActivity.taskCreatedBy_userId}}</td>
+								<td>{{historyActivity.taskUpdatedDate|date:'d-m-Y'}}{{cur_user.username}}</td>
+								 {% if cur_user.is_superuser  %}
+								<td><a href="/edit_task/?id={{historyActivity.id}}">&nbsp;Edit</a></td>
+								 {% else %}
+								     {% if  historyActivity.assignedTo == cur_user.username %}
+								          <td><a href="/edit_task/?id={{historyActivity.id}}">&nbsp;Edit</a></td>
+									 {% else %}
+										<td><a class="disabled">&nbsp;Edit</a></td>
+									 {% endif %}
+								 {% endif %}		
+								
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+<script>
+ 	
+	$(document).ready(function() {
+		$('#openActivites_tableId').dataTable({
+			"lengthMenu" : false,
+			"bLengthChange" : false,
+			"bFilter" : false,
+			"pageLength" : 20,
+			"aaSorting" : [],
+			"bStateSave" : false
+		});
+		$('#activityHistory_tableId').dataTable({
+			"lengthMenu" : false,
+			"bLengthChange" : false,
+			"bFilter" : false,
+			"pageLength" : 20,
+			"aaSorting" : [],
+			"bStateSave" : false
+		});
+	});
+</script>
+
+{% endblock %}

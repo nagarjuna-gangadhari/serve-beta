@@ -1,0 +1,79 @@
+{% extends 'new_base_temp.html' %}
+{% block content %}
+<div class="row" style="margin: 10% 0;">
+    <h1>Newsletter Archive</h1>
+    <div class="col-md-4 col-md-offset-2">
+        <div class="news">
+          <ol class="news_ol">
+          	<li><span>1.</span><p><a href="/static/newsletters/NL_January_2018.pdf" target="_blank">January 2018 <br>Issue 22</a></p></li>
+          	<li><span>2.</span><p><a href="/static/newsletters/NL_December_2017.pdf" target="_blank">December 2017<br>Issue 21</a></p></li>
+          	<li><span>3.</span><p><a href="/static/newsletters/NL_November_2017.pdf" target="_blank">November 2017<br>Issue 20</a></p></li>
+            <li><span>4.</span><p><a href="/static/newsletters/October NL.pdf" target="_blank">October 2017<br>Issue 19</a></p></li>
+            <li><span>5.</span><p><a href="/static/newsletters/September NL.pdf" target="_blank">September 2017<br>Issue 18</a></p></li>
+            <li><span>6.</span><p><a href="/static/newsletters/August NL.pdf" target="_blank">August 2017<br>Issue 17</a></p></li>
+            <li><span>7.</span><p><a href="/static/newsletters/July_2017.pdf" target="_blank">July 2017<br>Issue 16</a></p></li>
+            <li><span>8.</span><p><a href="/static/newsletters/June_2017.pdf" target="_blank">June 2017<br>Issue 15</a></p></li>
+            <li><span>9.</span><p><a href="/static/newsletters/May_2017.pdf" target="_blank">May 2017<br>Issue 14</a></p></li>
+            <li><span>10.</span><p><a href="/static/newsletters/April_2017.pdf" target="_blank">April 2017<br>Issue 13</a></p></li>
+            <li><span>11.</span><p><a href="/static/newsletters/March_2017.pdf" target="_blank">March 2017<br>Issue 12</a></p></li>
+           
+          </ol> 
+        </div>
+    </div><!--col-->
+    <div class="col-md-4 col-md-offset-1">
+        <div class="news">
+          <ol class="news_ol">
+           	<li><span>12.</span><p><a href="/static/newsletters/February_2017.pdf" target="_blank">February 2017<br>Issue 11</a></p></li>
+            <li><span>13.</span><p><a href="/static/newsletters/January_2017.pdf" target="_blank">January 2017<br>Issue 10</a></p></li>
+            <li><span>14.</span><p><a href="/static/newsletters/December_2016.pdf" target="_blank">December 2016<br>Issue 9</a></p></li>
+            <li><span>15.</span><p><a href="/static/newsletters/November_2016.pdf" target="_blank">November 2016<br>Issue 8</a></p></li>
+            <li><span>16.</span><p><a href="/static/newsletters/October_2016.pdf" target="_blank">October 2016<br>Issue 7</a></p></li>
+            <li><span>17.</span><p><a href="/static/newsletters/Sept_2016.pdf" target="_blank">September 2016<br>Issue 6</a></p></li>
+            <li><span>18.</span><p><a href="/static/newsletters/August_2016.pdf" target="_blank">August 2016<br>Issue 5</a></p></li>
+            <li><span>19.</span><p><a href="/static/newsletters/July_2016.pdf" target="_blank">July 2016<br>Issue 4</a></p></li>
+            <li><span>20.</span><p><a href="/static/newsletters/June_2016.pdf" target="_blank">June 2016<br>Issue 3</a></p></li>
+            <li><span>21.</span><p><a href="/static/newsletters/May_2016.pdf" target="_blank">May 2016<br>Issue 2</a></p></li>
+            <li><span>22.</span><p><a href="/static/newsletters/April_2016.pdf" target="_blank">April 2016<br>Issue 1</a></p></li>
+          </ol>
+        </div>
+    </div><!--col-->
+</div><!--row-->
+
+<style>
+h1{
+    text-align:center;
+    margin-bottom:3%;
+}
+.navbar-wrapper{
+    background:darkslategray;
+}
+div.news {
+  margin: 10px
+}
+
+ol.news_ol {
+  color: #ccc;
+  list-style-type: none;
+}
+
+ol.news_ol li {
+  position: relative;
+  font: bold italic 20px/1.5 Helvetica, Verdana, sans-serif;
+  margin-bottom: 20px;
+}
+
+ol.news_ol li p {
+  font: 12px/1.5 Helvetica, sans-serif;
+  padding-left: 60px;
+  color: #555;
+}
+
+ol.news_ol li span{
+  position: absolute;
+}
+.dropdown-menu.sub_logout {
+    left: 40px;
+  }
+</style>
+
+{% endblock content %}

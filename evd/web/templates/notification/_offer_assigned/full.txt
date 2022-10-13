@@ -1,0 +1,10 @@
+eVidyaloka is requested you to teach the following course.
+
+{{ offer }}
+------
+starting from: {{ start_date }}
+upto:  {{ end_date }}
+
+Kindly accept or reject the the above proposal by clicking on below link
+
+http://{{ request.get_host }}/myevidyaloka/

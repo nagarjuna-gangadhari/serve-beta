@@ -1,0 +1,837 @@
+{% extends "base.html" %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+{% endblock %}
+
+
+{% block head_styles %}
+    {{ block.super }}
+     <style>
+         .submitForm {
+            margin : 16px 5px;
+         }
+         label {
+            min-width: 39% !important;
+            font-weight: normal !important;
+            font-family: sans-serif !important;
+            font-size: 15px !important;
+            /* text-align: justify; */
+            text-align: right;
+            padding-right: 15px;
+         }
+         textArealabel {
+            min-width: 11% !important;
+            text-align:center;
+         }
+         .divrow{
+            margin-bottom:20px;
+         }
+         .errorlist {
+            color: red;
+            padding-left: 42%;
+            padding-top: 2%;
+         }
+         .formInput{
+             width:98%;
+         }
+         .formLabel>label{
+             position:absolute;
+             margin-left: 101px;
+         }
+         .form_q_instruction>label{
+             margin-left: 21px;
+         }
+         .formDiv{
+             margin-left: 20px;
+         }
+
+</style>
+
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+{% endblock %}
+
+
+{% block body_container%}
+    {{ block.super }}
+    {% if is_eligible %}
+<div class="col-sm-12 col-md-12 col-lg-12" style="background-color:#fff">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <h3><b id="headings">{% if update_flag %}Update{% else %}Add{% endif %} Question</b></h3>
+        <hr/>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        {% if save_msg %}
+            <div class="alert alert-success" id='save_and_add_msg'>
+                <strong>Success!</strong> {{save_msg}}.
+            </div>
+        {% endif %}
+        <div id="question_save">
+            {% csrf_token %}
+            <div class="row divrow">
+                <div class="fieldWrapper col-md-6 col-sm-6">
+                    {{ question_form.board.label_tag }}<span style="color:red">*</span>   {{ question_form.board }}
+                    {{ question_form.board.errors }}
+                </div>
+                <div class="fieldWrapper col-md-6 col-sm-6">
+                    {{ question_form.subject.label_tag }}<span style="color:red">*</span>  {{ question_form.subject }}
+                    {{ question_form.subject.errors }}
+                </div>
+            </div>
+            <div class="row divrow">
+                <div class="fieldWrapper col-md-6 col-sm-6">
+                    {{ question_form.grade.label_tag }}<span style="color:red">*</span>   {{ question_form.grade }}
+                    {{ question_form.grade.errors }}
+                </div>
+                <div class="fieldWrapper col-md-6 col-sm-6">
+                    {{ question_form.exercise_number.label_tag }}<span style="color:red">*</span>   {{ question_form.exercise_number }}
+                    {{ question_form.exercise_number.errors }}
+                </div>
+            </div>
+            <div class="row divrow">
+                <div class="fieldWrapper col-md-6 col-sm-6">
+                    {{ question_form.topic.label_tag }}<span style="color:red">*</span>   {{ question_form.topic }}
+                    {{ question_form.topic.errors }}
+                </div>
+                <div class="fieldWrapper col-md-6 col-sm-6">
+                    {{ question_form.subtopic.label_tag }} <span>&nbsp;</span> {{ question_form.subtopic }}
+                    {{ question_form.subtopic.errors }}
+                </div>
+            </div>
+            <div class="row divrow">
+                <div class="fieldWrapper col-md-6 col-sm-6" id="all_subjects">
+                    {{ question_form.question_type.label_tag }}<span style="color:red">*</span>   {{ question_form.question_type }}
+                    {{ question_form.question_type.errors }}
+                </div>
+                <div class="fieldWrapper col-md-6 col-sm-6" id="maths" style="display: none;">
+                    {{ question_form.question_type.label_tag }}<span style="color:red">*</span>   {{ question_form.question_type_maths }}
+                    {{ question_form.question_type.errors }}
+                </div>
+                <div class="fieldWrapper col-md-6 col-sm-6" id="science" style="display: none;">
+                    {{ question_form.question_type.label_tag }}<span style="color:red">*</span>   {{ question_form.question_type_science }}
+                    {{ question_form.question_type.errors }}
+                </div>
+
+                <div class="fieldWrapper col-md-6 col-sm-6">
+                    {{ question_form.difficulty_level.label_tag }}<span style="color:red">*</span>  {{ question_form.difficulty_level }}
+                    {{ question_form.difficulty_level.errors }}
+                </div>
+            </div>
+            <div class="row divrow">
+                {%if update_flag %}
+                <div class="fieldWrapper col-md-6 col-sm-6" style="display:none">
+                    {{ question_form.is_deleted.label_tag }}   {{ question_form.is_deleted }}
+                    {{ question_form.is_deleted.errors }}
+                </div>
+                {% endif %}
+            </div>
+            <div class="row divrow">
+                <div class="fieldWrapper col-md-12 col-sm-12">
+                    <div class="col-md-3 col-sm-3 form_q_instruction" style="position: relative;left:6%;">
+                    Question Stem
+                    </div>
+                    <div class="col-md-9 col-sm-9"> 
+                        <!-- <p style="color:cadetblue;">Enter the questions in Regional language for the chosen state board</p> -->
+                        {{ question_form.question_instruction }}</div>
+                    {{ question_form.question_instruction.errors }}
+                </div>
+            </div>
+            <div>
+                <p style="color: blue; margin-left: 18%;">*Enter the questions in Regional language for the chosen state board</p>
+            </div>
+            <div class="row divrow">
+                <div class="fieldWrapper col-md-12 col-sm-12 formDiv">
+                    <div class="col-md-2 col-sm-2 formLabel">
+                        {{ question_form.question.label_tag }}<span style="color:red; margin-left:105%;">*</span></div>
+                    <div class="col-md-10 col-sm-10">{{ question_form.question }}</div>
+                    {{ question_form.question.errors }}
+                </div>
+            </div>
+            <div class="row divrow">
+                <div class="fieldWrapper col-md-12 col-sm-12 formDiv">
+                    <div class="col-md-2 col-sm-2 formLabel">{{ question_form.question_image.label_tag }}</div>
+                    <div class="col-md-10 col-sm-10">{{ question_form.question_image }}</div>
+                    {{ question_form.question_image.errors }}
+                    <p style="color: red; margin-left: 18%;">*Image Resolution should be less than 400x300 Pixels</p>
+                </div>
+            </div>
+
+            <div class="row divrow">
+                <div class="fieldWrapper col-md-12 col-sm-12 formDiv" id="div_mcqs" style="display: none;">
+                    <div class="col-md-2 col-sm-2 formLabel" class="Label">{{ question_form.answer_question.label_tag }}<span style="color:red; margin-left:105%;">*</span></div>
+                    <div class="col-md-10 col-sm-10" id="choiceDiv">
+                        <!-- <input type = "text"  name = "Address" id = "mytext" required><br/>  -->
+
+
+                       <input type="text" id="choice1" maxlength = "40" class="form-control formInput" placeholder="Choice 1" {% if update_flag %}value=""{% endif %}>
+                       <input type="text" id="choice2" maxlength = "40" class="form-control formInput" placeholder="Choice 1" {% if update_flag %}value=""{% endif %}>
+                       <input type="text" id="choice3" maxlength = "40" class="form-control formInput" placeholder="Choice 1" {% if update_flag %}value=""{% endif %}>
+                       {% if update_flag %}
+                       {% if choiceLength == 4 or choiceLength == 5 %}
+                       <div id="div4"><input type="text" maxlength = "40" class="form-control" id="choice4" placeholder="Choice 4" value="" style="width: calc(100% - 62px);float:left;"><button type="button" onclick="deleteChoiceField()" class="btn-danger" style="width:34px;height:34px;float:left;margin-left:10px;"><span class="glyphicon glyphicon-minus"></span></button></div>
+                       {% endif %}
+                       {%if choiceLength == 5 %}
+                       <div id="div5"><input type="text" maxlength = "40" class="form-control" id="choice5" placeholder="Choice 5" value="" style="width: calc(100% - 62px);float:left;"><button type="button" onclick="deleteChoiceField()" class="btn-danger" style="width:34px;height:34px;float:left;margin-left:10px;"><span class="glyphicon glyphicon-minus"></span></button></div>
+                       {% endif %}
+                       {% endif %}
+                    </div>
+                    <button type="button" class="pull-right btn-success" id="addButton" onclick="addChoiceField()" style="margin-right: 33px; width: 34px; height: 34px;">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="row divrow">
+                <div class="fieldWrapper col-md-12 col-sm-12 formDiv" id="directAns">
+                    <div class="col-md-2 col-sm-2 formLabel">{{ question_form.correct_answer.label_tag }}<span style="color:red; margin-left:105%;">*</span></div>
+                    <div class="col-md-10 col-sm-10" id="correctAns">{{ question_form.correct_answer }}</div>
+                    {{ question_form.correct_answer.errors }}
+                </div>
+                <div class="fieldWrapper col-md-12 col-sm-12 formDiv" id="div_mcq_ans" style="display: none;">
+                    <div class="col-md-2 col-sm-2 formLabel">{{ question_form.correct_answer.label_tag }}<span style="color:red;margin-left:105%;">*</span></div>
+                    <div class="col-md-10 col-sm-10">
+                        <h1 style="display: none;" id="index_ans">{{index_ans}}</h1>
+                        <select id="selectMcq" class="form-control formInput">
+                            <option>Select Answer</option>
+                            <option id="mcqOption1" type="text" ></option>
+                            <option id="mcqOption2" type="text" ></option>
+                            <option id="mcqOption3" type="text" ></option>
+                            {% if update_flag %}
+                            {% if choiceLength == 4 or choiceLength == 5 %}
+                            <option id="mcqOption4" type="text" ></option>
+                            {% endif %}
+                            {% if choiceLength == 5 %}
+                            <option id="mcqOption5" type="text" ></option>
+                            {% endif %}
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="fieldWrapper col-md-12 col-sm-12 formDiv" id="tfAns" style="display: none;">
+                    <div class="col-md-2 col-sm-2 formLabel">{{ question_form.correct_answer.label_tag }}<span style="color:red;margin-left:105%;">*</span></div>
+                    <div class="col-md-10 col-sm-10">
+                        <select id="tf" class="form-control formInput">
+                            <option>Select Answer</option>
+                            <option>True</option>
+                            <option>False</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row divrow">
+                <div class="fieldWrapper col-md-12 col-sm-12 formDiv">
+                    <div class="col-md-2 col-sm-2 formLabel">{{ question_form.solution.label_tag }}</div>
+                    <div class="col-md-10 col-sm-10">{{ question_form.solution }}</div>
+                    {{ question_form.solution.errors }}
+                </div>
+            </div>
+            <div class="row divrow">
+                <div class="fieldWrapper col-md-12 col-sm-12 formDiv">
+                    <div class="col-md-2 col-sm-2" style="padding-left: 10%;">Marks<span style="color:red;margin-left: 70%;">*</span></div>
+                    <div class="col-md-10 col-sm-10">
+                        <input  type="number"  min=1 oninput="validity.valid||(value='');" class="form-control" id="marks" {% if update_flag %}value="{{marks}}"{% endif %}>
+                    </div>
+                </div>
+            </div>
+            <div class="row divrow" style="text-align: center;">
+                <button class="submitForm btn btn-success" type="button" id="id_addCenter" onclick="saveAndAddQuestion()" >{% if update_flag %}Update{% else %}Save and Add{% endif %}</button>
+                {% if not update_flag %}
+                <button class="submitForm btn btn-success" type="button" name="addQuestion" id="addQuestion" value="addQuestion" onclick="saveQuestion()">Save</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if not is_eligible %}
+    <div align="center" >
+            <div align="center" style="line-height: 50px;background:white;text-align: center;  font-size:18px">You can't add questions since you are not teaching any of the offerings</div>
+            </div>
+  </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block import_scripts %}
+ {{ block.super }}
+<script>
+    document.getElementById("choice1").value = JSON.parse('"' + ("{{choices.0}}") + '"');
+    document.getElementById("choice2").value = JSON.parse('"' + ("{{choices.1}}") + '"');
+    document.getElementById("choice3").value = JSON.parse('"' + ("{{choices.2}}") + '"');
+    document.getElementById("mcqOption1").innerHTML = document.getElementById("choice1").value;
+    document.getElementById("mcqOption2").innerHTML = document.getElementById("choice2").value;
+    document.getElementById("mcqOption3").innerHTML = document.getElementById("choice3").value;
+
+    len = "{{choiceLength}}"
+    if (len >3 & len == 4){
+    document.getElementById("choice4").value = JSON.parse('"' + ("{{choices.3}}") + '"');
+    document.getElementById("mcqOption4").innerHTML = JSON.parse('"' + ("{{choices.3}}") + '"');
+    }
+    else if (len >3 & len == 5){
+    document.getElementById("choice4").value = JSON.parse('"' + ("{{choices.3}}") + '"');
+    document.getElementById("choice5").value = JSON.parse('"' + ("{{choices.4}}") + '"');
+    document.getElementById("mcqOption4").innerHTML = JSON.parse('"' + ("{{choices.3}}") + '"');
+    document.getElementById("mcqOption5").innerHTML = JSON.parse('"' + ("{{choices.4}}") + '"');
+    }
+   function addressFunction() 
+{ 
+    document.getElementById('secondaryaddress').value="msg"
+      
+} 
+function compare(s1,s2){
+   
+
+var s1Parts= s1.split(' ');
+var s2Parts= s2.split(' ');
+
+var result = "";
+
+for(var i = 0; i<s1Parts.length; i++)
+{
+     if(s1Parts[i] === s2Parts[i])
+         result = "True";  
+    else result = "False"
+    break; 
+    console.log("!!!!!!!!!!!!!!!!!!!!",result)
+}
+};
+
+$(document).ready(function() {
+    if(document.getElementById("headings").innerHTML=="Update Question"){
+    if ($("#id_subject").val() == "Maths"){
+        document.getElementById('all_subjects').style.display = "none"
+        document.getElementById('science').style.display = "none"
+        document.getElementById('maths').style.display = "block"
+        if($("#id_question_type_maths").val() == "MCQs" || $("#id_question_type_maths").val() == "Multiple Choices"){
+            var indexAns = "{{index_ans}}"
+            setSelectedIndex(document.getElementById("selectMcq"),indexAns);
+            console.log("#########"+document.getElementById("selectMcq"))
+            $("#div_mcqs").show();
+            $("#div_mcq_ans").show();
+            $("#tfAns").hide();
+            $("#directAns").hide()
+        }
+        else if($("#id_question_type_maths").val() =="True/False"){
+            var indexAns = "{{index_ans}}"
+            setSelectedIndex(document.getElementById("tf"),indexAns);
+            $("#tfAns").show();
+            $("#div_mcqs").hide();
+            $("#div_mcq_ans").hide();
+            $("#directAns").hide()
+        }
+        else{
+            $("#tfAns").hide();
+            $("#div_mcqs").hide();
+            $("#div_mcq_ans").hide();
+            $("#directAns").show()
+        }
+    }
+    else if ($("#id_subject").val() == "Science"){
+        document.getElementById('all_subjects').style.display = "none"
+        document.getElementById('maths').style.display = "none"
+        document.getElementById('science').style.display = "block"
+        if($("#id_question_type_science").val() == "MCQs" || $("#id_question_type_science").val() == "Multiple Choices"){
+            var indexAns = "{{index_ans}}"
+            setSelectedIndex(document.getElementById("selectMcq"),indexAns);
+            console.log("#########"+document.getElementById("selectMcq"))
+            $("#div_mcqs").show();
+            $("#div_mcq_ans").show();
+            $("#tfAns").hide();
+            $("#directAns").hide()
+        }
+        else if($("#id_question_type_science").val() =="True/False"){
+            console.log("yess")
+            var indexAns = "{{index_ans}}"
+            setSelectedIndex(document.getElementById("tf"),indexAns);
+            $("#tfAns").show();
+            $("#div_mcqs").hide();
+            $("#div_mcq_ans").hide();
+            $("#directAns").hide()
+        }
+        else{
+            $("#tfAns").hide();
+            $("#div_mcqs").hide();
+            $("#div_mcq_ans").hide();
+            $("#directAns").show()
+        }
+    }
+    else 
+        {
+        if($("#id_question_type").val() == "MCQs" || $("#id_question_type").val() == "Multiple Choices"){
+            var indexAns = "{{index_ans}}"
+            setSelectedIndex(document.getElementById("selectMcq"),indexAns);
+            console.log("#########"+document.getElementById("selectMcq"))
+            $("#div_mcqs").show();
+            $("#div_mcq_ans").show();
+            $("#tfAns").hide();
+            $("#directAns").hide()
+        }
+        else if($("#id_question_type").val() =="True/False"){
+            var indexAns = "{{index_ans}}"
+            setSelectedIndex(document.getElementById("tf"),indexAns);
+            $("#tfAns").show();
+            $("#div_mcqs").hide();
+            $("#div_mcq_ans").hide();
+            $("#directAns").hide()
+        }
+        else{
+            $("#tfAns").hide();
+            $("#div_mcqs").hide();
+            $("#div_mcq_ans").hide();
+            $("#directAns").show()
+        }
+    }
+    }
+
+    setTimeout(function(){
+        $('#save_and_add_msg').hide();
+    },3000);
+
+    $(".inner.clearfix").css("width","85%");
+
+    $("#id_board").on('change', function() {
+        $.get("/questions/getsubjects/?board="+this.value,function(resp){
+            $("#id_subject").empty();
+            $('#id_subject').append('<option value="">Select Subject</option>');
+            $.each(resp, function (i, resp) {
+                $('#id_subject').append('<option value="'+resp[0]+'">'+resp[1]+'</option>');
+            });
+        });
+    });
+    $("#id_subject").on('change', function() {
+        var board = $("#id_board").children("option:selected").val()
+        var subject = this.value
+        $.get("/questions/getgrades/?board="+board+"&subject="+this.value,function(resp){
+            $("#id_grade").empty();
+            if (subject == "Maths"){
+                document.getElementById('all_subjects').style.display = "none"
+                document.getElementById('science').style.display = "none"
+            document.getElementById('maths').style.display = "block"
+            question_type = $("#id_question_type_maths").val()
+            $.post("/questions/question_instruction/", {'question_type': question_type,'csrfmiddlewaretoken': getCookieValue('csrftoken')}, function(response) {
+                instruction = response['instructions']
+                
+                $('#id_question_instruction').val(instruction);
+            });
+            }
+            else if (subject == "Science") {
+                document.getElementById('all_subjects').style.display = "none"
+                document.getElementById('maths').style.display = "none"
+            document.getElementById('science').style.display = "block"
+            question_type = $("#id_question_type_science").val()
+            $.post("/questions/question_instruction/", {'question_type': question_type,'csrfmiddlewaretoken': getCookieValue('csrftoken')}, function(response) {
+                instruction = response['instructions']
+                
+                $('#id_question_instruction').val(instruction);
+            });
+            }
+            else{
+                document.getElementById('all_subjects').style.display = "block"
+                document.getElementById('science').style.display = "none"
+            document.getElementById('maths').style.display = "none"
+
+            }
+            $('#id_grade').append('<option value="">Select Grade</option>');
+            $.each(resp, function (i, resp) {
+                $('#id_grade').append('<option value="'+resp[0]+'">'+resp[1]+'</option>');
+            });
+        });
+    });
+    $("#id_grade").on('change', function() {
+        var board = $("#id_board").children("option:selected").val()
+        var subject = $("#id_subject").children("option:selected").val()
+        var grade=$("#id_grade").children("option:selected").val()
+        $.get("/questions/topics/?subject="+subject+"&board="+board+"&grade="+grade,function(resp){
+            $("#id_topic").empty();
+            $('#id_topic').append('<option value="">Select Topic</option>');
+            $.each(resp, function (i, resp) {
+                $('#id_topic').append('<option value="'+resp[0]+'">'+resp[1]+'</option>');
+            });
+        });
+    });
+    $("#id_topic").on('change', function() {
+        $.get("/questions/subtopics/?topic="+this.value,function(resp){
+            $("#id_subtopic").empty();
+            $('#id_subtopic').append('<option value="">Select Sub Topic</option>');
+            $.each(resp, function (i, resp) {
+                $('#id_subtopic').append('<option value="'+resp[0]+'">'+resp[1]+'</option>');
+            });
+        });
+    });
+
+});
+
+function validateForm(){
+    var all_choices_filled = true;
+
+    if ( $("#id_board").val() == "Select Board" || $("#id_board").val() == "" ) {
+        all_choices_filled = false;
+    }
+    else if ( $("#id_subject").val() == "Select Subject" || $("#id_subject").val() == "" ) {
+        all_choices_filled = false;
+    }
+    else if ( $("#id_grade").val() == "Select Grade" || $("#id_grade").val() == "" ) {
+        all_choices_filled = false;
+    }
+    else if ( $("#id_exercise_number").val() == "" ){
+        all_choices_filled = false;
+    }
+    else if ( $("#id_topic").val() == "Select Topic" || $("#id_topic").val() == "" ){
+        all_choices_filled = false;
+    }
+    else if ( $("#id_question").val() == "" ){
+        all_choices_filled = false;
+    }
+    else if ($("#id_question").val() == "Maths" || $("#id_question").val() == "Science" ){
+        if ( $("#id_question_type").val() == "MCQs" || $("#id_question_type").val() == "Multiple Choices" ) {
+        all_choices_filled = all_choices_filled && ($("#choice1").val() != "" && $("#choice2").val() != "" && $("#choice3").val() != "");
+
+        if ( count == 5 ) {
+            all_choices_filled = all_choices_filled && ($("#choice4").val() !="");
+        }
+        else if ( count == 6 ) {
+            all_choices_filled = all_choices_filled && ($("#choice4").val() !="") &&  ($("#choice5").val() !="");
+        }
+
+        if ( $("#selectMcq").innerHTML == "Select Answer" )
+            all_choices_filled = false;
+    }
+    }
+
+    else if ($("#id_question").val() != "Maths" || $("#id_question").val() != "Science") {
+    if ( $("#id_question_type").val() == "MCQs" || $("#id_question_type").val() == "Multiple Choices" ) {
+        all_choices_filled = all_choices_filled && ($("#choice1").val() != "" && $("#choice2").val() != "" && $("#choice3").val() != "");
+
+        if ( count == 5 ) {
+            all_choices_filled = all_choices_filled && ($("#choice4").val() !="");
+        }
+        else if ( count == 6 ) {
+            all_choices_filled = all_choices_filled && ($("#choice4").val() !="") &&  ($("#choice5").val() !="");
+        }
+
+        if ( $("#selectMcq").innerHTML == "Select Answer" )
+            all_choices_filled = false;
+    }
+}
+    else if( $("#id_question_type").val() == "True/False" ){
+       if( $("#tf").val() == "Select Answer" ){
+           all_choices_filled = false;
+       }
+    }
+    else if($( "#id_question_type").val() == "DirectAnswer" || $("#id_question_type").val() == "Others" ) {
+        if($("#id_correct_answer").val() == "" ){
+            all_choices_filled = false;
+        }
+    }
+    return all_choices_filled;
+}
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie
+                        .substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var saved_href = $('.col-md-10 a').attr('href');
+var updateFlag = "{{update_flag}}"
+var saveAndAdd= "saveadd";
+function saveAndAddQuestion(){
+    var locStr = ''
+    var id = ''
+    if(updateFlag){
+        actionType = 'update'
+        locStr =  String(window.location.href)
+        locStrArr = locStr.split("/")
+        id = locStrArr[locStrArr.length-2]
+    }
+    else{
+        actionType = 'add'
+    }
+    var selected_ans = $("#selectMcq").val();
+    if ($("#id_subject").val() == "Maths"){
+    var q_type = $("#id_question_type_maths").val();
+    }
+    else if ($("#id_subject").val() == "Science"){
+        var q_type = $("#id_question_type_science").val();   
+    }
+    else {
+    var q_type = $("#id_question_type").val();
+    }
+    if(!validateForm() || (q_type === "MCQs" && selected_ans == "Select Answer")){
+        alert("Please fill all the mandatory fields");
+
+        return false;
+    }
+    else {
+        var q_type = $("#id_question_type").val();
+        if ( q_type === "MCQs" || q_type == "True/False" ) {
+            $("#id_correct_answer").value;
+        }
+        else {
+
+        }
+        var delete_image = $('#question_image-clear_id').is(':checked');
+        var qImage = $("#id_question_image").get(0);
+        var myFormData = new FormData();
+        myFormData.append('questionImage', $("#id_question_image").prop("files")[0]);
+        myFormData.append('saved_href', saved_href);
+        myFormData.append('delete_image', delete_image);
+        myFormData.append('action_type', actionType);
+        myFormData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
+        myFormData.append('id', id);
+        myFormData.append('saveAndAdd', saveAndAdd);
+        myFormData.append('board', $("#id_board").val());
+        myFormData.append('subject', $("#id_subject").val());
+        myFormData.append('grade', $("#id_grade").val());
+        myFormData.append('exerciseNumber', $("#id_exercise_number").val());
+        myFormData.append('topic', $("#id_topic").val());
+        myFormData.append('subTopic', $("#id_subtopic").val());
+        if ($("#id_subject").val() == "Maths"){
+            myFormData.append('questionType', $("#id_question_type_maths").val());
+        }
+        else if ($("#id_subject").val() == "Science") {
+            myFormData.append('questionType', $("#id_question_type_science").val());
+        }
+        else {
+        myFormData.append('questionType', $("#id_question_type").val());
+        }
+        myFormData.append('difficultyLevel', $("#id_difficulty_level").val());
+        myFormData.append('question_instruction', $("#id_question_instruction").val());
+        myFormData.append('question', $("#id_question").val());
+        myFormData.append('answer', $("#id_correct_answer").val());
+        myFormData.append('solution', $("#id_solution").val());
+        myFormData.append('choice_1', $("#choice1").val());
+        myFormData.append('choice_2', $("#choice2").val());
+        myFormData.append('choice_3', $("#choice3").val());
+        myFormData.append('choice_4', $("#choice4").val());
+        myFormData.append('choice_5', $("#choice5").val());
+        myFormData.append('mcqAnswer', $("#selectMcq").val());
+        myFormData.append('trueFalseAnswer', $("#tf").val());
+        myFormData.append('marks', $("#marks").val());
+
+        $.ajax({
+          url: '/questions/add/',
+          type: 'POST',
+          processData: false, // important
+          contentType: false, // important
+          dataType : 'json',
+          cache: false,
+          data: myFormData,
+          success: function(response_data) {
+                /* Display response message as alert
+                 *  and redirect as per the reponse data ('redirect-url')
+                 */
+                alert(response_data['message']);
+                if ( response_data['redirect_url'] != "" ) {
+                    window.location = response_data['redirect_url'];
+                }
+            }
+        });
+     //    $.post("/questions/add/",
+     //        {   
+     //            'csrfmiddlewaretoken': getCookie('csrftoken'),
+     //            'action_type'         : actionType,
+     //            'id'                  : id,
+     //            'saveAndAdd'          : saveAndAdd,
+     //            'board'               : $("#id_board").val(),
+     //            'subject'             : $("#id_subject").val(),
+     //            'grade'               : $("#id_grade").val(),
+     //            'exerciseNumber'      : $("#id_exercise_number").val(),
+     //            'topic'               : $("#id_topic").val(),
+     //            'subTopic'            : $("#id_subtopic").val(),
+     //            'questionType'        : $("#id_question_type").val(),
+     //            'difficultyLevel'     : $("#id_difficulty_level").val(),
+     //            'question_instruction': $("#id_question_instruction").val(),
+     //            'question'            : $("#id_question").val(),
+     //            // 'questionImage'       : $("#id_question_image").val(),
+     //            'questionImage'       : qImage.files[0],
+     //            'answer'              : $("#id_correct_answer").val(),
+     //            'solution'            : $("#id_solution").val(),
+     //            'choice_1'            : $("#choice1").val(),
+     //            'choice_2'            : $("#choice2").val(),
+     //            'choice_3'            : $("#choice3").val(),
+     //            'choice_4'            : $("#choice4").val(),
+     //            'choice_5'            : $("#choice5").val(),
+     //            'mcqAnswer'           : $("#selectMcq").val(),
+     //            'trueFalseAnswer'     : $("#tf").val(),
+     //            'marks'               : $("#marks").val()
+     //        },
+     //        function(response_data) {
+     //            /* Display response message as alert
+     //             *  and redirect as per the reponse data ('redirect-url')
+     //             */
+                 // console.log($("#id_subject").val())
+     //            alert(response_data['message']);
+     //            if ( response_data['redirect_url'] != "" ) {
+     //                window.location = response_data['redirect_url'];
+     //            }
+     //        }
+     //    );
+    }
+}
+function saveQuestion(){
+    saveAndAdd="save";
+    saveAndAddQuestion();
+}
+
+function getCookieValue(a) {
+			var b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+			return b ? b.pop() : '';
+		}
+$(function() {
+    console.log("yess")
+    // if ($("#id_subject").val() == "Maths"){
+        $("#id_question_type_maths").change(function() {
+            question_type = $("#id_question_type_maths").val()
+            $.post("/questions/question_instruction/", {'question_type': question_type,'csrfmiddlewaretoken': getCookieValue('csrftoken')}, function(response) {
+                instruction = response['instructions']
+                console.log(response['instructions'])
+                
+                $('#id_question_instruction').val(instruction);
+            });
+        if ( $("#id_question_type_maths").val() == "Multiple Choices" || $("#id_question_type_maths").val() == "MCQs" ) {
+            $("#div_mcqs").show();
+            $("#div_mcq_ans").show();
+            $("#tfAns").hide();
+            $("#directAns").hide()
+        }
+        else if($("#id_question_type_maths").val()=="True/False"){
+            $("#tfAns").show();
+            $("#div_mcqs").hide();
+            $("#div_mcq_ans").hide();
+            $("#directAns").hide()
+        }
+        else{
+            $("#tfAns").hide();
+            $("#div_mcqs").hide();
+            $("#div_mcq_ans").hide();
+            $("#directAns").show()
+        }
+    });
+
+    $("#id_question_type_science").change(function() {
+            question_type = $("#id_question_type_science").val()
+            $.post("/questions/question_instruction/", {'question_type': question_type,'csrfmiddlewaretoken': getCookieValue('csrftoken')}, function(response) {
+                instruction = response['instructions']
+                
+                $('#id_question_instruction').val(instruction);
+            });
+        if ( $("#id_question_type_science").val() == "Multiple Choices" || $("#id_question_type_science").val() == "MCQs" ) {
+            $("#div_mcqs").show();
+            $("#div_mcq_ans").show();
+            $("#tfAns").hide();
+            $("#directAns").hide()
+        }
+        else if($("#id_question_type_science").val()=="True/False"){
+            $("#tfAns").show();
+            $("#div_mcqs").hide();
+            $("#div_mcq_ans").hide();
+            $("#directAns").hide()
+        }
+        else{
+            $("#tfAns").hide();
+            $("#div_mcqs").hide();
+            $("#div_mcq_ans").hide();
+            $("#directAns").show()
+        }
+    });
+
+    // }
+    $("#id_question_type").change(function() {
+        if ( $("#id_question_type").val() == "Multiple Choices" || $("#id_question_type").val() == "MCQs" ) {
+            $("#div_mcqs").show();
+            $("#div_mcq_ans").show();
+            $("#tfAns").hide();
+            $("#directAns").hide()
+        }
+        else if($("#id_question_type").val()=="True/False"){
+            $("#tfAns").show();
+            $("#div_mcqs").hide();
+            $("#div_mcq_ans").hide();
+            $("#directAns").hide()
+        }
+        else{
+            $("#tfAns").hide();
+            $("#div_mcqs").hide();
+            $("#div_mcq_ans").hide();
+            $("#directAns").show()
+        }
+    });
+});
+var count=4
+if(updateFlag && ($("#id_question_type").val() == "MCQs" || $("#id_question_type").val() == "Multiple Choices")){
+    count=Number("{{choiceLength}}")+1
+}
+if(count==6){
+    $("#addButton").hide();
+}
+function addChoiceField(){
+    if(count<=5){
+        var field = `<div id="div${count}"><input type="text" class="form-control" id="choice${count}" placeholder="Choice ${count}" style="width: calc(100% - 62px);float:left;"><button type="button" onclick="deleteChoiceField()" class="btn-danger" style="width:34px;height:34px;float:left;margin-left:10px;"><span class="glyphicon glyphicon-minus"></span></button></div>`
+        $(field).appendTo(document.getElementById('choiceDiv'))
+        var optionfield = `<option id="mcqOption${count}" style="display:none;"></option>`
+        document.getElementById("selectMcq").innerHTML += optionfield
+        count+=1;
+    }
+    if(count==6){
+        $("#addButton").hide();
+    }
+}
+
+function deleteChoiceField(){
+    $("#addButton").show();
+    var id='#div'+Number(count-1)
+    var id2='#mcqOption'+Number(count-1)
+    $(id2).remove();
+    $(id).remove();
+    count-=1;
+}
+
+$('#div_mcqs').keyup(function() {
+    for(let i=1;i<=5;i++){
+        var optionId="mcqOption"+i; var choiceId="#choice"+i;
+        document.getElementById(optionId).innerHTML=$(choiceId).val();
+    }
+ });
+
+
+ $( "#question_save" ).change(function() {
+     for(let i=1;i< count;i++){
+         if(document.getElementById(`mcqOption${i}`).innerHTML==""){
+            $(`#mcqOption${i}`).hide()
+         }
+         else{
+            $(`#mcqOption${i}`).show()
+         }
+     }
+});
+
+function setSelectedIndex(s, i)
+{
+    s.options[i-1].selected = true;
+    return;
+}
+window.onload = function() {
+    document.getElementById('choice1').onload = function() {
+        document.getElementById('choice1').innerHTML = "error";
+        alert('msg')
+    }
+};
+</script>
+
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+
+{% endblock import_scripts %}

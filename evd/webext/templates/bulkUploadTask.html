@@ -1,0 +1,338 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+ <style>
+ input{
+ width:90px; 
+ text-align:center;
+ }
+ 
+.tab-content > div:last-child {
+  display : block !important;
+ }  
+    
+.rowCss{
+  margin-top:10px;
+ } 
+ a.dt-button.excelButton{
+     color: white;     
+}
+a.dt-button.excelButton:hover {
+ cursor: default; 
+} ​
+ </style> 
+ 
+ <style>
+
+.btn-primary{
+background: blue !important;
+}
+a{
+color: #337ab7; !important;
+}
+a:hover{
+color: #23527c; !important;
+}
+
+.btn-primary:hover, .btn:focus, .btn.focus {
+    color: #333;
+    text-decoration: none;
+}
+a span {
+	display:none;
+}
+.btn-info {
+    background: #244ec5;
+}
+.btn-info:hover {
+    background: #244ec5;
+}
+</style>
+<!--  <script src="https://kendo.cdn.telerik.com/2017.1.223/js/jquery.min.js"></script> -->
+<script src="https://kendo.cdn.telerik.com/2017.1.223/js/jszip.min.js"></script>
+<script
+	src="https://kendo.cdn.telerik.com/2017.1.223/js/kendo.all.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+<link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+<link href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
+<script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.js"></script>
+
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+<div class="container-fluid new_dash_container">
+	<div class='row my_profile' style="position: relative">
+		<div class="col-lg-12 col-sm-12">
+		<form action="/v2/bulkUploadTask/" id="form1"
+				enctype="multipart/form-data" 
+				method="post">
+				{% csrf_token %}
+				<input type="hidden" value="true" name='upload_download'>
+				<input type="hidden" value="{{msg}}" id="successId">
+				<input type="hidden" value="{{error}}" id="errorId">
+				<input type="hidden" id="emptyMsg">
+			<div class="tab-content">
+				<div id="profile" class="tab-pane fade in active">
+					<div class='basic_profile col-xs-12 col-sm-12 col-md-12'>
+						{% if msg %}
+							
+								<div class="alert alert-success alert-dismissable"
+									style="line-height: 0;" id="msgStatusId">
+									<a href="#" data-dismiss="alert" class="close"
+										style="font-size: x-large; top: -22px;">&times;</a>
+									{{msg}}
+								</div>
+								{% endif %} 
+								{% if error %}
+								<div class="alert alert-danger Box alert-dismissable"
+									style="line-height: 0;" id="errorBoxId">
+									<a href="#" data-dismiss="alert" class="close"
+										style="font-size: x-large; top: -22px;">&times;</a>
+									{{error}}
+								</div>
+							{% endif %}
+					<div id="validatemsg"></div>
+					<div id="emptyDownloadMsg"></div>
+						<div class='row '>
+							<div class="col-md-5">
+								<div class='row  section_title'
+									style="text-align: left; margin-left: 10px;">
+									 <br>
+									<h5>Bulk Upload Task</h5>
+								</div>
+							</div>
+							    <div class="col-md-5" style="text-align:right;">
+                                    <br>
+                                    <h5 >Bulk Task Sample:</h5>
+                                    </div>
+                                <div class="col-md-2">
+                                    <br>
+                                        <div class="row">
+                                           <div class="col-xs-6 col-sm-6 col-md-6" id="" >
+                                                <a href="#"><i
+                                                    class="fa fa-file-excel-o fa-2x download_Bulk"
+                                                    title="Task Sample" aria-hidden="true" style="align: center;"></i></a>
+                                            </div>
+                                        </div>
+                                </div>
+						</div>
+						<hr/>
+						<br>
+						<div class="row">
+							<div class="col-md-10" align="center">
+								<div class="row" align="center" style="margin-left: 52px;">
+									<span style="display: inline;"> Excel File &nbsp:</span> <input
+										type="file" id="files"
+										style="display: inline; width: auto; height: auto;"
+										class="btn btn-info" name="files" required="required">
+								</div>
+								<br/>
+								<div class="row" style="margin-left: 84px;">
+									<button type="button" class="btn btn-primary"
+										id="confirm_model">Upload</button>
+									<button type="button" class="btn" onclick="cancel_page()">Cancel</button>
+								</div>
+								<br>
+							</div>
+								<div class="col-md-2" style="margin-left: -158px;">
+									<h5 style="margin-left: -42px;">Download Rejected Task:</h5>
+										<div class="col-xs-6 col-sm-6 col-md-6" id="rejectedData" style="margin-top: -30px;margin-left: 147px;">
+											<a href="#"><i class="fa fa-file-excel-o fa-2x"aria-hidden="true" title="Rejected Task"></i></a>
+										</div>
+									</div>
+								</div>
+								<div class="rowCss" id="downloadRejectedTaskId">
+								<table id="rejectedTaskTableId"
+									class="table table-hover table-striped table-condensed"
+									style="margin-left: 10px;">
+								</table>
+							</div>
+							</div>
+						</div>
+					</div>
+		</form>
+		</div>
+	</div>
+</div>
+<div id='ajax_loader' style="position: fixed; left: 48%; top: 48%; display:none; z-index: 999;">
+	<img src="/static/img_new/ajax-loader.gif" />
+	</div>
+<script>
+$(document).ready(function() {
+	jQuery(function($) {
+		$(document).ajaxStop(function() {
+			$("#overlay").remove();
+			$("#ajax_loader").hide();
+		});
+		$(document).ajaxStart(function() {
+			$("body").append('<div id="overlay" style="background-color:rgba(192,192,192,0.4);position:absolute;top:0;left:0;height:100%;width:100%;z-index:100"></div>');
+			$("#ajax_loader").show();
+		});
+	});
+
+	
+});
+</script>
+<script>
+function cancel_page(){
+	window.location = "/v2/bulkUploadTask/";
+}
+$("#confirm_model").click(function(){
+	if ($("#files").val()!=''){
+		$.confirm({
+			title: '',
+			content: ' Are you sure you want to upload ? ',
+			buttons: {
+				confirm: function () {
+			        $("#form1").submit();
+			        },
+			        cancel: function () {
+			        },
+			    }
+		});
+	}else{
+		$("#downloadRejectedTaskId").hide();
+		$("#emptyDownloadMsg").empty();
+		$("#validatemsg").empty();
+		$("#msgStatusId").hide();
+		$("#errorBoxId").empty();
+		$("#errorBoxId").hide();
+		$("#msgStatusId").empty();
+		messageBox = '<div class="alert alert-';
+	    messageBox +=  'danger';
+	    messageBox += ' Box alert-dismissable" style="line-height: 0;">';
+	    messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+	    messageBox +='Please select file. </div>';
+	    $("#validatemsg").append(messageBox);
+		}
+});
+
+ </script>
+ <script>
+ 
+ $(document).ready(function(){
+	 $("#downloadRejectedTaskId").hide();
+	 getRejectedData();
+	 $("#emptyDownloadMsg").hide();
+	 $("#validatemsg").empty();
+	 $("#successId").val('');
+	 $("#errorId").val('');
+	    $('body').on('click', '.download_Bulk', function(){
+	    	location.href = "/v2/downloadSampleTask/";
+	    });
+	});
+function downloadRejectedTask(){
+	   $('#rejectedTaskTableId').dataTable({
+		    "destroy": true,
+			"lengthMenu" : false,
+			"bLengthChange" : false,
+			"bFilter" : false,
+			"pageLength" : 20,
+			"aaSorting" : [],
+			"bStateSave" : false,
+			 "paging":   false,
+			 "ordering": false,
+			 "info":     false,
+			 dom: 'Bfrtip',
+		        buttons: [
+               {
+                 extend: 'excel',
+            	 filename: 'Rejected Task',
+            	 className: 'excelButton',                	
+            	 exportOptions: {
+                     columns:[0,1,2,3,4,5,6,7,8]
+                  }
+               }
+                  
+		        ]
+		});
+		} 
+function getRejectedData(){
+	 var ajaxUrl = '/v2/ajax/get_rejected_task?flag=True';
+	 $.ajax({
+	     url : ajaxUrl,
+	     success: function (jsonStr) {
+	    	 var rejectedJsonData = jsonStr.rejectedJsonData;
+	    	 if (rejectedJsonData!=null && rejectedJsonData!='' && rejectedJsonData!='undefined'){
+	    		 var thead = '';
+				 var tbody = '';
+				 thead += '<thead>';
+		         thead +='<tr><b><th>Task Name</th></b><th>Due Date</th>';
+		         thead +='<th>Comment</th><th>AssignTo</th>';
+		         thead +='<th>Priority</th><th>Performed UserId</th><th>Task Type</th><th>Task Status</th>';
+		         thead +='<th>Category</th></tr>';
+		         thead +='</thead>';
+		         tbody += '<tbody>';
+	    		 for (i = 0; i < rejectedJsonData.length; i++) {
+	    			 var jsonObj=rejectedJsonData[i];
+	    			 var dueDate=jsonObj['dueDate'];
+	    			 var finalDate = '';
+	    			 if (dueDate!='None'){
+	    				 var date = new Date(jsonObj['dueDate']);
+		    			 finalDate = ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2)+"-"+date.getFullYear() ;
+	    			 }
+	    			 tbody += '<tr><td>' + jsonObj['taskName'] +'</td>';
+	    			 tbody += '<td>' + finalDate +'</td>';
+	    			 tbody += '<td>' + jsonObj['comment'] +'</td>';
+	    			 tbody += '<td>' + jsonObj['assignTo'] +'</td>';
+	    			 tbody += '<td>' + jsonObj['priority'] + '</td>';
+	    			 tbody += '<td>' + jsonObj['permormedOn_userId'] + '</td>';
+	    			 tbody += '<td>' + jsonObj['taskType']+ '</td>';
+	    			 tbody += '<td>' + jsonObj['taskStatus'] + '</td>';
+	    			 tbody += '<td>' + jsonObj['category'] + '</td></tr>';
+			   			
+	    		 }
+	    		 tbody += '</tbody>';
+                 var tableData = thead+tbody;
+     	   		 $("#rejectedTaskTableId").html(tableData);
+     	   		 downloadRejectedTask();
+	    	 }else{
+	            $("#emptyMsg").val(jsonStr.msg);
+	    	 }
+	     },
+	     error: function() {
+	     	//alert('error');
+	       }
+	   });
+	 
+ }
+$('#rejectedData').on( 'click', function () {
+	$("#emptyDownloadMsg").empty();
+	$("#emptyDownloadMsg").hide();
+	if ($('#emptyMsg').val()!=''){
+		if($('#emptyMsg').is(':empty')){
+	    	messageBox  =  '<div class="alert alert-danger';
+	 	    messageBox += ' Box alert-dismissable" style="line-height: 0;">';
+	 	    messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+	 	   	messageBox += $('#emptyMsg').val()+'</div>';
+	 	    $("#emptyDownloadMsg").append(messageBox); 
+	 	    $("#validatemsg").empty();
+	 	    $("#msgStatusId").hide();
+	 	   $("#errorBoxId").empty();
+	 	   $("#errorBoxId").hide();
+	 	   $("#msgStatusId").empty();
+	 	   
+	        $("#emptyDownloadMsg").show();
+	     }else{
+		 	$(".excelButton").trigger('click');
+	  	}
+	}
+	$(".excelButton").trigger('click');
+});
+ 
+</script> 
+{% endblock %}
+

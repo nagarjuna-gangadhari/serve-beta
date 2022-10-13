@@ -1,0 +1,36 @@
+<html lang="en">
+ <head>
+ <style>
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.button1 {background-color: rgba(3, 186, 0, 0.98);} /* Blue */
+</style>
+ </head>
+<body>
+<p>Dear {{volunteer_name}},</p>
+
+<p>Your selection of course: {{center}},{{offering}} is Not Confirmed.</p>
+<p>This is because: {{reason}}</p>
+
+<p>Request you to rebook another course by visiting the Demand page.</p>
+
+<a class="button button1"  href="http://www.evidyaloka.org/v2/demandList/">Select your Class</a>
+<p>We look forward to your active participation & contribution.</p>
+
+<p>With Regards,</p>
+
+<p>eVidyaloka Onboarding Team<br>
+
+www.evidyaloka.org</p>
+</body>

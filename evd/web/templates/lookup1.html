@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+  <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+  <style>
+    ul.custom-select > li > span.dropdown {
+        display: none;
+    }
+    ul.custom-select > li.focus-f > span.dropdown {
+        display: inline;
+    }
+    .ui-widget-content .ui-icon {
+        background-image:url("/static/images/ui-icons_222222_256x240.png.1");
+    }
+    .ellipsis {
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    .ellipsis.multiline {
+        white-space: normal;
+    }
+    .label, .badge {
+        font-size: 10.998px;
+        font-weight: bold;
+        line-height: 14px;
+        color: white;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+        white-space: nowrap;
+        vertical-align: baseline;
+        background-color: #999;
+    }
+    .label {
+        padding: 1px 4px 2px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+    }
+    .label-success, .badge-success {
+        background-color: #468847;
+    }
+    div.general-information > p, div.preferences > p{
+        font-size: 12px;
+        margin: 5px 0px;
+    }
+    div.general-information > p.username {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 10px 0px;
+    }
+    div.general-information label {
+        display: inline;
+        color: #999;
+        font-weight: normal;
+    }
+    div.user-block > div {
+        background: white;
+    }
+    li.block {
+        margin-left:-3px;
+        margin-top:15px;
+        margin-bottom:15px;
+        width:230px;
+        list-style:none;
+    }
+    .info {
+        padding-right:11px !important;
+    }
+    .info p {
+        clear:both;
+        font-size:14px;
+        letter-spacing: 1px;
+    }
+    .info p label {
+        float:left;
+        font-weight:bold;
+        margin-right:3px;
+    }
+  </style>
+{% endblock %}
+{% block head_scripts %}
+  {{ block.super }}
+  <script type="text/javascript" src="/static/js/jquery.tmpl.min.js"></script>
+  <script type="text/javascript" src="/static/js/jQuery.ellipsis.min.js"></script>
+  <script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
+{% endblock %}
+
+
+{% block pre_evd_init %}
+    
+        $("body").append("<a id='dummylink' rel='ajax-link' style='display:none' pre-call='pre_filter' href='/get_teachers' callback='after_filter'></a>");
+    
+{% endblock %}
+
+{% block doc_ready %}
+        var $loading = $("#loading"),
+            /*center_html = '<div class="user-block" style="float:left;width:470px">'+
+                              '<div style="width:460px;border:1px solid #8E8B8A;min-height:150px;overflow:hidden;clear:both;margin-top:10px;">'+
+                                '<div style="overflow:hidden">'+
+                                    '<div style="float:left;width:150px;height:150px;background:gray url(${picture}) top left no-repeat;background-size:cover"></div>'+
+                                    '<div class="general-information" style="padding-left:10px;float:left">'+
+                                        '<p class="username">${name}</p>'+
+                                        '<p><label>role: </label>${role}</p>'+
+                                        '<p><label>location: </label>${location}</p>'+
+                                        '<p><label>email: </label>${email}</p>'+
+                                        '<p><label>phone: </label>${phone}</p>'+
+                                        '<p><label>medium: </label>${medium}</p>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="preferences" style="padding:10px;float:left;width:440px;display:none">'+
+                                    '<p><label>Preferred Courses: </label></p>'+
+                                    '<p>${courses}</p>'+
+                                '</div>'+
+                              '</div>'+
+                          '</div>',*/
+            center_html = '<li class="block" style="opacity:1">'+
+                                    '<a class="student-img">'+
+                                        '<span class="img-container">'+
+                                            '<img src="${picture}" style="width:220px;height:220px;border:1px solid #ccc"/>'+
+                                        '</span>'+
+                                        '<span class="progress-bar">'+
+                                            '<span class="perc" style="margin-left:-21px;overflow:hidden;word-break:break-word;background-color:#e44c00">${name}</span>'+
+                                        '</span>'+
+                                    '</a>'+
+                                    '<div class="info">'+
+                                        '<p><label>role: </label>${role}</p>'+
+                                        '<p><label>location: </label>${location}</p>'+
+                                        '<p style="width:215px;word-wrap:break-word;"><label>email: </label>${email}</p>'+
+                                        '<p><label>phone: </label>${phone}</p>'+
+                                        '<p><label>medium: </label>${medium}</p>'+
+                                    '</div>'+
+                                '</li>',
+
+            remove_centers = function(){
+                $loading.nextAll().remove();
+                $loading.fadeIn("slow");
+            },
+            serialize = function(obj) {
+              var str = [];
+              for(var p in obj)
+                 str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+              return str.join("&");
+            };
+        $.template("center_template",center_html);
+        window.filters = { day:"all", subject:"all", from:"all", to: "all" };
+        evd.pre_filter = function(){
+            console.log(filters);
+            var href = $(this).attr("href"),
+                filter_type = $(this).attr("data-filter"),
+                q = "";
+            if(href.indexOf("?") >= 0)
+                q = href.substring(href.indexOf("?")+1);
+            (function (q) {
+                 var e,
+                 a = /\+/g,  // Regex for replacing addition symbol with a space
+                 r = /([^&=]+)=?([^&]*)/g,
+                 d = function (s) { return decodeURIComponent(s.replace(a, " ")); };
+                 while (e = r.exec(q))
+                 if( d(e[1]) == filter_type )
+                    filters[d(e[1])] = d(e[2]);
+            })(q);
+            var q = serialize(filters);
+            if(href.indexOf("?") >= 0)
+                href = href.substring(0,href.indexOf("?") + 1) + q;
+            else
+                href += "?"+q;
+
+            $(this).attr({"href": href});
+            remove_centers();
+        }
+        evd.after_filter = function(resp){
+            resp = eval(resp);
+            $loading.fadeOut("fast",function(){
+                if(resp.length > 0){
+                    $.tmpl("center_template",window.eval(resp)).insertAfter($loading);
+                }
+                else
+                    $("<p style='text-align:center;padding:20px 0px'><b>no results found</b></p>").insertAfter($loading);
+            });
+        }
+        $("#dummylink").trigger("click");
+        $("ul.custom-select li").toggle(function(){
+            $("ul.custom-select > li.focus-f").not($(this)).trigger("click");
+            $(this).addClass("focus-f");
+        },function(){
+            $(this).removeClass("focus-f");
+        });
+        $("html").click(function(){
+            $("ul.custom-select li.focus-f").trigger("click");
+        });
+        $("ul.custom-select li span.dropdown a").click(function(){
+            $(this).parent("span.dropdown").prev().text($(this).text());
+        });
+{% endblock %}
+
+ {% block body_container %} 
+    <div id="content" class="clearfix" style="padding-bottom:0px">
+        <div id="filter-top-wrapper" class="clearfix">
+            <div id="filter-top">
+                <div class="inner clearfix">
+                    <div class="intro clearfix">
+                        <h2>Find Passionate teachers </h2>
+                        <!--<p style="margin-bottom:5px;">We have hand-selected  passionate teachers to participate in our launch.</p>-->
+                    </div>
+                    <div class="clearfix">
+                        <span class="label-filter">Filters: </span>
+                        <div class="select-box select-pin">
+                            <span class="icon"></span>
+                            <ul class="custom-select">
+                                <li><span class="selected_item">All Days</span>
+                                    <span class="dropdown">
+                                        <a rel="ajax-link" class="filter-sensitive" href="/get_teachers/?day=all" data-filter="day" pre-call="pre_filter" callback="after_filter" style="cursor:pointer"><span>All Days</span></a>
+                                        {% for day in days %}
+                                        <a rel="ajax-link" class="filter-sensitive" href="/get_teachers/?day={{ day|slice:":3"|capfirst }}" data-filter="day" pre-call="pre_filter" callback="after_filter" style="cursor:pointer"><span>{{ day }}</span></a>
+                                        {% endfor %}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="select-box select-int">
+                            <span class="icon"></span>
+                            <ul class="custom-select">
+                                <li><span class="selected_item">All Subjects</span>
+                                    <span class="dropdown">
+                                        <a rel="ajax-link" class="filter-sensitive" data-filter="subject" pre-call="pre_filter" callback="after_filter" href="/get_teachers/?subject=all" style="cursor:pointer"><span>All Subjects</span></a>
+                                        {% for subject in subjects %}
+                                            <a rel="ajax-link" class="filter-sensitive" data-filter="subject" pre-call="pre_filter" callback="after_filter" href="/get_teachers/?subject={{ subject }}" style="cursor:pointer"><span>{{ subject }}</span></a>
+                                        {% endfor %}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="input text" style="float:left">
+                            <input type="text" class="date-picker" style="width:100px;padding:8px 9px;margin-left: 20px" placeholder="available from"/>
+                            <input type="text" class="date-picker" style="width:100px;padding:8px 9px;margin-left: 20px" placeholder="available upto"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="min-height:400px;margin-bottom:10px;">
+            <div style="width:940px;margin:0px auto;overflow:hidden">
+                <a id="date-from" rel="ajax-link" class="filter-sensitive" data-filter="from" pre-call="pre_filter" callback="after_filter" href="/get_teachers/?from=" style="cursor:pointer;display:none"><span></span></a>
+                <a id="date-to" rel="ajax-link" class="filter-sensitive" data-filter="to" pre-call="pre_filter" callback="after_filter" href="/get_teachers/?to=" style="cursor:pointer;display:none"><span></span></a>
+                <p id="loading" style="text-align:center;padding:20px 0px;"><b>Loading...</b></p>
+            </div>
+        </div>
+{% endblock %}
+
+{% block bottom_scripts %}
+    {{ block.super }}
+    <script> 
+        $(document).ready(function(){
+            $(".date-picker").datepicker({
+                dateFormat: "dd-mm-yy",
+                onSelect: function(datatext, inst){
+                    var data = encodeURIComponent(datatext),
+                        $target = $("#date-from"),
+                        href = $target.attr("href");
+                    href.replace(/(?:(?:\?|&)from=([^&$]*))/,function(matched,captured){
+                        if(captured.length > 0)
+                            var new_part = matched.replace(captured,data);
+                        else
+                            var new_part = matched + data
+                        href = href.replace(matched,new_part);
+                    });
+                    if($(inst.input).attr("placeholder") == "available upto"){
+                        $target = $("#date-to");
+                        href = $target.attr("href");
+                        href.replace(/(?:(?:\?|&)to=([^&$]*))/,function(matched,captured){
+                            if(captured.length > 0)
+                                var new_part = matched.replace(captured,data);
+                            else
+                                var new_part = matched + data
+                            href = href.replace(matched,new_part);
+                        });
+                    }
+                    $target.attr({"href": href});
+                    $target.trigger("click");
+                }
+            });
+        });
+    </script>
+{% endblock %}
+

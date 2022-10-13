@@ -1,0 +1,1088 @@
+{% extends "base.html" %} {% load tags %} {% load filters %} {% block head_title %}eVidyaloka - Center Admin dashboard{% endblock %} {% block doc_ready %} {% endblock %} {% block head_styles %} {{ block.super }}
+<link rel="stylesheet" type="text/css" href="/static/css/admindash.css" />
+<script src="/static/css/tailwindcss3.js"></script>
+<link rel="stylesheet" href="/static/css/jquery-ui.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+
+<style>
+    .inner {
+        width: 1040px;
+    }
+    
+    .ui-autocomplete {
+        overflow-y: auto;
+        max-height: 400px;
+    }
+    
+    .ui-autocomplete-loading {
+        background: url('/static/img/facebook_loading.gif') no-repeat right center;
+    }
+    
+    @media only screen and (max-width: 480px) and (min-width: 0px) {
+        .cont-align {
+            <!--position: absolute !important;
+            -->width: 93% !important;
+            overflow-x: visible !important;
+        }
+        #calendar {
+            width: 108% !important;
+            font-size: 10px;
+            float: left;
+            background: #f5f5f5;
+            border: 1px solid #BDBDBD;
+            margin-top: 27%;
+            margin-left: -4%;
+        }
+        .page-align {
+            margin-right: 10%;
+        }
+        .wid-align {
+            width: 104% !important;
+            margin-left: -2%;
+        }
+    }
+    
+    @media only screen and (max-width: 480px) and (min-width: 380px) {
+        #calendar {
+            width: 87% !important;
+            font-size: 10px;
+            float: left;
+            background: #f5f5f5;
+            border: 1px solid #BDBDBD;
+            margin-top: 19%;
+            margin-left: 6%;
+        }
+    }
+    
+    @media only screen and (max-width: 768px) and (min-width: 480px) {
+        .cont-align {
+            <!--position: absolute !important;
+            -->width: 93% !important;
+            overflow-x: visible !important;
+        }
+        .page-align {
+            margin-right: 10%;
+        }
+        .wid-align {
+            width: 104% !important;
+            margin-left: -2%;
+        }
+        #calendar {
+            width: 68% !important;
+            font-size: 10px;
+            float: left;
+            background: #f5f5f5;
+            border: 1px solid #BDBDBD;
+            margin-top: 20%;
+            margin-left: 15%;
+        }
+    }
+    
+    @media only screen and (max-width: 1024px) and (min-width: 768px) {
+        #calendar {
+            width: 49% !important;
+            font-size: 10px;
+            float: left;
+            background: #f5f5f5;
+            border: 1px solid #BDBDBD;
+            margin-left: 25%;
+        }
+        .wid-align {
+            width: 104% !important;
+        }
+        .container {
+            width: 100%;
+        }
+    }
+    
+    label {
+        font-family: sans-serif !important;
+    }
+    
+    #pageloader {
+        /* background: rgba( 255, 255, 255, 0.8 ); */
+        display: none;
+        height: 100%;
+        position: fixed;
+        width: 100%;
+        z-index: 9999;
+    }
+    
+    #pageloader img {
+        left: 30%;
+        /* margin-left: -32px; */
+        /* margin-top: -32px; */
+        position: absolute;
+        /* top: 50%; */
+    }
+    
+    .ec-checkbox.check-lg .ec-checkbox__control {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .ec-checkbox__control {
+        width: 24px;
+        height: 24px;
+        border: 1px solid #ccc;
+        position: relative;
+        margin-right: 10px;
+        border-radius: 2px;
+        -webkit-transition: .3s;
+        -o-transition: .3s;
+        transition: .3s;
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 auto;
+        flex: 0 0 auto;
+    }
+</style>
+
+{% endblock %} {% block body_container %}
+<div id="pageloader">
+    <img src="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif" alt="processing..." />
+</div>
+<div x-data="{ modelOpen: false, model2Open: false }" style="margin-left: -15rem; margin-right: -15rem;">
+
+    <div class="container" style="display: flex;">
+        <div class="dashboard-notifications-container wid-align" style="width:650px;float:left;padding-right:10px">
+            <div class="col-sm-12 col-md-12 note-box noteWidth cont-align">
+                {% if messages %}
+                <div class="alert alert-success" id="success_alert" role="alert">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a> {% for messages in messages %} {{messages}} {% endfor %}
+                </div>
+                {% endif %}
+                <h3>Assign Role for User</h3>
+                <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="row">
+                    <form method="post" action="/partner/user_save_roles/" id="id_assign_role_to_user">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <label for="id_search_user" class="myLabel">User</label>
+                                <input id="id_search_user" class="myInput form-control" type="text" name="search_user" value="" />
+
+                                <input type="hidden" class="sel_user_list_val" name="selected_user" type="text" value="" data-language="">
+                            </div>
+                            {% csrf_token %}
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                {% for role in assign_roles %}
+                                <div>
+                                    <div class='row'>
+                                        <p class='role_ele'>
+                                            <input type="checkbox" id="{{ role.name|removespace }}" name='roles' value={{ role.id }} {% if role.id in pref_roles %} checked {% endif %} />
+                                            <label for="{{ role.name|removespace }}" class='myevd_label' style="font-size: 13px !important; font-family: 'sans-serif' !important; padding-left: 40px  !important">{{ role.name }}</label>
+                                        </p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <!-- <div class="col-md-offset-5 col-sm-offset-5 col-sm-4 col-md-4"> -->
+                            <button type="submit" class="btn btn-md btn-success pull-right bg-green-400" name="assign_role_to_user" id="submit_assign_role_to_user" disabled="disabled" style="margin-bottom:16px;">Assign</button>
+                            <!-- </div> -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-notifications-container wid-align" style="width:950px;float:right;padding-right:10px">
+            <div class="col-sm-12 col-md-12 note-box noteWidth cont-align">
+
+                <h3>Content Reviewers</h3>
+
+                <div class="row">
+                    <div class="" style="margin:1.5%">
+                        <table class="table table-bordered table-striped" style="overflow-x: scroll;overflow-y: scroll;width: 100%">
+                            <thead>
+                                <tr id="" class="">
+                                    <th class="p-2 text-center">User Id</th>
+                                    <th class="p-2 text-center">First Name</th>
+                                    <th class="p-2 text-center">Last Name</th>
+                                    <th class="p-2 text-center">Email</th>
+                                    <th class="p-2 text-center">Mobile</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reviewer in reviewers %}
+                                <tr>
+                                    <td class="p-2 text-center">{{reviewer.user.id}}</td>
+                                    <td class="p-2 text-center">{{reviewer.user.first_name}}</td>
+                                    <td class="p-2 text-center">{{reviewer.user.last_name}}</td>
+                                    <td class="p-2 text-center">{{reviewer.user.email}}</td>
+                                    <td class="p-2 text-center">{{reviewer.phone}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="px-8">
+        <h3 class="w-full p-4 text-center rounded text-white font-bold bg-gradient-to-r from-violet-500 to-fuchsia-500">Booked Content</h3>
+        <div class="overflow-x-auto border border-gray-300">
+            <table id="bookTable" class="">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Language</th>
+                        <th>Board</th>
+                        <th>Subject</th>
+                        <th>Topic</th>
+                        <th>Subtopic</th>
+                        <th>WorkStream</th>
+                        <th>Status</th>
+                        <th>Author</th>
+                        <th>Reviewer</th>
+                        <th>Comment</th>
+                        <th>Link</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+        <h3 class="w-full p-4 mt-20 text-center rounded text-white font-bold bg-gradient-to-r from-green-500 to-fuchsia-500">Published Content</h3>
+        <div class="overflow-x-auto border border-gray-300">
+            <table id="publishedTable" class="w-full ">
+                
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Language</th>
+                        <th>Board</th>
+                        <th>Subject</th>
+                        <th>Topic</th>
+                        <th>Subtopic</th>
+                        <th>WorkStream</th>
+                        <th>Status</th>
+                        <th>Author</th>
+                        <th>Reviewer</th>
+                        <th>Comment</th>
+                        <th>Link</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                
+            </table>
+        </div>
+
+    </div>
+    <!-- Modal  -->
+    <div x-show="modelOpen" class="fixed inset-0 top-20 z-20 mx-10" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
+        <div class="flex items-end justify-center min-h-screen px-4 text-center md:items-center sm:block sm:p-0">
+            <div x-cloak @click="modelOpen = false" x-show="modelOpen" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200 transform"
+                x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-40 h-full" aria-hidden="true"></div>
+
+            <div x-cloak x-show="modelOpen" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="transition ease-in duration-200 transform"
+                x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block w-full p-8 my-20 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl 2xl:max-w-2xl min-h-[50%]">
+                <div class="flex items-center justify-between space-x-4">
+                    <h1 class="w-full text-2xl font-bold text-center">Update Content</h1>
+
+                    <button @click="modelOpen = false" class="text-gray-600 text-2xl focus:outline-none hover:text-red-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </button>
+                </div>
+
+                <form class="mt-5">
+                    <div class="w-full">
+                        <table class="border-collapse w-full">
+                            <thead>
+                                <tr class="uppercase bg-gray-200 text-center">
+                                    <th class="py-2 border border-gray-300 lg:table-cell text-center" >id</th>
+                                    <th class="py-2 border border-gray-300 lg:table-cell text-center">Language</th>
+                                    <th class="py-2 border border-gray-300 lg:table-cell text-center">Board</th>
+                                    <th class="py-2 border border-gray-300 lg:table-cell text-center">Subject</th>
+                                    <th class="py-2 border border-gray-300 lg:table-cell text-center">Topic</th>
+                                    <th class="py-2 border border-gray-300 lg:table-cell text-center">Subtopic</th>
+                                    <th class="py-2 border border-gray-300 lg:table-cell text-center">workstream</th>
+                                    <th class="py-2 border border-gray-300 lg:table-cell text-center">Status</th>
+                                    <th class="py-2 border border-gray-300 lg:table-cell text-center">Author</th>
+                                    <th class="py-2 border border-gray-300 lg:table-cell text-center">Reviewer</th>
+                                    <th class="py-2 border border-gray-300 lg:table-cell text-center">Comment</th>
+                                    <th class="py-2 border border-gray-300 lg:table-cell text-center">Due Date</th>
+                                    <th class="py-2 border border-gray-300 lg:table-cell text-center">Link</th>
+                                    <th class="py-2 border border-gray-300 lg:table-cell text-center">Publish</th>
+                                </tr>
+                            </thead>
+                            <tbody id="previous_booking_wraper"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-4">
+                        <div id="change_all_reviewers_wraper" class="flex space-x-2">
+                            <div>
+                                <p class="text-gray-500">Change all reviewers</p>
+                            </div>
+                            <div><input type="text" name="change_all_reviewers" id="change_all_reviewers"></div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="flex justify-end mt-6 mr-24">
+                        <div id="aprove_content" class="flex items-center justify-between space-x-10 hidden">
+                            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold h-16 py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" @click="update_content(2)">Approve</button>
+                            <div class="flex items-center">
+                                <textarea name="reject_reason" id="reject_reason" cols="60" rows="4" placeholder="Reason to reject"></textarea>
+                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold h-16 ml-4 py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" @click="update_content(1)">Reject</button>
+
+                            </div>
+                        </div>
+                        <button id="update_content" type="button" @click="update_content(3); modelOpen = false" class="px-3 py-2 text-2xl tracking-wide text-white font-bold capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:bg-indigo-700 hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- publish -->
+
+    <div x-show="model2Open" class="fixed inset-0 top-20 z-30 " aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
+        <div class="flex items-end justify-center min-h-screen px-4 text-center md:items-center sm:block sm:p-0">
+            <div x-cloak @click="model2Open = false" x-show="model2Open" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200 transform"
+                x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-40" aria-hidden="true"></div>
+
+            <div x-cloak x-show="model2Open" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="transition ease-in duration-200 transform"
+                x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block w-full max-w-6xl p-8 my-20 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl 2xl:max-w-2xl">
+                <div class="flex items-center justify-between space-x-4">
+                    <h1 class="text-2xl font-bold w-full text-center text-gray-800 ">Publish Content</h1>
+
+                    <button @click="model2Open = false" class="text-gray-600 focus:outline-none hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </button>
+                </div>
+
+                <form class="mt-5">
+                    <div class="flex justify-around">
+                        <div class="space-y-2">
+                            <input id="publish_id" type="text" class="hidden">
+                            <div>
+                                <label for="" class="block text-sm text-gray-700 capitalize dark:text-gray-200">Topic ID *</label>
+                                <input required id="publish_topic_id" disabled type="number" class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                            </div>
+
+                            <div class="mt-4">
+                                <label for="" class="block text-sm text-gray-700 capitalize dark:text-gray-200">Subtopic ID *</label>
+                                <input required id="publish_subtopic_id" disabled type="number" class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                            </div>
+                            <div>
+                                <label for="" class="block text-sm text-gray-700 capitalize dark:text-gray-200">Content Name</label>
+                                <input id="publish_name" type="text" class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                            </div>
+
+                            <div class="mt-4">
+                                <label for="" class="block text-sm text-gray-700 capitalize dark:text-gray-200">Content Description</label>
+                                <input id="publish_description" type="text" class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                            </div>
+                            <div class="mt-4">
+                                <label for="" class="block text-sm text-gray-700 capitalize dark:text-gray-200">Author ID *</label>
+                                <input id="publish_author" type="number" disabled class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                            </div>
+                        </div>
+                        <div class="space-y-2" x-data="{content_type: 1, workstreams : [{id: 1, label: 'Video'}, {id: 2, label: 'Activity'}, {id: 3, label: 'Worksheet'}, {id: 4, label: 'Textbook'}, {id: 5, label: 'LessonPlan'}]}">
+                            <div>
+                                <label for="" class="block text-sm text-gray-700 capitalize dark:text-gray-200">URL *</label>
+                                <input required id="publish_url" type="text" class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                            </div>
+
+                            <div class="mt-4 hidden">
+                                <label for="" class="block text-sm text-gray-700 capitalize dark:text-gray-200">URL Host</label>
+                                <input required id="publish_urlhost" type="text" class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                            </div>
+                            <div>
+                                <label for="" class="block text-sm text-gray-700 capitalize dark:text-gray-200">Content Source</label>
+                                <select required id="publish_content_type" class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"> 
+                                    {% for x in  host_type %}    
+                                    <option value="{{x.id}}" {% if x.id == '1' %}  selected {% endif %} >{{x.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mt-4">
+                                <label for="" class="block text-sm text-gray-700 capitalize dark:text-gray-200">Work Stream</label>
+                                <select required id="publish_workstream" class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"> 
+                                    <template x-model="content_type" x-for="streams in workstreams" :key="streams.id">
+                                        <option value="streams.id" x-text="streams.label"></option>
+                                    </template>
+                                </select>
+                            </div>
+                            <div class="mt-4" :class="[content_type == 1 ? '' : 'hidden']">
+                                <label for="" class="block text-sm text-gray-700 capitalize dark:text-gray-200">Duration in Sec</label>
+                                <input id="publish_duration" type="number" class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                            </div>
+                            <div class="mt-4">
+                                <label for="" class="block text-sm text-gray-700 capitalize dark:text-gray-200">Status</label>
+                                <select required id="publish_status" id="" class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"> 
+                                    <option value="approved">Approved</option> 
+                                    <option value="unapproved">Unapproved</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-around my-6">
+                        <button onclick="publush_content()" type="button" class="p-2 text-xl tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:bg-indigo-700 hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
+                            Publish
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %} {% block bottom_scripts %} {{ block.super }} {{booked_content|json_script:"booked_content_data"}} {{published_content|json_script:"published_content_data"}}
+<script type="text/javascript" src="/static/js/admindash.js"></script>
+<script type="text/javascript" src="/static/js_new/jquery-ui.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
+<script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+</script>
+<script>
+    const booked_content = JSON.parse(JSON.parse(document.getElementById('booked_content_data').textContent))
+    const published_content = JSON.parse(JSON.parse(document.getElementById('published_content_data').textContent))
+
+    console.log(booked_content)
+    console.log(published_content)
+    var is_assigned = false;
+    var BookDataSet = [];
+    var PublishedDataSet = [];
+    const choicess = {
+        1: 'Not Started',
+        2: 'Booked',
+        3: 'Assigned',
+        4: 'Submitted',
+        5: 'In Review',
+        6: 'Approved',
+        7: 'Resubmit',
+        8: 'Published',
+        9: 'Inactive'
+    }
+
+    for (let index = 0; index < booked_content.length; ++index) {
+        const element = booked_content[index];
+        BookDataSet.push([
+            element.id,
+            element.topic__course_id__language__name,
+            element.topic__course_id__board_name,
+            element.topic__course_id__grade + 'th ' + element.topic__course_id__subject,
+            element.topic__title,
+            element.subtopic__name ? element.subtopic__name.substring(0, 20) + '...': '',
+            element.workstream__name,
+            choicess[element.status],
+            element.author__id + '-' + element.author__first_name + ' ' + element.author__last_name,
+            element.reviewer__id ? element.reviewer__id + '-' + element.reviewer__first_name + ' ' + element.reviewer__last_name : '',
+            element.comment ? element.comment.substring(0, 10) + '...': '',
+            element.url ? `<a class="cursor-pointer" href="//${element.url}" target="__blank">Link</a>` : '',
+            `<div @click="modelOpen = true; get_booked_centet(${element.id})" class="cursor-pointer bg-blue-400 p-2 rounded text-center hover:bg-blue-600">Edit</div>`
+        ]);
+    }
+
+    for (let index = 0; index < published_content.length; ++index) {
+        const element = published_content[index];
+        PublishedDataSet.push([
+            element.id,
+            element.topic__course_id__language__name,
+            element.topic__course_id__board_name,
+            element.topic__course_id__grade + 'th ' + element.topic__course_id__subject,
+            element.topic__title,
+            element.subtopic__name.substring(0, 20) + '...',
+            element.workstream__name,
+            choicess[element.status],
+            element.author__id + '-' + element.author__first_name + ' ' + element.author__last_name,
+            element.reviewer__id ? element.reviewer__id + '-' + element.reviewer__first_name + ' ' + element.reviewer__last_name : '',
+            element.comment.substring(0, 10) + '...',
+            element.url ? `<a class="cursor-pointer" href="//${element.url}" target="__blank">Link</a>` : '',
+            `<div @click="modelOpen = true; get_publish_contet(${element.id})" class="cursor-pointer bg-blue-400 p-2 rounded text-center hover:bg-blue-600">Edit</div>`
+        ]);
+    }
+
+    console.log(BookDataSet);
+    console.log(PublishedDataSet);
+
+    $('#bookTable').DataTable({
+        data: BookDataSet,
+        columns: [{
+            title: 'Id'
+        }, {
+            title: 'Language'
+        }, {
+            title: 'Board'
+        }, {
+            title: 'Subject'
+        }, {
+            title: 'Topic'
+        }, {
+            title: 'Subtopic'
+        }, {
+            title: 'WorkStream'
+        }, {
+            title: 'Status'
+        }, {
+            title: 'Auther'
+        }, {
+            title: 'Reviewer'
+        }, {
+            title: 'Comment'
+        }, {
+            title: 'Link'
+        }, {
+            title: 'Edit'
+        }],
+        initComplete: function() {
+            this.api()
+                .columns()
+                .every(function() {
+                    var column = this;
+                    var select = $('<select><option value="">----</option></select>')
+                        .appendTo($(column.header()))
+                        .on('change', function() {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function(d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+
+                    
+                });
+        },
+    });
+
+    $('#publishedTable').DataTable({
+        data: PublishedDataSet,
+        columns: [{
+            title: 'Id'
+        }, {
+            title: 'Language'
+        }, {
+            title: 'Board'
+        }, {
+            title: 'Subject'
+        }, {
+            title: 'Topic'
+        }, {
+            title: 'Subtopic'
+        }, {
+            title: 'WorkStream'
+        }, {
+            title: 'Status'
+        }, {
+            title: 'Auther'
+        }, {
+            title: 'Reviewer'
+        }, {
+            title: 'Comment'
+        }, {
+            title: 'Link'
+        }, {
+            title: 'Edit'
+        }],
+        initComplete: function() {
+            this.api()
+                .columns()
+                .every(function() {
+                    var column = this;
+                    var select = $('<select><option value="">----</option></select>')
+                        .appendTo($(column.header()))
+                        .on('change', function() {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function(d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    
+                });
+        },
+    });
+
+
+
+    function get_booked_centet(id) {
+        let initel = booked_content.filter(function(elem) {
+            return (elem.id == id);
+        });
+        const data = initel[0];
+        let demands_list = booked_content.filter(function(elem) {
+            return (elem.topic__id == data.topic__id && elem.topic__course_id__board_name == data.topic__course_id__board_name && elem.topic__course_id__grade == data.topic__course_id__grade && elem.topic__course_id__subject == data.topic__course_id__subject && elem.topic__course_id__language__name == data.topic__course_id__language__name);
+        });
+
+        if (demands_list.length<=1){
+            $('#change_all_reviewers_wraper').hide()
+        }else{
+            $('#change_all_reviewers_wraper').show()
+        }
+
+
+        is_assigned = demands_list.every((val, i, arr) => val.status == 2);
+        console.log(is_assigned);
+
+
+        if (is_assigned == true) {
+            $('#aprove_content').removeClass('hidden');
+            $('#update_content').addClass('hidden');
+            $('#change_all_reviewers').hide();
+        } else {
+            $('#aprove_content').addClass('hidden');
+            $('#update_content').removeClass('hidden');
+            $('#change_all_reviewers').show().val('');
+        }
+
+        $('#previous_booking_wraper tr').remove();
+
+        for (demands in demands_list) {
+            let element = demands_list[demands];
+            let opt = `<select class="content_status text-xl" name="content_status" id="" ${!is_assigned ? '': 'disabled'}>`
+            for (const [key, value] of Object.entries(choicess)) {
+                if (key == element.status) {
+                    opt += `<option value="${key}" selected>${value}</option>`;
+                } else {
+                    opt += `<option value="${key}">${value}</option>`;
+                }
+            }
+            opt += `</select>`;
+            let duedate = element['due_date'] ? element['due_date'].split(' ')[0] : ''
+
+            $('#previous_booking_wraper').append(`<tr class="text-gray-800 text-center text-base bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
+                <td class="lg:w-auto py-1 border border-b lg:table-cell" name="content_id" >${element['id']}</td>
+                <td class="lg:w-auto py-1 border border-b lg:table-cell">${element['topic__course_id__language__name']}</td>
+                <td class="lg:w-auto py-1 border border-b lg:table-cell">${element['topic__course_id__board_name']}</td>
+                <td class="lg:w-auto py-1 border border-b lg:table-cell">${element['topic__course_id__grade']}th - ${element['topic__course_id__subject']}</td>
+                <td class="lg:w-auto py-1 border border-b lg:table-cell">${element['topic__title']}</td>
+                <td class="lg:w-auto py-1 border border-b lg:table-cell">${element['subtopic__name']}</td>
+                <td class="lg:w-auto py-1 border border-b lg:table-cell">${element['workstream__name']}</td>
+                <td class="lg:w-auto py-1 border border-b lg:table-cell">${opt}</td> 
+                <td class="lg:w-auto py-1 border border-b lg:table-cell"> ${element.author__id + '-' + element.author__first_name + ' ' + element.author__last_name}</td>
+                <td class="lg:w-auto border border-b lg:table-cell"><input class="id_search_reviewer h-10" name="reviewer" type="text" value="${element.reviewer__id ? element.reviewer__id: ''}"   ${element.status > 2 ? '': 'disabled'}></td>
+                <td class="lg:w-auto border border-b lg:table-cell"><input class="min-w-32 h-10" name="comment" type="text" value="${element.comment}"></td>
+                <td class="lg:w-auto py-1 border border-b lg:table-cell"><input type="date" name="duedate" class="text-xl" id="duedate" value="${duedate}"></td>
+                <td class="lg:w-auto border border-b lg:table-cell"><input class="min-w-32 h-10" name="url" type="text" value="${element.url}" ${!is_assigned ? '': 'disabled'}></td>
+                <td class="lg:w-auto border border-b lg:table-cell" ><div class="p-2 bg-blue-400 hover:bg-blue-600 text-white text-xl rounded cursor-pointer ${element.status == 6 ? '': 'hidden'}"  
+                    @click="publish_modal('${element['id']}', '${element['topic__id']}', '${element['subtopic__id']}', '${element['workstream__id']}', '${element.author__id}'); model2Open = true" >Publish</div></td>
+                 
+            </tr>`);
+        }
+    }
+
+
+    function get_publish_contet(id) {
+
+        let initel = published_content.filter(function(elem) {
+            return (elem.id == id);
+        });
+        const data = initel[0];
+        let demands_list = published_content.filter(function(elem) {
+            return (elem.topic__id == data.topic__id && elem.topic__course_id__board_name == data.topic__course_id__board_name && elem.topic__course_id__grade == data.topic__course_id__grade && elem.topic__course_id__subject == data.topic__course_id__subject && elem.topic__course_id__language__name == data.topic__course_id__language__name);
+        });
+
+
+
+        $('#previous_booking_wraper tr').remove();
+        $('#change_all_reviewers').hide();
+        for (demands in demands_list) {
+            let element = demands_list[demands];
+            let opt = `<select class="content_status" name="content_status" id="">`
+            for (const [key, value] of Object.entries(choicess)) {
+                if (key == element.status) {
+                    opt += `<option value="${key}" selected>${value}</option>`;
+                } else {
+                    opt += `<option value="${key}">${value}</option>`;
+                }
+            }
+            opt += `</select>`;
+
+            $('#previous_booking_wraper').append(`<tr class="text-gray-800 text-center text-sm bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
+                <td class="lg:w-auto py-1 border border-b lg:table-cell" name="content_id" >${element['id']}</td>
+                <td class="lg:w-auto py-1 border border-b lg:table-cell">${element['topic__course_id__language__name']}</td>
+                <td class="lg:w-auto py-1 border border-b lg:table-cell">${element['topic__course_id__board_name']}</td>
+                <td class="lg:w-auto py-1 border border-b lg:table-cell">${element['topic__course_id__grade']}th - ${element['topic__course_id__subject']}</td>
+                <td class="lg:w-auto py-1 border border-b lg:table-cell">${element['topic__title']}</td>
+                <td class="lg:w-auto py-1 border border-b lg:table-cell">${element['subtopic__name']}</td>
+                <td class="lg:w-auto py-1 border border-b lg:table-cell">${element['workstream__name']}</td>
+                <td class="lg:w-auto py-1 border border-b lg:table-cell">${opt}</td> 
+                <td class="lg:w-auto py-1 border border-b lg:table-cell"> ${element.author__id + '-' + element.author__first_name + ' ' + element.author__last_name}</td>
+                <td class="lg:w-auto border border-b lg:table-cell"><input class="id_search_reviewer" name="reviewer" type="text" value="${element.reviewer__id ? element.reviewer__id: ''}"></td>
+                <td class="lg:w-auto border border-b lg:table-cell"><input class="max-w-10" name="comment" type="text" value="${element.comment}"></td>
+                <td class="lg:w-auto border border-b lg:table-cell"><input class="max-w-10" name="url" type="text" value="${element.url}"></td>
+            </tr>`);
+        }
+
+    }
+
+
+    function publish_modal(id, topic_id, subtopic_id, workstream_id, auther_id) {
+        console.log(id, topic_id, subtopic_id, workstream_id, auther_id);
+
+        $('#publish_id').val(id)
+        $('#publish_topic_id').val(topic_id)
+        $('#publish_subtopic_id').val(subtopic_id)
+        $('#publish_author').val(auther_id)
+        $('#publish_workstream').val('' + workstream_id).change()
+        $('#publish_workstream  option[value="' + workstream_id + '"]').prop("selected", true);
+    }
+
+    function publush_content() {
+
+        let data = {
+            'id': $('#publish_id').val(),
+            'topic_id': $('#publish_topic_id').val(),
+            'subtopic_id': $('#publish_subtopic_id').val(),
+            'name': $('#publish_name').val(),
+            'description': $('#publish_description').val(),
+            'author': $('#publish_author').val(),
+            'url': $('#publish_url').val(),
+            'url_host': $('#publish_urlhost').val(),
+            'content_type': $('#publish_content_type').val(),
+            'workstream': $('#publish_workstream').val(),
+            'duration': $('#publish_duration').val(),
+            'status': $('#publish_status').val(),
+        }
+
+        console.log(data);
+    }
+
+
+
+
+
+
+
+
+
+
+    function update_content(response) {
+        let content_data = [];
+        let is_duedate = true;
+        $("#previous_booking_wraper tr").each(function(index) {
+            let id = $(this).find('td[name="content_id"]').text();
+            let reviewer = $(this).find('input[name="reviewer"]').val();
+            let comment = $(this).find('input[name="comment"]').val();
+            let url = $(this).find('input[name="url"]').val();
+            let duedate = $(this).find('input[name="duedate"]').val();
+            let status = $(this).find('select[name="content_status"]').val();
+            if (is_assigned){
+                if (duedate=='') {
+                    is_duedate = false;
+                    return false;
+                }
+            }
+
+            let data = {
+                'id': id,
+                'reviewer': reviewer,
+                'comment': comment,
+                'url': url,
+                'status': status,
+                'duedate': duedate
+            }
+            content_data.push(data);
+
+        });
+        console.log(content_data)
+        console.log('duedate:',is_duedate)
+        if (is_assigned){
+            if (!is_duedate){
+                alert('Please enter due date');
+                return false;
+            }
+        }
+
+        let reject_reason = $('#reject_reason').val();
+
+        if (response==1){
+            if (reject_reason==''){
+                alert('Please enter reject reason');
+                return false;
+            }
+        }
+
+        let mydata = {
+            'data': content_data,
+            'response': response,
+            'reason': reject_reason,
+            'is_assigned': is_assigned
+        }
+        console.log(mydata);
+
+        $.ajax({
+            url: '/content/admin/',
+            type: 'POST',
+            data: JSON.stringify(mydata),
+            contentType: 'application/json',
+            success: function(data) {
+                console.log(data);
+                if (data.status == 'success') {
+                    alert('Successfully Updated');
+                } else {
+                    alert('Something went wrong');
+                }
+                window.location.reload();
+            },
+            error: function(data) {
+                console.log(data);
+                alert('Something went wrong');
+            }
+        });
+    }
+
+
+
+    var autocomplete_reviewer = {
+        source: "/partner/ajax/get_my_users",
+        minLength: 3,
+        autoFocus: true,
+        select: function(event, ui) {
+            $(this).val(ui.item.id);
+            console.log(ui);
+            console.log(ui.item);
+            console.log(ui.item.id);
+        },
+        change: function(event, ui) {
+            if (ui.item) {
+                return;
+            }
+        }
+    }
+
+
+    $(document).on('click', '.id_search_reviewer', function() {
+        console.log($(this).val());
+
+        $(this).autocomplete(autocomplete_reviewer)
+    });
+
+
+
+    var autocomplete_reviewer_all = {
+        source: "/partner/ajax/get_my_users",
+        minLength: 3,
+        autoFocus: true,
+        select: function(event, ui) {
+            $(this).val(ui.item.value);
+            $('.id_search_reviewer').val(ui.item.id);
+
+        },
+        change: function(event, ui) {
+            if (ui.item) {
+                return;
+            }
+        }
+    }
+
+    $('#change_all_reviewers').click(function() {
+
+        $(this).autocomplete(autocomplete_reviewer_all)
+    });
+
+
+
+
+
+
+
+
+
+    $(document).ready(function() {
+        $("#id_assign_role_to_user").on("submit", function() {
+            $("#pageloader").fadeIn();
+        });
+        $("#success-alert").hide();
+        $("#id_vol_resource_mobil").hide()
+        getUsersByRole(".sel_admin_class", "2", "normal", "#adminId", "user_id", "Admin");
+        getUsersByRole(".sel_assistant_class", "6", "normal", "#assignId", "assistant_id", "Assistant");
+        getUsersByRole(".sel_partner_class", "2", "partner", "#partnerId", "partner_id", "Partner");
+        getUsersByRole(".sel_orgpartner_class", "4", "orgpartner", "#orgpartnerId", "orgpartner_id", "OrgPartner");
+        getUsersByRole(".sel_fcd_class", "11", "normal", "#fcId", "fieldCoordinator_id", "FieldCoordinator");
+        getUsersByRole(".sel_dc_class", "12", "normal", "#dcId", "deliveryCoordinator_id", "DeliveryCoordinator");
+        callAutoComplete('sel_center_id');
+        $("#confirm_reject").text("");
+    });
+
+    function hideErrorLabel() {
+        $(".errLabel").hide();
+    }
+
+    function getUsersByRole(class_name, role_id, type, btnId, var_param, flag_type) {
+        var ajax_url = '/v2/ajax/getSelUsers?role_id=' + role_id + '&type=' + type;
+        $(class_name).autocomplete({
+            source: function(request, response) {
+                $.getJSON(ajax_url, {
+                    center_id: $(".sel_center_class").val(),
+                    term: $(class_name).val()
+                }, response);
+            },
+            minLength: 1,
+            select: function(event, ui) {
+                hideCRButtons();
+                $(class_name + '_val').val(ui.item.id);
+
+                if ((ui.item.center_id).toString().indexOf($(".sel_center_class").val()) > -1) {
+                    $(btnId).children('span').text('Confirm');
+                    $(btnId).attr({
+                        "href": "/assign_center?flag=" + flag_type + "&center_id=" + $(".sel_center_class").val() + "&" + var_param + "=" + $(class_name + '_val').val() + ""
+                    });
+                    $(btnId).show();
+                } else {
+                    $(btnId).children('span').text('Confirm');
+                    $(btnId).attr({
+                        "href": "/assign_center?flag=" + flag_type + "&center_id=" + $(".sel_center_class").val() + "&" + var_param + "=" + $(class_name + '_val').val() + ""
+                    });
+                    $(btnId).show();
+                }
+
+            },
+            change: function(event, ui) {
+                if (ui.item) {
+                    return;
+                } else {
+                    $(this).val('');
+                    $(class_name + '_val').val('');
+                    hideCRButtons();
+                }
+            }
+        });
+    }
+
+
+
+    function clearInput(class_name) {
+        $("." + class_name).val('');
+    }
+
+    function hideCRButtons() {
+        if ($(".sel_admin_class_val").val() == null || $(".sel_admin_class_val").val() == '' || $(".sel_admin_class_val").val() == undefined) {
+            $("#adminId").hide();
+        }
+        if ($(".sel_assistant_class_val").val() == null || $(".sel_assistant_class_val").val() == '' || $(".sel_assistant_class_val").val() == undefined) {
+            $("#assignId").hide();
+        }
+        if ($(".sel_partner_class_val").val() == null || $(".sel_partner_class_val").val() == '' || $(".sel_partner_class_val").val() == undefined) {
+            $("#partnerId").hide();
+        }
+        if ($(".sel_orgpartner_class_val").val() == null || $(".sel_orgpartner_class_val").val() == '' || $(".sel_orgpartner_class_val").val() == undefined) {
+            $("#orgpartnerId").hide();
+        }
+        if ($(".sel_fcd_class_val").val() == null || $(".sel_fcd_class_val").val() == '' || $(".sel_fcd_class_val").val() == undefined) {
+            $("#fcId").hide();
+        }
+        if ($(".sel_dc_class_val").val() == null || $(".sel_dc_class_val").val() == '' || $(".sel_dc_class_val").val() == undefined) {
+            $("#dcId").hide();
+        }
+    }
+
+    function emptyUsers() {
+        $(".sel_admin_class").val('');
+        $(".sel_admin_class_val").val('');
+        $(".sel_assistant_class").val('');
+        $(".sel_assistant_class_val").val('');
+        $(".sel_partner_class").val('');
+        $(".sel_partner_class_val").val('');
+        $(".sel_orgpartner_class").val('');
+        $(".sel_orgpartner_class_val").val('');
+        $(".sel_fcd_class").val('');
+        $(".sel_fcd_class_val").val('');
+        $(".sel_dc_class").val('');
+        $(".sel_dc_class_val").val('');
+    }
+
+
+    var autocomplete_data = {
+        source: "/partner/ajax/get_my_users",
+        minLength: 3,
+        autoFocus: true,
+        select: function(event, ui) {
+            $(this).val(ui.item.value);
+            $('.sel_user_list_val').val(ui.item.id);
+            var rolenames = "{{roles|getnames|safe}}";
+            console.log(ui.item.id);
+            rolenames = rolenames.replace(/'/g, '"');
+            var myroles = JSON.parse(rolenames)
+            for (i = 0; i < myroles.length; i++) {
+                $('#' + myroles[i]).removeAttr('checked');
+            }
+            if (ui.item.roles) {
+                var roles = ui.item.roles.split(',')
+                console.log(roles)
+                for (r = 0; r < roles.length; r++) {
+                    document.getElementById(roles[r].replace(/\s+/g, '').trim()).checked = true;
+                    //$('#'+roles[r].replace(/\s+/g,'').trim()).attr('checked','checked');
+                }
+            }
+            $("#submit_assign_role_to_user").removeAttr('disabled');
+        },
+        change: function(event, ui) {
+            if (ui.item) {
+                return;
+            } else {
+                $(this).val('');
+                $('.sel_user_list_val').val('');
+                var rolenames = "{{roles|getnames|safe}}";
+                rolenames = rolenames.replace(/'/g, '"');
+                var myroles = JSON.parse(rolenames)
+                for (i = 0; i < myroles.length; i++) {
+                    $('#' + myroles[i]).removeAttr('checked');
+                }
+                $("#submit_assign_role_to_user").attr('disabled', 'disabled');
+            }
+        }
+    }
+
+    $('#id_search_user').click(function() {
+
+        $(this).autocomplete(autocomplete_data)
+    });
+</script>
+
+{% endblock %}

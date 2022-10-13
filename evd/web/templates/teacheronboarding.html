@@ -1,0 +1,1005 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <script defer src="https://rawgit.com/kimmobrunfeldt/progressbar.js/master/dist/progressbar.js"></script>
+    <script defer src="/static/js/selectize.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/selectize.css" />
+    <script src='/static/js_new/parsley.min.js' type='text/javascript' ></script>
+    <script src='/static/js/underscore_1.5.2.min.js' type='text/javascript' ></script>
+    <script src='/static/js_new/profile.js' type='text/javascript' ></script>
+    <script src='/static/js_new/fb_feed/fb_feed.min.js' type='text/javascript' ></script>
+    <script src='/static/js_new/play_orient_video.js' type='text/javascript' ></script>
+    <script>
+        {% include "underscore_temps/teacher_demand.tmpl" with container="#render_demand" only %}
+    </script>
+    <script>
+      var members_len = [{'fb_id': '100011607874861', 'member_token' : '{{ member_token }}'}];
+      $(document).ready(function(){
+            for (var i = 0; i<members_len.length; i++) {
+                $('.render_feed').evdFacebook({
+                id: members_len[i].fb_id,
+                member_token : members_len[i].member_token
+                })
+            };
+        //A & P form: restrict past dates from selecting.
+        today = new Date();
+        today = today.getFullYear() + "-" + ((today.getMonth()+1) <10 ? '0' + (today.getMonth()+1) : (today.getMonth()+1)) + "-" + 
+                (today.getDate()<10 ? '0'+today.getDate() : today.getDate());
+        $("#from, #to, #follow_up").prop("min", today);
+        var availability = $("input[name='availability']:checked").val();
+        if(availability === "available"){
+           $("#follow_up").removeAttr("required"); 
+        }
+        else{
+            $("#from, #to").removeAttr("required");
+            if($.inArray($("select[name='reason'").val(),
+                    ["Interested, but not now", "Interested, but Occupied with Professional commitments", "Interested, but Occupied with Personal commitments"])>-1){
+                $(".follow_up").removeClass("hidden");
+                $("#follow_up").prop("required", "true");
+            }
+            else{
+                $(".follow_up").addClass("hidden");
+                $("#follow_up").removeAttr("required");
+            }
+        }
+
+    });
+
+</script>
+<style>
+
+ @media only screen and (max-width: 480px) and (min-width: 0px)  {
+     .in-col12{
+        margin-bottom: 1%;
+        margin-left: auto !important;
+        width: 98%;
+        text-align: left;
+     }
+    .col-sm-3 {
+    margin-top: 8%;
+    }
+    .orient-align{
+        padding-bottom: 55% !important;
+        padding-top: 30px;
+        background-color: #F2F2F2;
+     }
+    #triggeringModal {
+        width: 94%;
+        height: 150px;
+        cursor: pointer;
+        box-shadow: rgb(136, 136, 136) 0.5px 0.5px 3px;
+        float: right;
+        margin-top: -60% !important;
+        margin-right: 3% !important;
+    }
+    .col-md-11{
+    position: absolute;
+    bottom: 5%;
+    margin-left: 23% !important;
+    }
+   .hight {
+    height: 100% !important;
+    margin-top: 10px !important;
+    }
+
+    .cont-chg{
+            margin-left: 33%;
+            margin-top: -29%;
+            margin-bottom: 6%;
+        }
+
+     .cont-align{
+         padding-right: 0px;
+         margin-left: -5%;
+         margin-right: 1%;
+
+        }
+
+        .demand_sm_dp {
+            border-radius: 100% !important;
+            margin: 5% -3% -3% -4%!important;
+            background-color: <%= random_color %> !important;
+            height: 0 !important;
+            width: 0 !important;
+            text-align: center !important;
+            color: white !important;
+            font-size: 11px !important;
+            padding: 11% 15% 15% 12% !important;
+        }
+
+     #Self_Evaluation.modal {
+        width: 85% !important;
+        margin-left: -42.5% !important;
+        margin-top: -54% !important;
+        margin-bottom: 10% !important;
+    }
+
+    .modal.fade.in {
+    top: 50%;
+    bottom: 9%;
+    }
+
+  .modal-cont-chg {
+    margin: 20% !important;
+    position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    bottom: -5% !important;
+    }
+
+
+    .unavail-align{
+    margin-right: 9%;
+    }
+    .new_dash_container {
+        margin-left: 0 !important;
+        width: 100% !important;
+        min-height: 500px !important;
+    }
+
+
+
+ }
+
+      @media only screen and (max-width: 768px) and (min-width: 480px)  {
+
+
+       .in-col12{
+        margin-bottom: 1%;
+        margin-left: auto !important;
+        width: 98%;
+        text-align: left;
+        }
+        .col-sm-3 {
+        margin-top: 8%;
+        }
+       .cont-chg {
+            margin-left: 48%;
+            margin-top: -21%;
+            margin-bottom: 2%;
+        }
+        .cont-align{
+         padding-right: 0px;
+         margin-left: -2%;
+         margin-right: 0.5%;
+
+        }
+        .demand_sm_dp {
+            border-radius: 100% !important;
+           margin: 4% -1% 8% 4%!important;
+            background-color: <%= random_color %> !important;
+            height: 0 !important;
+            width: 0 !important;
+            text-align: center !important;
+            color: white !important;
+            font-size: 11px !important;
+            padding: 4% 7% 7% 5% !important;
+        }
+
+        #triggeringModal {
+            width: 100% !important;
+            height: 100% !important;
+            cursor: pointer !important;
+            box-shadow: rgb(136, 136, 136) 0.5px 0.5px 3px !important;
+            float: right !important;
+            margin-bottom: 0% !important;
+            margin-top: -42% !important;
+        }
+
+        .orient-align{
+        padding-bottom: 40% !important;
+        padding-top: 4% !important;
+        background-color: #F2F2F2 !important;
+        }
+         .hight{
+        height: 100% !important;
+        margin-top: 10px !important;
+        }
+
+        .col-sm-6 {
+            width: 99%;
+            /* margin-right: 23%; */
+            margin-bottom: 2%;
+        }
+         .col-md-11{
+            position: absolute;
+            bottom: 5%;
+            margin-left: 35% !important;
+            }
+
+         .modal.fade.in {
+            top: 50%;
+            bottom: 9%;
+        }
+
+         .modal-cont-chg {
+    margin: 9% !important;
+    position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    bottom: -5% !important;
+    }
+
+
+    .save-btn{
+    width: 94% !important;
+    margin-right: 200% !important;
+    }
+
+        }
+
+         @media only screen and (max-width: 1024px) and (min-width: 768px)  {
+
+        .demand_sm_dp  {
+            border-radius: 100% !important;
+            margin: 41% 0% !important;
+            background-color: <%= random_color %> !important;
+            height: 60px !important;
+            width: 60px !important;
+            text-align: center !important;
+            color: white !important;
+            font-size: 19px !important;
+            padding: 23% !important;
+            }
+
+           .col-sm-6 {
+            width: initial;
+            margin-right: 0;
+            margin-bottom: 4%;
+            margin-left: 0;
+        }
+
+        .cont-align{
+         padding-right: 0px;
+         margin-left: -2%;
+         margin-right: 0.5%;
+
+        }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  .popover{
+    max-width:450px;
+    width:450px;
+  }
+  .availability p{
+      float:left;
+      min-width: 80px;
+  }
+  .availability p input[type='radio']{
+      height: 12px;
+  }
+  input[name='pref_sub'] {
+      height: 25px;
+      display: inline;
+      /* top: 0; */
+      left: -10px !important;
+      width: 15px;
+      position: absolute !important;
+  }
+</style>
+    <script>
+
+    function handleUrlChange () {
+
+        var curHash = window.location.hash;
+
+        $("#Availability_and_Preferences").modal("hide");
+
+        if (curHash === "#availability_preference") {
+
+          $("#Availability_and_Preferences").modal("show");
+        }
+
+        $('#Availability_and_Preferences').on('hidden.bs.modal', function () {
+            window.history.pushState(null, null, "#");
+        });
+    }
+
+    $(function () {
+
+      $(window).on("popstate", handleUrlChange);
+
+      handleUrlChange();
+
+      //popover
+      $('[data-toggle="popover"]').popover({ trigger: "hover", placement: "top" });
+
+      //$('.popover').css({"max-width":"450px","width":"450px"});
+      //$('.popover').addClass("selected_slots");
+
+
+
+      $('#Self_Evaluation').find('form').parsley().on('field:validated', function() {
+        var ok = $('.parsley-error').length === 0;
+        $('.bs-callout-info').toggleClass('hidden', !ok);
+        $('.bs-callout-warning').toggleClass('hidden', ok);
+      })
+      .on('form:submit', function() {
+        evd.se_submit();
+        setTimeout(location.reload.bind(location), 1000);
+        return false;
+      });
+
+        function convert_To_Time(value){
+            var time =  new Date();
+            var time_arr = value.split(':');
+            time.setHours(time_arr[0]);
+            time.setMinutes(time_arr[1]);
+            return time;
+        };
+        function validateTime(end_time_ele){
+            var end_time = $(end_time_ele).val();
+            var start_time_ele = $(end_time_ele).siblings('select[name=prefered_timings_mor]');
+            var start_time = $(start_time_ele).val();
+            if(end_time!='To' && start_time!='From'){
+                end_time = convert_To_Time(end_time);
+                start_time = convert_To_Time(start_time);
+                if(end_time <= start_time){
+                    $( start_time_ele).addClass('error');
+                    $( end_time_ele).addClass('error');
+                }else{
+                    $( start_time_ele).removeClass('error');
+                    $( end_time_ele).removeClass('error');
+                }
+            }else{
+                    $( start_time_ele).addClass('error');
+                    $( end_time_ele).addClass('error');
+            }
+        };
+        $('select[name=prefered_timings_eve],select[name=prefered_timings_mor]').change(function(){
+               validateTime($(this).parent().find('select[name=prefered_timings_eve]'));
+        });
+
+        window.Parsley.addValidator('daterangecheck', {
+          validateString: function(value) {
+            var end_date = new Date(value);
+            var from = $('#from').val();
+            var start_date = new Date(from);
+            if( Date.daysBetween(start_date, end_date) >= 42){
+                    return true;
+            }else{
+                    return false;
+            };
+          },
+          messages: {
+            en: 'To-date should be minimum of 6 weeks from From date',
+          }
+        });
+        function pref_times_check(){
+            $('select[name=prefered_timings_eve],select[name=prefered_timings_mor]').trigger('change');
+            var time_pref = true;
+            $('select[name=prefered_timings_eve],select[name=prefered_timings_morn]').each(function(){
+                time_pref = time_pref && !$(this).hasClass('error');
+            });
+            return time_pref;
+        }
+        //follow up date
+        $("#Availability_and_Preferences").on("change", "select[name='reason']", function(){
+            if($.inArray($(this).val(), 
+                    ["Interested, but not now", "Interested, but Occupied with Professional commitments", "Interested, but Occupied with Personal commitments"])>-1){
+                $(".follow_up").removeClass("hidden");
+                $("#follow_up").prop("required", "true");
+            }
+            else {
+                $(".follow_up").addClass("hidden");
+                $("#follow_up").removeAttr("required");
+            }
+        });
+        //availability
+        $("#Availability_and_Preferences").on("click", "input[type='radio'][name='availability']", function(){
+            var availability = $("input[name='availability']:checked").val();
+            if(availability === "unavailable"){
+                $(".avail").addClass("hidden");
+                $(".unavail").removeClass("hidden");
+                $("#from, #to").removeAttr("required");
+                $("#follow_up").prop("required", "true");
+            } else{
+                $(".unavail").addClass("hidden");
+                $(".avail").removeClass("hidden");
+                $("#follow_up").removeAttr("required");
+                $("#from, #to").prop("required", "true");
+            }
+
+        });
+
+      $('#availability_form').parsley().on('field:validated', function() {
+        $("#from, #to, #follow_up").removeAttr("min");
+        var ok = $('.parsley-error').length === 0;
+        $('.bs-callout-info1').toggleClass('hidden', !ok);
+        $('.bs-callout-warning1').toggleClass('hidden', ok);
+      })
+      .on('form:submit', function() {
+        var availability = $("input[name='availability']:checked").val();
+        if(availability === "available"){
+            var pref_times = pref_times_check();
+            if( pref_times == true){
+                evd.preferences_submit();
+                //window.location.reload();
+                window.history.pushState(null, null, "#");
+            }else{
+                $('.bs-callout-info1').toggleClass('hidden');
+                $('.bs-callout-warning1').toggleClass('hidden');
+            }
+        }
+        //unavilable
+        else{
+            evd.preferences_submit();
+            window.history.pushState(null, null, "#");
+        }
+        setTimeout(location.reload.bind(location), 1000);
+        return false;
+      });
+
+      /*$('body').on('click', '.book_modal', function(){
+        var se_eval_done = $(this).attr('data-step_status');
+        var modal_target = $(this).attr('data-modal_target');
+        if(se_eval_done == 'False'){
+            $('#Teacher_Selection_Discussion .modal-title').html("Complete Self Evaluation");
+            $('#Teacher_Selection_Discussion .standard_row').html('<h4>Fill the self evaluation form to choose a slot</h4>');
+        }
+        else{
+            $('#Teacher_Selection_Discussion .modal-title').html("Teacher Selection Discussion");
+            $('#Teacher_Selection_Discussion .standard_row').html('<div class="col-sm-9" style="margin-top: 31px;">' +
+                                                                  'Please choose a slot for a discussion using the book now button.</div>' +
+                                                                  '<div class="col-sm-3"><a href="https://evidyaloka.youcanbook.me/"' +
+                                                                  'target="_blank" data-ycbm-modal="true">' +
+                                                                  '<img style="box-shadow:3px 3px 3px -1px"'+
+                                                                  'src="https://youcanbook.me/resources/pics/ycbm-button.png"></a></div>');
+        }
+        $('#'+modal_target).modal('show');
+      });*/
+
+    });
+
+    </script>
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+
+    <div class="container-fluid new_dash_container" >
+        <div class='row onboarding material_div standard_row row-centered' >
+            <div class='onboarding_status'>
+                <h4>Teacher Onboarding</h4>
+                <hr>
+                <div class="progress" style="width:15%;position:absolute;left: 220px;top: 10px;">
+                  <div class="progress-bar progress-bar-striped active progress-bar-success" role="progressbar"
+                       aria-valuenow="{{onboarding.role_onboarding_status}}" aria-valuemin="0" aria-valuemax="100"
+                       style="width:{{onboarding.role_onboarding_status}}%;position:relative;">
+                        {{onboarding.role_onboarding_status}} %
+                  </div>
+                </div>
+
+                {% include "new_orientation_block.html" %}
+
+                {% for step in steps %}
+                    <div class='col-sm-3'>
+                        {% if step.status %}
+                            <div class="corner-ribbon top-left red shadow hide">Completed</div>
+                            <img src="/static/images/ribbon_complated.png" id="completed_ribbon">
+                        {% endif %}
+                        <div class='self_eval onboarding-step' style="height: 495px">
+                           <h3 class="col-md-12" style="margin-bottom: 25px;">Step {{ forloop.counter }} </h3>
+                           <div class='col-md-12'>
+                                <img src='/static/images/self-evaluate.png' height=150px>
+                           </div>
+                           <div class='col-md-12'style="height:55px">
+                                <h4>{{ step.step_name }}</h4>
+                           </div>
+                           <div class='col-md-12'>
+                                <p>{{step.desc}}</p>
+                           </div>
+                           <div class='col-md-11' style="position: absolute;bottom: 5%;">
+                             {% if step.step_name == "Availability and Preferences" %}
+                                <div class='btn btn-info step_action' >
+                                    <a href="#availability_preference">Take this Step</a>
+                                </div>
+                             {% elif step.step_name == "Orientation" %}
+                                <div class='btn btn-info step_action' >
+                                    <a data-toggle='modal' data-target="#orientation_modal" onclick="play_video()">Watch Video</a>
+                                </div>
+                             {% elif step.repeatable %}
+                                    <div class='btn btn-info step_action' >
+                                    <a data-toggle='modal' data-target="#{{ step.short_name }}">
+                                    Take this Step</a></div>
+                             {% else %}
+                                {% if  step.status %}
+                                    {% if step.step_name == "Teacher Selection Discussion" %}
+                                      <!--<a data-toggle="popover" title="Selected Slots" data-html="true"
+                                        data-content="
+                                            {% for item in selection_descussion %}
+                                            <ul>
+                                              <li>
+                                                <strong>Date : </strong>{{item.0|date:"M d Y D"}}&nbsp;
+                                                <strong>Slot : </strong>{{item.0|time:"H:i A"}} to {{item.1|time:"H:i A"}}
+                                              </li>
+                                            </ul>
+                                            {% endfor %}
+                                        ">
+                                        <div class='btn btn-link disabled step_action' disabled>Completed &nbsp&nbsp&nbsp 
+                                            <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                        </div>
+                                      </a>-->
+                                          <div class='btn btn-info  step_action'><!-- href="/book_sd_slots#{{step.role_preference}}"-->
+                                                <a {% if user_profile.phone and user_profile.skype_id %} href="/book_sd_slots#teacher" 
+                                                data-role_preference="{{step.role_preference}}"
+                                                {% else %} data-toggle="modal" data-target="#tsd_profile_fill_first" {% endif %}>Take this Step</a>
+                                          </div>
+
+                                    {% else %}
+                                        <div class='btn btn-link disabled step_action' disabled style="padding: 0px;">Completed &nbsp&nbsp&nbsp
+                                            <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                        </div>
+                                    {% endif %}
+                                 {% else %}
+                                    {% if step.step_name == "Teacher Selection Discussion" %}
+                                           <div class='btn btn-info  step_action'>
+                                               <a {% if user_profile.phone and user_profile.skype_id %}href="/book_sd_slots#teacher" 
+                                                {% else %} data-toggle="modal" data-target="#tsd_profile_fill_first" {% endif %}>Take this Step</a>
+                                           </div>
+                                    {% else %}
+                                        <div class='btn btn-info step_action' > <a data-toggle='modal'
+                                        data-target="#{{ step.short_name }}">
+                                        Take this Step </a></div>
+                                    {% endif %}
+                                {% endif %}
+                             {% endif %}
+                           </div>
+                    </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        {% include "new_view_oppourtunities_going_on.html" %}
+
+    </div>
+
+<div id="Availability_and_Preferences" class="modal" role="dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content modal-cont-chg" >
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" style="font-size:30px">&times;</button>
+            <h4 class="modal-title">Availability & Preferences</h4>
+        </div>
+        <div class="modal-body">
+            <div class='row  standard_row'>
+                <div class="alert alert-error bs-callout bs-callout-warning1 hidden">
+                  <h4>Oh snap!</h4>
+                  <p>Please correct the below error fields..</p>
+                </div>
+
+                <div class="alert alert-success bs-callout bs-callout-info1 hidden">
+                  <h4>Yay!</h4>
+                  <p>Everything seems to be ok :)</p>
+                </div>
+                <form id='availability_form' data-onboarding_id='{{ onboarding.id }}' data-parsley-validate="">
+
+                    <div class="row">
+                        <div class="form-group col-sm-12 availability">{{availablity}}
+                            <p>Available: </p><p><input type="radio" name="availability" value="available" {% if availability %}checked='checked'{% endif %}>&nbsp;&nbsp;&nbsp;</p>
+                            <p class="unavail-align">Unavailable : </p><p><input type="radio" name="availability" value="unavailable"{% if not availability %}checked='checked'{% endif %}></p>
+                        </div>
+                    </div>
+
+
+                    <div class='row standard_rowi avail {% if not availability %}hidden{% endif %}'>
+                        <div class="form-group col-sm-6">
+                            <label for="from">Available From:</label>
+                            <input type="date" class="form-control" required="" name='from_date' value='{{ user_profile.from_date|date:"Y-m-d" }}' id="from">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="to">Available To:</label>
+                            <input type="date" class="form-control" required="" data-parsley-daterangecheck='' name='to_date' value='{{ user_profile.to_date|date:"Y-m-d" }}' id="to">
+                        </div>
+                    </div>
+                    <div class=' row standard_row avail {% if not availability %}hidden{% endif %}'>
+                        <div class='col-sm-7'>
+                            {% time_slots "prefered_timings_slots" user_profile.pref_days user_profile.pref_slots "Preferred Days" %}
+                        </div>
+                        <div class='col-sm-3'>
+                            <label for="reason" style='margin-left:0'>Preferred Subject </label>
+                            <p>Maths<input type="checkbox" name="pref_sub" value="Maths" {% if "Maths" in pref_sub_list %}checked{% endif %}/></p>
+                            <p>English<input type="checkbox" name="pref_sub" value="English" {% if "English" in pref_sub_list %}checked{% endif %}/></p>
+                            <p>Science<input type="checkbox" name="pref_sub" value="Science" {% if "Science" in pref_sub_list %}checked{% endif %}/></p>
+                        </div>
+                    </div>
+                    <!--unavailable reason-->
+                    <div class=' row standard_row unavail {% if availability %}hidden{% endif %}'>
+                        <div class="form-group col-sm-12">
+                            <label for="reason" style='margin-left:0'>Unavailability Reason : </label>
+                            <select name="reason">
+                              {% for reason in unavilable_reasons_list %}
+                                <option value="{{reason}}" {% if reason == unavailable_reason_selected %}selected{% endif %}>{{reason}}</option>
+                              {% endfor %}
+                            </select>
+                        </div>
+                        <div class='form-group col-sm-6 follow_up {% if unavailable_reason_selected not in unavail_list_ %}hidden{% endif %}'>
+                            <label for="follow_up" style="margin-left:0">Follow Up Date: </label>
+                            <input type="date" class="form-control" required="" name='follow_up' value='{{ follow_up_date|date:"Y-m-d" }}' id="follow_up">
+                        </div>
+                    </div>
+                    <div class=' row standard_row'>
+                        <div class='col-sm-offset-9 col-sm-3'>
+                            <input class='btn btn-primary save-btn' type='submit' value='Save' style='float:right' \>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Teacher_Selection_Discussion" class="modal fade" role="dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" >
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" style="font-size:30px">&times;</button>
+            <h4 class="modal-title">Teacher Selection Discussion</h4>
+        </div>
+        <div class="modal-body">
+            <div class='alert alert-info'>
+                <div class='row standard_row'>
+                    {% for step in steps %}
+                        {% if step.step_name == "Teacher Selection Discussion" %}
+                            {% if step.prerequisite %}
+                            <div class='col-sm-9' style='    margin-top: 31px;'>
+                                Please choose a slot for a discussion using the book now button.
+                            </div>
+                            <div class='col-sm-3'>
+                                <a href="https://evidyaloka.youcanbook.me/" target="_blank"  data-ycbm-modal="true"><img style='box-shadow:3px 3px 3px -1px' src="https://youcanbook.me/resources/pics/ycbm-button.png" style="border-style:none;"/></a>
+                            </div>
+                            {% else %}
+                                <h6>Please complete your self evaluation, to proceed with the selection discussion</h6>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="Self_Evaluation" class="modal fade" role="dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" >
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" style="font-size:30px">&times;</button>
+            <h4 class="modal-title">Self Evaluation</h4>
+        </div>
+        <div class="modal-body">
+            <div class='row standard_row'>
+                <div class='col-sm-12'>
+                    <div class="alert alert-error bs-callout bs-callout-warning hidden">
+                      <h4>Oh snap!</h4>
+                      <p>This form seems to be invalid :(</p>
+                    </div>
+
+                    <div class="alert alert-success bs-callout bs-callout-info hidden">
+                      <h4>Yay!</h4>
+                      <p>Everything seems to be ok :)</p>
+                    </div>
+
+                  <form data-parsley-validate="" data-onboarding_id={{ onboarding.id }}>
+                    {% csrf_token %}
+                    <fieldset class="form-group row">
+                      <label class="col-form-legend col-sm-12 native_lang">Can you fluently Read and Write in the selected native language?*</label>
+                      <div class="ans-group col-sm-10">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" required="" name="native_lang"  value="yes" >
+                            Yes
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio"  name="native_lang"  value="no">
+                            No
+                          </label>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <div class="form-group row">
+                      <label for="lang_select" data-parsley-trigger="change" class="col-sm-12 col-form-label other_lang">Are you fluent to Speak, Read and Write in any other listed language?*</label>
+                        <div class='ans-group col-sm-10'>
+                            <select required="" class="form-control" name='other_lang' id='lang_select'>
+                              <option ></option>
+                              <option value='Hindi'>Hindi</option>
+                              <option value='Telugu'>Telugu</option>
+                              <option value='Tamil'>Tamil</option>
+                              <option value='Bengali'>Bengali</option>
+                              <option value='Kannada'>Kannada</option>
+                              <option value='Marathi'>Marathi</option>
+                              <option value='Odiya'>Odiya</option>
+                              <option value='Other'>Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="motivation" class="col-sm-12 col-form-label motivation">What motivates you to join this platform and contribute your time?*
+</label>
+                      <div class="ans-group col-sm-10">
+                        <textarea class="form-control " name='motivation' required="" id="motivation" ></textarea>
+                      </div>
+                    </div>
+                    <fieldset class="form-group row">
+                      <label class="col-form-legend col-sm-12 slot_commit">Online classes take place during school hours:
+                      <p style="    font-weight: 500;">JH: 9am to 2pm
+                      <br>WB: 11am to 2pm 
+                      <br>TN: 9:30am to 4pm
+                      <br>AP/TS: 9am to 4pm
+                      <br>KA: 10:30am to 4pm
+                      <br>MH: 10am to 4pm Mon to Fri</p>
+                      To teach online, it is required to provide two 1-hour slots on any two different days for any two available slots. Do you think you can commit for the same?*
+                      </label>
+                      <div class="ans-group col-sm-10">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" required="" name="slot_commit" value="yes" >
+                            Yes
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio"  name="slot_commit"  value="no">
+                            No
+                          </label>
+                        </div>
+                      </div>
+                    </fieldset>
+
+                    <fieldset class="form-group row">
+                    <!--<legend class="col-form-legend col-sm-12">Please share your response for some classic teacher scenarios below:</legend>-->
+                      <label class="col-form-legend col-sm-12 scenerio_1">For how long a duration do you think you can commit to teaching?*</label>
+                      <div class="ans-group col-sm-10">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" required="" name="scenerio_1"  value="option1" >
+                            Less than 3 months
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="scenerio_1"  value="option2">
+                            3 months
+                          </label>
+                        </div>
+                        <div class="form-check ">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="scenerio_1"  value="option3" >
+                            6 months
+                          </label>
+                        </div>
+                        <div class="form-check ">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="scenerio_1"  value="option3" >
+                            1year
+                          </label>
+                        </div>
+                        <div class="form-check ">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="scenerio_1"  value="option3" >
+                            1year +
+                          </label>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <fieldset class="form-group row">
+                      <div class="form-group row">
+                        <label for="q5" class="col-sm-12 col-form-label scenerio_2">What are your preferred subjects among Science, Maths and English (to be taught in the native language, including the technical words)?*
+    </label>
+                        <div class="ans-group col-sm-10">
+                          <textarea class="form-control" name='scenerio_2' required="" ></textarea>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="q6" class="col-sm-12 col-form-label scenerio_3">What are your preferred classes? (Class 5, 6, 7, 8)*
+    </label>
+                        <div class="ans-group col-sm-10">
+                          <textarea class="form-control" name='scenerio_3' required="" ></textarea>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <fieldset class="form-group row">
+                      <div class="form-group row">
+                        <label for="q7" class="col-sm-12 col-form-label scenerio_4">Do you have any prior teaching experience? If yes, where, how many years, which class, which subject<br>If no, please share your thoughts on teaching children *
+    </label>
+                        <div class="ans-group col-sm-10">
+                          <textarea class="form-control" name='scenerio_4' required="" ></textarea>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <fieldset class="form-group row">
+                      <div class="form-group row">
+                        <label for="q8" class="col-sm-12 col-form-label scenerio_5">How would you handle your first online class?*
+    </label>
+                        <div class="ans-group col-sm-10">
+                          <textarea class="form-control" name='scenerio_5' required="" ></textarea>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <fieldset class="form-group row">
+                      <div class="form-group row">
+                        <label for="q9" class="col-sm-12 col-form-label scenerio_5">How would you ascertain whether a child understood what was being taught?*
+    </label>
+                        <div class="ans-group col-sm-10">
+                          <textarea class="form-control" name='scenerio_5' required="" ></textarea>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <fieldset class="form-group row">
+                      <div class="form-group row">
+                        <label for="q10" class="col-sm-12 col-form-label scenerio_6">How would you plan to prepare yourself for the class? (time invested, what all to be prepared)*
+    </label>
+                        <div class="ans-group col-sm-10">
+                          <textarea class="form-control" name='scenerio_6' required="" ></textarea>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="q11" class="col-sm-12 col-form-label scenerio_7">A feedback on how this self-evaluation form helped you. Any suggestions to improve this form?
+    </label>
+                        <div class="ans-group col-sm-10">
+                          <textarea class="form-control" name='scenerio_7' required="" ></textarea>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <!--<fieldset class="form-group row">
+                      <legend class="col-form-legend col-sm-12">Detailed Profile*</legend>
+                        <div class="form-group row">
+                          <label for="smFormGroupInput" class="col-sm-12 col-form-label col-form-label-sm dob">Date of Birth</label>
+                          <div class="ans-group col-sm-10">
+                                <input type="date" class="form-control " style='width:100%' name='dob' id='sedob' required="" placeholder="DOB">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="lang_select" class="col-sm-12 col-form-label qual">Your highest educational qualification *</label>
+                            <div class='ans-group col-sm-10'>
+                                <select class="form-control" name='qual' required="">
+                                    <option value=''></option>
+                                    <option value="BE/BTech">BE/BTech</option>
+                                    <option value="Bachelors in Arts/Science/Commerce">Bachelors in Arts/Science/Commerce</option>
+                                    <option value="ME/MTech/MBBS">ME/MTech/MBBS</option>
+                                    <option value="Masters in Arts/Science/Commerce">Masters in Arts/Science/Commerce</option>
+                                    <option value="MPhil/PhD">MPhil/PhD</option>
+                                    <option value="B.Ed/B.El.Ed">B.Ed/B.El.Ed</option>
+                                    <option value="M.Ed">M.Ed</option>
+                                    <option value="Student -&nbsp;Under Graduate">Student -&nbsp;Under Graduate</option>
+                                    <option value="Student - School">Student - School</option>
+                                    <option value="Student - Post Graduate">Student - Post Graduate</option>
+                                    <option value="Student - Phd">Student - Phd</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="lang_select" class="col-sm-12 col-form-label profession">Your professional background *</label>
+                            <div class='ans-group col-sm-10'>
+                                <select class="form-control" name='profession' required="">
+                                    <option value=''></option>
+                                    <option value="Working professional">Working professional</option>
+                                    <option value="Teacher">Teacher</option>
+                                    <option value="Homemaker">Homemaker</option>
+                                    <option value="Retired - Public service">Retired - Public service</option>
+                                    <option value="Retired - Private service">Retired - Private service</option>
+                                    <option value="Retired - Defense service">Retired - Defense service</option>
+                                    <option value="Self employed">Self employed</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-group row">
+                      <label for="motivation" class="col-sm-12 col-form-label prof_details">Please enter the details of your profession, if you chose to share</label>
+                      <div class="ans-group col-sm-12">
+                        <textarea class="form-control"  name='prof_details' required="" ></textarea>
+                      </div>
+                    </div>-->
+                    <div class="form-group row">
+                      <div class="offset-sm-5 col-sm-7">
+                        <button id='self_eval_submit' type='submit' class="btn btn-primary" >Submit</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="Readiness" role="dialog">
+    <div class="">
+    
+      <!-- Modal content-->
+      <div class="modal-content modal-cont-chg">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Readiness</h4>
+        </div>
+        <div class="modal-body">
+          <p>
+            <a href="/curriculumreview/">Curriculum Review</a><br>
+            <a href="/mytrainings/">My Training {% if user_profile.trainings_complete %} -Completed {% endif %}</a>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- profile fill first to book tsd slot warning modal -->
+  <!-- Modal -->
+  <div class="modal fade" id="tsd_profile_fill_first" role="dialog">
+    <div class="">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+          <h5>
+            Please fill the phone number and skype id to book a slot : 
+            <a href="/profile/">Edit Profile</a>
+          </h5>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Orientation Modal Template -->
+  {% include "new_orientation_modal.html" %}
+
+{% endblock %}
+
+
+

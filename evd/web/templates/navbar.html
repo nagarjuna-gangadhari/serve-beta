@@ -1,0 +1,272 @@
+<html>
+	<head>
+		<style>
+			.sidenav {
+				width: 240px;
+				z-index: 1;
+				top: 0;
+				background-color: #1e2022 !important;
+				/* color: #fff; */
+				overflow-x: hidden;
+				overflow-y: hidden;
+				padding: 0px;
+				height: 100%;
+				display: inline-block;
+				position: sticky !important;
+				/*margin-left:-75px !important;*/
+				text-align: center;
+			}
+
+			.navbar-nav>li>a {
+			padding-top: 7px;
+			padding-bottom: 10px;
+			}
+
+			.nav-item a {
+				width: 240px;
+				padding: 0px;
+				text-decoration: none;
+				font-size: 25px;
+				color: #818181;
+				display: block;
+				text-align: center;
+			}
+
+			.inner {
+				height: 520px;
+				width: 99%;
+				overflow: hidden;
+			}
+
+			.nav-item>a:hover>.menu-item {
+				/* background-color:rgba(14,40,54,1);
+				color:orange; */
+				color: gray;
+				text-align: center;
+			}
+
+			.active {
+				background-color: #27a3e2;
+				text-align: center;
+				/*width: 100%;*/
+				/* {#border-radius: 30px;#} */
+			}
+
+			.blank_space {
+				height: 10px;
+			}
+
+			.menu-item {
+				font-size: 15px;
+				font-weight: 700 !important;
+				font-family: "Times New Roman", Times, serif !important;
+				text-align: center;
+				color: white;
+			}
+
+			hr.style-five {
+				width: 240px;
+				border: 0;
+				border-bottom: 1px dashed white;
+				/* background: #70A8FF; */
+			}
+
+			@media screen and (max-height: 450px) {
+				.sidenav {
+					padding-top: 15px;
+				}
+
+				.sidenav a {
+					font-size: 18px;
+				}
+			}
+		</style>
+		<script>
+			$(function () {
+				var url = window.location;
+				$('li.nav-item a').filter(function () {
+					return this.href == url;
+				}).addClass('active');
+			});
+		</script>
+	</head>
+	<body>
+		<div class="sidenav">
+			<nav class="navbar">
+				<div class="collapse navbar-collapse">
+					<ul class="flex-md-column flex-row navbar-nav w-100 justify-content-between">
+						{% if is_school_admin %}
+							{% if is_show_volunteer %}
+								<li class="nav-item active">
+									<a href="/myevidyaloka/" id="dashboard"><span class="menu-item">Dashboard<span></a>
+								</li>
+								<br><br><br>
+
+								<li class="nav-item">
+									<a href='/v2/school_admin/users/'><span class="menu-item">Users</span></a>
+								</li>
+								<br><br><br>
+
+								<li class="nav-item">
+									<a href="/v2/myschools/"><span class="menu-item">Schools</span></a>
+								</li>
+								<br><br><br>
+
+								<li class="nav-item">
+									<a href="/partner/centers/"><span class="menu-item">eVidyaloka Centers</span></a>
+								</li>
+								<br><br><br>
+
+								<li class="nav-item">
+									<a href="/v2/video/tool/"><span class="menu-item">Video Tool Integration</span></a>
+								</li>
+								<br><br><br>
+
+								<li class="nav-item">
+									<a href="/partner/partner_mou/"><span class="menu-item">Agreement</span></a>
+								</li>
+							{% else %}
+								{% if is_dashboard %}
+									<li class="nav-item active">
+								{% else %}
+									<li class="nav-item">
+								{% endif %}
+									<a href='/myevidyaloka/'><span class="menu-item">Dashboard</span></a>
+								</li>
+								<br><br><br>
+
+								{% if my_users %}
+									<li class="nav-item active">
+								{% else %}
+									<li class="nav-item">
+								{% endif %}
+									<a href='/v2/school_admin/users/'><span class="menu-item">Users</span></a>
+								</li>
+								<br><br><br>
+
+								{% if school == 1 %}
+									<li class="nav-item active">
+								{% else %}
+									<li class="nav-item">
+								{% endif %}
+									<a href="/v2/myschools/"><span class="menu-item"> Schools</span></a>
+								</li>
+								<br><br><br>
+
+								{% if is_evd_centers %}
+									<li class="nav-item active">
+								{% else %}
+									<li class="nav-item">
+								{% endif %}
+										<a href="/partner/centers/"><span class="menu-item">eVidyaloka Centers</span></a>
+									</li>
+								<br><br><br>
+
+								{% if is_video_tool %}
+									<li class="nav-item active">
+								{% else %}
+									<li class="nav-item">
+								{% endif %}
+										<a href="/v2/video/tool/"><span class="menu-item">Video Tool Integration</span></a>
+									</li>
+								<br><br><br>
+								
+								{% if is_mou %}
+									<li class="nav-item active">
+								{% else %}
+									<li class="nav-item">
+								{% endif %}
+									<a href="/partner/partner_mou/"><span class="menu-item">Agreement</span></a>
+								</li>
+							{% endif %}
+						{% else %}
+							<li>
+								<span class="partner-item">
+									{% if partner.name_of_organization %}
+										<span style="color:white;font-weight:550;text-transform: uppercase;">{{partner.name_of_organization}}</span>
+										</br>
+									{%endif%}
+									{% if partner.logo %}
+										<img src="/{{partner.logo}}" alt="partner_logo" style="width:100px !important;height:100px !important;padding:10px;">
+									{% endif %}
+								</span>
+								<hr class="style-five">
+							</li>
+							</br></br></br>
+							<!-- <li class="nav-item blank_space">&nbsp;</li> -->
+							{% if active == 1 %}
+								<li class="nav-item active">
+							{% else %}
+								<li class="nav-item">
+							{% endif %}
+								<a href="/myevidyaloka/" id="dashboard"><span class="menu-item">Dashboard<span></a>
+							</li>
+							</br></br></br>
+							<!-- <li class="nav-item blank_space">>&nbsp;</li> -->
+							<li class="nav-item">
+								<a href="/partner/my_users/"><span class="menu-item"> Users</span></a>
+							</li>
+							</br></br></br>
+							<!-- <li class="nav-item blank_space">>&nbsp;</li> -->
+							{% if school == 1 %}
+								<li class="nav-item active">
+							{% else %}
+								<li class="nav-item">
+							{% endif %}
+								<a href="/partner/myschools/"><span class="menu-item"> Schools</span></a>
+							</li>
+							</br></br></br>
+							<!-- <li class="nav-item blank_space">>&nbsp;</li> -->
+							<li class="nav-item">
+								<a href="/partner/centers/"><span class="menu-item">eVidyaloka Centers</span></a>
+							</li>
+							</br></br></br>
+							<!-- <li class="nav-item blank_space">>&nbsp;</li> -->
+							<li class="nav-item">
+								<a href="/partner/org_details/"><span class="menu-item">Org Details</span></a>
+							</li>
+							</br></br></br>
+							{% for role_name in request.user.userprofile.role.all %}
+								{% ifequal role_name.name "Partner Admin" %}
+									{% if is_video_tool %}
+										<li class="nav-item active">
+									{% else %}
+										<li class="nav-item">
+									{% endif %}
+											<a href="/v2/video/tool/"><span class="menu-item">Video Tool Integration</span></a>
+										</li>
+								{% endifequal %}
+							{% endfor %}
+							</br>
+							{% if not is_funding_partner %}
+								{% if is_partner or is_superuser %}
+									<!-- <li class="nav-item blank_space">>&nbsp;</li> -->
+									{% if not agreement%}
+										<li class="nav-item ">
+									{% else %}
+										<li class="nav-item active">
+									{% endif %}
+										<a href="/partner/partner_mou/"><span class="menu-item">Agreement</span></a>
+									</li>
+									</br>
+								{% endif %}
+							{% endif %}
+							{% if is_funding_partner  %}
+								{% ifequal partner.partnertype.all.0.name "Delivery Partner" %}
+									{% if not agreement%}
+										<li class="nav-item ">
+									{% else %}
+										<li class="nav-item active">
+									{% endif %}
+										<a href="/partner/partner_mou/"><span class="menu-item">Agreement</span></a>
+									</li>
+								{% endifequal %}
+							{% endif %}
+						{% endif %}
+						<!-- </br></br></br> -->
+					</ul>
+				</div>
+			</nav>
+		</div>
+	</body>
+</html>

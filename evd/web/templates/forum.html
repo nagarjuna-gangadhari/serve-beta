@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+.par {
+margin:7px;
+    padding-top:7px;
+    padding-bottom:2px;
+    padding-left:7px;
+    padding-right:3px;
+
+
+    width:50px;
+    height: 20px;
+    background: #97a585;
+}
+
+.par > a {
+color: white;
+
+}
+
+.activ{
+background:#e1570d;
+
+}
+
+        .right-content .top {
+            padding:34px 37px;
+        }
+        .subcontent {
+            background:none;
+        }
+        div.intro h2 {
+            padding-bottom:35px;
+        }
+        div.video {
+            padding:50px;
+        }
+    </style>
+{% endblock %}
+{% block head_scripts %}
+   {{ block.super }}
+   <meta name="google-signin-clientid" content="949536666159-9033lk75rv64lhgdkq33ib9l0qa5bl4b.apps.googleusercontent.com" />
+   <meta name="google-signin-scope" content="https://www.googleapis.com/auth/plus.login" />
+   <meta name="google-signin-requestvisibleactions" content="http://schema.org/AddAction" />
+   <meta name="google-signin-cookiepolicy" content="single_host_origin" />
+   <meta name="google-signin-callback" content="signinCallback" />
+   <script type="text/javascript" src="https://apis.google.com/js/client:platform.js?onload=render" async defer></script>
+
+   <script type="text/javascript">
+   $(document).ready( function(){ $("#general").next().addClass("activ"); }  );
+var state_count = "{{ state_count }}"
+var center_count = "{{ center_count }}"
+var subject_count = "{{ subject_count   }}"
+var admin_count =" {{ admin_count  }}"
+var lg_bttn = "{{ lg_bttn  }}"
+
+   var allsignin = 0;
+    function signinCallback(authResult) {
+       if (authResult['status']['signed_in']) {
+                       allsignin=1;
+                      $("#gSignInWrapper, #gplus").css("display","none");
+                      if( lg_bttn != 0){ $("#al").show(); }
+                      var ifrm = document.getElementById('forum_embed');
+                      ifrm.src = ifrm.src;
+                         }
+                         }
+   /* Executed when the APIs finish loading */
+   function render() {
+     // Additional params
+       var additionalParams = {
+           'theme' : 'dark'
+             };
+
+               gapi.signin.render('myButton', additionalParams);
+               }
+
+$( function(){
+           if( lg_bttn == 1 ){ $("#lg_bt").hide(); $("#fm_lst").css("margin-top", "-10px") ;$("#gplus").css("margin-left","680px"); }
+           if( state_count == 0){ $("#state_head").hide(); $("#evd_central").hide();  }
+           if( admin_count == 0 && center_count == 0){ $("#admin_head").hide();  }
+           if( subject_count == 0){ $("#subject_head").hide();}
+
+
+     $("a.forum").click( function(e){ e.preventDefault();
+      $(this).parent().siblings().removeClass("activ");
+      $(this).parent().addClass("activ");
+       var urll = "https://groups.google.com/forum/embed/?place=forum/"+ $(this).data("url") +"&domain=evidyaloka.org" +"&showsearch=true&showpopout=true&parenturl=" +  encodeURIComponent(window.location.href);
+        console.log(urll);
+         $("iframe").attr('src',urll);
+ });
+
+
+});
+</script>
+
+
+
+{% endblock %}
+{% block body_container %}
+<div id="al" style="float:right; display:none; color:blue;font-size:16px;"> Welcome! <p style="display:inline;color:Yellow;">{{curr_user  }}  &nbsp...</p></div>
+<div style="margin-left:30px;display:inline;">
+<p id="gplus" style="display:inline;font-size:12px; padding-bottom:10px;" >To participate in the Forums:</p>
+<div id="gSignInWrapper" style="display:inline;">
+  <div id="myButton" class="classesToStyleWith" style="display:inline; height:20px; font-size:12px;">
+     <img src="/static/images/gplus_signin.png"align="bottom"  style="cursor:pointer; border-radius:5px; height:25px; width:65px;"/ >
+        </div>
+        </div>
+</div>
+<div id = "lg_bt" style="float:right;margin-right:-25px;height:30px;display:inline; width:55%;">&nbsp|&nbsp
+<p style="display:inline;font-size:12px;" > To become a Volunteer ?</p>  <a style="display:inline;padding-left:12px;padding-top:5px;padding-bottom:5px;padding-right:12px;height:20px; font-size:12px;" href="http://www.evidyaloka.org/?show_popup=true&type=Sign_up"  class="btn ">SignUp</a> &nbsp|&nbsp <p style="display:inline;font-size:12px;" > Already an eVidyaloka Volunteer?</p> <a style="display:inline;padding-left:15px;padding-top:5px;padding-bottom:5px;padding-right:15px;  font-size:12px; height:20px;" href="http://www.evidyaloka.org/?show_popup=true&type=Login" data-toggle="tooltip"  title='Login enables you to access Internal Forums.. ' class="btn ">Login</a>   </div>
+<div id="fm_lst" style="width:180px;  display:inline; float:left;">
+<ul style="list-style-type:none">
+
+ <li id="admin_head" <h1 style=" color:#e1570d; font-size:18px; " > My Forums:  </h1>   </li>
+   {% for entry in admin_forums %}
+      <li class="par" style="width:180px; font-size:12px;height:30px;"><a href="" data-url={{ entry.url }} class="forum"> <span>{{ entry.name }}</span> </a> </li>
+   {% endfor %}
+   {% for entry in center_forums %}
+     <li class="par"  style="width:180px;font-size:12px;height:30px;"><a href="" data-url={{ entry.url }}  class="forum"> <span>{{ entry.name }}</span> </a> </li>
+   {% endfor %}
+
+
+   <li id = "evd_central"><h1 style="margin-top:20px;color:#e1570d; font-size:18px;" > eVidyaloka Central:  </h1>    </li> 
+   <li id = "state_head"><p  style="color:green;font-size:15px;">State Forums:</p></li>
+     {% for entry in state_forums %}
+        <li class="par" style="width:180px;font-size:12px;height:40px;"><a href=""  data-url={{ entry.url }} class="forum"> <span>{{ entry.name }}</span> </a> </li>
+     {% endfor %}
+   <li id = "subject_head"><p  style="color:green;font-size:15px;">Subject Forums:</p></li>
+      {% for entry in subject_forums %}
+       <li class="par" style="width:180px;font-size:12px;height:30px;"><a href="" data-url={{ entry.url }}  class="forum"> <span>{{ entry.name }}</span> </a> </li>
+      {% endfor %}
+
+
+    <li id="general" ><h1 style="margin-top:20px; font-:bold;color:#e1570d; font-size:18px; " > General: </h1>    </li>
+   {% for entry in general_forums %}
+      <li class="par" style="width:180px;font-size:12px;height:30px;"><a href="" data-url={{ entry.url  }} class="forum"> <span>{{ entry.name }}</span> </a> </li>
+   {% endfor %}
+
+</ul>
+</div>
+
+
+
+<div style="display:inline; float:right;" >
+
+  <iframe id="forum_embed"
+   src="javascript:void(0)"
+   style="background-color:#e3e8be; margin-top:16px;"
+    scrolling="no"
+     frameborder="0"
+      width="730"
+       height="700">
+       </iframe>
+
+       <script type="text/javascript">
+        document.getElementById("forum_embed").src =
+          "https://groups.google.com/forum/embed/?place=forum/forum-tdf&domain=evidyaloka.org" +
+            "&showsearch=true&showpopout=true&parenturl=" +
+              encodeURIComponent(window.location.href);
+
+
+
+              </script>
+
+
+
+
+</div>
+  {% endblock %}
+  {% block scripts %}
+
+
+  {% endblock %}

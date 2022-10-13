@@ -1,0 +1,2 @@
+{{user.username }} updated the profile on  {% now "jS o\f F" %}
+

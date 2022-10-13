@@ -1,0 +1,4 @@
+
+Please click on this link to set the password
+http://{{ site }}
+User: {{ user.first_name }} {{ user.last_name }}

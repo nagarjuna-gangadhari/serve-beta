@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+
+    <style>
+        .submitForm {
+            margin : 16px 5px;
+        }
+        label {
+            min-width: 39% !important;
+            text-align:center !important;
+        }
+        textArealabel {
+            min-width: 11% !important;
+            text-align:center;
+        }
+        .divrow{
+            margin-bottom:2px;
+        }
+        .errorlist {
+            color: red;
+            padding-left: 42%;
+            padding-top: 2%;
+        }
+        thead{
+            background-color: #525A99 !important;
+            color: white;
+        }
+        .row {
+            margin-right: -15px;
+            margin-left: -8px;
+        }
+        th {
+            text-align: center;
+        }
+        .fa-2x {
+            font-size: 1.5em;
+        }
+
+        .mySchoolDiv {
+            background-color:#ffffff;
+            padding : 15px 20px 20px 30px;
+        }
+        .verification{
+            margin-top:15px;
+        }
+        input, textarea {
+            margin-bottom : 0px !important;
+        }
+        thead{
+            background-color: #525A99 !important;
+            color: white;
+        }
+        thead th{
+            border-bottom: 1px solid #111;
+            font-weight: bold !important;
+        }
+        .tableCaption{
+            padding: 20px;
+            text-align: center;
+            font-size: 23px;
+            font-weight: bold;
+            background-color: #27A3E2;
+            color: white;
+        }
+        .spantext{
+            text-align: center !important;
+        }
+
+        tfoot {
+            display: table-header-group !important;
+        }
+        #myTable_filter
+        {
+            width: 30%;
+            margin-left: -14%;
+        }
+        
+        #myTable td{
+            text-align: center;
+        }
+        table tr td{
+            width: 18%;
+            text-align: center;
+        }
+        #content div .inner, #content div .inner-980 {
+            padding: 0px;
+            margin-top: 3px;
+        }
+        .tableCaption {
+            padding: 13px;
+            text-align: center;
+            font-size: 23px;
+            font-weight: bold;
+            background-color: #27A3E2;
+            color: white;
+        }
+        .dataTables_wrapper .dataTables_info {
+            clear: both;
+            float: left;
+            padding-top: 1.755em;
+            padding-left: 35px;
+    }
+
+
+    </style>
+
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+
+
+
+
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+   
+    <div class="inner" style="height: 100%;">
+
+        <div class="col-md-2" style="height: 100%;">
+          {%include "navbar.html"%}
+        </div>
+        <div class="col-md-10" style="height: 100%;overflow-y: auto; right: -15px; padding-left: 3%">
+
+    <div class="row" style="min-height: 450px !important;">
+    <div class="col-sm-12 col-md-12 col-lg-12" style="background-color: #27A3E2;width: 100%;margin-left: -5px;height: 67px; border-radius: 1ch;border-radius: 1ch;">
+        <h3 style="color:white" align="center"><b>Project Summary </b></h3>
+        <hr>
+    </div>
+
+
+
+      <div class="col-sm-12 col-md-12 col-lg-12" style="background-color: aliceblue; width: 100%;height: 120px;">
+        <h4 style="color:#27A3E2;font-family:fantasy"; align="center"></h4>
+        <br>
+        <b>
+        <table style="width:100%;text-align:center;color:#27A3E2;">
+            <tr style="text-size-adjust: 10px; color:#27A3E2;">
+                <td style="color:#27A3E2;">Centers <br><h4>{{ summery.center_count }}</h4></td>
+                <td>Active Teachers <br><h4> {{ summery.active_teachers_count }}</h4></td>
+                <!-- <td>Active Offering <br><h4> {{ summery.offering_count }}</h4></td> -->
+                <td>Total Children <br><h4> {{ summery.toal_childrean_count }}</h4></td>
+                <td>Boys <br><h4> {{ summery.boys_count }}</h4></td>
+                <td>Girls <br><h4> {{ summery.girls_count }} </h4></td>
+            </tr>
+        </table>
+        </b>
+    </div>
+
+
+      <!-- first Block ended here -->
+
+
+<!-- <div class="" > -->
+    <div class="col-md-12 col-sm-12 mySchoolDiv" style="border-radius: 2ch; margin-top: 2px;border-bottom-style: double; border-top-style: groove;" >
+        <div style="overflow-x:auto;">
+            <table class="table table-bordered" id="myTable">
+                <caption class="tableCaption"; style="background-color: #27A3E2;">Summary</caption>
+                <thead style="text-align: center; text-decoration-color: black;">
+                    <tr style="background-color:#86CBF8; text-transform: uppercase;">
+                        <th style="text-align: center;vertical-align: middle;">States</th>
+                        <th style="text-align: center;vertical-align: middle;">Total Centers</th>
+                        <th style="text-align: center;vertical-align: middle;">Total Teachers</th>
+                        <th style="text-align: center;vertical-align: middle;">Total Students</th>
+                        <th style="text-align: center;vertical-align: middle;">Total Girls </th>
+                        <th style="text-align: center;vertical-align: middle;">Total Boys </th>
+                        <th style="text-align: center;vertical-align: middle;">Grade 5 Boys </th>
+                        <th style="text-align: center;vertical-align: middle;">Grade 5 Girls </th>
+                        <th style="text-align: center;vertical-align: middle;">Grade 6 Boys </th>
+                        <th style="text-align: center;vertical-align: middle;">Grade 6 girls </th>
+                        <th style="text-align: center;vertical-align: middle;">Grade 7 Boys </th>
+                        <th style="text-align: center;vertical-align: middle;">Grade 7 girls </th>
+                        <th style="text-align: center;vertical-align: middle;">Grade 8 Boys </th>
+                        <th style="text-align: center;vertical-align: middle;">Grade 8 girls </th>
+                        </tr>
+                </thead>
+                <tbody>
+                {%  for cen_data in centers %}
+                        <tr>
+                            <td>{{cen_data.state}}</td>
+                            <td>{{cen_data.name}}</td>
+                            <td>{{cen_data.teacher_count}}</td>
+                            <td>{{cen_data.student_count}}</td>
+                            <td>{{cen_data.girls_count}}</td>
+                            <td>{{cen_data.boys_count}}</td>
+                            <td>{{cen_data.boys_count_5}}</td>
+                            <td>{{cen_data.girls_count_5}}</td>
+                            <td>{{cen_data.boys_count_6}}</td>
+                            <td>{{cen_data.girls_count_6}}</td>
+                            <td>{{cen_data.boys_count_7}}</td>
+                            <td>{{cen_data.girls_count_7}}</td>
+                            <td>{{cen_data.boys_count_8}}</td>
+                            <td>{{cen_data.girls_count_8}}</td>
+
+                        </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+<!-- </div> -->
+
+{% endblock %}
+
+
+{% block bottom_scripts %}
+    {{ block.super }}
+
+    <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+
+
+<!--    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"/>-->
+<!--    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"/>
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<!--    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
+
+
+
+<script type="text/javascript">
+        $(document).ready( function () {
+            $(".inner.clearfix").css("width","95%");
+            $("#teachers_of_center").hide();
+
+            $('#myTable').dataTable( {
+               "pageLength": 15
+            } );
+
+
+            $( "#state" ).change(function() {
+              //alert( "Handler for .change() called." );
+              query = $("#state").val();
+              $.ajax({
+                  method: "GET",
+                  url: "/projectsummary_details/",
+                  data: { search: query}
+
+                    }).done(function( data ) {
+                    $('#center').html('');
+                    //console.log("ajaxxxxxxxxxxxxxxxx",data);
+                    state_options = '<option>All</option>';
+                    $.each(data, function(i, v) {
+                        state_options += '<option value='+v.name+'>'+v.name+'</option>';
+                    });
+                    $('#center').append(state_options);
+               });
+            });
+
+
+       } );
+
+    </script>
+
+
+{% endblock %}

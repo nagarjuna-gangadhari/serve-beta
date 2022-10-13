@@ -1,0 +1,3635 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_title %}CenterAdmin{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <link rel='stylesheet' type='text/css' href='/static/css/calendar/fullcalendar.1.5.3.min.css'/>
+    <link rel="stylesheet" type="text/css" href="/static/css/calendar/theme.css" />
+    <link rel="stylesheet" href="/static/css/jquery-ui_1_12_1.css"/>
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery.timepicker.css"/>
+    <link rel="stylesheet" href="/static/css/centeradmin.css" />
+    <link href="/static/css_rubaru/parsley.css" rel="stylesheet" media="screen">
+    <style>
+        #add-panel input[type=text]{
+            height:29px !important;
+    </style>
+
+{% if is_partner %}
+    <style>
+        .contributions, .profile-edit-2, .role_change{
+            display : none !important;
+        }
+
+        </style>
+ {% endif %}
+ <style>
+	.col-md-12 {
+		width: 108%;
+		margin-left: -4%;
+	}
+	.list_style ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	}
+
+	.list_style li::before {
+	content: "• ";
+	color: green; /* or whatever color you prefer */
+	font-size : 30px;
+	}
+	#colorbox{
+
+	height: 700px !important;
+	}
+
+	#cboxLoadedContent{
+	height: 700px !important;
+	}
+	#cboxContent{
+	height: 700px !important;
+	}
+	#cboxWrapper{
+	height: 0px;
+	}
+
+
+	td.table_styling {
+		font-size: 12px;
+		background-color: white;
+		color: #0698a5;
+		font-weight: bold;
+		border-collapse:separate;
+	}
+
+	th.table_styling {
+		font-size: 12px;
+		color: #075f2e;
+		background-color: rgb(169, 206, 146);
+		border-top: 0px;
+		border-collapse:separate;
+	}
+
+	.table>tbody>tr>th {
+		padding: 8px;
+		line-height: 1.42857143;
+		vertical-align: top;
+		width: 15%;
+		border-top: 1px solid black;
+		border-collapse:separate;
+	}
+
+	th.default_time_table {
+		font-weight: bold;
+		font-size: 12px;
+		color: black;
+		background-color: rgb(213, 239, 196);
+		border-collapse:separate;
+	}
+
+	td.default_time_table {
+		font-size: 12px;
+		color: black;
+		background-color: rgb(213, 239, 196);
+		border-top: 0px solid #ddd;
+		border-collapse:separate;
+	}
+
+	tr.heading_time_table, tr>th.heading_time_table,div.heading_time_table {
+		background-color: rgb(142, 188, 50);
+		color: white;
+		border-collapse:separate;
+	}
+	div.heading_time_table {
+	margin-right: 0px;
+		margin-left: 0px;
+	}
+	th.heading_time_table {
+		font-weight: bold;
+		text-align: center; background-color : rgb( 142, 188, 50);
+		color: white;
+		background-color: rgb(142, 188, 50); color : white;
+		border: 1px rgb(142, 188, 50);
+		border-collapse:separate;
+	}
+
+	th.center_info {
+		background-color: rgb(142, 188, 50);
+		color: white;
+		width: 100%;
+		text-align: center;
+		font-size: 14px;
+		font-weight: bold;
+		border: 1px rgb(142, 188, 50);
+		border-collapse:separate;
+	}
+	#add-sess-modal{
+		width: 1072px;
+		top: 40% !important;
+		left: 30% !important;
+		}
+	.sess_details > .tab-pane ul > li {
+		min-height: 40px;
+		margin: 10px 0px;
+	}
+
+	#cboxClose {
+
+	loat: left !important;
+		display: none !important;
+
+	}
+	.awesome_sticker:hover {
+		transform: scale(1.5);
+	}
+
+
+
+	div.sticky {
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	padding: 5px;
+	background: rgba(0, 0, 0, 0.7);
+	background-color: #cae8ca;
+	border: 2px solid #4CAF50;
+	text-align: center;
+	}
+
+</style>
+
+
+{% endblock %}
+
+
+
+
+{% block doc_ready %}
+    {{ block.super }}
+    evd.after_save = function(){
+        $(this).hide();
+    }
+    $(".moifenroll").click(function(){
+        var a_href=$(this).attr("href");
+        window.open( a_href , "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400");
+    });
+   $(".mycla").click(function(){
+        var a_href_myclass = $(this).attr("href");
+        window.open( a_href_myclass, "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500,width=400,height=400");
+     });
+
+
+
+   $('.app_cal').click(function(){
+       var offer = $(this).data('offering');
+       console.log(offer);
+       $.get('/get_calenders/',{'offer':offer},function(resp){
+       console.log(resp);
+       $('#cal_list').html("");
+       $.each(resp,function(key,value){
+         console.log(this);
+         var id = this.cal_id;
+         var name = this.name;
+         var offering = this.offering;
+         console.log(id+'   '+ name + '   '+ offer);
+       $('#cal_list').append( '<option value= '+ id +' data-offer=' + offer +'>'+ name +'</option>');
+
+       });
+        $('#cal_lst_contain').css('display','block');
+        $('#load,#preview').hide();
+       });
+   });
+
+   $('#cal_apply').click(function(){
+
+      $('#cal_lst_contain').hide();
+      $('#load').show();
+      var sel_option = $(this).parent().find('#cal_list option:selected');
+      $.post('/apply_calender/',{"offering":sel_option.data('offer'),"calender":sel_option.val(),'submit':'False' ,csrfmiddlewaretoken: document.getElementsByName("csrfmiddlewaretoken")[0].value }, function(resp){
+      console.log(resp);
+      $('#cal_submit').data('offering', sel_option.data('offer'));
+      $('#cal_submit').data('calender', sel_option.val());
+      console.log(resp.length);
+      if(resp.length==0){
+          $('#del_sess').html('<p   style="margin:20px auto;text-align:center;">No Sessions falls on  Holidays.</p>');
+          $('#load , #cal_submit, #del_text').hide();
+          $('#preview').show();
+      }else if(resp.toString()!='Error'){
+      $.each(resp,function(key,value){
+          console.log(this);
+          var item = "Session on "+ this.time +" by "+this.teacher;
+          $('#del_sess').append('<li>'+item+'</li>');
+          $('#load').hide();
+          $('#preview').show();
+      });
+           } else{
+          $('#del_sess').append('<li>No Holidays found on this calender! </li>');
+          $('#load,#del_text,#cal_submit').hide();
+          $('#preview').show();
+           }
+      });
+      });
+
+      $('#cal_submit').click(function(){
+      $('#load').show();
+      $.post('/apply_calender/',{"offering": $(this).data('offering'),"calender":$(this).data('calender'),'submit':'True' ,csrfmiddlewaretoken: document.getElementsByName("csrfmiddlewaretoken")[0].value }, function(resp){
+          console.log(resp);
+          $('#preview').hide();
+          console.log(resp.responseText);
+          if(resp.toString()=='Success'){
+          console.log('Comparision success');
+          $('#ack').css('color','green');
+          $('#ack_msg').css('border','10px solid green').text('Calender Applied Successfully!');
+          $('#ack').show();
+          }else{
+          $('#ack').css('color','red');
+          $('#ack_msg').css('border','10px solid red').text('An Error Occurred');
+          $('#ack').show();
+          }
+         }).done(function(){ $('#load').hide(); });
+      });
+
+      $('#apply-cal-modal').on("hide",function(){
+           console.log('hiding modal');
+           $('#cal_lst_contain').find('#cal_list').children('option').remove();
+           $('#ack_msg').text('').css({"color":"#505055","border":"10px solid white"});
+           $('#load,#ack').hide();
+           $('#preview').find('#del_sess').children('li').remove();
+           $('#preview').find('#cal_submit').removeData();
+           window.setTimeout('location.reload()', 2000);
+      });
+
+	  window.evd.pre_modify_sess = function(){
+        var $table = $('#table_row').find('table');
+        var start_times = "",
+            end_times = "",
+            sessions = "",
+            dates = "",
+            planned_topics = "",
+            new_start_times = "",
+            new_end_times = "",
+            new_dates = "",
+            new_planned_topics = "",
+            teacher_ids = "",
+            new_teacher_ids = "",
+            software_linkId = "",
+            software = "",
+			video_links = "",
+			modes = "",
+			$that = $(this);
+		$table.find("select.modes_").each(function(){
+            modes += $(this).val()+ ";"
+		});
+		$table.find(".video_urls").each(function(){
+            video_links += $(this).val() + ";";
+		});
+        $table.find(".prefered_timings_mor").each(function(){
+
+                start_times += $(this).val() + ";";
+        });
+        $table.find(".prefered_timings_eve").each(function(){
+
+                end_times += $(this).val() + ";";
+        });
+        $table.find("div.add-timing").each(function(){
+            sessions += $(this).attr("data-session") + ";";
+        });
+        $table.find("input.date-picker").each(function(){
+            dates += $(this).val() + ";";
+        });
+        $table.find("select.planned-topics").each(function(){
+            $(this).children(":selected").each(function(){
+                planned_topics += $(this).val() + ",";
+            });
+            planned_topics += ";";
+        });
+        $table.find("input.searchAllTeachersId").each(function(){
+            teacher_ids += $(this).val() + ";"
+        });
+        $table.find("tr.new-row").find("input.searchAllTeachersId").each(function(){
+            new_teacher_ids += $(this).val() + ";"
+        });
+
+         $table.find("input.software_linkId").each(function(){
+            software_linkId += $(this).val()+ ";"
+        });
+         $table.find("select.softwareId").each(function(){
+            software += $(this).val()+ ";"
+        });
+        $table.find("tr.new-row").find(".prefered_timings_mor").each(function(){
+
+                new_start_times += $(this).val() + ";";
+        });
+        $table.find("tr.new-row").find(".prefered_timings_eve").each(function(){
+
+                new_end_times += $(this).val() + ";";
+        });
+        $table.find("tr.new-row").find("input.date-picker").each(function(){
+            new_dates += $(this).val() + ";";
+        });
+        $table.find("tr.new-row").find("select.planned-topics").each(function(){
+            $(this).children(":selected").each(function(){
+                new_planned_topics += $(this).val() + ",";
+            });
+            new_planned_topics += ";";
+        });
+        $('#table_row').find('#modif-form-div').find("form").find("input[name='start_time']").val(start_times);
+        $('#table_row').find('#modif-form-div').find('form').find("input[name='end_time']").val(end_times);
+        $('#table_row').find('#modif-form-div').find('form').find("input[name='sessions']").val(sessions);
+        $('#table_row').find('#modif-form-div').find('form').find("input[name='dates']").val(dates);
+        $('#table_row').find('#modif-form-div').find('form').find("input[name='planned_topics']").val(planned_topics);
+        $('#table_row').find('#modif-form-div').find('form').find("input[name='new_start_time']").val(new_start_times);
+        $('#table_row').find('#modif-form-div').find('form').find("input[name='new_end_time']").val(new_end_times);
+        $('#table_row').find('#modif-form-div').find('form').find("input[name='new_dates']").val(new_dates);
+        $('#table_row').find('#modif-form-div').find('form').find("input[name='new_planned_topics']").val(new_planned_topics);
+        $('#table_row').find('#modif-form-div').find('form').find("input[name='teacher_ids']").val(teacher_ids);
+        $('#table_row').find('#modif-form-div').find('form').find("input[name='new_teacher_ids']").val(new_teacher_ids);
+		$('#table_row').find('#modif-form-div').find('form').find("input[name='software_link']").val(software_linkId);
+		$('#table_row').find('#modif-form-div').find('form').find("input[name='video_links']").val(video_links);
+		$('#table_row').find('#modif-form-div').find('form').find("input[name='modes']").val(modes);
+        $('#table_row').find('#modif-form-div').find('form').find("input[name='software']").val(software);
+    }
+
+
+
+
+
+
+    window.evd.pre_submission = function(){
+        var q = "";
+        var $att_form = $($(this).attr("href"));
+        var stu_len = $att_form.find("input.student").length;
+        $att_form.find("input.student").each(function(index, val){
+            stu_name = $(this).attr("value");
+            q += stu_name + ((index < stu_len-1) ? ";" : "");
+        });
+        $att_form.find("input[name='student']").val(q);
+        q="";
+        var attend_len = $att_form.find("input.attend").not(":checked").length;
+        $att_form.find("input.attend").not(":checked").each(function(index,val){
+            attend = parseInt($(this).val());
+            q += attend + (( index < attend_len - 1) ? ";" : "");
+        });
+        $att_form.find("input[name='attend']").val(q);
+    }
+    window.evd.closemodal = function() {
+        $(this).parents(".modal").modal("hide");
+        evd.show_msg("Attendance has been submitted for this session");
+    }
+    window.evd.pre_feedback = function(){
+        var $form = $($(this).attr("href"));
+        var len = $form.find("input[type='checkbox'].feedback").filter(":checked").length;
+        var $topic_ids = $form.find("input[name='topic_ids']");
+        var q = "";
+
+        q = $(this).parent().find("select.topics").children(":selected").attr("data-topic-id");
+        $topic_ids.val(q);
+        var comment = $form.find("textarea").val().trim();
+        if(comment == ""){
+            alert("Feedback cannot be empty");
+            return false;
+        }
+        var stat = $(this).parent().find('#status').val(),
+            reasoncode = $(this).parent().find('.reason-code').find("select[name='reason']").val();
+        if(stat === 'Cancelled' || stat === 'Rescheduled'){
+            if(!reasoncode){
+                alert("You should select a Reason code");
+                return false;
+            }
+        }
+    }
+    window.evd.fd_calback = function(){
+        $(this).parent().children("textarea").val("");
+        $(".feedback-modal").modal("hide");
+
+        evd.show_msg("Your feedback has been submitted for this session");
+        render_event(window.last_clicked_day.attr("data-event-id"), window.dte);
+
+    }
+    window.evd.pre_requestsent = function(e){
+        e.stopPropagation();
+    }
+    window.evd.requestsent = function(){
+        $(this).removeAttr("rel");
+        $(this).removeAttr("href");
+        $(this).removeAttr("callback");
+        $(this).children("span").remove();
+        $(this).removeClass("btn");
+        $(this).addClass("request-sent-btn status-pending");
+        $(this).text("pending");
+    }
+
+    var make_timings = function(valid, q, days, index, val, $timing_wrappers){
+            var dict = {};
+             var strt = ($(this).children().eq(1).val()).split(':');
+              var end = ($(this).children().eq(2).val()).split(':');
+
+
+            if($(this).children().eq(1).val()!="From" && $(this).children().eq(2).val()!="To" &&  parseInt(strt[0]) < parseInt(end[0]) || ((parseInt(strt[0])==parseInt(end[0]    )) && (parseInt(strt[1])<parseInt(end[1])))){
+                q += $(this).children().eq(1).val() + "-" + $(this).children().eq(2).val() + ( index < ($("div.timing-inner-wrapper").length - 1) ? ";" : "");
+                $("input[name='prefered_timings']").val(q);
+                days += $(this).children().eq(0).val() + ( index < ($timing_wrappers.find("div.timing-inner-wrapper").length - 1) ? ";" : "");
+                $("input[name='prefered_days']").val(days);
+            }
+
+            else if( parseInt(strt[0])>parseInt(end[0]) || ( (parseInt(strt[0])==parseInt(end[0])) && (parseInt(strt[1])>=parseInt(end[1]) ))  ){
+
+                $(this).parent().attr({"rel":"tooltip", "data-title": "End time cannot be less than or equal to start time", "data-placement":"right"}).tooltip("show");
+                valid = valid && false;
+            }
+
+            else{
+
+                $(this).parent().attr({"rel":"tooltip", "data-title": "Invalid prefered days", "data-placement":"right"}).tooltip("show");
+                valid = valid && false;
+            }
+            return arguments;
+    }
+
+    window.evd.pre_add_session = function(){
+        var answer = confirm("Are you sure to create session ?");
+        if (answer){
+            console.log("confirmed");
+        }
+        else{
+            cancelFormSubmission();
+        }
+        var valid = true,
+            q = "",
+            days = "",
+            $timing_wrappers = $(this).parents("li").prev("li").find("div.timing-wrapper");
+        $.each($timing_wrappers, function(index,val){
+            args = make_timings.apply($(this).children("div.timing-inner-wrapper").get(0), [valid, q, days, index, val, $timing_wrappers]);
+            q = args[1];
+            days = args[2];
+            valid = args[0];
+            $timing_wrappers = args[5];
+        });
+       return valid;
+    }
+    window.evd.after_add_session = function(resp){
+
+
+        $(this).parents(".modal").on("hide", function(){
+            window.location = window.location.pathname + window.location.search;
+        });
+        if(resp == "failed"){
+            var _html = "<p>Number of Sessions required for selected topics are not available with in course duration.</p><br>";
+                _html = _html + "<p>Either change the course duration or increase the sessions per week.</p>"
+            $(this).parents("div.tab-pane").empty().html(_html);
+        }else{
+            $(this).parents("div.tab-pane").empty().html(resp);
+        }
+    }
+
+    evd.pre_stu_filter = function(){
+         $("#mystudents p.title").remove();
+         $("#mystudents p.no-students").remove();
+         $("#mystudents table").remove();
+         $("#mystudents").find("a[rel='submit']").hide();
+         $("#mystudents").append('<img style="display:block;margin:10px auto" src="/static/images/loader.gif" alt="spinner" />');
+    }
+    evd.after_stu_filter = function(resp){
+        var len = resp.length;
+        $("#mystudents img").remove();
+        if(len != 0) {
+            var students = resp;
+
+            $("<p class='title' style='padding:10px 0px 0px 10px;'>Students for the selected offering are:</p>").insertAfter($("#mystudents .select-box"));
+
+            var student_html = '<table class="current_session_table">'+
+                                    '<thead>'+
+                                        '<tr>'+
+                                            '<th style="width:150px">Name</th>'+
+                                            '<th>Strengths</th>'+
+                                            '<th>Weakness</th>'+
+                                            '<th>Observation</th>'+
+                                        '<tr>'+
+                                    '</thead>'+
+                                    '<tbody>';
+            var ids = "";
+            for(var index in students){
+                student = students[index];
+                ids += student.id + (index < students.length-1 ? ";" : "");
+                student_html += '<tr><td><div class="controls text"><p>' + student.name + '</p></div></td>'+
+                                    '<td><div class="controls text"><input type="text" class="strengths" value="' + student.strengths + '" /></div></td>'+
+                                    '<td><div class="controls text"><input type="text" class="weakness"  value="' + student.weakness + '"/></div></td>'+
+                                    '<td><div class="controls text"><input type="text" class="observation"  value="' + student.observation + '"/></div></tr>';
+            }
+            student_html += "</tbody></table>";
+            $("#mystudents form#students-form").append(student_html);
+            $("#mystudents form#students-form input[name='student_ids']").val(ids);
+            $("#mystudents").find("a[rel='submit']").show();
+        }
+        else {
+            $("<p style='padding:10px 0px 0px 10px;' class='no-students'>The selected offering has no students assigned</p>").insertAfter($("#mystudents .select-box"));
+        }
+    }
+    window.evd.pre_students_save = function(){
+        var strengths = "",
+            weakness = "",
+            observation = "",
+            students_len = $("#mystudents form#students-form").find("input.strengths").length;
+        $("#mystudents form#students-form").find("input.strengths").each(function(index, val){
+            strengths += $(this).val() + (index < students_len-1 ? ";" : "");
+        });
+        $("#mystudents form#students-form").find("input.weakness").each(function(index, val){
+            weakness += $(this).val() + (index < students_len-1 ? ";" : "");
+        });
+        $("##mystudents form#students-form").find("input.observation").each(function(index, val){
+            observation += $(this).val() + (index < students_len-1 ? ";" : "");
+        });
+        $("#mystudents form#students-form input[name='strengths']").val(strengths);
+        $("#mystudents form#students-form input[name='weakness']").val(weakness);
+        $("#mystudents form#students-form input[name='observation']").val(observation);
+    }
+    window.evd.after_students_save = function(){
+        $("#mystudents").modal("hide");
+        evd.show_msg("Modified students successfully");
+    }
+    window.evd.pre_edit_timing = function(){
+        var valid = true,
+            q = "",
+            days = "";
+        $.each($("#edit-timing div.timing-inner-wrapper"), function(index,val){
+            if($(this).children().eq(1).val()!="From" && $(this).children().eq(2).val()!="To" && parseInt($(this).children().eq(2).val()) > parseInt($(this).children().eq(1).val())){
+                q += $(this).children().eq(1).val() + "-" + $(this).children().eq(2).val() + ( index < ($("#edit-timing div.timing-inner-wrapper").length - 1) ? ";" : "");
+                $("input[name='prefered_timings']").val(q);
+                days += $(this).children().eq(0).val() + ( index < ($("#edit-timing div.timing-inner-wrapper").length - 1) ? ";" : "");
+                $("input[name='prefered_days']").val(days);
+            }
+
+            else if(parseInt($(this).children().eq(2).val()) <= parseInt($(this).children().eq(1).val())){
+
+                $(this).parent().attr({"rel":"tooltip", "data-title": "End time cannot be less than or equal to start time", "data-placement":"right"}).tooltip("show");
+                valid = valid && false;
+                return;
+            }
+
+            else{
+
+                $(this).parent().attr({"rel":"tooltip", "data-title": "Invalid prefered days", "data-placement":"right"}).tooltip("show");
+                valid = valid && false;
+                return;
+            }
+
+            $("#edit-time-slot select.prefered_days").each(function(){
+                var day = $(this).children(":selected").val();
+                var $that = $(this);
+                $("#edit-time-slot select.prefered_days").not($that).children(":selected").each(function(){
+                    if(day == $(this).val()){
+                        if($that.next(".prefered_timings_mor").children(":selected").val() == $(this).next(".prefered_timings_mor").children(":selected").val()) {
+                            evd.show_msg("Duplicates are not allowed");
+                            valid = valid && false;
+                            return;
+                        }
+                    }
+                });
+            });
+        });
+        return valid;
+    }
+    window.evd.after_edit_timing = function(){
+        $(this).parents(".modal a.close").trigger("click");
+        window.location = window.location.pathname + window.location.search;
+    }
+
+    $("ul.custom-select li").toggle(function(){
+        $("ul.custom-select > li.focus-f").not($(this)).trigger("click");
+        $(this).addClass("focus-f");
+    },function(){
+        $(this).removeClass("focus-f");
+    });
+    $("html").click(function(){
+        $("ul.custom-select li.focus-f").trigger("click");
+    });
+    $("ul.custom-select li span.dropdown a").click(function(){
+        $(this).parent("span.dropdown").prev().text($(this).text());
+    });
+
+    window.evd.pre_modify_session = function(){
+        var $table = $(this).parents("div").prev("table");
+        var start_times = "",
+            end_times = "",
+            sessions = "",
+            dates = "",
+            planned_topics = "",
+            new_start_times = "",
+            new_end_times = "",
+            new_dates = "",
+            new_planned_topics = "",
+            teacher_ids = "",
+			new_teacher_ids = "",
+			video_links = "",
+			modes = "",
+			$that = $(this);
+		$table.find("select.modes_").each(function(){
+            modes += $(this).val()+ ";"
+		});
+		$table.find(".video_urls").each(function(){
+            video_links += $(this).val() + ";";
+		});
+        $table.find("option.prefered_timings_mor").each(function(){
+            if($(this).attr("selected") == "selected")
+                start_times += $(this).val() + ";";
+        });
+        $table.find("option.prefered_timings_eve").each(function(){
+            if($(this).attr("selected") == "selected")
+                end_times += $(this).val() + ";";
+        });
+        $table.find("a.add-timing").each(function(){
+            sessions += $(this).attr("data-session") + ";";
+        });
+        $table.find("input.date-picker").each(function(){
+            dates += $(this).val() + ";";
+        });
+        $table.find("select.planned-topics").each(function(){
+            $(this).children(":selected").each(function(){
+                planned_topics += $(this).val() + ",";
+            });
+            planned_topics += ";";
+        });
+        $table.find("input.searchAllTeachersId").each(function(){
+            teacher_ids += $(this).val() + ";"
+        });
+        $table.find("tr.new-row").find("input.searchAllTeachersId").each(function(){
+            new_teacher_ids += $(this).val() + ";"
+        });
+        $table.find("tr.new-row").find("option.prefered_timings_mor").each(function(){
+            if($(this).attr("selected") == "selected")
+                new_start_times += $(this).val() + ";";
+        });
+        $table.find("tr.new-row").find("option.prefered_timings_eve").each(function(){
+            if($(this).attr("selected") == "selected")
+                new_end_times += $(this).val() + ";";
+        });
+        $table.find("tr.new-row").find("input.date-picker").each(function(){
+            new_dates += $(this).val() + ";";
+        });
+        $table.find("tr.new-row").find("select.planned-topics").each(function(){
+            $(this).children(":selected").each(function(){
+                new_planned_topics += $(this).val() + ",";
+            });
+            new_planned_topics += ";";
+        });
+        $that.parent("form").find("input[name='start_time']").val(start_times);
+        $that.parent("form").find("input[name='end_time']").val(end_times);
+        $that.parent("form").find("input[name='sessions']").val(sessions);
+        $that.parent("form").find("input[name='dates']").val(dates);
+        $that.parent("form").find("input[name='planned_topics']").val(planned_topics);
+        $that.parent("form").find("input[name='new_start_time']").val(new_start_times);
+        $that.parent("form").find("input[name='new_end_time']").val(new_end_times);
+        $that.parent("form").find("input[name='new_dates']").val(new_dates);
+        $that.parent("form").find("input[name='new_planned_topics']").val(new_planned_topics);
+        $that.parent("form").find("input[name='teacher_ids']").val(teacher_ids);
+		$that.parent("form").find("input[name='new_teacher_ids']").val(new_teacher_ids);
+		$that.parent("form").find("input[name='video_links']").val(video_links);
+        $that.parent("form").find("input[name='modes']").val(modes);
+    }
+    window.evd.after_modify_session = function(){
+        evd.show_msg("Modified the sessions successfully");
+        $(this).parents(".modal a.close").trigger("click");
+        window.location = window.location.pathname + window.location.search;
+    }
+    window.evd.pre_add_course = function(){
+
+        $("#add-course-modal select").each(function(){
+            if($(this).children(":selected").val() == ""){
+                $(this).attr({"rel":"tooltip", "data-placement":"right", "title":"select any one of these"}).tooltip("show");
+                return false;
+            }
+        });
+
+        var planned_topics = "",
+            enroll_students = "",
+            topics_len =  $("select#planned_topics").children(":selected").length,
+            students_len = $("select#enroll_students").children(":selected").length;
+        $("select#planned_topics").children(":selected").each(function(index, val){
+            planned_topics += $(this).val() + (index < (topics_len - 1) ? ";" : "");
+        });
+        $("input[name='planned_topics']").val(planned_topics);
+        $("select#enroll_students").children(":selected").each(function(index, val){
+            enroll_students += $(this).val() + (index < (students_len - 1) ? ";" : "");
+        });
+        $("input[name='students']").val(enroll_students);
+        $(this).parents("form").find("input[name='language']").val("{{ center.language }}");
+    }
+    window.evd.after_add_course = function(){
+        $("#add-course-modal").modal("hide");
+        window.location = window.location.pathname + window.location.search;
+    }
+{% endblock %}
+{% block body_container %}
+	<style>
+		.appreciation{
+			height:168px;
+
+		}
+		#manage_slots_modal {
+			top: 35%;
+		}
+		@media only screen and (max-width: 600px) {
+			.new_dash_container {
+				margin-left: 0;
+				margin-right:0;
+				padding-left: 0;
+				padding-right: 0;
+				width: 100%;
+				min-height: 500px;
+			}
+			.appreciation{
+				margin-bottom:5px;
+				height:200px;
+				display:inline-grid;
+				text-align:center;
+
+			}
+			.appreciation div{
+				width:100%;
+				height:auto;
+			}
+			.appreciation div input{
+				width:100%;
+				height:auto;
+			}
+			#manage_slots_modal{
+				text-align:center;
+				width:100%;
+				top:2%;
+				left:0;
+				margin:0;
+			}
+			.slot_timing{
+				padding-right:0;
+			}
+			.dashboard-calendar-container{
+				width:100%;
+			}
+			#calendar{
+				float:none;
+				width:100%;
+			}
+
+		}
+
+		@media only screen and (max-width: 1024px) and (min-width: 767px) {
+			.new_dash_container {
+				margin-left: 0;
+				margin-right:0;
+				padding-left: 0;
+				padding-right: 0;
+				width: 100%;
+				min-height: 500px;
+			}
+
+			#calendar{
+				float:none;
+				width:368px;
+			}
+			.appreciation{
+				display:auto;
+			}
+			
+		}
+
+		
+
+		
+	</style>
+	<div id="completed-course-modal"  class='hide'>
+        {% if completed_courses %}
+	    <div class="completed-offering" style="overflow-y:scroll;max-height:255px;overflow-x:hidden">
+            <ul id="ul-completed-courses">
+                {% for offering in completed_courses %}
+					<li>
+						<span>
+							{{ offering.course_offered }}
+							{% if offering.start_date %}, 
+								{{ offering.start_date }} 
+							{% endif %}
+							{% if offering.end_date %} 
+								to {{ offering.end_date }}
+							{% endif %}
+						</span>
+						</br>
+						<div>
+							<a href="#add-session-modal" class="tag add-session"
+								data-run_course="{{ offering.offering_id }}" data-toggle="modal"
+								data-offering="{{ offering.offering_id }}"
+								data-start-date="{{ offering.start_date_ts }}"
+								data-end-date="{{ offering.end_date_ts }}">Modify Sessions</a>
+							<a href="/admin/web/offering/{{ offering.offering_id }}" class="tag" target="_blank">Modify Course</a>
+						</div>
+					</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% else %}
+            <div class="completed-offering">
+                <p style="padding:20px;">There are no completed courses</p>
+            </div>
+        {% endif %}
+	</div>
+
+
+	{% if messages %}
+		<br>
+		{% for messages in messages %}
+		<div id="message_alert"  class="sticky">{{messages}}</div>
+		{% endfor %}
+	{% endif %}
+
+	<div class="container-fluid new_dash_container admin-dash-fluid">
+		<div class="col-md-8 admin-dash-fluid" >
+			<input type="hidden" id="currentWeekEndDateId"/>
+			<input type="hidden" id="center_id" value="{{center.id}}"/>
+			<input type="hidden" id="academic_year_id" value="{{ay_id}}"/>
+			<div class="dashboard-inner-container " style="margin-top: 10px;">
+				<div>
+		    		<input type="hidden" id="currentWeekStartDateId" value="{{current_week}}"/>
+					<div id="ca-dashboard" class="span6">
+						<div style="overflow:hidden;">
+							<div id="edit-timings-modal" class="modal hide">
+								<div class="header">
+									<p>Edit Center Timings:</p>
+									<a class="close" data-dismiss="modal" style="float:right;cursor:pointer;position:absolute;top:0px;right:0px;">X</a>
+								</div>
+								<form id="edit-timing" method="POST" action="/save_center_timings/">
+									{% csrf_token %}
+									<input type="hidden" name="center_id" value={{ center.id }} >
+									{% time_slots "edit-time-slot" center.working_days center.working_slots %}
+									<a class="btn" style="width:120px;height:25px;line-height:22px;margin-top:10px;" rel="submit" href="#edit-timing" pre-call="pre_edit_timing" callback="after_edit_timing">
+										<span class="ajax-button-label" data-loading="Please wait">save</span>
+									</a>
+								</form>
+							</div>
+						</div>
+						<br><br>
+						<div class="note-box">
+							<div class="row">
+								<div class="col-md-5">
+									<p style="font-size:20px;margin-bottom:2px;padding-left: 5px;" rel="tooltip"
+									data-placement="right" data-title="{{ center.name }}" id='center_name_id'>{{ center.name }}</p>
+								</div>
+								<div class="col-md-7" style="display:flex;align-items:center;">
+									<div class="col-md-7" >
+										<button id="enter_class" class="btn btn-danger myclasscls enter" target="_blank" href="/myclass/?ay_id={{ay_id}}"
+										style="float: left; font-size: 12px; cursor: pointer; z-index: 1; height: 35px; padding-top: 0px; padding-bottom: 0px; padding-right: inherit; padding-left: inherit; box-shadow: 0px 0px 0px #666666;">
+										Enter My Classroom
+										</button>
+									</div>
+									<div class="col-md-5" id="flt" style="display: none;">
+										<button class="btn btn-danger enter left"
+											href="#myCarousel1" data-slide="prev"
+											style="float: left; font-size: 12px; cursor: pointer; z-index: 1; height: 35px; padding-top: 0px; padding-bottom: 0px; padding-right: inherit; padding-left: inherit; box-shadow: 0px 0px 0px #666666;right: auto;left: 0;position: absolute;">
+											<i class="fa fa-chevron-left"
+												style="color: black;"></i>
+										</button>
+										<button class="btn btn-danger enter right"
+											href="#myCarousel1" data-slide="next"
+											style="float: left; font-size: 12px; cursor: pointer; z-index: 1; height: 35px; padding-top: 0px; padding-bottom: 0px; padding-right: inherit; padding-left: inherit; box-shadow: 0px 0px 0px #666666;right: 0;left: auto;position: absolute;">
+											<i class="fa fa-chevron-right"
+												style="color: black;"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+							<div class="row heading_time_table" id="theading_timeTable_id" style="display: none;">
+								<div class="col-md-6">
+									<b>
+										<p style="float: right;    margin-top: 5px;">TIME TABLE</p>
+									</b>
+								</div>
+							</div>
+							<div id="loader_div"></div>
+							<div class="dashboard" id="time_table_div" style="height: 250px; padding-left: 200px; z-index: -1; padding-top: 75px;">
+								<div class="carousel slide" id="myCarousel1" data-interval="false" data-wrap="false">
+									<div class="carousel-inner" id="carousel-inner1"></div>
+								</div>
+							</div>
+							<a id="comments" href="#Comments-modal" rel="tooltip" data-title="Comments" style="float:right;margin:13px 5px">
+								<img src='/static/images/comments.png' alt="comments" />
+							</a>
+							<a id="activities" href="/v2/activities?center={{center.id}}" rel="tooltip" data-title="Activities" style="float: right; margin-top: 7px; margin-right: 5px;">
+								<button class="btn btn-danger">Activities</button>
+							</a>
+							<div id='attendence-board' class="select-box select-pin attendence-board" style="margin:10px;font-size:14px;">
+								<select name='my_offerings' style='border-radius: 7px;background: whitesmoke;width:330px'>
+									{% for offering in my_offering%}
+										<option value={{ offering.id }}>
+											{{ offering.grade }} {{ offering.subject }}, {{ offering.center }} - {{ offering.date }} {{ offering.start }}
+										</option>
+									{% endfor %}
+								</select>
+								<select name="my_students" style='border-radius: 7px;background: whitesmoke;width:185px;'>
+									<option></option>
+									{%for offering in my_offering%}
+										{% if forloop.counter == 1%}
+										{% for stu in offering.students%}
+											<option data-offering-id={{ offering.id }} stu-name="{{ stu.name }}" value={{ stu.id}}>{{ stu.name }}</option>
+										{% endfor %}
+										{% endif %}
+									{% endfor %}
+								</select>
+								<div class="student_options hide">
+									{%for offering in my_offering%}
+										<select name="{{ offering.id }}">
+										<option></option>
+										{% for stu in offering.students%}
+											<option data-offering-id={{ offering.id }} stu-name="{{ stu.name }}" value={{ stu.id}}>{{ stu.name }}</option>
+										{% endfor %}
+										</select>
+									{% endfor %}
+								</div>
+								<div class="student_info hide" style="margin:5px;margin-top:10px;line-height:1.6em">
+									<table style="width: 100%;text-align: left">
+										<thead>
+											<tr>
+												<th><h3>Subject</h3></th>
+												<th><h3>Present</h3></th>
+												<th><h3>Absent</h3></th>
+											</tr>
+										</thead>
+										<tbody></tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="note-box" id="runnning-courses">
+						<input type="hidden"  id='offeringIDForDropTeacherId'>
+						<h3>Running Courses
+							<div class="pagination"></div>
+						</h3>
+						<div class="assigned-offering">
+				    		<ul id="#runnning-courses" class="cycle">
+								{% for offering in started_courses %}
+								<li>
+									<span>
+										{% if offering.program == 1 %} Digital Classroom ::
+										{% elif offering.program == 2 %} LFH ::
+										{% elif offering.program == 3 %} Worksheets ::
+										{% elif offering.program == 4 %} Alumni ::
+										{% elif offering.program == 5 %} Digital School ::
+										{% endif %}
+										{{ offering.course_offered }}, ({{offering.offering_id}})
+
+										{% if offering.start_date %}, 
+										{{ offering.start_date }} 
+										{% endif %} 
+
+										{% if offering.end_date %} 
+										to {{ offering.end_date }}
+										{% endif %} 
+
+										{% if offering.batch %}
+											-- Batch:  {{offering.batch}}
+										{% endif %}
+										
+									</span>
+									{% if offering.batch %}
+									<p style="float:right;padding-right:0px;"> Batch:  {{offering.batch}}</p>
+									{% endif %}
+									</br>
+									{% if is_superuser %}
+									<div>
+										{{ offering.session_status|safe }}
+										<a href="#add-session-modal" class="tag add-session" data-toggle="modal" data-run_courses="{{ offering.offering_id }}" data-offering="{{ offering.offering_id }}" data-start-date="{{ offering.start_Date_iso }}" data-end-date="{{ offering.end_date_ts }}">Modify Sessions</a>
+										<a href="/admin/web/offering/{{ offering.offering_id }}" class="tag" target="_blank">Modify Course</a>
+									</div>
+									{% endif %}
+								</li>
+								{% endfor %}
+				    		</ul>
+				   			<ul style="width: 100%;">
+								{% for offering in started_courses %}
+					    		<li>
+									<span>
+										{% if offering.program == 1 %} Digital Classroom ::
+										{% elif offering.program == 2 %} LFH ::
+										{% elif offering.program == 3 %} Worksheets ::
+										{% elif offering.program == 4 %} Alumni ::
+										{% elif offering.program == 5 %} Digital School ::
+										{% endif %}
+										{{ offering.course_offered }}, ({{offering.offering_id}})
+									
+										{% if offering.start_date %}, 
+											{{ offering.start_date }} 
+										{% endif %} 
+										
+										{% if offering.end_date %} 
+											to {{ offering.end_date }}
+											{% endif %}
+										
+										{% if offering.batch %}
+											-- Batch:  {{offering.batch}}
+										{% endif %}
+									</span>
+									
+									</br>
+                      				
+									<div>
+										<a href="/v2/offering/topic-details/?center_id={{center.id}}&offering_id={{ offering.offering_id }}&ayfy_id={{ ay_id }}" class="tag" target="_blank">My Content Reference</a>
+										<a href="/v2/center/subject/studentdoubts?subjectId={{ offering.offering_id }}&centerId={{center.id}}&cname={{center.name}}" class="tag" target="_blank">View Doubts</a>
+									</div>
+									{% if is_superuser or  dc_assigned_center or admin_assigned_center %}
+									<div>
+										
+						    			<a href="#add-sess-modal" class="tag add-sess" data-run_course="{{ offering.offering_id }}" data-backdrop="static"  data-toggle="modal" data-offering="{{ offering.offering_id }}" data-start-date="{{ offering.start_date_orig|date:'d-m-Y' }}" data-end-date="{{ offering.end_date_orig|date:'d-m-Y' }}"    data-course_name="{{ offering.course_offered }}{% if offering.start_date %}, {{ offering.start_date }} {% endif %} {% if offering.end_date %}to {{ offering.end_date }}{% endif %}" >Modify Sessions</a>
+						    			<a  href="/get_enroll/{{center.id}}/{{offering.offering_id}}" target="_blank"  class="tag modifenroll">Modify Enrollment</a>
+										{% if is_superuser or  is_centeradmin %}
+											<a href="#" class="tag mark_it_ascomplete" data-offering-id="{{ offering.offering_id }}">Mark As complete</a>
+						   					<a  href="/v2/plan_topics/{{center.id}}/{{offering.offering_id}}" target="_blank"  class="tag modifenroll">Plan your Topics</a>
+						     			{% endif %}
+                            			<a href="#apply-cal-modal"  class='tag app_cal'  data-toggle="modal" data-offering="{{ offering.offering_id }}">Apply Holidays</a>
+                            			{% if offering.teachers_id  %}
+                            				<a href="#{{ offering.teachers_id }}" class='tag my_teacher' data-offering="{{ offering.offering_id }}">{{ offering.teachers_first_name }} {{ offering.teachers_last_name }}-{{ offering.teachers_id }}</a>
+                            			{% endif %}
+                            			{% if offering.past_teacher_name != ''  %}
+                            				<a href="#{{ offering.past_teachers_id }}" class='tag my_teacher' data-offering="{{ offering.past_teachers_id }}">Past Teachers</a>
+										{% endif %}
+										
+                                        
+										
+									</div>
+                        			{% endif %}
+					    		</li>
+								{% endfor %}
+				    		</ul>
+						</div>
+					</div>
+					<div id="pending-courses" class="note-box">
+						<h3>Pending Courses
+							<div class="pagination" ></div>
+						</h3>
+						<div class="unassigned-offering">
+				    		<ul id="#pending-courses" class="cycle">
+								{% for offering in pending_courses %}
+									<li>
+										<span>
+											{% if offering.program == 1 %} Digital Classroom ::
+											{% elif offering.program == 2 %} LFH ::
+											{% elif offering.program == 3 %} Worksheets ::
+											{% elif offering.program == 4 %} Alumni ::
+											{% elif offering.program == 5 %} Digital School ::
+											{% endif %}
+											{{ offering.course_offered }}, ({{offering.offering_id}})
+											{% if offering.start_date %}
+												, {{ offering.start_date }}
+											{% endif %} 
+											{% if offering.end_date %}
+												to {{ offering.end_date }}
+											{% endif %}
+											{% if offering.batch %}
+												-- Batch:  {{offering.batch}}
+											{% endif %}
+										</span>
+										<p style="padding-left:5px;"> Batch: </p>
+										<div>
+											{% if is_superuser %}
+												{% if not offering.session_id %}
+													<a href="#add-session-modal" class="tag add-session" data-toggle="modal" data-offering="{{ offering.offering_id }}" data-start-date="{{ offering.start_date_ts }}" data-end-date="{{ offering.end_date_ts }}" data-topics="{{ offering.planned_topics }}">Create Schedule</a>
+												{% endif %}
+												<a href="/admin/web/offering/{{ offering.offering_id }}" class="tag" target="_blank">Modify Course</a>
+											{% endif %}
+										</div>
+									</li>
+								{% endfor %}
+				    		</ul>
+				    		<ul style="width: 100%;">
+								{% for offering in pending_courses %}
+					    		<li class="offering-{{forloop.counter}}">
+									<span>
+										{% if offering.program == 1 %} Digital Classroom ::
+										{% elif offering.program == 2 %} LFH ::
+										{% elif offering.program == 3 %} Worksheets ::
+										{% elif offering.program == 4 %} Alumni ::
+										{% elif offering.program == 5 %} Digital School ::
+										{% endif %}
+										{{ offering.course_offered }}, ({{offering.offering_id}})
+										{% if offering.start_date %}
+											, {{ offering.start_date }} 
+										{% endif %} 
+										{% if offering.end_date %} 
+											to {{ offering.end_date }}
+										{% endif %}
+										{% if offering.batch %}
+											-- Batch:  {{offering.batch}}
+										{% endif %}
+									</span>
+									 <div>
+										<a href="/v2/offering/topic-details/?center_id={{center.id}}&offering_id={{ offering.offering_id }}&ayfy_id={{ ay_id }}" class="tag" target="_blank">My Content Reference</a>
+										<a href="/v2/center/subject/studentdoubts?subjectId={{ offering.offering_id }}&centerId={{center.id}}&cname={{center.name}}" class="tag" target="_blank">View Doubts</a>
+									</div>
+									{% if is_superuser or  dc_assigned_center or admin_assigned_center %}
+									<div>
+                            			{% if not offering.session_id %}
+						        			<a href="#add-session-modal" class="tag add-session" data-toggle="modal" data-offering="{{ offering.offering_id }}" data-start-date="{{ offering.start_date_ts }}" data-end-date="{{ offering.end_date_ts }}" data-topics="{{ offering.planned_topics }}">Create Schedule</a>
+                            			{% endif %}
+										<a  href="/get_enroll/{{center.id}}/{{offering.offering_id}}" target="_blank"  class="tag modifenroll">Modify Enrollment</a>
+										{% if is_superuser %}
+						    			<a href="/admin/web/offering/{{ offering.offering_id }}" class="tag" target="_blank">Modify Course</a>
+										{% endif %}
+										{% if is_superuser or  is_centeradmin %}
+						   					<a  href="/v2/plan_topics/{{center.id}}/{{offering.offering_id}}" target="_blank"  class="tag modifenroll">Plan your Topics</a>
+											   <a href="#" class="tag mark_it_ascomplete" data-offering-id="{{ offering.offering_id }}">Mark As complete</a>
+						    			{% endif %}
+										<a class="tag offering_manage_slot" href="#manage-offering-slot-modal-{{ offering.offering_id }}" data-toggle="modal" data-offering_id="{{ offering.offering_id }}" data-start-date="{{ offering.start_date_ts }}" data-end-date="{{ offering.end_date_ts }}" data-topics="{{ offering.planned_topics }}">Manage Slot</a>
+                            			<a class="tag confirm_reject" href="#confirm-modal-{{ offering.offering_id }}" data-toggle="modal" data-offering_id="{{ offering.offering_id }}" data-start-date="{{ offering.start_date_ts }}" data-end-date="{{ offering.end_date_ts }}" data-topics="{{ offering.planned_topics }}">Confirm / Reject</a>  
+									</div>
+                        			{% endif %}
+					    		</li>
+								{% endfor %}
+				    		</ul>
+						</div>
+					</div>
+					<div id="backfill-courses" class="note-box">
+						<h3>Backfill Courses
+							<div class="pagination"></div>
+						</h3>
+						<div class="backfill_assigned-offering">
+				    		<ul id="#backfill-courses" class="cycle">
+								{% for offering in backfill_courses %}
+					    		<li>
+									<span>
+										{% if offering.program == 1 %} Digital Classroom ::
+										{% elif offering.program == 2 %} LFH ::
+										{% elif offering.program == 3 %} Worksheets ::
+										{% elif offering.program == 4 %} Alumni ::
+										{% elif offering.program == 5 %} Digital School ::
+										{% endif %}
+										{{ offering.course_offered }}, ({{offering.offering_id}})
+										{% if offering.start_date %}
+											, {{ offering.start_date }} 
+										{% endif %} 
+										{% if offering.end_date %} 
+											to {{ offering.end_date }}
+										{% endif %}
+										{% if offering.batch %}
+											-- Batch:  {{offering.batch}}
+										{% endif %}
+									</span>
+									</br>
+                         			{% if is_superuser %}
+									<div>
+						    			{{ offering.session_status|safe }}
+						    			<a href="#add-session-modal" class="tag add-session" data-toggle="modal" data-run_courses="{{ offering.offering_id }}" data-offering="{{ offering.offering_id }}" data-start-date="{{ offering.start_Date_iso }}" data-end-date="{{ offering.end_date_ts }}">Modify Sessions</a>
+						    			<a href="/admin/web/offering/{{ offering.offering_id }}" class="tag" target="_blank">Modify Course</a>
+									</div>
+                        			{% endif %}
+					    		</li>
+							{% endfor %}
+				    		</ul>
+				    		<ul style="width: 100%;">
+								{% for offering in backfill_courses %}
+					    		<li>
+									<span>
+										{% if offering.program == 1 %} Digital Classroom ::
+										{% elif offering.program == 2 %} LFH ::
+										{% elif offering.program == 3 %} Worksheets ::
+										{% elif offering.program == 4 %} Alumni ::
+										{% elif offering.program == 5 %} Digital School ::
+										{% endif %}
+										{{ offering.course_offered }}, ({{offering.offering_id}})
+										{% if offering.start_date %}
+											, {{ offering.start_date }} 
+										{% endif %} 
+										{% if offering.end_date %}
+											 to {{ offering.end_date }}
+										{% endif %}
+										{% if offering.batch %}
+											-- Batch:  {{offering.batch}}
+										{% endif %}
+									</span>
+									</br>
+									 	<div>
+											<a href="/v2/offering/topic-details/?center_id={{center.id}}&offering_id={{ offering.offering_id }}&ayfy_id={{ ay_id }}" class="tag" target="_blank">My Content Reference</a>
+											<a href="/v2/center/subject/studentdoubts?subjectId={{ offering.offering_id }}&centerId={{center.id}}&cname={{center.name}}" class="tag" target="_blank">View Doubts</a>
+										</div>
+										{% if is_superuser or  dc_assigned_center or admin_assigned_center %}
+										<div>
+											<a href="#add-sess-modal" class="tag add-sess" data-run_course="{{ offering.offering_id }}" data-backdrop="static"  data-toggle="modal" data-offering="{{ offering.offering_id }}" data-start-date="{{ offering.start_date_orig|date:'d-m-Y' }}" data-end-date="{{ offering.end_date_orig|date:'d-m-Y' }}"    data-course_name="{{ offering.course_offered }}{% if offering.start_date %}, {{ offering.start_date }} {% endif %} {% if offering.end_date %}to {{ offering.end_date }}{% endif %}" >Modify Sessions</a>
+											<a  href="/get_enroll/{{center.id}}/{{offering.offering_id}}" target="_blank"  class="tag modifenroll">Modify Enrollment</a>
+											{% if is_superuser or is_centeradmin %}
+												<a  href="/v2/plan_topics/{{center.id}}/{{offering.offering_id}}" target="_blank"  class="tag modifenroll">Plan your Topics</a>
+												<a href="#" class="tag mark_it_ascomplete" data-offering-id="{{ offering.offering_id }}">Mark As complete</a>
+											{% endif %}
+											<a href="#apply-cal-modal"  class='tag app_cal'  data-toggle="modal" data-offering="{{ offering.offering_id }}">Apply Holidays</a>
+											
+											<a class="tag offering_manage_slot" href="#manage-offering-slot-modal-{{ offering.offering_id }}" data-toggle="modal" data-offering_id="{{ offering.offering_id }}" data-start-date="{{ offering.start_date_ts }}" data-end-date="{{ offering.end_date_ts }}" data-topics="{{ offering.planned_topics }}">Manage Slot</a>
+											<a class="tag confirm_reject" href="#confirm-modal-{{ offering.offering_id }}" data-toggle="modal" data-offering_id="{{ offering.offering_id }}" data-start-date="{{ offering.start_date_ts }}" data-end-date="{{ offering.end_date_ts }}" data-topics="{{ offering.planned_topics }}">Confirm / Reject</a>
+										</div>
+                        			{% endif %}
+					    		</li>
+								{% endfor %}
+				    		</ul>
+						</div>
+					</div>
+					
+            		<div  id="appreciation" class="note-box ">
+						
+						<div class="appreciation"><div class="col-md-3 col-sm-3 col-lg-3 col-xs-3"><b">Children Stars</b></div>
+							<!-- <form onsubmit="getChildrenStarsForSelectedMonthNYear(this.id)">   -->
+							<div class="col-md-3 col-sm-3 col-lg-3 col-xs-3"><label  style=" font-family: sans-serif!important;    font-size: 14px;">
+									From &nbsp;</label><input type="date" style='width: 150px;' value ="{{start_date}}" id="from" name='from' required>
+							</div>
+							<div class="col-md-3 col-sm-3 col-lg-3 col-xs-3" ><label  style=" font-family: sans-serif!important;    font-size: 14px;">
+									To </label><input type="date" id="to" style='width: 150px;' value="{{end_date}}" name='to' required>
+							</div>
+							<div class="col-md-3 col-sm-3 col-lg-3 col-xs-3" > 
+								
+								<input type="submit" style="margin-top: 23px;" onclick="getChildrenStarsForSelectedMonthNYear()">
+							</div>
+							<!-- </form> -->
+						</div>
+                		<div class="row" id='children_stars' style="overflow-y: auto;max-height: 310px;">
+						{% if get_stickers_for_students %}
+							{% for stickers in get_stickers_for_students %}{{count}}
+								{% if forloop.counter0|divisibleby:5 %}
+									<div class='row'></div>
+								{% endif %}
+								<div class="col-md-2 text-center" style="margin-left: 15px;">
+									<div class="row">
+										<div class="col-md-12 ">
+											<div class="col-md-12">
+												<img src="{% if  stickers.std_photo %} /{{stickers.std_photo}} {% else %} {% if 'Boy' in stickers.std_gender or  'Male' in stickers.std_gender %} /static/uploads/student/boys.png {% else %} /static/uploads/student/girl.png {% endif %}  {% endif %}"  style="margin-top: 15px;margin-left: -13px;border-radius: 50%;width: 120px;height: 120px;"/>
+											</div>
+										</div>
+
+									</div>
+									<div class="row" style="margin-left: -33px;margin-top: 20px;">
+										<div class="col-md-6 ">
+											<div class="col-md-12" style ="width:100px;"><label>Name:&nbsp;&nbsp;</label></div>
+										</div>
+										<div class="col-md-2 ">
+											<div class="col-md-3" style="margin-left: 10px;padding: 0px 12px 0px 12px;word-wrap: break-word;width: 92px;"> {{stickers.std_name}}</div>
+										</div>
+									</div>
+									<div class="row" style="margin-left: -33px;"> 
+										<div class="col-md-6 " >
+											<div class="col-md-12" style ="width:100px;">
+												<label>Grade:&nbsp;&nbsp;</label>
+											</div>
+										</div>
+										<div class="col-md-2 ">
+											<div class="col-md-3" style="margin-left: 10px;"> <span>{{stickers.std_grade}}</span></div>
+										</div>
+									</div>
+									{% if stickers.get_stick_count_std %}
+										{% for stic in stickers.get_stick_count_std%}
+											<div class="row" style="margin-left: -32px;">
+												<div class="col-md-6 " >
+													<div class="col-md-12" style ="width:100px;">
+														<img title='{{stic.sticker__sticker_name}}' class='awesome_sticker' src='/{{stic.sticker__sticker_path}}' style="width: 55px;height: 55px;margin-left: 15%;margin-top: 0%;border-radius: 50%;" />:
+													</div>
+												</div>
+												<div class="col-md-2 " style="margin-left: 14px; margin-top: 15px;">
+													<div class="col-md-3" style="margin-left: 20px;"> 
+														<span>{{stic.countofsticker}}</span>
+													</div>
+												</div>
+											</div>
+										{% endfor %}
+									{% endif%}
+								</div>
+							{% endfor %}
+						{% else %}
+							<p style="margin-left: 29px;text-align: center; font-weight: bold;"> No student is appreciated in {{selected_month}} {{selected_year}}.</p>
+						{% endif %}
+            			</div>
+            		</div>
+
+            		<div id="appreciation_teach" class="note-box">
+                		<h3>Awesome Teachers
+							<div class="pagination"></div>
+						</h3>
+                		<div class="row" style="margin-left: 10px;">
+                    		{% if get_stickers_for_teachers %}
+                    			{% for stickers in get_stickers_for_teachers %}
+                  				<div class="col-md-3 text-center" style="margin-left: {% if forloop.first %}65px{% else %}25px {% endif %};margin-bottom: 20px;">
+                      				<div class="row"> 
+										<div class="col-md-12 ">
+											<div class="col-md-12">
+												{% if stickers.teach_pic %}
+													<img src="{{stickers.teach_pic}}"  style="margin-top: 15px;margin-left: -13px;border-radius: 50%;width: 120px;height: 120px;"/>
+												{% else %}
+													<img src='{% if stickers.gender == "female" %}/static/profile_images/teacher_female.png {% else %} /static/profile_images/teacher_male.png {% endif %}'  style="margin-top: 15px;margin-left: -13px;border-radius: 50%;width: 120px;height: 120px;"/>
+												{% endif %}
+											</div>
+                        				</div>
+                      				</div>
+									<div class="row" style="margin-left: -40px;margin-top: 20px;"> 
+										<div class="col-md-6 ">
+											<div class="col-md-12" style ="width:100px;">
+												<label>Name&nbsp;&nbsp;:</label>
+											</div>
+                        				</div>
+                      					<div class="col-md-2 ">
+											<div class="col-md-3" style="margin-left: 10px;"> 
+												<span>{{stickers.teach_name}}</span>
+											</div>
+										</div>
+									</div>
+									<div class="row" style="margin-left: -40px;"> 
+										<div class="col-md-6 " >
+											<div class="col-md-12" style ="width:100px;">
+												<label>Subject&nbsp;&nbsp;:</label>
+											</div>
+                        				</div>
+                      					<div class="col-md-2 ">
+											<div class="col-md-3" style="margin-left: 10px;"> 
+												<span>{{stickers.teach_sub}}</span>
+											</div>
+										</div>
+									</div>
+                      				{% if stickers.get_stick_count %}
+                        				{% for stic in stickers.get_stick_count%}
+										<div class="row" style="margin-left: -44px;"> 
+											<div class="col-md-6 " >
+												<div class="col-md-12" style ="width:100px;">
+													<img title='{{stic.sticker__sticker_name}}' class='awesome_sticker' src='/{{stic.sticker__sticker_path}}' style="width: 55px;height: 55px;margin-left: 15%;margin-top: 0%;border-radius: 50%;" />:
+												</div>
+                        					</div>
+                      						<div class="col-md-2 " style="margin-top: 17px;">
+												<div class="col-md-3" style="margin-left: 20px;"> 
+													<span>{{stic.countofsticker}}</span>
+												</div>
+											  </div>
+										</div>
+                        				{% endfor %}
+                      				{% endif%}
+                  				</div>
+                    			{% endfor %}
+                  			{% else %}
+                    			<p>Please, Appreciate a Teacher of This Center.</p>
+                    		{% endif %}
+             			</div>
+          			</div>
+            	</div>
+         	</div>
+			{% for offering in pending_courses %}
+			<div id="recomendations-{{ offering.offering_id }}" class="recommendations modal hide">
+				<img style="display:block;margin:10px auto" src="/static/images/loader.gif" alt="spinner" />
+			</div>
+			{% endfor %}
+		</div>
+		<div class="col-md-4">
+			<div class="dashboard-calendar-container" style="border:1px solid black; background-color: #f8f8f8; margin:60px 0px 1px 0px; padding-bottom: 0px;width:95%;">
+			    <table class="table" style="font-size: 12px;width:100%;border-collapse:separate ;">
+					<tr>
+						<th colspan="3" class="center_info" style="border-top: 1px solid rgb(142, 188, 50);border-left: 1px solid rgb(142, 188, 50)">
+							<b>Class Delivery Helpline</b>
+						</th>
+					</tr>
+        			<tr>
+        				<td width="30%" ><b>E-mail ID</b></td>
+        		       <td colspan="2" width="80%">classdelivery@evidyaloka.org</td>
+        			</tr>
+					<tr>
+						<td width="30%" ><b>Phone</b></td>
+						<td colspan="2" width="80%">080-47091716</td>
+					</tr>
+				</table>
+			</div>
+			<br><br><br>
+			<div class="dashboard-calendar-container" style="border:1px solid black; background-color: #f8f8f8;padding-bottom: 0px;width:95%;">
+				<table class="table" style="font-size: 12px;width:100%;border-collapse:separate ;">
+					<tr>
+						<th colspan="3" class="center_info" style="border-top: 1px solid rgb(142, 188, 50);border-left: 1px solid rgb(142, 188, 50)">
+							<b>Center Information</b>
+						</th>
+					</tr>
+					<tr>
+						<td width="30%" ><b>Center</b></td>
+						<td colspan="2" width="80%">{{center.name}}</td>
+					</tr>
+					<tr>
+						<td width="30%" ><b>Map Location</b></td>
+						<td colspan="2" width="80%">
+							{% if map_location_link %}
+								<a target="_blank" onclick="window.open('{{map_location_link}}')" style="cursor: pointer;">&nbsp;<img src='/static/images/map_icon.jpg' alt="map" style="color:white;width:30px;height:25px;"></img></a>
+							{% else %}
+								<a target="_blank" onclick="locationNotFound();" style="cursor: pointer;">&nbsp;<img src='/static/images/map_icon.jpg' alt="map" style="color:white;width:30px;height:25px;"></img></a>
+							{% endif %}
+							{% if center.photo %}
+								<img class="img-circle" src="/{{center.photo}}" style="width:50px !important;height: 50px !important;  border-radius:50%;">
+							{% endif %}
+
+						</td>
+					</tr>
+					<tr>
+						<td width="20%" >
+							<b>Skype Id</b>
+						</td>
+						{% if center.skype_id != None %}
+							<td colspan="2"width="80%" >{{center.skype_id}}</td>
+						{% else %}
+							<td colspan="2"width="80%" ></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td width="30%" ><b>Class Assistant (POC)</b></td>
+						<td width="40%" >{{center.assistant.first_name}}  {{center.assistant.last_name}}</td>
+						<td width="30%" >{{center.assistant.userprofile.phone}}
+					</tr>
+					<tr>
+						<td width="20%"><b>HM</b></td>
+						<td colspan="2" width="80%">{{hm.name}} </td>
+					</tr>
+					<tr>
+						<td width="30%"><b>Field co-ordinator</b></td>
+						<td colspan="2" width="80%"> {{fc.name}}   &nbsp; &nbsp;   {{fc.phone}}</td>
+					</tr>
+					<tr>
+						<td width="30%"><b>Delivery co-ordinator</b></td>
+						<td colspan="2" width="80%"> {{dc.name}} &nbsp; &nbsp;   {{dc.phone}}</td>
+					</tr>
+					<tr>
+						<td width="30%"><b>Center Admin</b></td>
+						<td colspan="2" width="80%">{{admin.name}} &nbsp; &nbsp;   {{admin.phone}}</td>
+					</tr>
+					<tr>
+						<td width="30%"><b>Donor</b></td>
+						<td colspan="2" width="80%">{{ donor.name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ donor.phone }}</td>
+					</tr>
+					<tr>
+						<td width="30%"><b>Partner</b></td>
+						<td colspan="2" width="80%">{{ delivery_partner.name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ delivery_partner.phone }}</td>
+					</tr>
+					<tr>
+						<td width="30%"><b>Program</b></td>
+						<td colspan="2" width="80%">{{ center.get_program_type_display }}</td>
+					</tr>
+
+				</table>
+			</div>
+			<div class="dashboard-calendar-container" style="margin-top: 10px;padding-bottom: 0px;">
+				<label style="display: inline-block;padding-left: 5px;">Academic Year: </label>
+				<img id='loading' src="/static/images/loader.gif" alt="spinner" style="position: absolute;top: 5%;right: 90px;display:none"/>
+				<select class="form-control" id="ay_filter" name="ay" onchange="location = this.value; $('#loading').css('display', 'block')">
+					{% for ay in ay_list %}
+						<option value="/centeradmin/?center_id={{center.id}}&ay_id={{ay.0}}" data-id = "{{ay.0}}">{{ay.1}} - {{ay.2}}</option>
+					{% endfor %}
+				</select>
+				<br><br>
+				<div class="row" style="margin-right: 0px;margin-left: 0px;">
+					<div class="col-md-6 col-sm-6">
+						<a class="btn" href="#manage_slots_modal" data-toggle="modal">Manage Center Timings</a>
+					</div>
+					<div class="col-md-6 col-sm-6">
+						<a class="btn" href="/role_onboarding/teacher/#availability_preference">Manage My Availability</a>
+					</div>
+				</div>
+			</div>
+			<div class="dashboard-calendar-container" style="width:100%;min-height:500px;margin-top: 10px;">
+                <div id="calendar"></div>
+            	{% if is_delivery_coordinator or is_field_coordinator or is_centeradmin or is_class_assistant or is_superuser %}
+                    <div class="col-md-12">
+                        <div class="note-box" style="margin-top:-1px; min-height:35px">
+                            <h3>Holidays
+								<span class="pull-right">
+									<a href="javascript:void(0);" id="holidays_id" style="font-size:20px;font-weight:20px">
+										<span id="holidays_cheveron_holder"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+									</a>
+								</span>
+                            </h3>
+                            <div class="holidays list_style" style="padding:20px;max-height:250px;overflow-y:scroll;display:none">
+                                <ul>
+									{% if holidays %}
+										{% for holiday in holidays %}
+											<li style="font-size:12px; padding:0px;">{{holiday.description}} - {{holiday.day|date}}</li>
+										{% endfor %}
+									{% else %}
+										<li style="font-size:12px; padding:0px;">No holidays found!</li>
+									{% endif %}
+								</ul>
+                            </div>
+                        </div>
+		            </div>
+            	{% endif %}
+
+       		</div>
+		</div>
+	</div>
+	{% with pending_courses|listFilter:backfill_courses as pending_coursess %}
+		{%  for  offering in pending_coursess %}
+    		<div class="modal fade" id="manage-offering-slot-modal-{{ offering.offering_id }}" role="dialog" style="top:44%;" >
+   				<div>
+        			<!-- Modal content-->
+        			<div class="modal-content">
+        				<div class="modal-header">
+            				<button type="button" class="close" data-dismiss="modal">&times;</button>
+                			<h4 class="modal-title">Manage Offering Slots</h4>
+            			</div>
+            			<div class="modal-body">
+            				<div class="well" style="padding:1px">
+                				<form  id="add_slot_form" class='{{ offering.offering_id }}' action="javascript:add_slots('manage-offering-slot-modal-{{ offering.offering_id }}');">
+                    				<div class="row" id='slot_fields'>
+                        				<h5 style="text-align:center">Add Slots</h5>
+                            			<div class="col-md-4 slot_days" id='slot-{{ offering.offering_id }}'>
+											<p style="text-align: center">
+												Day 
+												<a href="#" data-toggle="popover" class="error_pop" style="opacity: 0;" data-content="Select atleast one day">day</a>
+											</p>
+											<div class="checkbox">
+												<label> <input type="checkbox" class='two-checkbox'
+													value="Monday" name="day"> Monday
+												</label>
+											</div>
+											<div class="checkbox">
+												<label> <input type="checkbox" class='two-checkbox' name="day" value="Tuesday"> Tuesday</label>
+											</div>
+											<div class="checkbox">
+												<label> <input type="checkbox" class='two-checkbox' name="day" value="Wednesday"> Wednesday</label>
+											</div>
+											<div class="checkbox">
+												<label> <input type="checkbox" class='two-checkbox' name="day" value="Thursday"> Thursday</label>
+											</div>
+											<div class="checkbox">
+												<label> <input type="checkbox" class='two-checkbox' name="day" value="Friday"> Friday</label>
+											</div>
+											<div class="checkbox">
+												<label> <input type="checkbox" class='two-checkbox' name="day" value="Saturday"> Saturday</label>
+											</div>
+											<div class="checkbox">
+												<label> <input type="checkbox" class='two-checkbox' name="day" value="Sunday"> Sunday</label>
+											</div>
+						   				</div>
+										<div class="col-md-5">
+											<p style="text-align:center">Time</p>
+											<input id="slot_time_from-{{ offering.offering_id }}" type="text" class="time ui-timepicker-input offr_slot_from" autocomplete="off" required style="width:40%;float:left">
+											<p style="float:left"> &nbsp;To&nbsp; </p>
+											<input id="slot_time_to-{{ offering.offering_id }}" type="text" class="time ui-timepicker-input offr_slot_to" autocomplete="off" required style="width:40%;float:left">
+										</div>
+										<div class="col-md-3">
+											<p style="text-align: center">Duration</p>
+											<div style="text-align: center;">
+												<div class="radio">
+													<label><input type="radio" name="duration" id="" value="15"> 15</label>
+												</div>
+												<div class="radio">
+													<label> <input type="radio" name="duration" id="" value="30" required data-required-message="r"> 30</label>
+												</div>
+												<div class="radio">
+													<label> <input type="radio" name="duration" id="" value="40"> 40</label>
+												</div>
+												<div class="radio">
+													<label> <input type="radio" name="duration" id="" value="45"> 45</label>
+												</div>
+												<div class="radio">
+													<label> <input type="radio" name="duration" id="" value="50"> 50</label>
+												</div>
+												<div class="radio">
+													<label> <input type="radio" name="duration" id="" value="60"> 60</label>
+												</div>
+											</div>
+										</div>
+									</div>
+                       				<div class="row" style="text-align: center;margin-left:  20px;">
+                          				<button type="submit" id='submit' class="btn btn-xs btn-success" style="margin-bottom: 4px;">Add Slots</button>
+                        			</div>
+                    			</form>
+                			</div>
+							<div class="row" id="centerSlotShowHide" style="text-align: center;margin-left: 174px;margin-top: -39px;width: 13%;">
+								<button type="button" class="btn btn-xs btn-info"
+										onclick='CenterSlots("manage-offering-slot-modal-{{ offering.offering_id }}")'
+										style="margin-bottom: 10px;margin-top: -11px;height: 27px;">Center Slots</button>
+							</div>
+							<div class="added_slots">
+								<p style="display:none;color:red" id='msgSlot'>You can add Maximum two slots.</p>
+                    			<div style='height: 150px;overflow-y: scroll;border-bottom: 1px solid;display: none;' id='centerslots'>
+                    				<h5 style='text-align:center'>Existing Center Slots </h5>
+                        			<div class='row head_cols'>
+										<div class='col-md-3'>
+											<h6>Day</h6>
+										</div>
+										<div class='col-md-4'>
+											<h6>Slot</h6>
+										</div>
+										<div class='col-md-3'>
+											<h6>Status</h6>
+										</div>
+										<div class='col-md-2'>
+											<a href="#" data-toggle="popover" data-trigger="hover" data-placement="left"
+											data-content="Delete selected slots"><i class="icon-save"></i>
+											</a>
+										</div>
+                       				</div>
+									<div class="center_slot">
+										{% for slot in center_unallocated_slots %}
+											<div class='row'>
+												<div class='col-md-3'>
+													<p>{{slot.day}}</p>
+												</div>
+												<div class='col-md-4' style='text-align:center;'>
+													<p>{{slot.start_time|cut:" "}} to {{slot.end_time|cut:" "}}</p>
+												</div>
+												<div class='col-md-3'>
+													<p>Unallocated</p>
+												</div>
+												<div class='col-md-2 center_checkbox'>
+													<input type="checkbox" class="add_to_delete add_to_offering" name="" data-day="{{slot.day}}" data-time="{{slot.start_time}}to{{slot.end_time}}" value=""style="position:relative;left: 35%;height:30px;width:30%;"/>
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+                    			</div>
+								<div style='height: 150px;overflow-y: scroll;border-bottom: 1px solid;'>
+									<h5 style='text-align:center'>Existing Offering Slots </h5>
+									<div class='row head_cols'>
+										<div class='col-md-3'>
+											<h6>Day</h6>
+										</div>
+										<div class='col-md-4'>
+											<h6>Slot</h6>
+										</div>
+										<div class='col-md-3'>
+											<h6>Status</h6>
+										</div>
+										<div class='col-md-2'>
+											<a href="#" data-toggle="popover" data-trigger="hover" onclick ='deleteSlot({{offering.offering_id}});'data-placement="left" data-content="Release selected slots">
+												<p><img src="/static/images/delete_icon.svg" alt="delete" /></p>
+											</a>
+										</div>
+									</div>
+									<div class="slot_append">
+										{% with  pending_offer_slots|listFilter:backfill_offer_slots as offer_slots %}
+											{% for key, pending_offer_slot in offer_slots.items %}
+												{% if  offering.offering_id  == key %}
+													{% for item in pending_offer_slot %}
+														<div class='row' id='{{offering.offering_id}}'>
+															<div class='col-md-3'>
+																<p>{{item.0}}</p>
+															</div>
+															<div class='col-md-4' style='text-align:center;'>
+																<p>{{item.1|cut:" "}} to {{item.2|cut:" "}}</p>
+															</div>
+															<div class='col-md-3'>
+																<p>Unallocated</p>
+															</div>
+															<div class='col-md-2'>
+																<input type="checkbox" class="add_to_delete" name="" data-day="{{item.0}}" data-time="{{item.1}}to{{item.2}}" value=""style="position:relative;left: 35%;height:30px;width:30%;"/>
+															</div>
+														</div>
+													{% endfor %}
+												{% endif %}
+											{% endfor %}
+										{% endwith%}
+									</div>
+								</div>
+								<div class='row ' id="center_slot_save" style='text-align: center;margin-top:10px;display: none;'>
+									<button type='' class='btn btn-xs btn-success save_slots' onclick='saveSlots({{ offering.offering_id }},false);' style='margin-bottom: 4px;'>Save Slot</button>
+								</div>
+								<div class='row' id="offering_slot_save" style='text-align: center;margin-top:10px'>
+									<button type='' class='btn btn-xs btn-success save_slots' onclick='saveSlots({{ offering.offering_id }},true);' style='margin-bottom: 4px;'>Save Slot</button>
+								</div>
+                			</div>
+            			</div>
+						<div id="evd-notification" class="save_success alert alert-warning hide"> 
+							<div>
+								<a type="button" class="close reload_on_save">X</a>
+								<p class="msg-body add_slot_success_msg"></p>
+							</div>
+						</div>
+						<div id="evd-notification" class="alert alert-warning delete_select hidden">
+							<div>
+								<a type="button" class="close close_msg">X</a>
+								<p class="msg-body selcet_to_delete">Please select slots to delete</p>
+							</div>
+						</div>
+						<div class="modal-footer" style="display:none">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+        			</div>
+	    		</div>
+    		</div>
+			<!--End Model Offering Manage Slot -->
+
+			<!-- Start Confirm-reject Model -->
+			<div class="modal fade" id="confirm-modal-{{ offering.offering_id }}" role="dialog" style="width:50%;left:45%">
+				<input type="hidden"  id="offers" value="{{ offering.course_offered }}{% if offering.start_date %}, {{ offering.start_date }} {% endif %} {% if offering.end_date %} to {{ offering.end_date }}{% endif %}"/>
+				<input type="hidden" id='confirmModalId' value="{{offering.offering_id}}" />
+				<input type="hidden" id="start_date_id" value="{{offering.start_date_ts}}">
+				<input type="hidden" id="end_date_id" value="{{offering.end_date_ts}}">
+				<input type="hidden" id="plan_topic_id" value=" {{ offering.planned_topics }}">
+        		<div>
+        			<!-- Modal content-->
+        			<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Confirm / Reject</h4>
+						</div>
+						<div class="modal-body">
+							<table class="table table-bordered pending_offer_slot_table">
+								<thead style="text-align: center;">
+									<tr>
+										<th>Day</th>
+										<th style="width:11%">Start</th>
+										<th style="width:11%">End</th>
+										<th style="width:30%">User</th>
+										<th style="width:35%">Action</th>
+									</tr>
+								</thead>
+								<tbody class='tbody'>
+									{% for key, pending_offer_slot in pending_offer_slots.items %}
+										{% if  offering.offering_id  == key %}
+											{% for item in pending_offer_slot %}
+												<tr>
+													<td>{{item.0}}</td>
+													<td>{{item.1}}</td>
+													<td>{{item.2}}</td>
+													<td> <input type="hidden" value="{{item.4}}" id="slot_teacher_id"><a href="#" data-toggle="modal" data-target="#profile{{key}}">{{item.3}}</a></td>
+													<td rowspan="{{pending_offer_slot|length}}" style="vertical-align: middle;padding: 0%;">
+														{% if forloop.first %}
+															<input type="hidden" value='{{item.4}}' id='tchrid'>
+															<p style="text-align:center" data-center_id="{{center.id}}" data-offering_id="{{offering.offering_id}}">
+																<button class="btn btn-xs btn-success confirm_btn" data-btn_type="confirm" style="height: 20px;text-shadow: none;"  onclick="ConfirmDemand({{item.4}},{{offering.offering_id}},{{center.id}});" disabled="disabled">Confirm</button>
+																<button class="btn btn-xs btn-danger reject_btn_reason" data-btn_type="reject" onclick="addOffering({{offering.offering_id}});"style="height: 20px;;width: 50px;text-shadow: none;" >Reject</button>
+																<a class="btn btn-xs btn-info demand_details" data-toggle="modal"  href="#" style="height: 20px;;width: 91px;text-shadow: none;font-size: 67%;">Volunteer Details</a>
+																{% if center.digital_school %}
+																	<input id="digisoftwarelink{{offering.offering_id}}" type='text' style="margin-left: 20px; margin-top: 20px;" placeholder='software link' >
+																	<a class="btn btn-xs btn-success" style="height: 20px;text-shadow: none;" onclick="location.href='https://youtu.be/4Y1aGTZGpCA'" target="_blank" >How to create a link</a>
+																{% endif %}
+															</p>
+														{% endif %}
+													</td>
+												</tr>
+											{% endfor %}
+										{% endif %}
+									{% endfor %}
+								</tbody>
+							</table>
+
+  							<!-- Modal -->
+  							<div class="modal fade" id="profile{{offering.offering_id}}" role="dialog" style="display:none;top:50%">
+    							<div>
+      								<!-- Modal content-->
+									<div class="modal-content" style="background:aliceblue">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<h6 class="modal-title"><b>Profile Details</b></h6>
+										</div>
+										<div class="modal-body" id="dummy">
+											<div class="row">
+												<div class="col-md-4" style="border-right:1px solid gray">
+													<img src="/static/images/user_small.png" alt="user image" style="display:inline-block;margin:10px;" height="130px" width="130px">
+												</div>
+												<div class="col-md-8">
+													{% for key, user_detail in user_details.items %}
+														{% if  offering.offering_id  == key %}
+															<table>
+																<tr>
+																	<td><strong>User ID</strong></td>
+																	<td> &nbsp;&nbsp;: &nbsp;&nbsp;</td>
+																	<td>{{user_detail.id}}</td>
+																</tr>
+																<tr>
+																	<td><strong>User Name</strong></td>
+																	<td> &nbsp;&nbsp;: &nbsp;&nbsp;</td>
+																	<td>{{user_detail.username}}</td>
+																</tr>
+																<tr>
+																	<td><strong>Email</strong></td>
+																	<td> &nbsp;&nbsp;: &nbsp;&nbsp;</td>
+																	<td>{{user_detail.email}}</td>
+																</tr>
+																<tr>
+																	<td><strong>Medium</strong></td>
+																	<td> &nbsp;&nbsp;: &nbsp;&nbsp;</td>
+																	<td>{{user_detail.medium}}</td>
+																</tr>
+																<tr>
+																	<td><strong>Course</strong></td>
+																	<td> &nbsp;&nbsp;: &nbsp;&nbsp;</td>
+																	<td>{{user_detail.course}}</td>
+																</tr>
+																<tr>
+																	<td><strong>Location</strong></td>
+																	<td> &nbsp;&nbsp;: &nbsp;&nbsp;</td>
+																	<td>{{user_detail.location}}</td>
+																</tr>
+															</table>
+														{% endif %}
+													{% endfor %}
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default close_pro">Close</button>
+										</div>
+									</div>
+      							</div>
+  							</div>
+							<div id="evd-notification" class="task_save_success alert alert-warning hide">
+								<div>
+									<a type="button" class="close reload_on_save">X</a>
+									<p class="msg-body task_success_msg"></p>
+								</div>
+							</div>
+							<div id="evd-notification" class="demand_confirm alert alert-warning hide">
+								<div>
+									<a type="button" class="close reload_on_save">X</a>
+									<p class="msg-body demand_confirmMsg"></p>
+								</div>
+							</div>
+				    		<!-- Modal -->
+  							<div class="modal fade demand_modal in" id="demad_details_id" role="dialog" style="top:50%;height:290px;">
+    							<div>
+									<!-- Modal content-->
+									<div class="modal-content" style="background:aliceblue">
+										<div class="modal-header">
+											<button type="button" class="close close_demandDetails" data-dismiss="modal">&times;</button>
+											<h6 class="modal-title"><b>Volunteer Details</b></h6>
+										</div>
+        								<div class="modal-body" id="">
+            								<div class="row">
+                								<div class="col-md-4" style="border-right:1px solid gray">
+                    								<img src="/static/images/user_small.png" alt="user image" style="display:inline-block;margin:10px;" height="130px" width="130px">
+                								</div>
+                								<div class="col-md-8">
+													{% for key, user_detail in user_details.items %}
+														{% if  offering.offering_id  == key %}
+															<table>
+																<tr>
+																	<td><strong>User Name</strong></td>
+																	<td> &nbsp;&nbsp;: &nbsp;&nbsp;</td>
+																	<td>{{user_detail.username}}</td>
+																</tr>
+																<tr>
+																	<td><strong>Language</strong></td>
+																	<td> &nbsp;&nbsp;: &nbsp;&nbsp;</td>
+																	<td>{{user_detail.medium}}</td>
+																</tr>
+																<tr>
+																	<td><strong>TSD Status</strong></td>
+																	<td> &nbsp;&nbsp;: &nbsp;&nbsp;</td>
+																	<td>{{user_detail.tsd_status}}</td>
+																</tr>
+																<tr>
+																	<td><strong>Role Outcome</strong></td>
+																	<td> &nbsp;&nbsp;: &nbsp;&nbsp;</td>
+																	<td>{{user_detail.role_outcome}}</td>
+																</tr>
+																<tr>
+																	<td><strong>Skype Id</strong></td>
+																	<td> &nbsp;&nbsp;: &nbsp;&nbsp;</td>
+																	<td>{{user_detail.skype_id}}</td>
+																</tr>
+																<tr>
+																	<td><strong>Contact Number</strong></td>
+																	<td> &nbsp;&nbsp;: &nbsp;&nbsp;</td>
+																	<td>{{user_detail.contact_num}}</td>
+																</tr>
+															</table>
+														{% endif %}
+													{% endfor %}
+                								</div>
+            								</div>
+        								</div>
+										<div class="modal-footer">
+											{% for key, user_detail in user_details.items %}
+												{% if  offering.offering_id  == key %}
+													{% if user_detail.role_outcome == 'Recommended' %}
+														<button type="button" class=" btn btn-success volDetailsId">Ok</button>
+													{% else %}
+														{% if  user_detail.tsd_status != 'Booked' %}
+															<button type="button" class=" btn btn-success "  onclick="taskCreate();" id="createTaskId">Create Task</button>
+														{% endif %}
+													{% endif %}
+												{% endif %}
+											{% endfor %}
+											<button type="button" class="btn btn-default close_pro close_demand">Close</button>
+										</div>
+      								</div>
+    							</div>
+  							</div>
+							<div class="reject_reason hide">
+								<hr>
+								<div id="reason_id">
+									<h4 style="float: left; margin-right: 30px;">Reason :</h4>
+									<br></br> 
+									<span class="reason_req hide" style="left: 14%; bottom: 15%; color: red;">
+										Reason required:Please Select An Option
+									</span>
+									<div class="radio" style="margin-left: 20px;">
+										<label class='demand_label'> 
+											<input type="radio" name="lang" data-value='Timings could not be offered for the selected course in this center' class='fil_opts' style="width: 3%;">
+											Timings could not be offered for the selected course in this center
+										</label>
+									</div>
+									<div class="radio" style="margin-left: 20px;">
+										<label class='demand_label'> <input type="radio" name="lang" data-value='The language for chosen center does not match with your preferred language'
+											class='fil_opts' style="width: 3%;">The language for
+											chosen center does not match with your preferred language
+										</label>
+									</div>
+									<div class="radio" style="margin-left: 20px;">
+										<label class='demand_label'> <input type="radio" name="lang"
+											data-value='You have been assigned an alternate offering after discussion'
+											class='fil_opts' style="width: 3%;">You have been
+											assigned an alternate offering after discussion
+										</label>
+									</div>
+									<div class="radio" style="margin-left: 20px;">
+										<label class='demand_label'> <input type="radio" name="lang"
+											data-value='You have not completed the on-boarding steps to start teaching'
+											class='fil_opts' style="width: 3%;">You have not
+											completed the on-boarding steps to start teaching
+										</label>
+									</div>
+									<div class="radio" style="margin-left: 20px;">
+										<label class='demand_label'> <input type="radio" name="lang"
+											data-value='Volunteer is not interested due to personal reasons'
+											class='fil_opts' style="width: 3%;">Volunteer is not interested due to personal reasons
+										</label>
+									</div>
+								</div>
+								<p style="text-align: center">
+									<button class="btn btn-xs btn-danger reject_btn" data-btn_type="reject"
+										style="height: 25px;; width: 55px; text-shadow: none;">Reject</button>
+								</p>
+							</div>
+						</div>
+						<div id="evd-notification" class="save_success alert alert-warning hide">
+							<div>
+								<a type="button" class="close reload_on_save">X</a>
+								<p class="msg-body confirm_success_msg">Allocation of the selected course is Confirmed</p>
+							</div>
+						</div>
+						<div class="ajax_loader"style="position: fixed; left: 48%; top: 33%; z-index: 3001;">
+							<img src="/static/img_new/ajax-loader.gif" alt="spinner" />
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+      			</div>
+     		</div>
+     <script>
+		$(document).on('show.bs.modal','#confirm-modal-{{offering.offering_id}}', function () {
+    		  $('.reject_reason').addClass('hide');
+		})
+    </script>
+	{% endfor %}
+{%endwith%}
+<!-- Modify Sessions Modal -->
+<div id='add-sess-modal' class="modal hide" style="background-color:white;overflow-y:hidden">
+	<a class="close reload_on_save" data-dismiss="modal" style="float:right;cursor:pointer;position:absolute;top:-5px;right:0px;">X</a>
+    <div style="background-color:#F15A22;color:white;padding:10px;height:35px;"> Modify Sessions </div>
+    <div class='row' style='width:97%;padding:10px 10px 0px 10px;text-align:center;'>
+    	<label  style='display:inline-block'>Course : </label>
+        <p  style='display:inline-block;font-size:13px;color:#249a35;' id='course_nm'></p>
+        <label for="fromdt" style='display:inline-block;margin-left:20px;'>From</label>
+		<input type="text" id="fromdt" class='extnd_input' style='display:inline-block' name="from"> 
+		<label for="todt" style='display: inline-block'>To</label> 
+		<input type="text" style='display: inline-block' class='extnd_input' id="todt" name="to">
+		<div class='btn'
+			style='cursor: pointer; font-size: 11px; border: none; width: 100px; display: inline-block; margin-left: 35px'
+			onclick="getLoadClass();" id='get_sess'>Load Classes
+	   </div>
+	   	<div>
+	   		<p style='display: inline-block; color: #1e824c; position: absolute; margin-top: 9px; float: left; left: 60px;'>Reschedule</p>
+	    	<div class='btn'style='cursor: pointer; border: none; width: 34px; display: inline-block; float: left; font-size: 11px; height: 21px; margin-top: 6px;'
+				id='action_panel'>
+		    	<span style='position: absolute; margin-top: -5px; margin-left: -4px;'>▼</span>
+	   		</div>
+			<div style='width: 762px; display: inline-block; margin-top: 9px; float: right;'>
+				<hr>
+	   		</div>
+		</div>
+	</div>
+    <div id='control-panel' style='width:97%;padding:5px;display:none;;'>
+    	<div class='panel-content' id='add-panel' style='margin-left:7px;height:240px;display:flex;margin-top:30px;margin-bottom:15px;;' >
+        	<div  style='width:223px;padding:5px;'>
+            	<label style='display:inline-block;' class='extnd_input'>Reschedule From Date : </label><input type='text' style='display:inline-block;' id='extnd_start_date' class='date-picker extnd_input' />
+                <label  class='extnd_input' style='display:inline-block;'>Reschedule To Date : </label><input type='text' style='display:inline-block;' id='extnd_end_date' class='date-picker extnd_input' />
+                <label  class='extnd_input' style='display:inline-block;' >Teacher : </label><input type="text" class="searchAllTeachersId extnd_input" placeholder="Search Teacher" style='display:inline-block;margin-left: 10px; width:197px; ' id='extend_teacher' ><br>
+            </div><br>
+        	<div style='width:223px;padding:5px;'>
+            	<label  class='extnd_input' style='display:inline-block;' >Planned Topics : </label>
+                <select  class='extnd_input' style='height:130px;display:inline-block;font-size:12px;overflow-x:auto;' id='extnd_topics' multiple ></select>
+				<label  class='extnd_input' style='display:inline-block;' >Software Platform : </label>
+					<select name="software" style='display:inline-block;margin-left: 10px; width:197px;' id="modify_session_software_platform" >
+						{% for software in softwares %}
+							<option value="{{ software.id }}">{{ software.software_name }}</option>
+						{% endfor %}
+				 	</select>
+				<label  class='extnd_input' style='display:inline-block;' >Software link : </label><input type="text" class="extnd_input" id="modify_session_software_platform_link" placeholder="video communication link" style='display:inline-block;margin-left: 10px; width:197px;' ><br>
+
+            </div>
+            <div style='width:295px;padding-top:5px;' >
+            	<label  class='extnd_input' style='display:inline-block;' >Slots :</label>
+                	<div style='height:120px;overflow-y:auto;overflow-x:hidden;' id='extnd_slots'>
+                    	{% time_slots "time-slot-extend" center.working_days center.working_slots %}
+                    </div>
+           	</div>
+            <div style='width:240px;padding:5px;'>
+            	<div style='margin-top:20px;'>
+                	<input name='del_confirm' id='del_confirm'  type='checkbox'
+                    	style="position: absolute;width: 25px;z-index: 1200;opacity: 0;bottom: -15px;left:727px;"/>
+                    <label> Delete Existing classes and replace them</label>
+                </div>
+               	<div class='btn' id='add_new_sess' style='font-size:11px;width:100px;margin-top:75px;cursor:pointer;margin-left:15px;'>Submit</div>
+           	</div>
+        </div>
+        <div class='panel-content' id='delete-panel' ></div><br><hr></div>
+        	<img id='load_modif' style="display:none;margin:30px 0px 35px 480px;" src="/static/images/loader.gif" alt="spinner" />
+			<div class='row' id = 'table_row' style='display:none;width:97%;padding:10px;margin:10px 0px 10px 0px;;text-align:center;height:420px;overflow-y:scroll;overflow-x:scroll;'>
+				{% if is_superuser %}
+				<div class="row" style="width: 90%; padding: 10px 10px 10px 10px; margin: 10px 10px 20px 10px;text-align:center;">
+					<label for="start_dt_off" style='display:inline-block;margin-left:20px;font: message-box;font-size: 15px;'>Offering - Start Date</label>
+					<input type="text" id="start_dt_off" class='extnd_input' style='display:inline-block' name="start_date_off"> 
+					<label for="end_dt_off" style='display: inline-block;margin-left:20px;font: message-box;font-size: 15px;'>End Date</label> 
+					<input type="text" style='display: inline-block' class='extnd_input' id="end_dt_off" name="end_date_off">
+					<button type="button" class="btn" style="cursor: pointer; font-size: 11px; border: none; width: 100px; display: inline-block; margin-left: 35px" onclick="updateOfferingsDate();" id="update_off">Save</button>
+				</div>
+				{% endif %}
+	            <table class='current_session_table' id='table_id'>
+					<thead>
+						<tr>
+							<th style="width: 55px;">Day</th>
+							<th style='width: 150px;'>Date</th>
+							<th>Start time</th>
+							<th>End time</th>
+							<th style="width: 300px;">Planned topics</th>
+							<th style='width: 300px; padding-right: 6%;'>Teacher</th>
+							<th style='width: 300px; padding-right: 4%;'>Software</th>
+							<th style='width: 300px; padding-right: 1%;'>Software link</th>
+							<th style='width: 300px; padding-right: 1%;'>Video link</th>
+							<th style='width: 300px; padding-right: 1%;'>Modes</th>
+							<th style="width: 20px"></th>
+						</tr>
+					</thead>
+					<tbody id='exist_sess' style='height:200px;overflow-y:auto;overflow-x:hidden;'></tbody>
+                </table>
+                <div style="overflow:hidden;" id='modif-form-div'>
+                	<form method="POST" id="modify_sess" action="/modify_session/" style="padding:0px;">
+                    	<input type="hidden" name="offering_id" value=""/>
+                        {% csrf_token %}
+	                    <input type="hidden" name="removed_sessions" />
+	                    <input type="hidden" name="start_time" />
+	                    <input type="hidden" name="end_time" />
+	                    <input type="hidden" name="sessions" />
+	                    <input type="hidden" name="dates" />
+	                    <input type="hidden" name="planned_topics" />
+	                    <input type="hidden" name="offering_id" value="{{ offering_id }}" />
+	                    <input type="hidden" name="new_sessions" />
+	                    <input type="hidden" name="new_start_time" />
+	                    <input type="hidden" name="new_end_time" />
+	                    <input type="hidden" name="new_dates" />
+	                    <input type="hidden" name="new_planned_topics" />
+	                    <input type="hidden" name="teacher_ids" />
+	                    <input type="hidden" name="new_teacher_ids" />
+						<input type="hidden" name="software_link" />
+						<input type="hidden" name="video_links" />
+						<input type="hidden" name="modes" />
+	                    <input type="hidden" name="software" />
+                    </form>
+                    <div class="btn modify-btn  add-timing " style="cursor:pointer;margin:0px 10px 10px 0px;font-size:11px;width: 32px;height: 21px;"><span style="display:block;font-size:12px;">+</span></div>
+                 </div>
+            </div>
+            <a class="btn modify-btn "  id='dummy_submit_btn' style='display:none;margin:0px 10px 10px 0px;font-size:11px;width:95px;'>
+            	<span>Save</span>
+           	</a>
+           	<a class="btn modify-btn " rel="submit" href="#modify_sess" id='submit-modify-sess' pre-call="pre_modify_sess" style='display:none;margin:0px 10px 10px 0px;font-size:11px;width:95px;' callback="after_modify_session">
+           		<span class="ajax-button-label" data-loading="please-wait">Save</span>
+           	</a>
+</div>
+<!-- End Modify Sessions Modal -->
+
+<!-- Apply calender modal -->
+<div id='apply-cal-modal' class="modal hide" style="max-height:500px; min-height:200px;background-color:white;overflow-y:auto;">
+	<a class="close" data-dismiss="modal" style="float:right;cursor:pointer;position:absolute;top:0px;right:0px;">X</a>
+    <div style="background-color:#F15A22;color:white;padding:20px;height:15px;"> Apply Calender </div>
+    	<div style='display:none;margin-top:30px;text-align:center;' id='cal_lst_contain'>
+        	<label style="display:inline; font-size:18px;">Select a Calender &nbsp&nbsp&nbsp&nbsp: &nbsp&nbsp&nbsp&nbsp </label>
+        	<select id='cal_list'></select>
+        	<div class='btn' id='cal_apply' style='margin-top:30px;cursor:pointer;width:80px;background-color:#27AE60;font-size:18px;margin-left:236px; color:white;'>Apply </div>
+       </div>
+       	<img id='load' style="display:none;margin:60px 0px 0px 260px;" src="/static/images/loader.gif" alt="spinner" />
+       	<div style='display:none;padding:40px;' id='preview'>
+			<p id='del_text' style='font-size:18px;font-weight:bold;'>Sessions being deleted:</p>
+        	<ul id='del_sess'></ul>
+            <div class='btn' id='cal_submit' style='margin-top:30px;cursor:pointer;width:80px;background-color:#27AE60;font-size:18px;margin-left:193px; color:white;'>Confirm </div>
+      	</div>
+       	<div style="display:none;padding:20px" id='ack'>
+        	<div style='border:10px solid;padding:50px;text-align:center;' id='ack_msg'></div>
+        </div>
+</div>
+<div class="modal fade" id="my_teacher_modal" role="dialog">
+	<div>
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header" style="text-align: center">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">My Teachers</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-4">
+						<ul class="nav nav-pills nav-stacked teachers_li"></ul>
+					</div>
+					<!--col-md-4-->
+					<div class="col-md-8 no_data">
+						<div class="tab-content my_teachers_content"></div>
+					</div>
+					<!--col-md-8-->
+				</div>
+				<!--row-->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<!-- End apply calender modal -->
+
+<!-- Manage Slots Modal -->
+<div class="modal fade" id="manage_slots_modal" role="dialog">
+	<div>
+    	<div class="modal-content">
+        	<div class="modal-header">
+            	<button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Manage Slots</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="well" style="padding:1px">
+                	<h5 style="text-align:center">Add Slots</h5>
+                    <form  id="add_slot_form" class='manageSlot' action="javascript:add_slots('manage_slots_modal');">
+                    	<div class="row">
+							<div class="col-md-4 slot_days slot_timing">
+								<p style="text-align: center">
+									Day <a href="#" data-toggle="popover" class="error_pop"
+										style="opacity: 0;" data-content="Select atleast one day">day</a>
+								</p>
+								<div class="checkbox">
+									<label> <input type="checkbox" value="Monday"
+										name="day"> Monday
+									</label>
+								</div>
+
+								<div class="checkbox">
+									<label> <input type="checkbox" name="day"
+										value="Tuesday"> Tuesday
+									</label>
+								</div>
+
+								<div class="checkbox">
+									<label> <input type="checkbox" name="day"
+										value="Wednesday"> Wednesday
+									</label>
+								</div>
+
+								<div class="checkbox">
+									<label> <input type="checkbox" name="day"
+										value="Thursday"> Thursday
+									</label>
+								</div>
+
+								<div class="checkbox">
+									<label> <input type="checkbox" name="day"
+										value="Friday"> Friday
+									</label>
+								</div>
+
+								<div class="checkbox">
+									<label> <input type="checkbox" name="day"
+										value="Saturday"> Saturday
+									</label>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox" name="day"
+										value="Sunday"> Sunday
+									</label>
+								</div>
+
+							</div>
+							<div class="col-md-5 slot_timing">
+                            	<p style="text-align:center">Time</p>
+                                <input id="slot_time_from" type="text" class="time ui-timepicker-input" autocomplete="off" required>
+                                <p style="float:left"> &nbsp;To&nbsp; </p>
+                                <input id="slot_time_to" type="text" class="time ui-timepicker-input" autocomplete="off" required>
+                             </div>
+							<div class="col-md-3">
+								<p style="text-align: center">Duration</p>
+								<div style="text-align: center;">
+
+									<div class="radio">
+										<label> <input type="radio" name="duration" id=""
+											value="15"> 15
+										</label>
+									</div>
+									<div class="radio">
+										<label> <input type="radio" name="duration" id=""
+											value="30" required data-required-message="r"> 30
+										</label>
+									</div>
+
+									<div class="radio">
+										<label> <input type="radio" name="duration" id=""
+											value="40"> 40
+										</label>
+									</div>
+
+									<div class="radio">
+										<label> <input type="radio" name="duration" id=""
+											value="45"> 45
+										</label>
+									</div>
+
+									<div class="radio">
+										<label> <input type="radio" name="duration" id=""
+											value="50"> 50
+										</label>
+									</div>
+									<div class="radio">
+										<label> <input type="radio" name="duration" id=""
+											value="60"> 60
+										</label>
+									</div>
+
+								</div>
+						    </div>
+						</div>
+                        <div class="row" style="text-align: center;">
+                        	<button type="submit" class="btn btn-xs btn-success" style="margin-bottom: 4px;">Add Slot</button>
+                        </div>
+					</form>
+				</div><!-- well -->
+                <div class="added_slots">
+                	<div style='height: 150px;overflow-y: scroll;border-bottom: 1px solid;'>
+                    	<h5 style='text-align:center'>Existing Slots</h5>
+						<div class='row head_cols'>
+							<div class='col-md-3'>
+								<h6>Day</h6>
+							</div>
+							<div class='col-md-4'>
+								<h6>Slot</h6>
+							</div>
+							<div class='col-md-3'>
+								<h6>Status</h6>
+							</div>
+							<div class='col-md-2'>
+								<a href="#" data-toggle="popover" data-trigger="hover"
+									data-placement="left" data-content="Delete selected slots">
+									<p class="delete_slot">
+										<img src="/static/images/delete_icon.svg" alt="delete icon" />
+									</p>
+								</a>
+							</div>
+						</div>
+						<div class="slot_append">
+                        	{% for slot in center_unallocated_slots %}
+							<div class='row'>
+								<div class='col-md-3'>
+									<p>{{slot.day}}</p>
+								</div>
+								<div class='col-md-4' style='text-align: center;'>
+									<p>{{slot.start_time|cut:" "}} to {{slot.end_time|cut:" "}}</p>
+								</div>
+								<div class='col-md-3'>
+									<p>Unallocated</p>
+								</div>
+								<div class='col-md-2'>
+									<input type="checkbox" class="add_to_delete" name=""
+										data-day="{{slot.day}}"
+										data-time="{{slot.start_time}}to{{slot.end_time}}" value=""
+										style="position: relative; left: 35%; height: 30px; width: 30%;" />
+								</div>
+							</div>
+							{% endfor %}
+                        </div>
+					</div>
+                    <div class='row' style='text-align: center;margin-top:10px'>
+                    	<button type='' class='btn btn-xs btn-success save_slots' onclick='saveSlots("",true);' style='margin-bottom: 4px;'>Save Slot</button>
+                    </div>
+				</div><!-- div -->
+			</div><!-- modal body -->
+            <div id="evd-notification" class="save_success alert alert-warning hide" 
+				<div>
+					<a type="button" class="close reload_on_save">X</a>
+					<p class="msg-body add_slot_success_msg"></p>
+				</div>
+			</div>
+
+			<div id="evd-notification"
+				class="alert alert-warning delete_select hidden" 
+				<div>
+					<a type="button" class="close close_msg">X</a>
+					<p class="msg-body selcet_to_delete">Please select slots to
+						delete</p>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		    </div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.img-circle:hover {
+	transform: scale(3.5);
+	}
+.slot_days>.checkbox input[type="checkbox"] {
+	position: relative;
+	margin-left: 10px;
+	left: -10px;
+	width: 15px;
+	height: 13px;
+}
+
+.radio input[type="radio"] {
+	width: 20%;
+	height: 50%;
+}
+
+input#slot_time_from, input#slot_time_to {
+	width: 40%;
+	float: left;
+}
+
+form#add_slot_form {
+	border: none;
+	padding: 0;
+}
+
+
+form#add_slot_form button, .save_slots {
+	height: 25px;
+}
+
+.added_slots {
+	text-align: center;
+	border: 1px solid black;
+}
+
+.added_slots .col-md-4, .added_slots .col-md-3, .added_slots .col-md-2 {
+	border-right: 1px solid;
+	border-top: 1px solid;
+}
+
+p.delete_slot img {
+	position: relative;
+	top: 4px;
+}
+
+p.delete_slot img:hover {
+	-moz-transform: scale(1.1);
+	-webkit-transform: scale(1.1);
+	transform: scale(1.1);
+}
+
+div.head_cols [class*='col-md-'] {
+	height: 36px;
+}
+</style>
+<script>
+window.slots_to_save = [];
+$(document).ready(function(){
+$(".ajax_loader").css('display', 'none');
+
+	$('body').on('click', '.reject_btn_reason', function(){
+    	$('.reject_reason').removeClass('hide');
+    });
+
+    $('body').on('click', '.reject_btn', function(){
+
+    	var btn_type = $(this).attr('data-btn_type');
+        if(btn_type == 'confirm'){
+        	var center_id = $(this).parent("p").attr("data-center_id");
+            var offering_id = $(this).parent("p").attr("data-offering_id");
+            var reason = "confirm";
+       	} else{
+        	var center_id = $(".reject_btn_reason").parent("p").attr("data-center_id");
+
+            var offering_id  = $(".reject_btn").val();
+            var reason = '';
+           	var checked_opts = $('.fil_opts:checked');
+           	_.each(checked_opts,function(u){
+            	reason = $(u).data('value');
+            });
+        }
+        if(reason == ""){
+        	$(".reason_req").removeClass("hide");
+        } else {
+       		$(".reason_req").addClass("hide");
+            $.get("/confirm_accept_or_reject_slot/", {'btn_type': btn_type, 'center_id': center_id, 'offering_id': offering_id, 'reason': reason}, function(resp){
+            	if(btn_type == 'confirm'){
+               		var startDate = $("#start_date_id").val();
+                    var endDate = $("#end_date_id").val();
+                    $("#offerings_id").val(offering_id);
+                    $("#topic_id").val($("#plan_topic_id").val());
+                    var plan_topic = $("#plan_topic_id").val();
+                    $("#topic_id").data('topics') === $("#plan_topic_id").val();
+                    var start_date = new Date(parseInt(startDate) - 31800000);
+                    var end_date = new Date(parseInt(endDate) - 31800000);
+                    var startDate = start_date.getDate()+"-"+(start_date.getMonth() + 1)+"-"+start_date.getFullYear();
+                    var endDate = end_date.getDate()+"-"+(end_date.getMonth() + 1)+"-"+end_date.getFullYear();
+                  	//$("#starts_date_id").val(start_date.getDate()+"-"+(start_date.getMonth() + 1)+"-"+start_date.getFullYear());
+                    //$("#ends_date_id").val(end_date.getDate()+"-"+(end_date.getMonth() + 1)+"-"+end_date.getFullYear());
+                    var user = $("#slot_teacher_id").val();
+                }else {
+                	$('.confirm_success_msg').html("Allocation of the selected course is Rejected");
+                 	$('.save_success').removeClass('hide');
+               }
+          	});
+      	}
+	});
+    $('.modal').on('click', '.close', function(){
+    	console.log("here");
+
+  	});
+    $("#slot_time_from").timepicker({'minTime': '6:00am',
+        'maxTime': '5:45am',
+        'step' :15,});
+
+   	$("#slot_time_to").timepicker({'minTime': '6:00am',
+        'maxTime': '5:45am',
+        'step' :15,});
+    {% for offering in pending_courses %}
+    $("#slot_time_from-{{ offering.offering_id }}").timepicker({'minTime': '6:00am',
+        'maxTime': '5:45am',
+        'step' :15,});
+
+   	$("#slot_time_to-{{ offering.offering_id }}").timepicker({'minTime': '6:00am',
+        'maxTime': '5:45am',
+        'step' :15,});
+   	{% endfor %}
+
+    $('[data-toggle="popover"]').popover();
+
+    $('body').on("click",".reload_on_save",function(){
+   		window.location.reload();
+    });
+
+                        delete_list = [];
+                        $('body').on("change", ".add_to_delete", function(){
+                            day = $(this).attr("data-day");
+                            slot = $(this).attr("data-time").split("to");
+                            if($(this).prop('checked')){
+                                //add to delete array
+                                delete_list.push({'day':day,'start_time':slot[0],'end_time':slot[1]});
+                            }
+                            else{
+                                //remove from delete array
+                                delete_list = jQuery.grep(delete_list, function(value) {
+                                    if (value["day"]==day && value["start_time"]==slot[0] && value["end_time"]==slot[1]){
+                                        return null;
+                                    }else{
+                                        return value;
+                                    }
+                                    //return value != {'day':day,'start_time':slot[0],'end_time':slot[1]};
+                                });
+                            }
+                        });
+
+                        $('body').on("click", ".delete_slot", function(){
+                            if(jQuery.isEmptyObject(delete_list)){
+                                $(".delete_select").removeClass("hidden");
+
+                            }else{
+                                $.get("/delete_slots/", {'data':JSON.stringify(delete_list),'center':"{{center.id}}"}, function(resp){
+                                    $('.add_slot_success_msg').html(delete_list.length + " slots deleted successfully");
+                                    $('.save_success').removeClass('hide');
+                                });
+                            }
+                        });
+                        $('body').on("click", ".close_msg", function(){
+                            $(".delete_select").addClass("hidden");
+                        });
+
+                        //remove temp.slot
+
+                        $('body').on('click', '.delete_temp_slot', function(){
+
+                            var day_del = $(this).attr("data-day");
+                            var time_del_1 = $(this).attr("data-start_time");
+                            var time_del_2 = $(this).attr("data-end_time");
+                            var delete_this;
+                            for (var slot in slots_to_save){
+                                if(slots_to_save[slot].day === day_del && slots_to_save[slot].start_time === time_del_1 && slots_to_save[slot].end_time === time_del_2){
+                                    delete_this = slots_to_save[slot];
+                                    slots_to_save.splice(parseInt(slot), 1);
+                                }
+                            }
+                            $(this).closest("p").parent().parent().remove();
+                        });
+
+                        //close profile details modal
+                        $('body').on('click', '.close_pro', function(){
+                            $(this).closest('.modal').modal('hide');
+                        });
+
+                    });
+                    function add_slots(modelId){
+                    	var formClass='';
+                    	var start_time = 'slot_time_from';
+                    	var end_time = 'slot_time_to';
+                    	if (modelId!='manage_slots_modal'){
+                    		formClass = $('#'+modelId+' div:nth-child(2)').find('form').attr('class');
+                    		start_time = start_time+'-'+formClass;
+                    		end_time = end_time+'-'+formClass;
+                    	}else{
+                    		formClass = 'manageSlot';
+                    	}
+                        var atLeastOneIsChecked = $('.'+formClass).find('.slot_days').find('input[name="day"]:checked').length > 0;
+                        if (atLeastOneIsChecked === false){
+                            //$(".error_pop").trigger("click");
+                            $('.error_pop').popover('show');
+                        }
+                        else {
+                            $('.error_pop').popover('hide');
+                            var checkedObj = $('.'+formClass).find('input[name="day"]:checked');
+                            var days = []
+                            $.each( checkedObj, function( index, value ){
+                                days.push(value.value);
+                            });
+                            var start_time = $('.'+formClass).find("#"+start_time).timepicker('getTime').getTime();//$("#slot_time_from").val();
+                            var end_time = $('.'+formClass).find("#"+end_time).timepicker('getTime').getTime();//$("#slot_time_to").val();
+                            var total_minutes = (end_time - start_time)/ 1000 / 60;
+                            var duration = $('.'+formClass).find("input[name=duration]:checked").val();
+                            var extra_minutes = parseInt(total_minutes % duration);
+                            var no_of_slots = parseInt(total_minutes / duration);
+
+                            function formatAMPM(date) {
+                              var hours = date.getHours();
+                              var minutes = date.getMinutes();
+                              var ampm = hours >= 12 ? 'pm' : 'am';
+                              hours = hours % 12;
+                              hours = hours ? hours : 12; // the hour '0' should be '12'
+                              minutes = minutes < 10 ? '0'+minutes : minutes;
+                              var strTime = hours + ':' + minutes + ampm;
+                              return strTime;
+                            }
+
+                            var temp = start_time;
+                            var slots_array = [];
+                            for(var i=1;i<=no_of_slots;i++){
+                                var k = new Date(temp + duration*60000);
+                                /* if(i == no_of_slots){
+                                    if(extra_minutes <= 15){
+                                        k = new Date(temp +(parseInt(duration)+extra_minutes)*60000);
+                                    }
+                                } */
+                                slots_array.push([new Date(temp), k]);
+                                temp = k.getTime();
+                            }
+                            content = "";
+                            $.each(days, function(i,day){
+                              $.each(slots_array, function(j, slot){
+                                //hour1 = slot[0].getHours();
+                                //hour2 = slot[1].getHours();
+                                //minute1 = slot[0].getMinutes();
+                                //minute2 = slot[1].getMinutes();
+                                start_tim = formatAMPM(slot[0]);
+                                end_tim = formatAMPM(slot[1]);
+                                slots_to_save.push({'day':day, 'start_time':start_tim, 'end_time':end_tim});
+
+                                /*times = [hour1,hour2,minute1,minute2];
+                                $.each(times, function(k,l){
+                                    if(parseInt(l)<10){
+                                        times[k] = "0"+l;
+                                    }
+                                });*/
+                                content = content + "<div class='row'>" +
+                                                        "<div class='col-md-3'>" +
+                                                            "<p style='color:blue'>" + day + "</p>" +
+                                                        "</div>" +
+                                                        "<div class='col-md-4' style='text-align:center;'>" +
+                                                            "<p style='color:blue'>" + start_tim + " to " + end_tim + " </p>" +
+                                                        "</div>" +
+                                                        "<div class='col-md-3'><p>&nbsp;</p>" +
+                                                        "</div>" +
+                                                        "<div class='col-md-2'><p>"+ "<a href='#' data-toggle='popover' data-trigger='hover' "+
+                                                        "data-placement='left' data-content='Remove this slot from list'>"
+                                                        +"<img src='/static/images/cross_delete.svg' class='delete_temp_slot'"+
+                                                        "data-day='"+ day + "' data-start_time='" + start_tim + "'data-end_time='" + end_tim + "'/></a></p>" +
+                                                        "</div>" +
+                                                    "</div>";
+                              });
+                              content = content + "<hr style='margin:0'>";
+                            });
+                            $('#'+modelId+' div:nth-child(2)').find('.slot_append').append(content);
+                            $('[data-toggle="popover"]').popover();
+                             frm = $('.'+formClass)[0];
+                            frm.reset();
+                        }
+
+                    }
+                    	{% for offering in pending_courses %}
+                        	var teacherId = $('#confirm-modal-'+{{offering.offering_id}}).children().children().children('.modal-body').children().children('tbody').children().find('td #slot_teacher_id').val();
+                        	var table_data = $('#confirm-modal-'+{{offering.offering_id}}).children().children().children('.modal-body').children().children('tbody').children();
+                        	if(table_data.length === 0 || teacherId == ""){
+                        		$('li').find("[href='#confirm-modal-" + {{offering.offering_id}} + "']").css("display","none");
+                        	}else{
+                        		$('li').find("[href='#manage-offering-slot-modal-" + {{offering.offering_id}} + "']").css("display","none");
+                        	}
+                        	console.log("DS");
+                        {% endfor %}
+
+
+	$("#holidays_id").on('click', function(){
+		if ($("#holidays_cheveron_holder").html().toString().indexOf('down')>-1){
+			$("#holidays_cheveron_holder").empty();
+			$("#holidays_cheveron_holder").append('<i class="fa fa-chevron-up" aria-hidden="true"></i>');
+		}else{
+			$("#holidays_cheveron_holder").empty();
+			$("#holidays_cheveron_holder").append('<i class="fa fa-chevron-down" aria-hidden="true"></i>');
+		}
+		$(".holidays").toggle();
+	});
+
+                </script>
+
+<div class="modal" id="videoModal" role="dialog" style="width: 65%;margin-left:-32%;height:60%;">
+	<div class="modal-header" style="background-color: #f15a22;height: 55px;">
+		<p style="text-align: left;font-size: 16px;font-weight: bold; font-family: PlutoCondRegular;color:#FFFFFF;">Select A Video <button type="button" class="close" data-dismiss="modal" style="float: right;">&times;</button></p>
+	</div>
+	<div class="modal-body" id="video_modal" style="min-height:320px;">
+	</div>
+	<div class="modal-footer" id='video_modal_footer'></div>
+</div>
+
+
+<!-- add session modal -->
+<div id="add-session-modal" class="modal hide" style="max-height:600px;overflow-y:auto;">
+	<a class="close reload_on_save" data-dismiss="modal" style="float:right;cursor:pointer;position:absolute;top:0px;right:0px;">X</a>
+    	<div style="clear:both">
+			<ul class="nav nav-tabs evd">
+				<li class="current-session"><a href="#current_session" data-toggle="tab">Current Sessions</a></li>
+				<li class="active" style="border: bottom:0px;"><a href="#session-1" data-toggle="tab">Add Sessions</a></li>
+			</ul>
+		<div class="tab-content evd">
+        	<p class="title"><span>Course :  </span><span class="title"></span></p>
+            {% if teachers %}
+            	<div id="session-1" class="tab-pane active" id="tab1" style="overflow:hidden;margin-left:100px;">
+					<ul class="labels-list" style="display: table; float: left; margin-right: 10px;">
+						<li>Start Date:</li>
+						<li>End Date:</li>
+						<li>Teaching Software:</li>
+						<li>Software Link:</li>
+						<li>Teachers:</li>
+						<li>Timings:</li>
+					</ul>
+					<form id="form-session-1" style="clear:none !important;border-left:0px !important;padding:0px;display:table;float:left;border-right:0px solid #ccc; !important" action="/add_dynamic_session/" method="POST">
+
+						<input type="hidden" name="offering_id" id='offerings_id' value=""/>
+						<input type="hidden" name="session_id" id='sessions_id' value=""/>
+						<input type="hidden" name="topic_plan" id='topic_id' data-topics='' value=""/>
+						<input type="hidden" value="false" name="ajax"/>
+						{% csrf_token %}
+						<ul>
+						<li>
+						<div class="controls text">
+							<input type="date" style="width:200px;" name="start_date" value="{{ current_ay.start_date|date:'Y-m-d' }}" min="{{ current_ay.start_date|date:'Y-m-d' }}" max="{{ current_ay.end_date|date:'Y-m-d' }}" class="input"/>
+						</div>
+						</li>
+						<li>
+							<div class="controls text">
+								<input type="date" style="width:200px" name="end_date" value="{{ current_ay.end_date|date:'Y-m-d' }}" min="{{ current_ay.start_date|date:'Y-m-d' }}" max="{{ current_ay.end_date|date:'Y-m-d' }}" class="input" />
+							</div>
+						</li>
+						<li>
+							<select name="software">
+								{% for software in softwares %}
+									<option value="{{ software.id }}">{{ software.software_name }}</option>
+								{% endfor %}
+							</select>
+						</li>
+						<li>
+							<div class="controls text">
+								<input type="text" style="width: 200px" name="softwareLink"
+									id='softwareLinkId'>
+							</div>
+						</li>
+						<li><input type="text"
+							class="searchAllTeachersInCreateSchedule" name="user_id"
+							id='teacher_id' placeholder="Search Teacher" class='extnd_input'
+							style='display: inline-block; margin-left: 1px; width: 200px;'>
+						</li>
+					<li>
+							<div style="clear:both">
+								{% time_slots "time-slot-1" center.working_days center.working_slots %}
+							</div>
+					</li>
+					<li>
+						<div>
+							<a  class="btn" style="width:120px" rel="submit" href="#form-session-1" pre-call="pre_add_session" callback="after_add_session">
+								<span class="ajax-button-label" data-loading="Please wait">save</span></a>
+						</div>
+					</li>
+					</ul>
+					</form>
+                	<div id="evd-notification" class="evd-notification save_success alert alert-warning hide" style="margin-top:10px;">
+                        <a type="button" class="close reload_on_save">X</a>
+                        <p class="msg-body confirm_success_msg">This course doesn't seem to have any planned topics</p>
+                    </div>
+                </div>
+                {% for teacher_profile in teacher_profiles %}
+                	<div style="display:none;" id="teacher-{{ forloop.counter}}" class="teachers">
+	                    <a>Teacher Preferences:</a>
+	                    <p>from: {{ teacher_profile.from_date }}</p>
+	                    <p>to: {{ teacher_profile.to_date }}</p>
+	                    <p>language: {{ teacher_profile.medium }}</p>
+                        {% if teacher_profile.pref_days %}<p>prefered days: </p>{% endif %}
+	                        <ul>
+	                            {% for pref_day in teacher_profile.pref_days %}
+	                                <li>{{ pref_day }}</li>
+	                            {% endfor %}
+	                        </ul>
+                            {% if teacher_profile.current_courses %}
+                            	<div class="current-courses">
+                                	<p>current courses:</p>
+                                    	<ul>
+                                            {% for course in teacher_profile.current_courses %}
+                                                <li style="padding-bottom:5px;">{{ course }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                </div>
+                            {% endif %}
+                    </div>
+                {% endfor %}
+			</div>
+            {% else %}
+            	<p style="background:white;text-align:center;padding:20px;margin:0px auto 10px auto;float:none;width:500px;display:block;">There are no teachers matching the center language</p>
+            {% endif %}
+            <div id="current_session" class="tab-pane">
+                <img style="display:none;margin:10px auto" src="/static/images/loader.gif" alt="spinner" />
+            </div>
+		</div>
+	</div>
+</div>
+<!-- end add sesssion modal -->
+<div id="csrf_token">
+    {% csrf_token %}
+</div>
+<div id="teacher-modal" class="modal hide" style="width:510px;">
+    <a class="close" data-dismiss="modal" style="float:right;cursor:pointer;">X</a>
+    <img src="/static/images/loader.gif" style="float:none;margin:20px auto;display:block;" alt="spinner" />
+</div>
+
+<div id="success_session" class="modal hide"
+	style="max-height: 600px; overflow-y: auto;">
+	<a class="close" data-dismiss="modal"
+		style="float: right; cursor: pointer; position: absolute; top: 0px; right: 0px;">X</a>
+	<div style="clear: both">
+		<ul class="nav nav-tabs evd">
+			<li class="current-session" style="display: none;"><a
+				href="#current_session" data-toggle="tab">Current Sessions</a></li>
+			<li class="active" style="border: bottom:0px;"><a
+				href="#session-1" data-toggle="tab">Create Schedule</a></li>
+		</ul>
+		<div class="tab-content sess_details"></div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block bottom_scripts %}
+{{ block.super }}
+
+    <script>
+        $(document).ready(function() {
+        var add_course_dropdown_courses = {{add_course_dropdown_courses|safe}}
+        $("select[name='course_id'] option").remove();
+        $("select[name='course_id']").append($('<option>', {
+                value: '',
+                text: 'Select a Course'
+        }));
+
+        for (i = 0; i < add_course_dropdown_courses.length; i++) {
+			var language = ''
+			if(add_course_dropdown_courses[i].language != 'None'){
+				language= '::' + add_course_dropdown_courses[i].language
+			}
+            $("select[name='course_id']").append($('<option>', {
+                value: add_course_dropdown_courses[i].id,
+                text : add_course_dropdown_courses[i].board_name + language
+            }));
+        }
+
+        var add_course_dropdown_academic_year = {{add_course_dropdown_academic_year|safe}}
+        $("select[name='ay_id'] option").remove();
+
+        if(add_course_dropdown_academic_year.length > 0){
+            for (i = 0; i < add_course_dropdown_academic_year.length; i++) {
+                $("select[name='ay_id']").append($('<option>', {
+                    value: add_course_dropdown_academic_year[i].id,
+                    text : add_course_dropdown_academic_year[i].academic_year
+                }));
+            }
+        }
+        else{
+            $("select[name='ay_id']").append($('<option>', {
+                value: '',
+                text: 'No Academic Year found'
+            }));
+        }
+
+        });
+
+    </script>
+	<script>
+	$('.volDetailsId').on('click', function() {
+	    $('#demad_details_id').modal("hide");
+	  	$(".demand_modal").css("display","none");
+	  	  $(".confirm_btn").prop("disabled", false);
+	  	  $(".reject_btn_reason").prop("disabled", false);
+
+	  	});
+		window.center_id = {{ center.id }};
+		window.ay_id = {{ ay_id }};
+        $(document).ready(function(){
+        	if(location.search != null & location.search != '' & location.search != 'undefined'){
+        		var acc_year = location.search.split("&")[1];
+        		if(acc_year != null & acc_year != '' & acc_year != 'undefined'){
+        			var ay_id = location.search.split("&")[1].split("=")[1];
+        			$("select#ay_filter > option").each(function(){
+                        if($(this).attr("data-id") === ay_id){
+                            $(this).attr("selected", true);
+                        }
+                    });
+        		}
+        	}
+        });
+
+        $('.searchAllTeachersInCreateSchedule').autocomplete({
+    	    source : "/v2/ajax/get_allteachers?center_id="+window.center_id,
+    	    minLength : 1,
+    	    autoFocus : true,
+    	    select : function(event, ui) {
+
+    		      $(this).val(ui.item.value);
+           },
+         change : function(event, ui) {
+
+    		     if (ui.item) {
+    			        return;}
+    		     else {
+    			   $(this).val('');}
+
+    	      }
+
+    });
+
+
+	</script>
+
+  <script>
+$(document).ready(function(){
+      $(".myclasscls").colorbox({iframe:true, fastIframe:false, width:"1100px", height:"760px", gtransition:"fade", scrolling : false, fixed:false });
+      $(".esis").colorbox({iframe:true, fastIframe:false, width:"1100px", height:"760px", gtransition:"fade", scrolling : false, fixed:false });
+      $(".modifenroll").colorbox({iframe:true, fastIframe:false, width:"900px", height:"900px", gtransition:"fade", scrolling   : false });
+
+        $(".fromdt").datepicker({
+            dateFormat: "dd-mm-yy",
+            timeFormat: "hh:mm"
+        });
+        $(".todt").datepicker({
+            dateFormat: "dd-mm-yy",
+            timeFormat: "hh:mm"
+        });
+
+
+        });
+  </script>
+  <script>
+  $(document).ready(function(){
+ 	  var d = new Date();
+	  var str = $.datepicker.formatDate('yy-mm-dd', d);
+	  var day = d.getDay();
+	      diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+	      var week_start_tstmp = d.setDate(diff);
+          var week_start_date = new Date(week_start_tstmp);
+	      var start_date =formatted_date(week_start_date);
+	      var week_end = new Date(week_start_tstmp);
+	      week_end_date = new Date (week_end.setDate(week_end.getDate() + 5));
+          var end_date =formatted_date(week_end);
+	      $("#currentWeekStartDateId").val(start_date);
+	      $("#currentWeekEndDateId").val(end_date);
+	      function formatted_date(date){
+              var m = ("0"+ (date.getMonth()+1)).slice(-2); // in javascript month start from 0.
+              var d = ("0"+ date.getDate()).slice(-2); // add leading zero
+              var y = date.getFullYear();
+              return  y +'-'+m+'-'+d;
+}
+  });
+  </script>
+
+  <script>
+  $(document).ready(function(){
+	 loading();
+		var week_start_date = $("#currentWeekStartDateId").val();
+		var week_end_date = $("#currentWeekEndDateId").val();
+		var center_id = $('#center_id').val();
+		var time_table_id = 'time_table_id1';
+		timeTableForWeek(week_start_date,week_end_date,center_id,time_table_id);
+  });
+  </script>
+  <script>
+  	var loading = function() {
+        // add the overlay with loading image to the page
+        var over = '<div id="overlay">' +
+            '<td><img id="loading" src="/static/img_new/AjaxLoader.gif" alt="ajax loader" style="margin-left: 352px;" ></td>' +
+            '</div>';
+        $(over).appendTo("#loader_div");
+
+	};
+	function time_conversion(time){
+		time_slot = time.split('-')[0]
+		hours_min = time_slot.split(' ')[0];
+		hours = hours_min.split(':')[0];
+		minutes = hours_min.split(':')[1];
+		var ampm = hours >= 12 ? 'PM' : 'AM'; hours = hours % 12;
+		hours = hours ? hours : 12; // the hour '0' should be '12'
+		var time_slot_convert = hours + ':' + minutes + ' ' + ampm;
+		return time_slot_convert
+	}
+	function timeTableForWeek(week_start_date,week_end_date,center_id,time_table_id){
+  		var start_date = new Date(week_start_date);
+		start_date.setDate(start_date.getDate());
+		start_date = $.datepicker.formatDate('dd-mm-yy', start_date);
+		var end_date = new Date(week_end_date);
+		end_date.setDate(end_date.getDate());
+		end_date = $.datepicker.formatDate('dd-mm-yy', end_date);
+		$("#from_sdate").html("Date: "+start_date+" to "+end_date);
+		//$("#to_edate").html("To: "+end_date);
+		//var time_table_data ='<tr class="heading_time_table"><th colspan="3" class="heading_time_table"></th><th colspan="1" class="heading_time_table">TIME TABLE</th><th colspan="3" class="heading_time_table">(Date: '+start_date+'  to '+end_date+')</th></tr>';
+		var ajaxUrl = '/v2/ajax/time_table?center_id='+center_id+'&s_date='+week_start_date+'&e_date='+week_end_date;
+			$.ajax({
+			   url:ajaxUrl,
+			   success : function(resp){
+				var data = resp.time_slot_list;
+				var daysForEmpty = resp.days;
+			   	if(data != null && data !='' && data !='undefined'){
+			   		time_table_data = '<table  border="1" id="'+time_table_id+'" data-center="'+center_id+'"';
+			   		if(time_table_id == 'time_table_id1'){
+			   			time_table_data += 'class = "table item active table_data"';
+			   		}else{
+			   			time_table_data += 'class = "table item table_data"';
+			   		}
+			   		if($('input[data-center="'+center_id+'"]').val() != null & $('input[data-center="'+center_id+'"]').val() != '' & $('input[data-center="'+center_id+'"]').val() != 'undefined'){
+			   			time_table_data += 'data-center_name = "'+$('input[data-center="'+center_id+'"]').val()+'"';
+			   		}
+					time_table_data += 'style="margin-bottom: 0px; border-color: rgb(142, 188, 50);">';
+					time_table_data +='<tr>';
+					time_table_data +='<th class="table_styling" style="width:11%"><b>Time Slot</b></th>';
+					var days = data[0]['days'];
+					for(k=0;k<days.length;k++){
+						var day=Object.keys(days[k]);
+						time_table_data +='<th class="table_styling" style="width:6%"><b>'+day+'</b></th>';
+					}
+					time_table_data +='</tr>';
+			   		for(i=0;i<data.length;i++){
+			   			var time_start = data[i]['slot'].split('-')[0];
+			   			var start_time = time_conversion(time_start);
+			   			var time_end = data[i]['slot'].split('-')[1];
+			   			var end_time = time_conversion(time_end);
+						data[i]['slot'] = start_time+'-'+end_time;
+			   			time_table_data +='<tr>';
+				   		time_table_data +='<th class="default_time_table" >'+data[i]['slot']+'</th>';
+				   		var days_val = data[i]['days'];
+				   		for (k=0;k<days_val.length;k++){
+				   			var day=Object.keys(days_val[k]);
+				   			new_list = days_val[k][day].toString().split(",");
+					   		new_list = _.uniq(new_list);
+					   		new_data = '';
+					   		for (j=0;j<new_list.length;j++){
+					   			new_data += new_list[j];
+					   			if ((new_list.length-1)!=j){
+					   				new_data += ',\n';
+					   			}
+					   		}
+				   			if (new_data ==',\n' || new_data=='' || new_data==','){
+				   				new_data = '_';
+			   					time_table_data +='<td class="default_time_table" style="text-align: center;">'+new_data+'</td>';
+			   				}else{
+				   				time_table_data +='<td class="table_styling">'+new_data+'</td>';
+			   				}
+				   		}
+			   			time_table_data +='</tr>';
+			   		}
+			   	}else{
+			   		time_table_data = '<table border="1" id="'+time_table_id+'"data-center="'+center_id+'"';
+			   		if(time_table_id == 'time_table_id1'){
+			   			time_table_data += 'class = "table item active table_data2"';
+			   		}else{
+			   			time_table_data += 'class = "table item table_data2"';
+			   		}
+			   		if($('input[data-center="'+center_id+'"]').val() != null & $('input[data-center="'+center_id+'"]').val() != '' & $('input[data-center="'+center_id+'"]').val() != 'undefined'){
+			   			time_table_data += 'data-center_name = "'+$('input[data-center="'+center_id+'"]').val()+'"';
+			   		}
+					time_table_data += 'style="margin-bottom: 0px; border-color: rgb(142, 188, 50);"><tbody>';
+					time_table_data +='<tr>';
+					time_table_data +='<th class="table_styling"  style="width:5%"><b>Time Slot</b></th>';
+					for(k=0;k<daysForEmpty.length;k++){
+						var day = daysForEmpty[k];
+						time_table_data +='<th class="table_styling"><b>'+day+'</b></th>';
+					}
+					time_table_data +='</tr>';
+					time_table_data +='<tr>';
+	   				time_table_data +='<th class="default_time_table" style="width: 7%;">7:00AM - 8:00AM</th>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+
+	   				time_table_data +='</tr>';
+	   				time_table_data +='<tr>';
+	   				time_table_data +='<th class="default_time_table" style="width: 7%;">8:00AM - 9:00AM</th>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='</tr>';
+	   				time_table_data +='<tr>';
+	   				time_table_data +='<th class="default_time_table" style="width: 7%;">9:00AM - 10:00AM</th>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='</tr>';
+	   				time_table_data +='<tr>';
+	   				time_table_data +='<th class="default_time_table" style="width: 7%;">10:00AM - 11:00AM</th>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='</tr>';
+	   				time_table_data +='<tr>';
+	   				time_table_data +='<th class="default_time_table" style="width: 7%;">11:00AM - 12:00PM</th>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='</tr>';
+	   				time_table_data +='<tr>';
+	   				time_table_data +='<th class="default_time_table" style="width: 7%;">12:00PM - 1:00PM</th>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='</tr>';
+	   				time_table_data +='<tr>';
+	   				time_table_data +='<th class="default_time_table" style="width: 7%;">1:00PM - 2:00PM</th>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='</tr>';
+	   				time_table_data +='<tr>';
+	   				time_table_data +='<th class="default_time_table" style="width: 7%;">2:00PM - 3:00PM</th>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='</tr>';
+	   				time_table_data +='<tr>';
+	   				time_table_data +='<th class="default_time_table" style="width: 7%;">3:00PM - 4:00PM</th>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='</tr>';
+	   				time_table_data +='<tr>';
+	   				time_table_data +='<th class="default_time_table" style="width: 7%;">4:00PM - 5:00PM</th>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='<td class="default_time_table" style="text-align: center;">-</td>';
+	   				time_table_data +='</tr>';
+	   				time_table_data +='</tbody>';
+	   			}
+			   	time_table_data += '</table>';
+			   	$('#time_table_div').attr('style','padding-bottom: 0px;border-collapse:separate;');
+			   	$('#carousel-inner1').attr('style','overflow: scroll;max-height:500px;');
+			   	//$('#carousel-inner1').attr('style','overflow-x: scroll;');
+			   	//style="overflow:scroll;max-height:500px;"
+			   	$("#carousel-inner1").append(time_table_data);
+			   	$("#theading_timeTable_id").attr('style','display:in-block');;
+ 	   			$('#overlay').remove();
+
+			   }
+			});
+	}
+  </script>
+	<script>
+    $('.my_teacher').on('click',function(){
+    	$("#offeringIDForDropTeacherId").val($(this).attr('data-offering'));
+		var teacherId = $(this).attr('href').replace('#','');
+		$("#myteacher_id").val(teacherId);
+		$(".my_teachers").trigger( "click" );
+	});
+    </script>
+	<script>
+	$(document).ready(function(){
+  		$('#center_access_id').val($('#center_id').val());
+  	});
+
+  	function hide_centers_access(){
+		$('.float_btn').hide();
+		var arrow = $( ".arrow" ).html();
+		arrow = arrow.replace('fa-chevron-right','fa-chevron-left');
+		$( ".arrow" ).html(arrow);
+		var show_center = $( ".show_hide" ).html();
+		show_center = show_center.replace('hide_centers_access()','show_centers_access()');
+		$( ".show_hide" ).html(show_center);
+	}
+  	function show_centers_access(){
+  		$('.float_btn').show();
+  		var arrow = $( ".arrow" ).html();
+		arrow = arrow.replace('fa-chevron-left','fa-chevron-right');
+		$( ".arrow" ).html(arrow);
+		var show_center = $( ".show_hide" ).html();
+		show_center = show_center.replace('show_centers_access()','hide_centers_access()');
+		$( ".show_hide" ).html(show_center);
+  	}
+  </script>
+  <script>
+  	$(document).ready(function(){
+  		 setTimeout(function() {
+  			{% if not is_superuser %}
+  			 multiple_centers_access();
+  			{% endif %}
+  	    }, 2000);
+  	});
+  	function multiple_centers_access(){
+	    	var for_center_access_id  = $('#center_id').val();
+	    	if(for_center_access_id != null && for_center_access_id != '' && for_center_access_id != 'undefined'){
+	    		var ajaxUrl = '/v2/ajax/center_access/?center_id='+for_center_access_id;
+    	    	$.get(ajaxUrl, function(resp){
+    	    		if (resp !=null && resp !='' && resp !='undefined'){
+    	    			$('#flt').attr({'style': 'display:inline-block;'});
+    	    			var centers_access = resp;
+    	    			var week_start_date = $("#currentWeekStartDateId").val();
+    	    			var week_end_date = $("#currentWeekEndDateId").val();
+    	        		if(centers_access != null & centers_access != '' & centers_access != 'undefined'){
+    	        			for(i=0;i<centers_access.length;i++){
+     	        				var time_table_id = 'time_table_id'+(i+2);
+									var center_id = centers_access[i]['id'];
+									var center_name = centers_access[i]['name'];
+									var center_access_name = '<input type="hidden" value="'+center_name+'" data-center="'+center_id+'">'
+								$('#carousel-inner1').append(center_access_name);
+     	        				$('#carousel-inner1').append(timeTableForWeek(week_start_date,week_end_date,center_id,time_table_id));
+        	    			}
+    	        		}
+    	    		}
+    	    	});
+	    	}
+	}
+  </script>
+  <script>
+  $('#flt .left').hide();
+  $('#myCarousel1').bind('slid.bs.carousel', function ()
+	        {
+     var center_name = $('#carousel-inner1 .active').attr("data-center_name")
+
+     if(center_name != null & center_name != '' & center_name != 'undefined'){
+    	 	$('#center_name_id').text(center_name);
+     }else{
+    	 	$('#center_name_id').text('');
+    }
+     window.center_id = $('#carousel-inner1 .active').attr("data-center");
+	           if ($('#carousel-inner1 .item:first').hasClass('active'))
+	            {
+	            	$('#flt .left').hide();
+	            	 $('#flt .right').show();
+
+	            } else  if ($('#carousel-inner1 .item:last').hasClass('active'))
+	            {
+	                $('#flt .right').hide();
+	                $('#flt .left').show();
+	            }else  if ($('#carousel-inner1 .item:first').hasClass('active') && $('#carousel-inner1 .item:last').hasClass('active')){
+	            	 $('#flt .right').hide();
+	            	 $('#flt .left').hide();
+	            }
+	            else{
+	            	 $('#flt .right').show();
+	            	 $('#flt .left').show();
+	            }
+
+
+	        });
+ function autoSessionCreation (startDate,endDate,offering_id,user){
+	 var pref_time ="";
+	 var pref_days ="";
+	  $("#teacher-1").find('ul:first').find('li').each(function(i){
+			   var splitedDayTime = $( this ).text().split('(');
+			   pref_days = pref_days.concat(splitedDayTime[0].trim()+";");
+			   var times = splitedDayTime[1].replace(")", "");
+			   if (times.search("AM")!=-1){
+				   times = times.replace(/AM/g, "");
+			   }else if (times.search("PM")!=-1){
+				   times = times.replace(/PM/g, "");
+			   }
+			   pref_time = pref_time.concat(times.trim()+";");
+
+		});
+	  pref_time = pref_time.slice(0, -1);
+	  pref_days = pref_days.slice(0, -1);
+	 $.post('/add_dynamic_session/',{"offering_id":offering_id,"user_id":user,'start_date':startDate,'end_date':endDate,'prefered_days':pref_days,'prefered_timings':pref_time,'software':softeware,'softwareLink':'','ajax':'true',csrfmiddlewaretoken: document.getElementsByName("csrfmiddlewaretoken")[0].value }, function(resp){
+	      //alert(resp.sessions);
+	      var sess_total = '';
+	      if (resp.sessions!=null && resp.sessions!='' && resp.sessions !='undefined'){
+	    	  sess_total+='<p class="title"><span>Course : </span><span class="title">'+$("#offers").val()+'</span></p>';
+	    	  sess_total+='<div id="session-1" class="tab-pane active"style="overflow: hidden; margin-left: 30px;"><ul>';
+	    	  _.each(resp.sessions,function(sess){
+                  sess_total+='<li>'+sess+'</li>';
+         });
+	      }
+	      sess_total+='</ul></div><div id="current_session" class="tab-pane"><img style="display: block; margin: 10px auto"src="/static/images/loader.gif" alt="spinner"></div>';
+	      $(".sess_details").html(sess_total);
+	      $("#confirm-modal-"+resp.offering_id).modal("hide");
+	      $("#success_session").modal('show');
+	      });
+
+ }
+ function taskCreate(){
+	 var teacher = $("#slot_teacher_id").val();
+	 var  ajaxUrl = '/v2/ajax/create_Task_autoAlocation/?teacher='+teacher;
+	 $.ajax({
+         url : ajaxUrl,
+         success: function (data) {
+             $(".task_success_msg").text(data.msg);
+             $('#demad_details_id').modal('hide');
+             $('.task_save_success').removeClass('hide');
+             $("#confirm-modal-"+$("#confirmModalId").val()).modal("show");
+             $('.save_success').addClass('hide');
+        	/*  $("#task_success_msg").text(data.msg);
+             $('#demad_details_id').modal('hide');
+             $("#confirm-modal-"+$("#confirmModalId").val()).modal("hide");
+             $('.save_success').removeClass('hide'); */
+         },
+         error: function() {
+         // alert("error");
+           }
+       });
+}
+
+function change_year_and_month(selected_year, selected_month, academic_year_month) {
+	required_option = ''
+	for(month in academic_year_month[selected_year]){
+		console.log("Pela pela pela pela")
+		required_option += '<option value=' + academic_year_month[selected_year][month] +'>'+academic_year_month[selected_year][month]+'</option>'
+	}
+	required_option += '<option value="year_to_date">Year To Date</option>'
+	document.getElementById('academic_year_month').innerHTML = required_option
+}
+
+function getChildrenStarsForSelectedMonthNYear(){
+	var from_date = $('#from').val();
+	console.log("from_date",from_date)
+	var to_date = $('#to').val();
+	var center_id = '{{center_id}}'
+	var star_children_url = "/v2/ajax/get_star_childrens/?from_date="+ from_date+"&center_id="+center_id+"&to_date="+to_date;
+	$.ajax({
+		url : star_children_url,
+		success : function(resp) {
+			while(resp.includes(' u')){
+				resp =  resp.replace(' u', ' ');
+			}
+			json_data = eval('(' + resp + ')')
+			required_html=''
+			if ('get_stickers_for_students' in  json_data && json_data['get_stickers_for_students'].length) {
+				var count = 0;
+				// Reading data from the response
+				for(index in json_data['get_stickers_for_students']) {
+					data = json_data['get_stickers_for_students'][index]
+					if(count%5 == 0 && count >0) {
+						required_html += "<div class='row'></div>"
+					}
+					required_html += "<div class='col-md-2 text-center' style='margin-left: 15px;'>"
+					required_html += "<div class='row'><div class='col-md-12'><div class='col-md-12'>"
+					required_html += "<img src="
+					if('std_photo' in data && data['std_photo']) {
+						required_html = required_html + "/" + data['std_photo']
+					} else {
+						if(data['std_gender'] == 'Boy' || data['std_gender'] == 'Male'){
+							required_html += '/static/uploads/student/boys.png'
+						} else {
+							required_html += '/static/uploads/student/girl.png'
+						}
+					}
+					required_html += " style='margin-top: 15px;margin-left: -13px;border-radius: 50%;width: 120px;height: 120px;'/></div></div></div>"
+					required_html += "<div class='row' style='margin-left: -33px;margin-top: 20px;'><div class='col-md-6'>"
+					required_html += "<div class='col-md-12' style ='width:100px;'><label>Name:&nbsp;&nbsp;</label></div>"
+					required_html += "</div><div class='col-md-2'><div class='col-md-3' style='margin-left: 10px;padding: 0px 12px 0px 12px;word-wrap: break-word;width: 92px;'>"
+					required_html += data['std_name'] + "</div></div></div>"
+					required_html += "<div class='row' style='margin-left: -33px;'> <div class='col-md-6'>"
+					required_html += "<div class='col-md-12' style ='width:100px;'><label>Grade:&nbsp;&nbsp;</label></div></div>"
+					required_html += "<div class='col-md-2'><div class='col-md-3' style='margin-left: 10px;'><span>"
+					required_html += data['std_grade'] + "</span></div></div></div>"
+					if(data['get_stick_count_std'].length > 0)
+					{
+						for(i in data['get_stick_count_std']){
+							required_html += "<div class='row' style='margin-left: -32px;'><div class='col-md-6 '><div class='col-md-12' style ='width:100px;'>"
+							required_html += "<img title=" + data['get_stick_count_std'][i]['sticker__sticker_name'] + " class='awesome_sticker' src=/" + data['get_stick_count_std'][i]['sticker__sticker_path'] + " style='width: 55px;height: 55px;margin-left: 15%;margin-top: 0%;border-radius: 50%;' />:"
+							required_html += "</div></div><div class='col-md-2 ' style='margin-left: 14px; margin-top: 15px;'>"
+							required_html += "<div class='col-md-3' style='margin-left: 20px;'> <span>" + data['get_stick_count_std'][i]['countofsticker'] +"<span></div></div></div>"
+						}
+					}
+					required_html += "</div>" 
+					count += 1
+				}
+			} else{
+				//  If data is not available showng no data available
+				required_html += "<p style='margin-left: 29px;text-align: center; font-weight: bold;'>" + " No student is appreciated in "
+				if(month == 'year_to_date') {
+					required_html += 'Year To Date.</p>' 
+				} else {
+					required_html = required_html +  month + " " + json_data['selected_year'] + "." +"</p>"	
+				}
+			}
+			// required_html += '</div>'
+			document.getElementById('children_stars').innerHTML = required_html
+		}
+	})
+}
+
+$('body').on("click",".close_demandDetails",function(){
+	window.location.reload();
+});
+
+var is_digital = {% if center.digital_school %} true {% else %} false {% endif %};
+
+function ConfirmDemand (teacher,offering_id,center_id){
+	if (is_digital){
+		let digisoftwarelink = document.getElementById("digisoftwarelink"+offering_id).value;
+		console.log(digisoftwarelink)
+		if (digisoftwarelink == '' | digisoftwarelink == null){
+			alert('Please enter software link.');
+			return false;
+		}
+		
+		let software_link_regex =  /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/gm;
+		if (!software_link_regex.test(digisoftwarelink)){
+			alert('Please enter valid software link.\n Eg: https://meet.google.com/guh-vtga-jq');
+			return false;
+		}
+	}
+
+	$(".ajax_loader").css('display', 'block');
+	var  days = [];
+	var times = [];
+	$.get('/v2/prefDaysAndPrefSlots/',{'teacher':teacher, 'offering_id':offering_id}, function(resp){
+	      for (i = 0; i < resp.length; i++) {
+           days.push(resp[i]['day']);
+           times.push(resp[i]['times']);
+             }
+	      var btn_type = $(this).attr('data-btn_type');
+	      var startDate = '';
+	      var endDate = '';
+	      var start_date = new Date(parseInt($("#start_date_id").val()) - 31800000);
+	      var end_date = new Date(parseInt($("#end_date_id").val()) - 31800000);
+	      var startDate = start_date.getFullYear()+"-"+(start_date.getMonth() + 1)+"-"+start_date.getDate();
+	      var endDate = end_date.getFullYear()+"-"+(end_date.getMonth() + 1)+"-"+end_date.getDate();
+		  let dlink = document.getElementById("digisoftwarelink"+offering_id)
+		  let digisoftwarelink = null;
+		  if (dlink){
+			digisoftwarelink = dlink.value;
+		  }
+	      $.get('/v2/ajax/confirm_demand/',{'offering_id':offering_id,'center_id':center_id,'teacher':teacher,'pref_time':times.toString(),'pref_days':days.toString(),'startDate':startDate,'endDate':endDate,'software_link':digisoftwarelink}, function(resp){
+	    	  $(".ajax_loader").css('display', 'none');
+	    	  $("#demand_confirmMsg").text(resp.msg);
+		      $('.save_success').removeClass('hide');
+		});
+	});
+}
+
+
+$('body').on("click",".confirm_reject",function(){
+
+    $(".demand_modal").modal("hide");
+
+});
+$('body').on("click",".demand_details",function(){
+
+     $("#demad_details_id").modal("show");
+     $(".demand_modal").css("display","block");
+
+});
+$('body').on("click",".close_demand",function(){
+
+    $("#demad_details_id").modal("hide");
+    $(".demand_modal").css("display","none");
+
+});
+
+
+$("#dummy_submit_btn").click(function () {
+	var flag = false;
+    $(".modify_data").each(function() {
+    	if ($(this).val()==null || $(this).val()=='' || $(this).val()=='undefined'){
+			flag = true;
+    	}
+   	});
+   	if (flag){
+   		evd.show_msg("Please select all teachers");
+    }else{
+		$("#dummy_submit_btn").hide();
+		$("#submit-modify-sess").show();
+    	$("#submit-modify-sess").trigger('click');
+	}
+});
+  </script>
+
+<script>
+ $(document).ready(function() {
+        jQuery(function($) {
+            $(document).ajaxStop(function() {
+                $("#overlay").remove();
+                $("#ajax_loader").hide();
+            });
+            $(document).ajaxStart(function() {
+                $(".modal-content").append('<div id="overlay" style="background-color:rgba(192,192,192,0.4);top:0;left:0;height:100%;width:100%;z-index:100"></div>');
+                $("#ajax_loader").show();
+            });
+        });
+    });
+function addOffering(offering){
+	$(".reject_btn").val(offering);
+}
+
+var limit = 3;
+$('.checkbox input.two-checkbox').on('change', function(evt) {
+	var getParentID = $(this).parents().eq(2).attr('id');
+	parentDivId = $(this).parents().eq(9).attr('id');
+	existing_slot = $('#'+parentDivId+' div:nth-child(2)').find('.added_slots').find('.slot_append').find('.row').length;
+	currentSlot = $('div #'+getParentID).find('input:checked').length;
+    if(currentSlot >= limit || existing_slot>=2 ||(existing_slot ==1 && currentSlot>=2)) {
+    	$('#'+parentDivId+' div:nth-child(2)').find('.added_slots').find('#msgSlot').css('display', 'block');
+    	this.checked = false;
+    }else{
+      	$('#'+parentDivId+' div:nth-child(2)').find('.added_slots').find('#msgSlot').css('display', 'none');
+    }
+});
+
+
+function saveSlots(offeringId,is_new_slot){
+	if (is_new_slot && slots_to_save.length>2 && offeringId!= "" ){
+		$('#manage-offering-slot-modal-'+offeringId+' div:nth-child(2)').find('.added_slots').find('#msgSlot').css('display', 'block');
+	}else{
+		$.get("/save_slots/", {'data':JSON.stringify(slots_to_save),'center':"{{center.id}}",'offering_id':offeringId,'is_new_slot':is_new_slot}, function(resp){
+	     		$('.add_slot_success_msg').html(resp + " slots added successfully");
+	            	$('.save_success').removeClass('hide');
+	                slots_to_save = [];
+	 	});
+	}
+}
+
+function CenterSlots(modelId) {
+if ($('#'+modelId+' div:nth-child(2)').find('#centerslots').is(":visible")) {
+	$('#'+modelId+' div:nth-child(2)').find('#centerslots').css('display','none');
+	$('#'+modelId+' div:nth-child(2)').find('#center_slot_save').css('display','none');
+	$('#'+modelId+' div:nth-child(2)').find('#offering_slot_save').css('display','block');
+	$('#'+modelId+' div:nth-child(2)').find('#centerSlotShowHide').css('margin-left', '174px');
+	$('#'+modelId+' div:nth-child(2)').find('#centerSlotShowHide').css('margin-top', '-39px');
+	$('#'+modelId+' div:nth-child(2)').find('#centerSlotShowHide').css('width', '13%');
+	$('#'+modelId+' div:nth-child(2)').find('#centerSlotShowHide').find('button').html('Center Slots');
+	slots_to_save = []
+} else {
+	$('#'+modelId+' div:nth-child(2)').find('#centerslots').css('display','block');
+	$('#'+modelId+' div:nth-child(2)').find('#center_slot_save').css('display','block');
+	$('#'+modelId+' div:nth-child(2)').find('#offering_slot_save').css('display','none');
+	$('#'+modelId+' div:nth-child(2)').find('#centerSlotShowHide').css('margin-left', '215px');
+	$('#'+modelId+' div:nth-child(2)').find('#centerSlotShowHide').css('margin-top', '0px');
+	$('#'+modelId+' div:nth-child(2)').find('#centerSlotShowHide').css('width', 'none');
+	$('#'+modelId+' div:nth-child(2)').find('#centerSlotShowHide').find('button').html('Create New Slots');
+}
+if ($('#'+modelId+' div:nth-child(2)').find('#add_slot_form').is(":visible")) {
+	$('#'+modelId+' div:nth-child(2)').find('#add_slot_form').css('display','none');
+	$('#'+modelId+' div:nth-child(2)').find('.well').css('background-color', 'white');
+} else {
+	$('#'+modelId+' div:nth-child(2)').find('#add_slot_form').css('display','block');
+	$('#'+modelId+' div:nth-child(2)').find('.well').css('background-color','#f5f5f5');
+}
+}
+
+$('.center_slot input.add_to_offering').on('change', function(evt) {
+	day = $(this).attr("data-day");
+    slot = $(this).attr("data-time").split("to");
+    parentDivId = $(this).parents().eq(8).attr('id');
+	existing_slot = $('#'+parentDivId+' div:nth-child(2)').find('.added_slots').find('.slot_append').find('.row').length;
+    if($(this).prop('checked')){
+    	slots_to_save.push({'day':day,'start_time':slot[0],'end_time':slot[1]});
+        parentDivId = $(this).parents().eq(8).attr('id');
+        if (slots_to_save.length>=limit || existing_slot>=2 || (existing_slot==1 && slots_to_save.length >=2 )){
+        	this.checked = false;
+        	slots_to_save.pop();
+        	$(this).parents().eq(4).find('#msgSlot').css('display', 'block');
+        }
+    }else{//remove from delete array
+
+    slots_to_save = jQuery.grep(slots_to_save, function(value) {
+    if (value["day"]==day && value["start_time"]==slot[0] && value["end_time"]==slot[1]){
+        return null;
+    }else{
+        return value;
+    }
+    //return value != {'day':day,'start_time':slot[0],'end_time':slot[1]};
+});
+}
+});
+delete_offering_slot = []
+$('.slot_append input.add_to_delete').on('change', function(evt) {
+    day = $(this).attr("data-day");
+    slot = $(this).attr("data-time").split("to");
+    if($(this).prop('checked')){
+    	delete_offering_slot.push({'day':day,'start_time':slot[0],'end_time':slot[1]});
+    }else{//remove from delete array
+
+    	delete_offering_slot = jQuery.grep(delete_offering_slot, function(value) {
+        if (value["day"]==day && value["start_time"]==slot[0] && value["end_time"]==slot[1]){
+            return null;
+        }else{
+            return value;
+        }
+    	});
+    }
+});
+ function deleteSlot(offeringId){
+     if(jQuery.isEmptyObject(delete_offering_slot)){
+        $(".delete_select").removeClass("hidden");
+
+    }else{
+    	$.get("/delete_slots/", {'data':JSON.stringify(delete_offering_slot),'center':"{{center.id}}",'offering_id':offeringId}, function(resp){
+            $('.add_slot_success_msg').html(delete_offering_slot.length + " slots released successfully. ");
+            $('.save_success').removeClass('hide');
+        });
+    }
+}
+
+ function locationNotFound(){
+	alert('Location address not found');
+}
+
+ function locationNotFound(){
+	 alert('Location address not found');
+ }
+
+$("#message_alert").fadeTo(6000, 1000).slideUp(500, function(){
+	$("#message_alert").slideUp(1000);
+	});
+
+	document.addEventListener('DOMContentLoaded', function(event) {
+	//opens the class on doc load
+	var url_string = window.location.href;
+	var url = new URL(url_string);
+	var c = url.searchParams.get("mark_attendence");
+	if (c == 'true') {
+		document.getElementById("enter_class").click();
+	}
+	})
+
+</script>
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <!--<script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>-->
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.0/jquery-ui.min.js"></script> -->
+    <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+    <script type="text/javascript" src="/static/js/underscore-min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.timepicker.min.js"></script>
+    <!--<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>-->
+    <script type="text/javascript" src="/static/js/centeradmin.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.6.0/parsley.js"></script>
+{% endblock %}

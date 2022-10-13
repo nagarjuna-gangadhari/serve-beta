@@ -1,0 +1,237 @@
+{% extends "footer_base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+        .about-container{
+            margin-top: 80px;
+        }
+        .right-content .top {
+            padding:34px 37px;
+        }
+        .about-container #faq li {
+            background:none !important;
+        }
+        .subcontent {
+            padding:5px 12px 1px;
+            background:none;
+        }
+        .subcontent ul {
+            margin-left: 0px !important;
+        }
+        li.question {
+            list-style:none !important;
+            cursor:pointer;
+        }
+        div.intro h2 {
+            padding-bottom:35px;
+        }
+        .answer {
+            padding-left:20px;
+        }
+        .up-arrow {
+            background-position:0 -130px;
+            float:left;
+            width:5px;
+            height:11px;
+            margin-top:3px;
+            margin-right:5px;
+        }
+        .icon-down-arrow {
+            background-position:-4px -52px;
+            float:left;
+            width:14px;
+            height:6px;
+            margin-top:7px;
+            margin-right:5px;
+        }
+    </style>
+{% endblock %}
+
+{% block leftnav_list %}
+
+    <li><a href="/about/" class="about-1"><span>About us</span></a></li>
+    <li><a href="/vision/" class="about-2"><span>Vision & Mission</span></a></li>
+    <li><a href="/operating_principles/" class="about-3"><span>Principles</span></a></li>
+    <li><a href="/conduct/" class="about-4"><span>Code of Conduct</span></a></li>
+    <li><a href="/who_we_are/" class="about-5"><span>Who We Are</a></li>
+    <li><a href="/careers/" class="about-6" ><span>Careers</span></a></li>
+    <li><a href="/news_events/" class="about-7" ><span>News & Events</span></a></li>
+    <li><a href="/governance/" class="about-8" ><span>Governance</span></a></li>
+    <li><a href="/partners/" class="about-9"><span>Partners</span></a></li>
+    <li><a href="/faq/" class="about-10 active"><span>FAQ</span></a></li>
+    <li><a href="/contact_us/" class="about-11"><span>Contact Us</span></a></li>
+        
+{% endblock %}
+{% block top_content %}
+
+ <!--   <div class="top clearfix">
+        <div class="intro">
+            <h2>Have a question that wasn't answered here?</h2>
+        </div>
+    </div>-->
+{% endblock %}
+{% block bottom_content %}
+
+    <div class="paper-bg-wrapper">
+        <div class="paper-bg" style="border-top:0px;">
+            <div id="faq" class="subcontent">
+                <div class="paper-bg-wrapper">
+                    <div class="paper-bg" style="border-top:0px;">
+                        <div id="faq" class="subcontent">
+                            <ul class="collapsable clearfix level1">
+                                <li>
+                                    <!--<div class="main-question question"><em><span class="icon icon-arrow"></span></em>-->
+                                        <div class="expander" style="width: 690px; display: block;">
+                                            <ul class="clearfix level3">
+                                                <div class="faq">
+                                                    <ul>
+                                                        <li class="sub-question question"><span class="icon icon-arrow up-arrow"></span>How does this model work?</li>
+                                                        <ol class="answer">
+                                                            <li>eVidyaloka sets up a Digital Classroom (Delivery channel) of 15'x12' size, comprising,</li>
+                                                            <ol>
+                                                                <li>A CPU connected to a 32" LCD screen</li>
+                                                                <li>A high power Camera and a Conference Mic</li>
+                                                                <li>Powered by a broadband connection provided by BSNL</li>
+                                                            </ol>
+                                                            <li>The Volunteer Teachers can be located anywhere across the globe, and only require access to a computer system, webcam, headset and broadband connection.</li>
+                                                            <li>eVidyaloka team does the orchestration of schedules between the Centre and the Teacher Volunteers, depending on the children availability (Demand) and the teacher availability (Supply).</li>
+                                                            <li>Currently, Skype (<a href="http://www.skype.com/" target="_blank">www.skype.com</a>) is the  vehicle  for Class delivery. The remote Centre will have an eClassroom Skype ID which will be shared with the assigned Teacher Volunteers and vice versa.</li>
+                                                        </ol>
+                                                        <li class="sub-question question"><span class="icon icon-arrow up-arrow"></span>Who takes care of the classroom set up in the remote location?</li>
+                                                        <ol class="answer">
+                                                            <li>We have a local partner in the villages (NGO/Community lead) responsible for handling the classroom set up. </li>
+                                                            <li>The local coordinator is capable of operating the Computer and help with the connection.</li>
+                                                            <li>This person also will also be aware of the class schedule and coordinate with the children to ensure they attend the class on time.</li>
+                                                        </ol>
+                                                        <li class="sub-question question"><span class="icon icon-arrow up-arrow"></span>How many such eVidyaloka centers exist today and where are they located?</li>
+                                                        <ol class="answer">
+                                                            <li>Please find the details here:<a href="/centers/">eVidyaloka Centres</a></li>
+                                                        </ol>
+                                                        <li class="sub-question question"><span class="icon icon-arrow up-arrow"></span>Where is the Digital Classroom set up?</li>
+                                                        <ol class="answer">
+                                                            <li>Currently the eVidyaloka Digital Classroom is installed in 90+ Centers.</li>
+                                                        </ol>
+                                                        <li class="sub-question question"><span class="icon icon-arrow up-arrow"></span>What age group of children is taught?</li>
+                                                        <ol class="answer">
+                                                            <li>Children of 5th, 6th, 7th and 8th grades are currently taught - typically the age group of 10-14 years.</li>
+                                                        </ol>
+                                                        <li class="sub-question question"><span class="icon icon-arrow up-arrow"></span>What subjects are taught?</li>
+                                                        <ol class="answer">
+                                                            <li>The primary offerings are Mathematics, Science and English.</li>
+                                                        </ol>
+                                                        <li class="sub-question question"><span class="icon icon-arrow up-arrow"></span>What curriculum is taught to the children?</li>
+                                                        <ol class="answer">
+                                                            <li>The children are taught the same curriculum as prescribed in their respective local schools; typically, the local State Board syllabus in the local medium of instruction.</li>
+                                                            <li>The focus is to ensure that the children understand the concepts clearly, which is the primary objective of the initiative.</li>
+                                                        </ol>
+                                                        <li class="sub-question question"><span class="icon icon-arrow up-arrow"></span>So is it a replacement of what is taught in the school?</li>
+                                                        <ol class="answer">
+                                                            <li>No, it is a supplement/complement to what is being taught in the school. The students are guided in learning the concepts and applying them in their other curricular activities and projects.</li>
+                                                        </ol>
+                                                        <li class="sub-question question"><span class="icon icon-arrow up-arrow"></span>How is the local language handled by the Teacher Volunteers?</li>
+                                                        <ol class="answer">
+                                                            <li>We segment the volunteer as per the language speaking skills and assign to the centers accordingly. For example, a Hindi speaking volunteer will be assigned with a Centre in Jharkhand while a Tamil speaking volunteer for a Centre in Tamil Nadu.</li>
+                                                            <li>Even though the volunteers can speak the local language, most of them face the challenge of teaching technical terms in the local language.</li>
+                                                            <li>While currently it is handled well as they take a couple of classes and getting used to that medium, eVidyaloka is mitigating this by providing supporting transliteration contents for every topic between English and the local language, as a teaching aid.</li>
+                                                            <li>With the immense passion and driving force integrated by the volunteers in their classrooms, this challenge eventually becomes a non-issue.</li>
+                                                        </ol>
+                                                        <li class="sub-question question"><span class="icon icon-arrow up-arrow"></span>How is power interruptions handled?</li>
+                                                        <ol class="answer">
+                                                            <li>Class schedules are worked out keeping the local power shut-downs in mind.</li>
+                                                            <li>There are also backup inverters where power cut is erratic, ensuring an uninterrupted class.</li>
+                                                            <li>Where no power supply is available, we are working on an alternate power source like Solar. Currently, all our centers have electricity supply.</li>
+                                                        </ol>
+                                                        <!--<li class="sub-question question"><span class="icon icon-arrow up-arrow"></span>Any other similar initiatives/projects exist ?</li>
+                                                        <div class="answer">
+                                                            <p>We constantly strive to connect and align to avoid re-invention of wheels and also possibly try to partner with them . Following are few initiatives that we are tracking :
+                                                        Non-commercial:-->
+                                                            <!--<table style="border:0px;margin:10px 0px 10px 0px;">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th><a>www.khanacademy.org</a></th>
+                                                                        <th><a>www.icarnegie.com</a></th>
+                                                                        <th><a>www.ivolunteer.in</a></th>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th><a>www.agastya.org</a></th>
+                                                                        <th><a>http://www.eurekachild.org</a></th>
+                                                                        <th><a>http://www.karaditales.com</a></th>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>-->
+                                                            <!--<br/>
+                                                            <a href="http://www.khanacademy.org/">www.khanacademy.org</a><br/>
+                                                            <a href="http://www.icarnegie.com/">www.icarnegie.com</a><br/>
+                                                            <a href="http://www.ivolunteer.in/">www.ivolunteer.in</a><br/>
+                                                            <a href="http://www.agastya.org/">www.agastya.org</a><br/>
+                                                            <a href="http://www.eurekachild.org/">http://www.eurekachild.org</a><br/>
+                                                            <a href="http://www.karaditales.com/">http://www.karaditales.com</a><br/>
+                                                            Certain commercials business  too exist in this space, but predominantly catering to the western markets and tier 1, upmarket segment.
+                                                            </p>
+                                                        </div>-->
+                                                        <li class="sub-question question"><span class="icon icon-arrow up-arrow"></span>How can I Help/Volunteer?</li>
+                                                        <div class="answer">
+                                                    There are so many ways that one can help contribute to the revolution of quality education in remote villages of India. Some of the options to choose from are:<br>
+                                                      <ol><li> <a id="signup-trigger" style="cursor:pointer;">- Sign up and become a Volunteer Teacher.</a></li>
+                                                            
+                                                                    <li>- Help develop a standardized Lesson Plan, design teaching tools and collect learning material and become a Content Volunteer.</li>
+                                                                    <li>- Develop IT Systems supporting the class operations.</li>
+                                                                    <li>- Volunteer to administer the back end class operations and become a Volunteer Class Administrator.</li>
+                                                                    <li>- Sponsor/Donate individual classrooms, annual operating costs or general donations.
+                                                                        <a href="/sponsor/">Donate</a>
+                                                                    </li>
+                                                                    <li>- Or just be our well wisher, evangelize and spread the word.
+                                                                        <a href="http://www.facebook.com/evidyaloka" target="_blank">eVidyaloka on Facebook</a></li>
+                                                                </ol>
+                                                        </div>
+                                                        <li class="question sub-question"><span class="icon icon-arrow up-arrow"></span>BTW, what does 'eVidyaloka' mean?</li>
+                                                        <p class="answer"> <b>e </b> stands for:<br>Electronic (Technology)<br>
+                                                                        Educate<br>
+                                                                        Empower Rural communities<br>
+                                                                        Enable people to give<br>
+                                                                        Environment friendly<br>
+                                                            <b>Vidya</b> - Education<br>
+                                                            <b>Loka</b> - World symbolizes 'human connect'
+                                                        </p>
+                                                    </ul>
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block bottom_scripts %}
+    {{ block.super }}
+    <script>
+    $(document).ready(function(){
+        $(".answer").hide();
+        $(".sub-question").each(function() {
+            $(this).click(function(e) {
+                var $span = $(this).children();
+                if($span.hasClass("up-arrow")) {
+                    $span.removeClass("up-arrow");
+                    $span.addClass("icon-down-arrow");
+                }
+                else {
+                    $span.removeClass("icon-down-arrow");
+                    $span.addClass("up-arrow");
+                }
+                var $ans = $(this).next();
+                $ans.slideToggle();
+                e.stopPropagation();
+            });
+        });
+        $(".answer a").click(function(e){
+            e.stopPropagation();
+        });
+    });
+    </script>
+{% endblock %}

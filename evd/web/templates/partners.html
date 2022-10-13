@@ -1,0 +1,379 @@
+{% extends "footer_base.html" %}
+
+{% block head_styles %}
+{{ block.super }}
+    <style>
+        .about-container{
+            margin-top:-5px;
+        }
+        .right-content .top {
+            padding:33px 37px;
+        }
+        .right-content .top .intro {
+            margin-top:9px;
+        }
+        .subcontent {
+            background:none;
+            padding: 5px 40px 50px;
+        }
+        a {
+            cursor:pointer;
+        }
+        .blue {
+            color:#F15A22 !important;
+            /*text-shadow:0 -1px #0D94BA,0 1px white;*/
+        }
+        .partner > .content,.partner > .details {
+            padding: 10px 0 10px 15px;
+            font-size: 14px;
+            border: 1px solid #CCC;
+        }
+        .partner {
+            margin-top:10px;
+        }
+        .partner > .content {
+            cursor:pointer;
+        }
+        .partners > h3 {
+            padding-top: 20px;
+            color: #F15A22!important;
+        }
+        .panel-heading{
+            //height: 100px;
+        }
+        .content > img{
+            //margin-top: 15px;
+        }
+    </style>
+{% endblock %}
+{% block leftnav_list %}
+    <!--<li><a href="/about/" class="about-1"><span>About us</span></a></li>
+    <li><a href="/vision/" class="about-2"><span>Vision & Mission</span></a></li>-->
+    <li><a href="/operating_principles/" class="about-3"><span>Principles</span></a></li>
+    <li><a href="/conduct/" class="about-6"><span>Code of Conduct</span></a></li>
+    <!--<li><a href="/who_we_are/" class="about-2"><span>Who We Are</a></li>-->
+    <li><a href="/careers/" class="about-6" ><span>Careers</span></a></li>
+    <!--<li><a href="/news_events/" class="about-7" ><span>News & Events</span></a></li>-->
+    <li><a href="/governance/" class="about-8" ><span>Governance</span></a></li>
+    <li><a href="/partners/" class="about-9 active"><span>Partners</span></a></li>
+    <li><a href="/faq/" class="about-10"><span>FAQ</span></a></li>
+    <li><a href="/contact_us/" class="about-11"><span>Contact Us</span></a></li>
+        
+
+{% endblock %}
+{% block top_content %}
+
+<!--<div class="top clearfix">
+    <div class="intro">
+        <h2>Partners</h2>
+    </div>
+</div>-->
+{% endblock %}
+{% block bottom_content %}
+<div class="paper-bg-wrapper">
+    <div class="paper-bg">
+        <div class="subcontent clearfix">
+            <div class="partners">
+                <h3>Tamil Nadu:</h3>
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                        <p class="content">Payir Trust, Perambalur
+                            <img alt='Banner Logo' src="/static/images/logo_banner_v2.gif" height="40" width="120" align="right">
+                        </p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse1" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        Payir envisages the transformation of Indian villages into a socially stimulating, self reliant, growth oriented community rooted in the principles of Truth - a society where people practice and interact with the highest moral values<a href="http://www.payir.org/" target="_blank"> Website</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                        <p class="content">Human Upliftment Trust, Perambalur
+                            <img alt='Human Upliftment Trust image' src="/static/images/top_01.jpg" height="40" width="120" align="right">
+                        </p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse2" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        Human Uplift Trust is a community-based organization serving the rural areas of Mannachanallur, Perambalur and Ponmalaipatti, in Tamil Nadu, India. For more than 20 years we have helped people in rural communities satisfy their basic needs in education and health care. <a href="http://hutindia.org/" target="_blank"> Website</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                        <p class="content">Wild Wings Society , Coimbatore
+                            <img alt="Wild Wings Society" src="/static/images/wwslogo.jpg" style="height:40px; width: 120px" align="right">
+                        </p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse3" class="panel-collapse collapse">
+                    <div class="panel-body">
+
+                        <a href="http://wildwingsociety.blogspot.in/" target="_blank">Website</a>
+                    </div>
+                  </div>
+                </div>
+               
+                <h3> Andhra Pradesh:</h3>
+                <!--<div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">
+                        <p class="content">Parivartan Foundation, Vijayawada
+                            <img alt="Parivartan Foundation" src="/static/images/header_pf.jpg" height="40" width="120" align="right">
+                        </p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse4" class="panel-collapse collapse">
+                    <div class="panel-body">
+                    Parivartan Foundation, started when five friends at Birla Institute of Technology and Science, Pil    ani decided to put this quote to action. With two other like- minded individuals, we started our journey with an aim to bring the energy and dynamism of youth to development of villages.
+                        <a href="https://www.facebook.com/pages/Parivartan-Foundation-for-Socio-Economic-Development/276836325707" target="_blank">Website</a>
+                    </div>
+                  </div>
+                </div>-->
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">
+                        <p class="content">Gandhian Organisation for Rural Development
+                            <img alt="Gandhian Organisation for Rural Development" src="/static/images/partner_gord.PNG" style="height: 40px; width:120px" align="right">
+                        </p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse4" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <a href="" target="_blank">Website</a>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">
+                        <p class="content">IDEAS, Tiruvuru
+                            <img alt="IDEAS Tiruvuru image" src="/static/images/partner_ideas.jpg" height="40" width="120" align="right">
+                        </p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse5" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        IDEAS is a Non-Government, Non-Profit voluntary organization, which operates in Tiruvuru, Krishna District, Andhra Pradesh, India since 1998. It works for the Empowerment of social disadvantaged people, as Street and Working Children, Child Domestic Workers and Domestic Workers.
+                        <a href="http://www.ideas-ngo.in/" target="_blank">Website</a>
+                    </div>
+                  </div>
+                </div>
+
+
+                <h3>Telangana:</h3>
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse6">
+                        <p class="content">IDEAS, Tiruvuru
+                            <img alt="IDEAS Tiruvuru image" src="/static/images/partner_ideas.jpg" height="40" width="120" align="right">
+                        </p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse6" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        IDEAS is a Non-Government, Non-Profit voluntary organization, which operates in Tiruvuru, Krishna District, Andhra Pradesh, India since 1998. It works for the Empowerment of social disadvantaged people, as Street and Working Children, Child Domestic Workers and Domestic Workers.
+                        <a href="https://www.facebook.com/pages/Parivartan-Foundation-for-Socio-Economic-Development/276836325707" target="_blank">Website</a>
+                    </div>
+                  </div>
+                </div>
+
+
+                <h3>Jharkhand:</h3>
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse7">
+                        <p class="content">NEEDS (Network for Enterprise Enhancement and Development Support)
+                            <img alt="NEEDS image" src="/static/images/partner_needs.png" style="width:120px; height:40px" align="right">
+                        </p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse7" class="panel-collapse collapse">
+                    <div class="panel-body">
+
+                        <a href="" target="_blank">Website</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse8">
+                        <p class="content">Sahayog Mitra, Ranchi 
+                            <img alt="Sahayog Mitra, Ranchi" src="/static/images/partner_saha.PNG" style="height:40px; width:120px" align="right">
+                        </p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse8" class="panel-collapse collapse">
+                    <div class="panel-body">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse9">
+                        <p class="content">Samajik Parivartan Sansthan, Giridih 
+                            <img alt="Samajik Parivartan Sansthan, Giridih" src="/static/images/partner_sama.png" height="40" width="120" align="right" >
+                        </p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse9" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        Samajik Parivartan Sansthan is a grass root voluntary development organization working with the poor and marginalized communities in and around Giridih district, of Jharkhand, India.
+                 <a href="http://www.samajikparivartansansthan.org/" target="_blank">Website</a>
+                    </div>
+                  </div>
+                </div>
+
+                <h3>Karnataka</h3>
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse10">
+                        <p class="content">Vidyaposhak
+                            <img alt="Vidyaposhak" src="/static/images/partner_vidya.jpg" height="40" width="120" align="right" >
+                        </p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse10" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <a href="" target="_blank">Website</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse11">
+                        <p class="content">NEED BASE INDIA, Koppal
+                            <img alt="NEED BASE INDIA, Koppal" src="/static/images/need_base_india.png" height="40" width="120" align="right" >
+                        </p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse11" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        Need Base India (A foundation for Child Care and Development) is a non-profit organization started in Dec 2009 with the intention to work towards addressing the basic and fundamental rights of child care, protection, health and education for children living on streets, runaway children, orphans, children out of school or children under challenging situations.
+                        <a href="http://needbaseindia.org/" target="_blank">Website</a>
+                    </div>
+                  </div>
+                </div>
+
+                <h3>West Bengal</h3>
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse12">
+                        <p class="content">CESR (Centre for Environmental & Socio Economic Regeneration)
+                            <img alt="CESR" src="/static/images/partner_cesr.bmp" height="40" width="120" align="right" >
+                        </p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse12" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <a href="" target="_blank">Website</a>
+                    </div>
+                  </div>
+                </div>
+
+                <h3>Maharashtra</h3>
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse13">
+                        <p class="content">Vidya Prasarak Sanstha Nandurbar
+                            <img alt="Vidya Prasarak Sanstha Nandurbar" src="/static/images/partner_vpsn.PNG" style="height: 40px; width:120px" align="right" >
+                        </p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse13" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <a href="" target="_blank">Website</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse14">
+                        <p class="content">Vanchit Vikas Sanstha
+                            <img alt="Vanchit Vikas Sanstha" src="/static/images/partner_vvs.PNG" style="height:40px;width:120px" align="right" >
+                        </p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse14" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <a href="" target="_blank">Website</a>
+                    </div>
+                  </div>
+                </div>
+
+                <h3>Content:</h3>
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse15">
+                        <p class="content">Gyanome</p>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse15" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <a href="http://www.gyanome.org/" target="_blank"> Website </a>
+                    </div>
+                  </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block  head_scripts %}
+{{ block.super }}
+
+{% endblock %}

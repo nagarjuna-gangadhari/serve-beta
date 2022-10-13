@@ -1,0 +1,358 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+ <style>
+.tab-content > div:last-child {
+  display : block !important;
+ }
+.rowCss{
+margin-top:20px;
+} 
+.btn-primary{
+background-color:#337ab7 !important;}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: lightblue;
+}
+ </style>
+{% endblock %}
+
+{% block body_container %}
+    {{ block.super }}
+    {% include "code_conduct_modal.html" %}
+
+<div class="container-fluid new_dash_container"
+	data-profile_completion_status="{{user_profile.profile_completion_status}}">
+	<div class='row my_profile' style="position: relative">
+		<div class="col-lg-12 col-sm-12">
+		<input type="hidden" id="tabName"value="{{tabName}}"/>
+			<ul class="nav nav-tabs" id="tab_active">
+				<li id='offering_tab'><a href="#offering" data-toggle="tab"
+					aria-expanded="false" id='offering_id'>Custom Offering</a></li>
+				<li id ='other_tab'><a href="#other" data-toggle="tab" aria-expanded="true"
+					id="other_id">Other Opportunities</a></li>
+			</ul>
+			<div class="tab-content">
+				<div id="offering" class="tab-pane fade ">
+					<div class='basic_profile col-xs-12 col-sm-12 col-md-12'>
+						<div class="row rowCss">
+							<div class="col-md-12">
+								<div class="col-md-2">
+									<h4>
+										<b>Custom Offering</b>
+									</h4>
+								</div>
+								<div class="col-md-8"></div>
+							</div>
+						</div>
+						<hr />
+						<div id="messageBoxDiv"></div>
+						<div class="row rowCss">
+							<div class="col-md-12" id="offering_table">
+								<table class="table table-striped" id="table_id">
+									<thead>
+										<tr>
+											<th style="width: 5%">No</th>											
+											<th style="width: 30%"><label>Courses</label></th>
+											<th style="width: 20%"><label>Center Name</label></th>
+											<th style="width: 20%"><label>Requested By</label></th>
+											<th style="width: 5%"><label>Action </label></th>
+											<th style="width: 5%"></th>
+										</tr>
+									</thead>
+									<tbody>
+										{% if offerings and offerings|length > 0%}
+										{% for offering in offerings %}
+										<tr>
+											<td>{{forloop.counter}}</td>
+											<td>{{offering.course.board_name}}:{{offering.course.subject}}:{{offering.course.grade}}</td>
+											<td>{{offering.center.name}}</td>
+											<td>{{offering.center.created_by.get_full_name}}</td>
+											<td><button type="button" class="btn btn-primary" onclick="changeAction({{offering.id}})"> Approve</button>&nbsp;&nbsp; </td>
+											<td><button type="button" class="btn btn-primary" onclick="remove_offering({{offering.id}})">Release</button></td>
+										</tr>
+										{% endfor %}
+										{% else %}
+										<tr>
+											<td colspan="4">No Data Found</td>
+										</tr>
+										{% endif %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="other" class="tab-pane fade">
+					<div class='basic_profile col-xs-12 col-sm-12 col-md-12'>
+						<div class="row rowCss">
+							<div class="col-md-12">
+								<div class="col-md-4">
+									<h4>
+										<b>Other Opportunities</b>
+									</h4>
+								</div>
+								<div class="col-md-8"></div>
+							</div>
+						</div>
+						<hr />
+						<div id="messageBoxDivOther"></div>
+						<div class="row rowCss">
+							<div class="col-md-12">
+								<table class="table table-striped" id="table_id1">
+									<thead>
+										<tr>
+											<th style="width: 25%"><label>Subject</label></th>
+											<th style="width: 25%"><label>Comment</label></th>
+											<th style="width: 25%"><label>Requested By</label></th>
+											<th style="width: 25%"><label>Action</label></th>
+										</tr>
+									</thead>
+									<tbody>
+										{% if otherTasks and otherTasks|length > 0%}
+										{% for otherTask in otherTasks %}
+										<tr>
+											<td>{{otherTask.subject}}</td>
+											<td>{{otherTask.comment}}</td>
+											<td>{{otherTask.taskFor}}</td>
+											<td><button type="button" class="btn btn-primary"
+													onclick="changeTaskAction({{otherTask.id}})">
+													Approve</button>
+												<button type="button" class="btn btn-default"
+													onclick="changeTaskActionReject({{otherTask.id}})"
+													style="margin-left: 20px;">Reject</button>
+											</td>
+										</tr>
+										{% endfor %}
+										{% else %}
+										<tr>
+											<td colspan="4">No Data Found</td>
+										</tr>
+										{% endif %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id='ajax_loader' style="position: fixed; left: 48%; top: 48%; display:none; z-index: 999;">
+	<img src="/static/img_new/ajax-loader.gif" />
+</div>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function(){
+	$("#messageBoxDiv").empty();
+	if($('#tabName').val() == 'other'){
+		$('#other_tab').attr('class','active');
+		$('#offering_tab').removeAttr('class','active');
+		$('#offering').removeAttr('class','in active');
+		$('#offering').attr('class','tab-pane fade');
+		$('#other').attr('class','tab-pane fade active in');
+	}else{
+		$('#offering_tab').attr('class','active');
+		$('#other_tab').removeAttr('class','active');
+		$('#other').removeAttr('class','tab-pane fade active in');
+		$('#offering').attr('class','tab-pane fade in active');
+		$('#other').attr('class','tab-pane fade');
+	}
+	/* $("#offering_id").addClass('active'); */
+	if($("#offering_id").hasClass('active')){
+		loadDataTableForOffering();
+	}
+});
+function loadDataTableForOffering(){
+	{% if offerings and offerings|length > 0%}
+	if ($.fn.dataTable.isDataTable('#table_id')) {
+		$('#table_id').dataTable().fnDestroy();
+		} 
+	 	$('#table_id').dataTable({
+		"lengthMenu" : false,
+		"bLengthChange" : false,
+		"bFilter" : false,
+		"pageLength" : 20,
+		"aaSorting" : [],
+		"bStateSave" : false
+		});
+	 	{% endif %}
+}
+function loadDataTableForOther(){
+	{% if otherTasks and otherTasks|length > 0%}
+	if ($.fn.dataTable.isDataTable('#table_id1')) {
+		$('#table_id1').dataTable().fnDestroy();
+		} 
+		$('#table_id1').dataTable({
+		"lengthMenu" : false,
+		"bLengthChange" : false,
+		"bFilter" : false,
+		"pageLength" : 20,
+		"aaSorting" : [],
+		"bStateSave" : false
+		});
+	{% endif %}
+}
+$("#offering_id").click(function(){
+	loadDataTableForOffering();
+});
+$("#other_id").click(function(){
+	loadDataTableForOther();
+});
+</script>
+<script>
+$(document).ready(function() {
+	jQuery(function($) {
+		$(document).ajaxStop(function() {
+			$("#overlay").remove();
+			$("#ajax_loader").hide();
+		});
+		$(document).ajaxStart(function() {
+			$("body").append('<div id="overlay" style="background-color:rgba(192,192,192,0.4);position:absolute;top:0;left:0;height:100%;width:100%;z-index:100"></div>');
+			$("#ajax_loader").show();
+		});
+	});
+
+	
+});
+</script>
+<script>
+function changeAction(value){
+	$("#messageBoxDiv").empty();
+	var messageBox = '<div class="alert Box alert-dismissable" style="line-height: 0;" id="alert_id">';
+		messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+		messageBox += '<span id="text_message"></span></div>';
+    var ajaxUrl = '/ajax/updateOfferingOrOthersStatus?flag=offering&offering_id='+value;
+     $.ajax({
+       url : ajaxUrl,
+       success : function(data){
+    	   if (data!=null && data!='' && data!='undefined'){
+    		   $("#messageBoxDiv").html(messageBox);
+    		   if (data['status']=='success'){
+    			   $("#alert_id").addClass('alert-success');
+    			   $("#text_message").append(data['message']);
+    			   //window.location.href='/approve_offering/?tab=offering';
+				   $("#offering_table").load(" #offering_table > *");
+    		   }
+    		   else if(data['status']=='failure'){
+    			   $("#alert_id").addClass('alert-danger');
+    			   $("#text_message").append(data['message']); 
+    		   }
+    		   else{
+    			   $("#messageBoxDiv").empty(); 
+    		   }
+    	   }
+             },
+       error : function(){
+    	   alert("error");
+       }
+     
+});
+}
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+    var csrftoken = getCookie('csrftoken');
+function remove_offering(value){
+	var choice = confirm("Are you sure you would like to release Offering?");
+	if (choice === true) {
+	$.post("/v2/remove_offering/", {"offering_id":value,'csrfmiddlewaretoken':csrftoken}, function(resp){
+		if (resp['status'] === "Success" ) {
+			alert("Offering Released");
+			//window.location.reload();
+			$("#offering_table").load(" #offering_table > *");
+			return true;
+		}
+	});
+	}
+}
+function changeTaskAction(value){
+	$("#messageBoxDivOther").empty();
+	var messageBox = '<div class="alert Box alert-dismissable" style="line-height: 0;" id="alert_id">';
+		messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+		messageBox += '<span id="text_message"></span></div>';
+    var ajaxUrl = '/ajax/updateOfferingOrOthersStatus?flag=other&task_id='+value;
+     $.ajax({
+       url : ajaxUrl,
+       success : function(data){
+    	   if (data!=null && data!='' && data!='undefined'){
+    		   $("#messageBoxDivOther").html(messageBox);
+    		   if (data['status']=='success'){
+    			   $("#alert_id").addClass('alert-success');
+    			   $("#text_message").append(data['message']);
+    			   window.location.href='/approve_offering/?tab=other';
+    		   }
+    		   else if(data['status']=='failure'){
+    			   $("#alert_id").addClass('alert-danger');
+    			   $("#text_message").append(data['message']); 
+    		   }
+    		   else{
+    			   $("#messageBoxOther").empty(); 
+    		   }
+    	   }
+             },
+       error : function(){
+    	   alert("error");
+       }
+     
+});
+}
+
+function changeTaskActionReject(value){
+	$("#messageBoxDivOther").empty();
+	var messageBox = '<div class="alert Box alert-dismissable" style="line-height: 0;" id="alert_id">';
+		messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+		messageBox += '<span id="text_message"></span></div>';
+    var ajaxUrl = '/ajax/updateOfferingOrOthersStatus?flag=reject&task_id='+value;
+     $.ajax({
+       url : ajaxUrl,
+       success : function(data){
+    	   if (data!=null && data!='' && data!='undefined'){
+    		   $("#messageBoxDivOther").html(messageBox);
+    		   if (data['status']=='success'){
+    			   $("#alert_id").addClass('alert-success');
+    			   $("#text_message").append(data['message']);
+    			   window.location.href='/approve_offering/?tab=other';
+    		   }
+    		   else if(data['status']=='failure'){
+    			   $("#alert_id").addClass('alert-danger');
+    			   $("#text_message").append(data['message']); 
+    		   }
+    		   else{
+    			   $("#messageBoxOther").empty(); 
+    		   }
+    	   }
+             },
+       error : function(){
+    	   alert("error");
+       }
+     
+});
+}
+var hash = window.location.hash;
+window.setTimeout(function(){$('.nav-tabs a[href="' + hash + '"]').trigger('click');}, 1);
+$('.nav-tabs a').click(function (e) {
+    $(this).tab('show');
+    var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+    window.location.hash = this.hash;
+    $('html,body').scrollTop(scrollmem);
+});
+</script>
+{% endblock %}

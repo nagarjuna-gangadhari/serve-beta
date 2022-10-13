@@ -1,0 +1,515 @@
+{% extends "base.html" %} 
+{% load tags %} 
+{% load filters %} 
+{% block head_title %}eVidyaloka - Admin dashboard {% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+<style>
+.mapClass {
+    text-align: center;
+    color: black;
+	display: none;
+	position: fixed;
+	z-index: 1050 !important;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	vertical-align: middle;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+.nav-tabs li{
+   width: 33%;
+   }
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{
+	background-color: #22567d;
+	color: #f5f5f5;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+    background-color: #167ac6;
+}
+.nav-tabs > li > a{
+    color: #f5f5f5;
+    cursor: default;
+    background-color: #167ac6;
+    border: 1px solid #ddd;
+    border-bottom-color: #f5f5f5;
+    font-size: 15px;
+}
+</style>
+{% endblock %}
+
+{% block body_container%}
+<div class="container-fluid" style="background-color:white;margin-left:-7%;margin-right:-8%;">
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12">
+		{% if message %}
+				<div class="alert alert-success alert-dismissable" style="line-height: 0;margin-top:1%;">
+					 <a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>
+					  {{message}}
+				</div>
+		{% else %}
+		{% endif %}
+			<div class="row">
+                <div class="col-sm-9">
+                    <h3 style="margin-left:3%;font-weight:bold;">School Feasibility Test</h3>
+                </div>
+                <div class="col-sm-3">
+                    <span class="pull-right" style="margin-top:20px">Go back to <a href="/partner/myschools/" style="vertical-align:middle;">List Schools</a></span>
+                </div>
+            </div>
+
+
+           <div id ="message"></div>
+            <div id ="message1"></div>
+            <div class="row">
+                <div class="col-lg-12 col-sm-12 col-md-12">
+                  <ul class="nav nav-tabs" style="margin-right: -4%;">
+                        <li class="active"><a href="#internateAndGeoDiv" data-toggle="tab"
+                            aria-expanded="false" id='1'>Connectivity and GEO Verification</a></li>
+                        <li><a href="#evDiv" data-toggle="tab"
+                            aria-expanded="true" id='2'>eV Verification</a></li>
+                        <li><a href="#visualDiv" data-toggle="tab"
+                            aria-expanded="true" id='3'>Visual Verification</a></li>
+                          <li></li>
+                  </ul>
+                 </div>
+            </div>
+
+			<hr>
+			<!-- <h4 style="margin-left:6.7%;color:orange;">Please fill below details :</h4> -->
+			<br>
+			 <div class="tab-content">
+			 <div id="internateAndGeoDiv" class="tab-pane fade in active">
+			  <form action="/partner/myschool_verification/{{myschool.id}}/internetandgeo/" id="forminternetgeo" method="POST">
+				  {% csrf_token %}
+                  {% if error_msg %}
+                        <div class="alert alert-warning">
+                            <strong>Info!</strong> {{error_msg}}.
+                        </div>
+                    {% endif %}
+                    <div class="row" style="margin-left:5%;">
+                        <div class="col-lg-3 col-md-6 col-sm-4">
+                            <label><span style="color:red;">*&nbsp;</span>School Code</label>
+                            <input class="form-control" type="text" id="geo_schoolCode" name="geo_schoolCode" value="{{myschool.school.school_code}}" readonly="readonly" required="required" placeholder="School Code" title="Enter School Code"/>
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-3 "></div>
+                        <div class="col-lg-3 col-md-6 col-sm-4">
+                            <label><span style="color:red;">*&nbsp;</span>School Name</label>
+                            <input class="form-control" type="text" id="geo_schoolName" name="geo_schoolName" value="{{myschool.school.name}}" readonly="readonly" required="required" placeholder="School Name" title="Enter School Name"/>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-left:5%;">
+                        <div class="col-lg-3 col-md-6 col-sm-4">
+                            <label><span style="color:red;">*&nbsp;</span>Village Name</label>
+                            <input class="form-control" type="text" name="villageName" value="{{myschool.school.village}}" required="required" placeholder="Village Name" title="Enter Village Name"/>
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-3 "></div>
+                        <div class="col-lg-3 col-md-6 col-sm-4">
+                            <label><span style="color:red;">*&nbsp;</span>District Name</label>
+                            <input class="form-control" type="text" name="distirictName" value="{{myschool.school.district_details}}" required="required" placeholder="District Name" title="Enter District Name"/>
+                        </div>
+                    </div>
+	                    <div class="row" style="margin-left:5%;">
+                        <div class="col-lg-3 col-md-6 col-sm-4">
+                            <label><span style="color:red;">*&nbsp;</span>Broadband Service provider</label>
+                            <input class="form-control" type="text" name="serviceProvider" value="" required="required" required="required" placeholder="Broadband Service provider" title="Enter Broadband Service provider"/>
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-3 "></div>
+                        <div class="col-lg-3 col-md-6 col-sm-4">
+                            <label>Select wired or wireless</label>
+                            <select class="form-control" name="connectionType" style="border-radius:0px;">
+                                <option value="LandlineBroadband">Landline Broadband</option>
+                                <option value="3Gor4G">3G/4G</option>
+                                <option value="WiMax">WiMax</option>
+                                <option value="RailNetwork">Rail Network</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-left:5%;">
+                        <div class="col-lg-3 col-md-6 col-sm-4">
+
+                                <label><span style="color:red;">*&nbsp;</span>Enter download speed</label>
+                                <input class="form-control" type="text" name="downloadSpeed" required="required" style="border-radius:0px;width:99%:margin-left:0.5%;" placeholder="Enter Download Speed">
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-3 "></div>
+                        <div class="col-lg-3 col-md-6 col-sm-4">
+                                <label><span style="color:red;">*&nbsp;</span>Enter upload speed</label>
+                                <input class="form-control" type="text" name="uploadSpeed" required="required" style="border-radius:0px;width:99%:margin-left:0.5%;" placeholder="Enter Upload Speed">
+                        </div>
+                    </div>
+                    <div class="row" style="margin-left:5%;">
+                        <div class="col-lg-3 col-md-6 col-sm-4">
+                            <span style="width:100%;word-wrap:break-word;display:block;margin: 15px 0px 10px 0px;">Click <a href="http://speedtest.net/" target="_blank"  style="focus:focus;color:white;background:rebeccapurple;height:auto;text-align:left;border-radius:0px;margin-top:15px;padding:7px;">HERE</a> to check your upload & download speed</span>
+                        </div>
+                        <!-- <div class="col-lg-3" style="left:6.3%;">
+                             <label>Is there a Computer already available in the school ?</label>
+                                <select class="form-control" name="systemAvailability" style="border-radius:0px;">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                        </div> -->
+                        <div class="col-lg-2 col-md-3 col-sm-3 "></div>
+                        <div class="col-lg-3 col-md-6 col-sm-4">
+                            <label>Address</label>
+                            <input class="form-control" id="locationName" name="locationName" type="text" value="">
+                            <input class="form-control" id="id_postal_code" name="postal_code" type="hidden" value="">
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-left:5%;">
+                        <div class="col-lg-3 col-md-6 col-sm-4">
+
+                                <label><span style="color:red;">*&nbsp;</span>Latitude</label>
+                                <input class="form-control" id="latitude" type="text" name="latitude" required="required" readonly="readonly" style="border-radius:0px;width:99%:margin-left:0.5%;" placeholder="Enter Download Speed">
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-3 "></div>
+                        <div class="col-lg-3 col-md-6 col-sm-4">
+                                <label><span style="color:red;">*&nbsp;</span>Longitude</label>
+                                <input class="form-control" id="longitude" type="text" name="longitude" required="required" readonly="readonly" style="border-radius:0px;width:99%:margin-left:0.5%;" placeholder="Enter Upload Speed">
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-left: 30px;">
+                        <div class="col-md-5"></div>
+
+                        <div class="col-md-5"></div>
+                        <div class="col-md-2">
+                            <input id="geo_myschoolid" name="geo_myschoolid" type="hidden" value="{{myschool.id}}">
+                            <!--<input id="latitude" name="latitude" type="hidden" value="">-->
+                            <!--<input id="longitude" name="longitude" type="hidden" value="">-->
+                            <p id="demo"></p>
+                            <input class="btn btn-success" id="update" type="submit" value="Verify">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-lg-12">
+                    </div>
+                    <div class="mapClass1">
+                        <div id="hideDiv" style="cursor:pointer;font-size:17px;border-radius:10px;background:white;z-index: 3000;margin-left: 34%;height:auto;width: 33%;margin-top: 17%;padding: 2% 1% 1% 1% !important;">
+                            <p>Please make sure that you allow the location access  in the next step to enter the evidyaloka page</p><hr>
+                            <span style="margin-bottom:5%;"onclick="getLocation()">OK</span><br>
+                        </div>
+                        <p id="errorMsg" style="display:none;font-size:17px;background:white;z-index: 3000;margin-left: 34%;height:10%;width: 33%;margin-top: 17%;padding-top:1%;">
+
+                        </p>
+			        </div>
+			    </form>
+			 </div>
+
+
+			  <div id="evDiv" class="tab-pane fade">
+                  <form action="/partner/myschool_verification/{{myschool.id}}/everification/" id="evidverify" method="POST">
+                      {% csrf_token %}
+                      <div class="row" style="margin:0% 3%;">
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <label><span style="color:red;">*&nbsp;</span>School Code</label>
+                                <input class="form-control" type="text" id="everify_schoolCode" name="everify_schoolCode" value="{{myschool.school.school_code}}" readonly="readonly" required="required" placeholder="School Code" title="Enter School Code"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <label><span style="color:red;">*&nbsp;</span>School Name</label>
+                                <input class="form-control" type="text" id="everify_schoolName" name="everify_schoolName" value="{{myschool.school.name}}" readonly="readonly" required="required" placeholder="School Name" title="Enter School Name"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4"></div>
+                        </div>
+                      <div class="row" style="margin:0% 3%;">
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <label><span style="color:red;">*&nbsp;</span>No. of Teachers teaching (Std 5 to 8)-th</label>
+                                <input class="form-control" id="noOfTeachers" onkeydown="return validateNumber(event)" type="number" name="noOfTeachers" value="" min="0"required="required" placeholder="No. of Teachers teaching" title="Enter No. of Teachers teaching"/>
+                            </div>
+
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <label><span style="color:red;">*&nbsp;</span>No. of Students Enrolled (Std 5 to 8)-th</label>
+                                <input class="form-control" id="noOfStudents" onkeydown="return validateNumber(event)" type="number" name="noOfStudents" value="" min="0" required="required" placeholder="No. of Students Enrolled" title="Enter No. of students"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <label><span style="color:red;">*&nbsp;</span>HeadMaster Name</label>
+                                <input class="form-control" id="headMasterName" name="headMasterName" type="text" value="" required="required" placeholder="HeadMaster Name" title="Enter HeadMaster Name"/>
+                            </div>
+                      </div>
+
+
+                      <div class="row">
+                          <div class="col-lg-4 col-md-4 col-sm-4"></div>
+                          <div class="col-lg-4 col-md-4 col-sm-4">
+                              <input id="ev_myschoolid" name="myschoolid" type="hidden" value="{{myschool.id}}">
+                              <input type="hidden" id="ev_schoolCode" name="ev_schoolCode" value="{{myschool.school.school_code}}" />
+                              <input type="hidden" id="ev_schoolname" name="ev_schoolname" value="{{myschool.school.name}}" />
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-4" style="text-align: center;">
+                                <button class='btn btn-success' style="margin:0px 0px 15px 0px;" id="evDiv_submit">Submit</button>
+                          </div>
+
+                      </div>
+                  </form>
+              </div>
+
+			   <div  id="visualDiv" class="tab-pane fade">
+                   <form action="/partner/myschool_verification/{{myschool.id}}/visualverification/" id="visualverify" method="POST" enctype="multipart/form-data">
+                       {% csrf_token %}
+                       <div class="row" style="margin:0% 3%;">
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <label><span style="color:red;">*&nbsp;</span>School Code</label>
+                                <input class="form-control" type="text" id="visual_schoolCode" name="visual_schoolName" value="{{myschool.school.school_code}}" readonly="readonly" required="required" placeholder="School Code" title="Enter School Code"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <label><span style="color:red;">*&nbsp;</span>School Name</label>
+                                <input class="form-control" type="text" id="visual_schoolName" name="visual_schoolName" value="{{myschool.school.name}}" readonly="readonly" required="required" placeholder="School Name" title="Enter School Name"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4"></div>
+                        </div>
+                       <div class="row" style="margin:0% 3%;">
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <label>School Picture</label>
+                                <input class="form-control" id="school_pic" accept="image/*" type="file" name="school_pic" value="" onChange="validate(this)"  title="upload"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <label>Classroom picture</label>
+                                <input class="form-control" id="class_pic" accept="image/*" type="file" name="class_pic" value="" onChange="validate(this)"  title="upload"/>
+                            </div>
+                           <div class="col-lg-4 col-md-4 col-sm-4">
+                                <label>Permission Letter</label>
+                                <input class="form-control" id="permission_letter"  type="file" name="permission_letter" value="" onChange="validate(this)"  title="upload"/>
+                            </div>
+                           <!--<div class="col-lg-3 col-md-3 col-sm-3">
+                                <label>upload2</label>
+                                <input class="form-control" id="3"  type="file" name="3" value="" required="required"  title="upload"/>
+                            </div>-->
+
+                       </div>
+                       <div>
+                           <span><b><u>Note:</u></b> Attach File of type jpg, jpeg, png and pdf, should not be more than 3MB in size.</span>
+                       </div>
+                       <div>
+                           <div class="col-lg-4 col-md-4 col-sm-4">
+
+                           </div>
+                           <div class="col-lg-4 col-md-4 col-sm-4">
+                               <input id="vis_myschoolid" name="vis_myschoolid" type="hidden" value="{{myschool.id}}">
+                               <input type="hidden" id="vis_schoolCode" name="vis_schoolCode" value="{{myschool.school.school_code}}" />
+                               <input type="hidden" id="vis_schoolname" name="vis_schoolname" value="{{myschool.school.name}}" />
+                           </div>
+                           <div class="col-lg-4 col-md-4 col-sm-4" style="text-align: center;">
+                                    <button class='btn btn-success' style="margin:0px 0px 15px 0px;" id="visualDiv_submit">Submit</button>
+                           </div>
+                       </div>
+                   </form>
+			   </div>
+			   <div  id="" class="tab-pane fade">
+			   <div class="row" style="margin-left:5%;">
+			   </div>
+			   </div>
+			  </div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block bottom_scripts %}
+ {{ block.super }}
+<script type="text/javascript" src="/static/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/js/select.min.js"></script>
+<script>
+$(document).ready(function() {
+	{% if tab == 'everification' %}
+		$('.nav-tabs a[href="#evDiv"]').tab('show');
+	{% endif %}
+	
+	{% if tab == 'internet' %}
+		$('.nav-tabs a[href="#internateAndGeoDiv"]').tab('show');
+	{% endif %}
+	
+	{% if tab == 'visual_verification' %}
+		$('.nav-tabs a[href="#visualDiv"]').tab('show');
+	{% endif %}
+	
+	
+});
+function validateNumber(e) {
+	if(!((e.keyCode > 95 && e.keyCode < 106) || (e.keyCode > 47 && e.keyCode < 58) || e.keyCode == 8 || e.keyCode == 9)) {
+        return false;
+      }
+}
+
+
+function validate(file) {
+    var id = file.id
+    var ext = file.value.split(".");
+    ext = ext[ext.length-1].toLowerCase();
+    var arrayExtensions = ["jpg" , "jpeg", "png", "bmp", "pdf"];
+
+    if (arrayExtensions.lastIndexOf(ext) == -1) {
+        alert("File Format Not Supported. Attach jpg, jpeg, png, pdf type Attachment.");
+        $("#"+id).val("");
+    }
+    var fileSize = file.files[0].size/1024/1024;
+    if (fileSize > 3) {
+        alert('Upload file which is less than 3 MB size');
+        $("#"+id).val("");
+        <!--$(file).val(''); //for clearing with Jquery-->
+    }
+}
+
+
+$(':input').keyup(function() {
+	if ($("#formId")[0].checkValidity()) {
+	$("#submitId")[0].disabled = false;
+	$("#submitId").css({'background':'rebeccapurple', 'color':'white'});
+	  } else {
+	  $("#submitId")[0].disabled = true;
+	  $("#submitId").css({'background':'whitesmoke', 'color':'#555'});
+	  }
+});
+
+var x = document.getElementById("demo");
+$(document).ready(function(){
+	  
+	$(function() {
+	    $('#submitId').attr('disabled', 'disabled');
+	});
+	
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+	var min = today.getMinutes();
+	var hrs = today.getHours();
+	var sec = today.getSeconds();
+	
+	if(min<10) {
+		min = '0'+min
+	}
+	if(hrs<10) {
+		hrs = '0'+hrs
+	}
+	if(dd<10) {
+	    dd = '0'+dd
+	} 
+	if(mm<10) {
+	    mm = '0'+mm
+	} 
+	$("#dateId").val(yyyy + '-' + mm + '-' + dd);
+	today = yyyy + '-' + mm + '-' + dd + ' ' + hrs + ':' + min + ':' + sec;
+	$('input[id="dateId1"]').val(today);
+	$(".mapClass").css('display','block');
+	getLocation();
+
+
+	$('#visualDiv_submit').click(function(){
+        <!--if($('#school_pic').val() == ''  || $('#class_pic').val() == ''  ||  $('#permission_letter').val() == '' ){-->
+        <!--alert_message('please upload file');-->
+        <!--}-->
+
+        if($('#school_pic').val() != ''  && $('#class_pic').val() != ''  &&  $('#permission_letter').val() != '' ){
+         alert_message1('File upload in progress!');
+        }
+
+	});
+		$('#evDiv_submit').click(function(){
+        if($('#noOfTeachers').val() == ''  || $('#noOfStudents').val() == ''  ||  $('#headMasterName').val() == '' ){
+        alert_message('please enter all the details');
+        }
+
+        if($('#noOfTeachers').val() != ''  && $('#noOfStudents').val() != ''  &&  $('#headMasterName').val() != '' ){
+         alert_message1('submitted successfully!');
+        }
+
+	});
+
+
+	function alert_message(msg){
+            var s = "<div class='alert alert-danger alert-dismissable'><button type = 'button' class = 'close' data-dismiss = 'alert' aria-hidden = 'true'>&times;</button><strong>Warning!  </strong>"+msg+"</div>";
+	       $("#message").html(s);
+            }
+
+    function alert_message1(msg){
+            var s = "<div class='alert alert-success alert-dismissable'><button type = 'button' class = 'close' data-dismiss = 'alert' aria-hidden = 'true'>&times;</button><strong>Success!  </strong>"+msg+"</div>";
+	       $("#message1").html(s);
+            }
+
+
+
+ });
+
+function getLocation() {
+	var options = {
+	        enableHighAccuracy: true,
+	        maximumAge: 0
+	      };
+	$("#hideDiv").hide();
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError, options);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPosition(position) {
+	var latitude = position.coords.latitude;
+	var longitude = position.coords.longitude;
+	$(".mapClass").hide();
+    $("#latitude").val(latitude);
+    $("#longitude").val(longitude);
+    getAddress(latitude, longitude);
+}
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            $("#errorMsg").css('display','block');
+            $("#errorMsg").text("Please enable the location to access the page");
+           // $("#errorMsg").append("<br><p onclick='reloadPage()'>click here</p>");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            $("#errorMsg").css('display','block');	
+            $("#errorMsg").text("Location information unavailable");
+            break;
+        case error.TIMEOUT:
+        	$("#errorMsg").css('display','block');
+            $("#errorMsg").text("The request to get user location timed out");
+            break;
+        case error.UNKNOWN_ERROR:
+        	$("#errorMsg").css('display','block');
+        	$("#errorMsg").text("An unknown error occurred.");
+            break;
+    }
+}
+function reloadPage() {alert("dhfsdfkdsshfkjh");
+		window.location.reload(true);
+}
+function getAddress (latitude, longitude) {
+
+	return new Promise(function (resolve, reject) {
+        var request = new XMLHttpRequest();
+
+        var method = 'GET';
+        var gkey = 'AIzaSyADqJvBMuoeUfYoTP_9P-7LbVAqmGedKLs';
+        var url = 'https://maps.googleapis.com/maps/api/geocode/json?key=' + gkey + '&latlng=' + latitude + ',' + longitude + '&sensor=true';
+        var async = true;
+
+        request.open(method, url, async);
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                if (request.status == 200) {
+                    var data = JSON.parse(request.responseText);
+                    var address = data.results[0];
+                    var zip_address = address.address_components;
+                    var zipcode = zip_address[zip_address.length - 1].long_name;
+                    $("#locationName").val(address.formatted_address);
+                    $("#id_postal_code").val(zipcode);
+                    $("#locationName").prop('readonly',true);
+                    resolve(address);
+                }
+                else {
+                    reject(request.status);
+                }
+            }
+        };
+        request.send();
+    });
+};
+
+</script>
+{% endblock %}

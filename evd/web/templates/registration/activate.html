@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+        h3.logout {
+            padding: 20px 40px;
+            background: wheat;
+            border: 1px solid black;
+            text-align: center;
+            margin-top: 220px;
+            width: 290px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+    </style>
+{% endblock %}
+
+{% block body_container %}
+    <div id="content" class="clearfix">
+        <div>
+            <div class="inner clearfix" style="min-height:500px;">
+                <h3 class="logout"><b>Activation Complete.</b><br/><br/>You can explore eVidyaloka now. Your native people are waiting for you<br/><br/>Make them educated.</h3>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.setTimeout(function(){
+            window.location = "/";
+        },2000);
+    </script>
+{% endblock body_container %}

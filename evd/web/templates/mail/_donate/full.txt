@@ -1,0 +1,10 @@
+{{ name }} is willing to {{ donate }}  - Rs. {{ amount }} for {{ number }} {{ donation_type }} {% if num_children %} for {{ num_children }} {% endif %}
+
+His/Her details are:
+{% if name %}Name: {{ name }}{% endif %}
+{% if phone %}Phone Number: {{ phone }}{% endif %}
+{% if email %}Email: {{ email }}{% endif %}
+
+
+{% if reference %}Reference: {{ reference }}{% endif %}
+{% if channel %}Channel: {{ channel }} {% endif %}

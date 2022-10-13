@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/codemirror/codemirror.css">
+    <script src="/static/codemirror/codemirror.js"></script>
+    <script src="/static/codemirror/matchbrackets.js"></script>
+    <script src="/static/codemirror/sql.js"></script>
+    <link rel="stylesheet" href="/static/codemirror/show-hint.css">
+    <script src="/static/codemirror/show-hint.js"></script>
+    <script src="/static/codemirror/sql-hint.js"></script>
+
+    <script src="/static/css/tailwindcss3.js"></script>
+    <script src="/static/css/fontawesome/js/all.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba( 255, 255, 255, .8) url('http://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
+        }
+        /* When the body has the loading class, we turn
+           the scrollbar off with overflow:hidden */
+        
+        body.loading .modal {
+            overflow: hidden;
+        }
+        /* Anytime the body has the loading class, our
+           modal element will be visible */
+        
+        body.loading .modal {
+            display: block;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="px-10">
+        <div class="w-full flex h-10 justify-start items-center space-x-10">
+            <button class="bg-yellow-500 rounded-full text-sm font-bold p-1" onclick="get_data()">GET DATA</button>
+        </div>
+        <div class="w-full h-1/4 border">
+            <textarea class="w-full h-full" id="code" name="code"></textarea>
+        </div>
+
+
+        <div id="network_calls_table" class="w-full border">
+
+        </div>
+
+
+        <div class="flex items-stretch grid justify-items-stretch"><a class="justify-self-center p-2 font-bold">Response Data</a><a id="ExportTable" class="p-2 justify-self-end" href="#"><i class="fas fa-file-download fa-2x"></i></a></div>
+        <div class="w-full border">
+            <div id="table_div"></div>
+        </div>
+    </div>
+
+    <div class="modal"></div>
+
+
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+<script type="text/javascript">
+    google.charts.load('current', {
+        'packages': ["corechart", "table", "controls", "LineChart", "line"]
+    });
+    var network_calls = [];
+
+    var column_names = [];
+    var csv_columns_headers;
+    var csv_columns_data;
+    google.charts.load('current', {
+        'packages': ["corechart", "table", "controls", "LineChart", "line"]
+    });
+
+    $body = $("body");
+    $(document).on({
+        ajaxStart: function() {
+            $body.addClass("loading");
+        },
+        ajaxStop: function() {
+            $body.removeClass("loading");
+        }
+    });
+
+    function get_data() {
+        let today = new Date()
+        let start_time = today.getTime();
+        let call = {
+            'Status': 'Pending',
+            'Time': today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds(),
+            "action": editor.getValue(),
+            "Message": "loading",
+            "Duration": "00:00:00"
+        };
+        let data = {
+            'query': editor.getValue()
+        }
+
+        $.ajax({
+            url: "/v2/sql-editor/", // the endpoint
+            type: "POST", // http method
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            data: JSON.stringify(data),
+            dataType: 'json',
+            success: function(response) {
+                let table_data = response['data'];
+                let headers = response['headers'];
+                column_names = headers
+                let end_time = new Date();
+                const diffTime = Math.abs(end_time - today);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                call.Status = 'Success';
+                call.Message = table_data.length + " rows returned";
+                call.Duration = diffTime + " ms";
+                network_calls.push(call);
+                console.log(network_calls)
+                make_network_call_table()
+                center_table(table_data, headers)
+
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(xhr.responseJSON.error.message)
+                call.Status = "Error";
+                if (xhr.responseJSON.error.message.includes("kCustomErrorMsg")) {
+                    call.Message = xhr.responseJSON.error.message.split("'")[1];
+                } else {
+                    call.Message = "Method not allowed or " + xhr.responseJSON.error.message;
+                }
+                //call.Message = xhr.responseJSON.error.message.split(';')[1];
+                call.Duration = "2 ms";
+                network_calls.push(call);
+                console.log(network_calls)
+                make_network_call_table()
+
+                $('#table_div div').remove();
+            }
+        })
+    }
+
+    function center_table(data, headers) {
+        var table_data = [];
+        for (row in data) {
+
+            var row_data = [];
+            for (colum in headers) {
+                row_data.push(String(data[row][headers[colum]]));
+            }
+            table_data.push(row_data);
+        }
+
+        google.charts.setOnLoadCallback(drawTable);
+
+        function drawTable() {
+            var data = new google.visualization.DataTable();
+            for (idex = 0; idex < column_names.length; idex++) {
+                data.addColumn('string', column_names[idex]);
+            }
+            data.addRows(table_data);
+            // build column headings for csv data
+            csvColumns = '';
+            for (var i = 0; i < data.getNumberOfColumns(); i++) {
+                csvColumns += data.getColumnLabel(i);
+                if (i < (data.getNumberOfColumns() - 1)) {
+                    csvColumns += ',';
+                }
+            }
+            csv_columns_headers = csvColumns += '\n';
+
+            // build csv data
+            window.csv_columns_data = data
+
+            var table = new google.visualization.Table(document.getElementById('table_div'));
+            var cssClassNames = {
+                'headerRow': 'font-black text-blue-400 text-xs',
+                'tableRow': 'text-sm',
+                'oddTableRow': '',
+                'selectedTableRow': '',
+                'hoverTableRow': 'text-sm',
+                'headerCell': '',
+                'tableCell': 'text-xs h-2 truncate',
+                'rowNumberCell': ''
+            };
+            table.draw(data, {
+                showRowNumber: false,
+                allowHtml: true,
+                width: '100%',
+                height: '100%',
+                pageSize: 10,
+                cssClassNames: cssClassNames,
+                // sortColumn: 1,
+                sort: 'enable',
+                pagingSymbols: {
+                    prev: 'prev',
+                    next: 'next'
+                }
+            });
+        }
+    }
+
+    $('#ExportTable').click(function() {
+
+        var csvFormattedDataTable = csv_columns_headers + google.visualization.dataTableToCsv(csv_columns_data);
+        var encodedUri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csvFormattedDataTable);
+        this.href = encodedUri;
+        this.download = 'table_data.csv';
+        this.target = '_blank';
+    })
+
+    window.onload = function() {
+        var mime = 'text/x-mysql';
+
+        window.editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+            mode: mime,
+            indentWithTabs: true,
+            smartIndent: true,
+            lineNumbers: true,
+            matchBrackets: true,
+            autofocus: true,
+            extraKeys: {
+                "Ctrl-Space": "autocomplete"
+            },
+            hintOptions: {
+                tables: {
+                    users: ["name", "score", "birthDate"],
+                    countries: ["name", "population", "size"]
+                }
+            }
+        });
+    };
+
+    google.charts.load('current', {
+        'packages': ['table']
+    });
+
+
+    function make_network_call_table() {
+
+        google.charts.setOnLoadCallback(drawTable);
+
+        function drawTable() {
+
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Satus');
+            data.addColumn('string', 'Time');
+            data.addColumn('string', 'Action');
+            data.addColumn('string', 'Message');
+            data.addColumn('string', 'Duration');
+            let mynetwork_calls = network_calls.reverse()
+
+            for (idex = 0; idex < mynetwork_calls.length; idex++) {
+                data.addRow([mynetwork_calls[idex]['Status'], mynetwork_calls[idex]['Time'], mynetwork_calls[idex]['action'], mynetwork_calls[idex]['Message'], mynetwork_calls[idex]['Duration']]);
+            }
+            var table = new google.visualization.Table(document.getElementById('network_calls_table'));
+            var cssClassNames = {
+                'headerRow': 'font-black text-blue-400 text-xs',
+                'tableRow': 'text-sm',
+                'oddTableRow': '',
+                'selectedTableRow': '',
+                'hoverTableRow': 'text-sm',
+                'headerCell': '',
+                'tableCell': 'text-xs h-2 truncate',
+                'rowNumberCell': ''
+            };
+            table.draw(data, {
+                showRowNumber: false,
+                allowHtml: true,
+                width: '100%',
+                height: '100%',
+                pageSize: 5,
+                cssClassNames: cssClassNames,
+                // sortColumn: 1,
+                sort: 'enable',
+                pagingSymbols: {
+                    prev: 'prev',
+                    next: 'next'
+                }
+            });
+        }
+    }
+
+    //make_network_call_table()
+</script>
+<script>
+</script>
+
+
+</html>

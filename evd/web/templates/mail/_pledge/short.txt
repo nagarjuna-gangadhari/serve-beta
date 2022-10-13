@@ -1,0 +1,1 @@
+Thank You {{ name }} {{ last_name }} for your interest in donating Rs. {{ amount }} for {{ donation_type }}

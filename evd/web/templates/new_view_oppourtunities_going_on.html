@@ -1,0 +1,31 @@
+<div class='row standard_row hight' style='height : 200px; margin-top : 10px;'>
+            <div class='col-sm-7' style='padding-left:0px;padding-right:5px;'>
+                <div class='material_div sec_title' style='min-height:221px;'>
+			
+				{% if slot_details%}
+    				{% for slot in slot_details %}
+    					 {% if forloop.first %}
+   							<p style="margin-left: 21px;"> Your booked Center {{slot.0}} {{slot.5}} on {{slot.1}} ( From {{slot.2}} To {{slot.3}} ) </p> 
+                         {% else %}
+							<p style="margin-left: 21px;"> and {{slot.1}} ( From {{slot.2}} To {{slot.3}} )    as on {{slot.4}}</p>
+						 {% endif %}
+ 					{% endfor %}
+ 				{% else %}
+ 					<h5><a href="/v2/demandList/"style="color: rgba(255, 110, 0, 0.99); text-decoration: none;font-size: 16px;">Select a School to Teach</a></h5>
+				{% endif %} 
+			       <hr>
+                     <a href='/demand/' style='font-family : inherit; line-height : normal;margin-top:25px; color : black;'>
+                        <div class='row standard_row' id='render_demand' data-toggle="tooltip" data-placement="top" title="Click to explore more..">
+                        </div>
+                    </a> 
+                </div>
+                          </div>
+            <div class='col-sm-5 cont-align' style=' padding-right : 0px;'>
+                <div class='material_div sec_title' style='min-height:221px;'>
+                    <h5>Know what's going on..</h5>
+                    <hr>
+                    <div class='row standard_row render_feed' style='height:166px; overflow-y:auto;'>
+                    </div>
+                </div>
+            </div>
+</div>

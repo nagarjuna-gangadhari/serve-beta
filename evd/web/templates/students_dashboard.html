@@ -1,0 +1,1819 @@
+{% extends "base.html" %} {% block head_styles %} {{ block.super }}
+{% endblock %} {% block head_scripts %} {{ block.super }}
+
+
+<!-- Bootstrap cs -->
+<!-- <link href="/static/css/bootstrap.min.css" rel="stylesheet"> -->
+
+<!-- Font Awesome -->
+<link href="/static/css/select2.min.css" rel="stylesheet">
+
+<!-- Custom Theme Style -->
+<link href="/static/css/custom.css" rel="stylesheet">
+
+<!-- jQuery -->
+<script src="/static/js_new/jquery-ui.min.js"></script>
+<script src="/static/js_new/jquery-ui.js" ></script>
+<!-- <script src="/static/js/jquery.min.js"></script> -->
+<!-- <script src="/static/js/jquery.js" ></script> -->
+
+
+<!-- My Library -->
+<link href="/static/css/jquery-ui.css" rel="Stylesheet"></link>
+<script type="text/javascript" src="/static/js_new/user_center_incremental_search.js"></script>
+
+<!-- Bootstrap -->
+<!-- <script src="/static/js/bootstrap.min.js"></script> -->
+
+<!-- Datepicker -->
+<script type="text/javascript" src="/static/js/bootstrap-datepicker.min.js"></script>
+
+<!-- Select -->
+<script src="/static/js/select.min.js"></script>
+
+<!-- Extra -->
+<script src="https://www.amcharts.com/lib/3/gauge.js"></script>
+<style>
+.tile_count {
+	margin-bottom: 2px;
+	margin-top: 2px;
+}
+.divider {
+     border-bottom: 0px solid #ddd ! important;
+     margin: 0px ! important;
+}
+.chart {
+	width: 100%;
+	height: 290px;
+	border-radius: 4px;
+	margin-top: 10px;
+	padding: 20px;
+	position: relative;
+}
+
+.count {
+	font-size: 10px;
+}
+
+.count1 {
+	font-size: 14px;
+	margin-left: 0px;
+}
+
+.chartBoxCss {
+	height: 370px;
+}
+.rowCss {       
+    padding: 20px;      
+}
+.input-group-addon:hover {
+    background-color: #eee !important;
+}    
+.btnCss {       
+    margin-top: 23px;  
+}
+/* .container {
+  width: 100%;
+  padding: 0
+} */
+.inner {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+.count1 h3 {
+	font-size: 18px;
+}
+.cbp-af-header.cbp-af-header-shrink .nav a{
+	color: #000 !important;
+}
+.rowCSS {
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+.navbar-default {
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+.tile_count {
+    margin-top: 0px !important;
+}
+a{
+color: #337ab7; !important;
+}
+a:hover{
+color: #23527c; !important;
+}
+
+.btn-primary:hover, .btn:focus, .btn.focus {
+    color: #333;
+    text-decoration: none;
+}
+.chartBoxCss {
+     height: 400px;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+  /*   padding-top: 3px;
+    height: 28px; */
+}
+.select2-container .select2-selection {
+	    height: auto;
+	    max-height:35px;
+	    overflow-y : scroll;
+	} 
+	
+
+.btn-primary:active:hover{
+    color: #fff;
+    background-color: #204d74;
+    border-color: #122b40;
+}
+</style>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#general").next().addClass("activ");
+	});
+	var state_count = "{{ state_count }}"
+	var center_count = "{{ center_count }}"
+	var subject_count = "{{ subject_count   }}"
+	var admin_count = " {{ admin_count  }}"
+	var lg_bttn = "{{ lg_bttn  }}"
+
+	var allsignin = 0;
+	function signinCallback(authResult) {
+		if (authResult['status']['signed_in']) {
+			allsignin = 1;
+			$("#gSignInWrapper, #gplus").css("display", "none");
+			if (lg_bttn != 0) {
+				$("#al").show();
+			}
+			var ifrm = document.getElementById('forum_embed');
+			ifrm.src = ifrm.src;
+		}
+	}
+	/* Executed when the APIs finish loading */
+	function render() {
+		// Additional params
+		var additionalParams = {
+			'theme' : 'dark'
+		};
+
+		gapi.signin.render('myButton', additionalParams);
+	}
+
+	$(function() {
+		if (lg_bttn == 1) {
+			$("#lg_bt").hide();
+			$("#fm_lst").css("margin-top", "-10px");
+			$("#gplus").css("margin-left", "680px");
+		}
+		if (state_count == 0) {
+			$("#state_head").hide();
+			$("#evd_central").hide();
+		}
+		if (admin_count == 0 && center_count == 0) {
+			$("#admin_head").hide();
+		}
+		if (subject_count == 0) {
+			$("#subject_head").hide();
+		}
+
+		$("a.forum")
+				.click(
+						function(e) {
+							e.preventDefault();
+							$(this).parent().siblings().removeClass("activ");
+							$(this).parent().addClass("activ");
+							var urll = "https://groups.google.com/forum/embed/?place=forum/"
+									+ $(this).data("url")
+									+ "&domain=evidyaloka.org"
+									+ "&showsearch=true&showpopout=true&parenturl="
+									+ encodeURIComponent(window.location.href);
+							console.log(urll);
+							$("iframe").attr('src', urll);
+						});
+
+	});
+</script>
+
+
+
+{% endblock %} {% block body_container %}
+{%if is_partner%}
+<div class="inner" style="height: 99%;">
+    <div class="col-md-2"style="height: 100%;">
+      {%include "navbar.html"%}
+    </div>
+    <div class="col-md-10" style="height: 100%;overflow-y:  auto; right: -15px; padding-left: 3%">
+{%else%}
+<div>
+     <div class="col-md-12">
+{%endif%}
+<div class="container-fluid"style="padding-top: 15px;padding-left: 0px;">
+<form action="/students_dashboard/" id="advancedFilterForm" method="get">
+<input type="hidden" value="True" name="flag">
+	<div class="row rowCSS">
+		<div class="col-xs-12 col-sm-12 col-md-12">
+			<div class="panel panel-default">			    
+			     <div class="row rowCss">
+					         <div class="col-md-12">  
+			                    <div class="row"
+									style="background-color: #ddd; margin-left: 14px;">
+									<div class="col-sm-12"
+										style="margin-left: -17px; postion: absolute">
+										<div class="btn-group">
+											<button style="text-align: center; width: 120px; background-color:#2d5477;"
+												type="button"  onclick="location.href='/students_dashboard/'" class=" btn btn-primary size" >Dashboard</button>
+
+											<button style="text-align: center;background: #337ab7 !important;" type="button" onclick="location.href='/students_progress_report/'"
+												class=" btn btn-primary size">Student Progress
+												Report</button>
+
+											<button style="text-align: center; width: 120px;background: #337ab7 !important;" onclick="location.href='/reportCard/'"
+												type="button" class=" btn btn-primary size">Report
+												Card</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+			
+				<div class="row " style="margin-left:17px">
+				   <div class="col-md-10 col-xs-10">
+					<div class="col-md-3 col-sm-6 col-xs-12">
+					<input type="hidden" id="state_count" value="{{states|length}}">
+						<label>Select State</label>
+                        <div class="col-md-12 input-group">
+							<select id="state_id" name="stateId" class="select2_multiple form-control select2-hidden-accessible" multiple="multiple" tabindex="-1" aria-hidden="true">
+								{% if states|length == 0  %}
+									<option value="No_state" id="stateId" selected="selected">State Not Found</option>
+								{%else%}
+								 
+								    {% if statenames.0 == "All" or statenames.0 == '' %}
+										<option value="All" id="stateId" selected="selected">All</option>
+									{% else %}
+										<option value="All" id="stateId">All</option>
+									{% endif %}
+								{% endif %}
+									
+									{% for state in states %}
+										{%if state.state %}
+											<option value="{{state.state}}"
+												{% for state_base in statenames %}
+													{% if state.state == state_base%}
+														selected="selected"
+													{% endif %}
+												{% endfor %}
+											>{{state.state}}</option>
+											<!-- <option value="pela" selected="selected">Pela</option> -->
+										{% endif %}
+									{% endfor %}
+							</select>
+							<label class="input-group-addon btn" for="state_id" title="Select State" style="cursor: default !important;"> 
+								<span class="fa fa-angle-down" title="Select State" style="cursor: default !important;"></span>
+							</label>
+								
+							</div>
+					</div>
+					<div class="col-md-3 col-sm-6 col-xs-12">
+						<label>Partner</label>
+						<div class="col-md-12 input-group">
+							<input type="hidden" value="{{delivery_partner}}" id="partnerid"/>
+						<select id='id_partner' name='partner_id' class="select2_multiple form-control select2-hidden-accessible" multiple="multiple" tabindex="-1" aria-hidden="true">
+							<option value=-1 id='partner_id'>All</option>
+						</select>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-6 col-xs-12">
+						<label>Donor</label>
+						<div class="col-md-12 input-group">
+							<input type="hidden" value="{{funding_partner}}" id="fundpartner_id"/>
+						<select id='id_fund_partner' name='fund_partner_id' class="select2_multiple form-control select2-hidden-accessible" multiple="multiple"  tabindex="-1" aria-hidden="true">
+							<option value=-1 id='fund_partner_id'>All</option>
+							</select>
+							</label>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-6 col-xs-12">
+						<label>Select Center</label>
+                        <div class="col-md-12 input-group">
+                        <input type="hidden" value="{{centernames}}" id="centerDataId"/>
+						<select id="center_id" name="centerId" class="select2_multiple form-control select2-hidden-accessible" multiple="multiple" required="required" tabindex="-1" aria-hidden="true">
+							<!-- <option value="All" selected="selected">All</option> -->
+					</select><label class="input-group-addon btn" for="centerId" title="Select Center" style="cursor: default !important;"> <span class="fa fa-angle-down" title="Select Center" style="cursor: default !important;"></span>
+		</label>
+                        </div>
+					</div>
+					</div>
+					</div>
+					<div class="row " style="margin-left:17px">
+						<div class="col-md-10 col-xs-10">
+					
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+			<label>Select Start Date</label>
+			<div class="col-md-12 input-group">
+				<input type="text" id="sdate" name="startDate" class="form-control readonly" value="{{start_date}}" required="required"> <label class="input-group-addon btn" for="sdate" title="Select Start Date" style="cursor: default !important;"> <span class="fa fa-calendar" title="Select Start Date" style="cursor: default !important;" ></span>
+				</label>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-6 col-xs-12">
+			<label>Select End Date</label>
+			<div class="col-md-12 input-group">   
+				<input type="text" id="edate" name="endDate" class="form-control readonly" value="{{end_date}}" required="required"> <label class="input-group-addon btn" for="edate" title=" Select End Date" style="cursor: default !important;"> <span class="fa fa-calendar" title="Select End Date" style="cursor: default !important;"></span>
+				</label>
+			</div>
+		</div>
+		</div>
+		<div class="col-md-2 col-xs-2">
+                    <div class="col-md-4 col-sm-6 col-xs-12 btnCss">
+                        <button type="submit" class="btn btn-primary btnCSS" onclick="generateReport(this)" style="background: #337ab7 !important;">Generate</button>
+                    </div>
+                  </div>  
+				</div>
+                
+                
+			</div>
+		</div>
+	</div>
+</form>
+</div>
+<div class="container-fluid">
+	<div class="tile_count">
+		<div class="row rowCSS">
+			<div class="animated flipInY col-md-6 col-sm-6 col-xs-12"style="padding-left: 0px;">
+				<div class="tile-stats chartBoxCss">
+					<div class="col-md-8 col-xs-8">
+						<div class="count1">
+							<h3>Attendance</h3>
+						</div>
+					</div>
+					<div class="col-md-4 col-xs-4">
+						<div class="iconCss">
+							<i class="fa fa-tags" aria-hidden="true"></i>
+						</div>
+					</div>
+					<div class="col-md-12 col-xs-12">
+						<input type="hidden" id="attendance" value="{{attendance_perc}}" />
+						<div class="count">{{attendance_perc}}%</div>
+					</div>
+					<div id="attendance_chart" class="chart"></div>
+				</div>
+			</div>
+			<div class="animated flipInY col-md-6 col-sm-6 col-xs-12">
+				<div class="tile-stats chartBoxCss">
+					<div class="col-md-10 col-xs-10">
+						<div class="col-md-6">
+							<div class="count1">
+								<h3>Attendance Trends</h3>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<label>Select Grade</label>
+							<div class="col-md-12 input-group">
+								<select id="grade_id_attendanceTrend" name="gradeId" class="select2_multiple form-control select2-hidden-accessible" multiple="multiple" required="required" tabindex="-1" aria-hidden="true">
+								{% if grades.0 == "All" or grades.0 == '' %}
+									<option value="All" id="gradeIdAttendanceTrend" selected="selected">All</option>
+								{% else %}
+									<option value="All">All</option>
+								{% endif %}
+								{% for grade in grade_list %}
+									<option value="{{grade}}"
+										{% for grade_base in grades %}
+												{% if grade == grade_base%}
+													selected="selected"
+												{% endif %}
+											{% endfor %}
+									>{{grade}}th</option>
+								{% endfor %}
+							</select><label class="input-group-addon btn" for="grade_id" title="Select Grade" style="cursor: default !important;"> <span class="fa fa-angle-down" title="Select Grade" style="cursor: default !important;"></span>
+				</label>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2 col-xs-2">
+						<div class="iconCss">
+							<i class="fa fa-line-chart" aria-hidden="true"></i>
+						</div>
+					</div>
+					<!--<div class="col-md-12 col-xs-12">
+							<div class="count">41%</div>
+						</div>-->
+					<div id="attendanceTrends_chart" class="chart"></div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="row rowCSS">
+			<div class="animated flipInY col-md-6 col-sm-6 col-xs-12"style="padding-left: 0px;">
+				<div class="tile-stats chartBoxCss">
+					<div class="col-md-10 col-xs-10">
+						<div class="col-md-6">
+							<div class="count1">
+								<h3>Attendance Course Wise Per Grade</h3>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<label>Select Grade</label>
+							<div class="col-md-12 input-group">
+								<select id="grade_id_attendanceCourse_grade" name="gradeId" class="select2_multiple form-control select2-hidden-accessible" multiple="multiple" required="required" tabindex="-1" aria-hidden="true">
+								{% if grades.0 == "All" or grades.0 == '' %}
+									<option value="All" id="gradeIdAttendanceCourseGrade" selected="selected">All</option>
+								{% else %}
+									<option value="All">All</option>
+								{% endif %}
+								{% for grade in grade_list %}
+									<option value="{{grade}}"
+										{% for grade_base in grades %}
+												{% if grade == grade_base%}
+													selected="selected"
+												{% endif %}
+											{% endfor %}
+									>{{grade}}th</option>
+								{% endfor %}
+							</select><label class="input-group-addon btn" for="grade_id" title="Select Grade" style="cursor: default !important;"> <span class="fa fa-angle-down" title="Select Grade" style="cursor: default !important;"></span>
+				</label>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2 col-xs-2">
+						<div class="iconCss">
+							<i class="fa fa-bar-chart" aria-hidden="true"></i>
+						</div>
+					</div>
+					<!--<div class="col-md-12 col-xs-12">
+							<div class="count">41%</div>
+						</div>-->
+					<div id="attendanceCourseWise_chart" class="chart"></div>
+				</div>
+			</div>
+			<div class="animated flipInY col-md-6 col-sm-6 col-xs-12">
+				<div class="tile-stats chartBoxCss">
+					<div class="col-md-10 col-xs-10">
+						<div class="col-md-4">
+							<div class="count1">
+								<h3>Diagnostic Outcome</h3>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<label>Select Grade</label>
+							<div class="col-md-12 input-group">
+								<select id="grade_id_diagnostic" name="gradeId" class="select2_multiple form-control select2-hidden-accessible" multiple="multiple" required="required" tabindex="-1" aria-hidden="true">
+								{% if grades.0 == "All" or grades.0 == '' %}
+									<option value="All" id="gradeIdDiagnostic" selected="selected">All</option>
+								{% else %}
+									<option value="All">All</option>
+								{% endif %}
+								{% for grade in grade_list %}
+									<option value="{{grade}}"
+										{% for grade_base in grades %}
+												{% if grade == grade_base%}
+													selected="selected"
+												{% endif %}
+											{% endfor %}
+									>{{grade}}th</option>
+								{% endfor %}
+							</select><label class="input-group-addon btn" for="grade_id" title="Select Grade" style="cursor: default !important;"> <span class="fa fa-angle-down" title="Select Grade" style="cursor: default !important;"></span>
+				</label>
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<label>Select Terms</label>
+							<div class="col-md-12 input-group">
+							<select id="diagCategoryId" name="diagCategory" class="select2_multiple form-control select2-hidden-accessible" multiple="multiple" required="required" tabindex="-1" aria-hidden="true">
+								{% if diagTerms.0 == "All" or diagTerms.0 == '' %}
+									<option value="All" id='diag_category_id' selected="selected">All</option>
+								{% else %}
+									<option value="All">All</option>
+								{% endif %}
+								{% for category in diag_category_list %}
+									<option value="{{category}}"
+									{% for term_base in terms %}
+												{% if category == term_base%}
+													selected="selected"
+												{% endif %}
+											{% endfor %}
+									>{{category}}</option>
+								{% endfor %}
+							</select><label class="input-group-addon btn" for="diagCategory" title="Select Category" style="cursor: default !important;"> <span class="fa fa-angle-down" title="Select Category" style="cursor: default !important;"></span>
+				         </label>
+							</div>
+							</div>	
+					</div>
+					<div class="col-md-2 col-xs-2">
+						<div class="iconCss">
+							<i class="fa fa-bar-chart" aria-hidden="true"></i>
+						</div>
+					</div>
+					<!--<div class="col-md-12 col-xs-12">
+							<div class="count">41%</div>
+						</div>-->
+					<div id="diagonostic_chart" class="chart"></div>
+				</div>
+			</div>
+		</div>
+		<div class="row rowCSS">
+			<div class="animated flipInY col-md-6 col-sm-6 col-xs-12"style="padding-left: 0px;">
+				<div class="tile-stats chartBoxCss">
+					<div class="col-md-10 col-xs-10">
+						<div class="col-md-3">
+							<div class="count1">
+								<h3>Scholastic Outcome</h3>
+							</div>
+						</div>
+						<div class="col-md-9">
+						 <div class="col-md-6">
+							<label>Select Grade</label>
+							<div class="col-md-12 input-group">
+								<select id="grade_id_scholastic" name="gradeId" class="select2_multiple form-control select2-hidden-accessible" multiple="multiple" required="required" tabindex="-1" aria-hidden="true">
+								{% if grades.0 == "All" or grades.0 == '' %}
+									<option value="All" id="gradeIdScholastic" selected="selected">All</option>
+								{% else %}
+									<option value="All">All</option>
+								{% endif %}
+								{% for grade in grade_list %}
+									<option value="{{grade}}"
+										{% for grade_base in grades %}
+												{% if grade == grade_base%}
+													selected="selected"
+												{% endif %}
+											{% endfor %}
+									>{{grade}}th</option>
+								{% endfor %}
+							</select><label class="input-group-addon btn" for="grade_id" title="Select Grade" style="cursor: default !important;"> <span class="fa fa-angle-down" title="Select Grade" style="cursor: default !important;"></span>
+				</label>
+							</div>
+							</div>
+							<div class="col-md-6">
+							<label>Select Terms</label>
+							<div class="col-md-12 input-group">
+							<select id="category" name="categoryId" class="select2_multiple form-control select2-hidden-accessible" multiple="multiple" required="required" tabindex="-1" aria-hidden="true">
+								{% if terms.0 == "All" or terms.0 == '' %}
+									<option value="All" id='category_id' selected="selected">All</option>
+								{% else %}
+									<option value="All">All</option>
+								{% endif %}
+								{% for category in category_list %}
+									<option value="{{category}}"
+									{% for term_base in terms %}
+												{% if category == term_base%}
+													selected="selected"
+												{% endif %}
+											{% endfor %}
+									>{{category}}</option>
+								{% endfor %}
+							</select><label class="input-group-addon btn" for="categoryId" title="Select Category" style="cursor: default !important;"> <span class="fa fa-angle-down" title="Select Category" style="cursor: default !important;"></span>
+				         </label>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2 col-xs-2">
+						<div class="iconCss">
+							<i class="fa fa-bar-chart" aria-hidden="true"></i>
+						</div>
+					</div>
+					<!--<div class="col-md-12 col-xs-12">
+							<div class="count">41%</div>
+						</div>-->
+					<div id="scholastic_chart" class="chart"></div>
+				</div>
+			</div>
+			<div class="animated flipInY col-md-6 col-sm-6 col-xs-12">
+				<div class="tile-stats chartBoxCss">
+					<div class="col-md-10 col-xs-10">
+						<div class="col-md-6">
+							<div class="count1">
+								<h3>Co-Scholastic</h3>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<label>Select Grade</label>
+							<div class="col-md-12 input-group">
+								<select id="grade_id_coscholastic" name="gradeId" class="select2_multiple form-control select2-hidden-accessible" multiple="multiple" required="required" tabindex="-1" aria-hidden="true">
+								{% if grades.0 == "All" or grades.0 == '' %}
+									<option value="All" id="gradeIdCoscholastic" selected="selected">All</option>
+								{% else %}
+									<option value="All">All</option>
+								{% endif %}
+								{% for grade in grade_list %}
+									<option value="{{grade}}"
+										{% for grade_base in grades %}
+												{% if grade == grade_base%}
+													selected="selected"
+												{% endif %}
+											{% endfor %}
+									>{{grade}}th</option>
+								{% endfor %}
+							</select><label class="input-group-addon btn" for="grade_id" title="Select Grade" style="cursor: default !important;"> <span class="fa fa-angle-down" title="Select Grade" style="cursor: default !important;"></span>
+				</label>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2 col-xs-2">
+						<div class="iconCss">
+							<i class="fa fa-bar-chart" aria-hidden="true"></i>
+						</div>
+					</div>
+					<!--<div class="col-md-12 col-xs-12">
+							<div class="count">41%</div>
+						</div>-->
+					<div id="coScholastic_chart" class="chart"></div>
+				</div>
+			</div>
+			<input type="hidden" value="{{attendance_trends_data}}"
+				id="attendance_trend_id" /> <input type="hidden"
+				value="{{grade_wise_json_data}}" id="attendance_grade_id" /> <input
+				type="hidden" value="{{data_for_diagonostic_outcome}}"
+				id="diagonostic_outcome_id" /> <input type="hidden"
+				value="{{tital_aggregate_level_json}}" id="tital_aggregate_level_id" />
+			<input type="hidden" value="{{data_for_scholastic_outcome}}"
+				id="data_for_scholastic_id" /> <input type="hidden"
+				value="{{data_for_co_scholastic_outcome}}"
+				id="data_for_co_scholastic_id" />
+
+
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+/* 	$("#state_id").on("change", function() {
+		$("#state_id option[value=All]").attr
+	('selected', false);
+	 });
+	 $("#center_id").on("change", function() {
+	 $("#center_id option[value=All]").attr('selected', false);
+	 });
+	 $("#grade_id").on("change", function() {
+	 $("#grade_id option[value=All]").attr('selected', false);
+	 }); */
+</script>
+<script>
+	$(".readonly").keydown(function(e) {
+		e.preventDefault();
+	});
+	$(document).ready(
+			function() {
+				var date_input = $('input[id="sdate"]');
+				var container = $('.bootstrap-iso form').length > 0 ? $(
+						'.bootstrap-iso form').parent() : "body";
+				var options = {
+					format : 'yyyy-mm-dd',
+					container : container,
+					todayHighlight : true,
+					autoclose : true,
+				};
+				date_input.datepicker(options).on('changeDate',
+						function(selected) {
+							var startDate = new Date(selected.date.valueOf());
+							$('#edate').datepicker('setStartDate', startDate);
+						}).on('clearDate', function(selected) {
+					$('#edate').datepicker('setStartDate', null);
+				});
+
+				var date_input = $('input[id="edate"]');
+				var container = $('.bootstrap-iso form').length > 0 ? $(
+						'.bootstrap-iso form').parent() : "body";
+				var options = {
+					format : 'yyyy-mm-dd',
+					container : container,
+					todayHighlight : true,
+					autoclose : true,
+				};
+				date_input.datepicker(options).on('changeDate',
+						function(selected) {
+							var endDate = new Date(selected.date.valueOf());
+						 /* $('#sdate').datepicker('setEndDate', endDate); */ 
+						}).on('clearDate', function(selected) {
+					$('#sdate').datepicker('setEndDate', null);
+				});
+			})
+	$(".select2_multiple").select2({
+		maximumSelectionLength : 1000
+	});
+
+	$(".select2_multiple").select2({
+		maximumSelectionLength : 1000
+	});
+</script>
+    
+    
+    <script>
+        var chart = AmCharts.makeChart("attendance_chart", {
+	  "theme": "light",
+	  "type": "gauge",
+	  "startDuration": 1, 
+	  "axes": [{
+	    "topTextFontSize": 20,
+	    "topTextYOffset": 70,
+	    "axisColor": "#31d6ea",
+	    "axisThickness": 1,
+	    "endValue": 100,
+	    "gridInside": true,
+	    "fontSize": 10,
+	    "inside": true,
+	    "radius": "50%",
+	    "valueInterval": 20,
+	    "tickColor": "#67b7dc",
+	    "startAngle": -90,
+	    "endAngle": 90,
+	    "unit": "%",
+	    "bandOutlineAlpha": 0,
+	    "bands": [{
+	      "color": "#0080ff",
+	      "endValue": 100,
+	      "innerRadius": "105%",
+	      "radius": "170%",
+	      "gradientRatio": [0.5, 0, -0.5],
+	      "startValue": 0,
+	      "endValue": 100
+	    }, {
+	      "color": "#3cd3a3",
+	      "endValue": 0,
+	      "innerRadius": "105%",
+	      "radius": "170%",
+	      "gradientRatio": [0.5, 0, -0.5],
+	      "startValue": 0,
+	      "endValue": $("#attendance").val()
+	    }]
+	  }],
+	  "arrows": [{
+	    "alpha": 1,
+	    "value": $("#attendance").val(),
+	    "innerRadius": "35%",
+	    "nailRadius": 0,
+	    "radius": "170%"
+	  }],
+	  "export" : {
+			"enabled" : true,
+			"menuReviver" : function(config, li) {
+				if (config.format) {
+					config.fileName = "attendance_chart";
+				}
+				return li;
+			}
+		}
+	});
+        </script>
+     <script>
+     
+     function createAttendanceTrends_chart(data){
+    	 if(data != null){
+    		 var jsonData = JSON.stringify(data);
+             var obj = JSON.parse(jsonData);
+    	 }else{
+    		 var jsonData = $("#attendance_trend_id").val();
+             var obj = JSON.parse(jsonData);
+    	 }
+    	 if (obj != null && obj.length== 0){
+          	obj = [{"day": "", "value": 0.0}];
+          } 
+         var chart =  AmCharts.makeChart("attendanceTrends_chart", {
+ 						"type" : "serial",
+ 						"theme" : "light",
+ 						"startDuration": 1, 
+ 						"dataProvider" : obj,
+ 						"valueAxes" : [ {
+ 							"gridAlpha" : 0,
+ 							"axisAlpha" : 0.3,
+ 							"minimum": 0
+ 						} ],
+ 						"startDuration" : 1,
+ 						"graphs" : [ {
+ 							"balloonText" : "<span style='font-size:13px;'>[[title]] <br/>[[category]]:&nbsp;&nbsp;<b>[[value]]%</b> [[additional]]</span>",
+ 							"bullet" : "round",
+ 							"dashLengthField" : "dashLengthLine",
+ 							"lineThickness" : 3,
+ 							"bulletSize" : 7,
+ 							"bulletBorderAlpha" : 1,
+ 							"bulletColor" : "#FFFFFF",
+ 							"useLineColorForBulletBorder" : true,
+ 							"bulletBorderThickness" : 3,
+ 							"lineAlpha" : 1,
+ 							"title" : "Attendance% per day",
+ 							"valueField" : "value"
+ 						} ],
+ 						"categoryField" : "day",
+ 						"categoryAxis" : {
+ 							"gridPosition" : "start",
+ 							"gridAlpha" : 0,
+ 							"labelRotation" : 90,
+ 							"axisAlpha" : 0.3,
+ 							"minorGridAlpha": 0.1,
+ 						},
+ 						"export" : {
+ 							"enabled" : true,
+ 							"menuReviver" : function(config, li) {
+ 								if (config.format) {
+ 									config.fileName = "attendanceTrends_chart";
+ 								}
+ 								return li;
+ 							}
+ 						}
+ 					});
+     }
+       
+        
+    </script>
+    <script>
+    
+    function createAttendanceCourse_chart(data){
+    	if(data != null){
+   		 var jsonData = JSON.stringify(data);
+   		 var attendanceStr = JSON.parse(jsonData);
+   	 }else{
+   		 var jsonData = $("#attendance_grade_id").val();
+   		 var attendanceStr = JSON.parse(jsonData);
+   	 }
+        if (attendanceStr!= null && attendanceStr.length== 0 ){
+        	attendanceStr = [{"grade": "Grade5", "maths": 0.0, "english": 0.0, "science": 0.0}, {"grade": "Grade6", "maths": 0.0, "english": 0.0, "science": 0.0}, {"grade": "Grade7", "maths": 0.0, "english": 0.0, "science": 0.0}, {"grade": "Grade8", "maths": 0.0, "english": 0.0, "science": 0.0}];
+        }
+            var chart = AmCharts.makeChart("attendanceCourseWise_chart", {
+        "type": "serial",
+    	"theme": "light",
+    	 "legend": {
+    	        "autoMargins": false,
+    	        "borderAlpha": 0.2,
+    	        "equalWidths": false,
+    	        "horizontalGap": 2,
+    	        "markerSize": 10,
+    	        "useGraphSettings": true,
+    	        "valueAlign": "left",
+    	        "valueWidth": 0
+    	    },
+        "dataProvider": attendanceStr,
+        "valueAxes": [{
+            "stackType": "regular",
+            "axisAlpha": 0.5,
+            "gridAlpha": 0,
+            "minimum":0,
+            "maximum":100
+        }],
+                
+        "graphs": [{
+            "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b></span>",
+            "fillAlphas": 0.8,
+            "labelText": "[[value]]%",
+            "lineAlpha": 0.3,
+            "title": "Maths",
+            "type": "column",
+    		"color": "#000000",
+            "valueField": "maths"
+        }, {
+            "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b></span>",
+            "fillAlphas": 0.8,
+            "labelText": "[[value]]%",
+            "lineAlpha": 0.3,
+            "title": "English",
+            "type": "column",
+    		"color": "#000000",
+            "valueField": "english"
+        }, {
+            "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b></span>",
+            "fillAlphas": 0.8,
+            "labelText": "[[value]]%",
+            "lineAlpha": 0.3,
+            "title": "Science",
+            "type": "column",
+    		"color": "#000000",
+            "valueField": "science"
+        }],
+        "rotate": true,
+        "categoryField": "grade",
+        "categoryAxis": {
+            "gridPosition": "start",
+            "gridAlpha": 0,
+            "position": "left",
+            "tickLength" : 0
+        },
+        "export": {
+        	"enabled": true
+         }
+    });
+    }
+    
+    function createDiagonostic_chart(data){
+    	if(data != null){
+      		 var jsonData = JSON.stringify(data);
+      		 var attendanceStr = JSON.parse(jsonData);
+      	 }else{
+      		var jsonData = $("#diagonostic_outcome_id").val();
+            var attendanceStr = JSON.parse(jsonData);
+      	 }
+    	
+        var chart = AmCharts.makeChart("diagonostic_chart", {
+     "type": "serial",
+ 	"theme": "light",
+ 	 "legend": {
+ 	        "autoMargins": false,
+ 	        "borderAlpha": 0.2,
+ 	        "equalWidths": false,
+ 	        "horizontalGap": 2,
+ 	        "markerSize": 10,
+ 	        "useGraphSettings": true,
+ 	        "valueAlign": "left",
+ 	        "valueWidth": 0
+ 	    },
+     "dataProvider": attendanceStr,
+     "valueAxes": [{
+         "stackType": "regular",
+         "axisAlpha": 0.5,
+         "gridAlpha": 0,
+         "minimum":0,
+         "maximum":100
+     }],
+     "graphs": [{
+         "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b></span>",
+         "fillAlphas": 0.8,
+         "labelText": "[[value]]%",
+         "lineAlpha": 0.3,
+         "title": "L1",
+         "type": "column",
+ 		"color": "#000000",
+         "valueField": "l1"
+     }, {
+         "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b></span>",
+         "fillAlphas": 0.8,
+         "labelText": "[[value]]%",
+         "lineAlpha": 0.3,
+         "title": "L2",
+         "type": "column",
+ 		"color": "#000000",
+         "valueField": "l2"
+     }, {
+         "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b></span>",
+         "fillAlphas": 0.8,
+         "labelText": "[[value]]%",
+         "lineAlpha": 0.3,
+         "title": "L3",
+         "type": "column",
+ 		"color": "#000000",
+         "valueField": "l3"
+     }, {
+         "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b></span>",
+         "fillAlphas": 0.8,
+         "labelText": "[[value]]%",
+         "lineAlpha": 0.3,
+         "title": "L4",
+         "type": "column",
+ 		"color": "#000000",
+         "valueField": "l4"
+     }],
+     "rotate": true,
+     "categoryField": "subject",
+     "categoryAxis": {
+         "gridPosition": "start",
+         "gridAlpha": 0,
+         "position": "left",
+         "tickLength" : 0
+     },
+     "export": {
+     	"enabled": true
+      }
+ });
+    }
+       
+   
+    
+    function createCoScholastic_chart(data){
+    	if(data != null){
+     		 var jsonData = JSON.stringify(data);
+     		 var coscholasticStr = JSON.parse(jsonData);
+     	 }else{
+     		 var jsonData = $("#data_for_co_scholastic_id").val();
+             var coscholasticStr = JSON.parse(jsonData);
+     	 }
+        var chart = AmCharts.makeChart("coScholastic_chart", {
+        "type": "serial",
+    	"theme": "light",
+    	"legend": {
+    	        "autoMargins": false,
+    	        "borderAlpha": 0.2,
+    	        "equalWidths": false,
+    	        "horizontalGap": 2,
+    	        "markerSize": 10,
+    	        "useGraphSettings": false,
+    	        "valueAlign": "left",
+    	        "valueWidth": 0
+    	  },
+    	"columnWidth": 0.8,
+    	"labelsEnabled" : false,
+        "dataProvider": coscholasticStr,
+        "valueAxes": [{
+            "stackType": "regular",
+            "axisAlpha": 0.5,
+            "gridAlpha": 0,
+            "minimum":0,
+            "maximum":100
+        }],
+        "graphs": [
+		{
+            "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b></span>",
+            "fillAlphas": 0.8,
+            "labelText": "[[value]]%",
+            "lineAlpha": 0.3,
+            "title": "Needs Improvement",
+            "type": "column",
+    		"color": "#000000",
+            "valueField": "poor"
+		},
+		{
+            "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b></span>",
+            "fillAlphas": 0.8,
+            "labelText": "[[value]]%",
+            "lineAlpha": 0.3,
+            "title": "Average",
+            "type": "column",
+    		"color": "#000000",
+            "valueField": "average"
+		},
+		{
+            "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b></span>",
+            "fillAlphas": 0.8,
+            "labelText": "[[value]]%",
+            "lineAlpha": 0.3,
+            "title": "Good",
+            "type": "column",
+    		"color": "#000000",
+            "valueField": "good"
+        }, {
+            "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b></span>",
+            "fillAlphas": 10,
+            "labelText": "[[value]]%",
+            "lineAlpha": 0.3,
+            "title": "Very Good",
+            "type": "column",
+    		"color": "#000000",
+            "valueField": "veryGood"
+        }  ],
+        "rotate": true,
+    	 "categoryField": "remark",
+    	"categoryAxis" : {
+    		"gridPosition" : "start",
+    		"gridAlpha" : 0,
+    		"tickPosition" : "start",
+    		"autoGridCount" : true,
+    		"tickLength" : 0,
+            "minVerticalGap": 0,
+    	},
+
+        "export": {
+        	"enabled": true
+         }
+    });
+    }
+        
+       function createScholastic_chart(data){
+    	   if(data != null){
+        		 var jsonData = JSON.stringify(data);
+        		 var scholasticStr = JSON.parse(jsonData);
+        	 }else{
+        		 var jsonData = $("#data_for_scholastic_id").val();
+                 var scholasticStr = JSON.parse(jsonData);
+        	 }
+    	   
+           if(scholasticStr != null && scholasticStr.length==0){
+          	 scholasticStr = [{"poor": 0.0, "good": 0.0, "average": 0.0, "excellent": 0.0, "veryGood": 0.0, "subject": "English Foundation"}, {"poor": 0.0, "good": 0.0, "average": 0.0, "excellent": 0.0, "veryGood": 0.0, "subject": "Maths"}, {"poor": 0.0, "good": 0.0, "average": 0.0, "excellent": 0.0, "veryGood": 0.0, "subject": "Science"}];
+           }
+          var chart = AmCharts.makeChart("scholastic_chart", {
+      "type": "serial",
+  	"theme": "light",
+
+  	 "legend": {
+  	        "autoMargins": false,
+  	        "borderAlpha": 0.2,
+  	        "equalWidths": false,
+  	        "horizontalGap": 2,
+  	        "markerSize": 10,
+  	        "useGraphSettings": true,
+  	        "valueAlign": "left",
+  	        "valueWidth": 0
+  	    },
+      "dataProvider": scholasticStr,
+      "valueAxes": [{
+          "stackType": "regular",
+          "axisAlpha": 0.5,
+          "gridAlpha": 0,
+          "minimum":0,
+          "maximum":100
+      }],
+       "graphs": [
+	   {
+          "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b></span>",
+          "fillAlphas": 0.8,
+          "labelText": "[[value]]%",
+          "lineAlpha": 0.3,
+          "title": "Poor<35",
+          "type": "column",
+          "color": "#000000",
+          "valueField": "poor"
+      },{
+          "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b></span>",
+          "fillAlphas": 0.8,
+          "labelText": "[[value]]%",
+          "lineAlpha": 0.3,
+          "title": "50>Average>=35",
+          "type": "column",
+          "color": "#000000",
+          "valueField": "average"
+      },{
+          "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b></span>",
+          "fillAlphas": 0.8,
+          "labelText": "[[value]]%",
+          "lineAlpha": 0.3,
+          "title": "70>Good>=50",
+          "type": "column",
+          "color": "#000000",
+          "valueField": "good"
+      },{
+          "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b>50>Average>=35</span>",
+          "fillAlphas": 0.8,
+          "labelText": "[[value]]%",
+          "lineAlpha": 0.3,
+          "title": "90>Very Good>=70",
+          "type": "column",
+          "color": "#000000",
+          "valueField": "veryGood"
+      }, {
+		  
+          "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]%</b></span>",
+          "fillAlphas": 0.8,
+          "labelText": "[[value]]%",
+          "lineAlpha": 0.3,
+          "title": "Excellent>=90 ",
+          "type": "column",
+          "color": "#000000",
+          "valueField": "excellent"
+      } ],
+      "rotate": true,
+      "categoryField": "subject",
+      "categoryAxis": {
+          "gridPosition" : "start",
+          "gridAlpha" : 0,
+          "tickPosition" : "start",
+          "autoGridCount" : true,
+          "tickLength" : 0,
+          "minVerticalGap": 0,
+      },
+      "export": {
+          "enabled": true
+       }
+  });
+       } 
+         
+    
+    </script>
+    <script>
+    $(document).ready(function(){
+    	var startDate = $("#sdate").val();
+    	$('#edate').datepicker('setStartDate', startDate);
+    	loadCentersByState();
+		
+    	createAttendanceTrends_chart();
+    	createAttendanceCourse_chart();
+    	createDiagonostic_chart();
+    	createScholastic_chart();
+    	createCoScholastic_chart();
+    });
+    
+    $("#state_id").on("change", function() {
+    	loadCentersByState();
+    });
+        
+	function loadCentersByState(){
+		var state = []; 
+		var state_count = $('#state_count').val();
+		var partner= $("#id_partner").val();
+		var fund_partner= $("#id_fund_partner").val();
+		
+		if(partner==null || partner=='' || partner=='undefined'){
+			partner = 'All';
+		}
+		if(fund_partner==null || fund_partner=='' || fund_partner=='undefined'){
+			fund_partner = 'All';
+		}
+		$('#state_id :selected').each(function(i, selected){ 
+			state[i] = $(selected).text(); 
+		});
+		if(state==null || state=='' || state=='undefined'){
+			state = 'All';
+		}
+		var ajaxUrl = '/ajax/getCourses/?state='+state+'&partner='+partner+'&funding_partner_id='+fund_partner;
+		if (state_count == '0'){
+			ajaxUrl = "";
+		}
+	$.ajax({
+			url : ajaxUrl,
+			success: function (data) {
+				if(data != null){
+					
+					var backend_center_data = $("#centerDataId").val();
+					console.log("GTRG", backend_center_data)
+					var json_backend_data = '';
+					if (backend_center_data!=null && backend_center_data!='' && backend_center_data!='undefined'){
+						json_backend_data = JSON.parse(backend_center_data);
+					}
+					var optionList = '';
+					if (json_backend_data!=null){
+						if(json_backend_data[0]=='All' || json_backend_data[0]=='' || json_backend_data[0] == undefined){
+							optionList += '<option value = "All" id="centerId" selected="selected" >All</option>';
+						}
+						else{
+							optionList += '<option value = "All"  id="centerId" >All</option>';
+						}
+					}
+					for(i=0;i<data.center_list.length;i++){
+						var value = data.center_list[i]['value'];
+						value = escape(value);
+						optionList += '<option value = '+value;
+							if (json_backend_data!=null){
+						for(j=0;j<json_backend_data.length;j++){
+							if(value==json_backend_data[j]){
+								optionList += ' selected="selected"';
+							}
+						}
+					}  
+						optionList += ' >'+data.center_list[i]['label']+'</option>';
+					}
+					$("#center_id").html(optionList);
+					val1 = $("#center_id").val();
+					if(val1 == null || val1 == '' || val1 == 'undefined') {
+						val1 = ['All'];
+						var x = $("#centerId").val();
+						//$("#center_id").select2(x);
+						$("#center_id").val(x);
+					}
+					
+					var partner_list = []
+					for (i=0;i<data.center_list.length;i++){
+					var is_present = 'no';
+					for(j=0;j<partner_list.length;j++){
+					if(data.center_list[i]['funding_partner_id'] == partner_list[j]['funding_partner_id']){
+
+						is_present = 'yes';
+						break;
+					}
+				}
+			
+				if((is_present == 'no') && (data.center_list[i]['funding_partner_id'] != 'undefined')){
+					partner_list.push({'funding_partner_id':data.center_list[i]['funding_partner_id'],'funding_partner':data.center_list[i]['funding_partner']});
+				}
+			}
+			var selected_funding_partners = "{{funding_partner|safe}}"
+			while(selected_funding_partners.includes("u\'")) {
+				selected_funding_partners= selected_funding_partners.replace("u\'", "\'")
+			}
+			selected_funding_partners = eval( '(' + selected_funding_partners + ')')
+			var options = '<option value=-1>All</option>';
+			for (i=0;i<partner_list.length;i++){
+				options += '<option value="'+partner_list[i]['funding_partner_id']+'"';
+				if (selected_funding_partners.includes((partner_list[i]['funding_partner_id']).toString())){
+					options += 'selected="selected" ';
+				}
+				options += '>'+partner_list[i]['funding_partner']+'</option>';
+			}
+			$("#id_fund_partner").empty();
+
+			$("#id_fund_partner").append(options);
+			
+
+			var partner_list = []
+			for (i=0;i<data.center_list.length;i++){
+				var is_present = 'no';
+				for(j=0;j<partner_list.length;j++){
+					if(data.center_list[i]['delivery_partner_id'] == partner_list[j]['delivery_partner_id']){
+
+						is_present = 'yes';
+						break;
+					}
+				}
+			
+				if((is_present == 'no') && (data.center_list[i]['delivery_partner_id'] != 'undefined')){
+					partner_list.push({'delivery_partner_id':data.center_list[i]['delivery_partner_id'],'delivery_partner':data.center_list[i]['delivery_partner']});
+				}
+			}
+
+			var selected_partners = "{{delivery_partner|safe}}"
+			while(selected_partners.includes("u\'")) {
+				selected_partners= selected_partners.replace("u\'", "\'")
+			}
+			selected_partners = eval( '(' + selected_partners + ')')
+			var options = '<option value=-1>All</option>';
+			for (i=0;i<partner_list.length;i++){
+				options += '<option value="'+partner_list[i]['delivery_partner_id']+'"';
+				if (selected_partners.includes((partner_list[i]['delivery_partner_id']).toString()))
+					options += 'selected="selected" ';
+				options += '>'+partner_list[i]['delivery_partner']+'</option>';
+			}
+			$("#id_partner").empty();
+
+			$("#id_partner").append(options);
+			if (selected_partners.length && selected_funding_partners.length) {
+				loadCentersByfundpartner();
+			} else if (selected_partners.length && selected_funding_partners.length == 0) {
+				loadCentersBypartner();
+			} else if(selected_partners.length == 0 && selected_funding_partners.length){
+				loadCentersByfundpartner();
+			}
+			}
+			},
+			error: function() {
+					alert("error");
+				}
+			});
+	}
+    
+
+
+
+
+
+
+
+
+
+
+
+		$("#id_partner").on("change", function() {
+			
+			$("#id_partner option[value=All]").remove()
+			;
+		
+    	loadCentersBypartner();
+        });
+        
+        function loadCentersBypartner(){
+			var partner =[] ; 
+			var state= $("#state_id").val();
+			var fund_partner= $("#id_fund_partner").val();
+			var fund_partner= 'All';
+        	var state_count = $('#state_count').val();
+			$('#id_partner :selected').each(function(i, selected){ 
+				
+				partner[i] = $(selected).val(); 
+    		});
+			console.log("FRF",state)
+			if(state==null || state=='' || state=='undefined'){
+    			state = 'All';
+    		}
+    		if(partner==null || partner=='' || partner=='undefined'){
+    			partner = 'All';
+    		}
+			if(fund_partner==null || fund_partner=='' || fund_partner=='undefined'){
+    			fund_partner = 'All';
+    		}
+			console.log(partner,state)
+    		var ajaxUrl = '/ajax/getCourses/?state='+state+'&partner='+partner+'&funding_partner_id='+fund_partner;;
+    		if (state_count == '0'){
+    			ajaxUrl = "";
+    		}
+    	$.ajax({
+    	        url : ajaxUrl,
+    	        success: function (data) {
+    	        	if(data != null){
+    	        		
+    	        		var backend_center_data = $("#centerDataId").val();
+    	        		var json_backend_data = '';
+    	        		if (backend_center_data!=null && backend_center_data!='' && backend_center_data!='undefined'){
+    	        			json_backend_data = JSON.parse(backend_center_data);
+    	        		}
+    	        		var optionList = '';
+    	        		if (json_backend_data!=null){
+    	        			if(json_backend_data[0]=='All' || json_backend_data[0]=='' || json_backend_data[0] == undefined){
+    	        				optionList += '<option value = "All" id="centerId" selected="selected" >All</option>';
+    	        			}
+    	        			else{
+    	        				optionList += '<option value = "All"  id="centerId" >All</option>';
+    	        			}
+    	        		}
+    	        		for(i=0;i<data.center_list.length;i++){
+    	        			var value = data.center_list[i]['value'];
+    	        			value = escape(value);
+    	        			optionList += '<option value = '+value;
+    	        			  if (json_backend_data!=null){
+            				for(j=0;j<json_backend_data.length;j++){
+            					if(value==json_backend_data[j]){
+            						optionList += ' selected="selected"';
+            					}
+            				}
+            			}  
+    	        			optionList += ' >'+data.center_list[i]['label']+'</option>';
+    	        		}
+    	        		$("#center_id").html(optionList);
+    	        		val1 = $("#center_id").val();
+    	        		if(val1 == null || val1 == '' || val1 == 'undefined') {
+    	        			val1 = ['All'];
+    	        			var x = $("#centerId").val();
+    	        			//$("#center_id").select2(x);
+    	        			$("#center_id").val(x);
+    	        		}
+						var partner_list = []
+				for (i=0;i<data.center_list.length;i++){
+					var is_present = 'no';
+					for(j=0;j<partner_list.length;j++){
+						if(data.center_list[i]['funding_partner_id'] == partner_list[j]['funding_partner_id']){
+
+							is_present = 'yes';
+							break;
+						}
+					}
+				
+					if((is_present == 'no') && (data.center_list[i]['funding_partner_id'] != 'undefined')){
+						partner_list.push({'funding_partner_id':data.center_list[i]['funding_partner_id'],'funding_partner':data.center_list[i]['funding_partner']});
+					}
+				}
+				var selected_funding_partners = "{{funding_partner|safe}}"
+				while(selected_funding_partners.includes("u\'")) {
+					selected_funding_partners= selected_funding_partners.replace("u\'", "\'")
+				}
+				selected_funding_partners = eval( '(' + selected_funding_partners + ')')
+				var options = '<option value=-1>All</option>';
+				for (i=0;i<partner_list.length;i++){
+					options += '<option value="'+partner_list[i]['funding_partner_id']+'"';
+					if (selected_funding_partners.includes((partner_list[i]['funding_partner_id']).toString()))
+						options += 'selected="selected" ';
+					options += '>'+partner_list[i]['funding_partner']+'</option>';
+				}
+				$("#id_fund_partner").empty();
+
+				$("#id_fund_partner").append(options);
+						
+    	        		
+    	        	}
+    	        },
+    	        error: function() {
+    	              alert("error");
+    	           }
+    	      });
+        }
+
+
+
+
+
+		$("#id_fund_partner").on("change", function() {
+			
+			$("#id_fund_partner option[value=All]").remove()
+			;
+		
+    	loadCentersByfundpartner();
+        });
+        
+        function loadCentersByfundpartner(){
+			var fund_partner =[] ; 
+			var state= $("#state_id").val();
+			var partner= $("#id_partner").val();
+        	var state_count = $('#state_count').val();
+			$('#id_fund_partner :selected').each(function(i, selected){ 
+				
+				fund_partner[i] = $(selected).val(); 
+				
+			});
+			console.log("FRF",state,partner)
+			if(state==null || state=='' || state=='undefined'){
+    			state = 'All';
+    		}
+    		if(partner==null || partner=='' || partner=='undefined'){
+    			partner = 'All';
+    		}
+			if(fund_partner==null || fund_partner=='' || fund_partner=='undefined'){
+    			fund_partner = 'All';
+    		}
+			// console.log("fund_partner",partner,state,fund_partner,$("#id_fund_partner").val())
+    		var ajaxUrl = '/ajax/getCourses/?state='+state+'&partner='+partner+'&funding_partner_id='+fund_partner;
+    		if (state_count == '0'){
+    			ajaxUrl = "";
+    		}
+    	$.ajax({
+    	        url : ajaxUrl,
+    	        success: function (data) {
+    	        	if(data != null){
+						var backend_center_data = $("#centerDataId").val();
+    	        		var json_backend_data = '';
+    	        		if (backend_center_data!=null && backend_center_data!='' && backend_center_data!='undefined'){
+    	        			json_backend_data = JSON.parse(backend_center_data);
+    	        		}
+    	        		var optionList = '';
+    	        		if (json_backend_data!=null){
+    	        			if(json_backend_data[0]=='All' || json_backend_data[0]=='' || json_backend_data[0] == undefined){
+    	        				optionList += '<option value = "All" id="centerId" selected="selected" >All</option>';
+    	        			}
+    	        			else{
+    	        				optionList += '<option value = "All"  id="centerId" >All</option>';
+    	        			}
+    	        		}
+    	        		for(i=0;i<data.center_list.length;i++){
+    	        			var value = data.center_list[i]['value'];
+							value = escape(value);
+    	        			optionList += '<option value = '+value;
+							if (json_backend_data!=null){
+								for(j=0;j<json_backend_data.length;j++){
+									if(value==json_backend_data[j]){
+										optionList += ' selected="selected"';
+									}
+								}
+							}  
+    	        			optionList += ' >'+data.center_list[i]['label']+'</option>';
+						}
+    	        		$("#center_id").html(optionList);
+						val1 = $("#center_id").val();
+    	        		if(val1 == null || val1 == '' || val1 == 'undefined') {
+    	        			val1 = ['All'];
+    	        			var x = $("#centerId").val();
+    	        			//$("#center_id").select2(x);
+    	        			$("#center_id").val(x);
+    	        		}
+						
+						
+    	        		
+    	        	}
+    	        },
+    	        error: function() {
+    	              alert("error");
+    	           }
+    	      });
+        }
+    
+</script>
+
+<script>
+    
+    $("#grade_id_attendanceTrend").on("change", function() {
+    	flag = "AttendanceTrend" ;
+    	loadgetGrade(flag);
+        });
+    $("#grade_id_attendanceCourse_grade").on("change",function(){
+    	flag = "Attendance_Courses_Per_Grade" ;
+    	loadgetGrade(flag);
+    });
+    $("#grade_id_diagnostic").on("change",function(){
+    	flag = "Diagnostic_Outcome" ;
+    	loadgetGrade(flag);
+    });
+    $("#grade_id_scholastic").on("change",function(){
+    	flag = "Scholastic_Outcome" ;
+    	loadgetGrade(flag);
+    });
+    $("#grade_id_coscholastic").on("change",function(){
+    	flag = "Co_Scholastic_Outcome" ;
+    	loadgetGrade(flag);
+    });
+    $("#category").on("change",function(){
+    	flag = "Scholastic_Outcome" ;
+    	loadgetGrade(flag);
+    });
+    $("#diagCategoryId").on("change",function(){
+    	flag = "Diagnostic_Outcome" ;
+    	loadgetGrade(flag);
+    });
+    function loadgetGrade(data){
+    	var flag = data;
+    	var grade = [];
+    	var state = [];
+    	var center = [];
+    	var startDate = $("#sdate").val();
+    	var endDate = $("#edate").val();
+    	var terms = [];
+    	var diagTerms = [];
+    	if (flag == "AttendanceTrend"){
+    		$('#grade_id_attendanceTrend :selected').each(function(i, selected){ 
+        		grade[i] = $(selected).text(); 
+      		});
+    	}else if(flag == "Attendance_Courses_Per_Grade"){
+    		$('#grade_id_attendanceCourse_grade :selected').each(function(i, selected){ 
+        		grade[i] = $(selected).text(); 
+      		});
+    	}else if (flag == "Diagnostic_Outcome"){
+    		$('#grade_id_diagnostic :selected').each(function(i, selected){ 
+        		grade[i] = $(selected).text(); 
+      		});
+    	}else if (flag == "Scholastic_Outcome"){
+    		$('#grade_id_scholastic :selected').each(function(i, selected){ 
+        		grade[i] = $(selected).text(); 
+      		});
+    	}else{
+    		$('#grade_id_coscholastic :selected').each(function(i, selected){ 
+        		grade[i] = $(selected).text(); 
+      		});
+    	}
+    	
+    	$('#state_id :selected').each(function(i, selected){ 
+  		  state[i] = $(selected).text(); 
+  		});
+    	$('#center_id :selected').each(function(i, selected){ 
+  		  center[i] = $(selected).text(); 
+  		});
+    	$('#category :selected').each(function(i, selected){ 
+    		terms[i] = $(selected).text(); 
+    	});
+    	$('#diagCategoryId :selected').each(function(i, selected){ 
+    		diagTerms[i] = $(selected).text(); 
+    	});
+    	var ajaxUrl = '/ajax/get_grade/?flag=' + flag ;
+    	if(grade != null && grade != '' && grade != 'undefined'){
+    		ajaxUrl += '&grade='+grade;
+    	}
+    	if(state != null && state != '' && state != 'undefined'){
+    		ajaxUrl += '&stateName='+state;
+    	}
+		
+    	if(center !=null && center!='' && center!='undefined'){
+    		ajaxUrl += '&centerName='+center;
+		}
+    	if(startDate !=null && startDate!='' && startDate!='undefined'){
+    		ajaxUrl += '&startDate='+startDate;
+		}
+    	if(endDate !=null && endDate!='' && endDate!='undefined'){
+    		ajaxUrl += '&endDate='+endDate;
+		}
+    	if(terms !=null && terms!='' && terms!='undefined'){
+    		ajaxUrl += '&categoryId='+terms;
+		}
+    	if(diagTerms !=null && diagTerms!='' && diagTerms!='undefined'){
+    		ajaxUrl += '&diagCategory='+diagTerms;
+		}
+    	$.ajax({
+    	        url : ajaxUrl,
+    	        success: function (data) {
+    	        	if(data !=null){
+    	        		if(flag == "AttendanceTrend"){
+    	        			createAttendanceTrends_chart(data);
+    	        		}else if(flag == "Attendance_Courses_Per_Grade"){
+    	        			createAttendanceCourse_chart(data);
+    	        		}else if (flag == "Diagnostic_Outcome"){
+    	        			createDiagonostic_chart(data);
+    	        		}else if (flag == "Scholastic_Outcome"){
+    	        			createScholastic_chart(data);
+    	        		}else {
+    	        			createCoScholastic_chart(data);
+    	        		}
+    	        	}
+    	        },
+    	        error: function() {
+  	              alert("error");
+  	           }
+  	      });
+    	
+    }
+    
+</script>
+<script>
+    $("#state_id").select2();
+	$("#stateId").removeAttr("selected");
+	$("#state_id").on('change', function() {
+		var selected = $(this).val();
+		if (selected != null) {
+			if (selected.indexOf('All') >= 0) {
+				$(this).val('All').select2();
+			}
+		}
+		if (selected != 'All') {
+			document.getElementById('stateId').selected = false;
+		}
+	});
+	$("#center_id").select2();
+	var newSelectedOption1;
+	var val1 = ["All"];
+	$("#center_id").on('change', function() {
+		$('#centerErrorId').hide();
+		var selected = $(this).val();
+		var newVal = $(this).val();
+		//alert("selected "+selected);
+		if(newVal != null) {
+			for(var i=0; i<newVal.length; i++) {
+			     if($.inArray(newVal[i], val1) == -1) {
+			    	 newSelectedOption1 = $(this).find('option[value="' + newVal[i] + '"]').text();
+			    	 selected = newSelectedOption1;
+			     }
+			 }
+		if (selected != null) {
+			if (selected == 'All') {
+				$(this).val('All').select2();
+			} 
+		}
+		 if (selected != 'All') {
+			document.getElementById('centerId').selected = false;
+			$("#center_id option[value='All']").remove();
+			$("#center_id").prepend('<option id="centerId" value="All">All</option>');
+			var selectedOptions = $(this).val();
+			$("#center_id").val('');
+			$("#center_id").val(selectedOptions);
+			
+		} 
+		 val1 = $(this).val();
+		} 
+	});
+	
+	$("#grade_id_attendanceTrend").select2();
+	$("#gradeIdAttendanceTrend").removeAttr("selected");
+	$("#grade_id_attendanceTrend").on('change', function() {
+		var selected = $(this).val();
+		if (selected != null) {
+			if (selected.indexOf('All') >= 0) {
+				$(this).val('All').select2();
+				$("#gradeIdAttendanceTrend").removeAttr("selected");
+
+			}
+		}
+		if (selected != 'All') {
+			document.getElementById('grade_id_attendanceTrend').selected = false;
+		}
+	});
+	$("#grade_id_attendanceCourse_grade").select2();
+	$("#gradeIdAttendanceCourseGrade").removeAttr("selected");
+	$("#grade_id_attendanceCourse_grade").on('change', function() {
+		var selected = $(this).val();
+		if (selected != null) {
+			if (selected.indexOf('All') >= 0) {
+				$(this).val('All').select2();
+				$("#gradeIdAttendanceCourseGrade").removeAttr("selected");
+
+			}
+		}
+		if (selected != 'All') {
+			document.getElementById('grade_id_attendanceCourse_grade').selected = false;
+		}
+	});
+	$("#grade_id_diagnostic").select2();
+	$("#gradeIdDiagnostic").removeAttr("selected");
+	$("#grade_id_diagnostic").on('change', function() {
+		var selected = $(this).val();
+		if (selected != null) {
+			if (selected.indexOf('All') >= 0) {
+				$(this).val('All').select2();
+				$("#gradeIdDiagnostic").removeAttr("selected");
+
+			}
+		}
+		if (selected != 'All') {
+			document.getElementById('grade_id_diagnostic').selected = false;
+		}
+	});
+	$("#grade_id_scholastic").select2();
+	$("#gradeIdScholastic").removeAttr("selected");
+	$("#grade_id_scholastic").on('change', function() {
+		var selected = $(this).val();
+		if (selected != null) {
+			if (selected.indexOf('All') >= 0) {
+				$(this).val('All').select2();
+				$("#gradeIdScholastic").removeAttr("selected");
+
+			}
+		}
+		if (selected != 'All') {
+			document.getElementById('grade_id_scholastic').selected = false;
+		}
+	});
+	$("#grade_id_coscholastic").select2();
+	$("#gradeIdCoscholastic").removeAttr("selected");
+	$("#grade_id_coscholastic").on('change', function() {
+		var selected = $(this).val();
+		if (selected != null) {
+			if (selected.indexOf('All') >= 0) {
+				$(this).val('All').select2();
+				$("#gradeIdCoscholastic").removeAttr("selected");
+
+			}
+		}
+		if (selected != 'All') {
+			document.getElementById('grade_id_coscholastic').selected = false;
+		}
+	});
+	$("#category").select2();
+	//$("#category_id").removeAttr("selected");
+	$("#category").on('change', function() {
+		var selected = $(this).val();
+		if (selected != null) {
+			if (selected.indexOf('All') >= 0) {
+				$(this).val('All').select2();
+				$("#category_id").removeAttr("selected");
+
+			}
+		}
+		if (selected != 'All') {
+			document.getElementById('category').selected = false;
+		}
+	});
+	
+	$("#diagCategoryId").select2();
+	//$("#category_id").removeAttr("selected");
+	$("#diagCategoryId").on('change', function() {
+		var selected = $(this).val();
+		if (selected != null) {
+			if (selected.indexOf('All') >= 0) {
+				$(this).val('All').select2();
+				$("#diag_category_id").removeAttr("selected");
+
+			}
+		}
+		if (selected != 'All') {
+			document.getElementById('diagCategoryId').selected = false;
+		}
+	});
+	
+</script>
+
+
+
+{% endblock %} {% block scripts %} {% endblock %}

@@ -1,0 +1,7 @@
+HI ADMIN / COORD,
+
+{{ user.id }}, {{ user.first_name }} {{ user.last_name }}
+
+Has booked slots on {{ slots.0.day }} from {{slots.0.start_time}} to {{slots.0.end_time}} and {{slots.1.day}} from {{slots.1.start_time}} to {{slots.1.end_time}} for {{slots.0.offering.course.grade}}th {{slots.0.offering.course.subject}} in {{slots.0.offering.center.name}}.
+
+Confirm / Reject : {{ confirm_url }}

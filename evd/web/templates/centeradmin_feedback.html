@@ -1,0 +1,253 @@
+<div class="header">
+    <p>Feedback</p>
+    <a class="close" data-dismiss="modal" style="float:right;cursor:pointer;">X</a>
+</div>
+<form id="feedback_form_{{session}}" action="/save_offering/" method="GET" style="max-height:500px;overflow-y:auto;overflow-x:hidden;">
+    <input type="hidden" name="topic_ids" />
+    <input type="hidden" name="session_id" id="session_id" value="{{session}}" />
+    <input type="hidden" name="offering_id" id='offering_id' value="{{offering_id}}" />
+    <div class='drop-downs' style="font-size:14px;">
+        <div class="status" style="float:left;margin-bottom:10px;">
+            <span><strong style="color:orange"> Class Status:</strong> </span>
+            <select id="status" name="status">
+           <!-- <option{% if status == "Waiting" %} selected="selected"{% endif %}>Waiting</option>-->
+      <!--      <option{% if status == "pending" %} selected="selected"{% endif %}>pending</option>-->
+           <!-- <option{% if status == "Completed" %} selected="selected"{% endif %}>Completed</option>-->
+    <!--        <option{% if status == "postponed" %} selected="selected"{% endif %}>postponed</option>-->
+            <option {% if status = "Started" %} selected="selected"{% endif %}>Scheduled</option>
+            <option {% if status = "Scheduled" %} selected="selected"{% endif %}>Scheduled</option>
+            <option {% if status = "Rescheduled" %} selected="selected"{% endif %}>Rescheduled</option>
+            <option {% if status = "Cancelled" %} selected="selected"{% endif %}>Cancelled</option>
+            <option {% if status = "Waiting" %} selected="selected"{% endif %}>Waiting</option>
+            <option {% if status = "Completed" %} selected="selected"{% endif %}>Completed</option>
+            <option {% if status = "Offline" %} selected="selected"{% endif %}>Offline</option>
+
+        </select>
+        </div>
+        <div class='chapters' style="float:right;">
+            <!--<table class='feedback-table'>
+            <thead>
+                <tr>
+                    <th>Chapters</th>
+                    <th style='text-align:center'>Completed</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for topic in topics %}
+                <tr>
+                    <td>{{ topic.title }}</td>
+                    <td><input class='feedback' type='checkbox' {% if topic.planned %}checked='checked'{% endif %} value="{{ topic.id }}"/></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>-->
+            <!--  <span style="color:orange;display:none"><strong>Planned	Topic:</strong> </span>
+        <span>
+       
+            {% for topic in planned_topic %}
+            {% if forloop.first %}
+            <input type="hidden" id='planned_topic_id' value="{{topic.id}}"/>
+                <strong>
+            {{ topic.title }}</strong> 
+            {% endif %}
+            {% endfor %}
+        </span>  -->
+            <!-- <select class="plan_topics" style="width:245px;display:none;"">
+               {% for topic in planned_topic %}
+                    <option data-topic-id="{{ topic.id }}"  data-topic-url = "{{topic.url}}" {% if topic.actual %} selected="selected"{% endif %}>{{ topic.title }}</option>
+                
+                {% endfor %} 
+            </select> -->
+            <div style="color: orange; font-weight: bold; margin-bottom: 10px;">Select grade:
+                <select id="offering_grade" class="form-select col" aria-label=".form-select-lg example" style="width:100px; color: black;">
+                    {% for grade in revision_grades %}
+                    <option value="{{grade}}">{{grade}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <span style="color:orange"><strong>Planned/Covered Topic:</strong> </span>
+            <select id="topics" class="topics" style="width:245px" id="id_topic">
+                <option data-topic-id="" value=""  data-topic-url = "" >Select the Topic</option>
+        
+                {% for topic in topics %}
+                    <option data-topic-id="{{ topic.id }}" value="{{ topic.id }}"  data-topic-url = "{{topic.url}}" {% if topic.actual %} selected="selected" style="background-color:yellow;" {% endif %}>{{ topic.title }}</option>
+                {% endfor %}
+            </select> {% if topics.0.url %}
+            <a style="color:white; text-decoration:underline;"> wikividya</a> {% else %}
+            <a style="color:white; text-decoration:underline;" href="javascript:void(0);" onclick="autoLoginInWikiVidya('{{topics.0.url}}')"> wikividya</a> {% endif %}
+
+            <br><br>
+            <span>&#9733;Please check this box, if you used the provided Lesson plan while covering this topic.</span><br>
+            <span style="color:orange"><strong>Used Lesson Plan:</strong> </span>
+            <input class='lesson_plan' type='checkbox' value="" />
+
+
+
+            <br><br>
+
+            <span style="color:orange"><strong>Sub Topic : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong> </span>
+            <select class="sub_topics" style="width:245px">
+        {% if sub_topic_json %}
+            {% for topic in sub_topic_json %}
+                <option data-topic-id="{{ topic.id }}" value="{{ topic.id }}" {% if topic.completed %} selected="selected" style="background-color:yellow;"{% endif %}>{{ topic.name }}</option>
+            {% endfor %}
+         {% else %}
+          <option data-topic-id="" value="">No Topics</option>
+          {% endif %}
+        </select>
+
+            <!--         <a style="color:white; text-decoration:underline;" {% if topics.0.url %} target="_blank" href="{{topics.0.url}}"{% endif %}> wikividya</a> -->
+
+        </div>
+        <div style="clear:both"></div>
+    </div>
+    <div class="reason-code hide" style="float:left;font-size:14px;margin-bottom:10px">
+        <span>Reason It</span>
+        <select name="reason">
+            <option></option>
+            <option value="Internet Down School">Internet is Down in school</option>
+            <option value="Power Cut School"> Power Cut in school</option>
+            <option value="Unscheduled leave School"> Unscheduled Leave at school </option>
+            <option value="Internet down Teacher"> Internet Down at teachers side </option>
+            <option value="Power Cut Teacher"> Power cut at teacher side </option>
+            <option value="Last Minute Dropout Teacher"> Last Minute Dropout Teacher </option>
+            <option value="Communication Issue">Communication Issue</option>
+            <option value="Teacher yet to be backfilled">Teacher yet to be backfilled</option>
+            <option value="CA/ Local resource not available">CA/ Local resource not available</option>
+            <option value="Infra issues">Infra issues</option>
+            <option value="Prior information from Teacher">Prior information from Teacher</option>
+            <option value="School event">School event</option>
+            
+    </select>
+    </div>
+
+    <textarea rows="5" name='comment'>{% ifequal actual_comment None %}Comment here{% else %}{{ actual_comment }} {% endifequal %}</textarea>
+    <a href="#feedback_form_{{ session }}" class="btn request-sent-btn" rel="submit" pre-call="pre_feedback" callback="fd_calback" data-offering_id='+curr_event.offering_id + ' data-topic_id='+curr_event.topic_id+ ' data-session_id='+curr_event.id+' style="width:110px;margin-top:12px"><span class="ajax-button-label">Submit</span></a>
+    <input type="hidden" value="{{session_ratings}}" id="session_rating_id" name="session_rate" />
+</form>
+
+<form action="http://wikividya.evidyaloka.org/api.php" method="post" id="formMedia" target="content">
+    <input type="hidden" name="action" value="login" />
+    <input type="hidden" name="lgname" id="wiki_lgname" />
+    <input type="hidden" name="lgpassword" id="wiki_lgpass" />
+    <input type="hidden" name="lgtoken" id="lg_token" />
+    <input type="hidden" value="" id="csessionId" />
+    <input type="hidden" name="format" value="json" />
+</form>
+<iframe name="content" id="wikiiframe" style="display: none"></iframe>
+<script src="/static/js_new/user_center_incremental_search.js"></script>
+
+
+
+
+
+<script type="text/javascript" src="/static/js/custom_autoLogin.js"></script>
+<script>
+    function getCookieValue(a) {
+        var b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+        return b ? b.pop() : '';
+    }
+
+    function updateVideo(mode_val, video_url_val) {
+        session_id = $('#session_id').val()
+        console.log("SessionId", session_id);
+        video_link = video_url_val
+        if (video_link == '' && video_link == ' ') {
+            alert("Please provide correct video url.")
+            return false;
+        }
+        post_data = {
+            'csrfmiddlewaretoken': getCookieValue('csrftoken'),
+            'video_url': video_link,
+            'session_id': session_id,
+            'mode': mode_val
+        }
+        console.log(post_data);
+        $.post('/v2/update_video/session/', post_data, function(response) {
+            html_message = ''
+            if ('success_msg' in response) {
+                alert(response['success_msg'])
+            } else if ('error_msg' in response) {
+                alert(response['error_msg'])
+            }
+        })
+    }
+
+    function autoLoginInWikiVidya(url) {
+        if (url != null && url != 'undefined' && url != '') {
+            //autoLoginWikividya(url);
+            window.open(url, '_blank');
+        }
+        /* else{
+        		 window.open(url, '_blank');
+        	 } */
+    }
+
+    $('#topics').on('change', function() {
+        var topicId = this.value;
+        var ajaxUrl = '/v2/get_sub_topic/?topic_id=' + topicId;
+        $.ajax({
+            url: ajaxUrl,
+            success: function(data) {
+                var optionList = '';
+                jsonStr = JSON.parse(data);
+                if (jsonStr.length > 0) {
+                    for (i = 0; i < jsonStr.length; i++) {
+                        optionList += '<option data-topic-id = "' + jsonStr[i]['id'] + '" value="' + jsonStr[i]['id'] + '">' + jsonStr[i]['name'] + '</option>';
+                    }
+                    $('.sub_topics').html(optionList);
+
+                } else {
+                    optionList = '<option data-topic-id="" value="" > No Topics </option>';
+                    $('.sub_topics').html(optionList);
+                }
+
+            },
+            error: function() {
+                //alert('error');
+            }
+
+        });
+    });
+</script>
+<script>
+    $("#offering_grade").click(function(e) {
+        var grade = $(e.target).val();
+
+        // var grade = $('#offering_grade').val();
+        var offering_id = $('#offering_id').val();
+        $('#all_topics_grade').text('Grade:' + grade)
+
+
+        $.ajax({
+            url: '/get_planed_topics_by_grade/',
+            type: "POST",
+            data: {
+                'csrfmiddlewaretoken': getCookieValue('csrftoken'),
+                'offering_id': offering_id,
+                'grade': grade
+            },
+            dataType: 'json',
+            success: function(response) {
+                console.log(response)
+                    // $('#all_topics_title').text('CourseTopics-' + response.length)
+                $('#id_topic').find('option').remove();
+                for (const key in response) {
+                    $('#id_topic').append($('<option>', {
+                        value: response[key].id,
+                        text: response[key].title,
+                        'data-topic-id': response[key].id
+                    }));
+                }
+            },
+
+            error: function(xhr, errmsg, err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg + "></div>")
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+
+        });
+
+    });
+</script>

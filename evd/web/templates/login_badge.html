@@ -1,0 +1,18 @@
+<ul id="login-badge" class="clearfix" style="margin-top:6px;">
+  <li class="ribbon clearfix">
+    <!--<ul>
+      <li><a href="/myevidyaloka/">My eVidyaloka</a></li>
+      <li><a href="/user_profile">My Profile</a></li>
+      <li><a href="/accounts/logout" class="fb-logout-trigger logout">Log Out<span class="icon icon-power"></span></a></li>
+    </ul>-->
+    <div class="badgeribbon clearfix">
+       <a href="/myevidyaloka/"><img class="avatar profile_pic" src="{% if profile.picture %}{{ profile.picture }}{% else %}/static/images/user_small.png{% endif %}" style="width:50px;height:50px;padding:6px;"></a>
+       <ul class="dropdown-menu submenu sub_logout" style="width:100%;text-align:center; top:0 !important;">
+           <li style="border:none;"><a href="/accounts/logout/" style="margin-left:-13px;">Log Out</a></li>
+       </ul>
+
+        <!--<span class="icon icon-whitearrow"></span>-->
+    </div>
+  </li>
+  <!--<a href="/myevidyaloka/" class="mp"><span class="icon icon-ribbon"></span></a>-->
+</ul>

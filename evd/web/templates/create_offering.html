@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>Offering</title>
+</head>
+<body
+<b><h1>Create Offering </b></h1>
+
+    <form action="/save_offering/" method = "POST" >
+    {% csrf_token %}
+    <b> Please Select Course </b><br />
+        {% for course in courses %}
+            <input type="radio" name = "course" value="{{course.id}}"/>{{ course }} <br />
+        {% endfor %}
+        <br />
+        <br />
+    <input type="hidden" name = "center" value="{{center.id}}" /><br />
+    <br />
+    <br />
+    <b> Language </b><br />
+    <input type = "radio" value="Hindi" name = "language" />Hindi <br />
+    <input type = "radio" value="English" name = "language" />English <br />
+    <input type = "radio" value="Telugu" name = "language" />Telugu <br />
+    <br />
+    <br />
+    <b> Start Date and Time </b><br />
+    Date: <input type="text" value="" name = "start_date" /><br />
+    Time: <input type="text" value="" name = "start_time" /><br />
+    <br />
+    <br />
+    <b> End Date and Time </b><br />
+     Date: <input type="text" value="" name = "end_date" /><br />
+     Time: <input type="text" value="" name = "end_time" /><br />
+    <br />
+    <br />
+    <b> Status </b><br />
+    <input type = "radio" value="started" name = "status" />started <br />
+    <input type = "radio" value="pending" name = "status" />pending <br />
+    <input type = "radio" value="completed" name = "status" />completed <br />
+     <br />
+     <br />
+
+    <b> Planned Topics </b><br />
+    {% for topic in topics %}
+    <input type="radio" value="{{ topic }}" name = "planned_topic" />{{ topic }}<br />
+    {% endfor %}
+    <br />
+    <br />
+    <b> Actual Topics </b><br />
+    {% for topic in topics %}
+     <input type="radio" value="{{ topic }}" name = "actual_topic" />{{ topic }}<br />
+    {% endfor %}
+    <br />
+    <br />
+    <b> Students </b><br />
+    {% for student in students %}
+    <input type="checkbox" value = "{{student}}" name="student" /> {{ student }} <br />
+    {% endfor %}
+    <br />
+    <br />
+    <input type="submit" value="Create Offering"/>
+
+    </form>
+</body>
+</html>
+    

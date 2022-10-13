@@ -1,0 +1,8 @@
+HI COORD / VA,
+
+{{ user.id }}, {{ user.first_name }} {{ user.last_name }}
+
+Has booked slots on {{ slots.0.day }} from {{slots.0.start_time}} to {{slots.0.end_time}} and {{slots.1.day}} from {{slots.1.start_time}} to {{slots.1.end_time}} for {{slots.0.offering.course.grade}}th {{slots.0.offering.course.subject}} in {{slots.0.offering.center.name}}, 
+but Volunteer status is  : not RFT Please reach out to the volunteer, to have him/her complete the Teacher onboarding process, to get him/her start with teaching, as soon as possible.
+
+Kindly go to {{ confirm_url }}

@@ -1,0 +1,332 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+
+{% block head_title %}VolOfMonth{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <link rel='stylesheet' type='text/css' href='/static/css/calendar/fullcalendar.css'/>
+    <link rel="stylesheet" type="text/css" href="/static/css/calendar/theme.css" />
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery.timepicker.css"/>
+    <link rel="stylesheet" href="/static/css/centeradmin.css" />
+    <link href="/static/css_rubaru/parsley.css" rel="stylesheet" media="screen">
+    <style>
+        #add-panel input[type=text]{
+            height:29px !important;
+    </style>
+
+{% if is_partner %}
+    <style>
+        .contributions, .profile-edit-2, .role_change{
+            display : none !important;
+        }
+       /*  ul div{
+            display: none !important;
+        } */
+
+        </style>                                                                                                                                                                                                                                                                                    
+ {% endif %}
+ <style>
+.list_style ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list_style li::before {
+  content: "• ";
+  color: green; /* or whatever color you prefer */
+  font-size : 30px;
+}
+ #colorbox{
+ 
+ height: 700px !important;
+ }
+ 
+#cboxLoadedContent{
+height: 700px !important;
+}
+#cboxContent{
+height: 700px !important;
+}
+#cboxWrapper{
+height: 700px !important;
+}
+
+ 
+td.table_styling {
+	font-size: 12px;
+	background-color: white;
+	color: #0698a5;
+	font-weight: bold;
+	border-collapse:separate;
+}
+
+th.table_styling {
+	font-size: 12px;
+	color: #075f2e;
+	background-color: rgb(169, 206, 146);
+	border-top: 0px;
+	border-collapse:separate;
+}
+
+.table>tbody>tr>th {
+	padding: 8px;
+	line-height: 1.42857143;
+	vertical-align: top;
+	width: 15%;
+	border-top: 1px solid black;
+	border-collapse:separate;
+}
+
+th.default_time_table {
+	font-weight: bold;
+	font-size: 12px;
+	color: black;
+	background-color: rgb(213, 239, 196);
+	border-collapse:separate;
+}
+
+td.default_time_table {
+	font-size: 12px;
+	color: black;
+	background-color: rgb(213, 239, 196);
+	border-top: 0px solid #ddd;
+	border-collapse:separate;
+}
+
+tr.heading_time_table, tr>th.heading_time_table,div.heading_time_table {
+	background-color: rgb(142, 188, 50);
+	color: white;
+	border-collapse:separate;
+}
+div.heading_time_table {
+margin-right: 0px;
+    margin-left: 0px;
+}
+th.heading_time_table {
+	font-weight: bold;
+	text-align: center; background-color : rgb( 142, 188, 50);
+	color: white;
+	background-color: rgb(142, 188, 50); color : white;
+	border: 1px rgb(142, 188, 50);
+	border-collapse:separate;
+}
+
+th.center_info {
+	background-color: rgb(142, 188, 50);
+	color: white;
+	width: 100%;
+	text-align: center;
+	font-size: 14px;
+	font-weight: bold;
+	border: 1px rgb(142, 188, 50);
+	border-collapse:separate;
+}
+#add-sess-modal{
+	width: 1072px;
+	top: 40% !important;
+	left: 30% !important;
+      }
+.sess_details > .tab-pane ul > li {
+    min-height: 40px;
+    margin: 10px 0px;
+}
+
+#cboxClose {
+
+loat: left !important;
+    display: none !important;
+
+}
+
+select {
+  position: relative;
+}
+
+/* Style by id. Effects position of the select drop down. */
+#styledSelect {
+  left: 100px;
+}
+label {
+	margin-right: 5%;
+}
+</style>
+
+
+{% endblock %}
+
+{% block body_container %}
+	<div id="msg_id" class="col-md-12" style='display:none;background: #1ab188;color: white; font-size:20px;margin-top:2%;margin-bottom:2%;text-align: center;padding: 0.9%;'></div>
+	<div id="msg_id1" class="col-md-12" style='display:none;background: #DC143C;color: white; font-size:20px;margin-top:2%;margin-bottom:2%;text-align: center;padding: 0.9%;'></div>
+	
+	<div class="col-md-12 container-fluid" style="background:white">
+	<form action="">
+	{% if user_details %}
+		<div class="col-md-12" style="margin-top:2%;">Edit volunteer of the month:</div>
+		<input id="vol_of_id" type="hidden" value="{{ user_details.vol_of_id }}">
+	{% else %}
+		<div class="col-md-12" style="margin-top:2%;">Add volunteer of the month:</div>
+	{% endif %}
+	<br><br><br><br>
+	<div class="col-md-12 row">
+	<div class="col-md-4">
+	<input id="addEditParam" type="hidden" value="add">
+	<label>Category :</label>
+	<select id="category_id" onchange="storeval()"class="form-control">
+		<option value="" selected disabled>Language *</option>
+        <option value="Bengali">Bengali</option>
+        <option value="Gujarathi">Gujarathi</option>
+        <option value="Hindi">Hindi</option>
+        <option value="Kannada">Kannada</option>
+        <option value="Marathi">Marathi</option>
+        <option value="Oriya">Oriya</option>
+        <option value="Tamil">Tamil</option>
+        <option value="Telugu">Telugu</option>
+	</select>
+	</div>
+	<div class="col-md-4">
+		<label>Month :</label>
+		<select id="month_id" class="form-control">
+		  <option value="" selected disabled>Month *</option>
+		  <option value="1">Jan</option>
+		  <option value="2">Feb</option>
+		  <option value="3">Mar</option>
+		  <option value="4">Apr</option>
+		  <option value="5">May</option>
+		  <option value="6">Jun</option>
+		  <option value="7">Jul</option>
+		  <option value="8">Aug</option>
+		  <option value="9">Sep</option>
+		  <option value="10">Oct</option>
+		  <option value="11">Nov</option>
+		  <option value="12">Dec</option>
+		</select>
+	</div>
+	<div class="col-md-4" style="">
+		 <label>Year :</label>
+		 <input id="year_id" type="text" class="form-control" style="" value="">
+	</div>
+	</div>
+	<br><br><br><br><br>
+	<div class="col-md-12 row">
+	<div class="col-md-4" style="">
+		<label>Volunteer :</label>
+		<input type="text" id="volunteer_id" class="form-control" placeholder="select teacher" style="" value="">
+	</div>
+	<div class="col-md-4 p-0" style="">
+			 <label>Write up :</label>	 
+		 <textarea id="write_up" rows="1" cols="1" class="form-control" maxlength="" style="">
+		 </textarea>
+	</div>
+	<div class="col-md-4" style="">
+	<label>Status :</label>
+	<select id="status_id" class="form-control">
+		  <option value="Nominated">Nominated</option>
+		  <option value="Approved">Approved</option>
+		  <option value="Not Approved">Not Approved</option>
+		</select>
+	</div>
+	</div>
+	
+	<div class="col-md-2 btn btn-info" id="vol_submit_id" align="center" style="margin-left:31%;margin-top:2%;margin-bottom:2%;">ADD</div>
+	
+	<a href="/v2/list_vol_of_month/"><div class="col-md-2 btn" align="center" style="margin:2% 0% 2% 3%;color:white !important;background: #989090;">CANCEL</div></a>
+	
+	</form>
+	</div>
+{% endblock%}
+
+{% block bottom_scripts %}
+{{ block.super }}
+<script>
+  	$(document).ready(function(){
+  		{% if user_details %}
+  			 $("#category_id option[value={{ user_details.category }}]").prop("selected", true);
+  			 $("#month_id option[value={{ user_details.month }}]").prop("selected", true);
+  			 $("#volunteer_id").val("{{user_details.elected_user}}");
+  			 $("#write_up").val("{{user_details.writeup}}");
+  			 $("#vol_submit_id").text("EDIT");
+  			 $("#addEditParam").val("edit")
+  	    {% endif %}
+  	    
+  		var date = new Date();
+  		 var year = date.getFullYear();
+  		 $("#year_id").val(year);
+  		$("#year_id").attr('disabled', 'disabled');
+  	});
+  	
+  		$('#volunteer_id').click(function(){
+  			var category = $('#category_id').val();
+  			var ajax_url = '/v2/ajax/get_vol_of_month?category='+ category;
+  			$('#volunteer_id').autocomplete({
+         	source: function(request, response){
+         		$.getJSON(ajax_url, { term: $('#volunteer_id').val() }, response);
+         		<!--$.getJSON(ajax_url, response);-->
+         	},
+             minLength: 1,
+             select: function(event, ui) {
+            	 $(this).val(ui.item.value);
+ 	         },
+ 	         change: function(event, ui){
+ 	        	 if(ui.item){
+ 	        		 return;
+ 	        	 }else{
+ 	        		 $(this).val('');
+ 	        		 $(class_name + '_val').val('');
+ 	        		 hideCRButtons();
+ 	        	 }
+ 	         }
+          });
+  		});
+  		$('#vol_submit_id').click(function(){
+  			var category = $('#category_id').val();
+  			var volunteer = $('#volunteer_id').val();
+  			var year = $('#year_id').val();
+  			var month = $('#month_id').val();
+  			var write_up = $('#write_up').val();
+  			var status_id = $('#status_id').val();
+  			var addEditParam = $('#addEditParam').val();
+  			var vol_of_id = $('#vol_of_id').val();
+  			if(category== "" || category == "undefined" || category== null){
+  				alert("Please select category");
+  				return false
+  			}
+  			if(month == "" || month == "undefined" || month == null){
+  				alert("Please select month");
+  				return false
+  			}
+  			if(volunteer == "" || volunteer == "undefined" || volunteer == null){
+  				alert("Please select volunteer");
+  				return false
+  			}
+  			$.ajax({
+  		    	url: '/v2/ajax/save_vol_of_month',
+  		    	data: { 'vol_of_id': vol_of_id,'addEditParam': addEditParam, 'category': category, 'volunteer': volunteer, 'year': year, 'month': month, 'write_up': write_up, 'status': status_id},
+  		    	success: function(resp){
+  		    		if(resp.msg === "Volunteer added successfully"){
+  		    			 window.location = "/v2/list_vol_of_month?succ_msg="+resp.msg
+  		    		} else if (resp.msg === "Volunteer details updated successfully") {
+  		    			 window.location = "/v2/list_vol_of_month?succ_msg="+resp.msg
+  		    			 //$('#msg_id').text(resp.msg);
+  		    			 //$('#msg_id').css('display', 'block');
+  		    		} else {
+  		    			 $('#msg_id1').text(resp.msg);
+  		    			 $('#msg_id1').css('display', 'block');
+  		    		}
+  		    		
+  					var fade_btn = function() {
+  						 $("#msg_id1").fadeOut().empty();
+  						 $("#msg_id").fadeOut().empty();
+   						 //location.reload();
+  					}
+  					setTimeout(fade_btn, 2300);
+  				}
+  		    });
+  		});
+</script>
+{% endblock %}

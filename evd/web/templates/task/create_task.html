@@ -1,0 +1,307 @@
+{% extends "base.html" %} {% block head_styles %} {{ block.super }}
+{% endblock %} {% block head_scripts %} {{ block.super }}
+
+  <link href="/static/css/select2.min.css" rel="stylesheet">
+<script src="/static/js/select.min.js"></script>
+
+<script src="https://cdn.ckeditor.com/4.6.2/standard/ckeditor.js"></script>   
+<script type="text/javascript" src="/static/js/bootstrap-datepicker.min.js"></script>
+<style>
+
+.btn-primary{
+background: #337ab7 !important;
+}
+a{
+color: #337ab7; !important;
+}
+a:hover{
+color: #23527c; !important;
+}
+
+.btn-primary:hover, .btn:focus, .btn.focus {
+    color: #333;
+    text-decoration: none;
+}
+</style>
+<style>
+.rowCss {
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+    padding: 20px;
+}
+.input-group-addon {
+    color: white;
+    background-color: #337ab7;
+}
+.btnCss {
+    margin-top: 23px;
+}
+.inner {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+.row {
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+.navbar-default {
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+.date_style{
+	background-color: transparent !important;
+}
+</style>
+
+{% endblock %} {% block body_container %}
+
+<div class="container-fluid " style = "margin-top: 20px;">
+    <div class="row rowCSS">
+        <form action="/saveTask/" id="formId" method="post" onsubmit="return validateMyForm();">
+        {% csrf_token %}
+        <input type="hidden"  value="{{message}}" name="message" />
+        <input type="hidden"  value="{{tabName}}" name="tabName" id="tabNameId" />
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="panel panel-default">
+                    <div class="row rowCss">
+                        <div class="row rowCss">
+                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                <h3>Create Task</h3>
+                            </div> 
+                        </div>
+                        <div class="row rowCss">
+                                   <div class="col-md-2 col-sm-6 col-xs-12">
+                                    <div class="input-group" >
+                                           <div class="input-group-addon"><i class="fa fa-bars "></i></div>
+                                              <label class="input-group-addon">Task Information</label>
+                                       </div>
+                                </div>
+                            </div>
+                            <div class="row rowCss" >
+                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                    <label><span style="color: red;">*</span>Task Name</label>
+                                    <input type="text" id='taskNameId' name="taskName" class="form-control" placeholder="Enter Task Name" value="{{task.subject}}"/>
+                                </div>
+                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                    <label><span style="color: red;">*</span>Due Date</label>
+                                    <div class="col-md-12 input-group">
+                                        <input type="text" id="due_dateId" name="dueDate" class="form-control date_style" required="required" placeholder="Select Date" readonly/>
+                                        <label class="input-group-addon btn" for="due_dateId" title="Select Due Date" style="cursor: default !important;"> <span class="fa fa-calendar" title="Select Due Date" style="cursor: default !important;"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <label>Task Type</label> 
+                                <select name="type" id="task_type" class="form-control">
+                                    <option value="MANUAL" selected="selected">Internal</option>
+                                    <option value="OTHER">Other Opportunity</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-12" id="peformeon_div">
+                            <div id="prfm_div">
+                            <label>Performed On</label>
+                                    <input type="hidden" name="prfm_name" id="prfm_name_id" />
+                                    <input type="hidden" name="prfm_id" id="prfm_id" />
+                                    <input type="text" id="prfm_text" class="form-control" title="Enter 4 or more character" placeholder="Enter 4 or more character" />
+                            </div>
+                                </div>  
+                                <div class="col-md-3 col-sm-3 col-xs-12" id="category_div" hidden='true'>
+                                    <label>Category</label>
+                                    <select  id="category_id" name="categoryId" class="form-control" style="width: 253px;">
+                                         <option value="MARKETING" selected="selected">Marketing</option>
+                                         <option value="ADMIN" >Admin</option>
+                                         <option value="IT" >IT</option>
+                                         <option value="REPORTING" >Reporting</option>
+                                    </select>
+                                </div> 
+                            </div>
+                            <div class="row rowCss">
+                                <div class="adjoined-bottom col-xs-12 col-sm-12 col-md-12">
+                                    <label>Comments :</label>
+                                     <textarea name="editor1">
+                                     {{task.comment}}
+                                        </textarea>
+                                       <script>
+                                        CKEDITOR.replace( 'editor1' );
+                                        CKEDITOR.config.autoParagraph = false;
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="row rowCss"><div class="col-md-2 col-sm-6 col-xs-12"></div></div>
+                            <div class="row rowCss">
+                                   <div class="col-md-2 col-sm-6 col-xs-12">
+                                    <div class="input-group">
+                                           <div class="input-group-addon"><i class="fa fa-bars "></i></div>
+                                              <label class="input-group-addon" >Additional Information</label>
+                                       </div>
+                                </div>
+                            </div>
+                            <div class="row rowCss">
+                                <div class="col-md-4 col-sm-4 col-xs-6">
+                                    <label><span style="color: red;">*</span>Status</label>
+                                    <select id="status_id" name="statusId" class="form-control" required="required" >
+                                        <option value="Open" selected>Open</option>
+                                        <option value="WIP" >WIP</option>
+                                        <option value="Closed" >Closed</option>
+                                        <option value="Resolved" >Resolved</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-6">
+                                    <label><span style="color: red;">*</span>Priority</label>
+                                    <select id="priority_id" name="priorityId" class="form-control" required="required">
+                                        <option value="Normal" selected>Normal</option>
+                                        <option value="High" >High</option>
+                                        <option value="Urgent" >Urgent</option>
+                                        <option value="Immediate" >Immediate</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12" id="assignto_div">
+                                    <label>Assign To</label>
+                                    <input type="hidden" name="assign_name_id" id="assign_name_id" value="{{logged_in_username}}"/>
+                                    <input type="hidden" id="assign_nameId" value="{{logged_in_username}}-{{logged_in_id}}"/>
+                                    <input type="text" name="assignId" class="form-control" id="assigned_text" title="Enter 4 or more character" value="{{logged_in_username}}-{{logged_in_id}}" placeholder="Enter 4 or more character" />
+                                </div> 
+                            </div>
+                            <div class="row rowCss" align="center">
+                                <button type="submit" class="btn btn-primary btnCSS">Save</button>
+                                <button type="button" class="btn btnCSS" onclick="cancel_page()">Cancel</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal fade" id="error_model">
+     <div class="modal-content">
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+  </div>
+</div>
+
+<script>
+    $(".readonly").keydown(function(e) {
+        e.preventDefault();
+    });
+    $(document).ready(
+            function() {
+                var date_input = $('input[id="due_dateId"]');
+                var container = $('.bootstrap-iso form').length > 0 ? $(
+                        '.bootstrap-iso form').parent() : "body";
+                var options = {
+                    format : 'dd-mm-yyyy',
+                    container : container,
+                    todayHighlight : true,
+                    autoclose : true,
+                    startDate : '0d',
+                };
+                date_input.datepicker(options);    
+            })
+    $(".select2_multiple").select2({
+        maximumSelectionLength : 1000
+    });    $(".select2_multiple").select2({
+        maximumSelectionLength : 1000
+    });
+</script>
+<script>
+$(document).ready(function(){
+	$("#prfm_text").autocomplete({
+	    source: "/v2/ajax/get_users?action=performed_on",
+	    minLength: 4,
+	    select: function(event, ui) {
+	        $("#prfm_name_id").val(ui.item.value)
+	        $("#prfm_id").val(ui.item.id)
+	    }
+	});
+	$("#assigned_text").autocomplete({
+	    source: "/v2/ajax/get_users?action=assigned_to",
+	    minLength: 4,
+	    select: function(event, ui) {
+	        $("#assigned_text").val(ui.item.value)
+	        $("#assign_name_id").val(ui.item.name)
+	        $("#assign_nameId").val(ui.item.value)
+	    }
+	});
+});
+</script>
+<script>
+   function cancel_page(){
+    var value = $("#tabNameId").val();
+       if(value != null && value != '' && value !='undefined' && value != 'None'){
+            window.location = "/task_list/?tab={{tabName}}";
+       }else{
+           window.location = "/task_list";           
+       }
+   }
+   function validateMyForm(){
+       var date_input = $('input[id="due_dateId"]');
+       var task_name = $('#taskNameId').val();
+       if ($("#prfm_name_id").val()!=$("#prfm_text").val()){
+    	   $("#prfm_name_id").val('');
+    	   $("#prfm_text").val('');
+    	   $("#prfm_id").val('');
+       }
+       if ($("#assign_nameId").val()!=$("#assigned_text").val()){
+    	   $("#assign_name_id").val('');
+    	   $("#assign_nameId").val('');
+    	   $("#assigned_text").val('');
+       }
+       if(date_input.val() == ''|( task_name == ''| task_name == 'undefined' | task_name == null) ){
+    	   var message = '';
+    	   message = "Please Enter All Mandatory(*) Fields";
+    	   errorMessage(message);
+           return false;
+       }
+       return true;
+   }
+   function errorMessage(data){
+	   if (data!=null && data!='' && data!='undefined'){
+          var message = data;
+         $("#error_model .modal-body").html(message);
+            $("#error_model").modal();
+		}
+  }
+   $("#task_type").change(function(){
+       checkTaskType();
+   });
+   
+   function checkTaskType(){
+       var taskType = $("#task_type").val();
+       if(taskType!=null && taskType!='' && taskType!='undefined'){
+           if(taskType=='MANUAL'){
+               $("#performed_id").removeAttr("disabled");
+               $("#assign_id").removeAttr("disabled");
+               $("#category_div").hide();
+               $("#peformeon_div").show();
+               $("#assignto_div").show();
+               var performed_on_select = $("#performed_id option:selected").text();
+               if (performed_on_select!='Select Performed On'){
+                   $('#ufl_name_id').val(performed_on_select);
+               }
+           }
+           else if(taskType=='OTHER'){
+               $("#performed_id").attr("disabled","true");
+               $("#assign_id").attr("disabled","true");
+               $("#assignto_div").hide();
+               $("#peformeon_div").hide();
+               $("#category_div").show();
+               $("#ufl_name_id").val('');
+        }
+       }
+   }
+   $("#performed_id").change(function(){
+       var performed_on_select = $("#performed_id option:selected").text();
+       $('#ufl_name_id').val(performed_on_select);
+   });
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        checkTaskType(); 
+});
+</script>
+
+{% endblock %} {% block scripts %} {% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block head_styles %}
+{{ block.super }}
+    <style>
+        /*.left-nav li a {
+            background:none;
+            padding-left:0px;
+        }*/
+    </style>
+{% endblock %}
+{% block body_container %}
+
+<div id="content" class="clearfix">
+    <div class="about-container" id="about-landing">
+        <div class="inner clearfix">
+            {% block left_nav %}
+                <div class="left-nav">
+                    <ul class="clearfix">
+                        <li><a href="#basic_info" class="db-1 active"><span>Basic Info</span></a></li>
+                        <li><a href="#offerings" class="db-2"><span>Offerings</span></a></li>
+                        <li><a href="#preferences" class="db-3"><span>Preferences</span></a></li>
+                    </ul>
+                </div>
+
+            {% endblock %}
+            <div class="right-content">
+                {% block right_content %}
+                    <div class="top clearfix">
+                        <div class="intro">
+                            <h1>About</h1>
+                            <h2>To Educate - Anywhere Anytime</h2>
+                        </div>
+                    </div>
+                    {% block bottom_content %}
+                    {% endblock %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block bottom_scripts %}
+    {{ block.super }}
+    <script>
+        /*$(document).ready(function() {
+            $("div.left-nav ul li a").click(function() {
+                debugger;
+                $(this).addClass("active");
+            });
+        });*/
+    </script>
+
+{% endblock %}

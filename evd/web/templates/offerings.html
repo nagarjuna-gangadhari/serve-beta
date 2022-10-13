@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block body_container %}
+    <div class="row">
+        <div class="span12 trans-block" style="min-height:500px;">
+            <form>
+                <div class="row">
+                   <div class="span12" style="margin-top:30px;">
+                        <h2 style="padding-left:50px;float:left">Offerings</h2>
+                   </div>
+                   <div class="span12 offset1" style="padding-top:20px">
+                        <div class="control-group">
+                            <label class="control-label" for="input01" style="text-align:left;width:100%">Select one of the Offerings</label>
+                            <div class="controls" style="margin-left:0px">
+                                <input type="hidden" name="prefered_offerings" />
+                                <select id="prefered_thisoffering" multiple="multiple" style="width:74.5%;">
+                                {% for offering in session_offering %}
+                                    <option value="{{ offering.offering.id }}">{{ offering.offering }}</option>
+                                    <!--<button type="submit" class="btn" style="margin-left: 10px;padding: 0px 4px 0px 4px !important;"><i class="icon-ok"></i></button>-->
+                                {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                   </div>
+                    <div class="span10">
+                        <button class="btn btn-primary pull-right">Preferences</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block bottom_scripts %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function(){
+
+            var pref_offerings = "{{ user_profile.pref_offerings}}";
+            pref_offerings = pref_offerings.slice(0,-1).split(";");
+            for( var offering in pref_offerings )
+            {
+                $("#prefered_thisoffering").children("option[value='" + pref_offerings[offering] + "']").attr({"selected":"selected"});
+            }
+
+        });
+    </script>
+{% endblock %}

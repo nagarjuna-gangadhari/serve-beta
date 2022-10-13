@@ -1,0 +1,947 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+      <style>
+
+html{
+background-image: url(/static/images/ev_bg_white.png);
+}
+
+
+@font-face {
+    font-family: "lato";
+    src: url('/static/fonts/lato/Lato-Regular.ttf') format("truetype");
+    }
+p.lato {
+    font-family: "lato", Verdana, Tahoma;
+    }
+@font-face {
+    font-family: "lobster";
+    src: url('/static/fonts/Lobster/Lobster_1.3.otf') format("opentype");
+    }
+p.lob {
+    font-family: "lobster";
+    }
+.stat_circle{
+      border-radius:100%;
+      border:6px dotted #fd699b;
+      width:180px;
+      height:180px;
+}
+.stat_circle_inner{
+      border-radius:100%;
+      width:160px;
+      height:160px;
+      margin:10px;
+}
+.stat_circle_inner > p{
+      top:37%;
+      position :    relative;
+      font-size:35px;
+      font-weight  :   bold;
+      color:white;
+}
+.thumb-nail{
+      margin:0% 2%;;
+      display:inline-block;
+   }
+.thumb-nail > p{
+      font-family:'lato';
+      margin-top:20px;
+      font-weight:bold;
+}
+.new-one{
+    height: 290px;
+    width: 940px;
+    background-color: transparent;
+    position: relative;
+    float: left;
+
+}
+
+    @-webkit-keyframes pulse-border {
+              from, to { box-shadow: 0 0 0 0 #14ce4c;}
+                  70% { box-shadow: 0 0 0 4px #14ce4c; }
+                  }
+    div.blnc{
+        -webkit-animation: pulse-border 1s infinite;
+            }
+        #bottom a {
+            margin-left:18px !important;
+        }
+        .mid-block{
+            background-color:#33ccff;
+            height:590px;
+            margin-top:20px;
+            text-align:center;
+        }
+        #header {
+            background:transparent !important;
+            padding-bottom:0px !important;
+        }
+        #header .inner {
+            padding-right:1px;
+            height:71px;
+            background:#FFFFFF;
+            padding-right:200px;
+        }
+        div.header_full {
+            height:79px;
+            width:auto;
+            background-color:white;
+            border-bottom:2px solid #909d71;
+        }
+        div.footer_full {
+            height: 60px;
+            width: auto;
+            background-color: #545453;
+            border-top: 1px solid #242423;
+            margin-bottom:-10px;
+        }
+        .nav_left {
+            width:272px;
+            height:71px;
+            margin:0px 0px 0px 0px;
+            display:inline;
+            float:left;
+            clear:both;
+
+        }
+        .nav_left img {
+            width:55px;
+            height:55px;
+            float:left;
+            padding:5px 5px 5px 5px;
+        }
+        .nav_left > h1 {
+            position:relative;
+            float:left;
+            display:inline;
+        }
+        h1#logo > a {
+            font-size:22px;
+        }
+        .nav_left > a {
+            float:left;
+            display:inline;
+        }
+        .nav_left > h3 {
+            float:left;
+            position:absolute;
+            font-size:12px;
+            top:40px;
+            left:75px;
+            color:#004f00;
+        }
+        .nav_right {
+            position:absolute;
+            float:left;
+            height:71px;
+            }
+        li.main-nav-list > a {
+            color:#F15A22 !important;
+        }
+        li.main-nav-list > a:hover {
+            color:#909D71 !important;
+        }
+        .nav-menu {
+            position:relative;
+            height:71px;
+            width:166px;
+            float:left;
+            border-left:1px solid #909D71;
+        }
+        div.nav-menu > ul.nav_main {
+            padding-top:0px;
+        }
+        .about-container {
+            padding:0px 0px 0px 0px;
+        }
+        .content {
+            width: 940px;
+            height:532px;
+            display: block;
+            position: relative;
+            z-index: 1;
+        }
+        div.left-block {
+            height: 513px;
+            position: relative;
+            width: 100%;
+            float: left;
+        }
+        div.right-block1 {
+            position: relative;
+            float: left;
+            height: 124px;
+            width: 181px;
+            border: 1px solid #C9C9C7;
+            margin: 9px 5px 5px 2px;
+        }
+        div.right-block2 {
+            height: 124px;
+            width: 181px;
+            border: 1px solid #C9C9C7;
+            position: relative;
+            float: left;
+            margin: 2px 5px 0px 2px;
+        }
+        div.right-block3 {
+            height: 124px;
+            width: 181px;
+            border: 1px solid #C9C9C7;
+            position: relative;
+            float: left;
+            margin: 5px 5px 0px 2px;
+        }
+        div.bottom-line {
+            height: 210px;
+            width: 940px;
+            background-color: transparent;
+            position: relative;
+            float: left;
+            border-top:2px solid #909D71;
+        }
+        div.stats {
+            height: 183px;
+            width: 203px;
+            background-color: #cdd7be;
+            position: relative;
+            float: left;
+            margin:12px 11px 0px 0px;
+        }
+        div.teach_speech {
+            height: 183px;
+            width: 298px;
+            position: relative;
+            float: left;
+            background-color: #D2DCC3;
+            margin: 12px 0px 0px 0px;
+        }
+        div.right-block1 p,
+        div.stats p {
+            font-size: 14px;
+            line-height: 1.4em;
+            text-align:center;
+            padding-top:10px;
+            color:#909d71
+        }
+        div.right-block2 p {
+            font-size: 14px;
+            line-height: 1.4em;
+            margin-left:5px;
+            padding-top:5px;
+            color:#909d71;
+        }
+        div.right-block3 p{
+            font-size: 14px;
+            line-height: 1.4em;
+            margin-left: 10px;
+            padding-top: 5px;
+            color: #909D71;
+        }
+
+        div.stats h2 {
+            text-align: center !important;
+            font-size: 32px !important;
+            margin-top: 10px !important;
+        }
+        div.stats h2 span {
+            color: #f69206 !important;
+        }
+        div.stats h2 > span.stats-active {
+
+            font-size: 19px !important;
+            color: #f69206 !important;
+        }
+        /*div.stats > div > h2:last-child {
+            margin-top:5px; 
+        }*/
+        div.stats h2 span.stats-total {
+            font-size: 32px !important;
+            margin-left: 0px;
+            color: #f69206 !important;
+        }
+
+        div.signup-trigger, div#login-trigger, div#joy {
+            font-size: 25px;
+            box-shadow: 1px -1px 4px #F4D595;
+            -moz-box-shadow: 1px -1px 0px #F4D595;
+            -webkit-box-shadow: 1px -1px 0px #f7e4ba;
+            background-color: #F7E4BA;
+            margin: 15px 22px 19px 19px;
+            width:143px;
+            height:53px;
+            cursor: pointer;
+            display: block;
+            float: left;
+            text-align: center;
+            color: #CE6600;
+            border-bottom: 2px solid #F4D595;
+            border-left: 2px solid #F4D595;
+        }
+        div.signup-trigger > h4 {
+            margin-top: 5px;
+            font-size:75%
+        }
+        div#joy h4 {
+            margin-top:16px;
+            font-size:75%;
+        }
+        div#login-trigger > h4 {
+            margin-top:15px;
+            font-size:75%;
+        }
+        div#login-trigger {
+            margin: 15px 22px 19px 19px;
+        }
+        #header ul#main-nav li a {
+            background:none !important;
+        }
+        div.head_box {
+            height:34px;
+            border-bottom:1px solid #C9C9C7;
+        }
+        .stats > .head_box,
+        .teach_speech .head_box {
+            padding-bottom:5px;
+        }
+        #carousel {
+            width:945px !important;
+            height:513px;
+            float:left;
+        }
+        #carousel ul,
+        #carousel li{
+            height:513px !important;
+        }
+        #carousel-teach ul,
+        #carousel-teach li{
+            height:143px;
+        }
+        #carousel li .image {
+            position:absolute !important;
+        }
+        #carousel img {
+            width:945px;
+        }
+        div.left-block > #carousel > #pager {
+            width: 43px;
+            position: absolute;
+            z-index: 200;
+            float: right;
+            margin: -30px 0px 0px 475px ;
+            padding:2px 0px 0px 0px;
+        }
+        #load-carousel {
+            width: 742px;
+            height: 355px;
+            background: white;
+            background-image: url(/static/images/ajax-loader.gif) !important;
+            background-repeat: no-repeat;
+            background-position: 65%;
+            float: left;
+        }
+
+
+        div.quote {
+            display:none;
+            position:absolute;
+            width:314px;
+            margin-left:22px;
+            font-size:14px;
+            line-height:1.6em;
+            background:rgba(204, 204, 204,0.7);
+            color:#222;
+            padding:15px 0px 10px 15px;
+        }
+        div.quote1 {
+            position: absolute;
+            width: 314px;
+            margin-left: 22px;
+            font-size: 19px;
+            line-height: 1.7em;
+            /* background: rgba(204, 204, 204,0.7); */
+            color: #EB4D03 !important;
+            padding: 276px 0px 10px 385px;
+            font-weight: bold;
+        }
+        div.quote1 a {
+            color: #EB4D03 !important;
+        }
+        div.quote p {
+            margin-bottom:10px;
+            text-align:left;
+            margin-right:5px;
+            font-size:15px;
+        }
+        #pager a {
+            background-image:url(/static/images/pager.gif) !important;
+        }
+        #pager-teach a {
+            background-image:url(/static/images/pager.gif) !important;
+            width: 8px;
+            height: 8px;
+            float: left;
+            position: relative;
+            margin-right: 9px;
+            display: block;
+            text-indent: -9999em;
+        }
+        #pager-teach {
+            position: absolute;
+            z-index: 200;
+            float: right;
+            margin: -25px 0px 0px 195px;
+            height:8px;
+            width:105px !important;
+        }
+        #pager-teach a.activeSlide, #pager-teach a:hover {
+            background-position: 0 -8px;
+
+        }
+        .fixed {
+            position: fixed;
+            bottom: 0px;
+            width:100%;
+            left:0px;
+            right:0px;
+        }
+        #footer {
+            position: relative;
+            width:100%;
+        }
+        #footer .inner > p{
+            display:block;
+        }
+        #footer .inner > a{
+            float:right;
+        }
+        #joy  a {
+            color:#CE6600;
+        }
+        #slide3 span {
+            color:#F15A22;
+        }
+        .log-in {
+            right: 0px;
+            top: 35px;
+        }
+        .submenu li a {
+            padding: 0px 13px !important;
+        }
+        #header #login-badge ul li a {
+            text-align:center;
+        }
+        #video-modal {
+            display:none;
+            width:auto;
+            margin: 0px 0 0 0px;
+            top: 50px;
+            background:black;
+            border-radius:20px;
+        }
+        .modal-top {
+            width: 505px;
+            height: 30px;
+            background: black;
+            border-top-right-radius: 20px;
+            border-top-left-radius: 20px;
+        }
+        .modal-mid > div {
+            margin-left:20px;
+        }
+        .modal-mid {
+            height: 344px;
+            background: black;
+            width: 505px;
+        }
+        .modal-bottom {
+            width:505px;
+            height: 50px;
+            background: black;
+            border-bottom-right-radius: 20px;
+            border-bottom-left-radius: 20px;
+        }
+        .close_bottom {
+            background: whiteSmoke;
+            height: 20px;
+            width: 80px;
+            float: right;
+            margin-right: 10px;
+            margin-top: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .close_bottom > span {
+            margin-right: 5px;
+            font-size: 16px;
+        }
+        .close_bottom > a {
+            margin-right:10px;
+            padding:0px;
+            font-size:14px;
+            cursor:pointer;
+            opacity: 1;
+        }
+        #carousel-teach > ul >li> img {
+            cursor:pointer;
+        }
+        .signup-trigger a,.signup-trigger a:hover {
+            color:#CE6600 !important;
+        }
+    </style>
+{% endblock %}
+{% block head_scripts %}
+{{ block.super }}
+    <script src="//www.youtube.com/iframe_api">
+    </script>
+    <!--<script type="text/javascript" src="/static/js/jquery-1.9.0.min.js"></script>-->
+    <script>
+            $(document).ready(function(){
+                if($("#footer").position()){
+                    if($(window).height() > ($("#footer").position().top + $("#footer").height())){
+                        $("#footer").css({"position": "fixed","bottom": "0px", "width": "100%"});
+                    }
+
+                }
+                $('[rel="tooltip"]').tooltip();
+            });
+            $(document).ready(function(){
+
+                $("#video-modal").css("left", (($(window).width()-505)/2));
+
+                $("div.log-in").on('mouseover','#login-badge',function(e){
+                      $("#login-badge ul").css("display","block");
+                })
+                $("div.log-in").on('mouseout','#login-badge',function(){
+                      $("#login-badge ul").css("display","none");
+                })
+            });
+
+            $(window).load(function(){
+                $('#load-carousel').fadeOut('slow', function(){
+                    $('#carousel').fadeIn("slow");
+                    window.theCarousel = $('#carousel ul');
+                    window.youtube_player_ready = function(event){
+                        event.target.playVideo();
+                    }
+                    window.theCarousel = theCarousel.cycle({
+                        fx      : 'fade',
+                        speed   : 750,
+                        timeout : 0,
+                        pager   : '#pager',
+                        timeout : 70000,
+                        before: function(currSlideElement, nextSlideElement, options, forwardFlag){
+                        (function(currSlideElement, nextSlideElement, options, forwardFlag, that){
+                            if($(that).hasClass("video-content")){
+                               var $img = $(that).find("img");
+                               if($img.length > 0){
+                                   $img.on("click", function(){
+                                        var $this_img = $(this),
+                                            this_id   = $(this).attr("id"),
+                                            vid_id    = $(this).attr("vid-id");
+                                        window.theCarousel.cycle("pause");
+                                        var player;
+                                        player = new YT.Player(this_id, {
+                                          height: '475',
+                                          width: '742',
+                                          videoId: vid_id,
+                                          events: {
+                                            'onReady': youtube_player_ready,
+                                          }
+                                        });
+                                   });
+                                   $('#pager').on('click','a',function(){
+                                       var $slide4 = $('li#slide4').children('div');
+                                       $slide4.html('<img alt="youtube link" id="p-1" src="/static/images/anand__concept_video.jpg" vid-id="h2bbbAC_IqU" class="youtube-player" />');
+                                       $imgv = $slide4.children('img');
+                                       $imgv.on("click", function(){
+                                            var $this_img = $(this),
+                                                this_id   = $(this).attr("id"),
+                                                vid_id    = $(this).attr("vid-id");
+                                            window.theCarousel.cycle("pause");
+                                            var player;
+                                            player = new YT.Player(this_id, {
+                                              height: '475',
+                                              width: '742',
+                                              videoId: vid_id,
+                                              events: {
+                                                'onReady': youtube_player_ready,
+                                              }
+                                            });
+                                       });
+
+
+                                    });
+                               }
+                            }
+                        }(currSlideElement, nextSlideElement, options, forwardFlag, this));
+                        $('#carousel li').removeClass('animIn animOut');
+                        $(currSlideElement).addClass('animOut');
+                        },
+                        after: function(currSlideElement, nextSlideElement, options, forwardFlag){
+                            $('#carousel li').removeClass('animIn animOut');
+                            $(nextSlideElement).addClass('animIn');
+                        },
+                        onPagerEvent: function(zeroBasedSlideIndex, slideElement) {
+                            window.theCarousel.cycle("pause");
+                        },
+                        continuous: false
+                    });
+                    $('#pager a:last').addClass('last');
+                    $('#pager').width(($('#pager a').outerWidth(true) * $('#pager a').length)+8);
+                });
+            });
+            $(window).load(function(){
+              $('#main-video').click(function(){
+                        $('#video-modal2').show();
+                });
+               $('#video-modal2').find('a.close').click(function(){$('#video-modal2').hide();$('#vid_main').attr('src',$('#vid_main').attr('src'))});
+                $('#load-carousel-teach').fadeOut('slow', function(){
+                    $('#carousel-teach').fadeIn("slow");
+                    window.theCarousel_teach = $('#carousel-teach ul');
+                    window.youtube_player_teach_ready = function(event){
+                        event.target.playVideo();
+                    }
+                    window.youtube_player_teach_stop  = function(event){
+                        event.target.stopVideo();
+                        console.log('video stoped');
+                    }
+                    window.theCarousel_teach = theCarousel_teach.cycle({
+                        fx      : 'fade',
+                        speed   : 750,
+                        timeout : 0,
+                        pager   : '#pager-teach',
+                        timeout : 7000,
+                        before: function(currSlideElement, nextSlideElement, options, forwardFlag){
+                        (function(currSlideElement, nextSlideElement, options, forwardFlag, that){ 
+                            if($(that).hasClass("video-content-teach")){
+                               var $img = $(that).find("img");
+
+                               if($img.length > 0){
+
+                                   $img.on("click", function(){
+
+                                        var $slide4 = $('li#slide4').children('div');
+                                        if($slide4.children('iframe')){
+                                            $slide4.html('');
+                                            $slide4.html('<img alt="youtube link" id="p-1" src="/static/images/anand__concept_video.jpg" vid-id="h2bbbAC_IqU" class="youtube-player" />');
+                                        }
+
+                                        var $modal = $('#video-modal');
+                                        $modal.css('display','block');
+                                        var modal_img  = $modal.children('modal-mid').children('div'),
+                                            f_name = $(that).attr('name'),
+                                            f_id = $(that).attr('id'),
+                                            htm_l = '<img alt="youtube link" id="pi-1" src="/static/images/'+f_name+'_big.jpg" vid-id="'+f_id+'" class="youtube-player" style="height:344px;width:475px;"/>';
+                                        var $close = $('#video-modal').children('.modal-bottom').children('.close_bottom');
+                                        $modal.children('.modal-mid').children('div').html('');
+                                        $modal.children('.modal-mid').children('div').html(htm_l);
+                                        var $image = $modal.children('.modal-mid').children('div').children('img');
+                                        var player;
+                                        $image.on('click',function(){
+                                            var $this_img = $(this),
+                                                this_id   = $(this).attr("id"),
+                                                vid_id    = $(this).attr("vid-id");
+
+                                            player = new YT.Player(this_id, {
+                                              height: '344',
+                                              width: '475',
+                                              videoId: vid_id,
+                                              events: {
+                                                'onReady': youtube_player_teach_ready,
+                                              }
+                                            });
+                                        });
+
+                                        $close.on('click','a',function(event){
+
+                                            $modal.children('.modal-mid').children('div').html('');  
+                                            $modal.css('display','none');
+                                        });
+
+                                   });
+                               }
+                            }
+                        }(currSlideElement, nextSlideElement, options, forwardFlag, this));
+                        $('#carousel-teach li').removeClass('animIn animOut');
+                        $(currSlideElement).addClass('animOut');
+                        },
+                        after: function(currSlideElement, nextSlideElement, options, forwardFlag){
+                            $('#carousel-teach li').removeClass('animIn animOut');
+                            $(nextSlideElement).addClass('animIn');
+                        },
+                        onPagerEvent: function(zeroBasedSlideIndex, slideElement) {
+                            window.theCarousel_teach.cycle("pause");
+                        },
+                        continuous: false
+                    });
+                    $('#pager-teach a:last').addClass('last');
+                    $('#pager-teach').width(($('#pager-teach a').outerWidth(true) * $('#pager-teach a').length)-8);
+                });
+            });
+    </script>
+{% endblock %}
+
+{% block top_bar %}
+<div class="header_full">
+    <div id="header">
+        <div class="inner clearfix">
+            <div class="nav_left">
+                <a href="/?home=true"><img alt="eVidyaloka Logo" src="/static/images/evidyalogo.png"/></a>
+                <h1 id="logo"><a href="/?home=true">eVidyaloka</a></h1>
+                <h3>To Educate-Anywhere Anytime</h3>
+            </div>
+            <div class="nav_right">
+                <div class="nav-menu">
+                    <ul id="main-nav" class="nav_main" class="clearfix">
+                        <li class="main-nav-2 main-nav-list" style="margin-left:48px">
+                            <a href="/?home=true" style="cursor:pointer;color:#909d71 !important;font-weight: bold;">Home</a>
+                            <ul class="dropdown-menu submenu" style="display: none;margin-left:-46px">
+                                <li><a href="/about/">About Us</a></li>
+                                <li><a href="/vision/">Vision and Mission</a></li>
+                                <li><a href="/operating_principles/">Operating Principles</a></li>
+                                <li><a href="/conduct/">Code of Conduct</a></li>
+                                <li><a href="/who_we_are/">Who We Are</a></li>
+                                <li><a href="/careers/">Careers</a></li>
+                                <li><a href="/news_events/">News & Events</a></li>
+                                <li><a href="/governance/">Governance</a></li>
+                                <li><a href="/partners/">Partners</a></li>
+                                <li><a href="/faq/">FAQ</a></li>
+                                <li><a href="/contact_us/">Contact Us</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!--<div style="border:2px solid #909d71;position: absolute;bottom: 0;width: 98%;"></div>-->
+                </div>
+                <div class="nav-menu">
+                    <ul id="main-nav" class="nav_main">
+                        <li class="main-nav-3 main-nav-list">
+                            <a style="cursor:pointer;padding-left:0px;margin-left:50px">Discover</a>
+                            <ul class="dropdown-menu submenu" style="display: none;margin-left:14px;">
+                                <li><a href="/volunteer/">Spend some Time</a></li>
+                                <li><a href="/spread/">Spread the Word</a></li>
+                                <li><a href="/sponsor/">Share the Joy</a></li>
+                                <li><a href="/donors/">Know the Donors</a></li>
+
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-menu">
+                    <ul id="main-nav" class="nav_main">
+                        <li class="main-nav-1 main-nav-list" style="margin-left:6px">
+                            <a style="cursor:pointer;">Education in India</a>
+                            <ul class="dropdown-menu submenu" style="display: none;margin-left:-5px">
+                                <li><a href="http://www.mhrd.gov.in/school-education" target="_blank">Ministry of HRD</a></li>
+                                <li><a href="http://www.mhrd.gov.in/rte" target="_blank">Right to Education</a></li>
+                                <li><a href="http://en.wikipedia.org/wiki/Education_in_India" target="_blank">Education in India</a></li>
+                                <li><a href="http://www.educationforallinindia.com/" target="_blank">Educational Statistics</a></li>
+                                <li><a href="http://www.asercentre.org/Keywords/p/205.html" target="_blank">ASER Reports</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+               </div>
+
+
+               <div class="nav-menu">
+                    <ul id="main-nav" class="nav_main">
+                    <li class="main-nav-3 main-nav-list"style="padding-left:50px">
+                    <a style="cursor:pointer" href="/forums/" >Forums</a>
+                    </li>
+                    </ul>
+               </div>
+
+               <div class="nav-menu" style="padding-left:20px;text-align:center;">
+                    {% if not user.is_authenticated %}
+                        <a id='login-trigger' class="btn cust_btn"   style="padding:3px 15px;background-color:#35CB67;cursor:pointer;border:none;font-size:14px;width:54%;margin-top:20px;">Signup/Login</a>
+                    {% endif %}
+               </div>
+               <!--<div class="nav-menu">
+                    <ul id="main-nav" class="nav_main">
+                    <li class="main-nav-3 main-nav-list"style="padding-left:50px">
+                          <a style="cursor:pointer" href="http://blog.eVidyaloka.org" target="_blank">Blog</a>
+                    </li>
+                    </ul>
+               </div>-->
+            </div>
+        </div>
+        <div class="log-in">
+            {% if user.is_authenticated %}
+                {% login_badge user %}
+            {% endif %}
+        </div>
+<img alt="banner_bottom image" src='/static/images/top-colored-bar.jpg' style='margin-top:1px;position:absolute;width:100%;' />
+    </div>
+
+</div>
+{% endblock %}
+
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block body_container %}
+        <div class="content">
+           <div style="background: #fafafa;overflow: hidden;">
+           <div class="left-block" >
+                <!--<div>
+                    <img alt="eVidyaloka home" src="/static/images/evidyaloka_home.png" />
+                </div>-->
+                <div id="load-carousel" class="clearfix"></div>
+                <div id="carousel" class="hide">
+                    <ul>
+                      <!--
+                       <li id='slide6'>
+
+                            <div class="image">
+                               <a href="/sponsor/"><img alt="eVidyaloka Landing page image" src="/static/images/Landing_Pagee.png" /></a></div>
+
+                       </li>
+                       -->
+                       <li id="slide1">
+                            <div class="image">
+                                <img alt="slider images" src="/static/images/slide1neww.jpg" />
+                            </div>
+                            <div class='quote' style='display:none' >
+                                <p>Connect and engage online with the school children of rural villages in India.</p>
+                                <p>Give 2 hrs in a week, your passion & commitment</p>
+                                <p>Be a part of the solution and enhance the children's learning experience</p>
+                                <p>Educate anywhere, anytime... <a href="/faq/">Know more</a></p>
+                            </div>
+                        </li>
+                        <li id="slide2">
+                            <div class="image">
+                                <img alt="slider images" src="/static/images/slide2new.jpg"/>
+                            </div>
+                            <div class='quote'>
+                                <p><span style="color:#F15A22">Volunteer speak</span><br/>
+                                    <strong>Anand Kumar</strong> <span style="font-size:10px"> (Teacher from Bangalore)</span></p>
+                                <p><span style="font-size:25px">&#147;</span>I carry a Sense of Pride that I teach in My mother tongue (Tamil) and helps connect back to your roots, teaching children in villages<span style="font-size:25px">&#148;</span></p>
+                                <p><a href="/">Hear more</a></p>
+                            </div>
+                        </li>
+                        <li id="slide3">
+                            <div class="image">
+                                <img alt="slider images" src="/static/images/slide3new.jpg"/>
+                            </div>
+                            <div class='quote'>
+                                <p><span>58%</span> of Std V students can't recognize alphabets and <span>74% </span>can't do division.<br/> (Source : ASER 2011-12)</p>
+                                <p>To meet the RTE norms, there is a shortage of <span>12 lakh</span> teachers.<br/> (Source : HRD Minister)</p>
+                            </div>
+                        </li>
+                        <li id="slide4" >
+                            <div class='image'>
+                            <img alt="slider images" src="/static/images/slide4new.jpg" vid-id="h2bbbAC_IqU" class="youtube-playe" />
+                            </div>
+                        </li>
+                        <!--
+                        <li id="slide5">
+                            <iframe src="/map/" height="514px" width="735px" scrolling="no"></iframe>
+                        </li>
+                        -->
+                    </ul>
+                    <div id="pager" class="clearfix" style="width: 84px;"></div>
+                </div>
+            </div>
+           </div>
+             <div class='row' style='margin-top:30px;text-align:center;'>
+                <div style='display:inline-block; margin-right:30px;'>
+                  <a href='/centers/' ><div class='btn cust_btn' style='background-color:#ff6699;padding:5px 65px;font-weight:bold;border:none' >EXPLORE</div></a><br>
+                  <p class='lato' style='word-wrap: break-word;width:300px;font-weight:bold;' > Discover how we connect rural children with teachers </p>
+                </div>
+                <div style='display:inline-block;' >
+                  <a href='/sponsor/'> <div class='btn cust_btn' style='background-color:#ff9933;padding:5px 65px;font-weight:bold;border:none;' >DONATE</div></a><br>
+                  <p class='lato' style='word-wrap: break-word;width:300px;font-weight:bold;'>Share the joy by enabling rural children to study and realize their dream</p>
+                </div>
+              </div>
+           <div class='mid-block'>
+              <div style=''>
+                  <p class='lob' style='font-size:44px;color:white;position:absolute;margin-top:15px;margin-left:26%;'>#Educate One Rural Child </p> 
+                  <img alt="banner" src='/static/images/banner.png' style='margin-top:15px;'  />
+                  <p class='lato' style='width:80%;margin-left:10%;margin-top:10px;font-weight:bold;font-size:17px;color:white;' >Every child deserves a chance at a good life. #EducateOneRuralChild is an initiative to bring quality education to village schools. A single donation of Rs.3500 covers the operating costs involved in connecting a volunteer teacher to one child in the village school.
+                  </p>
+                  <div style='margin-top:15px;width:612px;height:344px;padding-left:17%'>
+                       <iframe width="612" height="344" src="https://www.youtube.com/embed/fEGxN2u9p-s" frameborder="0" allowfullscreen></iframe>
+                  </div>
+             <div class='row' style='margin-top:15px;'>
+                 <a href='/campaign/'><div class='btn cust_btn' style='display:inline-block;margin-right:30px;font-size:16px;background-color:white;color:#6b717a;padding:0px 30px;border:none' >Find out more</div></a>
+                <a href='/sponsor/'>  <div class='btn cust_btn' style='display:inline-block;background-color:#ff9933;font-size:16px;padding:0px 30px;font-weight:bold;border:none;' >Donate NOW</div></a>
+              </div>
+          </div>
+           </div>
+           <div class="new-one" style='text-align:center;padding-top:3%;'>
+             <div class='thumb-nail' style='color:#66669A'>
+               <div  class='stat_circle' style='border:6px solid #66669A;'>
+                   <div class='stat_circle_inner' style='background-color:#66669A;'>
+                      <p class='lato'  >533</p>
+                   </div>
+               </div>
+               <p class='lato' >Teachers Involved</p>
+            </div>
+
+             <div class='thumb-nail' style='color:#fe6699;'>
+               <div  class='stat_circle' style='border:6px solid #fe6699;'>
+                   <div class='stat_circle_inner' style='background-color:#fe6699;'>
+                      <p class='lato'  >4610</p>
+                   </div>
+               </div>
+               <p class='lato' >Children Benefited</p>
+            </div>
+             <div class='thumb-nail' style='color:#32CA65'>
+               <div  class='stat_circle' style='border:6px solid #32CA65;'  >
+                    <div class='stat_circle_inner' style='background-color:#32CA65;'>
+                       <p class='lato'  >6823</p>
+                    </div>
+               </div>
+               <p class='lato'>Online Classes Conducted</p>
+            </div>
+             <div class='thumb-nail' style='color:#FC9631'  >
+               <div  class='stat_circle' style='border:6px solid #FC9631' >
+                 <div class='stat_circle_inner' style='background-color:#FC9631'>
+                      <p class='lato'>136460</p>
+                 </div>
+               </div>
+               <p class='lato'>Child Learning Hours</p>
+            </div><br><br>
+           <div style='text-align:center;'>
+                <p class='lato'>(* Since Year 2011 to Till date )</p>
+           </div>
+           </div>
+        <div id="video-modal" class="modal-layer modal hide">
+            <div class="modal-backdrop  in" style="z-index:-1 !important;"></div>
+            <div class="modal-top">
+            </div>
+            <div class="modal-mid">
+                <div>
+                    <!--<iframe width="465" height="344" src="http://www.youtube.com/embed/R2yTQRpiV0E" frameborder="0" allowfullscreen></iframe>-->
+                </div>
+           <!-- Pure Chat widget-->
+           <script type='text/javascript'>(function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript'; script.src = 'https://widget.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({ c: '151c25fb-5697-47ef-9b37-2558964b866a', f: true }); done = true; } }; })();</script>
+           </div>
+            <div class="modal-bottom">
+                <div class='close_bottom'>
+                    <a class="close" data-dismiss="modal" >X</a>
+                    <span>Close</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="video-modal2" class="modal-layer modal hide" style='width:505px;'>
+            <div class="modal-backdrop  in" style="z-index:-1 !important;"></div>
+            <div class="modal-top">
+            </div>
+            <div class="modal-mid">
+                <iframe id='vid_main' width="505" height="355" src="https://www.youtube.com/embed/fEGxN2u9p-s" frameborder="0" allowfullscreen></iframe>
+           </div>
+            <div class="modal-bottom">
+                <div class='close_bottom'>
+                    <a class="close" data-dismiss="modal" >X</a>
+                    <span>Close</span>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}

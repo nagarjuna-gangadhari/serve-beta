@@ -1,0 +1,1270 @@
+{% extends 'new_ui.html' %} {% block head %} {{ block.super }}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> {% endblock head %} {% block content %}
+<!-- Global site tag (gtag.js) - Google Ads: UA-35920468-1 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-967708218"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'AW-967708218');
+</script>
+<!-- End of GA tag -->
+<div class="customModal" id="spinnerModal">
+    <div class="text-center">
+        <span class="fa fa-spinner fa-spin fa-5x w-100" style="margin-top: 15%;font-size:130px;"></span>
+    </div>
+</div>
+
+<section class="paddingBottom-100 bg-light-v2 p-5 pad-rem-1">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card align-items-start shadow-v3 mob_css p-5" style="padding-top: 1.9rem !important;">
+
+                <section class="col-12 p-0">
+                    <div class="row">
+                        <div class="col-12 pl-2">
+                            <ol class="breadcrumb breadcrumb-triangle breadcrumb-expand bg-transparent p-0 rounded-0">
+                                <li class="breadcrumb-item current b-crum1-mob">
+                                    <a href="#" class="progres_bar_css"> Step 1 : Share Your Interest</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="#"> Step 2 : Discussion Online</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="#"> Step 3 : Select An Opportunity</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <ol class="track-progress col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                    <li class="done">
+                        <em>1</em>
+                        <span>Step 1</span>
+                    </li>
+                    <li class="todo">
+                        <em>2</em>
+                        <span>Step 2</span>
+                    </li>
+                    <li class="todo">
+                        <em>3</em>
+                        <span>Step 3</span>
+                    </li>
+                </ol>
+
+                <h3 class="mb-2 font_css pt-4">
+                    Your Time Commitment
+                </h3>
+                <p class="p_css ml-5 mt-1 m-mob-0 font-size-17">
+                    (Typically, a volunteer contributes 2 hours per week)
+                </p>
+                <br class="">
+                <div class="col-md-12 col-lg-12 col-sm-12 disp_prop">
+                    <div class="col-md-3 col-lg-3 col-sm-12 pl-5 m-p-l-1" style="color:black;font-size:20px;">
+                        <span class="p_css ml-5">Hours/Week :</span></div>
+                    <br>
+                    <div class="col-md-9 col-lg-9 col-sm-12 p-0">
+                        <div class="slidecontainer" style="display:inline-flex;">
+                            <div style="margin-top:1%;" class="col-md-10">
+                                <input style="margin-bottom:6px;" type="range" min="1" max="10" value="2" class="slider" id="myRange">
+                                <span class="hide_for_mob"><pre style="background:white;border:none;color:#606065">    2       4       6      8      10</pre></span>
+                                <span class="hide_for_portal"><pre style="background:white;border:none;">    2   4   6   8   10</pre></span>
+                            </div>
+                            <p class="col-md-2 col-lg-2 mt-0"><span><input style="width:40px;height:32px;text-align: center;" name="no_of_hrs" value="2" type="text" id="demo"></span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <br>
+                <h3 class="font_css mob_font_size">Your Language Proficiency </h3>
+                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 disp_prop hide_for_mob">
+                    <h4 class="col-md-2 col-lg-2 col-sm-2 col-xs-2"></h4>
+                    <span class="col-md-2 col-lg-2 col-sm-2 col-xs-2" style="margin-left:4%;color:black;font-size: 17px;font-weight:normal;">Speak</span>
+                    <span class="col-md-2 col-lg-2 col-sm-2 col-xs-2" style="color:black;font-size: 17px;font-weight:normal;">Write</span>
+                    <span class="col-md-3 col-lg-3 col-sm-3 col-xs-3" style="color:black;font-size: 17px;font-weight:normal;">Read</span>
+                </div>
+                <br>
+                <div class="row col-md-12" id="clone_divv">
+                    <div class="row col-md-12 col-lg-12 col-sm-5 col-xs-5 language" id="div_id">
+                        <div class="col-md-2 col-xs-12 col-sm-12 my-1 select_div p-0">
+                            <select class="col-xs-5 col-xs-5 col-md-12 form-control check_lang" tabindex="5" onchange="hide_error_msg(this); verify_check();">
+						<option value="">Primary Language*</option>
+						<option value="Bengali">Bengali</option>
+						<option value="Gujarathi">Gujarathi</option>
+						<option value="Hindi">Hindi</option>
+						<option value="Kannada">Kannada</option>
+						<option value="Marathi">Marathi</option>
+						<option value="Oriya">Oriya</option>
+						<option value="Tamil">Tamil</option>
+						<option value="Telugu">Telugu</option>
+						<option value="Tangkhul">Tangkhul</option>
+						<option value="Manipuri">Manipuri</option>
+					</select>
+                            <span class="error_msg">Please select a language</span>
+                            <br class="hide_for_mob"><br class="hide_for_mob">
+                        </div>
+
+                        <!-- Default checked -->
+                        <div class="col-sm-2 col-xs-2 col-md-2 mt-2 disp_mob marg_0" id="id_1" style="margin-left: 6%;">
+                            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2 hide_for_portal" style="font-size: 17px;color:black;margin-left:3%;">Speak</div>
+                            <label class="ec-checkbox check-lg mb-3 mr-4" onclick="verify_check(); check_for_lang(this);">
+			          <input type="checkbox" name="checkbox">
+			          <span class="ec-checkbox__control"></span>
+			        </label>
+                        </div>
+
+                        <div class="col-sm-2 col-xs-2 col-md-2 mt-2 disp_mob" id="id_2" style="margin-left:0.2%;">
+                            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2 hide_for_portal" style="font-size: 17px;color:black;margin-left:3%;">Read</div>
+                            <label class="ec-checkbox check-lg mb-3 mr-4" onclick="verify_check(); check_for_lang(this);">
+			          <input type="checkbox" name="checkbox">
+			          <span class="ec-checkbox__control"></span>
+			        </label>
+                        </div>
+
+                        <div class="col-sm-2 col-xs-2 col-md-1 col-lg-1 mt-2 disp_mob" id="id_3" style="margin-left:0.6%;">
+                            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2 hide_for_portal" style="font-size: 17px;color:black;margin-left:3%;">Write</div>
+                            <label class="ec-checkbox check-lg mb-3 mr-4" onclick="verify_check(); check_for_lang(this);">
+			          <input type="checkbox" name="checkbox">
+			          <span class="ec-checkbox__control"></span>
+			        </label>
+                        </div>
+
+                        <span class="cls m-p-l-1">
+					<i class="fa fa-plus-circle font-30" style="cursor:pointer;font-size:37px;color:#18b718" onclick="create_div(this)"></i>
+				</span>
+
+                        <div class="col-md-3 col-lg-3 cls m-p-l-1 p-2 disp_contents" style="margin-top:-0.2%;">
+                            <p class="padd_css1 mt-0" style="font-size: 17px;font-weight:normal;color:black;display:inline;">Add another language</p>
+                        </div>
+                        <br><br><br>
+                    </div>
+                </div>
+                <hr>
+                <h3 class="font_css">Volunteering Preference</h3>
+                <br>
+                <div id="course_id" class="col-md-12 disp_prop">
+                    <div class="col-md-3">
+                        <label class="ec-checkbox check-lg click_cls" onclick="hide_error_msg(this); verify_check();">
+                            <input type="checkbox" name="checkbox" value="1">
+                            <span class="ec-checkbox__control"></span>
+                            <span class="ec-checkbox__lebel"  data-toggle="tooltip" data-skin="light"
+                            title="Teach Online remotely, from wherever you are via Skype,for 2 hours a week, to the children of  Government Schools in rural villages in India"
+                            style="font-family:Work Sans, sans-serif;color:black;font-size: 17px;">Teacher</span>
+                        </label>
+                    </div>
+                    <br>
+                    <div class="col-md-4">
+                        <label class="ec-checkbox check-lg click_cls" onclick="hide_error_msg(this); verify_check();">
+                            <input type="checkbox" name="checkbox" value="20">
+                            <span class="ec-checkbox__control"></span>
+                            <span class="ec-checkbox__lebel"  data-toggle="tooltip" data-skin="light"
+                             title="Be a Guide and a Facilitator in child's learning like clearing doubts, revising concepts, offline, practice worksheets etc"
+                             style="font-family:Work Sans, sans-serif;color:black;font-size: 17px;"> Facilitator teacher</span>
+                         </label>
+                    </div>
+                    <br>
+                    <div class="col-md-4">
+                        <label class="ec-checkbox check-lg click_cls" onclick="hide_error_msg(this); verify_check();">
+                            <input type="checkbox" name="checkbox" value="3">
+                            <span class="ec-checkbox__control"></span>
+                            <span class="ec-checkbox__lebel" style="font-family:Work Sans, sans-serif;color:black;font-size: 17px;" data-toggle="tooltip" data-skin="light"
+                            title="Help search, identify, curate and review contents. Offline, at you own pace, from wherever you are.Typically 2 to 3 hours a week of volunteering efforts.">
+                            Content Developer
+                            </span>
+                        </label>
+                    </div>
+                    <br>
+                    <div class="col-md-2">
+                        <label class="ec-checkbox check-lg click_cls" onclick="hide_error_msg(this); verify_check();">
+	                <input type="checkbox" name="checkbox" value="4">
+	                <span class="ec-checkbox__control"></span>
+	                <span class="ec-checkbox__lebel" style="font-family:Work Sans, sans-serif;color:black;font-size: 17px;" data-toggle="tooltip" data-skin="light"
+	                title="You can opt for any other option like well wisher">Any other</span>
+	              </label>
+                    </div>
+                </div>
+                <br>
+                <span class="error_msg" style="margin-left:43%;" align="center">Please select a volunteering option</span>
+                <br>
+                <hr><br>
+                <div id="more_info" class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                    <span class="mr-2 mb-3 font_size" style="font-size: 20px;">
+                Great. A little bit more about yourself would be helpful.!!
+        </span>
+                </div>
+                <br><br>
+                <div class="col-md-12 hide_div">
+                    <h3 class="font_css">About Myself</h3>
+                    <br>
+
+                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 disp_prop">
+                        <div class="col-md-3 col-lg-3 col-sm-3 col-xs-3 mb-3"><input id="first_name" class="form-control" type="text" value="" placeholder="First Name*" autofocus="autofocus" maxlength="32" onkeypress="return check_alphabet(event)" onkeyup="hide_error_msg(this)">
+                            <span class="error_msg">Please enter first name</span>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-sm-3 col-xs-3 mb-3">
+                            <input id="last_name" class="form-control" type="text" value="" placeholder="Last Name*" maxlength="32" onkeypress="return check_alphabet(event)" onkeyup="hide_error_msg(this)">
+                            <span class="error_msg">Please enter last name</span>
+                        </div>
+
+                        <div class="col-12 col-md-3 col-lg-3 col-sm-3 col-xs-3 my-1 mb-3">
+                            <select id="gender" data-placeholder="gender" class="form-control" onchange="hide_error_msg(this)">
+		            <option disabled selected>Gender*</option>
+		            <option value="male">Male</option>
+		            <option value="female">Female</option>
+		            <option value="other">other</option>
+		          </select>
+                            <span class="error_msg">Please select gender</span>
+                        </div>
+
+                        <div class="col-12 col-md-3 col-lg-3 col-sm-3 col-xs-3 my-1 mb-3">
+                            <select class="form-control" name="yearpicker" placeholder="Year of birth*" id="datepicker">
+	               		  <option value="01-03-2019" disabled selected>Year of birth*</option>
+	               		  </select>
+                            <span class="error_msg">Please select YOB</span>
+                        </div>
+
+                    </div>
+                    <br><br>
+                    <!--         
+          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 disp_prop" >
+          		<div class="col-md-3 col-lg-3 col-sm-12 col-xs-12 font_css1 font_20">
+         	  		My native place is
+         	   </div>
+         	   <div class="col-12 col-md-3 my-1">
+		        <select id="native_country" data-placeholder="Your Favorite Football Team" class="countries1 form-control" onchange="hide_error_msg(this)">
+		            <option selected disabled>Country</option>
+		        </select>
+		        <span class="error_msg">Please select a country</span>
+		       </div>
+		       <div class="col-12 col-md-3 my-1 mt-2">
+		        <select id="native_state" data-placeholder="Your Favorite Football Team" class="states1 form-control" onchange="hide_error_msg(this)">
+		            <option selected disabled>State</option>
+		        </select>
+		        <span class="error_msg">Please select a state</span>
+		       </div>
+		       <div class="col-12 col-md-3 my-1 mt-2">
+		        <select id="native_city" data-placeholder="Your Favorite Football Team" class="cities1 form-control" onchange="hide_error_msg(this)">
+		            <option selected disabled>City</option>
+		        </select>
+		        <span class="error_msg">Please select a city</span>
+		       </div>
+          </div>
+          
+          <br><br>
+-->
+                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 disp_prop">
+                        <div class="col-md-3 col-lg-3 col-sm-12 col-xs-12 font_css1 font_20">
+                            Currently i live in
+                        </div>
+                        <div class="col-12 col-md-3 my-1 mt-2">
+                            <select id="current_country" data-placeholder="Your Favorite Football Team" name="country" class="countries form-control" onchange="hide_error_msg(this)">
+		            <option selected disabled>Country</option>
+		        </select>
+                            <span class="error_msg">Please select a country</span>
+                        </div>
+                        <div class="col-12 col-md-3 my-1 mt-2">
+                            <select id="current_state" data-placeholder="Your Favorite Football Team" class="states form-control" onchange="hide_error_msg(this)">
+		            <option selected disabled>State</option>
+		        </select>
+                            <span class="error_msg">Please select a state</span>
+                        </div>
+                        <div class="col-12 col-md-3 my-1 mt-2">
+                            <select id="current_city" data-placeholder="Your Favorite Football Team" class="cities form-control" onchange="hide_error_msg(this)">
+		            <option selected disabled>City</option>
+		        </select>
+                            <span class="error_msg">Please select a city</span>
+                        </div>
+                    </div>
+                    <br>
+                    <br class="hide_for_mob">
+                    <br>
+                    <hr><br>
+
+                    <h3 class="font_css mob_font_size">Education And Profession</h3>
+                    <br>
+                    <div class="col-md-9 col-lg-9 col-xs-12 col-sm-12 disp_prop" style="dsiplay:inline-flex">
+                        <div class="col-md-5 pl-0">
+                            <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12 font_css1 disp_prop font_20">I am a</div>
+                            <div class="col-12 col-md-3 col-lg-10 my-1">
+                                <select id="profession" data-placeholder="Your Favorite Football Team" class="form-control" onchange="hide_error_msg(this)">
+						<option value="" selected disabled>Select Your Profession*</option>
+						<option value="corporates">Corporates</option>
+						<option value="legal">Legal</option>
+						<option value="finance">Finance</option>
+						<option value="teacher_university">Teacher(University)</option>
+						<option value="teacher_school">Teacher(School)</option>
+						<option value="top_managemenet">Top Management</option>
+						<option value="business/self_employed">Business/Self employed</option>
+						<option value="home_makers">Home makers</option>
+						<option value="retired_professional">Retired professional</option>
+						<option value="student_ug">Student (UG)</option>
+						<option value="student_pg">Student (PG)</option>
+						<option value="others">Others</option>
+					</select>
+                                <span class="error_msg">Please select your profession</span>
+                            </div>
+                        </div>
+                        <br class="hide_for_mob">
+                        <div class="col-md-4">
+                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 font_css1 font_20">Currently, I am a</div>
+                            <div class="col-12 col-md-12 col-lg-12 col-sm-12 col-xs-12 my-1 m_p_0">
+                                <input id="current_job" class="form-control" type="text" value="" placeholder="Current Job*" maxlength="50" onkeypress="return check_alphabet(event)" onkeyup="hide_error_msg(this)">
+                                <span class="error_msg">Please select your job</span>
+                            </div>
+                        </div>
+                        <br class="hide_for_mob">
+                        <div class="col-md-4 m-mob-0">
+                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 font_css1 font_20">Work Experience</div>
+                            <div class="col-12 col-md-12 col-lg-12 col-sm-12 col-xs-12 my-1 m_p_0">
+                                <!--<input id="work_exp" class="form-control input_css" type="text" onkeypress="return isNumberKey(event)" value="1" maxlength="2"> -->
+                                <select required name="work_experience" id="work_exp" class="form-control">
+						<option value="" selected disabled>Select Experience</option>
+						<option value="0-3">0-3</option>
+						<option value="4-8">4-8</option>
+						<option value="8-15">8-15</option>
+						<option value="15-20">15-20</option>
+						<option value="20+">20+</option>
+					</select>
+                            </div>
+                        </div>
+                        <br class="hide_for_mob">
+                        <div class="col-md-4 m-mob-0">
+                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 font_css1 font_20">Qualification</div>
+                            <div class="col-12 col-md-12 col-lg-12 col-sm-12 col-xs-12 my-1 m_p_0">
+                                <!--<input id="work_exp" class="form-control input_css" type="text" onkeypress="return isNumberKey(event)" value="1" maxlength="2"> -->
+                                <select required name="Qualification" id="qualification" class="form-control">
+						<option value="" selected disabled>Qualification</option>
+						<option value="high_school">High school</option>
+						<option value="graduate">Graduate</option>
+						<option value="post_graduate">Post Graduate</option>
+						<option value="professional_degrees">Professional Degrees</option>
+					</select>
+				</div>
+			</div>
+		</div>       
+        <br><br><hr><br>
+        
+        <h3 class="font_css mob_font_size">How Can We Reach You ?</h3>
+        <br>
+        <div class="col-md-12 disp_prop">
+			<div class="col-md-3 col-lg-3 col-sm-12 col-xs-12 mb-2"><input id="user_email" required class="form-control input_css" type="email" value="" placeholder="Email*" onkeyup="hide_error_msg(this)">
+				<span class="error_msg">Please enter an email</span>
+			</div>
+			
+			<div class="col-md-3 col-lg-3 col-sm-12 col-xs-12 mb-2">
+				<input required id="phone" class="form-control input_css" type="text" value="" placeholder="Phone*" onkeypress="return check_phone(event)" onclick="hide_error_msg(this)" maxlength="16">
+				<span class="error_msg">Please enter a valid phone number</span>
+			</div>
+			<div class="col-md-3 col-lg-3 col-sm-12 col-xs-12"><input id="skype" class="form-control input_css" type="text" value="" maxlength="30" placeholder="Skype" onkeyup="hide_error_msg(this)">
+				<span class="error_msg">Max 30 characters are allowed </span>
+			</div>        	 
+        </div>
+        <br class="hide_for_mob"><br class="hide_for_mob">
+        <div class="col-md-12 disp_prop">
+        	<div class="col-md-3 col-lg-3 col-sm-12 col-xs-12 mb-2 m-mob-t"><input id="password1" required class="form-control input_css" type="password" value="" placeholder="Password*" onkeyup="hide_error_msg(this)">
+        		<span class="error_msg">Please enter a password</span>
+        	</div>
+        	<div class="col-md-3 col-lg-3 col-sm-12 col-xs-12"><input id="confirm_password" required class="form-control input_css" type="password" value="" placeholder="Confirm Password*" onkeyup="hide_error_msg(this)">
+        		<span class="error_msg">Please enter confirm password</span>
+        	</div>
+        	<div class="col-md-3 col-lg-3 col-sm-12 col-xs-12 m-mob-t">
+        		<button id="submit_id" type="button" class="btn btn-success mr-2 form-control">I am in</button>
+        	</div>
+							
+					<!-- Modal -->
+					<div class="modal fade" id="sucessModal" tabindex="-1" data-keyboard="false" data-backdrop="static" aria-hidden="true">
+  					<div class="modal-dialog modal-sm modal-notify modal-success" role="document">
+    					<div class="modal-content">
+      					<div class="modal-body" > 
+									<div class="text-center">
+										<i class="fas fa-check animated rotateIn"></i>
+											<p style="font:12px/10px 'Open Sans',sans-serif">Volunteer Registration Successful !!</p>
+									</div>
+								</div>
+      					<div class="modal-footer justify-content-center" style="height: 50px">
+									<button id="coutinue_after_submit_id" type="button" class="btn btn-success btn-sm">Continue</button>
+	     					</div>
+    					</div>
+  					</div>
+					</div>
+
+        	<input type="hidden" name="next" value='/myevidyaloka/'/>
+			<input type="hidden" name="referal" id='referal_id'/>
+			<input type="hidden" name="referal_p" id='referal_p_id'/>
+        </div>
+        <span class="marg_left" style="margin-left:3%;">Password must be minimum of length 8 should include atleast 1 number, 1 lower case, 1 upper case letter</span>
+        <span class="error_msg passwrod_error" style="margin-left:3%;">password and confirm password doesn't match</span>
+        <div class="col-md-5 col-lg-5 col-sm-12 col-xs-12" style="padding-left: 2.7%;padding-top: 1.5%;">
+        		<label class="ec-checkbox check-xs" onclick="hide_error_msg(this)">
+			          <input type="checkbox" class="terms" name="checkbox" value="1">
+			          <span class="ec-checkbox__control"></span>
+			          <span class="ec-checkbox__lebel" style="font-family:Work Sans, sans-serif;color:black;font-size: 15px;">By clicking Sign Up, you agree to our <a href="/static/PrivacyPolicyREV1.pdf" target="_blank" style="text-decoration: underline;color:#02cc26!important;">Terms and Conditions</a></span>
+			       </label>
+                        <span class="error_msg">Please accept the terms and conditions</span>
+                    </div>
+                    <br><br>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END row-->
+</section>
+
+<style>
+    .customModal {
+        height: 100%;
+        width: 100%;
+        display: none;
+        background: rgb(0, 0, 0, 0.4);
+        position: fixed;
+        z-index: 1000;
+    }
+    
+    .track-progress {
+        margin: 0;
+        padding: 10px 10px 0 10px;
+        background: white;
+        height: 80px;
+        border-radius: 10px;
+        -moz-box-shadow: 0 4px 6px -5px black;
+    }
+    
+    .track-progress li {
+        list-style-type: none;
+        display: inline-block;
+        position: relative;
+        font: 14px/14px Helvetica, sans-serif;
+        text-transform: uppercase;
+        text-align: center;
+        color: #bbb;
+        border-bottom: 4px #f2f2f6 solid;
+        line-height: 3em;
+        width: 33%;
+        float: left;
+    }
+    
+    .track-progress li:after {
+        content: "\00a0\00a0";
+        /*non-breaking space */
+    }
+    
+    .track-progress li:before {
+        position: relative;
+        bottom: -2.5em;
+        float: left;
+        left: 50%;
+        line-height: 1em;
+    }
+    
+    @media (max-width: 800px) {
+        .track-progress li {
+            font-size: 0.7em;
+        }
+    }
+    
+    .track-progress li span {
+        padding-left: 0.75em;
+    }
+    
+    @media (max-width: 640px) {
+        .track-progress li span {
+            display: none;
+        }
+    }
+    
+    .track-progress li.done {
+        color: #bbb;
+        font-weight: bold;
+        border-bottom: 4px #02cc26 solid;
+    }
+    
+    .track-progress li.done:before {
+        content: "";
+        background: #02cc26;
+        height: 1.2em;
+        width: 1.2em;
+        line-height: 1.2em;
+        border: none;
+        border-radius: 1.2em;
+    }
+    
+    .track-progress li.todo:before {
+        content: "";
+        background: white;
+        border: 0.55em solid #bbb;
+        height: 0.8em;
+        width: 0.8em;
+        border-radius: 0.8em;
+    }
+    
+    .track-progress em {
+        display: none;
+        font-weight: 700;
+        padding-left: 0.75em;
+    }
+    
+    @media (max-width: 640px) {
+        .track-progress em {
+            display: inline;
+        }
+    }
+    
+    p {
+        margin: 0 auto;
+        max-width: 500px;
+        width: 75%;
+        margin-top: 25px;
+        font: 18px/28px 'Open Sans', sans-serif;
+    }
+    
+    p em {
+        display: block;
+        font-size: 23px;
+        font-weight: 700;
+        font-style: normal;
+    }
+    
+    .breadcrumb-triangle .breadcrumb-item.current>a:after {
+        border-left-color: #02cc26 !important;
+    }
+    
+    .progres_bar_css {
+        background: #02cc26 !important;
+    }
+    
+    .current {
+        background: #02cc26 !important;
+    }
+    
+    .error_msg {
+        display: none;
+        color: red;
+    }
+    
+    .font_css {
+        color: #e00707;
+    }
+    
+    .font_css1 {
+        padding-top: 0.6%;
+        font-size: 17px;
+        color: black;
+    }
+    
+    .p_css {
+        font-size: 17px;
+        color: black;
+        padding-left: 5%;
+    }
+    
+    .input_css {
+        border: 2px solid #e4e4e7;
+    }
+    /* slider css */
+    
+    .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 5px;
+        border-radius: 5px;
+        background: #02cc26;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+    }
+    
+    .slider:hover {
+        opacity: 1;
+    }
+    
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        background: #f6f6f6;
+        cursor: pointer;
+    }
+    
+    .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        background: #f6f6f6;
+        cursor: pointer;
+    }
+    /* slider css end  */
+    
+    .ec-checkbox.check-xl .ec-checkbox__control {
+        width: 40px;
+        height: 34px;
+    }
+</style>
+
+{% endblock content %} {% block scripts %} {{ block.super }}
+
+<!-- Event snippet for eVidyaloka conversion page -->
+<!-- End of Event snippet for eVidyaloka conversion page -->
+
+
+<script>
+    (function() {
+
+        var evl = window.EVL = window.EVL || {};
+        evl.user_location_info = {
+            {
+                user_location_info | safe
+            }
+        };
+    }());
+
+    $(function() {
+        $('[data-toggle="popover"]').popover();
+    });
+</script>
+
+<script>
+    var native_selected_country_id, native_selected_state_id, native_selected_city_id;
+    var current_selected_country_id, current_selected_state_id, current_selected_city_id;
+
+    $(document).ready(function() {
+        /* $jq('#datepicker').datepicker({ 
+        	dateFormat: 'yy',
+        	changeMonth: true,
+            changeYear: true,
+            //defaultDate: new Date('1970-10-18'),
+            yearRange: '1950:c'
+        }); */
+
+        let present_year = new Date().getFullYear();
+        let limit_year = present_year - 18;
+
+        for (i = limit_year; i > 1950; i--) {
+            $('#datepicker').append($('<option />').val(i).html(i));
+        }
+
+        /* $( "#datepicker" ).datepicker({ 
+        	dateFormat: 'dd/mm/yy'
+        });
+        $( "#datepicker" ).datepicker();
+        */
+
+        var url = window.location.href;
+        if (window.location.href.indexOf("/p/") != -1) {
+            var url_p = url.split("/p/");
+            if (url_p.length > 0) {
+                var partner_id = url_p[1];
+                $('#referal_p_id').val(partner_id);
+            }
+        }
+        var splited_url = url.split("volunteer/");
+        if (splited_url.length == 2) {
+            $("#referal_id").val(splited_url[1]);
+        }
+
+        $('#more_info').css('display', 'none');
+        $(".hide_div").hide();
+
+
+        $.get("/v2/get_country_state_city", function(response) {
+            for (var i = 0; i < response['data'].length; ++i) {
+                //console.log(response['data'][i])
+                // var option_0 = $('<option />');
+                // option_0.attr('value', response['data'][i]['country_name']).text(response['data'][i]['country_name']);
+                // option_0.attr('native_country', response['data'][i]['custom_country_id']);
+
+                var option_1 = $('<option />');
+                option_1.attr('value', response['data'][i]['country_name']).text(response['data'][i]['country_name']);
+                option_1.attr('current_country', response['data'][i]['custom_country_id']);
+
+                // $('.countries1').append(option_0);
+                $('.countries').append(option_1);
+            }
+            // $(".countries1").prop("disabled",false);
+            $(".countries").prop("disabled", false);
+        });
+
+        // $(".countries1").on("change", function(ev) {
+        // 	var countryId = $("option:selected", this).attr('native_country');
+        // 	$(".states1 option:gt(0)").remove();
+        // 	native_selected_country_id = -1;
+        // 	if(countryId != '') {
+        // 		native_selected_country_id = countryId;
+        //         $(".cities1 option:gt(0)").remove();
+
+        //         $.get("/v2/get_country_state_city/?country=" + countryId, function(response) {
+        // 			for ( var i = 0; i < response['data'].length; ++i ) {
+        // 				var option = $('<option />');
+        // 				option.attr('value', response['data'][i]['state_name']).text(response['data'][i]['state_name']);
+        // 				option.attr('native_state', response['data'][i]['custom_state_id']);
+        // 				$('.states1').append(option);
+        // 			}
+        // 			$(".states1").prop("disabled",false);
+        // 			$(".states1").prop("selectedIndex", 0);
+
+        // 			if($('.states1').children().length == 1){
+        // 				$('.states1').append('<option val="others">Others</option>');
+        // 				$('.cities1').append('<option val="others">Others</option>');
+        // 			}
+        //         });
+        // 	}
+        // });
+
+        $(".countries").on("change", function(ev) {
+            var countryId = $("option:selected", this).attr('current_country');
+            $(".states option:gt(0)").remove();
+            current_selected_country_id = -1;
+            if (countryId != '') {
+                current_selected_country_id = countryId;
+                $(".cities option:gt(0)").remove();
+
+                $.get("/v2/get_country_state_city/?country=" + countryId, function(response) {
+                    for (var i = 0; i < response['data'].length; ++i) {
+                        var option = $('<option />');
+                        option.attr('value', response['data'][i]['state_name']).text(response['data'][i]['state_name']);
+                        option.attr('current_state', response['data'][i]['custom_state_id']);
+                        $('.states').append(option);
+                    }
+                    $(".states").prop("disabled", false);
+                    $(".states").prop("selectedIndex", 0);
+
+                    if ($('.states').children().length == 1) {
+                        $('.states').append('<option val="others">Others</option>');
+                        $('.cities').append('<option val="others">Others</option>');
+                    }
+                });
+            }
+
+        });
+
+        // $(".states1").on("change", function(ev) {
+        // 	var stateId = $("option:selected", this).attr('native_state');
+        // 	$(".cities1 option:gt(0)").remove();
+        // 	native_selected_state_id = -1;
+        // 	if(stateId != '') {
+        // 		native_selected_state_id = stateId;
+        // 		$.get("/v2/get_country_state_city/?country=" + native_selected_country_id + "&state=" + stateId, function(response) {
+        // 			for ( var i = 0; i < response['data'].length; ++i ) {
+        // 				var option = $('<option />');
+        // 				option.attr('value', response['data'][i]['city_name']).text(response['data'][i]['city_name']);
+        // 				option.attr('native_city', response['data'][i]['custom_city_id']);
+        // 				$('.cities1').append(option);
+        // 			}
+        // 			$(".cities1").prop("disabled",false);
+        // 			$(".cities1").prop("selectedIndex", 0);
+
+        // 			if($('.cities1').children().length == 0) {
+        // 				$('.cities1').append('<option val="others">Others</option>');
+        // 			}
+        //         });
+        // 	}
+        // });
+
+        $(".states").on("change", function(ev) {
+            var stateId = $("option:selected", this).attr('current_state');
+            $(".cities option:gt(0)").remove();
+            current_selected_state_id = -1;
+            if (stateId != '') {
+                current_selected_state_id = stateId;
+                $.get("/v2/get_country_state_city/?country=" + current_selected_country_id + "&state=" + stateId, function(response) {
+                    for (var i = 0; i < response['data'].length; ++i) {
+                        var option = $('<option />');
+                        option.attr('value', response['data'][i]['city_name']).text(response['data'][i]['city_name']);
+                        option.attr('current_city', response['data'][i]['custom_city_id']);
+                        $('.cities').append(option);
+                    }
+                    $(".cities").prop("disabled", false);
+                    $(".cities").prop("selectedIndex", 0);
+
+                    if ($('.cities').children().length <= 1) {
+                        $('.cities').append('<option val="others">Others</option>');
+                    }
+                });
+            }
+        });
+    });
+
+
+
+    function verify_check() {
+        var array1 = $('.language');
+        var z = 0;
+        var return_var = 0;
+        var arr_length = array1.length;
+        var lang;
+        var lang_array = []
+        var lang_obj = {}
+
+        var k1 = 0;
+        var check_lang = $(".check_lang");
+        var check_lang_len = check_lang.length;
+        for (; k1 < check_lang_len; k1++) {
+            var lang = check_lang[k1].value;
+            if (lang == "" || lang == null || lang == 'undefined') {
+                return_var++;
+                break;
+            }
+        }
+        for (; z < arr_length; z++) {
+            id_name = $(array1[z]).attr('id');
+            lang = $("#" + id_name + " > div > select").val();
+            speak = $("#" + id_name + " > div:eq(1) > label > input").is(":checked") * 1;
+            write = $("#" + id_name + " > div:eq(2) > label > input").is(":checked") * 1;
+            read = $("#" + id_name + " > div:eq(3) > label > input").is(":checked") * 1;
+            if (!(speak) && !(write) && !(read)) {
+                return_var++;
+                break;
+            }
+        }
+        if (return_var > 0) {
+            $('#more_info').css('display', 'none');
+            $(".hide_div").css('display', 'none');
+            return;
+        }
+
+        var checked1 = $('.click_cls')
+        var k = 0;
+        var i = 0;
+        var checked_value = 0;
+        var len = checked1.length;
+        for (; k < len; k++) {
+            var check = $(checked1[k]).find('input').is(':checked');
+            if (check) {
+                checked_value++;
+            }
+        }
+        if (checked_value > 0) {
+            $('#more_info').css('display', 'block');
+            $(".hide_div").toggle('slow');
+            $("#first_name").focus();
+            window.scrollBy(0, scroll_val);
+            if (scroll_val == 220) {
+                scroll_val = -220;
+            } else {
+                scroll_val = 220;
+            }
+            i++;
+        }
+        if (i == 0) {
+            $('#more_info').css('display', 'none');
+            $(".hide_div").css('display', 'none');
+        }
+    }
+
+    function check_for_lang(thisobj) {
+        var lang = $(thisobj).parent().siblings('.select_div').find('.check_lang').val();
+        if (lang == "" || lang == null || lang == 'undefined') {
+            $(thisobj).parent().siblings('.select_div').find('span').css('display', 'block');
+            $('html, body').animate({
+                scrollTop: $(this).offset().top
+            }, 1000);
+            $('#more_info').css('display', 'none');
+            return false
+        }
+    }
+
+
+    function hide_error_msg(this_obj) {
+        if ($(this_obj).is('label')) {
+            $('#course_id').siblings('span').css('display', 'none');
+        } else {
+            $(this_obj).siblings('span').css('display', 'none');
+        }
+    }
+
+    var scroll_val = 220;
+
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+    output.innerHTML = slider.value; // Display the default slider value
+
+    // Update the current slider value (each time you drag the slider handle)
+    slider.oninput = function() {
+        output.value = this.value;
+    }
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        var work_exp = $("#work_exp").val()
+        if (charCode == 48 && work_exp > 0)
+            return true
+        if (charCode > 31 && (charCode < 49 || charCode > 57))
+            return false;
+        return true;
+    }
+
+    function check_phone(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (evt.shiftKey && charCode == 43 || charCode == 45 || charCode == 32 || charCode == 46)
+            return true
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+
+    function check_alphabet(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8)
+            return true;
+        return false;
+    }
+
+    var dynamic_id = 1;
+
+    function create_div(obj) {
+        var clone_div = $("#div_id");
+        var cloned = $(clone_div).clone();
+        $(cloned).attr('id', 'div_id_' + dynamic_id);
+
+        var select_div = '<select class="chosen-select ec-select my_select_box check_lang" tabindex="5" onchange="hide_error_msg(this); verify_check();">' +
+            '<div class="form-control"><option value="">Language*</option>' +
+            '<option value="Bengali">Bengali</option>' +
+            '<option value="Gujarathi">Gujarathi</option>' +
+            '<option value="Hindi">Hindi</option>' +
+            '<option value="Kannada">Kannada</option>' +
+            '<option value="Marathi">Marathi</option>' +
+            '<option value="Oriya">Oriya</option>' +
+            '<option value="Tamil">Tamil</option>' +
+            '<option value="Telugu">Telugu</option>' +
+            '<option value="Tangkhul">Tangkhul</option>' +
+            '<option value="Manipuri">Manipuri</option>' +
+            '</select><span class="error_msg">Please select a language</span></div>';
+
+        if (dynamic_id == 1) {
+            var ele = $("#div_id");
+            $(cloned).find(".select_div").html(select_div);
+            $(cloned).find(".select_div > select ").addClass('form-control');
+            $(cloned).find('.ec-checkbox').find('input').prop('checked', false);
+            $(ele).find('.fa-plus-circle').addClass('fa-minus-circle').removeAttr('onclick').attr('onClick', 'delete_lang(this)').parent().next().text('Remove language').css('color', 'black');
+            $(cloned).insertAfter(ele);
+        } else {
+            var id_value = dynamic_id - 1;
+            cloned = $("#div_id_" + id_value).clone();
+            cloned.find('.ec-checkbox').find('input').prop('checked', false);
+            $(cloned).attr('id', 'div_id_' + dynamic_id)
+            var ele = $("#div_id_" + id_value);
+            $(ele).find('.fa-plus-circle').addClass('fa-minus-circle').removeAttr('onclick').attr('onClick', 'delete_lang(this)').parent().next().text('Remove language').css('color', 'black');
+            $(cloned).insertAfter(ele);
+        }
+        dynamic_id++;
+    }
+
+    function delete_lang(obj) {
+        var del_lang = $(obj).parent().parent();
+        $(del_lang).remove();
+    }
+
+    $("#submit_id").click(function(event) {
+        $('.error_msg').css('display', 'none');
+        var no_of_hrs = $("#demo").val(),
+            check_lang = $(".check_lang"),
+            check_lang_len = check_lang.length,
+            array1 = $('.language'),
+            course = $('.ec-checkbox'),
+            referal = $('#referal_id').val(),
+            referal_p = $('#referal_p_id').val(),
+            first_name = $('#first_name').val(),
+            last_name = $('#last_name').val(),
+            gender = $('#gender').val(),
+            dob = $('#datepicker').val(),
+            // native_country = $("#native_country").val(),
+            // native_state = $('#native_state').val(),
+            // native_city = $('#native_city').val(),
+            current_country = $("#current_country").val(),
+            current_state = $("#current_state").val(),
+            current_city = $("#current_city").val(),
+
+            current_job = $("#current_job").val(),
+            profession = $("#profession").val(),
+            work_exp = $("#work_exp").val(),
+            qualification = $("#qualification").val(),
+            email = $("#user_email").val(),
+            phone = $("#phone").val(),
+            skype = $("#skype").val(),
+            password = $("#password1").val(),
+            confirm_password = $("#confirm_password").val(),
+            terms = $('.terms').is(':checked'),
+            k = 0;
+
+        /* validations */
+
+        for (; k < check_lang_len; k++) {
+            var lang = check_lang[k].value;
+            if (lang == "" || lang == null || lang == 'undefined') {
+                $(check_lang[k]).siblings('span').css('display', 'block');
+                $('html, body').animate({
+                    scrollTop: $(check_lang[k]).offset().top
+                }, 1000);
+                return false
+            }
+        }
+
+        var j = 0;
+        var course_divs = $("#course_id > div"),
+            course_leng = course_divs.length,
+            course_arr = []
+        for (; j < course_leng; j++) {
+            var some = $("#course_id > div:eq(" + j + ")")[0];
+            selected = $("#course_id > div:eq(" + j + ") > label > input ").prop("checked");
+            if (selected) {
+                course_sel = $("#course_id > div:eq(" + j + ") > label > input").val();
+
+                course_arr.push(course_sel);
+            }
+        }
+
+        /* validations */
+        if (course_arr == '' || course_arr == null || course_arr == 'undefined') {
+            $("#course_id").siblings('span').css('display', 'block');
+            $('html, body').animate({
+                scrollTop: $("#myRange").offset().top
+            }, 1000);
+            return false
+        }
+        if (first_name == '' || first_name == null || first_name == 'undefined') {
+            $('#first_name').siblings('span').css('display', 'block');
+            $('html, body').animate({
+                scrollTop: $('#course_id').offset().top
+            }, 1000);
+            return false
+        }
+
+        var name_format = /^[a-zA-Z]+$/
+        if (!(first_name.match(name_format))) {
+            alert("First Name should have only alphabets")
+            return false
+        }
+        if (last_name == '' || last_name == null || last_name == 'undefined') {
+            $('#last_name').siblings('span').css('display', 'block');
+            $('html, body').animate({
+                scrollTop: $('#course_id').offset().top
+            }, 1000);
+            return false
+        }
+        if (!(last_name.match(name_format))) {
+            alert("Last Name should have only alphabets")
+            return false
+        }
+        if (gender == '' || gender == null || gender == 'undefined') {
+            $('#gender').siblings('span').css('display', 'block');
+            $('html, body').animate({
+                scrollTop: $('#course_id').offset().top
+            }, 1000);
+            return false
+        }
+        if (dob == '' || dob == null || dob == 'undefined') {
+            $('#datepicker').siblings('span').css('display', 'block');
+            $('html, body').animate({
+                scrollTop: $('#course_id').offset().top
+            }, 1000);
+            return false
+        }
+        // if(native_country == '' || native_country == null || native_country == 'undefined'){
+        // 	$('#native_country').siblings('span').css('display','block');
+        // 	$('html, body').animate({scrollTop: $('#course_id').offset().top}, 1000);
+        // 	return false
+        // }
+        // if(native_state == '' || native_state == null || native_state == 'undefined'){
+        // 	$('#native_state').siblings('span').css('display','block');
+        // 	$('html, body').animate({scrollTop: $('#course_id').offset().top}, 1000);
+        // 	return false
+        // }
+        // if(native_city == '' || native_city == null || native_city == 'undefined'){
+        // 	$('#native_city').siblings('span').css('display','block');
+        // 	$('html, body').animate({scrollTop: $('#course_id').offset().top}, 1000);
+        // 	return false
+        // }
+        if (current_country == '' || current_country == null || current_country == 'undefined') {
+            $('#current_country').siblings('span').css('display', 'block');
+            $('html, body').animate({
+                scrollTop: $('#course_id').offset().top
+            }, 1000);
+            return false
+        }
+        if (current_state == '' || current_state == null || current_state == 'undefined') {
+            $('#current_state').siblings('span').css('display', 'block');
+            $('html, body').animate({
+                scrollTop: $('#course_id').offset().top
+            }, 1000);
+            return false
+        }
+        if (current_city == '' || current_city == null || current_city == 'undefined') {
+            $('#current_city').siblings('span').css('display', 'block');
+            $('html, body').animate({
+                scrollTop: $('#course_id').offset().top
+            }, 1000);
+            return false
+        }
+        if (profession == '' || profession == null || profession == 'undefined') {
+            $('#profession').siblings('span').css('display', 'block');
+            $('html, body').animate({
+                scrollTop: $('#current_city').offset().top
+            }, 1000);
+            return false
+        }
+        if (current_job == '' || current_job == null || current_job == 'undefined') {
+            $('#current_job').siblings('span').css('display', 'block');
+            $('html, body').animate({
+                scrollTop: $('#current_city').offset().top
+            }, 1000);
+            return false
+        }
+        if (phone == '' || phone == null || phone == 'undefined') {
+            $('#phone').siblings('span').css('display', 'block');
+            return false
+        }
+        var phone_format = /^(\+?(([0-9]){1,3})[-.\s])?((((([0-9]){2,3})[-.\s]){1,2}([0-9]{4,10}))|([0-9]{10}))$/
+        if (phone != null && phone != '' && phone != 'undefined') {
+            if (!(phone.match(phone_format))) {
+                $('#phone').siblings('span').css('display', 'block');
+                return false
+            }
+        }
+        // if (skype == '' || skype == null || skype == 'undefined') {
+        //     $('#skype').siblings('span').css('display', 'block');
+        //     return false
+        // }
+        if (skype != null && skype != '' && skype != 'undefined') {
+            if (skype.length > 30) {
+                $('#skype').siblings('span').css('display', 'block');
+                return false
+            }
+        }
+        if (email == '' || email == null || email == 'undefined') {
+            $('#user_email').siblings('span').css('display', 'block');
+            return false
+        }
+        var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/
+        if (!(email.match(mailformat))) {
+            alert("Invalid email")
+            return false
+        }
+        if (password == '' || password == null || password == 'undefined') {
+            $('#password1').siblings('span').css('display', 'block');
+            return false
+        }
+        if (confirm_password == '' || confirm_password == null || confirm_password == 'undefined') {
+            $('#confirm_password').siblings('span').css('display', 'block');
+            return false
+        }
+        if (password != confirm_password) {
+            $('.passwrod_error').css('display', 'block');
+            return false
+        }
+        var password_regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
+        if (!password_regex.test(password)) {
+            alert("Password must be minimum of length 8 should include atleast 1 number, 1 lower case, 1 upper case letter !!");
+            return false
+        }
+
+        if (terms == false || terms == '' || terms == null || terms == 'undefined') {
+            $('.terms').parent('label').siblings('span').css('display', 'block');
+            return false
+        }
+
+        course = {}
+
+        var i = 0;
+        var return_var = 0;
+        var arr_length = array1.length;
+        var lang;
+        var lang_array = []
+        var lang_obj = {}
+        for (; i < arr_length; i++) {
+            id_name = $(array1[i]).attr('id');
+            lang = $("#" + id_name + " > div > select").val();
+            speak = $("#" + id_name + " > div:eq(1) > label > input").is(":checked") * 1;
+            write = $("#" + id_name + " > div:eq(2) > label > input").is(":checked") * 1;
+            read = $("#" + id_name + " > div:eq(3) > label > input").is(":checked") * 1;
+            if (!(speak) && !(write) && !(read)) {
+                return_var++;
+                break;
+            }
+            lang_obj = {
+                "lang": lang,
+                "speak": speak,
+                "write": write,
+                "read": read
+            }
+            lang_array.push(lang_obj);
+        }
+
+        if (return_var > 0) {
+            $('#more_info').css('display', 'none');
+            $(".hide_div").css('display', 'none');
+            $('html, body').animate({
+                scrollTop: $('.language').offset().top
+            }, 1000);
+            return;
+        }
+        $('#spinnerModal').css('display', 'block');
+        details_json = {
+            "no_of_hrs": no_of_hrs,
+            "lang_array": lang_array,
+            "course_arr": course_arr,
+            "first_name": first_name,
+            "last_name": last_name,
+            "gender": gender,
+            "dob": dob,
+            "current_country": current_country,
+            "qualification": qualification,
+            "current_state": current_state,
+            "current_city": current_city,
+            "profession": profession,
+            "current_job": current_job,
+            "work_exp": work_exp,
+            "email": email,
+            "phone": phone,
+            "skype": skype,
+            "password": password,
+            "confirm_password": confirm_password,
+            "referal": referal,
+            "referal_p": referal_p,
+            'terms': terms * 1
+        }
+        var json = JSON.stringify(details_json);
+        $.ajax({
+            type: "POST",
+            url: '/v2/new_signup/',
+            data: {
+                "json": json
+            },
+            success: function(resp) {
+                $('#spinnerModal').css('display', 'none');
+                if (resp.status) {
+                    alert(resp.message);
+                } else if (resp.referal_name) {
+                    // event.preventdefault();
+                    $("#sucessModal").modal("show")
+                    $("#coutinue_after_submit_id").click(function() {
+                        window.location.href = '/v2/vLounge?referal_name=' + resp.referal_name;
+                    });
+                } else {
+                    $("#sucessModal").modal("show")
+                    $("#coutinue_after_submit_id").click(function() {
+                        window.location = '/v2/vLounge';
+                    });
+
+                }
+            }
+
+        });
+
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    var $jq = jQuery.noConflict();
+</script>
+{% endblock scripts %}

@@ -1,0 +1,31 @@
+Thank You {{ name }} {{ last_name }} for your interest in donating to eVidyaloka
+
+{% if payment_type != "online" %}
+Here are your donation details:
+Amount  : {{ amount }}
+Category: {{ donation_type }}
+
+{% if password %}
+A new acount has been created for you, the following are the details
+Username: {{ email }}
+Password: {{ password }}
+{% endif %}
+
+Please login into your eVidyaloka Account on www.evidyaloka.org/myevidyaloka/contributions/ for more details.
+{% else %}
+
+
+{% if password %}
+A new acount has been created for you, the following are the details
+Username: {{ email }}
+Password: {{ password }}
+{% else %}
+Your trasaction is {% if txn_status %}{{ txn_status }}{% else %}Failed{% endif %}
+
+Following are the details:
+Amount  : {{ amount }}
+Category: {{ donation_type }}
+{% endif %}
+
+
+{% endif %}

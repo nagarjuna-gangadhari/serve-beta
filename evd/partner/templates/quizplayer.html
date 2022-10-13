@@ -1,0 +1,794 @@
+{% extends 'base_generic.html' %}{% load filters %} {% block title %}Quiz Player | eVidyaloka{% endblock %} {% block head %}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+<style>
+
+</style>
+{% endblock %} {% block body %}
+
+<div class="w-full">
+    
+    <div id="question_div"></div>
+
+    <div id="result" class="w-full min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" style="display: none;">
+        <div class="absolute bg-black opacity-80 inset-0 z-0"></div>
+        <div class="w-max md:w-4/12 max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
+            <!--content-->
+            <div class="">
+                <!--body-->
+                <div class="text-blueGray-400 text-center font-bold italic">
+                    <div class="flex-row items-center justify-between">
+                        <div tabindex="0" class="focus:outline-none text-2xl w-full text-center font-semibold leading-6 text-gray-800 mt-8">Result!</div>
+                    </div>
+                    <div class="flex items-center w-auto my-3 place-content-center">
+                        
+                    </div>
+                    <div id="result_display">
+                    </div>
+                     </div>                 
+                    <button class="mt-2 bg-blue-600 text-white hover:bg-blue-800 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150" onclick="next_question()"> Next Question</button>
+                </div>
+            </div>
+        </div> 
+    </div>
+
+    <div id="finalResult" class="hidden">
+        <div class="w-full md:w-4/12 px-4 mx-auto py-6">
+            <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white shadow-2xl shadow-green-800 border-1 border-red-400">
+                <div class="flex-auto px-4 lg:px-10 py-10">
+                    <div class="text-blueGray-400 text-center mb-3 font-bold">
+                        <div class="flex items-center justify-between">
+                            <div tabindex="0" class="focus:outline-none text-2xl w-full text-center font-semibold leading-6 text-gray-800">Thank You</div>
+                            <div role="button" x-data onclick="redirectToOffering()" class="focus:outline-none hover:text-red-500 rounded-md cursor-pointer text-2xl">
+                                <i class="fas fa-times"></i>
+                            </div>
+                        </div>
+                        <div id="finalResult_display"></div>
+                    </div>                 
+                    <button class="flex-row ml-10 mt-2 bg-blue-600 text-white hover:bg-blue-800 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 min-w-min ease-linear transition-all duration-150" onclick="retakeQuiz()"> Retake Quiz</button>
+                    <button class="flex-row  mt-2 bg-blue-600 text-white hover:bg-blue-800 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 min-w-min ease-linear transition-all duration-150" onclick="redirectToOffering()"> Continue</button>
+                </div>
+            </div>
+       </div>
+    </div>
+
+    <div id="selectAnswerPopup" class="min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" style="display: none;">
+        <div class="absolute bg-black opacity-80 inset-0 z-0"></div>
+        <div class="w-auto  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
+            <!--content-->
+            <div class="">
+                <!--body-->
+                <div class="text-center p-5 flex-auto justify-center">
+                    <h2 class="text-xl font-bold py-4 ">Please Select answer</h3>
+                </div>
+                <!--footer-->
+                <div class="p-3  mt-2 text-center space-x-4 md:block">
+                    <button class="mb-2 md:mb-0 bg-blue-400 px-6 py-2 text-2xl shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-blue-600" onclick="$('#selectAnswerPopup').hide();">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}{% block scripts %}
+
+
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<script src="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.js"></script>
+
+{{ data|json_script:"question_data" }}{{ studData|json_script:"student_data" }}
+
+<script type="text/javascript">
+
+    const question_details = JSON.parse(document.getElementById('question_data').textContent);
+    var allQuestion = question_details.questionSet.questions // for question in Question Set
+    const student_details = JSON.parse(document.getElementById('student_data').textContent);
+
+
+    console.log(question_details)
+    console.log(allQuestion)
+    console.log('name',student_details)
+
+    let i = 0   // Question Index(for looping through questions)
+
+    let answerData = []
+    let totalCorrectAnswer = 0
+
+    answerData['studentId'] = question_details.studentId        // appending student id to answer data
+    answerData['offeringId'] = question_details.offeringId
+    answerData['attempt'] = question_details.attempt   
+
+    console.log('list of question and user submitted answers')
+    console.log(answerData)
+
+    function question_display() {
+        $('#result').hide();
+        $("#question_div div").remove();
+        var div = document.getElementById('question_div');
+        console.log('inside question_display function')
+
+        var opt = ''
+
+        opt +='<div class="float-right text-center ">\
+                <div class="italic font-medium mr-8 text-pink-500" >Question:  '+ (i+1) +'/'+ allQuestion.length +'</div>\
+            </div>\
+            <div class="mt-8 ml-8 flex flex-row">\
+                <div class="italic font-medium text-blue-500 mr-8" >Name :  '+ student_details.studentName +'</div>\
+                <div class="italic font-medium text-blue-500 mr-8" >Subject :  '+ student_details.subject +'</div>\
+                <div class="italic font-medium text-blue-500 mr-8" >Grade :  '+ student_details.grade +'</div>\
+            </div>'
+
+        if (allQuestion.length > 0 && allQuestion != null && allQuestion != '' && allQuestion != 'undefined') {
+            if(allQuestion[i].type === 'mcq'){
+                single_question = allQuestion[i] // To Get first Question which is equal to type 'mcq'
+                var option = single_question.options // to Get option for Specfic question
+                console.log(single_question)
+
+                data = {            // question data for sending to function to Check with Correct answer
+                    questionSet_id  : question_details.questionSet.id,
+                    question_id     : single_question.id,
+                    question_type   : single_question.type,
+                    question_points : single_question.points,
+                    isCorrect       : 0,
+                }
+
+                opt += '<div class="ml-16 mr-24 pt-8 pb-8 text-xl text-justify">\
+                    <div class="font-medium mb-4" >'+ single_question.title +'</div>\
+                    <labelfor="question">'+(i+1)+'. '+ single_question.text +'</label>\
+                    </div>\
+                    <div class="form-check">'
+                        for (var z = 0; z < option.length; z++) {
+                            var item = option[z];
+                            console.log(item.text)
+                            opt += '<div class="mx-auto my-2 h-max w-40 py-2 px-4 text-base bg-emerald-200 hover:bg-emerald-400 font-normal rounded-md text-justify">\
+                                <input class="McqOption" type="radio" name="mcqOption" id="" value="'+ item.id +'" >\
+                            <label class="" for="option1" >\ ' + item.text + ' </label>\
+                            </div>'
+                        }
+                         opt +=  '<div class="pt-8 pb-32"> <center> <button type="submit" onclick="check_result(data)" class="mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">Submit</button></center></div>\
+                        </div>'
+                div.innerHTML += opt 
+
+            }else if(allQuestion[i].type === 'mmcq'){
+                console.log(i)
+                single_question = allQuestion[i] // To Get first Question which is equal to type 'mcq'
+                var option = single_question.options // to Get option for Specfic question
+                console.log(single_question)
+
+                data = {            // question data for sending to function to Check with Correct answer
+                    questionSet_id  : question_details.questionSet.id,
+                    question_id     : single_question.id,
+                    question_type   : single_question.type,
+                    question_points : single_question.points,
+                    isCorrect       : 0,
+                }
+
+                opt += '<div class="ml-16 pt-8 pb-8 text-xl mr-24 text-justify">\
+                    <div class="font-medium mb-4" >'+ single_question.title +'</div>\
+                    <labelfor="question">'+(i+1)+'. '+ single_question.text +'</label>\
+                    </div>\
+                    <div class="flex flex-row place-content-center min-w-min">\
+                    <div class="form-check grid grid-cols-2 gap-4 place-content-center w-1/3 min-w-min place-content-center">'
+                        for (var z = 0; z < option.length; z++) {
+                            var item = option[z];
+                            console.log(item.text)
+                            opt += '<div class="place-content-center mx-auto m-2 h-max w-40 py-2 px-4 text-base bg-emerald-200 hover:bg-emerald-400 font-bold rounded-md">\
+                                 <input class="MmcqOption mx-2" type="checkbox" name="MmcqOption" id="" value="'+ item.text +'" >\
+                                 <label class="" for="option1" >\ ' + item.text + ' </label>\
+                            </div>'
+                        }
+                         opt +=  '</div></div><div class="pt-8 pb-32"> <center> <button type="submit" onclick="check_result(data)" class="mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">Submit</button></center></div>'
+                         
+                div.innerHTML += opt 
+
+            }else if(allQuestion[i].type === 'orderBy'){
+                single_question = allQuestion[i] // To Get first Question which is equal to type 'mcq'
+                var option = single_question.options // to Get option for Specfic question
+                console.log(single_question)
+
+                data = {            // question data for sending to function to Check with Correct answer
+                    questionSet_id  : question_details.questionSet.id,
+                    question_id     : single_question.id,
+                    question_type   : single_question.type,
+                    question_points : single_question.points,
+                    isCorrect       : 0,
+                }
+
+                opt += '<div class="ml-16 pt-8 pb-8 text-xl">\
+                    <div class="font-medium mb-4" >'+ single_question.title +'</div>\
+                    <input id="MCqQuestion" value="'+(i+1)+'. ' + single_question.id +'" class="hidden">\
+                    <labelfor="question">'+(i+1)+'. '+ single_question.text +'</label>\
+                    </div>\
+                    <div class=" text-base font-semibold w-full md:w-4/12 px-4 mx-auto py-4 rounded-lg" id="ordering">'
+                for (var z = 0; z < option.length; z++) {
+                    var item = option[z];
+                    console.log(item.text)
+                    opt += '<div class=" flex justify-center w-40 min-h-min min-w-min h-16 bg-green-400  place-content-center justify-center my-1 text-center align-middle py-6 mx-auto mb-5 rounded-lg" id="'+ item.id +'">' + item.text + '</div>'
+                }
+                opt += '</div>' + '<div class = "pt-8 pb-12"> <center> <button type="submit" onclick="check_result(data)" class="ml-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md w-32">Submit</button> </center> </div>'
+                
+                div.innerHTML += opt
+
+                // jQuery function for sorting
+                $('#ordering').sortable({
+                    start: function(e, ui) {
+                        // puts the old positions into array before sorting
+                        var old_position = $(this).sortable('toArray');
+                        
+                    },
+                    update: function(event, ui) {
+                    // grabs the new positions now that we've finished sorting
+                        var new_position = $(this).sortable('toArray');
+                        data.user_submitted_ans = new_position;     // appending the user submitted ans to data
+                       
+                    }
+                });
+   
+            }else if(allQuestion[i].type === 'matchTheFollowing'){
+                single_question = allQuestion[i] // To Get first Question which is equal to type 'mcq'
+                console.log(single_question)
+                var question = single_question.leftColumn
+                var option = single_question.rightColumn // to Get option for Specfic question
+                console.log(single_question)
+
+                data = {            // question data for sending to function to Check with Correct answer
+                    questionSet_id  : question_details.questionSet.id,
+                    question_id     : single_question.id,
+                    question_type   : single_question.type,
+                    question_points : single_question.points,
+                    isCorrect       : 0,
+                }
+
+                opt += '<div class="ml-16 pt-8 pb-8 text-xl">\
+                    <div class="font-medium mb-4" >'+ single_question.title +'</div>\
+                    <label for="question">'+(i+1)+'. '+ single_question.text +'</label>\
+                </div>\
+                <div class="flex flex-row place-content-center  ">\
+                    <div class="ml-8 text-base font-semibold">'
+                for (var z = 0; z < question.length; z++) {
+                    var item = question[z];
+                    console.log(item.text)
+                    opt += '<div class="w-64 h-30 bg-green-400  place-content-center justify-center my-1 text-center align-middle py-8 mx-8 mb-5 rounded-lg" >'+ item.text +'</div>'
+                }
+
+                opt +='</div>\
+                    <div class="ml-8 text-base font-semibold" id="MatchFollowing">'
+                for (var z = 0; z < option.length; z++) {
+                    var item = option[z];
+                    console.log(item.text)
+                    opt += '<div class="w-64 h-30 bg-green-400  place-content-center justify-center my-1 text-center align-middle py-8 mx-8 mb-5 rounded-lg" id="'+ item.id +'">'+ item.text +'</div>'
+                }
+
+                opt +='</div>\
+                </div>\
+                <div class="pt-12 pb-36"> <center> <button type="submit" onclick="check_result(data)" class="ml-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">Submit</button></center></div>'
+
+
+                div.innerHTML += opt
+
+                // jQuery function for MatchTHefollowing
+                $('#MatchFollowing').sortable({
+                    start: function(e, ui) {
+                        // puts the old positions into array before sorting
+                        var old_position = $(this).sortable('toArray');
+                        
+                    },
+                    update: function(event, ui) {
+                    // grabs the new positions now that we've finished sorting
+                        var new_position = $(this).sortable('toArray');
+                        data.user_submitted_ans = new_position;     // appending the user submitted ans to data
+                        console.log(new_position)
+                       
+                    }
+
+                });
+
+            }else if(allQuestion[i].type === 'categorise'){
+                single_question = allQuestion[i] // To Get first Question which is equal to type 'mcq'
+                var categoryItem = single_question.categoryItem
+                console.log(single_question)
+
+                data = {            // question data for sending to function to Check with Correct answer
+                    questionSet_id  : question_details.questionSet.id,
+                    question_id     : single_question.id,
+                    question_type   : single_question.type,
+                    question_points : single_question.points,
+                    isCorrect       : 0,
+                }
+
+                opt += '<div class="ml-16 pt-8 pb-8 text-xl">\
+                    <div class="font-medium mb-4" >'+ single_question.title +'</div>\
+                    <label for="question">'+(i+1)+'. '+ single_question.text +'</label>\
+                    </div>\
+                    <div class="flex flex-row place-content-center" >\
+                    <div>\
+                        <fieldset id="{{ item.text }}" class="float-left">\
+                            <legend class="ml-10 mb-4 text-base"><b>'+ single_question.category[0].text +'</b></legend>\
+                            <ul class="w-48 h-96 ml-8 border-solid border-2 border-indigo-600 rounded-md" id="left">\
+                            </ul>\
+                        </fieldset>\
+                    </div>\
+                    <div>\
+                        <fieldset id="'+ single_question.category[0].text +'" class="float-left">\
+                            <legend class= "mx-auto mb-4 text-base"><b>'+ single_question.category[1].text +'</b></legend>\
+                            <ul class="w-48 h-96 ml-8 border-solid border-2 border-indigo-600 rounded-md" id="right">\
+                            </ul>\
+                        </fieldset>\
+                    </div>\
+                    <div>\
+                        <fieldset id="categorise" class="float-none">\
+                            <legend class="mx-auto mb-4 text-xl"><b>All Items</b></legend>\
+                            <ul class="w-48 h-96 ml-8 border-solid border-2 border-indigo-600 rounded-md" id="allitems">'
+                    for (var z = 0; z < categoryItem.length; z++) {
+                        var item = categoryItem[z];
+                        console.log(item.text)
+                        opt += '<li class="h-8 w-36 text-xl text-center border-solid border-2 border-indigo-600 ml-8 my-1 h-max w-32 text-lg ml-5 bg-emerald-200 hover:bg-emerald-400 font-bold py-2 px-2 rounded-md place-content-center" id="'+ item.correctAnswerId +'">'+ item.text +'</li>'
+                    }
+                
+                opt += '</ul>\
+                        </fieldset>\
+                    </div>\
+                </div>\
+                <div class="pt-12 pb-16"> <center> <button type="submit" onclick="check_result(data)" class="ml-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">Submit</button></center></div>'
+
+                div.innerHTML += opt
+
+                // jquery function for sorting match the following
+                $(function () {
+                    $("#allitems").sortable({
+                        connectWith: "#left, #right"
+                    }).disableSelection();
+
+                    $("#left").sortable({
+                        connectWith: "#right, #allitems",
+                        update: function(event, ui) {
+                        var new_position = $(this).sortable('toArray');
+                        data.first_category_ans = new_position;
+                        console.log(new_position)
+                       }    
+                    },).disableSelection();
+
+                    $("#right").sortable({
+                        connectWith: "#allitems, #left",
+                        update: function(event, ui) {
+                        var new_position = $(this).sortable('toArray');
+                        data.second_category_ans = new_position;
+                        console.log(new_position)
+                        }
+                    }).disableSelection();
+
+                });
+
+
+            }
+        }
+    }
+
+
+    function check_result(data){
+        console.log('inside check result function')
+        console.log(data)
+        $("#result_display div").remove();
+        var div = document.getElementById('result_display');
+        console.log(data.question_type)
+        
+        if (data.question_type === 'mcq'){
+            user_answer = Number($(".McqOption:checked").val())
+            var ans = ''
+            console.log('user answer')
+            if (user_answer != null && user_answer != '' && user_answer != 'undefined') {
+                data.user_submitted_ans = user_answer;  // appending the user submitted ans to data
+                console.log(data)
+                answerData.push(data)
+                console.log(answerData)
+                var correct_ans = 0;
+                for(var z = 0; z< allQuestion.length; z++ ) {   // function to get Correct ans for question
+                    var question = allQuestion[z];
+                    if (question.id === data.question_id){
+                        console.log(question )
+                        for (var opt of allQuestion[z].options){
+                            if (opt.isAnswer === true){
+                                var correct_ans = opt;
+                                console.log(correct_ans)
+                            }
+
+                        }
+                    }
+                }
+                console.log('correct ans')
+                if (correct_ans.id === user_answer){  // Function to Check Correct Answer with user submitted answer
+                    totalCorrectAnswer++;
+                    data['isCorrect'] = 1;
+                    console.log('Your answer is Correct')
+                    ans += '<div class="items-center justify-between pt-2 pb-2">\
+                            <div><i class="fa-solid fa-thumbs-up text-green-600 fa-3x"></i></div>\
+                            <div tabindex="0" class="focus:outline-none text-2xl w-full text-center font-semibold leading-6 text-green-800 my-4">Congratulations</div>\
+                            <div tabindex="0" class="focus:outline-none text-2xl w-full text-center font-semibold leading-6 text-green-800 my-4">Correct Answer</div>\
+                        </div>'
+                    
+                    div.innerHTML += ans
+                    $('#result').show();
+
+                }else{
+                    console.log('Your answer is InCorrect')
+                    ans += '<div class="items-center justify-between pt-2 pb-2">\
+                            <div><i class="fa-solid fa-thumbs-down text-red-600 fa-3x"></i></div>\
+                            <div tabindex="0" class="text-2xl w-full text-center font-semibold leading-6 text-red-800 py-2">Wrong Answer</div>\
+                        </div>\
+                        <div class="relative w-full mb-3">\
+                            <label class="block uppercase text-center text-blueGray-600 text-base font-bold mb-2 mt-2" for="grid-password">Correct Answer is :</label>\
+                            <div class="text-center text-xl font-bold pb-14">'+ correct_ans.text +'</div>\
+                        </div>'
+
+                    div.innerHTML += ans
+                    console.log(correct_ans)
+                    $('#result').show();
+
+                }
+            }else{
+                alert("Please Select answer")
+            }
+
+
+        }else if (data.question_type === 'mmcq'){
+            console.log('inside mmcq function')
+            var option = document.getElementsByClassName("MmcqOption");
+            var ans = ''
+
+            var user_answer = []
+            for(z =0; z<option.length; z++){   //function to get checkbox checked answers
+                if(option[z].checked){
+                    var val = option[z].value
+                    console.log(val)
+                    user_answer.push(val);
+                }
+                
+            }
+            console.log(user_answer)
+            if (user_answer != null && user_answer != '' && user_answer != 'undefined') {
+                data.user_submitted_ans = user_answer;  // appending the user submitted ans to data
+                answerData.push(data)
+                console.log(answerData)
+                var correct_ans = [];      // empty list for storing all the correct answer in mmcq
+                console.log(allQuestion.length)
+                for(var z = 0; z< allQuestion.length; z++ ) {   // function to get Correct ans for question
+                    var question = allQuestion[z];
+                    if (question.id === data.question_id){ 
+                        for (var opt of allQuestion[z].options){
+                            if (opt.isAnswer === true){
+                                correct_ans.push(opt.text)
+                            }
+
+                        }
+                    }
+                }
+
+                if (JSON.stringify(user_answer)==JSON.stringify(correct_ans)){
+                    totalCorrectAnswer++;
+                    data['isCorrect'] = 1;
+                    console.log('Your answer is Correct')
+                    ans += '<div class="items-center justify-between pt-2 pb-2">\
+                            <div><i class="fa-solid fa-thumbs-up text-green-600 fa-3x"></i></div>\
+                            <div tabindex="0" class="focus:outline-none text-2xl w-full text-center font-semibold leading-6 text-green-800 my-4">Congratulations</div>\
+                            <div tabindex="0" class="focus:outline-none text-2xl w-full text-center font-semibold leading-6 text-green-800 my-4">Correct Answer</div>\
+                        </div>'
+                    
+                    div.innerHTML += ans
+                    $('#result').show();
+
+                }else{
+                    console.log('Your answer is InCorrect')
+                    ans += '<div class="items-center justify-between pt-2 pb-2">\
+                            <div><i class="fa-solid fa-thumbs-down text-red-600 fa-3x"></i></div>\
+                            <div tabindex="0" class="text-2xl w-full text-center font-semibold leading-6 text-red-800 py-2">Wrong Answer</div>\
+                        </div>\
+                        <div class="relative w-full mb-3">\
+                            <label class="block uppercase text-center text-blueGray-600 text-lg font-bold mb-2 mt-8" for="grid-password">Correct Answers are :</label>\
+                            <div class="text-center text-xl font-bold pb-14">'+ correct_ans +'</div>\
+                        </div>'
+
+                    div.innerHTML += ans
+                    console.log(correct_ans)
+                    $('#result').show();
+
+                }
+
+            }else{
+                $('#selectAnswerPopup').show();
+            }
+
+        }else if (data.question_type === 'orderBy'){
+            var ans = ''
+            console.log('data')
+            console.log(data)
+            console.log('inside order function')
+            if ( data.user_submitted_ans != null && data.user_submitted_ans != '' && data.user_submitted_ans != 'undefined') {
+                answerData.push(data)
+                console.log(answerData)
+                var correct_ans = undefined;
+                var correct_ans_text = [];
+                for(var z = 0; z< allQuestion.length; z++ ) {   // function to get Correct ans for question
+                    var question = allQuestion[z];
+                    if (question.id === data.question_id){  
+                        correct_ans = question.correctSequenceId
+                        var cSequence = question.correctSequenceId.split(',').map(Number);
+                        console.log(typeof(cSequence))
+                        console.log(cSequence)
+                        for (var id of cSequence){     // sub function for getting option.text in correct order using correct sequence id
+                            for (var opt of question.options){          // for displaying in result if user submit wrong answers     
+                                if(id === opt.id){
+                                    correct_ans_text.push(opt.text)
+                                }
+                            }
+                        }
+
+                    }
+                }
+                console.log(correct_ans)
+
+                var user_answer = String(data.user_submitted_ans)
+
+                if(JSON.stringify(user_answer)==JSON.stringify(correct_ans)){ //compare correcr answer with user answers
+                    totalCorrectAnswer++;
+                    data['isCorrect'] = 1;
+                    console.log('Your answer is Correct')
+                    ans += '<div class="items-center justify-between pt-2 pb-2">\
+                            <div><i class="fa-solid fa-thumbs-up text-green-600 fa-3x"></i></div>\
+                            <div tabindex="0" class="focus:outline-none text-2xl w-full text-center font-semibold leading-6 text-green-800 my-4">Congratulations</div>\
+                            <div tabindex="0" class="focus:outline-none text-2xl w-full text-center font-semibold leading-6 text-green-800 my-4">Correct Answer</div>\
+                        </div>'
+                    
+                    div.innerHTML += ans
+                    $('#result').show();
+                }else{
+                    console.log('Your answer is InCorrect')
+                    ans += '<div class="items-center justify-between pt-2 pb-2">\
+                            <div><i class="fa-solid fa-thumbs-down text-red-600 fa-3x"></i></div>\
+                            <div tabindex="0" class="text-2xl w-full text-center font-semibold leading-6 text-red-800 py-2">Wrong Answer</div>\
+                        </div>\
+                        <div class="relative w-full mb-3">\
+                            <label class="block uppercase text-center text-blueGray-600 text-lg font-bold mb-2 mt-8" for="grid-password">Correct Answer is :</label>'
+                            for(answer of correct_ans_text){
+                            ans += '<div class="text-center text-xl font-bold pb-2">'+ answer +'</div>'
+                            }
+                        '</div>'
+
+                    div.innerHTML += ans
+                    console.log(correct_ans)
+                    $('#result').show();
+
+                }
+            }else{
+                $('#selectAnswerPopup').show();
+            }
+            
+        }else if (data.question_type === 'matchTheFollowing'){
+            var ans = ''
+            console.log(data)
+            console.log('inside matchfollowing function')
+            if ( data.user_submitted_ans != null && data.user_submitted_ans != '' && data.user_submitted_ans != 'undefined') {
+                answerData.push(data)
+                console.log(answerData)
+                var correct_ans = [];
+                var correct_ans_text = [];
+                for(var z = 0; z< allQuestion.length; z++ ) {   // function to get Correct ans for question
+                    var question = allQuestion[z];
+                    if (question.id === data.question_id){
+                        for (var rc of allQuestion[z].rightColumn){
+                            for (var lc of allQuestion[z].leftColumn){
+                                if (rc.id === lc.correctAnswerId){
+                                    correct_ans.push(String(rc.id))
+                                    correct_ans_text.push([ rc.text, lc.text])
+                                }
+                            }
+
+                        }
+                    }
+                    
+                }
+                console.log(correct_ans)
+                console.log(correct_ans_text)
+                if(JSON.stringify(data.user_submitted_ans)==JSON.stringify(correct_ans)){
+                    totalCorrectAnswer++;
+                    data['isCorrect'] = 1;
+                    console.log('Your answer is Correct')
+                    ans += '<div class="items-center justify-between pt-2 pb-2">\
+                            <div><i class="fa-solid fa-thumbs-up text-green-600 fa-3x"></i></div>\
+                            <div tabindex="0" class="focus:outline-none text-2xl w-full text-center font-semibold leading-6 text-green-800 my-4">Congratulations</div>\
+                            <div tabindex="0" class="focus:outline-none text-2xl w-full text-center font-semibold leading-6 text-green-800 my-4">Correct Answer</div>\
+                        </div>'
+                    
+                    div.innerHTML += ans
+                    $('#result').show();
+                }else{
+                    console.log('Your answer is InCorrect')
+                    ans += '<div class="items-center justify-between pt-2 pb-2">\
+                            <div><i class="fa-solid fa-thumbs-down text-red-600 fa-3x"></i></div>\
+                            <div tabindex="0" class="text-2xl w-full text-center font-semibold leading-6 text-red-800 py-2">Wrong Answer</div>\
+                        </div>\
+                        <div class="relative w-full mb-3">\
+                            <label class="block uppercase text-center text-blueGray-600 text-lg font-bold mb-2 mt-8" for="grid-password">Correct Answer is :</label>'
+                            for (answer of correct_ans_text){
+                            ans += '<div class="text-center text-xl font-bold pb-2 text-orange-600">'+ answer[0] +' : '+ answer[1] +'</div>'
+                            }
+                        '</div>'
+
+                    div.innerHTML += ans
+                    console.log(correct_ans)
+                    $('#result').show();
+
+                }
+
+            }else{
+                $('#selectAnswerPopup').show();
+            }
+
+
+        }else if (data.question_type === 'categorise'){
+            var ans = ''
+            console.log('inside matchfollowing function')
+            if ( data.first_category_ans != null && data.second_category_ans != null &&data.first_category_ans != '' && data.first_category_ans != 'undefined') {
+                answerData.push(data)
+                console.log(answerData)
+                var first_category_correct_ans = [];
+                var second_category_correct_ans = [];
+                var first_category_correct_ans_text = [];
+                var second_category_correct_ans_text = [];
+                for(var z = 0; z< allQuestion.length; z++ ) {   // function to get Correct ans for question
+                    var question = allQuestion[z];
+                    if (question.id === data.question_id){
+                        first_category_correct_ans_text.push(question.category[0].text)
+                        second_category_correct_ans_text.push(question.category[1].text)
+                        for (var opt of question.categoryItem){
+                            if(opt.correctAnswerId === question.category[0].id){
+                                first_category_correct_ans.push(opt.correctAnswerId)
+                                first_category_correct_ans_text.push(opt.text)
+
+                            }else if (opt.correctAnswerId === question.category[1].id){
+                                second_category_correct_ans.push(opt.correctAnswerId)
+                                second_category_correct_ans_text.push(opt.text)
+                            }
+                            
+                        } 
+                    }   
+                }
+                console.log(first_category_correct_ans_text)
+                console.log(second_category_correct_ans_text)
+
+                var first_correct_ans = String(first_category_correct_ans)
+                var first_user_ans = String(data.first_category_ans)
+
+                var second_correct_ans = String(second_category_correct_ans)
+                var second_user_ans = String(data.second_category_ans)
+
+                if(JSON.stringify(first_user_ans)==JSON.stringify(first_correct_ans) && JSON.stringify(second_user_ans)==JSON.stringify(second_correct_ans)){
+                    totalCorrectAnswer++;
+                    console.log('Your answer is Correct')
+                    ans += '<div class="items-center justify-between pt-2 pb-2">\
+                            <div><i class="fa-solid fa-thumbs-up text-green-600 fa-3x"></i></div>\
+                            <div tabindex="0" class="focus:outline-none text-2xl w-full text-center font-semibold leading-6 text-green-800 my-4">Congratulations</div>\
+                            <div tabindex="0" class="focus:outline-none text-2xl w-full text-center font-semibold leading-6 text-green-800 my-4">Correct Answer</div>\
+                        </div>'
+                    
+                    div.innerHTML += ans
+                    $('#result').show();
+                }else{
+                    console.log('Your answer is InCorrect')
+                    ans += '<div class="items-center justify-between pt-2">\
+                            <div><i class="fa-solid fa-thumbs-down text-red-600 fa-3x"></i></div>\
+                            <div tabindex="0" class=" text-2xl w-full text-center font-semibold leading-6 text-red-800">Wrong Answer</div>\
+                        </div>\
+                        <div class="relative w-full mb-3">\
+                            <label class="block uppercase text-center text-blueGray-600 text-lg font-bold mb-2 mt-8" for="grid-password">Correct Answer is :</label>'
+                            for(var answer of first_category_correct_ans_text){
+                                ans += '<div class="text-center text-lg font-bold pb-2 text-orange-600">'+ answer +'</div>'
+                            }
+                            for(var answer of second_category_correct_ans_text){
+                                ans += '<div class="text-center text-lg font-bold pb-2 text-purple-600">'+ answer +'</div>'
+                            }
+                        '</div>'
+
+                    div.innerHTML += ans
+                    console.log(correct_ans)
+                    $('#result').show();
+
+                }
+
+            }else{
+                $('#selectAnswerPopup').show();
+            }
+
+        }
+
+        
+    }
+
+    function next_question(){
+        console.log('value of i'+ i)
+        
+        console.log('questionlength'+ allQuestion.length)
+        i++;
+        if (i === allQuestion.length){
+            $("#question_div div").remove();
+            $('#result').hide();
+            $("#finalResult_display div").remove();
+            var div = document.getElementById('finalResult_display');
+            var res = ''
+            if (totalCorrectAnswer >= 10){
+                res += '<div class="flex items-center justify-between place-content-center ml-24 pt-1">\
+                            <i class="fa-solid fa-trophy self-center w-32 h-24 mx-1 text-yellow-600"></i>\
+                        </div>'
+            }else if (totalCorrectAnswer>= 8 && totalCorrectAnswer <=9) {
+                res += '<div class="flex items-center justify-between place-content-center ml-24 pt-1">\
+                            <img class="self-center w-32 h-24 mx-1" src="/static/uploads/stickers/3_Stars.png" alt="evidyalogo">\
+                        </div>'
+            }else if (totalCorrectAnswer>=5 && totalCorrectAnswer <=7){
+                res += '<div class="flex items-center justify-between place-content-center ml-24 pt-1">\
+                            <img class="self-center w-32 h-24 mx-1" src="/static/uploads/stickers/great_job.jpg" alt="evidyalogo">\
+                        </div>'
+            }else {
+                res += '<div class="flex items-center justify-between place-content-center ml-24 pt-1">\
+                            <img class="self-center w-32 h-24 mx-1" src="/static/uploads/stickers/Good_Effort.png" alt="evidyalogo">\
+                        </div>'
+            }
+
+
+            res += '<div class="relative w-full mb-3">\
+                            <label class="block uppercase text-center text-blueGray-600 text-lg font-bold mb-2 mt-4" for="grid-password">you have completed the Quiz :</label>\
+                            <div class="text-center text-2xl font-bold pb-2 text-green-600">You Got '+totalCorrectAnswer+'/'+allQuestion.length+' Questions correct</div>\
+                        </div>'
+
+            div.innerHTML += res
+            $('#finalResult').show();
+            
+            var dummy_data={"studentId":question_details.studentId,"offeringId":question_details.offeringId,"attempt":question_details.attempt,"questionSubmitedAnswers":answerData};
+        
+            var question_answer_data = JSON.stringify(dummy_data);
+            $.ajax({
+                url: "/partner/quiz/submit_answer/", // the endpoint
+                type: "POST", // http method
+                data: question_answer_data, // data sent with the post request
+                dataType: "json",
+                ContentType: 'application/json; charset=utf-8',
+                success: function(response) {
+                        console.log(response)  
+                },
+            })
+        }else{
+            console.log(i)
+            question_display();   
+        }
+        
+    }
+
+    function retakeQuiz(){
+        confirm("Are you Sure You want to Retake Quiz");
+        retakeUrl = window.location.href
+        location.replace(retakeUrl)  
+    }
+
+    function redirectToOffering(){
+        confirm("Are you Sure You want to Continue");
+        location.replace('/v2/offering/topic-details/?center_id='+ student_details.centerId +'&offering_id='+ student_details.offeringId +'&ayfy_id='+ student_details.ayfyID)  
+    }
+
+    console.log('answer data by me')
+    console.log(answerData)
+
+
+
+    // window.addEventListener('beforeunload', function (e) {
+    //     // Cancel the event
+    //     e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+    //     // Chrome requires returnValue to be set
+    //     e.returnValue = '';
+    // });
+    
+    question_display()
+
+</script>
+{% endblock %}
+
+</html>

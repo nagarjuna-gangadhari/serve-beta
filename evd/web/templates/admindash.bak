@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block head_title %}eVidyaLoka - Admin dashboard{% endblock %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/calendar/jquery-ui-1.8.17.custom.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+                var date = new Date();
+                var d = date.getDate();
+                var m = date.getMonth();
+                var y = date.getFullYear();
+                var get_future_date = function(curr_date, offset_month){
+                    return new Date(curr_date.setMonth(curr_date.getMonth() + offset_month));
+                };
+                var calendar = $("#calendar").fullCalendar({
+                        theme: true,
+                        header: {
+                                left: 'prev,next today',
+                                center: 'title',
+                                right: 'month,agendaWeek,agendaDay'
+                        },
+                        selectable: true,
+                        editable: true,
+                        dragOpacity: 0.2,
+                        columnFormat: {
+                                    month: 'ddd',    // Mon
+                                    week: 'ddd d/M', // Mon 9/7
+                                    day: 'dddd d/M'  // Monday 9/7
+                        },
+                        eventSources: [
+                            {
+                                events: [
+                                            {% for session in assigned_session %}
+                                            {
+                                                title: '{{ session.offering }}',
+                                                start: new Date("{{ session.date_start.isoformat }}"),
+                                                end_date: new Date("{{ session.date_end.isoformat }}"),
+                                                allDay: false,
+                                                color: "#46D150",
+                                                textColor: "black",
+                                                teacher: "{{ session.teacher }}",
+                                            },
+                                            {% endfor %}
+                                            {% for session in unassigned_session %}
+                                            {% if not session.date_start == None %}
+                                            {
+                                                title: '{{ session.offering }}',
+                                                start: new Date("{{ session.date_start.isoformat }}"),
+                                                end_date: new Date("{{ session.date_end.isoformat }}"),
+                                                allDay: false,
+                                                color: "#E80531",
+                                                textColor: "black",
+                                                teacher: "{{ session.teacher }}",
+                                            }{% if not forloop.last %},{% endif %}
+                                            {% endif %}
+                                            {% endfor %}
+                                        ],
+                            }
+                        ],
+                        eventMouseover: function(event, jsEvent, view) {
+                               if (view.name !== 'agendaDay') {
+                                    $(jsEvent.target).attr('title', event.title);
+                                }
+                        },
+                        dayClick: function(date, allDay, jsEvent, view) {
+                            if(view.name=="month") {
+                                var mon_year = $(".fc-header-title").text().split(" ");
+                                if( mon_year[0] == "july") { var month= 6};
+                                var day = $(this).find(".fc-day-number").text();
+                                $('#calendar').fullCalendar( 'changeView', 'agendaDay' );
+                                $("#calendar").fullCalendar( 'gotoDate', mon_year[1], month, day );
+                                console.log($(this));
+                            }
+                            else if(view.name=="agendaWeek"){
+                                /*var mon_year = $(".fc-header-title").text().split(" ");
+                                var month = mon_year[0];
+                                var year = mon_year[4];
+                                console.log($(this));
+                                var day = $(this).find(".fc-day-number").text();
+                                $('#calendar').fullCalendar( 'changeView', 'agendaDay' );
+                                $("#calendar").fullCalendar( 'gotoDate', year, month, day );*/
+                            }
+                        },
+                       eventClick: function( calEvent, jsEvent, view){
+                            event_title = calEvent.title;
+                            console.log(calEvent.start.toDateString(), calEvent.className);
+                            $(".event-desc h3").text("Session Details");
+                            $(".event-desc p.title").text(event_title);
+                            $(".event-desc p.title").append("<p>Start Date : " + calEvent.start + "</p>");
+                            $(".event-desc p.title").append("<p>End Date : " + calEvent.end_date + "</p>");
+                            if(calEvent.teacher != "None"){
+                                $(".event-desc p.title").append("<p>Teacher : " + calEvent.teacher + "</p>");
+                            }
+                        }
+                });
+        });
+
+    </script>
+
+{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <link rel='stylesheet' type='text/css' href='/static/css/calendar/fullcalendar.1.5.3.min.css'/>
+    <link rel="stylesheet" type="text/css" href="/static/css/calendar/theme.css" />
+    <style type='text/css'>
+        #calendar {
+                width: 300px;
+                font-size: 10px;
+                float: left;
+                margin-left:50px;
+                margin-top: 35px;
+            }
+        .fc-header-title h2 {
+                font-size: 13px;
+                margin-top: -8px;
+                white-space: normal !important;
+           }
+        .fc-view-month .fc-event, .fc-view-agendaWeek .fc-event {
+                font-size: 10px;
+                overflow: hidden;
+                height: 15px;
+           }
+        .fc-view-agendaWeek .fc-event-vert {
+                font-size: 10px;
+                overflow: hidden;
+                width: 25px !important;
+          }
+        .fc-agenda-axis {
+                width: 20px !important;
+                font-size: .7em;
+          }
+        .fc-button-content {
+                padding: 0;
+          }
+    </style>
+
+{% endblock %}
+
+{% block body_container %}
+    <div class="row">
+        <div class="span12 trans-block" style="min-height:500px;">
+            <div class="dashboard admin-dashboard">
+                <h2 class="offset3">Welcome to Admin Dashboard</h2>
+                 <div class="row">
+                     <div id="calendar"></div>
+                     <div class="span6 event-desc">
+                        <h3 style="margin-left:42px; margin-top:50px;"></h3>
+                        <p class="title"></p>
+                     </div>
+                </div>
+                <div class="row">
+                    <div class="span7 pull-left">
+                        <h3>Recommendations:</h3>
+                        {% for map in mapping %}
+                            <form action="/assignoffer/" method="POST">
+                                {% csrf_token %}
+                                 <!--teacher<input type="text" value="{{ map.teacher }}" name = "teacher" /> is available for-->
+                                 <p class="teacher">
+                                    <strong><a href="/admin/web/userprofile/{{ map.teacher.id }}">{{ map.teacher.first_name}} {{ map.teacher.last_name }}</a></strong> is interested in :
+                                    <input type="hidden" name="teacher_id" value="{{ map.teacher.id }}" />
+                                 </p>
+                                 <ul class="offerings">
+                                    {% for offering in map.offerings %}
+                                        <li>
+                                            <input type="hidden" value="{{offering.id}}" name="offering_id"/>
+                                            <b>Offering - </b><a href="/admin/web/offering/{{ offering.id }}">{{ offering }}</a>
+                                            <button type="submit" class="btn ok-btn"><i class="icon-ok"></i></button>
+                                            <ul>
+                                                <li> Board - {{ offering.course.board_name }}, {{ offering.center.state }}</li>
+                                                <li> Center - {{offering.center }} </li>
+                                                <li> Subject - {{offering.course.subject }}</li>
+                                                <li> Standard - {{ offering.course.grade }}th</li>
+                                            </ul>
+                                        </li>
+                                    {% endfor %}
+                                 </ul>
+                            </form>
+                        {% endfor %}
+                    </div>
+                    <div class="span4 pull-right">
+                        <h3 style="margin-left:-80px;">Upcoming assigned sessions</h3>
+                        {% for session in recent_session %}
+                            <li style="margin-left:-70px"><b>{{ session.offering }}</b></li>
+                            <ul style="margin-left:-20px">
+                                <li><b>Date:</b> {{ session.date_start }} </li>
+                                <li><b>Teacher:</b> {{ session.teacher }} </li>
+                                <li><b> Number of student enrolled:</b> {{ session.num_students_enrolled }} </li>
+                            </ul>
+                        {% endfor %}
+                    </div>
+                    <div class="span4 pull-right">
+                        <div style="margin-top: 30px">
+                            <h3>Available Centers</h3>
+                            <ul style="margin-left:0px; margin-top:20px;">
+                                {% for center in centers %}
+                                    <li style="display:block;margin-bottom: 10px;"><input type="hidden" value="{{center.id}}" name="center_id" />
+                                        <a href="/centeradmin/?center_id={{ center.id }}" class="btn" style="width:92px;">{{center}}</a>
+                                    </li>
+                                 {% endfor %}
+                            </ul>
+            ------------------------------------
+            <p><b> Assign Center Admin </p></b>
+            {%  for admin in center_admin %}
+                <form method = "POST" action="/assign_center/" />
+                {% csrf_token %}
+                <input type="hidden" value = {{ admin.user }} name = "user" />
+                <p><b> User: {{ admin.user }} </b></p>
+                {% for center in center_none %}
+                    <input type = "radio" value = "{{center.id}}" name= "center" />{{ center }}<br />
+                {% endfor %}
+                <input type="submit" value="assign" />
+            {% endfor %}
+            <!----------------------------------------------
+            <p><b> Reco </b></p>
+            {% for map in main_reco %}
+                {% for m in map %}
+                    
+                <ul>
+                    <li><b>{{ m.teacher}}</b></li>
+                    {% for offer in m.offerings %}
+                    <ul>
+                      <li>  {{ offer }}</li>
+                    </ul>
+                </ul>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}--!>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

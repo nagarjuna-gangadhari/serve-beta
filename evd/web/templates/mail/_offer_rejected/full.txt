@@ -1,0 +1,14 @@
+User {{ user.frist_name }} {{ user.last_name }} has rejected to teach a course
+
+email-id : {{ user.email }}
+
+Course Details:
+--------------
+course        : {{ offer_title }}
+
+center        : {{ offer.center }}
+
+starting from : {{ offer.start_date }}
+
+upto          : {{ offer.end_date }}
+

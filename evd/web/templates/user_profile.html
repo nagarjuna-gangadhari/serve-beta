@@ -1,0 +1,1516 @@
+{% extends "base.html" %}
+
+{% load tags %}
+{% load filters %}
+{% block head_styles %}
+{{ block.super }}
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="/static/css/userprofile.css"/>
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+    var slides_data = [
+    {
+      title: "Personal Info",
+    },
+    {
+      title: "On Boarding",
+    },
+    {
+      title: "Readiness",
+    }
+    ];
+    $('.carousel').carousel({
+        interval: false
+    });
+    window.message = "";
+    window.evd.show_offerings = function(data){
+        window.data = data;
+        var $offering_tab = $("#offerings-tab"),
+            $pref_tab = $("#pref-tab"),
+            $offer_save_btn = $("#offerings-save-button span.ajax-button-label");
+        var empty_courses = null,
+            ofr_save_btn_text = "Next";
+        if(typeof(data) == "object"){
+            message = "Redirecting to your dashboard";
+            $("#readiness a.back-btn").attr({"data-tab":"db-3"});
+            $("#readiness .for-teacher").show();
+            $("#readiness .for-centeradmin").show();
+            $("#offerings-table tbody").empty();
+            if(data.length > 0){
+                ofr_save_btn_text = "Save Selected";
+                $("#pref_courses_tmpl").template("pref_courses_template");
+                $("#offerings-table tbody").append($.tmpl("pref_courses_template", data));
+                $("#offerings-tab").show();
+            }
+            else{
+                $("#offerings-table tbody").append('<tr><td colspan="5"><p style="background:wheat;text-align:center;padding:20px">There are no courses matching your medium</p></td></tr>');
+                //$("#offerings-tab").hide();
+                //$(".db-3").trigger("click");
+            }
+            $(".db-2").trigger("click");
+        }
+        else if(data == "wellwisher"){
+            evd.show_msg("Thanks for updating your profile");
+            window.setTimeout(function(){
+                window.location = "/myevidyaloka/";
+            }, 1000);
+        }
+        else if(data == "contentdeveloper"){
+            message = "Thanks for updating your profile";
+            $("#readiness .for-teacher").hide();
+            $("#readiness .for-centeradmin").hide();
+            $("#offerings-tab").hide();
+            $(".db-2").trigger("click");
+            $("#preferences a.back-btn").attr({"data-tab":"db-1"});
+        }
+        else if(data == "centeradmin"){
+            message = "Thanks for updating your profile";
+            $("#readiness .for-teacher").hide();
+            $("#readiness .for-centeradmin").show();
+            $("#offerings-tab").hide();
+            $("#preferences-tab").hide();
+            $(".db-4").trigger("click");
+            $("#readiness a.back-btn").attr({"data-tab":"db-1"});
+        }
+        else{
+            $("#readiness .for-teacher").show();
+            $("#readiness .for-centeradmin").show();
+            $("#offerings-table tbody").empty();
+            if(data.length > 0){
+                ofr_save_btn_text = "Save Selected";
+                $("#pref_courses_tmpl").template("pref_courses_template");
+                $("#offerings-table tbody").append($.tmpl("pref_courses_template", data));
+                $("#offerings-tab").show();
+            }
+            else{
+                $("#offerings-table tbody").append('<tr><td colspan="5"><p style="background:wheat;text-align:center;padding:20px">There are no courses matching your medium</p></td></tr>');
+                //$("#offerings-tab").hide();
+                //$(".db-3").trigger("click");
+            }
+            $(".db-2").trigger("click");
+        }
+        $offer_save_btn.text(ofr_save_btn_text);
+    }
+    window.evd.show_preferences = function(resp){
+        message = "Redirecting to your dashboard";
+        var dates=[];
+        if(typeof(data) == "object"){
+            message = "Redirecting to your dashboard";
+            $("#readiness a.back-btn").attr({"data-tab":"db-3"});
+            $("#readiness .for-teacher").show();
+            $("#readiness .for-centeradmin").show();
+            $("#offerings-table tbody").empty();
+            if(data.length > 0){
+                ofr_save_btn_text = "Save Selected";
+                $("#pref_courses_tmpl").template("pref_courses_template");
+                $("#offerings-table tbody").append($.tmpl("pref_courses_template", data));
+                $("#offerings-tab").show();
+            }
+            else{
+                $("#offerings-table tbody").append('<tr><td colspan="5"><p style="background:wheat;text-align:center;padding:20px">There are no courses matching your medium</p></td></tr>');
+                //$("#offerings-tab").hide();
+                //$(".db-3").trigger("click");
+            }
+        }
+        $(".db-3").trigger("click");
+        $("#offerings-table input[type='checkbox']:checked").each(function(i,v) {
+            var start_date = parseInt($(this).attr("data-start_date")) - 31800000;
+            var end_date = parseInt($(this).attr("data-end_date")) - 31800000;
+            dates.push(new Date(start_date));
+            dates.push(new Date(end_date));
+            var subject = $(this).attr("data-subject");
+            var medium = $(this).attr("data-medium");
+            $(".prefered_subjects input[type='checkbox']").each(function(){
+                if($(this).attr("value") == subject){
+                    $(this).attr("checked","checked");
+                }
+            });
+            $("#medium input[type='checkbox']").each(function(){
+                if($(this).attr("value") == medium) {
+                    $(this).attr("checked","checked");
+                }
+            });
+        });
+        dates.push(window.min_start_date);
+        dates.push(window.min_end_date);
+        var start_date = new Date(Math.min.apply(null,dates));
+        var end_date = new Date(Math.max.apply(null,dates));
+        if(start_date.toDateString() !== "Invalid Date") {
+            $("input[name='from_date']").datepicker({
+                dateFormat: "yy-mm-dd",
+                minDate: start_date
+            });
+            $("input[name='to_date']").datepicker({
+                dateFormat: "yy-mm-dd",
+                minDate: end_date
+            });
+            $("input[name='from_date']").val(start_date.getFullYear() + "-" + (start_date.getMonth()+1) + "-" + start_date.getDate());
+            $("input[name='to_date']").val(end_date.getFullYear() + "-" + (end_date.getMonth()+1) + "-" + end_date.getDate());
+        }
+    }
+
+    window.evd.pre_profile_save = function(e){
+        if($(".item.active input[name='step']").val() == "4"){
+            var from_date = new Date($("#from-date").val());
+            var to_date = new Date($("#to-date").val());
+            if(to_date - from_date < 3628800000){
+                $("#to-date").attr({"rel":"tooltip", "data-placement":"right", "data-title": "End date should be atleast 6 weeks from the start date"}).tooltip("show");
+                return false;
+            }
+        }
+        var fname = $("input[name=firstname]");
+        var lname = $("input[name=lastname]");
+        //var city  = $("input[name=city]");
+        var emal  = $("input[name=primary_email]");
+        if(fname.val()==""){ fname.css("border","2px solid red"); evd.show_msg("Please enter firstname");return false; }
+        if(lname.val()==""){ lname.css("border","2px solid red");evd.show_msg("Please enter lastname"); return false; }
+        //if(city.val()==""){ city.css("border","2px solid red");evd.show_msg("Please enter city"); return false; }
+        if(emal.val()==""){ emal.css("border","2px solid red");evd.show_msg("Please enter email"); return false; }
+
+        var country   = $("#countryId").children(":selected").val();
+        var state     = $("#stateId").children(":selected").val();
+        var city_     = $("#cityId").children(":selected").val();
+        var gender    = $("#genderId").children(":selected").val();
+        var age       = $("input[name=age]").val();
+        var profession= $("input[name=profession]").val();
+        if(country=="select"){
+            $("#countryId").attr({"rel":"tooltip", "data-placement":"left", "data-title": "select a country"}).tooltip("show");
+            $("#countryId").addClass("eror");
+            return false;
+        }
+        if(state=="select"){
+            $("#stateId").attr({"rel":"tooltip", "data-placement":"left", "data-title": "select a state"}).tooltip("show");
+            $("#stateId").addClass("eror");
+            return false;
+        }
+        if(city_=="select"){
+            $("#cityId").attr({"rel":"tooltip", "data-placement":"left", "data-title": "select a city"}).tooltip("show");
+            $("#cityId").addClass("eror");
+            return false;
+        }
+        if(gender==''){
+            $("#genderId").attr({"rel":"tooltip", "data-placement":"left", "data-title": "select your gender"}).tooltip("show");
+            $("#genderId").addClass("eror");
+            return false;
+        }
+        if(age==''){
+            $("#ageId").tooltip("show");
+            $("#ageId").css("border", "2px solid red");
+            return false;
+        }
+
+        var q = "";
+        var roles_len = $("#prefered_roles input[type='checkbox']:checked").length;
+        var language = $("#medium").children(":selected").val();
+        if(roles_len==0 || !$("input[name='accept']").is(":checked")){
+            if(roles_len==0 && !$("input[name='accept']").is(":checked")){
+                $("#prefered_roles").parent("div").attr({"rel":"tooltip", "data-placement":"right", "data-title": "select any one of these"}).tooltip("show");
+                $("#prefered_roles").parent("div").css("border", "2px solid red");
+                $("input[name='accept']").parents("div.controls").addClass("eror") 
+                $("input[name='accept']").parents("div.controls").attr({"rel":"tooltip", "data-placement":"left", "data-title": "accept the code of conduct"}).tooltip("show");
+                $("#medium").attr({"rel":"tooltip", "data-placement":"right", "data-title": "select a language"}).tooltip("show");
+            }
+            else if(roles_len == 0){
+                $("#prefered_roles").parent("div").attr({"rel":"tooltip", "data-placement":"right", "data-title": "select any one of these"}).tooltip("show");
+                $("#prefered_roles").parent("div").addClass("eror");
+                                   }
+            else if(!$("input[name='accept']").is(":checked")){
+                $("input[name='accept']").parents("div.controls").attr({"rel":"tooltip", "data-placement":"left", "data-title": "accept the code of conduct"}).tooltip("show");
+                $("input[name='accept']").parents("div.controls").addClass("eror");
+                                                               }
+            return false;
+        }
+        else{
+             $("#prefered_roles input[type='checkbox']:checked").each(function(index, val){
+                q += $(this).attr("value") + ( index < (roles_len - 1) ? ";" : "");
+             });
+        }
+        if(language=="None") {
+            $("#medium").attr({"rel":"tooltip", "data-placement":"left", "data-title": "select a language"}).tooltip("show");
+            $("#medium").addClass("eror");
+            return false;
+        }
+        $("input[name='prefered_roles']").val(q);
+
+        var step = parseInt($($(this).attr("href")).children("input[name=step]").val());
+        var q = "";
+
+        var offerings = $("#offerings-table input[type='checkbox']:checked").length;
+        if(step == 2){
+            if(offerings > 0){
+                $("#offerings-table input[type='checkbox']:checked").each(function(index, val){
+                    q += $(this).attr("value") + ( index < (offerings - 1) ? ";" : "" );
+                });
+            }
+            $("input[name='prefered_offerings']").val(q);
+        }
+        q = "";
+        var subjects = $(".prefered_subjects input[type='checkbox']:checked").length;
+        $(".prefered_subjects input[type='checkbox']:checked").each(function(index,val){
+            q += $(this).attr("value") + ( index < (subjects - 1) ? ";" : "" );
+        });
+        $("input[name='prefered_subjects']").val(q);
+
+        q = "";
+        var medium = $("#medium input[type='checkbox']:checked").length;
+        $("#medium input[type='checkbox']:checked").each(function(index, val){
+            q += $(this).attr("value") + ( index < (medium -1) ? ";" : "");
+        });
+        $("input[name='prefered_medium']").val(q);
+
+        q = "";
+        days="";
+         window.flag = 0;
+        var valid = true;
+        $.each($("div.timing-inner-wrapper"), function(index,val){
+            var strt_time = $(this).children().eq(1).val();
+            var end_time = $(this).children().eq(2).val();
+            if(strt_time!='From' && end_time!='To'){
+                strt_date = '01/01/2016 '+$(this).children().eq(1).val();
+                endd_date = '01/01/2016 '+$(this).children().eq(2).val();
+            }else{
+                $(this).attr({"rel":"tooltip", "data-title": "Please select preferred days", "data-placement":"left"}).tooltip("show");
+                valid = valid && false;
+                return;
+            }
+            if($(this).children().eq(1).val()!="From" && $(this).children().eq(2).val()!="To" && parseInt($(this).children().eq(2).val()) > parseInt($(this).children().eq(1).val())){
+                q += $(this).children().eq(1).val() + "-" + $(this).children().eq(2).val() + ( index < ($("div.timing-inner-wrapper").length - 1) ? ";" : "");
+                $("input[name='prefered_timings']").val(q);
+                days += $(this).children().eq(0).val() + ( index < ($("div.timing-inner-wrapper").length - 1) ? ";" : "");
+                $("input[name='prefered_days']").val(days);
+            }
+            else if(Date.parse(strt_date)>=Date.parse(endd_date)){
+                //evd.show_msg("End time cannot be less than start time");
+                $(this).attr({"rel":"tooltip", "data-title": "End time cannot be less than or equal to start time", "data-placement":"right"}).tooltip("show");
+                valid = valid && false;
+                flag = 1;
+                return;
+            }
+            else if($("#preferences").hasClass("active")){
+                //evd.show_msg("Invalid Preferred Days");
+                $(this).attr({"rel":"tooltip", "data-title": "Invalid prefered days", "data-placement":"left"}).tooltip("show");
+                valid = valid && false;
+                return;
+            }
+        });
+        if(!valid)
+            return true;
+    }
+    window.evd.show_readiness = function(){
+        $(".db-4").trigger("click");
+    };
+
+
+   window.evd.disp_msg = function(){
+   var orientation=  $("#rep_evd").prop("checked");
+   var se_eval = $("#eval_self").prop('checked');
+             if(orientation && se_eval){
+             window.message="Thank you for completing the Orientation and Self Evaluation. You can either opt for 'On the Spot discussion' \t or One of our representat     ive will be  reaching out to you in 48 hours via email for the final Discussion over Skype !"
+             }
+        else if (orientation && !(se_eval) ){
+           window.message = "Thank you for completing the Orientation. Please proceed with your Self Evaluation."
+        }
+        else{
+        window.message = "Please complete and mark orientation and selfevaluation to proceed further."
+        }
+       evd.show_msg(window.message);
+               window.setTimeout(function(){
+                           window.location = "/myevidyaloka/";
+                                  }, 8000);
+       }
+
+    window.evd.dashboard_redirect = function(){
+      if(flag == 0){//added
+        console.log(flag);
+        if(window.message=="")
+        {
+            window.message="Redirecting to your dashboard";
+        }
+        evd.show_msg(window.message);
+        window.setTimeout(function(){
+            window.location = "/myevidyaloka/";
+        }, 2000);
+      }//added
+    }
+    window.evd.pref_redirect = function(){
+        if(window.message=="")
+        {
+            window.message="Thank you for updating!.. Proceeding to Orientation and Self Evaluation.";
+        }
+        evd.show_msg(window.message);
+        $(".db-2").trigger("click");
+    }
+
+    $(".db-tab").click(function(){
+        $(".db-tab.active").removeClass("active");
+        $(this).addClass("active");
+        var index = $(".db-tab").index($(this));
+        $("#section-title").text(slides_data[index].title);
+        $("#section-caption").text(slides_data[index].description);
+        $(".carousel").carousel(index).show(); 
+    });
+    $(".carousel").on("slid", function(){
+        footer_adjust();
+    });
+{% endblock %}
+
+{% block userprofile %}
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="/user_profile/">My Profile<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a class="db-tab db-1 active">Personal Info</a></li>
+            <li id="offerings-tab"><a class="db-tab db-2">OnBoarding</a></li>
+            <li id="readiness-tab"><a class="db-tab db-4">Readiness</a></li>
+        </ul>
+        <span class="divider">|</span>
+    </li>
+{% endblock %}
+
+{% block body_container %}
+            <div class="right-content dashboard-inner-container">
+                {% block right_content %}
+                    <div class="top clearfix">
+                        <div class="intro">
+                            <h1 id="section-title">Personal Info</h1>
+                            <img  src="/static/images/onboard_process.png" style="width:750px;" />
+
+                        </div>
+                    </div>
+                    {% if is_teacher %}
+                    <h1 style="background: white;">Status :</h1>
+                    <div class='clearfix progress-bar'  >
+                        <p class='{% if prof_per == 100 %}completed_progress{% else %}incomplete_progress{%endif%}'
+                            style="width:{%if prof_per == 10%}18{% else %}{{ prof_per }}{%endif%}%" rel="tooltip" data-placement="top"
+                            data-original-title="{{ prof_cm_des }}">{{ prof_cm_status }} : {{ prof_per}}%</p>
+                    </div>
+                    {% endif %}
+                    {% block bottom_content %}
+                    <div id="myCarousel" class="carousel slide">
+                        <div class="carousel-inner">
+                            <div id="basic_info" class="item active" style="width:940px;">
+                                <div class="row">
+                                    <div class="span12 trans-block" style="position:relative">
+                                       <form id="basic_info_form" class="form-horizontal" method="POST" action="/save_user_profile/" >
+
+
+
+
+
+                                            <a class="btn" href="#profile-help" data-toggle="modal" style="margin-left: 155px;display:none; width:310px;">
+                                               <span style="line-height: 30px; font-size: 13px">4 Min Guided Tour for On-boarding - Watch Now</span></a>
+                                               <a class="" href="#profile-help" data-toggle="modal" style="display:inline;float:right; margin-top:10px;width:285px;"><h1 style="display:inline;float:right;width:285px;color:green;line-height:1.5; font-size:16px; padding-bottom:10px;" >Click to watch the 3 min-video below for the Volunteer Onboarding steps:</h1>
+                                               <img src="/static/images/profile_help.png" style="overflow:hidden;width:285px;height:195px; " /> </a>
+
+
+
+                                                {% csrf_token %}
+                                                <input type="hidden" value="1" name="step"/>
+                                                <div id="profile-picture" style="" >
+                                                    <div class="profile-pic-wrapper" style="border-radius:15px;">
+                                                        <img class="profile_pic" src="{% if user_profile.picture %}{{ user_profile.picture }}{% else %}/static/images/add_picture.png{% endif %}" style="width:150px;height:150px;border-radius:15px;"/>
+                                                        <div class="caption">
+                                                            <a href="#photo-upload-modal" data-toggle="modal">change picture</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row" style="padding-left:160px; width:500px;">
+                                                    <div class="span5 offset1" style="padding-top:10px;">
+                                                        <div class="control-group control">
+                                                            <div class="controls text">
+                                                                <input type="text" class="input-small input" style="width:200px" id="input01" name="firstname" placeholder="first name" value="{{ user.first_name }}" data-validate="false" data-field-type="not_empty" data-show-tooltip="true" rel="tooltip" data-placement="left" data-title="First Name">
+                                                                <input type="text" class="input-small input" style="margin-left:10px;width:200px" name="lastname" placeholder="last name" value="{{ user.last_name}}" style="margin-left:15px;" data-validate="false" data-field-type="not_empty" data-show-tooltip="true" rel="tooltip" data-placement="right" data-title="Last Name"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="control-group">
+                                                            <div class="controls text">
+                                                                <input type="text" class="medium input" style="width:200px" name="primary_email" placeholder="email" value="{% if curr_user.email %}{{ curr_user.email }}{%else%}{{ user_profile.email }}{% endif %}" data-validate="false" data-field-type="email" data-show-tooltip="true" rel="tooltip" data-placement="left" data-title="Primary email">
+                                                                <input type="text" class="medium input" style="margin-left:10px;width:200px" name="secondary_email" placeholder="alternate email" value="{{user_profile.secondary_email}}" data-validate="false" data-field-type= "email" data-show-tooltip="true" rel="tooltip" data-placement="right" data-title="Secondary Email">
+                                                             <select name="gender" id="genderId" class="" style="height:28px">
+                                                                    {% if user_profile.gender == "" %}
+                                                                        <option value="">--Select Gender--</option>
+                                                                        <option value="male">Male</option>
+                                                                        <option value="female">Female</option>
+                                                                    {% elif user_profile.gender == "male" %}
+                                                                        <option value="">--Select Gender--</option>
+                                                                        <option value="male" selected="selected">Male</option>
+                                                                        <option value="female">Female</option>
+                                                                    {% else %}
+                                                                        <option value="">--Select Gender--</option>
+                                                                        <option value="male">Male</option>
+                                                                        <option value="female" selected="selected">Female</option>
+                                                                    {% endif %}
+                                                             </select>
+                                                             <input type="number" min="10" class="medium input" style="width:40px;height:15px;margin-left:6px;" name="age" id="ageId" placeholder="age" value="{{ user_profile.age}}" data-show-tooltip="true" rel="tooltip" data-placement="left" data-title="Age">
+<!--<input type="text" class="medium input" style="width:201px;height:15px;margin-left:9px;" name="profession" id="professionId" placeholder="profession" value="{{ user_profile.profession}}" data-show-tooltip="true" rel="tooltip" data-placement="right" data-title="Profession">-->
+<select name= "profession" id="professionId" style="width:220px;height:28px;margin-left:9px;">
+    <option value="">--Select Your Profession--</option>
+    {% for item in prof_list %}
+      {% if user_profile.profession == item %}
+         <option value="{{item}}" selected="selected">{{item}}</option>
+      {% else %}
+         <option value="{{item}}">{{item}}</option>
+      {% endif %}
+    {% endfor %}
+</select>
+
+
+                                                                <!--<input type="text" class="medium input" style="width:200px;margin-left:10px" name="phone" placeholder="phone number" value="{% if user_profile %}{{ user_profile.phone }}{% endif %}" data-validate="true" data-field-type="indian_phone_number" data-show-tooltip="true" rel="tooltip" data-placement="right">-->
+                                                                <!--<input type="text" class="medium input" name="city" placeholder="city" value="{% if user_profile %}{{ user_profile.city }}{% endif %}" style="width:200px;margin-left:10px;" data-validate="false" data-field-type="not_empty" data-show-tooltip="true" rel="tooltip" data-placement="right"/>-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+<!--modified-->
+                                                    <div class="control-group">
+                                                        <div class="controls text">
+                                                          <select name="country" class="countries" id="countryId" style="width:220px">
+                                                            {% if user_profile.country == "" %}
+                                                                <option value="select">Select Country</option>
+                                                            {% else %}
+                                                                <option value="{{ user_profile.country }}">{{ user_profile.country }}</option>
+                                                            {% endif %}
+                                                          </select>
+                                                          <select name="state" class="states" id="stateId" style="width:220px;margin-left:10px">
+                                                            {% if user_profile.state == "" %}
+                                                                <option value="select">Select State</option>
+                                                            {% else %}
+                                                                <option value="{{user_profile.state}}">{{user_profile.state}}</option>
+                                                            {% endif %}
+                                                          </select>
+                                                          <select name="city" class="cities" id="cityId" style="width:453px;margin-top:10px">
+                                                            {% if user_profile.city == "" %}
+                                                                <option value="select">Select City</option>
+                                                            {% else %}
+                                                                <option value="{{user_profile.city}}">{{user_profile.city}}</option>
+                                                            {% endif %}
+                                                          </select>
+                                                          <script src="/static/js/upload/location.js"></script>
+                                                        <label class="control-label text-left"style="margin-top:10px">Referrer:</label>
+                                                        <div class="input text">
+                                                            <input type="text" id="refer" name="reference" rel="tooltip" data-placement="right" data-title="Name of person, through whom you came to know the details" data-original-title="" style="width:434px;height:8px;margin-bottom:0px" value="{{user_profile.referrer}}">
+                                                            <input type="hidden" id="refer_id" name="reference_id" rel="tooltip" >
+                                                        </div>
+                                                        <!--<input type="text" class="medium input" style="width:195px;height:8px;margin-bottom:0px" name="referrer">-->
+                                                        </div>
+                                                    </div>
+
+<!--***-->
+
+
+                                                    <div class="span5" style="padding-top:0px;">
+                                                        <div class="control-group">
+                                                                <div class="controls text">
+                                                                   <select id="user_time_zone" name="time_zone" class="medium" style="width:455px;">
+                                                                      <option value="">--select timezone--</option>
+                                                                      <option data-offset="-36000" value="Hawaii">(GMT-10:00) Hawaii</option>
+                                                                      <option data-offset="-32400" value="Alaska">(GMT-09:00) Alaska</option>
+                                                                      <option data-offset="-28800" value="Pacific Time (US &amp; Canada)">(GMT-08:00) Pacific Time (US &amp; Canada)</option>
+                                                                      <option data-offset="-25200" value="Arizona">(GMT-07:00) Arizona</option>
+                                                                      <option data-offset="-25200" value="Mountain Time (US &amp; Canada)">(GMT-07:00) Mountain Time (US &amp; Canada)</option>
+                                                                      <option data-offset="-21600" value="Central Time (US &amp; Canada)">(GMT-06:00) Central Time (US &amp; Canada)</option>
+                                                                      <option data-offset="-18000" value="Eastern Time (US &amp; Canada)">(GMT-05:00) Eastern Time (US &amp; Canada)</option>
+                                                                      <option data-offset="-18000" value="Indiana (East)">(GMT-05:00) Indiana (East)</option>
+                                                                      <option data-offset="-39600" value="International Date Line West">(GMT-11:00) International Date Line West</option>
+                                                                      <option data-offset="-39600" value="Midway Island">(GMT-11:00) Midway Island</option>
+                                                                      <option data-offset="-39600" value="Samoa">(GMT-11:00) Samoa</option>
+                                                                      <option data-offset="-28800" value="Tijuana">(GMT-08:00) Tijuana</option>
+                                                                      <option data-offset="-25200" value="Chihuahua">(GMT-07:00) Chihuahua</option>
+                                                                      <option data-offset="-25200" value="Mazatlan">(GMT-07:00) Mazatlan</option>
+                                                                      <option data-offset="-21600" value="Central America">(GMT-06:00) Central America</option>
+                                                                      <option data-offset="-21600" value="Guadalajara">(GMT-06:00) Guadalajara</option>
+                                                                      <option data-offset="-21600" value="Mexico City">(GMT-06:00) Mexico City</option>
+                                                                      <option data-offset="-21600" value="Monterrey">(GMT-06:00) Monterrey</option>
+                                                                      <option data-offset="-21600" value="Saskatchewan">(GMT-06:00) Saskatchewan</option>
+                                                                      <option data-offset="-18000" value="Bogota">(GMT-05:00) Bogota</option>
+                                                                      <option data-offset="-18000" value="Lima">(GMT-05:00) Lima</option>
+                                                                      <option data-offset="-18000" value="Quito">(GMT-05:00) Quito</option>
+                                                                      <option data-offset="-16200" value="Caracas">(GMT-04:30) Caracas</option>
+                                                                      <option data-offset="-14400" value="Atlantic Time (Canada)">(GMT-04:00) Atlantic Time (Canada)</option>
+                                                                      <option data-offset="-14400" value="La Paz">(GMT-04:00) La Paz</option>
+                                                                      <option data-offset="-14400" value="Santiago">(GMT-04:00) Santiago</option>
+                                                                      <option data-offset="-12600" value="Newfoundland">(GMT-03:30) Newfoundland</option>
+                                                                      <option data-offset="-10800" value="Brasilia">(GMT-03:00) Brasilia</option>
+                                                                      <option data-offset="-10800" value="Buenos Aires">(GMT-03:00) Buenos Aires</option>
+                                                                      <option data-offset="-10800" value="Georgetown">(GMT-03:00) Georgetown</option>
+                                                                      <option data-offset="-10800" value="Greenland">(GMT-03:00) Greenland</option>
+                                                                      <option data-offset="-7200" value="Mid-Atlantic">(GMT-02:00) Mid-Atlantic</option>
+                                                                      <option data-offset="-3600" value="Azores">(GMT-01:00) Azores</option>
+                                                                      <option data-offset="-3600" value="Cape Verde Is.">(GMT-01:00) Cape Verde Is.</option>
+                                                                      <option data-offset="0" value="Casablanca">(GMT) Casablanca</option>
+                                                                      <option data-offset="0" value="Dublin">(GMT) Dublin</option>
+                                                                      <option data-offset="0" value="Edinburgh">(GMT) Edinburgh</option>
+                                                                      <option data-offset="0" value="Lisbon">(GMT) Lisbon</option>
+                                                                      <option data-offset="0" value="London">(GMT) London</option>
+                                                                      <option data-offset="0" value="Monrovia">(GMT) Monrovia</option>
+                                                                      <option data-offset="3600" value="Amsterdam">(GMT+01:00) Amsterdam</option>
+                                                                      <option data-offset="3600" value="Belgrade">(GMT+01:00) Belgrade</option>
+                                                                      <option data-offset="3600" value="Berlin">(GMT+01:00) Berlin</option>
+                                                                      <option data-offset="3600" value="Bern">(GMT+01:00) Bern</option>
+                                                                      <option data-offset="3600" value="Bratislava">(GMT+01:00) Bratislava</option>
+                                                                      <option data-offset="3600" value="Brussels">(GMT+01:00) Brussels</option>
+                                                                      <option data-offset="3600" value="Budapest">(GMT+01:00) Budapest</option>
+                                                                      <option data-offset="3600" value="Copenhagen">(GMT+01:00) Copenhagen</option>
+                                                                      <option data-offset="3600" value="Ljubljana">(GMT+01:00) Ljubljana</option>
+                                                                      <option data-offset="3600" value="Madrid">(GMT+01:00) Madrid</option>
+                                                                      <option data-offset="3600" value="Paris">(GMT+01:00) Paris</option>
+                                                                      <option data-offset="3600" value="Prague">(GMT+01:00) Prague</option>
+                                                                      <option data-offset="3600" value="Rome">(GMT+01:00) Rome</option>
+                                                                      <option data-offset="3600" value="Sarajevo">(GMT+01:00) Sarajevo</option>
+                                                                      <option data-offset="3600" value="Skopje">(GMT+01:00) Skopje</option>
+                                                                      <option data-offset="3600" value="Stockholm">(GMT+01:00) Stockholm</option>
+                                                                      <option data-offset="3600" value="Vienna">(GMT+01:00) Vienna</option>
+                                                                      <option data-offset="3600" value="Warsaw">(GMT+01:00) Warsaw</option>
+                                                                      <option data-offset="3600" value="West Central Africa">(GMT+01:00) West Central Africa</option>
+                                                                      <option data-offset="3600" value="Zagreb">(GMT+01:00) Zagreb</option>
+                                                                      <option data-offset="7200" value="Athens">(GMT+02:00) Athens</option>
+                                                                      <option data-offset="7200" value="Bucharest">(GMT+02:00) Bucharest</option>
+                                                                      <option data-offset="7200" value="Cairo">(GMT+02:00) Cairo</option>
+                                                                      <option data-offset="7200" value="Harare">(GMT+02:00) Harare</option>
+                                                                      <option data-offset="7200" value="Helsinki">(GMT+02:00) Helsinki</option>
+                                                                      <option data-offset="7200" value="Istanbul">(GMT+02:00) Istanbul</option>
+                                                                      <option data-offset="7200" value="Jerusalem">(GMT+02:00) Jerusalem</option>
+                                                                      <option data-offset="7200" value="Kyiv">(GMT+02:00) Kyiv</option>
+                                                                      <option data-offset="7200" value="Pretoria">(GMT+02:00) Pretoria</option>
+                                                                      <option data-offset="7200" value="Riga">(GMT+02:00) Riga</option>
+                                                                      <option data-offset="7200" value="Sofia">(GMT+02:00) Sofia</option>
+                                                                      <option data-offset="7200" value="Tallinn">(GMT+02:00) Tallinn</option>
+                                                                      <option data-offset="7200" value="Vilnius">(GMT+02:00) Vilnius</option>
+                                                                      <option data-offset="10800" value="Baghdad">(GMT+03:00) Baghdad</option>
+                                                                      <option data-offset="10800" value="Kuwait">(GMT+03:00) Kuwait</option>
+                                                                      <option data-offset="10800" value="Minsk">(GMT+03:00) Minsk</option>
+                                                                      <option data-offset="10800" value="Nairobi">(GMT+03:00) Nairobi</option>
+                                                                      <option data-offset="10800" value="Riyadh">(GMT+03:00) Riyadh</option>
+                                                                      <option data-offset="12600" value="Tehran">(GMT+03:30) Tehran</option>
+                                                                      <option data-offset="14400" value="Abu Dhabi">(GMT+04:00) Abu Dhabi</option>
+                                                                      <option data-offset="14400" value="Baku">(GMT+04:00) Baku</option>
+                                                                      <option data-offset="14400" value="Moscow">(GMT+04:00) Moscow</option>
+                                                                      <option data-offset="14400" value="Muscat">(GMT+04:00) Muscat</option>
+                                                                      <option data-offset="14400" value="St. Petersburg">(GMT+04:00) St. Petersburg</option>
+                                                                      <option data-offset="14400" value="Tbilisi">(GMT+04:00) Tbilisi</option>
+                                                                      <option data-offset="14400" value="Volgograd">(GMT+04:00) Volgograd</option>
+                                                                      <option data-offset="14400" value="Yerevan">(GMT+04:00) Yerevan</option>
+                                                                      <option data-offset="16200" value="Kabul">(GMT+04:30) Kabul</option>
+                                                                      <option data-offset="18000" value="Islamabad">(GMT+05:00) Islamabad</option>
+                                                                      <option data-offset="18000" value="Karachi">(GMT+05:00) Karachi</option>
+                                                                      <option data-offset="18000" value="Tashkent">(GMT+05:00) Tashkent</option>
+                                                                      <option data-offset="19800" value="Chennai" selected="selected">(GMT+05:30) Chennai</option>
+                                                                      <option data-offset="19800" value="Kolkata">(GMT+05:30) Kolkata</option>
+                                                                      <option data-offset="19800" value="Mumbai">(GMT+05:30) Mumbai</option>
+                                                                      <option data-offset="19800" value="New Delhi">(GMT+05:30) New Delhi</option>
+                                                                      <option data-offset="20700" value="Kathmandu">(GMT+05:45) Kathmandu</option>
+                                                                      <option data-offset="21600" value="Almaty">(GMT+06:00) Almaty</option>
+                                                                      <option data-offset="21600" value="Astana">(GMT+06:00) Astana</option>
+                                                                      <option data-offset="21600" value="Dhaka">(GMT+06:00) Dhaka</option>
+                                                                      <option data-offset="21600" value="Ekaterinburg">(GMT+06:00) Ekaterinburg</option>
+                                                                      <option data-offset="21600" value="Sri Jayawardenepura">(GMT+06:00) Sri Jayawardenepura</option>
+                                                                      <option data-offset="23400" value="Rangoon">(GMT+06:30) Rangoon</option>
+                                                                      <option data-offset="25200" value="Bangkok">(GMT+07:00) Bangkok</option>
+                                                                      <option data-offset="25200" value="Hanoi">(GMT+07:00) Hanoi</option>
+                                                                      <option data-offset="25200" value="Jakarta">(GMT+07:00) Jakarta</option>
+                                                                      <option data-offset="25200" value="Novosibirsk">(GMT+07:00) Novosibirsk</option>
+                                                                      <option data-offset="28800" value="Beijing">(GMT+08:00) Beijing</option>
+                                                                      <option data-offset="28800" value="Chongqing">(GMT+08:00) Chongqing</option>
+                                                                      <option data-offset="28800" value="Hong Kong">(GMT+08:00) Hong Kong</option>
+                                                                      <option data-offset="28800" value="Krasnoyarsk">(GMT+08:00) Krasnoyarsk</option>
+                                                                      <option data-offset="28800" value="Kuala Lumpur">(GMT+08:00) Kuala Lumpur</option>
+                                                                      <option data-offset="28800" value="Perth">(GMT+08:00) Perth</option>
+                                                                      <option data-offset="28800" value="Singapore">(GMT+08:00) Singapore</option>
+                                                                      <option data-offset="28800" value="Taipei">(GMT+08:00) Taipei</option>
+                                                                      <option data-offset="28800" value="Ulaan Bataar">(GMT+08:00) Ulaan Bataar</option>
+                                                                      <option data-offset="28800" value="Urumqi">(GMT+08:00) Urumqi</option>
+                                                                      <option data-offset="32400" value="Irkutsk">(GMT+09:00) Irkutsk</option>
+                                                                      <option data-offset="32400" value="Osaka">(GMT+09:00) Osaka</option>
+                                                                      <option data-offset="32400" value="Sapporo">(GMT+09:00) Sapporo</option>
+                                                                      <option data-offset="32400" value="Seoul">(GMT+09:00) Seoul</option>
+                                                                      <option data-offset="32400" value="Tokyo">(GMT+09:00) Tokyo</option>
+                                                                      <option data-offset="34200" value="Adelaide">(GMT+09:30) Adelaide</option>
+                                                                      <option data-offset="34200" value="Darwin">(GMT+09:30) Darwin</option>
+                                                                      <option data-offset="36000" value="Brisbane">(GMT+10:00) Brisbane</option>
+                                                                      <option data-offset="36000" value="Canberra">(GMT+10:00) Canberra</option>
+                                                                      <option data-offset="36000" value="Guam">(GMT+10:00) Guam</option>
+                                                                      <option data-offset="36000" value="Hobart">(GMT+10:00) Hobart</option>
+                                                                      <option data-offset="36000" value="Melbourne">(GMT+10:00) Melbourne</option>
+                                                                      <option data-offset="36000" value="Port Moresby">(GMT+10:00) Port Moresby</option>
+                                                                      <option data-offset="36000" value="Sydney">(GMT+10:00) Sydney</option>
+                                                                      <option data-offset="36000" value="Yakutsk">(GMT+10:00) Yakutsk</option>
+                                                                      <option data-offset="39600" value="New Caledonia">(GMT+11:00) New Caledonia</option>
+                                                                      <option data-offset="39600" value="Solomon Is.">(GMT+11:00) Solomon Is.</option>
+                                                                      <option data-offset="39600" value="Vladivostok">(GMT+11:00) Vladivostok</option>
+                                                                      <option data-offset="43200" value="Auckland">(GMT+12:00) Auckland</option>
+                                                                      <option data-offset="43200" value="Fiji">(GMT+12:00) Fiji</option>
+                                                                      <option data-offset="43200" value="Kamchatka">(GMT+12:00) Kamchatka</option>
+                                                                      <option data-offset="43200" value="Magadan">(GMT+12:00) Magadan</option>
+                                                                      <option data-offset="43200" value="Marshall Is.">(GMT+12:00) Marshall Is.</option>
+                                                                      <option data-offset="43200" value="Wellington">(GMT+12:00) Wellington</option>
+                                                                      <option data-offset="46800" value="Nuku'alofa">(GMT+13:00) Nuku'alofa</option>
+                                                                  </select>
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                    <div style="width:220px; float:left;">
+                                                        <div class="control-group" style="width:220px;float:left">
+                                                                <label class="control-label text-left">Language*</label>
+                                                                <label class="control-label text-left" style="font-size:11px;color:gray">Other than english, that you can speak</label>
+                                                                <div class="controls">
+                                                                    <select name="prefered_medium" id="medium" style="width:218px;">
+                                                                        <option value="None" selected="selected">Select Language</option>
+                                                                        <option value="Bengali">Bengali</option>
+                                                                        <option value="Gujarathi">Gujarathi</option>
+                                                                        <option value="Hindi">Hindi</option>
+                                                                        <option value="Kannada">Kannada</option>
+                                                                        <option value="Malayalam">Malayalam</option>
+                                                                        <option value="Marathi">Marathi</option>
+                                                                        <option value="Oriya">Oriya</option>
+                                                                        <option value="Punjabi">Punjabi</option>
+                                                                        <option value="Assamese">Assamese</option>
+                                                                        <option value="Tamil">Tamil</option>
+                                                                        <option value="Telugu">Telugu</option>
+                                                                        <option value="Urdu">Urdu</option>
+                                                                    </select>
+                                                                </div>
+                                                        </div>
+                                                        <div class="control-group" style="clear:both;">
+                                                            <label class="control-label text-left" style="float:left;width:200px;">Skype ID:</label>
+                                                            <div class="controls text" style="float:left;">
+                                                                <input type="text" class="medium input" style="width:200px;padding:3px;" name="skype_id"
+                                                                value="{% if user_profile %}{{ user_profile.skype_id }}{% endif %}"
+                                                                data-show-tooltip="true" rel="tooltip" data-placement="right">
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="control-group" style="clear:both;">
+                                                            <label class="control-label text-left" style="float:left;width:200px;">Phone Number:</label>
+                                                            <div class="controls text" style="float:left;">
+                                                                <input type="text" class="medium input" style="width:200px;padding:3px;" name="phone"
+                                                                value="{% if user_profile %}{{ user_profile.phone }}{% endif %}"
+                                                                data-validate="false" data-field-type="indian_phone_number"
+                                                                data-show-tooltip="true" rel="tooltip" data-placement="right">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="control-group" style="width:200px;float:left;margin-left:15px; ">
+                                                        <label class="control-label text-left">I want to be a</label>
+                                                        <div class="controls">
+                                                            <input type="hidden" name="prefered_roles" />
+                                                            <div style="float:left;padding:22px;background:white;border:1px solid #686868" data-validate="true" data-field-type="role">
+                                                                <table id="prefered_roles">
+                                                                    <tbody>
+                                                                    {% for role in roles %}
+                                                                        <tr>
+                                                                        <td>{{ role.name }}</td>
+                                                                        <td><input type="checkbox" value="{{ role.id }}"/></td>
+                                                                        </tr>
+                                                                    {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="control-group" style="clear:both;">
+                                                        <label class="control-label" style="float:left;">Reference Channel:</label>
+                                                        <div class="controls" style="float:left;margin-left: 10px;">
+                                                            <select name="reference_channel">
+                                                                <option>Internet Search</option>
+                                                                <option>Word of Mouth</option>
+                                                                <option>Facebook</option>
+                                                                <option>Emailer</option>
+                                                                <option>UN Volunteering</option>
+                                                                <option>Corporate - HP</option>
+                                                                <option>Corporate - Microsoft</option>
+                                                                <option>Corporate - FlipKart</option>
+                                                                <option>Corporate - Apeejay Group</option>
+                                                                <option>Corporate - Cognizant CH</option>
+                                                                <option>Corporate - DST</option>
+                                                                <option>India Assoc - Nashville</option>
+                                                                <option>Corporate - Mphasis</option>
+                                                                <option>Corporate - ANZ</option>
+                                                                <option>Corporate - TE Connect</option>
+                                                                <option>Corporate - XLRI - Sigma</option>
+                                                                <option>Corporate - Mantra</option>
+                                                                <option>Corporate - Tech-Mahindra</option>
+                                                                <option>Corporate - Brillio</option>
+                                                                <option>Corporate - Infosys</option>
+                                                                <option>Corporate - Avvaya</option>
+                                                                <option>Corporate - Quess</option>
+                                                                <option>Corporate - Cisco</option>
+                                                                <option>Corporate - Enzen</option>
+                                                                <option>Corporate - Joy of Reading</option>
+                                                                <option>Corporate - Aditya Birla Retail</option>
+                                                                <option>Corporate - Cognizant - Kolkata</option>
+                                                                <option>Corporate - Cognizant - Mumbai</option>
+                                                                <option>Corporate - Cognizant - GGN</option>
+                                                                <option>Corporate - Cognizant - Pune</option>
+                                                                <option>Team-Everest</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="control-group" style="clear:both">
+                                                        <label class="control-label text-left">Brief Intro</label>
+                                                        <div class="controls">
+                                                            <textarea rows="4" cols="40" style="width:440px;" name='short_notes'>{{ user_profile.short_notes }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="control-group" style="float:right;display:inline;margin-top:-140px; margin-right:-250px;">
+                                                        <div class="controls">
+                                                            <div class="input checkbox" style="overflow:hidden;">
+                                                                <label for="accept" style="margin:0px;color:#777;display:inline">
+                                                                <input type="checkbox" name="accept" value="1" id="accept" {% if accept %}checked="checked"{% endif %}/>
+                                                                &nbsp;<a href="/conduct/"  style="font-size:16px;" target="_blank">I accept Volunteer Code of Conduct</a></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="span10" style="width:152px;position:relative;left:135px;margin-right:-60px; margin-top:-100px;float:right">
+                                               <!--         <a href="#basic_info_form" class="btn btn-primary pull-right" style="width:150px;margin-top:10px" rel="submit" callback="show_offerings" pre-call="pre_profile_save" validate="true">-->
+                                                        <a href="#basic_info_form" class="btn btn-primary pull-right" style="width:150px;"
+                                                            rel="submit" callback="pref_redirect" pre-call="pre_profile_save" validate="true">
+                                                            <span class="ajax-button-label" id="perso_save" style="padding-top:10px;display:block;font-size:16px"
+                                                            data-loading="Please Wait">Save</span>
+                                                        </a>
+                                                    </div>
+                                                   <div style="clear:both"></div>
+                                                </div>
+                                       </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="preferences" class="item" style="width:940px;">
+                            
+                                <div class="row">
+                                    <div class="span12 trans-block" style="min-height:330px;">
+                                        <form id="preferences_form" class="form-horizontal" method="POST" action="/save_user_profile/" style="overflow:hidden;">
+                                            {% csrf_token %}
+                                            <input type="hidden" value="3" name="step" />
+                                            <h1>OnBoarding Steps:{% if user_profile.evd_rep and user_profile.self_eval %}<p style="font-size:14px;" > Your Profile is <span style="color:black;font-weight:bold;"> inprocess</span>. One of our representative will be  reaching out to you in 48 hours via email for the <span style="color:black;font-weight:bold;"> Selection Discussion</span> over Skype.</p>{% endif %}</h1>
+
+                                              <div style="margin:10px 0px 10px 0px; border: 1px solid #8D8383; padding: 10px 10px;height:285px;">
+                                                <div class="row">
+                                                   <div class="span5">
+                                                        <br>
+                                                        <div class="control-group for-centeradmin" style="overflow:hidden;float: left;margin-bottom: 0px; overflow: hidden"> 
+
+
+                                                    <!--    <div style="height:150px;width:200px;background-color:white;margin-bottom:10px;" ></div>-->
+                                                                                                                        <label class="control-label" style="float:left;  width:300px;">
+                                                            <p style="font-size:20px;color:black;padding-bottom:10px;">Step 2:</p>
+                                                             Click for your Orientation (22 Mins):
+                                                            </label><br/>
+                                                            <div class="controls" style="display:none; float:left;margin-top:1px;">
+                                                                <a class="btn" href="#calendar-modal" data-toggle="modal" style="
+    float: left;width:55px;
+"><span style="
+    line-height: 30px;
+">Online</span></a>
+<a class="btn" href="#offline-orientation" data-toggle="modal" style="
+    float: left;margin-left: 10px;width: 55px;
+"><span style="
+    line-height: 30px;
+">Offline</span></a>
+<div style="clear: both"></div>
+
+                                                            </div>
+<a class="big_btn" href="#offline-orientation" data-toggle="modal" style=" float: left;margin-left: 10px; margin-bottom:10px;font-size:16px;padding-left:60px;margin-bottom:20px;padding-right:60px;">Video ►</a>
+
+                                                            <label class="control-label" style="float:left;padding:5px 5px 5px 5px; border-radius:5px; margin-left:10px;width:270px; margin-right:15px;clear: both">
+                                                             I have completed the Orientation
+                                                            </label>
+                                                            <div class="controls" style="float:left;margin-top:8px;margin-left:-40px;">
+                                                                <input type="checkbox" id="rep_evd" name="evd_rep" {% if user_profile.evd_rep %}checked="checked"{% endif %}/>
+                                                            </div>
+                                                            <div class='evd_rep_meet {% if not user_profile.evd_rep %}hide{% endif %}' style='float:left;clear:both; display:none;padding-bottom:20px;'>
+                                                                Process through : &nbsp;
+                                                                <input type="radio" name="evd_rep_meet" value="off"
+                                                                    {% if user_profile.evd_rep_meet %}checked="checked"{% endif %}/>Online
+                                                                <input type="radio" name="evd_rep_meet" value="on" style="margin-left: 15px;"
+                                                                    {% if not user_profile.evd_rep_meet %}checked="checked"{% endif %}/>Offline
+                                                            </div>
+                                                        </div>
+
+
+
+
+                                                   <div class="" style="float: right;margin-top:35px; height:250px;width:240px;">
+
+
+                                                          <div id='FAQ' style="inline-block;width:100px;float:left;margin-top:23px; margin-left:5px;margin-bottom:20px">
+                                                               <h10 style="font-size:15px;">Have some doubts? </h10>
+
+                                                               <a href="#teacherfaq" data-toggle="modal"style="float:left;"> <div id="faq" style="border-radius:50%; height:50px;width:50px;cursor:pointer; background-color:#e1570d; border:1px solid white;text-align:center;color:white; "><p style="margin-top:13px;">Click</br> Here</p>
+                                                               </div>
+                                                               </a>
+                                                          </div>
+
+
+                                                          <div id="sampleclass" style="inline-block;width:100px;margin-top:24px;float:right;margin-right:20px; " >
+                                                               <h10 style="font-size:15px;">Curious to see a class? </h10>
+
+                                                               <a href="#playl" data-toggle="modal"style="float:left;"> <div id="class_recod" style="border-radius:50%; height:50px;width:50px;cursor:pointer; background-color:#e1570d; border:1px solid white;text-align:center;color:white;"><p style="margin-top:13px;">Click</br>Here</p>
+ 
+                                                               </div>
+                                                               </a>
+                                                          </div>
+
+
+                                                          <div id='' style="inline-block;width:100px; margin-left:40px;">
+                                                               <h10 style="font-size:15px;"></h10>
+
+                                                               <a href="/demand/" style="float:left;"> <div id="" style="border-radius:50%; height:100px;width:100px;cursor:pointer; background-color:#e1570d; border:1px solid white;text-align:center;color:white;background: -moz-linear-gradient(125deg, #f45419 31%, #ffbda4 50%, #f35b23 75%);background: -webkit-gradient(linear, 125deg, color-stop(31%, #f45419), color-stop(50%, #ffbda4), color-stop(75%, #f35b23));background: -webkit-linear-gradient(125deg, #f45419 31%, #ffbda4 50%, #f35b23 75%);background: -o-linear-gradient(125deg, #f45419 31%, #ffbda4 50%, #f35b23 75%);background: -ms-linear-gradient(125deg, #f45419 31%, #ffbda4 50%, #f35b23 75%);filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f45419', endColorstr='#f35b23', GradientType='1');background: linear-gradient(325deg, #f45419 31%, #ffbda4 50%, #f35b23 75%);">
+<p style="margin-top:35px;font-size:15px;color:black;font-weight:800">See</br> All schools</p>
+                                                               </div>
+                                                               </a>
+                                                          </div>
+
+                                                 </div>
+
+                                                       <!-- <div class="control-group for-centeradmin" style="float: right; text-align:center; ">
+                                                   <a href="#teacherfaq" data-toggle="modal"style="float:left; margin-left:10px; margin-bottom:10px;">     <div id="faq" style="border-radius:50%; height:70px;width:70px;cursor:pointer; background-color:#e1570d; border:1px solid white; margin-top:25px; text-align:center;color:white;margin-left:30px; "><p style="margin-top:20px;">Click</br> Here</p>
+                                                        </div></a>
+                                                        <h1 style="margin-top:20px;">Curious to see a class ? </h1>
+                                                   <a href="#playl" data-toggle="modal"style="float:left; margin-left:10px; margin-bottom:10px;">     <div id="class_recod" style="border-radius:50%; height:70px;width:70px;cursor:pointer; background-color:#e1570d; border:1px solid white; margin-top:25px; text-align:center;color:white;margin-left:30px; "><p style="margin-top:20px;">Click</br> Here</p>
+
+                                                        </div></a>
+
+                                                        </div>-->
+
+
+
+
+                                                        <div class="control-group for-centeradmin" style="float: right; display:none;">
+                                                       <label class="control-label text-left" style="font-style:normal;float: left; line-height: 34px">Join Teacher Selection Discussion :</label>
+                                        <a class="btn" href="#calendar-modal" data-toggle="modal" style="
+                                            float: left;width: 55px;margin-left: 10px; margin-bottom: 10px
+                                        "><span style="
+                                            line-height: 30px;
+                                        ">Select</span></a>
+<div style="clear: both"></div>
+
+                                                            <label class="control-label" style="float:left;padding-right:10px;width:175px;">
+                                                                <b style="color: #F15A22">Discussion Outcome:</b>&nbsp; {{ user_profile.dicussion_outcome }}
+                                                            </label>
+                                                        </div>
+
+                                                         <div class="control-group for-centeradmin" style="float:left;">
+                                                        <img src="/static/images/green_arrow.png" style="height:120px;width:40px;margin-top:42px;margin-right:25px;margin-left:-30px; border-radius:5px;overflow:hidden;"  />
+                                                        </div>
+
+
+
+
+                                                       <div class="control-group for-centeradmin" style="float:left;">
+                                                        <label class="control-label" style="float:left;">
+                                                           <p style="font-size:20px;color:black;padding-bottom:10px;">Step 3:</p>
+                                                        <b style=""> Click to complete Self Evaluation :</b> <a rel="tooltip" data-original-title="Certain corporate networks may have restriction in display of this Google Form. You can do so from your home or any other network." data-placement="top"><img style="display:inline;padding-left:5px" src="/static/images/tooltip.png"/></a>
+                                                        </label>
+                                                        </br>
+                                                          <a class="big_btn" href="#selfevalform" data-toggle="modal" style=" float:left;margin-left:30px; margin-bottom:20px; font-size:16px;padding-left:30px;padding-right:30px;"> Questionnaire ➲</a>
+                                                          <label class="control-label" style="float:left;padding:5px 5px 5px 5px; border-radius:5px; margin-left:5px;width:250px; margin-right:15px;clear: both">
+                                                          I have completed Self Evaluation
+                                                          </label>
+                                                          <div class="controls" style="float:left;margin-top:8px;margin-left:-20px;px;">
+                                                              <input type="checkbox" id="eval_self"  name="self_eval" {% if user_profile.self_eval %}checked="checked"{% endif %}/>
+                                                              </div>
+
+                                                        </div>
+
+                                                    <div style="clear:both; ">
+                                                        <div class="control-group" style="float:left;overflow: hidden; ">
+                                                                                                                            </div>
+                                                            <div class="control-group" style="display:none" >
+                                                                <label class="control-label text-left" style="font-style:normal;">Statement of Purpose</label>
+                                                                <textarea style="height:35px"
+                                                                 name="purpose" placeholder="Write purpose here">{% if purpose %}{{ purpose }}{% else %}{% endif %}</textarea>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                       </div>
+
+
+
+
+
+                                                        <div>
+                                                        <div style="width:102px;float:left;clear:both;margin-left:40px;">
+                                                            <a class="btn back-btn" data-tab="db-1" style="width:102px;"><span>Back</span></a>
+                                                        </div>
+                                                        <div class="control-group" style="float:right;width:102px;margin-right:50px;">
+                                                            <div class="controls">
+                                                                <a rel="submit" href="#preferences_form"  class="btn btn-primary pull-right" style="width:100px" pre-call="pre_profile_save" callback="disp_msg">
+                                                                    <span class="ajax-button-label" style="padding-top:10px;display:block;font-size:16px" data-loading="Please Wait">Save</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                           </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            <!--<div id="offerings" class="item" style="width:940px">
+                                <div class="row">
+                                    <div class="span12 trans-block">
+                                        <form id="offerings_form" method="POST" action="/save_user_profile/">
+                                            {% csrf_token %}
+                                            <input type="hidden" value="2" name="step"/>
+                                            <div class="row" style="padding-left:70px;">
+                                               <div class="span12 offset1" style="padding-top:10px">
+                                                    <div class="control-group">
+                                                        <div class="controls" style="margin-left:0px">
+                                                            <input type="hidden" name="prefered_offerings" />
+                                                            <div><p style="padding-bottom:10px;text-align:center"></p></div>
+                                                            <div style="float:left;padding:7px;background:white;border:1px solid #686868;{% if count > 5 %}max-height:150px;overflow-y:auto;overflow-x:hidden;{% endif %}">
+                                                                <table id="offerings-table" style="width:758px">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Center</th>
+                                                                            <th>Course</th>
+                                                                            <th>Language</th>
+                                                                            <th>Start date</th>
+                                                                            <th>End date</th>
+                                                                            <th></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% if unassigned_offerings %}
+                                                                            {% for offering in unassigned_offerings %}
+                                                                            <tr>
+                                                                                <td>{{ offering.center }}</td>
+                                                                                <td>{{ offering.course_offered }}</td>
+                                                                                <td>{{ offering.language }}</td>
+                                                                                <td>{{ offering.start_date  }}</td>
+                                                                                <td>{{ offering.end_date }}</td>
+                                                                                <td><input type="checkbox" value="{{ offering.offering_id }}" data-subject="{{ offering.subject }}" data-start_date="{{ offering.start_date_ts }}" data-end_date="{{ offering.end_date_ts }}" data-medium="{{ offering.language }}"></td>
+                                                                            </tr>
+                                                                            {% endfor %}
+                                                                        {% else %}
+                                                                            <tr>
+                                                                                <td colspan="5"><p style="background:wheat;text-align:center;padding:20px">There are no courses matching your medium</p></td>
+                                                                            </tr>
+                                                                        {% endif %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div style="clear:both"></div>
+                                                        </div>
+                                                    </div>
+                                               </div>
+                                                <div style="width:152px;float:left;">
+                                                    <a data-tab="db-2" class="btn back-btn"><span>Back</span></a>
+                                                </div>
+                                                <div class="span10" style="width:152px;float:right;margin-right:144px;">
+                                                    <a id="offerings-save-button" href="#offerings_form" class="btn btn-primary pull-right" style="width:150px" rel="submit" callback="show_readiness" pre-call="pre_profile_save">
+                                                        <span class="ajax-button-label" style="padding-top:10px;display:block;font-size:16px" data-loading="Please Wait">{% if unassigned_offerings %}Save Selected{% else %}Next{% endif %}</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            -->
+                            <div id="readiness" class="item" style="width:940px;">
+                                <div class="row">
+                                    <div class="span6 trans-block" style="min-height:275px;">
+                                        <form id="readiness_form" class="form-horizontal" method="POST" action="/save_user_profile/">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="step" value="4" />
+                                            <h1 style="display:none;width:100%;padding-bottom:10px;">System Setup:<p style=" display:inline;float:right;padding-right:330px;">Self Review :  </p></h1>
+                                            <div class="" style="padding:10px 0px 0px 0px;display:none;">
+                                                <div style="margin-bottom:15px;overflow:hidden;display:inline-block;width:450px;padding:20px 10px 10px 25px;border:1px solid">
+                                                    <div style="width:300px;float:left;clear:both;margin-top:10px;">
+                                                        <div class="control-group" style="overflow:hidden;">
+                                                            <label class="control-label" style="width:255px;float:left;padding-right:10px;">Do you have Computer?</label>
+                                                            <div class="controls" style="float:left;margin-top:1px;">
+                                                                <input type="checkbox" name="comp" {% if user_profile.computer %}checked="checked"{% endif %} >
+                                                            </div>
+                                                        </div>
+                                                        <div class="control-group" style="overflow:hidden;">
+                                                            <label class="control-label" style="float:left;width:255px;padding-right:10px;">Do you have Internet Connection?</label>
+                                                            <div class="controls" style="float:left;margin-top:1px;">
+                                                                <input type="checkbox" name="internet_connection" {% if user_profile.internet_connection %}checked="checked"{% endif %}/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="control-group for-centeradmin" style="overflow:hidden;">
+                                                            <label class="control-label" style="float:left;padding-right:10px;width:255px;">Do you have Webcam?</label>
+                                                            <div class="controls" style="float:left;margin-top:1px;">
+                                                                <input type="checkbox" name="webcam" {% if user_profile.webcam %}checked="checked"{% endif %}/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="control-group for-centeradmin" style="overflow:hidden;">
+                                                            <label class="control-label" style="float:left;padding-right:10px;width:255px;">Do you have Headset?</label>
+                                                            <div class="controls" style="float:left;margin-top:1px;">
+                                                                <input type="checkbox" name="head_set" {% if user_profile.headset %}checked="checked"{% endif %}/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="control-group" style="clear:both;overflow:hidden;">
+                                                        <label class="control-label text-left" style="float:left;width:265px;">Skype Id
+                                                        <a href="#" id="skypetooltip" rel="tooltip" data-placement="right" title="This is required, so that we can connect with you for online teaching.">
+                                                            <img src = "/static/images/tooltip.png" id="skypetooltipimg" />
+                                                        </a>:</label>
+                                                        <div class="controls text" style="float:left;">
+                                                            <input type="text" class="meidum input" style="width:150px;padding:3px;" name="skypeid" value="{% if user_profile %}{{ user_profile.skype_id }}{% endif %}" data-validate="true" data-field-type="skype_id" data-show-tooltip="true" data-placement="left"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class='' style=" display:none; float:right;height:181px; ">
+                                                <div style="margin-bottom:15px;overflow:hidden;height:181px;width:380px;padding:20px 10px 10px 25px;border:1px solid">
+                                                    <div style="width:350px;float:left;margin-top:10px;">
+                                                        <div class="control-group for-centeradmin" style="overflow:hidden;">
+                                                            <label class="control-label" style="float:left;padding-right:10px;width:250px;">Trainings Completed?</label>
+                                                            <div class="controls" style="float:left;margin-top:1px;">
+                                                                <input type="checkbox" name="trainings_comple" {% if user_profile.trainings_complete %}checked="checked"{% endif %}/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="control-group for-teacher" style="overflow:hidden;">
+                                                            <label class="control-label" style="float:left;padding-right:10px;width:250px;">Curriculum Reviewed?</label>
+                                                            <div class="controls" style="float:left;margin-top:1px;">
+                                                                <input type="checkbox" name="reviwed_resourc" {% if user_profile.review_resources %}checked="checked"{% endif %}/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="control-group for-teacher" style="overflow:hidden;">
+                                                            <label class="control-label" style="float:left;padding-right:10px;width:250px;">Trial Class completed?</label>
+                                                            <div class="controls" style="float:left;margin-top:1px;">
+                                                                <input type="checkbox" name="trail_class" {% if user_profile.trail_class %}checked="checked"{% endif %}/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                               </div>
+                                            <br>
+                                            </div>
+                                            </br>
+                                            <div style="margin-bottom:10px;" >
+                                           <div style="padding: 10px 0px 0px 200px; width:720px;border:1px solid black;">
+                                                <div class="row" >
+                                                    <div class="span5" >
+                                                        <div class="control-group" style="overflow:hidden;">
+                                                            <label class="control-label" style="width:255px;float:left;padding-right:5px;">System Readiness?</label>
+                                                            <div class="controls" style="float:left;margin-top:1px;">
+                            <input type="checkbox" style='width:20px;height:20px;cursor:pointer' name="computer" {% if user_profile.computer %}checked="checked"{% endif %}/>
+                                                            </div>
+                                                            <a rel="tooltip" data-original-title="Access to PC ,Broadband ( greater than 1 mbps ), Webcam and Headset (for Teaching online)" data-placement="right"><img style="display:inline;padding-left:20px;;margin-top:5px" src="/static/images/tooltip.png"/></a>
+                                                        </div>
+                                                        <div class="control-group for-centeradmin" style="overflow:hidden;">
+                                                            <label class="control-label" style="float:left;padding-right:10px;width:250px;">Trainings Completed?</label>
+                                                            <div class="controls" style="float:left;margin-top:1px;">
+                                                                <input type="checkbox"  style='width:20px;height:20px;cursor:pointer' name="trainings_complete" {% if user_profile.trainings_complete %}checked="checked"{% endif %}/>
+                                                            </div>
+                                                            <a href='/mytrainings/' target='_blank' style='margin-left:20px;vertical-align:middle !important;font-size:16px;' >Click Here : </a><p style='display:inline-block;'>Take you to My Trainings</p>
+                                                        </div>
+                                                        <div class="control-group for-teacher" style="overflow:hidden;">
+                                                            <label class="control-label" style="float:left;padding-right:10px;width:250px;">Curriculum Reviewed?</label>
+                                                            <div class="controls" style="float:left;margin-top:1px;">
+                                                                <input type="checkbox" style='width:20px;height:20px;cursor:pointer' name="reviwed_resources" {% if user_profile.review_resources %}checked="checked"{% endif %}/>
+                                                            </div>
+                                                            <a href='/curriculumreview/' target='_blank' style='margin-left:20px;vertical-align:middle !important;font-size:16px;'>Click Here : </a><p style='display:inline-block;' >Take you to Curriculum page</p>
+                                                        </div>
+
+
+                                                        <div class="control-group" style="float:left;margin-right:30px; ">
+                                                                <label class="control-label text-left">Available From</label>
+                                                                <div class="controls text">
+                                                                    <input type="text" class="span2 input" style="width:200px" id="from-date" name="from_date" value="{% if user_profile.from_date %}{{ user_profile.from_date.year }}-{{ user_profile.from_date.month }}-{{ user_profile.from_date.day }}{% endif %}" data-from_date_ts="{{ from_date_ts }}">
+                                                                </div>
+                                                        </div>
+                                                        <div class="control-group" style="float:left;margin-left:10px;">
+                                                            <label class="control-label text-left"><span>Available Upto</span>
+                                                                <a rel="tooltip" data-original-title="The end date should be atleast 6 weeks from the start date" data-placement="right"><img style="display:inline;padding-left:5px" src="/static/images/tooltip.png"/></a>
+                                                            </label>
+                                                            <div class="controls text">
+                                                                <input type="text" class="span2 input" style="width:200px" id="to-date" name="to_date" value="{% if user_profile.to_date %}{{ user_profile.to_date.year }}-{{ user_profile.to_date.month }}-{{ user_profile.to_date.day }}{% endif %}" data-to_date_ts="{{ to_date_ts }}" >
+                                                            </div>
+                                                        </div>
+                                                        <div class="control-group for-teacher" style=";">
+                                                            <label class='control-label' style='float:left;padding-right:10px;width:250px'>Currently open classes that require Teachers : </label>
+                                                            <div class="controls" style="float:left;margin-top:1px;width:370px">
+                                                                <a class='btn' target='_blank' style='display:inline-block;border:none;background-color:#389B39;width:100px;line-height:33px !important;height:30px;'  href='/demand/'>Click Here</a>
+                                                                <p style='display:inline-block;width:200px;margin-left:20px;'>To Review and select, if it matches your availability.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <div style="float:left;clear:both;margin-top:20px;">
+                                                    <p>{{user_profile.pref_days}}</p>
+                                                        {% time_slots "prefered_timings_slots" user_profile.pref_days user_profile.pref_slots "Preferred Days" %}
+                                                    </div>
+                                                        <div class="control-group" style="width:250px;float:left;display:none">
+                                                            <label class="control-label text-left" style="font-style:normal;">Prefered Subjects</label>
+                                                            <div class="controls">
+                                                                <input type="hidden" name="prefered_subjects" />
+                                                                <div style="float:left;padding:10px;background:white;border:1px solid #686868;width:200px;margin-right:20px;">
+                                                                    <table class="prefered_subjects" style="float:left;">
+                                                                        <tbody>
+                                                                        {% for subject in subjects %}
+                                                                            <tr>
+                                                                                <td>{{ subject }}</td>
+                                                                                <td style="padding-left:30px"><input type="checkbox" value="{{ subject }}"></td>
+                                                                            </tr>
+                                                                        {% endfor %}
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+
+
+
+
+
+
+                                                <div style="padding-top:10px;clear:both;margin-left:-100px;margin-right:-100px;overflow:hidden;">
+                                                    <div style="width:102px;float:left;clear:both;">
+                                                        <a class="btn back-btn" data-tab="db-2" style="width:102px;"><span>Back</span></a>
+                                                    </div>
+                                                    <div class="control-group" style="float:right;width:102px;margin-right:180px;">
+                                                        <div class="controls">
+                                                            <a rel="submit" href="#readiness_form" class="btn btn-primary pull-right" style="width:100px" pre-call="pre_profile_save" callback="dashboard_redirect">
+                                                                <span class="ajax-button-label" style="padding-top:10px;display:block;font-size:16px" data-loading="Please Wait">Save</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endblock %}
+                {% endblock %}
+            </div>
+<div id="photo-upload-modal" class="modal simplemodal-container" style="display:none">
+    <a class="modalCloseImg close" data-dismiss="modal"></a>
+    <form id="fileupload" action="/upload_profilepic/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row fileupload-buttonbar">
+            <div class="span5" style="position:relative">
+                <div class="btn btn-success fileinput-button pull-left addfiles-btn">
+                    <i class="icon-plus icon-white"></i>
+                    <span style="font-size:19px;padding:10px;">Add file...<img id="photo-loading-gif" class="hide" src='/static/images/loader.gif' /></span>
+                    <input type="file" name="files[]" multiple="">
+                </div>
+                <span class="progress-bar hide">
+                    <span class="bar"></span>
+                    <span class="perc"></span>
+                </span>
+               <div class="upload-watermark">
+                   <p class="watermark-content" style="text-align:center;background:gray;padding:48px 0px;color:white;clear:both">Drag and drop to upload photo</p>
+               </div>
+            </div>
+            <!-- The global progress information -->
+        </div>
+    </form>
+    <script id="template-upload" type="text/x-tmpl"> </script>
+    <script id="template-download" type="text/x-tmpl"> </script>
+</div>
+
+
+<div id="playl" class="modal simplemodal-container" style="display: none;">
+    <a class="modalCloseImg close" data-dismiss="modal"></a>
+<iframe width="600" height="315" src="https://www.youtube.com/embed/videoseries?list=PLbdxk95Fm6YyzIv5Yp_389XPJ33E9CKm5" frameborder="0" allowfullscreen></iframe>
+</div>
+
+
+
+
+<div id="teacherfaq" class="modal simplemodal-container" style="display: none; "><!--FAQ-->
+    <a class="modalCloseImg close" data-dismiss="modal"></a>
+<div style="height:500px; width:610px; overflow:auto;">
+<div id="headr" style="height:25px;width:585px;padding-top:5px;color:white;padding-left:5px; background-color:#f26721; text-align:left;">Frequently Asked Questions</div>
+<div class="body_content" style="margin:10px;">
+
+
+<div style="margin:10px;">
+<a style="color:black;  cursor:pointer;margin-right:10px; text-align:justify;"  onclick="toggler('q1');" > ► &nbsp&nbsp&nbspI can read and write my native language, but have done my education in English medium and not conversant with the technical subject terms. Won’t that be a problem?</b></br> </a>
+<div  id="q1"style="color:black; margin-top:10px;margin-right:30px; text-align:justify;margin-left:40px;" > <strong style="color:green">Ans:</strong> Passion and commitment along with linguistic ability to read and write, we have observed most of the teachers in the past were able to manage quite comfortably to teach in local language. To support, both English version and the local language version books are available side by side for preparation. Infact, by 3rd or 4th class, the children start teaching you some of the language terms ☺ </div></br>
+</div>
+
+
+<div style="margin:10px;" >
+<a style="color:black; cursor:pointer;margin-bottom:10px;"  onclick="toggler('q2');" > ► &nbsp&nbsp&nbspCan I teach only during weekends on Saturday and Sunday?</a></br>
+<div  id="q2" style="color:black; margin-left:40px; display:none; margin-top:10px; margin-right:30px; text-align:justify;" ><strong style="color:green" >Ans:</strong> eVidyaloka classes happen within the school premises, during school hours. Hence we require volunteers to provide at least 1 hour in the weekday between 10 am to 4 pm (TN ), 9am to 1pm (JH), 11am to 5 pm (KA) and 9am to 4pm (for AP). The second 1 hour could be on a Saturday and shall be worked out during the class planning discussion with the Class Administrators.
+</div></br>
+</div>
+
+<div style="margin:10px;">
+<a style="color:black; cursor:pointer;margin-bottom:10px;"  onclick="toggler('q3');" >► &nbsp&nbsp&nbspI ‘m a working professional. How can I give teach during this time ?
+</a></br>
+<div  id="q3" style="color:black; margin-left:40px; display:none; text-align:justify;margin-right:30px;margin-top:10px;" ><strong style="color:green"     >Ans:</strong> More 60% of current teaching volunteers work full time in their professions. They adopt typicall any of these 3 approaches: 1) Take take the earliest slot at 9am or 10 am and head to work on these two days. 2) They check with their organisation/supervisor to take these two one hour slots for volunteering. And typically no one is being refused, provided the networking infrastructure supports 3) They manage one of the slots around lunch time and another one on a Saturday.</div></br>
+</div>
+
+<div style="margin:10px;">
+<a style="color:black; cusor:pointer; margin-bottom:10px;"  onclick="toggler('q4');" >►  &nbsp&nbsp&nbspDo you provide teaching resources and any trainings to teach?</a></br>
+<div  id="q4" style="color:black; display:none; margin-left:40px; text-align:justify;margin-right:30px;margin-top:10px;" ><strong style="color:green"     >Ans:</strong> Yes. A curriculum plan of recommended topics will provided along with the Timetable. The reference to the Online version of the text books. We are also in the process of developing additional resources like videos, worksheets etc and will be shared as and when available through our content platform – Wikividya. 
+Regarding trainings, we have put together certain basic training resources under My Trainings. We encourage all the recommended Teachers to go through the resources and equip themselves with enhanced Teaching capabilities, prior to the class start.</div></br>
+</div>
+
+
+<div style="margin:10px;">
+<a style="color:black; cursor:pointer;margin-bottom:10px; "  onclick="toggler('q5');" >► &nbsp&nbsp&nbspDo I have to have a physical blackboard for teaching?How is the blackboard need addressed in this online teaching model? </a></br>
+<div  id="q5" style="color:black; display:none; margin-left:40px; text-align:justify;margin-right:30px;margin-top:10px;" ><strong style="color:green"     >Ans:</strong> The screen share feature in Skype allows the teacher to share their desktop. You can open the Paint, Powerpoint of MS Word and use it as a Whiteboard. What ever is written will be available as display in the 32” screen for the children. In fact this is even more powerful, where you can play Videos, show pictures and the class becomes a truly smart classroom.</div></br>
+</div>
+
+</div>
+
+
+</div>
+</div><!--end of FAQ-->
+
+<div id="skype-modal" class="modal simplemodal-container" style="display:none;width:500px;">
+    <a class="modalCloseImg close"  data-dismiss="modal"></a>
+    <div style=" padding:15px; background-color:#ED7D31;color:white;font-weight:bold;text-align:left;">On The Spot Discussion</div>
+    <div style="padding:15px;background-color:white;">
+{% if i_tsd == "intime" %}
+
+<p>This will Open your Skype and Place a Call:</p>
+<p style="font-size:12px;" >(Please wait while Skype places a CALL to<span style="color:#ED7D31"> evidyaloka.discussion </span>Skype id ) </p>
+
+<!--<a href="skype:eVidyaloka.discussion?chat"><img src="/static/images/call_us.png" style="margin-left:140px; margin-bottom:20px;" /></a>-->
+<script type="text/javascript" src="http://www.skypeassets.com/i/scom/js/skype-uri.js"></script>
+<div style="margin-left:140px;">
+<div id="SkypeButton_Call_evidyaloka.discussion_1">
+  <script type="text/javascript">
+    Skype.ui({
+      "name": "dropdown",
+      "element": "SkypeButton_Call_evidyaloka.discussion_1",
+      "participants": ["evidyaloka.discussion"],
+      "imageSize": 32
+    });
+  </script>
+</div></div>
+<p>Don't have a Skype Id ?</p>
+<div style="margin-left:140px;margin-top:20px;">    <a style="margin:20px;" href="https://login.skype.com/account/signup-form" target="_blank" class="skype">Get Now ➲ </a></div>
+
+<br>
+
+{% else %}
+
+<p style="color:red;padding-bottom:30px;padding-top:30px;">On the Spot Discussion option is available between 9:00AM to 6:00PM on all days, other than sundays.</p>
+{% endif %}
+
+<br>
+<p>To have us Schedule the Discussion with you at a later time<p>
+<div style="margin-left:140px;margin-top:20px;"  >    <a style="margin:20px;padding-left:25px;padding-right:25px;" onclick="save_trig()"   target="_blank" class="skype">Click here</a></div>
+<br><br>
+    </div>
+</div>
+<div id="skype" class="modal simplemodal-container" style="display:none;">
+    <a class="modalCloseImg close"  data-dismiss="modal"></a>
+    <div style=" padding:15px; background-color:#ED7D31;color:white;font-weight:bold;text-align:left;">On The Spot Discussion</div>
+    <p style="padding:30px;">You are required to complete Step 2 and Step 3 before Step 4 can be enabled. </p>
+</div>
+
+
+<div id="calendar-modal" class="modal simplemodal-container" style="display: none;">
+    <a class="modalCloseImg close" data-dismiss="modal"></a>
+    <iframe src="https://www.google.com/calendar/embed?src=events@evidyaloka.org" style=" border:solid 1px #777 " width="560" height="550" frameborder="0" scrolling="no"></iframe>
+</div>
+<div id="offline-orientation" class="modal simplemodal-container" style="display: none;">
+    <a class="modalCloseImg close" data-dismiss="modal"></a>
+    <iframe width="595" height="300" src="https://www.youtube.com/embed/DhmVpNCEWOo" frameborder="0" style="border:solid 1px #777 " scrolling="no" allowfullscreen=""></iframe>
+</div>
+<div id="selfevalform" class="modal simplemodal-container" style="display: none;">
+    <a class="modalCloseImg close" data-dismiss="modal"></a>
+    <iframe width="600" height="500" align="" src="https://docs.google.com/a/evidyaloka.org/forms/d/1286wtxS0kKRLkfKmatw4nFY0L4ICsFCBh2TobGvOdNM/viewform?entry.810279269={{curr_user.id }}&entry.1860904165&entry.1549032661&entry.974337526&entry.760715744" frameborder="0" style="border:solid 1px #777 " scrolling="yes" allowfullscreen=""></iframe>
+</div>
+
+<div id="profile-help"  class="modal simplemodal-container" style="display: none;">
+       <a class="modalCloseImg close" data-dismiss="modal"></a>
+          <iframe width="590" height="400" src="https://www.youtube.com/embed/jSU3Wr_ABOE" frameborder="0" style="border:solid 1px #777 " scrolling="no" allowfullscreen=""></iframe>
+</div>
+<!--Online Chat of pure chat -->
+<!--
+<script type='text/javascript'>(function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript'; script.src = 'https://widget.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({ c: '7874272e-7fb9-4a7f-bd88-8f467896abe9', f: true }); done = true; } }; })();</script>
+
+-->
+
+{% endblock %}
+{% block bottom_scripts %}
+    {{ block.super }}
+    <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+    <script src="/static/js/upload/load-image.min.js"></script>
+    <!-- The Canvas to Blob plugin is included for image resizing functionality -->
+    <script src="/static/js/upload/canvas-to-blob.min.js"></script>
+    <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+    <script src="/static/js/upload/jquery.iframe-transport.js"></script>
+    <!-- The basic File Upload plugin -->
+    <script src="/static/js/upload/jquery.fileupload.js"></script>
+    <!-- The File Upload file processing plugin -->
+    <script src="/static/js/upload/jquery.fileupload-fp.js"></script>
+    <!-- The File Upload user interface plugin -->
+    <script src="/static/js/upload/jquery.fileupload-ui.js"></script>
+    <!-- The localization script -->
+    <script src="/static/js/upload/locale.js"></script>
+    <!-- The main application script -->
+    <script src="/static/js/upload/main.js"></script>
+    <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE8+ -->
+    <!--[if gte IE 8]><script src="/static/js/upload/cors/jquery.xdr-transport.js"></script><![endif]-->
+    <script type="text/javascript" src="/static/js/bootstrap-carousel.js"></script>
+    <script src="/static/js/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
+    <script id="pref_courses_tmpl" type="text/x-jquery-tmpl">
+        {{ offerings_template|safe }} 
+    </script>
+    <!--<script src="/static/js/userprofile.js"></script>-->
+<script>
+function save_trig(){ $("a[href='#preferences_form']").trigger('click'); $('#skype-modal').modal('toggle');$("a[href='#preferences_form']").focus();   };
+
+function toggler(divId) {
+    $("#" + divId).toggle("fast");
+    }
+var prof_status = "{{ prof_cm_status }}" ;
+if(prof_status == "Incomplete" || prof_status == "Started"){  $("#perso_save").parent().height(50);$("#perso_save").css("line-height","1"); $("#perso_save").text("Proceed with Onboarding");  }
+</script>
+<script>
+        $(document).ready(function(){
+$('#playl,#offline-orientation,#profile-help').on('hidden.bs.modal', function () {
+    var src = $(this).find('iframe').attr('src');
+    $(this).find('iframe').attr('src', '');
+    $(this).find('iframe').attr('src', src);
+});
+            $("[rel=tooltip]").tooltip();
+            {% if show_error_msg %}
+                evd.show_msg("Please update your profile");
+            {% endif %}
+            var hash = window.location.href.split("?")[1];
+            if(hash == "offerings"){
+                $(".db-3").trigger("click");
+            }else if(hash == "preferences"){
+                $(".db-2").trigger("click");
+            }else if(hash == "readiness")
+                $(".db-4").trigger("click");
+            if($(".item.active").position().left != 0)
+                $(".item.active").css({"left": "0px"});
+
+           var country = "{{ user_profile.country}}";
+           $("select[name='country']").children("option[value='"+ country +"']").attr({"selected": "selected"});
+
+           var $from_date = $("input[name='from_date']"),
+               $to_date = $("input[name='to_date']");
+
+           var time_zone = "{{user_profile.time_zone}}";
+           $("select[name='time_zone']").children("option[value='"+ time_zone + "']").attr({"selected" : "selected"});
+            
+           var from_date = parseInt($from_date.attr("data-from_date_ts")) - 31800000;
+           var curr_date = from_date == "" ?new Date():new Date(from_date),
+                curr_day = curr_date.getDate(),
+                curr_month = curr_date.getMonth() + 1,
+                curr_year = curr_date.getFullYear(),
+                min_date = curr_year +"-"+ curr_month +"-"+ curr_day;
+           window.min_start_date = curr_date;
+
+
+           var future_date = new Date(curr_date.getTime()+3628800000),
+                future_day = future_date.getDate(),
+                future_month = future_date.getMonth() + 1,
+                future_year = future_date.getFullYear(),
+                max_date = future_year +"-"+ future_month +"-"+ future_day;
+           window.min_end_date = future_date;
+
+            $from_date.datepicker({
+                dateFormat: "yy-mm-dd",
+                minDate: min_date
+            });
+            $to_date.datepicker({
+                dateFormat: "yy-mm-dd",
+                minDate: max_date
+            });
+
+            var pref_subjects = "{{ user_profile.pref_subjects }}";
+            pref_subjects = pref_subjects.split(";");
+            for( var subject in pref_subjects )
+            {
+                sub = pref_subjects[ subject ];
+                $(".prefered_subjects input[type='checkbox']").each(function(){
+                    if($(this).attr("value") == sub){
+                        $(this).attr("checked","checked");
+                    }
+                });
+            }
+
+            var status = "{{ user_profile.status }}";
+            $("select[name='status']").children("option").each(function(){
+                if($(this).val() == status){
+                    $(this).attr("selected", "selected");
+                }
+            });
+
+            var pref_roles = [{% for role in pref_roles %}{{role}}{% if not forloop.last %},{% endif %}{% endfor %}];
+            for( var role in pref_roles )
+            {
+                $("#prefered_roles input[type='checkbox']").each(function(){
+                    if($(this).attr("value") == pref_roles[role]){
+                        $(this).attr("checked","checked");
+                    }
+                });
+            }
+
+            var pref_medium = "{{ user_profile.pref_medium }}";
+            pref_medium = pref_medium.split(";");
+            for( var medium in pref_medium )
+            {
+                $("#medium").children("option[value='" + pref_medium[medium] + "']").attr({"selected":"selected"});
+            }
+
+            var reference_channel = "{{ user_profile.reference_channel }}";
+            $("select[name='reference_channel']").children("option[value='" + reference_channel + "']").attr({"selected": "selected" });
+
+            var pref_offerings = [{% for offering in  user_profile.pref_offerings.all %}"{{ offering.id }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+            for( var offering in pref_offerings )
+            {
+                $("#offerings-table input[type='checkbox']").each(function(){
+                    if($(this).attr("value") == pref_offerings[offering]) {
+                        $(this).attr("checked","checked");
+                    }
+                });
+            }
+
+           $("div.profile-pic-wrapper").mouseenter(function(){
+                $(this).children(".caption").addClass("show").css({"margin-top" : "-32px"});
+           });
+           $("div.profile-pic-wrapper").mouseleave(function(){
+                $(this).children(".caption").css({"margin-top" : "0px"}).removeClass("show");
+           });
+
+            $("li.dropdown, ul.dropdown-menu").mouseenter(function(){
+                $(this).children("ul.dropdown-menu").show();
+            });
+            $("li.dropdown, ul.dropdown-menu").mouseleave(function(){
+                $(this).children("ul.dropdown-menu").hide();
+            });
+
+            $(".back-btn").click(function(){
+                var tab = $(this).attr("data-tab");
+                $("."+tab).trigger("click");
+            });
+
+            $('[name="evd_rep"]').click(function(){
+               if($(this).is(':checked')) {
+                $(".evd_rep_meet").removeClass("hide");
+               }else{
+                $(".evd_rep_meet").addClass("hide");
+               }
+            });
+
+        });
+        </script>
+        <script>
+        $(document).ready(function(){
+        $("#refer").autocomplete({
+            source: "/ajax/refer/",
+            minLength: 4,
+            select: function(event, ui) {
+                $("#refer_id").val(ui.item.id)
+            }
+        });
+        });
+        </script>
+{% endblock %}

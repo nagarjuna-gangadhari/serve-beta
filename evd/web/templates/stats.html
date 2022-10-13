@@ -1,0 +1,640 @@
+{% extends "base.html" %}
+
+{% block head_styles %}
+{{ block.super }}
+    <link rel="stylesheet" href="/static/css/stats.css"/>
+    
+    <style>
+        .right-content .top {
+            padding:34px 37px;
+        }
+        .subcontent {
+            background:none;
+        }
+        div.intro h3 {
+            padding-bottom:35px;
+        }
+        div.video {
+            padding:50px;
+        }
+        input{
+            display : inline-block;
+        }
+        label{
+            position : relative;
+        }
+    </style>
+{% endblock %}
+
+{% block head_scripts %}
+{{ block.super }}
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script>
+       $(document).ready(function(){
+      $(function() {
+        $('#from').datepicker({changeMonth : true, minDate :  new Date(2013,3,1), dateFormat : "dd-mm-yy"}) ;
+        $('#to').datepicker({changeMonth : true, minDate :  new Date(2013,3,8), dateFormat: "dd-mm-yy"}) ;
+
+        var query = window.location.search.substring(1);
+        if (query != ""){
+            var query_list = query.split("&");
+            for(var qry in query_list){
+                if(query_list[qry].indexOf("from=") != -1){
+                    frm = query_list[qry].substring(5);
+                } else if(query_list[qry].indexOf("to=") != -1){
+                    t = query_list[qry].substring(3);
+                }
+            }
+            $('#from').val(frm) ;
+            $('#to').val(t) ;
+        } else {
+            var today = new Date();
+            var tomorrow = new Date();
+            tomorrow = new Date(tomorrow.setDate(today.getDate() + 1));
+            $('#from').val(today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear()) ;
+            $('#to').val(tomorrow.getDate() + "-" + (tomorrow.getMonth()+1) + "-" + tomorrow.getFullYear()) ;
+        }
+      }) ;
+           $("#my_div").click(function(){
+              $('#toog1').fadeOut();
+              $('#det').fadeOut();
+              $('#toog2').fadeIn("slow");
+        });
+        $("#sess").click(function(){
+              $('#toog2').fadeOut();
+              $('#det').fadeOut();
+              $('#toog1').slideDown("slow");
+        });
+        $("#sess1").click(function(){
+              $('#toog2').fadeOut();
+              $('#det').fadeOut();
+              $('#toog1').slideDown("slow");
+        });
+        $("#extend").click(function(){
+              $('#toog2').fadeOut();
+              $('#toog1').fadeOut();
+              $('#det').fadeIn();
+              
+        }); 
+
+
+        $("button").click(function(){
+           $(this).toggleClass("active").next().slideToggle("fast");
+           if ($.trim($(this).find("span").text()) === 'Show ▼') {
+           $(this).find("span").text('Hide ▲');
+           } else {
+           $(this).find("span").text('Show ▼');;        
+           }
+    
+    return false; 
+           
+           });
+
+
+   
+        });
+        
+
+
+      
+
+    </script>
+{% endblock %}
+
+{% block doc_ready %}
+    
+    google.charts.load('current', {packages:['table', 'controls',"corechart",'bar',"LineChart"], callback: drawTable});
+    function drawTable() {
+        $('#state_id').append("<option value='-1'>All</option>") ;
+        {% for state in states_all %}
+           $('#state_id').append("<option value='{{state}}'>{{state}}</option>") ;
+        {% endfor %}
+        var centerid = {{ global_data.center_id }} ;
+        $('#center_id').append("<option value=-1>All</option>") ;
+        {% for center in centers_all %}
+            $('#center_id').append("<option value={{center.id}}>{{center.name}}</option>") ;
+        {% endfor %}
+        $('#center_id').val({{global_data.center_id}}) ;
+         $('#state_id').val('{{global_data.state_name}}') ;
+        if(centerid==-1){$('.grstats').hide();
+                         $('.barstats').hide();
+                         $('#toog2').hide();
+                         $('#toog1').hide();
+                         $('#course_btn').hide();
+                         $('button').hide();
+                         $('.grstats').hide();
+                            
+                        }
+        else{$('#toog1').slideUp();
+             $('#sess1').slideUp(); 
+             }
+        var data = new google.visualization.DataTable();
+        if( centerid ==  -1) {
+        data.addColumn('string','Center') ;
+        data.addColumn('number','Offerings') ;
+        data.addColumn('number','Planned Sessions') ;
+        data.addColumn('number','Actual Sessions') ;
+        
+        data.addColumn('number','Total Children') ;
+        data.addColumn('number','Attendance Percentage') ;
+
+        $('#global_div').append('<center><table style="width:100%;padding:10px 10px 10px 10px;text-align:center;color:#F15A22;"><tr><td>&nbsp&nbsp&nbsp</td><td>{{centers_active|length}}</td><td>{{global_data.offeringscount}}</td><td>{{new_data.noofchildren}}</td><td>{{new_data.planvsact}} % </td><td>{{new_data.center_attendance}} %</td></tr><tr><td></td><td>Centers </td><td>Teachers</td><td>Total Children </td><td>Classes-Plan vs Actual </td><td>Attendance </td></tr></table></center>');
+        }
+        else
+        {
+        data.addColumn('string','Subject') ;
+        data.addColumn('string','Grade') ;
+        data.addColumn('string','Teacher') ;
+        data.addColumn('number','Planned Sessions') ;
+        data.addColumn('number','Actual Sessions') ;
+        
+        data.addColumn('number','Total Children') ;
+        data.addColumn('number','Attendance Percentage') ;
+   
+        $('#global_div').append('<center><table style="width:100%;padding:10px 10px 10px 10px;text-align:center;color:#F15A22;"><tr><td>{{global_data.offeringscount}}</td><td>{{new_data.planvsact}}% </td><td>{{new_data.noofchildren}}</td><td>{{new_data.offering_attendance}} %</td></tr><tr><td>Teachers</td><td>Classes-plan vs actual</td><td>Children</td><td>Attendance</td></tr></table></center>');
+        }
+
+
+
+        
+        var bardata = new google.visualization.DataTable() ;
+        bardata.addColumn('string','Center') ;
+        bardata.addColumn('number', 'Planned Topics') ;
+        bardata.addColumn('number','Actual Topics') ;
+        if( centerid ==  -1) {
+        {% for center in centers_active %}
+            {% if center.totalstudents %}
+               attnd_prsnt = Math.round(({{center.attendedstudents}}/{{center.totalstudents}})*100)
+            {% else %}
+               attnd_prsnt = 0
+            {% endif %}
+            
+               
+            data.addRow(['{{center.name}}',{{center.noofferings}},{{center.noofsessions}},{{center.completedSessions}},{{center.childrencount}},attnd_prsnt]) ;
+            bardata.addRow(['{{center.name}}',{{center.topics_planned}},{{center.topics_actual}}]) ;
+            
+        {% endfor %}
+        }
+        else {
+        {% for offering in offerings %}
+            {% if offering.attendedstudents %}
+               attnd_perst = Math.round(({{offering.attendedstudents}}/{{offering.totalstudents}})*100)
+            {% else %}
+               attnd_perst = 0
+            {% endif %}
+            data.addRow(['{{offering.course.subject}}','{{offering.course.grade}}','{{offering.teacher}}',{{offering.noofsessions}},{{offering.completedSessions}},{{ offering.studentscount }},attnd_perst]) ;
+            bardata.addRow(['{{offering.course.subject}}' + '_' + '{{offering.course.grade}}',{{offering.topics_planned_count}},{{offering.topics_actual_count}}]) ;
+        {% endfor %}
+        }
+
+        var summary_table = new google.visualization.Table(document.getElementById('table_div'));
+        summary_table.draw(data, {showRowNumber : true, page: 'enable',allowHtml: true,width:'923px', pageSize:10, pagingSymbols: {prev:'prev', next:'next'}});
+        
+        
+       
+
+
+        var piedata = new google.visualization.DataTable() ;
+        piedata.addColumn('string','Status') ;
+        piedata.addColumn('number','Count') ;
+        var totalsessions = 0 ;
+        {% for k,v in sessions.iteritems %}
+            piedata.addRow(['{{k}}', {{v}},]) ;
+            totalsessions += {{v}} ;
+        {% endfor %}
+        var options = { title: 'Total Sessions ' + totalsessions, is3D: true, chartArea : {left : 10, width : '100%' }, legend: {position : 'right'}} ;
+
+        var pie_div = new google.visualization.PieChart(document.getElementById('pie_div'));
+        pie_div.draw(piedata, options);
+
+        var reasonsPie = new google.visualization.DataTable() ;
+        reasonsPie.addColumn('string','CancelReason') ;
+        reasonsPie.addColumn('number','Count') ;
+        var totalCancellations = 0 ;
+        {% for k,v in cancel_reason.iteritems %}
+            reasonsPie.addRow(['{{k}}', {{v}},]) ;
+            totalCancellations += {{v}} ;
+        {% endfor %}
+        var options = { title: 'Cancelled Sessions ' + totalCancellations, is3D: true, chartArea : {left : 10, width : '100%' }, legend: {position : 'right'}} ;
+
+        var reasons_pie_div = new google.visualization.PieChart(document.getElementById('reasons_pie_div'));
+        reasons_pie_div.draw(reasonsPie, options);
+
+
+
+
+
+       
+       
+
+        var ssdata = new google.visualization.DataTable();
+        ssdata.addColumn('string','Course');
+        ssdata.addColumn('string','Class start');
+        ssdata.addColumn('string','Class end');
+        ssdata.addColumn('string','Teacher');
+        ssdata.addColumn('string','Center');
+        ssdata.addColumn('string','Class Status');
+        ssdata.addColumn('string','Attendance Percent');
+
+        {% for entry in session_table %}
+            ssdata.addRow(['{{entry.course}}','{{entry.starttime}}','{{entry.endtime}}','{{entry.Teacher}}','{{entry.center}}','{{entry.status}}','{{entry.session_attendance}}']);
+         
+        {% endfor %}
+          
+        var sschartoptions =
+        {
+            'showRowNumber' : true, 
+            'page': 'enable', 
+            'pageSize':30, 
+            'pagingSymbols': {prev:'prev', next:'next'},
+            'alternatingRowStyle'           :   true,
+            'sort'                          :   'enable',
+            'sortAscending'                 :   true,
+            'allowHtml'                     :   true,
+            'width'                         :   '923px'
+        };
+
+        var chartWrapper1 = new google.visualization.ChartWrapper
+        (
+            {
+                'chartType'     :   'Table',                            
+                'containerId'   :   'sess_table_div',
+                'options'       :   sschartoptions,
+                view: {
+                    columns: [0,1,2,3,4,5]
+                }
+            }
+        );
+        
+
+
+        
+
+        var centerFilter = new google.visualization.ControlWrapper
+        (
+            {
+                'controlType'           :   'CategoryFilter',
+                'containerId'           :   'center_div',
+                'options':
+                {
+                    'filterColumnLabel' :   'Center',
+                    'matchType'         :   'any'
+                }
+            }
+        );
+
+
+        var statusFilter1 = new google.visualization.ControlWrapper
+        (
+            {
+                'controlType'           :   'CategoryFilter',
+                'containerId'           :   'sess_status_div',
+                'options':
+                {
+                    'filterColumnLabel' :   'Class Status',
+                    'matchType'         :   'any'
+                }
+            }
+        );
+        var teacherFilter = new google.visualization.ControlWrapper
+        (
+            {
+                'controlType'           :   'CategoryFilter',
+                'containerId'           :   'teacher_div',
+                'options':
+                {
+                    'filterColumnLabel' :   'Teacher',
+                    'matchType'         :   'any'
+                }
+            }
+        );
+        
+        var courseFilter1 = new google.visualization.ControlWrapper
+        (
+            {
+                'controlType'           :   'CategoryFilter',
+                'containerId'           :   'sess_coursefilter_div',
+                'options':
+                {
+                    'filterColumnLabel' :   'Course',
+                    'matchType'         :   'any'
+                }
+            }
+        );
+
+        
+        var dashboard = new google.visualization.Dashboard
+        (
+            document.getElementById('sess_dash_div')
+        ).bind([statusFilter1,courseFilter1,teacherFilter,centerFilter],chartWrapper1).draw(ssdata);
+ 
+       
+
+
+
+
+
+
+
+        var aadata = new google.visualization.DataTable();
+        aadata.addColumn('string','Student');
+        aadata.addColumn('string','Course');
+        aadata.addColumn('number','Total Sessions');
+        aadata.addColumn('number','Classes Happened');
+        aadata.addColumn('number','Present');
+        aadata.addColumn('number','Absent');
+        aadata.addColumn('number','Uncaptured');
+
+        {% for entry1 in attnd_table %}
+            aadata.addRow(['{{entry1.student}}','{{entry1.course}}',{{entry1.totalsess}},{{entry1.asoftoday}},{{entry1.present}},{{entry1.absent}},{{entry1.uncap}}]);
+        {% endfor %}
+
+        var tableChartOptions =
+        {
+            'showRowNumber' : true, 
+            'page': 'enable', 
+            'pageSize':30, 
+            'pagingSymbols': {prev:'prev', next:'next'},
+            'alternatingRowStyle'           :   true,
+            'sort'                          :   'enable',
+            'sortAscending'                 :   true,
+            'sortColumn'                    :   0,      
+            'allowHtml'                     :   true, 
+            'width'                         :   '923px'
+        };
+
+        var chartWrapper = new google.visualization.ChartWrapper
+        (
+            {
+                'chartType'     :   'Table',                            
+                'containerId'   :   'attnd_table_div',
+                'options'       :   tableChartOptions,
+                view: {
+                    columns: [0,1,2,3,4,5,6]
+                }
+            }
+        );
+
+        var statusFilter = new google.visualization.ControlWrapper
+        (
+            {
+                'controlType'           :   'CategoryFilter',
+                'containerId'           :   'Session_status_div',
+                'options':
+                {
+                    'filterColumnLabel' :   'Student',
+                    'matchType'         :   'any'
+                }
+            }
+        );
+        var courseFilter = new google.visualization.ControlWrapper
+        (
+            {
+                'controlType'           :   'CategoryFilter',
+                'containerId'           :   'coursefilter_div',
+                'options':
+                {
+                    'filterColumnLabel' :   'Course',
+                    'matchType'         :   'any'
+                }
+            }
+        );
+         
+      
+
+
+        
+        var dashboard = new google.visualization.Dashboard
+        (
+            document.getElementById('attnd_dash_div')
+        ).
+        
+        bind([statusFilter,courseFilter],chartWrapper).draw(aadata);
+        
+
+
+
+
+
+       var data1 = new google.visualization.DataTable();
+       data1.addColumn('string', 'Name');
+       data1.addColumn('number', 'Percentage');
+       data1.addColumn({type: 'number', role: 'annotation'});
+       offcount=0
+       totalp=0
+       {% for offering in offerings %}
+          {% if offering.totalstudents %}
+             atndprcnt = Math.round(({{offering.attendedstudents}}/{{offering.totalstudents}})*100)
+             totalp+=atndprcnt
+             if (atndprcnt!=0){
+                offcount +=1
+             }
+             data1.addRow(['{{offering.course.grade}} {{offering.course.subject}}',atndprcnt,atndprcnt]);
+          {% endif %}
+        
+         {% endfor %}
+         
+       data1.addRow([' Overall', Math.round(totalp/offcount),Math.round(totalp/offcount)])
+       var view = new google.visualization.DataView(data1);
+       view.setColumns([0, 1, 1, 2]);
+
+       var chart = new google.visualization.ComboChart(document.getElementById('my_div'));
+
+       chart.draw(view, {
+            
+          series: {
+                  0: {
+        type: 'bars'
+               },
+                  1: {
+                   type: 'line',
+                   color: 'Green',
+                lineWidth: 0,
+                 pointSize: 0,
+                 visibleInLegend: false
+           }
+             },
+              vAxis: {
+                  maxValue: 100
+                  }
+   
+                  });
+    
+
+
+        var grdata = new google.visualization.DataTable();
+            grdata.addColumn('number','Months');
+            grdata.addColumn('number','Expected');
+        {% for entry in course_table %}
+
+            grdata.addColumn('number', "{{entry.cours}}");
+        {% endfor %}
+            
+        
+    
+        grdata.addRows({{course_table_tr}});
+
+        var options = {
+          
+          hAxis: {
+          title: 'Months (June to April)',
+          
+          gridlines: {count: 11}
+        },
+        vAxis: {
+          title: 'No.of sessions',
+          maxValue : 40
+          
+        },
+           };
+
+      var chartgr = new google.visualization.LineChart(document.getElementById('gr_div'));
+        chartgr.draw(grdata, options);
+
+    
+    //     var chartgr = new google.visualization.AnnotatedTimeLine(document.getElementById('gr_div'));
+    //  chartgr.draw(grdata, {displayAnnotations: true});
+      
+
+
+
+
+
+
+
+
+}
+
+
+{% endblock %}
+
+{% block body_container %}
+
+<div class="title"><h1 >Operations Dashboard :<span class="strokeme" style=" color: #119fe0; text-shadow: 5px 5px 3px #A9A9A9;
+"> {{global_data.center_name}}</span> </h1></div>
+<form name="input" method='get'>
+<div style='    margin-top: 20px;'>
+  Center: 
+  <select id='center_id' name='center_id'>
+  </select>
+   <select id='state_id' name='state_id'>
+   </select>
+  From: <input type="text" style='width:100px' id="from" name='from'>
+  To: <input type="text" id="to" style='width:100px'  name='to'>
+  <input type='submit' value='Submit' class='btn btn-warning' style='display: inline-block;width: 12%;margin-left: 10px;' >
+
+</div>
+</form>
+    <div class="stats" id="extend">
+        <div class="head_box">
+            <p>Summary</p>
+        </div>
+        <div class="stats-body"  id="global_div">
+        </div>
+    </div>
+<div class="stats" id="sess" style="width:460px; cursor: pointer;">
+        <div class="head_box">
+            <p>Classes</p>
+        </div>
+        <div class="stats-body">
+            <div id='pie_div' style="height:260px" ></div>
+        </div>
+    </div>
+
+
+
+<div class="stats" id="sess1"style="width:454px;cursor: pointer;">
+        <div class="head_box">
+            <p>Cancelled Classes</p>
+        </div>
+        <div class="stats-body">
+            <div id='reasons_pie_div' style="height:260px"></div>
+        </div>
+    </div>
+    
+
+
+    
+    <div class="barstats" >
+        
+        <div class="head_box">
+            <p> Children Attendance</p>
+           
+        </div>
+        <div class="stats-body">
+            <div id='my_div' style="height:260px;top:100%;"></div>
+        </div>
+    </div>
+    
+
+
+ 
+     
+     <button style="width:925px;background-color:#cdd7be;color:#636B51;height:40px; margin-top:10px; position:left;border:none;"><h1 style="padding-top:80px;font-size:15px; display:inline;">Course coverage</h1> <span style="float:right">Hide ▲</span></button>
+     <div class="grstats" style=" width:922px;margin-top:0px;margin-bottom:10px;margin-left:1px;"> 
+ 
+        <div class="stats-body" style="height:300px; width:923px;" id="show">
+            <div id='gr_div' style="height:300px; width:923px; top:0%;position :relative"></div>
+        </div>
+     </div>
+
+
+
+
+
+       
+
+    <div class="stats"id="det" style="width:925px;">
+        
+        <div class="head_box">
+            <p>Details</p>
+        </div>
+        <div class="stats-body" style="top:0%;margin-top:34px;">
+            <div id='table_div' ></div>
+        </div>
+    </div>
+    
+    <div class="stats" id="toog1" style="width:926px; ">
+        <div class="head_box">
+            <p>Classes Details</p>
+        </div>
+        <div class="stats-body"  style="top:0%;margin-top:34px; ">
+            <div id="sess_dash_div" style="">
+               <div style="margin-top: 20px;">
+                   <div id="sess_coursefilter_div" class='filtercust' style="display:inline-block;"></div> 
+                   <div id="sess_status_div" style="display:inline-block;"></div>
+                   <div id="teacher_div" style="display:inline-block;"></div>
+                   <div id="center_div" style="display:inline-block;"></div>
+               </div>
+               <div id="sess_table_div"  style=" width:100%"></div> 
+
+            </div>
+
+        </div>
+    </div>
+    <div class="stats" id='toog2' style="width:926px;display:none">
+        <div class="head_box">
+            <p>Attendance Details</p>
+        </div>
+        <div class="stats-body"  style="top:0%;margin-top:34px;">
+            <div id="attnd_dash_div">
+               <div style="margin-top: 20px;">
+                   <div id="coursefilter_div" style="display:inline-block;"></div> 
+                   <div id="Session_status_div" style="display:inline-block;"></div>
+                   
+               </div>
+               <div id="attnd_table_div" ></div> 
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+   
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

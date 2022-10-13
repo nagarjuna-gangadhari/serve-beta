@@ -1,0 +1,781 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+ <style> 
+.tab-content > div:last-child {
+  display : block !important;
+ } 
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: lightblue;
+} 
+  
+.rowCss{
+margin-top:20px;
+}  
+.alphabet {
+    list-style-type: none;
+    margin:10px auto 0;
+    padding:0;
+    cursor: pointer;
+    width:80%;
+    text-align:center;
+}
+
+.alphabet li {
+    float:left;
+    margin:0;
+    padding:0;
+    border-right:1px solid darkgrey;
+    font-size: 13px;
+    -moz-box-sizing:border-box;
+    color:black;
+    display:inline-block;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
+    width:3.84%;
+}
+
+.alphabet li:last-child {
+    border-right: none;
+}
+
+.alphabet li:hover {
+    color:green;
+    background-color: lightgrey;
+}
+.acticveli{
+color:red !important;}
+
+ a.dt-button.excelButton{
+     color: white;     
+}
+a.dt-button.excelButton:hover {
+ cursor: default; 
+} 
+.container-fluid {
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-attachment: fixed;
+	background-position: center;
+	padding-left: 0px;
+	padding-right: 0px;
+}
+.model{
+    max-height: 480px;
+    overflow: auto;
+}
+
+.active_stud {
+	background-color: #FF7043;
+}
+.pagination > li > a, .pagination > li > span {
+    position: relative;
+    float: none ! important;
+    }
+    
+.pagination{
+   margin: 20px 0 ! important;
+}​
+ </style> 
+ <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> 
+<script src="https://kendo.cdn.telerik.com/2017.1.223/js/jszip.min.js"></script>
+<script
+	src="https://kendo.cdn.telerik.com/2017.1.223/js/kendo.all.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+<link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+<link href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
+<script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.js"></script>
+
+ <script type="text/javascript" src="/static/js/bootstrap-datepicker.min.js"></script>
+ <style>
+
+.btn-primary{
+background: #337ab7 !important;
+}
+a{
+color: #337ab7; !important;
+}
+a:hover{
+color: #23527c; !important;
+}
+
+.btn-primary:hover, .btn:focus, .btn.focus {
+    color: #333;
+    text-decoration: none;
+}
+</style>
+ <style>
+
+.btn-primary{
+background: #337ab7 !important;
+}
+a{
+color: #337ab7; !important;
+}
+a:hover{
+color: #23527c; !important;
+}
+
+.btn-primary:hover, .btn:focus, .btn.focus {
+    color: #333;
+    text-decoration: none;
+}
+a span {
+	display:none;
+}
+</style>
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+    {% include "code_conduct_modal.html" %}
+<input type="hidden" id="alfaid" value="">
+<input type="hidden" id="byDefaultStartDate">
+<input type="hidden" id="byDefaultEndDate">
+<div class="container-fluid new_dash_container"
+	data-profile_completion_status="{{user_profile.profile_completion_status}}">
+	<div class='row my_profile' style="position: relative">
+	
+	<input type="hidden" id="srchid" value="">
+	<input type="hidden" id="activityName" value="">
+	<input type="hidden" id="pageId" />
+	<input type="hidden" id="emptyList" />
+		<div class="col-lg-12 col-sm-12">
+
+			<div class="tab-content">
+				<div id="profile" class="tab-pane fade in active">
+					<div class='basic_profile col-xs-12 col-sm-12 col-md-12'>
+					<div class="row">
+					<div id="messageForEmptyList"></div>
+					<div class='section_title col-md-2' >
+							<h5>User Activity</h5>
+							<hr>
+						</div>
+					</div>
+					<div class="row">
+					<div class="col-md-6" style="margin-left: -20px;margin-top: 24px;">
+									<ul class="alphabet">
+										<li><a  id="A" onclick="alphabetSearch('A')">A</a></li>
+										<li><a  id="B" onclick="alphabetSearch('B')">B</a></li>
+										<li><a  id="C" onclick="alphabetSearch('C')">C</a></li>
+										<li><a  id="D" onclick="alphabetSearch('D')">D</a></li>
+										<li><a  id="E" onclick="alphabetSearch('E')">E</a></li>
+										<li><a  id="F" onclick="alphabetSearch('F')">F</a></li>
+										<li><a  id="G" onclick="alphabetSearch('G')">G</a></li>
+										<li><a  id="H" onclick="alphabetSearch('H')">H</a></li>
+										<li><a  id="I" onclick="alphabetSearch('I')">I</a></li>
+										<li><a  id="J" onclick="alphabetSearch('J')">J</a></li>
+										<li><a  id="K" onclick="alphabetSearch('K')">K</a></li>
+										<li><a  id="L" onclick="alphabetSearch('L')">L</a></li>
+										<li><a  id="M" onclick="alphabetSearch('M')">M</a></li>
+										<li><a  id="N" onclick="alphabetSearch('N')">N</a></li>
+										<li><a  id="O" onclick="alphabetSearch('O')">O</a></li>
+										<li><a  id="P" onclick="alphabetSearch('P')">P</a></li>
+										<li><a  id="Q" onclick="alphabetSearch('Q')">Q</a></li>
+										<li><a  id="R" onclick="alphabetSearch('R')">R</a></li>
+										<li><a  id="S" onclick="alphabetSearch('S')">S</a></li>
+										<li><a  id="T" onclick="alphabetSearch('T')">T</a></li>
+										<li><a  id="U" onclick="alphabetSearch('U')">U</a></li>
+										<li><a  id="V" onclick="alphabetSearch('V')">V</a></li>
+										<li><a  id="W" onclick="alphabetSearch('W')">W</a></li>
+										<li><a  id="X" onclick="alphabetSearch('X')">X</a></li>
+										<li><a  id="Y" onclick="alphabetSearch('Y')">Y</a></li>
+										<li><a  id="Z" onclick="alphabetSearch('Z')">Z</a></li>
+									</ul>
+									</div>
+										 <div class="col-md-2" style="margin-left: -65px;">
+										 <label>Select Activity Type</label>
+									    <select id="activity_id" name="activityName" class="form-control" onchange="alphabetSearch('type');activityNameList('not');">
+									    <option value="All">All Activity</option>
+									    {% if activityType%}
+											{% for activity in activityType %}
+									        <option value="{{activity.activity_type}}">{{activity.activity_type}}</option>
+									    	{% endfor %}
+									    {% endif %}
+								        </select>
+							</div>
+							<div class="col-md-2 " id="activityNameFilterDiv">
+							 <label>Select Activity Name</label>
+										<select name="activityName" id="activityNameFilter_id" class="form-control" onchange="alphabetSearch('')" required="required" tabindex="-1" aria-hidden="true">
+										<option value="All">All Activities</option>
+										</select>
+									</div>
+									<label style="margin-left: -169px;">Download User Activity</label>
+							<div class="col-md-1" style="margin-left: 4px;margin-top: 29px;">
+							
+                                <a title="Download Data" id="excelData" style="visibility: visible;"><i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i></a>
+                            </div>
+                            <div class="col-md-1" style="margin-left: -38px;margin-top: 29px;">
+                                <a title="Download All Data" id="excelAllData" style="visibility: visible;"><i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i></a>
+                            </div>
+								</div>
+								<hr>
+								<br>
+								<div class ="row">
+							
+									        <div class="col-md-3" style=" margin-left: 44px;">
+                              <label> Select Start Date</label> 
+                                <div class="col-md-12 input-group">
+                              
+                                    <input type="text" id="sdate" name="startDate"
+                                        class="form-control readonly"
+                                        value="{{start_date|date:'d-m-Y'}}"> <label
+                                        class="input-group-addon btn" for="sdate" title="Start Date"
+                                        style="cursor: default !important;"> <span
+                                        class="fa fa-calendar" title="Start Date"
+                                        style="cursor: default !important;"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                             <label> Select End Date</label> 
+                                <div class="col-md-12 input-group">
+                                    <input type="text" id="edate" name="endDate"
+                                        class="form-control readonly"
+                                        value="{{end_date|date:'d-m-Y'}}"> <label
+                                        class="input-group-addon btn" for="edate" title="End Date"
+                                        style="cursor: default !important;"> <span
+                                        class="fa fa-calendar" title="End Date"
+                                        style="cursor: default !important;"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                             <label>Search User</label> 
+									<input type="hidden" name="usr_name" id="usr_name_id" />
+                                    <input type="hidden" name="usr_id" id="usr_id" />
+                                    <input type="text" id="search_Id" class="form-control" placeholder="Search User Name" />
+								</div>
+								<div class="col-md-1" style="margin-top: 24px;">
+									<button class="btn btn-primary" title="Search"
+										onclick="alphabetSearch('')">Search</button>
+								</div>
+								<div class="col-md-1" style="margin-top: 24px;">
+									<button class="btn" title="Refresh" onclick="refreshPage();">Refresh</button>
+								</div>
+						</div>
+					<br/>
+					<div class="row" id="countPaginationId" align="right">
+	                    
+                   </div>
+						<div class="row" id="ajaxTableDiv">
+							<div class="col-md-12">
+
+								<table id="table_id" class="table table-hover table-striped table-condensed"
+									style="margin-left: 10px;">
+<!-- 									ajax table loading -->
+								</table>
+							</div>
+							
+						</div>
+						<div class="row" id="hideDivId">
+							<div class="col-md-12">
+								<table id="hiddenTableId" name="Table"
+									class="table table-hover table-striped table-condensed"
+									style="margin-left: 10px;">
+								</table>
+							</div>
+							
+						</div>
+						<div class="row" id="pagination_data" style="text-align:center"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+function alphabetSearch(value){
+	var hiddenAlphabate = $('#alfaid').val();
+	var activeAlph = $(".acticveli").text();
+	var aphabate = value;
+	var first = "A", last = "Z";
+	if (value!='type'){
+	for(var i = first.charCodeAt(0); i <= last.charCodeAt(0); i++) {
+		var alpha = ( eval("String.fromCharCode(" + i + ")") + " " );
+		if (aphabate!=null && aphabate!='' && aphabate!='undefined'){
+			$("#"+alpha).removeClass("acticveli");
+		}
+	}
+	}
+	
+	var searchBox = $("#search_Id").val();
+	$("#srchid").val(searchBox);
+	var type=$("#activity_id").val();
+	var activity_name=$("#activityNameFilter_id").val();
+	if(activity_name == 'All'){
+		$("#activityNameFilter_id").attr('title','All Activities');
+	}else{
+		$("#activityNameFilter_id").attr('title',activity_name);
+	}
+	$("#activityName").val(activity_name);
+	var activeAlph = $(".acticveli").text();
+	var pageId = $("#pageId").val();
+	var ajaxUrl = '/ajax/userActivityFilter/?flag=true&page='+pageId;
+	if (aphabate!=null && aphabate!='' && aphabate!='undefined'&& aphabate!='type'){
+		$("#"+aphabate).addClass("acticveli");
+	}
+	if ((aphabate!=null && aphabate!='' && aphabate!='undefined') &&  aphabate!='type' || (activeAlph!=null && activeAlph!='' && activeAlph!='undefined')){
+		if (activeAlph!=null && activeAlph!='' && activeAlph!='undefined'){
+			aphabate = activeAlph;
+		}
+		ajaxUrl += '&searchItem='+aphabate;
+	}else if(hiddenAlphabate!=null && hiddenAlphabate!='' && hiddenAlphabate!='undefined'){
+		ajaxUrl += '&searchItem='+hiddenAlphabate;
+	} 
+	 if(searchBox!=null && searchBox!='' && searchBox!='undefined'){
+		ajaxUrl += '&searchName='+searchBox;
+	}
+	 if (value=='type'){
+	 if(type!=null && type!='All' && type!='undefined'){
+			ajaxUrl += '&type='+type;
+		}
+	 }else{
+		 if(activity_name!=null && activity_name!='' && activity_name!='undefined' && activity_name!='All'&&type!=null && type!='undefined'){
+			 ajaxUrl += '&type='+type;  
+			 ajaxUrl += '&activityName='+activity_name;
+		    } 
+	 }
+	 if (ajaxUrl.search("&type")==-1 && type!='All' ){
+		 ajaxUrl += '&type='+type;
+	 }
+		var startDate = $("#sdate").val();
+		var endDate = $("#edate").val();
+	 if(startDate!=null && startDate!='' && startDate!='undefined'){
+	        ajaxUrl += '&start_date='+startDate;
+	   }
+	    if(endDate!=null && endDate!='' && endDate!='undefined'){
+	        ajaxUrl += '&end_date='+endDate;
+	    }
+	$.ajax({
+	        url : ajaxUrl,
+	        success: function (data, textStatus, jqXHR) {
+	        	jsonStr=data.activity_history
+	        	alphabatesRes=data.alphabateSearch
+	        	var allData=data.user_activity_allData
+	        	AllData(allData);
+	        	var current_page = data.current;
+				var prev_page = data.prev;
+				var next_page = data.next;
+				var total_page = data.total;
+				var count=data.count;
+				var msg=data.errorMsg;
+				$("#messageForEmptyList").hide();
+				$("#messageForEmptyList").empty();
+				if (msg !=null && msg !='' && msg!='undefined'){
+					$("#emptyList").val(msg);
+    			}
+	        	$('#alfaid').val(alphabatesRes);
+	        	$("#ajaxTableDiv").show();
+	        	var table='';	
+	        	if (jsonStr !=null && jsonStr !='' && jsonStr!='undefined'){
+	        		var thead = '';
+	   				var tab1 = '';
+	   				thead += '<thead>';
+	                thead +='<tr><th width="250px"><b>Name</b></th><th width="250px"><b>Activity Date-Time</b></th><th width="250px"><b>Activity Name</b></th>';
+	                thead +='</thead>';
+		   		    tab1 = '<tbody>';
+	   				 	for (i = 0; i < jsonStr.length; i++) {
+	   						var jsonObj = jsonStr[i];
+	   						var date = new Date(jsonObj['activity_date_time']);
+	   					 	var hours=date.getHours();
+                         	var minutes=date.getMinutes();
+                         	var second=date.getSeconds()
+                            hours = hours < 10 ? '0'+hours : hours;
+                            minutes = minutes < 10 ? '0'+minutes : minutes;
+                            second = second < 10 ? "0" + second : second;
+	   						var finalDate = ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2)+"-"+date.getFullYear()+" "+hours+":"+minutes+":"+second ;
+	   						tab1 += '<tr>';
+	   						var name = '<a href="/userActivity?user_id='+jsonObj['user_id']+'">'+jsonObj['name']+'</a>';
+	   						tab1 += '<td>' + name + '</td>';
+	   			   			tab1 += '<td>' + finalDate +'</td>';
+	   			   			tab1 += '<td>' + jsonObj['activity_name'] +'</td>';
+	   						tab1 += '</tr>';
+	   					 }
+	   					   	tab1 += '</tbody>';
+	   					   	tableData = thead+tab1;
+	   					   	$("#table_id").html(tableData);
+	   					   	var pagination_template = '';
+	  						if (tableData != null && tableData != ' ' && tableData != 'undefined' && tableData.length > '0') {
+	   							pagination_template += "<ul class='pagination' style='padding-left: 210px;padding-right: 187px;'>";
+	   							if(total_page >=1){
+	   								if(current_page >1){
+	   						    		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+prev_page+")'"+prev_page+"' ><i class='fa fa-chevron-left'></i></a></li> ";
+	   						   	 	}else{
+	   						    		pagination_template += "<li><a class='page' href='javascript:void(0);'><i class='fa fa-chevron-left'></i></a></li> ";
+	   						    	}
+	   						   		 if(current_page !=1){
+	   						    		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(1)'>1</a></li> ";
+	   						     	}
+	   						    	 if(current_page > 4 && current_page <= 10){
+	   						        	pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-1)+")'"+(current_page-1)+"' >...</a></li> ";
+	   						     	}
+	   						     	if((current_page-50)>0){
+	   						        	pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-50)+")'"+(current_page-50)+"' >...</a></li> ";
+	   						     	}
+	   						     	if((current_page-11) > 0 && (current_page-11) != 1){
+	   						        	pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-11)+")'"+(current_page-11)+"' >"+(current_page-11)+"</a></li> ";
+	   						     	}
+	   						     	if((current_page-10)>0){
+	   						         	pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-10)+")'"+(current_page-10)+"' >...</a></li> ";
+	   						     	}
+	   						     	if((current_page-2) > 0 && (current_page-2) != 1){
+	   						     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-2)+")'"+(current_page-2)+"' >"+(current_page-2)+"</a></li> ";
+	   						     	}
+	   						     	if((current_page-1) > 0 && (current_page-1) != 1){
+	   						     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-1)+")'"+(current_page-1)+"' >"+(current_page-1)+"</a></li> ";
+	   						     	}
+	   						     		pagination_template += "<li  class='active'><a class='page' href='javascript:void(0);' onclick='loadPagination("+current_page+")'"+current_page+"' >"+current_page+"</a></li> ";
+	   						     	if((current_page+1) <= total_page){
+	   						     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+1)+")'"+(current_page+1)+"' >"+(current_page+1)+"</a></li> ";
+	   						     	}
+	   						     	if((current_page+2) <= total_page){
+	   						     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+2)+")'"+(current_page+2)+"' >"+(current_page+2)+"</a></li> ";
+	   						     	}
+	   						     	if((current_page+10) < total_page){
+	   						     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+10)+")'"+(current_page+10)+"' >...</a></li> ";
+	   						     	}
+	   						     	if((current_page+11) < total_page){
+	   						     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+11)+")'"+(current_page+11)+"' >"+(current_page+11)+"</a></li> ";
+	   						     	}
+	   						     	if((current_page+50) < total_page){
+	   						     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+50)+")'"+(current_page+50)+"' >...</a></li> ";
+	   						     	}
+	   						     	if((current_page >= (total_page-10)) && (current_page < (total_page-3))){
+	   						     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+1)+")'"+(current_page+1)+"' >...</a></li> ";
+	   						     	}
+	   						     	if((current_page+3) <= total_page){
+	   						     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+total_page+")'"+total_page+"' >"+total_page+"</a></li> ";
+	   						     	}
+	   						     	if(current_page < total_page){
+	   						     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+next_page+")'"+next_page+"' ><i class='fa fa-chevron-right'></i></a></li> ";
+	   						     	}else{
+	   						     	pagination_template += "<li><a class='page' href='javascript:void(0);'><i class='fa fa-chevron-right'></i></a></li> ";
+	   						     	}
+	   						 	}
+	   							pagination_template += "</ul>";
+	   						}
+	  						
+	  					
+	 	                  var span='';
+	 	                  span='<span class="col-sm" style="text-align :right;" >';
+	 	                 var curent_count_end='';
+	 	                  var curent_count='';
+	                       if(total_page>0){
+	                    	   curent_count=(current_page*50)-49;
+	                         if (current_page<total_page){
+	                        		  span +='Showing '+curent_count+' to '+current_page*50+' Activity of '+count+' Activity';
+	                        	  } else{
+	                        		  span +='Showing '+curent_count+' to '+count+' Activity of '+count +' Activity';
+	                        	  }  
+	                          }  
+	                         span +='</span>';
+	                         $("#countPaginationId").html(span);
+		   				  	$("#table_id").html(tableData);
+		   					$('#pagination_data').html(pagination_template);
+		   				 download();
+		   				downloadAllData();
+	   					}else{
+	                        	   var table='';   
+	                               var thead = '';
+	                               var tab1 = '';
+	                               thead += '<thead>';
+	                               thead +='<tr><th width="100px"><b>Name</b></th><th width="100px"><b>Activity Date-Time</b></th><th width="100px"><b>Activity Name</b></th>';
+	                               thead +='</thead>';
+	                               tab1 = '<tbody align="center">';
+	                               tab1 += '<tr>';
+	                               tab1 += '<td colspan="3" > No data Found</td>';
+	                               tab1 += '</tr>';
+	                               tab1 += '</tbody>';
+	                               var tableData1 = thead+tab1;
+	                        	   $("#table_id").html(tableData1);
+	                 	   	       $("#pagination_data").html('');
+	                 	   	       $("#countPaginationId").html('');
+	                         
+	   					}
+	        },
+	        error: function() {
+// 	        	alert('error');
+	          }
+	      });
+}
+</script>
+<script>
+	function refreshPage(){
+	window.location.reload(true);
+	}
+</script>
+<div id='ajax_loader' style="position: fixed; left: 48%; top: 48%; display:none; z-index: 999;">
+	<img src="/static/img_new/ajax-loader.gif" />
+	</div>
+<script>
+$(document).ready(function() {
+	jQuery(function($) {
+		$(document).ajaxStop(function() {
+			$("#overlay").remove();
+			$("#ajax_loader").hide();
+		});
+		$(document).ajaxStart(function() {
+			$("body").append('<div id="overlay" style="background-color:rgba(192,192,192,0.4);position:absolute;top:0;left:0;height:100%;width:100%;z-index:100"></div>');
+			$("#ajax_loader").show();
+		});
+	});
+
+	
+});
+</script>
+<script>
+	function activityNameList(value){
+		var activity_type=$("#activity_id").val() ;
+		  $("#activityNameFilterDiv").show();
+		  if( activity_type!=null && activity_type!='undefined'&& activity_type!=''){
+		  	var ajaxUrl = '/ajax/getActivityNameByActivityType?flag=true&activityType='+activity_type
+		 	 $.ajax({
+		        url : ajaxUrl,
+		        success: function (data) {
+		        	if (data !=null && data !='' && data!='undefined'){
+		        		$("#activityNameFilterDiv").show();
+		        		var optionList='';
+		        		optionList += '<option value=All>All Activities</option>';
+		        		 for(i=0;i<data.length;i++){
+		        			var activityValue =data[i]['activity_name'];
+		        			if (value==data[i]['activity_name']){
+		        				 optionList +='<option value="'+ activityValue+'" selected>' +activityValue+ '</option>';
+		        			}else{
+		        				optionList +='<option value="'+ activityValue+'">' +activityValue+ '</option>';
+		        			}
+		        			 
+		 	        		} 
+		        			 $("#activityNameFilter_id").html(optionList);
+		        		}else{
+		        			var optionList='';
+		        			optionList += '<option value="All">All Activities</option>';
+		        			$("#activityNameFilter_id").html(optionList);
+		        		}
+		        },
+		        error: function() {
+// 		        alert("error");
+		          }
+		      });
+		  }else{
+			  //$("#activityNameFilterDiv").hide();
+		  }
+	}
+</script>
+<script>
+$(document).ready(function() {
+	$("#hiddenTableId").hide();
+	$("#hideDivId").hide();
+	var value=$("#alfaid").val();
+	var alafa='type';
+	if (value!=null && value!='undefined'&& value!=''){
+		alafa=value;
+	}
+	var vl=$("#activityName").val();
+	activityNameList(vl);
+	alphabetSearch(alafa);
+	$("#activityNameFilter_id").val(vl); 
+});
+</script>
+<script>
+$(".readonly").keydown(function(e) {
+    e.preventDefault();
+});
+$(document).ready(
+       
+        function() {
+            var date_input = $('input[id="sdate"]');
+            var container = $('.bootstrap-iso form').length > 0 ? $(
+                    '.bootstrap-iso form').parent() : "body";
+            var options = {
+                format : 'dd-mm-yyyy',
+                container : container,
+                todayHighlight : true,
+                autoclose : true,
+            };
+            date_input.datepicker(options).on('changeDate',
+                    function(selected) {
+                        var startDate = new Date(selected.date.valueOf());
+                        $('#edate').datepicker('setStartDate', startDate);
+                    }).on('clearDate', function(selected) {
+                $('#edate').datepicker('setStartDate', null);
+            });
+
+            var date_input = $('input[id="edate"]');
+            var container = $('.bootstrap-iso form').length > 0 ? $(
+                    '.bootstrap-iso form').parent() : "body";
+            var options = {
+                format : 'dd-mm-yyyy',
+                container : container,
+                todayHighlight : true,
+                autoclose : true,
+            };
+            date_input.datepicker(options).on('changeDate',
+                    function(selected) {
+                        var endDate = new Date(selected.date.valueOf());
+                       // $('#sdate').datepicker('setEndDate', endDate);
+                    }).on('clearDate', function(selected) {
+                $('#sdate').datepicker('setEndDate', null);
+            });
+        })
+/* $(".select2_multiple").select2({
+    maximumSelectionLength : 1000
+});
+
+$(".select2_multiple").select2({
+    maximumSelectionLength : 1000
+}); */
+function download(){
+	   $('#table_id').dataTable({
+		    "destroy": true,
+			"lengthMenu" : false,
+			"bLengthChange" : false,
+			"bFilter" : false,
+			"pageLength" : 20,
+			"aaSorting" : [],
+			"bStateSave" : false,
+			"paging":   false,
+			"ordering": false,
+			"info":     false,
+			dom: 'Bfrtip',
+		        buttons: [
+                {
+                 extend: 'excel',
+             	 filename: 'User Activity',
+             	 className: 'excelButton',  
+             	 exportOptions: {
+                      columns:[0,1,2]
+                   }
+                }
+                   
+		        ]
+		});
+  } 
+  
+$('#excelData').on( 'click', function () {
+	$("#messageForEmptyList").hide();
+	$("#messageForEmptyList").empty();
+	var msg=$("#emptyList").val();
+	if (msg !=null && msg !='' && msg!='undefined'){
+		messageBox = '<div class="alert alert-';
+	    messageBox +=  'danger';
+	    messageBox += ' Box alert-dismissable" style="line-height: 0;">';
+	    messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+	    messageBox += msg+'</div>';
+	    $("#messageForEmptyList").append(messageBox);
+	    $("#messageForEmptyList").show();
+	}else{
+		 $(".excelButton").trigger('click');
+		 download();
+	}
+	
+	} );
+	
+$('#excelAllData').on( 'click', function () {
+	$("#messageForEmptyList").hide();
+	$("#messageForEmptyList").empty();
+	var msg=$("#emptyList").val();
+	if (msg !=null && msg !='' && msg!='undefined'){
+		messageBox = '<div class="alert alert-';
+	    messageBox +=  'danger';
+	    messageBox += ' Box alert-dismissable" style="line-height: 0;">';
+	    messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+	    messageBox += msg+'</div>';
+	    $("#messageForEmptyList").append(messageBox);
+	    $("#messageForEmptyList").show();
+	}else{
+		$(".excelButton2").trigger('click');
+		 downloadAllData();
+	}
+	} );
+	
+function loadPagination(Page) {
+	var pageId = $("#pageId").val(Page);
+	alphabetSearch('');
+}
+
+function AllData(jsonStr){
+	var thead = '';
+		var tab1 = '';
+		thead += '<thead>';
+    thead +='<tr><th width="250px"><b>Name</b></th><th width="250px"><b>Activity Date-Time</b></th><th width="250px"><b>Activity Name</b></th>';
+    thead +='</thead>';
+	    tab1 = '<tbody>';
+		 	for (i = 0; i < jsonStr.length; i++) {
+				var jsonObj = jsonStr[i];
+				var date = new Date(jsonObj['activity_date_time']);
+			 	var hours=date.getHours();
+         	var minutes=date.getMinutes();
+         	var second=date.getSeconds()
+            hours = hours < 10 ? '0'+hours : hours;
+            minutes = minutes < 10 ? '0'+minutes : minutes;
+            second = second < 10 ? "0" + second : second;
+				var finalDate = ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2)+"-"+date.getFullYear()+" "+hours+":"+minutes+":"+second ;
+				tab1 += '<tr>';
+				var name = '<a href="/user_activity?user_id='+jsonObj['user_id']+'">'+jsonObj['name']+'</a>';
+				tab1 += '<td>' + name + '</td>';
+	   			tab1 += '<td>' + finalDate +'</td>';
+	   			tab1 += '<td>' + jsonObj['activity_name'] +'</td>';
+				tab1 += '</tr>';
+			 }
+			   	tab1 += '</tbody>';
+			   	tableData = thead+tab1;
+			   	$("#hiddenTableId").html(tableData);
+}
+
+function downloadAllData(){
+	 $('#hiddenTableId').dataTable({
+		    "destroy": true,
+			"lengthMenu" : false,
+			"bLengthChange" : false,
+			"bFilter" : false,
+			"pageLength" : 20,
+			"aaSorting" : [],
+			"bStateSave" : false,
+			 "paging":   false,
+			 "ordering": false,
+			 "info":     false,
+			 dom: 'Bfrtip',
+		        buttons: [
+             {
+               extend: 'excel',
+          	 filename: 'All User Activity',
+          	 className: 'excelButton2',  
+          	 exportOptions: {
+                   columns:[0,1,2]
+                }
+             }
+                
+		        ]
+		});
+}
+</script>
+ <script>
+$(document).ready(function(){
+	$("#search_Id").autocomplete({
+	    source: "/v2/ajax/get_username?action=username",
+	    minLength: 4,
+	    select: function(event, ui) {
+	        $("#usr_name_id").val(ui.item.value)
+	        $("#usr_id").val(ui.item.id)
+	    }
+	});
+});
+</script> 
+{% endblock %}
+

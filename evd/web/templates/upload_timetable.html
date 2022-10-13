@@ -1,0 +1,471 @@
+<!DOCTYPE html>{% load staticfiles%}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> upload time table | eVidyaloka </title>
+
+    <link rel="stylesheet" href="{% static 'css/tailwind.min.css' %}">
+    <script src="{% static 'css/fontawesome/js/all.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js" integrity="sha512-wBcFatf7yQavHQWtf4ZEjvtVz4XkYISO96hzvejfh18tn3OrJ3sPBppH0B6q/1SHB4OKHaNNUKqOmsiTGlOM/g==" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+
+    <!-- component -->
+    <div class="flex justify-center bg-gray-100 p-4">
+        <input id="input1" name="field_name" class="border border-2 rounded-r px-4 py-2 w-1/2" type="file" accept=".xls,.xlsx" placeholder="Select File" />
+        <button id="button1" class="bg-blue-500 px-4 py-2 text-xs font-semibold tracking-wider text-white rounded hover:bg-blue-600">Button</button>
+
+    </div>
+    <!-- component -->
+    <!-- <div class="container">
+        <h1 class="mb-8">
+            Scrollable Table Fixed Height
+        </h1>
+
+        <table class="text-left w-full">
+            <thead class="bg-black flex text-white w-full">
+                <tr class="flex w-full mb-4">
+                    <th class="p-4 w-1/4">One</th>
+                    <th class="p-4 w-1/4">Two</th>
+                    <th class="p-4 w-1/4">Three</th>
+                    <th class="p-4 w-1/4">Four</th>
+                </tr>
+            </thead>
+            <div class="">
+                <tbody class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full h-60">
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                    <tr class="flex w-full mb-4">
+                        <td class="p-4 w-1/4">Dogs</td>
+                        <td class="p-4 w-1/4">Cats</td>
+                        <td class="p-4 w-1/4">Birds</td>
+                        <td class="p-4 w-1/4">Fish</td>
+                    </tr>
+                </tbody>
+            </div>
+        </table>
+    </div> -->
+
+    <div class="overflow-x-auto">
+        <div class="min-w-screen h-1/2 bg-gray-100 flex items-center justify-center bg-gray-100 font-sans overflow-hidden">
+
+            <div class="w-full lg:w-5/6 ">
+                <h1 id="table_hading" class="text-xl flex justify-center text-center p-4 text-gray-600">
+                    <div id="tableheader" class="px-2">All states </div> classes Time table</h1>
+                <div class="bg-white shadow-md rounded my-6 mx-8">
+                    <table class="min-w-max w-full table-auto">
+                        <thead>
+                            <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 text-center">Date</th>
+                                <th class="py-3 px-6 text-center">Class</th>
+                                <th class="py-3 px-6 text-center">Subject</th>
+                                <th class="py-3 px-6 text-center">Chapter</th>
+                                <th class="py-3 px-6 text-center">Chanel</th>
+                                <th class="py-3 px-6 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table_of_items" class="items-center overflow-y-auto h-60">
+                            <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                <td class="py-2 px-6 text-center whitespace-nowrap border-r ">2021-05-16; 14:00:00</td>
+                                <td class="py-2 px-6 text-center">6</td>
+                                <td class="py-2 px-6 text-center">Mathmatics</td>
+                                <td class="py-2 px-6 text-center">Tregnometry</td>
+                                <td class="py-2 px-6 text-center">DD Telugu </td>
+                                <td class="py-2 px-6 text-center">
+                                    <div class="flex item-center justify-center">
+                                        <div class="w-4 mr-2 transform hover:text-red-500 hover:scale-150"><i class="far fa-trash-alt"></i></div>
+                                        <div class="w-4 ml-2 transform hover:text-purple-500 hover:scale-150"><i class="far fa-edit"></i></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+
+<script>
+    let selectedFile;
+    console.log(window)
+
+    document.getElementById("input1").addEventListener("change", (event) => {
+        // console.log(event.target.files[0]);
+        selectedFile = event.target.files[0];
+
+    });
+
+    document.getElementById("button1").addEventListener("click", () => {
+
+        if (selectedFile) {
+            let fileReader = new FileReader();
+            fileReader.readAsBinaryString(selectedFile);
+            fileReader.onload = (event) => {
+                // console.log(event.target.result);
+                let data = event.target.result;
+                let workbook = XLSX.read(data, {
+                    type: "binary"
+                });
+
+
+                workbook.SheetNames.forEach(sheet => {
+                    let rowObject = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+                    let workbooksheet = {
+                        "state": sheet,
+                        "table": rowObject
+                    };
+
+                    datatables(workbooksheet)
+
+                    // console.log(workbooksheet)
+                    // console.log(JSON.stringify(rowObject));
+                });
+            }
+        }
+
+    });
+
+
+    function datatables(response) {
+        $("#table_of_items tr").remove();
+        document.getElementById("tableheader").innerHTML = response.state;
+        // console.log(response.time_table[0])
+        var table = response.table;
+        var x, y, i=0;
+
+        for (x in table) {
+            var row = table[x];
+            // console.log(row)
+            $("#table_of_items").append("<tr class='text-center border-b border-gray-200 hover:bg-gray-100' id='tr" + i + "'></tr>");
+            // $("#tr" + i).append("<td class='py-2 px-6'>" + row['state'] + "</td>");
+            $("#tr" + i).append("<td class='py-2 px-6'>" + row['Date'] + "</td>");
+            $("#tr" + i).append("<td class='py-2 px-6'>" + row['Class'] + "</td>");
+            $("#tr" + i).append("<td class='py-2 px-6'>" + row['Subject'] + "</td>");
+            $("#tr" + i).append("<td class='py-2 px-6'>" + row['Chapter Name'] + "</td>");
+            // $("#tr" + i).append("<td class='py-2 px-6'>" + row['Chapter Name'] + "</td>");
+
+            $("#tr" + i).append("<td class='py-2 px-6'><a class='text-green-600 text-xl' href=' target='_blank'" + row['link'] + "'><i class='fas fa-chalkboard-teacher'></i></a></td>");
+            $("#tr" + i).append("<td class='py-2 px-6 text-xl '><div class='flex item-center justify-center'><div class='w-4 mr-2 transform hover:text-red-500 hover:scale-150'><i class='far fa-trash-alt'></i></div><div class='w-4 ml-2 transform hover:text-purple-500 hover:scale-150'><i class='far fa-edit'></i></div></div></td>");
+            // $("#tr" + i).append("<td class='py-2 px-6'><a href='" + row['link'] + "' >link</a></td>");
+
+            // for (y in row) {
+            //     // console.log(row[y])
+            // }
+            i = i + 1
+
+        }
+    }
+</script>
+
+
+</html>
+

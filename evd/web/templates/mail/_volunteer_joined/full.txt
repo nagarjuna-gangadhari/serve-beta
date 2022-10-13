@@ -1,0 +1,23 @@
+iDear Sir/Madam,
+
+Welcome to eVidyaloka!
+
+Thank you for taking the first step, in this exciting journey of making the dream of Quality in education, a reality, for those deserving children from rural Villages of India. India's future. Let us get started !
+
+Your Login Details are: {{ username }} or Facebook Login . Click here to Login. http://www.evidyaloka.org/?show_popup=true
+
+Please select your volunteering preferences and complete the On-boarding process for your most preferred role.
+
+You can also explore more about the open opportunities by visiting - View Opportunities
+
+And You can also connect with the existing community of volunteers, who are teaching, developing contents, administering classes, donors and other well wishers, by Connecting with the Community. Facebook@Work for eVidyaloka is an exclusive social network for like minded individuals in the field of education, to come around - discuss ideas, share best practices, solve problems and help each other towards the cause.
+
+Presently, 400+ teachers are reaching out to 4500+ children in 70+ Villages across 6 states – Jharkhand, Andhra Pradesh, Karnataka, West Bengal, Tamil Nadu and Maharashtra.
+
+It’s an exciting journey and can’t happen without you. Its joy to have you join the same.
+
+Regards,
+eVidyaloka
+Educate – Anywhere, Anytime!
+
+

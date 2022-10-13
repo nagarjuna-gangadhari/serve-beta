@@ -1,0 +1,25 @@
+<p style="font-size:14px;" >Hi,</p>
+
+<p style="font-size:14px;" >Welcome to eVidyaloka!</p>
+
+<p style="font-size:14px;" >Thank you for taking the first step, in this exciting journey of making the dream of Quality in education, a reality, for those deserving children from rural Villages of India. India\'s future. Let us get started !</p>
+
+{% if fb_user %}
+    <p style="font-size:14px;" >Facebook Login : <a href="{{host}}/?show_popup=true">Click here to Login.</a></p>
+{% else %}
+    <p style="font-size:14px;" >Your User Name is {{username}} : <a href="{{host}}/?show_popup=true">Click here to Login.</a></p>
+{% endif %}
+
+<p><div><span><a style="padding: 7px; color: #fff; background-color: #49ba8e; font-size: 15px; border: none; text-decoration: none; border-radius: 15px;" href="{{host}}/profile">Get Started</a></span>
+<span style="margin:7px;"><a style="padding: 7px; color: #fff; background-color: #49ba8e; font-size: 15px; border: none; text-decoration: none; border-radius: 15px;"href="{{host}}/engage">Get Connected</a></span>
+<span style="margin:7px;"><a style="padding: 7px; color: #fff; background-color: #49ba8e; font-size: 15px; border: none; text-decoration: none; border-radius: 15px;" href="{{host}}/demand/">Browse Volunteering Opportunities</a></span></div></p>
+
+<p style="font-size:14px;" >It\’s an exciting journey and can\’t happen without you. Its joy to have you join the same.</p>
+<br>
+
+<p style="font-size:12px; line-height:0.3" >With Regards,</p>
+<p style="font-size:12px;line-height:0.3;" >eVidyaloka Onboarding Team</p>
+<img src="{{host}}/static/images/resize_evd_logo.jpg"/>
+<img src="{{host}}/static/images/evd_tagline.png"/>
+<p style="font-size:12px;line-height:0.3;" ><a href="{{host}}/">www.evidyaloka.org<a></p>
+<p style="font-size:12px;line-height:0.3;" >talktosomeone@evidyaloka | +91 80 4090 3939</p>

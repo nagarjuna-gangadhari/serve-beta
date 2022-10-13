@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load filters %}
+{% load tags %}
+
+{% block head_title %}eVidyaloka - Payment Details{% endblock %}
+<meta name="description" content="NAD">
+<meta property="og:title" content="eVidyaloka" />
+<meta property="og:description" content="eVdyaloka NAD campaign" />
+<meta property="og:url" content="http://evidyaloka.org/nad/" />
+
+
+
+
+{% block body_container %}
+<!-- Event snippet for Donation Complete conversion page -->
+<script>
+    gtag('event', 'conversion', {'send_to': 'AW-967708218/um2FCPiJouwBELqcuM0D'});
+</script>
+<link rel="stylesheet" href="/static/campaign/css/sharetastic.css"/>
+<div class="col-lg-6 col-xs-12" style="text-align: center; padding: 120px 30px 30px 30px;"> 
+    <div class="carousel slide multi-item-carousel" id="headerCarousel">
+        <div class="carousel-inner">
+          <div class="item active">
+            <div class="col-lg-12 col-md-12 col-sm-12" style="background-color: white; border-radius: 2.5%;padding: 0%;">
+                <img src="/static/images/thank_you_page/9.jpg" class="img-responsive center-block">
+            </div>
+          </div>
+          <div class="item ">
+            <div class="col-lg-12 col-md-12 col-sm-12" style="background-color: white; border-radius: 2.5%;padding: 0%;">
+                <img src="/static/images/thank_you_page/10.jpg" class="img-responsive center-block">
+            </div>
+          </div>
+          <div class="item ">
+            <div class="col-lg-12 col-md-12 col-sm-12" style="background-color: white; border-radius: 2.5%;padding: 0%;">
+                <img src="/static/images/thank_you_page/11.jpg" class="img-responsive center-block">
+            </div>
+          </div>
+           <!-- add  more items here -->
+          <div class="item">
+            <div class="col-lg-12 col-md-12 col-sm-12" style="background-color: white; border-radius: 2.5%;padding: 0%;">
+                <img src="/static/images/thank_you_page/12.jpg" class="img-responsive center-block">
+            </div>
+          </div>
+        </div>
+        <a class="left carousel-control" href="#headerCarousel" data-slide="prev" style="opacity: 0.25;"><i class="glyphicon glyphicon-chevron-left black"></i></a>
+        <a class="right carousel-control" href="#headerCarousel" data-slide="next" style="opacity: 0.25;"><i class="glyphicon glyphicon-chevron-right black"></i></a>
+      </div>
+</div>
+
+<div class="col-lg-6 col-xs-12" style="text-align: center; padding: 120px 30px 30px 30px;">
+    <!-- <h2 style="font-size: 2.5em">Thank You</h2><br/> -->
+    <h4>Thank you for your contribution and belief in our cause. Your donation will help us deliver quality education across Rural India!</h4>
+    <br>
+    <h4>An email with the receipt will be shared with you within 14 days.</h4> 
+    <br>
+    <h4>For any further assistance, please write to <b>donate@evidyaloka.org</b></h4>
+    <br>
+    <h4><i>Thank you, once again, on behalf of all the children across Rural India!</i></h4>
+    <br><br>
+
+    <h4><b>Spread the word!</b></h4><br>
+    <!-- Twitter -->
+    <a href="https://twitter.com/share?url=http://www.evidyaloka.org/nad/&amp;text=I%20have%20donated%20to%20support%20quality%20education%20in%20rural%20India.%20You%20can%20also%20support%20at%20&amp;hashtags=evidyaloka" target="_blank">
+        <img src="/static/campaign/img/twitter.png" alt="Twitter" style="height: 50px;"/>
+    </a>
+
+    <!-- LinkedIn -->
+    <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.evidyaloka.org/nad/&amp;text=I%20have%20donated%20to%20support%20quality%20education%20in%20rural%20India.%20You%20can%20also%20support%20at%20http://www.evidyaloka.org/nad/" target="_blank">
+        <img src="/static/campaign/img/linkedin.png" alt="LinkedIn" style="height: 50px;"/>
+    </a>
+
+
+    <!-- Facebook -->
+    <a href="http://www.facebook.com/sharer.php?u=http://www.evidyaloka.org/nad/&amp;p=sdd" target="_blank">
+        <img src="/static/campaign/img/facebook.png" alt="Facebook" style="height: 50px;"/>
+    </a>
+
+   
+    <!-- Google+ -->
+    <a href="https://plus.google.com/share?url=http://www.evidyaloka.org/nad/&amp;text=I%20have%20donated%20to%20support%20quality%20education%20in%20rural%20India.%20You%20can%20also%20support%20at%20http://www.evidyaloka.org/nad/" target="_blank">
+        <img src="/static/campaign/img/google.png" alt="Google" style="height: 50px;"/>
+    </a>
+    
+    <!-- Email -->
+    <a href="mailto:?Subject=Donation&amp;Body=I%20have%20donated%20to%20support%20quality%20education%20in%20rural%20India.%20You%20can%20also%20support%20at%20http://www.evidyaloka.org/nad/ ">
+        <img src="/static/campaign/img/email.png" alt="Email" style="height: 50px;"/>
+    </a>
+    <br> 
+    <br>
+    <!-- <p style="margin-top: 15px;">Please login to view/update the donation details, under "My Donations" Tab</p><br/>
+    <p>(If you are first time user, Login details are sent to your email address)</p><br/> -->
+    <div style="display: table; margin: 10px auto; font-weight: bold; font-size: 1.9em">
+        {% if user.is_authenticated %}
+        <a href="/myevidyaloka/contributions/">Go to Dashboard</a>
+        {% else %}
+        <a href="/?show_popup=true&type=login">Login</a>
+        {% endif %}
+    </div>
+</div>
+
+<style type="text/css"> 
+    #share-buttons img {
+        width: 35px;
+        padding: 5px;
+        border: 0;
+        box-shadow: 0;
+        display: inline;
+    }
+</style>
+
+<script src="/static/campaign/vendor/jquery/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $('.inner').css('width', '100%');
+        $('.multi-item-carousel').carousel({
+        interval: 5000
+        });
+    });
+</script>  
+  
+{% endblock %}

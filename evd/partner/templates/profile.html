@@ -1,0 +1,439 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+    <script>
+
+      (function () {
+
+        var evl = window.EVL = window.EVL || {};
+        evl.user_location_info =  {{user_location_info|safe}};
+      }());
+
+    </script>
+
+    <!-- <script defer src="https://www.youtube.com/iframe_api"></script>-->
+    <script defer src="https://rawgit.com/kimmobrunfeldt/progressbar.js/master/dist/progressbar.js"></script>
+    <script defer src="/static/js/selectize.min.js"></script>
+    <script src="/static/js/upload/location.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/selectize.css" />
+    <script src='/static/js_new/parsley.min.js' type='text/javascript' ></script>
+    <script src='/static/js_new/partner_profile.js' type='text/javascript' ></script>
+
+    <script>
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: 'DhmVpNCEWOo',
+          controls : 0,
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      } 
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        //event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        if(event.data == 0 ){
+         evd.ajax_sub('/partner/save_profile/',{'step':'organisation'},function(){});
+        }
+        //if (event.data == YT.PlayerState.PLAYING && !done) {
+          //setTimeout(stopVideo, 6000);
+          //done = true;
+        //}
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
+      $(function(){
+        $('[data-toggle="popover"]').popover();
+        var profile_completion_status = $('.new_dash_container').attr('data-profile_completion_status');
+        if(profile_completion_status === 'True'){
+            $(".not_editable").removeClass("hide");
+            $(".editable").addClass("hide");
+        }
+        $("body").on("click", ".cancel_edit_profile", function(event){
+            event.preventDefault();
+            $(".not_editable").removeClass("hide");
+            $(".editable").addClass("hide");
+        });
+        $("body").on("click", ".edit_profile", function(){
+            $(".not_editable").addClass("hide");
+            $(".editable").removeClass("hide");
+        });
+        //redirect_to_onboard
+        $("body").on("click", ".redirect_to_onboard", function(){
+            window.location.pathname="/partner/home/";
+        });
+        //code of conduct checkbox:save enable/disable
+        $("#profile_sub").removeAttr("disabled");
+        $("body").on("change", "#code_conduct", function(){
+            if (document.getElementById('code_conduct').checked){
+                $("#profile_sub").removeAttr("disabled");
+            }
+            else{
+                $("#profile_sub").attr("disabled","disabled");
+            }
+        });
+      });
+      $(function() {
+        $(".btn-pref .btn").click(function (e) {
+            e.preventDefault();
+            $(".btn-pref .btn").removeClass("btn-warning").addClass("btn-default");
+            // $(".tab").addClass("active"); // instead of this do the below
+            $(this).removeClass("btn-default").addClass("btn-warning");
+        });
+        /*// store the currently selected tab in the hash value
+        $(".btn-group button").on("shown.bs.tab", function(e) {
+            var id = $(e.target).attr("href").substr(1);
+            window.location.hash = id;
+        });*/
+
+        // on load of the page: switch to the currently selected tab
+        var hash = window.location.hash;
+        window.setTimeout(function(){$('.nav-tabs a[href="' + hash + '"]').trigger('click');}, 1);
+
+        $('.nav-tabs a').click(function (e) {
+            $(this).tab('show');
+            var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+            window.location.hash = this.hash;
+            $('html,body').scrollTop(scrollmem);
+        });
+      });
+    </script>
+
+    <style>
+        .contributions, .profile-edit-2, .role_change{
+            display : none !important;
+        }
+
+
+       .parsley-errors-list.filled {
+            opacity: 1;
+            margin-top: -6%;
+            margin-bottom: 8%;
+        }
+    </style>
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+    {% include "code_conduct_modal.html" %}
+    <style>
+    .tab-content > div:last-child {
+        display : block !important;
+    }
+        .btn-pref .btn {
+            -webkit-border-radius:0 !important;
+        }
+    .input-group{
+    position: relative;
+    display: block;
+    border-collapse: separate;
+    }
+    .input-group-addon{
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color:red;
+    display:block;
+    text-align:left;
+    border: none;
+    }
+    .nav-tabs {
+        margin-bottom: 15px;
+    }
+    .sign-with {
+        margin-top: 25px;
+        padding: 20px;
+    }
+    div#OR {
+        height: 30px;
+        width: 30px;
+        border: 1px solid #C2C2C2;
+        border-radius: 50%;
+        font-weight: bold;
+        line-height: 28px;
+        text-align: center;
+        font-size: 12px;
+        float: right;
+        position: absolute;
+        right: -16px;
+        top: 40%;
+        z-index: 1;
+        background: #DFDFDF;
+    }
+    .col-sm-4{
+        width: 17.333333%;
+    }
+    .col-md-6{
+        position: relative;
+        left: 70px;
+    }
+    </style>
+    <div class="container-fluid new_dash_container" data-profile_completion_status="{{user_profile.profile_completion_status}}">
+        <div class='row my_profile' style="position:relative">
+          <div class="col-lg-12 col-sm-12">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab"
+                    href="#profile" style="font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;color:black">My Profile</a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="profile" class="tab-pane fade in active">
+                    <div class='basic_profile col-xs-12 col-sm-12 col-md-12' >
+                        <div class='section_title'>
+                            <h5> My Profile</h5>
+                            <hr>
+                        </div>
+
+                        <div class="editable1">
+                            <form id='basic_form' method='POST' enctype="multipart/form-data" data-parsley-validate="">
+                            {% csrf_token %}
+                                <input type='hidden' name='step' value='base_profile' />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="first_name" class="col-sm-4 control-label">First Name</label>
+                                        <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <input type='text' class="form-control" name='first_name' placeholder="FirstName" 
+                                            value='{{ user_profile.user.first_name }}' required="">
+                                            <span class="input-group-addon">*</span>
+                                        </div>
+                                        </div>
+                                    </div> <!--col-md-6 -->
+
+                                   <div class="col-md-6">
+                                        <label for="last_name" class="col-sm-4 control-label">Last Name</label>
+                                        <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <input type='text' class="form-control" name='last_name' placeholder="LastName"
+                                            value='{{ user_profile.user.last_name }}' required="">
+                                            <span class="input-group-addon">*</span>
+                                        </div>
+                                        </div>
+                                    </div> <!--col-md-6 -->
+                                </div> <!-- row -->
+
+                                <div class="row" style="top: 17px;">
+                                    <div class="col-md-6">
+                                        <label for="email" class="col-sm-4 control-label">Email</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                            <input type='email' class="form-control" name='email' placeholder="Email "
+                                            value='{{ user_profile.user.email }}' required="">
+                                            <span class="input-group-addon">*</span>
+                                            </div>
+                                        </div>
+                                    </div> <!--col-md-6 -->
+
+                                   <div class="col-md-6">
+                                        <label for="alt_email" class="col-sm-4 control-label">Alternate Email</label>
+                                        <div class="col-sm-6">
+                                            <input type='alt_email' class="form-control" name='alt_email' placeholder="Alternate Email"
+                                            value='{{ user_profile.secondary_email }}' >
+                                        </div>
+                                    </div> <!--col-md-6 -->
+                                </div> <!-- row -->
+
+                                <div class="row" style="top: 17px;">
+                                    <div class="col-md-6">
+                                        <label for="skype_id" class="col-sm-4 control-label">Skype ID</label>
+                                        <div class="col-sm-6">
+                                            <input type='text' class="form-control" name='skype_id' placeholder="Skype ID"
+                                               value='{{ user_profile.skype_id }}'>
+                                        </div>
+                                    </div> <!--col-md-6 -->
+
+                                   <div class="col-md-6">
+                                        <label for="phone" class="col-sm-4 control-label">Phone No</label>
+                                        <div class="col-sm-6">
+                                            <input type='text' class="form-control" name='phone' placeholder="Phone No"
+                                               value='{{ user_profile.phone }}' data-parsley-pattern="^(\+(([0-9]){1,2})[-.])?((((([0-9]){2,3})[-.]){1,2}([0-9]{4,10}))|([0-9]{10}))$">
+                                        </div>
+                                    </div> <!--col-md-6 -->
+                                </div> <!-- row -->
+
+                                <div class="row" style="top: 17px;">
+                                    <div class="col-md-6">
+                                        <label for="email" class="col-sm-4 control-label">Gender</label>
+                                        <div class="col-sm-6">
+                                            <select name="gender" id="genderId" class="selects-up" required="">
+                                                {% if user_profile.gender == "" %}
+                                                    <option value="">--Select Gender--</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                {% elif user_profile.gender == "male" %}
+                                                    <option value="">--Select Gender--</option>
+                                                    <option value="male" selected="selected">Male</option>
+                                                    <option value="female">Female</option>
+                                                {% else %}
+                                                    <option value="">--Select Gender--</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female" selected="selected">Female</option>
+                                                {% endif %}
+                                         </select>
+                                        <span class="input-group-addon" style="border: none; top:0; background: none; position: absolute; right: 0;">*</span>
+                                        </div>
+                                    </div> <!--col-md-6 -->
+
+                                   <div class="col-md-6">
+                                        <label for="age" class="col-sm-4 control-label">Age</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <input type='number' name='age' class="form-control" placeholder="Age"
+                                                   value='{{ user_profile.age }}' required="" min="0" max="100">
+                                                <span class="input-group-addon">*</span>
+                                            </div>
+                                        </div>
+                                    </div> <!--col-md-6 -->
+                                </div> <!-- row -->
+
+                                <div class="row" style="top: 17px;">
+                                    <div class="col-md-6">
+                                        <label for="prefered_medium" class="col-sm-4 control-label">Preferred Medium</label>
+                                        <div class="col-sm-6">
+                                            <select name="prefered_medium" id="medium" class=' selects-up' required="">
+                                            {% if user_profile.pref_medium %}
+                                                <option value="{{ user_profile.pref_medium }}" selected="selected">
+                                                {{ user_profile.pref_medium }}</option>
+                                            {% else %}
+                                                <option value="" selected="selected">--Select Language--</option>
+                                            {% endif %}
+                                            <option value="Bengali">Bengali</option>
+                                            <option value="Gujarathi">Gujarathi</option>
+                                            <option value="Hindi">Hindi</option>
+                                            <option value="Kannada">Kannada</option>
+                                            <option value="Malayalam">Malayalam</option>
+                                            <option value="Marathi">Marathi</option>
+                                            <option value="Oriya">Oriya</option>
+                                            <option value="Punjabi">Punjabi</option>
+                                            <option value="Assamese">Assamese</option>
+                                            <option value="Tamil">Tamil</option>
+                                            <option value="Telugu">Telugu</option>
+                                            <option value="Urdu">Urdu</option>
+                                        </select>
+                                        <span class="input-group-addon" style="border: none; top:0; background: none; position: absolute; right: 0;">*</span>
+                                        </div>
+                                    </div> <!--col-md-6 -->
+
+                                   <div class="col-md-6">
+                                        <label for="referrer" class="col-sm-4 control-label">Referrer</label>
+                                        <div class="col-sm-6">
+                                            <input type='text' name='refer_name' id='refer' class="form-control" placeholder="Referrer"
+                                               value='{{ user_profile.referer }}'>
+                                        </div>
+                                    </div> <!--col-md-6 -->
+                                </div> <!-- row -->
+
+                                <div class="row" style="top: 17px;">
+                                    <div class="col-md-6">
+                                        <label for="reference_channel" class="col-sm-4 control-label">Reference Channel</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <input type='text' class="form-control" name='reference_channel' placeholder="Reference Channel"
+                                                    value='{{ref_channel.name}}' required="">
+                                            <span class="input-group-addon">*</span>
+                                        </div>
+                                        </div>
+                                    </div> <!--col-md-6 -->
+
+                                   <div class="col-md-6">
+                                        <label for="country" class="col-sm-4 control-label">Country</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                              <select name="country" class="countries form-control" id="countryId" required="">
+                                                  <option value="">Select Country</option>
+                                              </select>
+                                                <span class="input-group-addon">*</span>
+                                            </div>
+                                        </div>
+                                    </div> <!--col-md-6 -->
+                                </div> <!-- row -->
+
+                                <div class="row" style="top: 17px;">
+                                    <div class="col-md-6">
+                                        <label for="state" class="col-sm-4 control-label">State</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                              <select name="state" class="states form-control" id="stateId" required="">
+                                                  <option value="">Select State</option>
+                                              </select>
+                                              <span class="input-group-addon">*</span>
+                                            </div>
+                                        </div>
+                                    </div> <!--col-md-6 -->
+
+                                   <div class="col-md-6">
+                                        <label for="alt_email" class="col-sm-4 control-label">City</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                              <select name="city" class="cities form-control" id="cityId" required="">
+                                                  <option value="">Select City</option>
+                                              </select>
+                                              <span class="input-group-addon">*</span>
+                                              </div>
+                                        </div>
+                                    </div> <!--col-md-6 -->
+                                </div> <!-- row -->
+
+                                <div class="row" style="top: 17px;">
+                                    <div class="col-md-6">
+                                        <label for="profession" class="col-sm-4 control-label">Profession</label>
+                                        <div class="col-sm-6">
+                                            <select name= "profession" id="professionId" class=' selects-up'>
+                                                <option value="">--Select Your Profession--</option>
+                                                {% for item in prof_list %}
+                                                  {% if user_profile.profession == item %}
+                                                     <option value="{{item}}" selected="selected">{{item}}</option>
+                                                  {% else %}
+                                                     <option value="{{item}}">{{item}}</option>
+                                                  {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div> <!--col-md-6 -->
+
+                                   <div class="col-md-6">
+                                        <label for="short_notes" class="col-sm-4 control-label">Short Notes</label>
+                                        <div class="col-sm-6">
+                                            <input type='textarea' name='short_notes' cols=4 class="form-control" placeholder="Brief Intro"
+                                               value='{{ user_profile.short_notes }}'>
+                                        </div>
+                                    </div> <!--col-md-6 -->
+                                </div> <!-- row -->
+
+                                <button id="profile_submit" class="btn btn-success" style="margin-bottom:22px;width:100px;position: relative;top: 22px;float: right;left: -160px;">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                </div> <!--Profile completes -->
+
+            </div>
+          </div>
+        </div>
+    </div>
+{% endblock %}

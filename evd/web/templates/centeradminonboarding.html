@@ -1,0 +1,600 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <script defer src="https://rawgit.com/kimmobrunfeldt/progressbar.js/master/dist/progressbar.js"></script>
+    <script defer src="/static/js/selectize.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/selectize.css" />
+    <script src='/static/js_new/parsley.min.js' type='text/javascript' ></script>
+    <script src='/static/js/underscore_1.5.2.min.js' type='text/javascript' ></script>
+    <script src='/static/js_new/profile.js' type='text/javascript' ></script>
+    <script src='/static/js_new/fb_feed/fb_feed.min.js' type='text/javascript' ></script>
+    <script src='/static/js_new/play_orient_video.js' type='text/javascript' ></script>
+    <script>
+        {% include "underscore_temps/teacher_demand.tmpl" with container="#render_demand" only %}
+    </script>
+    <script>
+      var members_len = [{'fb_id': '100011607874861', 'member_token' : '{{ member_token }}'}];
+      $(document).ready(function(){
+            for (var i = 0; i<members_len.length; i++) {
+                $('.render_feed').evdFacebook({
+                id: members_len[i].fb_id,
+                member_token : members_len[i].member_token
+                })
+            };
+        });
+    </script>
+
+    <script>
+    $(document).ready(function(){
+     $('label.control-label').addClass('myevd_label');
+      $('#Self_Evaluation').find('form').parsley().on('field:validated', function() {
+        var ok = $('.parsley-error').length === 0;
+        $('.bs-callout-info').toggleClass('hidden', !ok);
+        $('.bs-callout-warning').toggleClass('hidden', ok);
+      })
+      .on('form:submit', function() {
+        evd.se_submit();
+        var delay = 1000;
+        setTimeout(function(){ window.location.pathname = '/role_onboarding/centeradmin/'; }, delay);
+        return false;
+      });
+    });
+
+    </script>
+
+<style>
+    @media only screen and (max-width: 480px) and (min-width: 0px)  {
+
+    .in-col12{
+        margin-bottom: 1%;
+        margin-left: auto !important;
+        width: 98%;
+        text-align: left;
+     }
+    .col-sm-3 {
+    margin-top: 8%;
+    }
+    .orient-align{
+        padding-bottom: 55% !important;
+        padding-top: 30px;
+        background-color: #F2F2F2;
+     }
+    #triggeringModal {
+        width: 94%;
+        height: 150px;
+        cursor: pointer;
+        box-shadow: rgb(136, 136, 136) 0.5px 0.5px 3px;
+        float: right;
+        margin-top: -60% !important;
+        margin-right: 3% !important;
+    }
+    .col-md-11{
+    position: absolute;
+    bottom: 5%;
+    margin-left: 23% !important;
+    }
+   .hight {
+    height: 100% !important;
+    margin-top: 10px !important;
+    }
+
+    .cont-chg{
+            margin-left: 33%;
+            margin-top: -29%;
+            margin-bottom: 6%;
+        }
+
+     .cont-align{
+         padding-right: 0px;
+         margin-left: -5%;
+         margin-right: 1%;
+
+        }
+
+        .demand_sm_dp {
+            border-radius: 100% !important;
+            margin: 5% -3% -3% -4%!important;
+            background-color: <%= random_color %> !important;
+            height: 0 !important;
+            width: 0 !important;
+            text-align: center !important;
+            color: white !important;
+            font-size: 11px !important;
+            padding: 11% 15% 15% 12% !important;
+        }
+
+        .card-align{
+        margin-bottom: 4%;
+        margin-top: 4%;
+        }
+        .step-align{
+        margin-left: 72% !important;
+        }
+        .model-chg{
+        margin: 19% !important;
+        }
+
+                    .new_dash_container {
+        margin-left: 0 !important;
+        width: 100% !important;
+        min-height: 500px !important;
+    }
+
+        .modal-content {
+    margin: 20% !important;
+    position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+}
+
+    }
+
+
+
+      @media only screen and (max-width: 768px) and (min-width: 480px)  {
+
+        .model-chg{
+        margin-top: 23% !important;
+        margin-left: 6% !important;
+        margin-right: 6% !important;
+        }
+       .in-col12{
+        margin-bottom: 1%;
+        margin-left: auto !important;
+        width: 98%;
+        text-align: left;
+        }
+        .col-sm-3 {
+        margin-top: 8%;
+        }
+       .cont-chg {
+            margin-left: 48%;
+            margin-top: -21%;
+            margin-bottom: 2%;
+        }
+        .cont-align{
+         padding-right: 0px;
+         margin-left: -2%;
+         margin-right: 0.5%;
+
+        }
+        .demand_sm_dp {
+            border-radius: 100% !important;
+           margin: 4% -1% 8% 4%!important;
+            background-color: <%= random_color %> !important;
+            height: 0 !important;
+            width: 0 !important;
+            text-align: center !important;
+            color: white !important;
+            font-size: 11px !important;
+            padding: 4% 7% 7% 5% !important;
+        }
+
+        #triggeringModal {
+            width: 100% !important;
+            height: 100% !important;
+            cursor: pointer !important;
+            box-shadow: rgb(136, 136, 136) 0.5px 0.5px 3px !important;
+            float: right !important;
+            margin-bottom: 0% !important;
+            margin-top: -42% !important;
+        }
+
+        .orient-align{
+        padding-bottom: 40% !important;
+        padding-top: 4% !important;
+        background-color: #F2F2F2 !important;
+        }
+         .hight{
+        height: 100% !important;
+        margin-top: 10px !important;
+        }
+
+        .col-sm-6 {
+            width: 99%;
+            /* margin-right: 23%; */
+            margin-bottom: 2%;
+        }
+         .col-md-11{
+            position: absolute;
+            bottom: 5%;
+            margin-left: 35% !important;
+            }
+
+         .modal-cont-chg {
+    margin: 9% !important;
+    position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    bottom: -5% !important;
+    }
+
+     .card-align{
+        margin-bottom: 4%;
+        margin-top: 4%;
+        }
+        .step-align{
+        margin-left: 229% !important;
+        }
+
+        }
+</style>
+
+
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+    <div class="container-fluid new_dash_container" >
+        <div class='row onboarding material_div standard_row row-centered' >
+            <div class='onboarding_status'>
+                <h4>Center Admin Onboarding </h4>
+               <div class="progress" style="width:19%;position: absolute;top: 10px;left: 270px;">
+                  <div class="progress-bar progress-bar-striped active progress-bar-success" role="progressbar" 
+                       aria-valuenow="{{onboarding.role_onboarding_status}}" aria-valuemin="0" aria-valuemax="100"
+                       style="width:{{onboarding.role_onboarding_status}}%;position:relative;height:30px">
+                        {{onboarding.role_onboarding_status}} %
+                  </div>
+                </div>
+
+                {% include "new_orientation_block.html" %}
+
+                {% for step in steps %}
+                        <div class='col-sm-6 card-align'>
+                        {% if step.status %}
+                        <img src="/static/images/ribbon_complated.png" id="completed_ribbon">
+                        {% endif %}
+                        <div class='self_eval onboarding-step' style="height: 460px;">
+                           <h3>Step {{ forloop.counter }} </h3>
+                           <div class='col-md-12'>
+                                <img src='/static/images/self-evaluate.png' height=150px>
+                           </div>
+                           <div class='col-md-12'>
+                                <h4>{{ step.step_name }}</h4>
+                           </div>
+                           <div class='col-md-12'>
+                                <p>{{step.desc}}</p>
+                           </div>
+                           <div class='col-md-11' style="position: absolute;bottom: 8%;">
+                             {% if step.repeatable %}
+                                    {% if step.step_name == "Admin Selection Discussion" %}
+                                        <div class='btn btn-info  step_action'><!-- href="/book_sd_slots#{{step.role_preference}}"-->
+                                            <a {% if user_profile.phone and user_profile.skype_id %} href="/book_sd_slots#center_admin"
+                                            data-role_preference="{{step.role_preference}}"
+                                            {% else %} data-toggle="modal" data-target="#tsd_profile_fill_first" {% endif %}>Take this Step</a>
+                                        </div>
+                                    {% else %}
+                                        <div class='btn btn-info step_action' >
+                                            <a data-toggle='modal' data-target="#{{ step.short_name }}">
+                                            Take this Step</a>
+                                        </div>
+                                    {% endif %}
+                             {% else %}
+                                 {% if step.status %}
+                                        <div class='btn btn-link disabled step_action' disabled>Completed &nbsp&nbsp&nbsp 
+                                            <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                        </div>
+                                 {% else %}
+                                        <div class='btn btn-info step_action' > <a data-toggle='modal'
+                                        data-target="#{{ step.short_name }}">
+                                        Take this Step </a></div>
+                                 {% endif %}
+                             {% endif %}
+                           </div>
+                        </div>
+                        </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+        {% include "new_view_oppourtunities_going_on.html" %}
+
+    </div>
+
+<div id="Admin_Selection_Discussion" class="modal fade" role="dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" >
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" style="font-size:30px">&times;</button>
+            <h4 class="modal-title">Admin Selection Discussion</h4>
+        </div>
+        <div class="modal-body">
+            <div class='alert alert-info'>
+                <div class='row standard_row'>
+                    {% for step in steps %}
+                        {% if step.step_name == "Admin Selection Discussion" %}
+                            {% if step.prerequisite %}
+                            <div class='col-sm-9' style='    margin-top: 31px;'>
+                                Please choose a slot for a discussion using the book now button.
+                            </div>
+                            <div class='col-sm-3'>
+                                <a href="https://evidyaloka.youcanbook.me/"   data-ycbm-modal="true"><img style='box-shadow:3px 3px 3px -1px' src="https://youcanbook.me/resources/pics/ycbm-button.png" style="border-style:none;"/></a>
+                            </div>
+                            {% else %}
+                                <h6>Please complete your self evaluation, to proceed with the selection discussion</h6>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="Self_Evaluation" class="modal fade" role="dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" >
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" style="font-size:30px">&times;</button>
+            <h4 class="modal-title">Self Evaluation</h4>
+        </div>
+        <div class="modal-body">
+            <div class='row standard_row'>
+                <div class='col-sm-12'>
+                    <div class="alert alert-error bs-callout bs-callout-warning hidden">
+                      <h4>Oh snap!</h4>
+                      <p>This form seems to be invalid :(</p>
+                    </div>
+
+                    <div class="alert alert-success bs-callout bs-callout-info hidden">
+                      <h4>Yay!</h4>
+                      <p>Everything seems to be ok :)</p>
+                    </div>
+
+                  <form data-parsley-validate="" data-onboarding_id={{ onboarding.id }}>
+                    {% csrf_token %}
+                    <fieldset class="form-group row">
+                      <label class="col-form-legend col-sm-12 native_lang">Can you Read and Write fluently on the selected Native Language? *</label>
+                      <div class="ans-group col-sm-10">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" required="" name="native_lang"  value="yes" >
+                            Yes
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio"  name="native_lang"  value="no">
+                            No
+                          </label>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <div class="form-group row">
+                      <label for="lang_select" data-parsley-trigger="change" class="col-sm-12 col-form-label other_lang">Are you fluent to Speak, Read and Write in any other listed language? *</label>
+                        <div class='ans-group col-sm-10'>
+                            <select required="" class="form-control" name='other_lang' id='lang_select'>
+                              <option ></option>
+                              <option value='Hindi'>Hindi</option>
+                              <option value='Telugu'>Telugu</option>
+                              <option value='Tamil'>Tamil</option>
+                              <option value='Bengali'>Bengali</option>
+                              <option value='Odia'>Odia</option>
+                              <option value='Marathi'>Marathi</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="motivation" class="col-sm-12 col-form-label motivation">What motivates you to come on a platform like this and contribute your time? *
+</label>
+                      <div class="ans-group col-sm-10">
+                        <textarea class="form-control " name='motivation' required="" id="motivation" ></textarea>
+                      </div>
+                    </div>
+                    <fieldset class="form-group row">
+                      <label class="col-form-legend col-sm-12 slot_commit">Online classes happen during school hours. i.e 10am to 4pm IST. Mon to Friday. To Teach online, It is required to provide two 1-hr slots, which can be any two different days and any two slots in this window. Do you think you can commit for the same? *</label>
+                      <div class="ans-group col-sm-10">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" required="" name="slot_commit" value="yes" >
+                            Yes
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio"  name="slot_commit"  value="no">
+                            No
+                          </label>
+                        </div>
+                      </div>
+                    </fieldset>
+
+                    <fieldset class="form-group row">
+                      <legend class="col-form-legend col-sm-12">Please share your response for some classic teacher scenarios below:
+                      </legend>
+                      <label class="col-form-legend col-sm-12 scenerio_1">Sushmita, a volunteer teacher, has taught Fractions to a class of 20 children from Grade 6 for the last 4 sessions. On the 5th day, except for Seetha and Ramu all the other 18 children were clueless about what she had taught so far.  What should be the next best course of action for Sushmita ?</label>
+                      <div class="ans-group col-sm-10">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" required="" name="scenerio_1"  value="option1" >
+                            Plan to spend 2 more sessions to teach again
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="scenerio_1"  value="option2">
+                            Report this to coordinator and ask for help
+                          </label>
+                        </div>
+                        <div class="form-check ">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="scenerio_1"  value="option3" >
+                            Look for other approaches to teach the topic again
+                          </label>
+                        </div>
+                        <div class="form-check ">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="scenerio_1"  value="option3" >
+                            Ask Seetha and Ramu for their help to overcome the situation
+                          </label>
+                        </div>
+                        <div class="form-check ">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="scenerio_1"  value="option3" >
+                            Move on to next topic and park the topic to be revisted later
+                          </label>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <fieldset class="form-group row">
+                      <label class="col-form-legend col-sm-12 scenerio_2">She is now fully prepared for her next class. However on the day of her session, came an unavoidable personal/professional commitment for her few hours prior to the class. *
+What will you do if you were in her situation at that moment ?</label>
+                      <div class="ans-group col-sm-10">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" required="" name="scenerio_2"  value="option1" >
+                            Will make it a point to inform at end of the day to the Coordinator for the absence, with reasons
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="scenerio_2"  value="option2">
+                            Pick up the phone/sms/watsapp to inform the Coordinator and ask for help
+                          </label>
+                        </div>
+                        <div class="form-check ">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="scenerio_2"  value="option3" >
+                            Will re-adjust your personal/professional commitment to make to the class, as children are already struggling
+                          </label>
+                        </div>
+                        <div class="form-check ">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="scenerio_2"  value="option3" >
+                            Will reason out to the Children in the next class and make up for the loss
+                          </label>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <fieldset class="form-group row">
+                      <label class="col-form-legend col-sm-12 scenerio_3">As Sushmita comes for the next class, the children were trying to avoid and sought a break from the class requesting to cancel. *
+Your choice of action would be ?</label>
+                      <div class="ans-group col-sm-10">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" required="" name="scenerio_3"  value="option1" >
+                            Let the children go and have fun
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="scenerio_3" value="option2">
+                            You will reason out, why it is important for them stay for the class and continue with the class
+                          </label>
+                        </div>
+                        <div class="form-check ">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="scenerio_3"  value="option3" >
+                            You will ask the interested children to stay on and let others go
+                          </label>
+                        </div>
+                        <div class="form-check ">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="scenerio_3"  value="option3" >
+                            You will try to do something that could motivate the children to stay on
+                          </label>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <div class="form-group row">
+                      <label for="q4" class="col-sm-12 col-form-label scenerio_5">What will be your approach of delivering Fractions to the children now ? *
+</label>
+                      <div class="ans-group col-sm-10">
+                        <textarea class="form-control" name='scenerio_5' required="" ></textarea>
+                      </div>
+                    </div>
+                    <fieldset class="form-group row">
+                      <label class="col-form-legend col-sm-12 scenerio_6">What is best option to Inspire the child to learn ? *</label>
+                      <div class="ans-group col-sm-12">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="scenerio_6" required=""  value="option1" >
+                            Offer goodies for consistently participating in the class
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio"  name="scenerio_6"  value="option2">
+                            Challenge the child to do something, which he/she thought was not possible to do
+                          </label>
+                        </div>
+                        <div class="form-check ">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio"  name="scenerio_6"  value="option3" >
+                            Share motiviational stories of yours or others
+                          </label>
+                        </div>
+                        <div class="form-check ">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio"  name="scenerio_6"  value="option3" >
+                            Give periodic motivational talks
+                          </label>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <div class="form-group row">
+                      <div class="offset-sm-5 col-sm-7">
+                        <button id='self_eval_submit' type='submit' class="btn btn-primary" >Submit</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  <!-- profile fill first to book tsd slot warning modal -->
+  <!-- Modal -->
+  <div class="modal fade" id="tsd_profile_fill_first" role="dialog">
+    <div class="">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+          <h5>
+            Please fill the phone number and skype id to book a slot :
+            <a href="/profile/">Edit Profile</a>
+          </h5>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+{% include "new_orientation_modal.html" %}
+
+{% endblock %}
+
+
+

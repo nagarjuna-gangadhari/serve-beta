@@ -1,0 +1,738 @@
+{% extends "base_generic.html" %} 
+{% load tags %} 
+{% load filters %}
+
+{% block title %}Center Admin Page{% endblock %} 
+
+{% block breadcrumb %}{% endblock %} 
+
+{% block head %}
+    <style>
+        #body {
+            margin-left: 30px !important;
+            margin-right: 30px !important;
+        }
+
+        .box {
+            margin: 3px;
+        }
+
+        .red {
+            background-color: rgb(242, 188, 187) !important;
+        }
+
+        .align {
+            margin-right: 60px;
+            margin-left: 10px;
+        }
+
+        .activity {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding: 2px;
+            border-radius: 4px;
+            border: 2px solid black;
+        }
+
+        .btn {
+            border-radius: 4px;
+            background-color:rgb(156, 131, 235);
+            color: white;
+            padding: 5px;
+            border: 1px solid black;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: rgb(128, 107, 200);
+            color: white;
+            border: 1px solid black;
+        }
+
+        .btn-danger {
+            background-color: rgb(237, 124, 123);
+        }
+
+        .btn-danger:hover {
+            background-color: rgb(204, 92, 92);
+        }
+
+        .delete-slot {
+            color: red;
+            text-align: center !important;
+            align-items: center;
+        }
+
+        .block-imp {
+            display: block !important;
+        }
+
+        #act-date {
+            border: 1px solid;
+            border-radius: 4px;
+        }
+
+        .form-group input[type]:not([type='file']), .form-group textarea, .form-group select {
+            border: 1px solid;
+            border-radius: 4px;
+            padding: 3px;
+            margin-bottom: 5px;
+            width: 750px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        #add, #add-t, .but {
+            border-radius: 4px;
+            padding: 7px;
+            margin-bottom: 35px;
+            margin-top: 20px;
+            background-color:green;
+            color: white;
+            font-weight: bolder;
+            font-size: 20px;
+        }
+
+        .hr {
+            color: black !important;
+            width: 90% !important;
+        }
+
+        th {
+            background-color: lightblue !important;
+        }
+
+        #center-act {
+            padding: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div id="body">
+        <h1 class="text-4xl text-center font-bold text-purple-900" id="center-act">Welcome to Center Activities</h1>
+        <div class="text-center">
+            <button id="add" onclick="addActivity()">
+                <i class="fa fa-plus"></i> 
+                Add Activity
+            </button>
+        </div>
+        <a href="javascript:void(0)" id="bdlink" class="block-imp delete-slot text-center" style="display: none !important" onclick="bulkDelete()">Bulk Delete Marked Activities</a>
+        <table id="act-table">
+            <thead>
+                <tr>
+                    <th>Activity</th>
+                    <th>Comments</th>
+                    <th>Images</th>
+                    <th>Status</th>
+		            <th>Date</th>
+                    <th>Created By</th>
+                    <th>Created At</th>
+                    {% if can_edit %}
+                        <th>Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for activity in data %}
+                    <tr id="tr-{{activity.id}}">
+                        <td>{{activity.activity}}</td>
+                        <td>
+                            <strong>{{activity.comment|safe}}</strong>
+                            
+                            {% if activity.values %}
+                                <br/><br/>
+                                {% for k, v in activity.values.items %}
+                                    <strong>{{k}}: </strong> {{v}}<br/>
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not activity.imgs %}
+                                No images
+                            {% endif %}
+                            {% for img in activity.imgs %}
+                                <a class="text-blue-500" href="{{img.url}}">Image {{forloop.counter}}</a>
+                            {% endfor %}        
+                        </td>
+                        <td>{{activity.status}}</td>
+			            <td>{{activity.date}}</td>
+                        <td>{{activity.user}}</td>
+                        <td>{{activity.created_on}}</td>
+                        {% if can_edit %}
+                        <td>
+                                <input id="bd-{{slot.id}}" type="checkbox" class="checkbox checkbox-secondary" onclick="markBulkDelete({{activity.id}})" />
+                                <a href="javascript:void(0)" class="inline delete-slot" onclick="markBulkDelete({{activity.id}})"></a>
+                                <i class="fa-solid fa-trash-can text-red-400"></i>
+                                <span style="margin-right: 15px"></span>
+                                <a class="text-brown-400 font-bold" href="javascript:void(0)" onclick="editActivity({{activity.json}})"><i class="fas fa-edit"></i></a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if can_edit %}
+            <h2 class="text-3xl text-center hidden">Activity Types</h2>
+            <div class="text-center hidden">
+                <!--<button id="add-t" onclick="addAType()">Add Activity Type</button>-->
+            </div>
+            <table class="min-w-full hidden">
+                <thead class="border-b">
+                    <tr>
+                        <th scope="col" class="text-sm font-medium text-black px-6 py-4 text-left">Activity Type</th>
+                        <th scope="col" class="text-sm font-medium text-black px-6 py-4 text-left">Recorded Data</th>
+                        <!--<th scope="col" class="text-sm font-medium text-black px-6 py-4 text-left">Actions</th>-->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for type in activity_types %}
+                        <tr id="tr-{{type.id}}" class="border-b">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">{{type.type.activity_type}}</td>
+                            <td class="text-sm text-black px-6 py-4 whitespace-nowrap">
+                                {% for form in type.form %}
+                                    <strong>{{ form.label }}: </strong>{{ form.type }}<br/>
+                                {% endfor %}
+                            </td>
+                            <!--<td class="text-sm text-black px-6 py-4 whitespace-nowrap">
+                                <a class="text-brown-400 font-bold" href="javascript:void(0)" onclick="editAType({{type.json}})">Edit</a>
+                                <span style="margin-right: 3px;"></span>
+                                <a class="text-brown-400 font-bold" href="javascript:void(0)" onclick="delAType({{type.type.id}})">
+                                    <i class="fa-solid fa-trash-can text-red-400"></i>
+                                </a>
+                            </td>-->
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+
+    <!--Add/edit activity type modal-->
+    <div class="relative z-10 hidden" id="modal-2" aria-labelledby="modal-title-t" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+    
+        <div class="fixed z-10 inset-0 overflow-y-auto">
+        <div class="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
+            <div class="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full" style="min-width: 900px;">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                    <i class="fa-solid fa-check text-green-400"></i>
+                </div>
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title-t">Add Activity Type</h3>
+                    <div class="mt-2">
+                        <div>
+                            <div id="type-name-t" class="form-group">
+                                <label>Enter activity type name</label>
+                                <br/>
+                                <input type="text" id="type-name-t-inp" />
+                                <br/>
+                            </div>
+                            <div id="choices-t" class="form-group">
+                            </div>    
+                            <h3 class="text-md leading-6 font-medium text-gray-900" id="inp-title-t">Inputs</h3>
+                            <p class="text-sm text-gray-500">Add any inputs you wish to record. Date and comment is always recorded</p>
+                            <div id="inp-name-t" class="form-group">
+                                <label>Enter input name/label</label>
+                                <br/>
+                                <input type="text" id="inp-name-t-inp" />
+                                <br/>
+                            </div>
+                            <div id="inp-type-t" class="form-group">
+                                <label>Enter input type name (text/number/date)</label>
+                                <br/>
+                                <input type="text" id="inp-type-t-inp" />
+                                <br/>
+                            </div>
+                            <button class="but" onclick="addInp()">Add Input</button>
+                        </div>
+                        <p class="text-sm text-gray-500"></p>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button onclick="closeModal()" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">Cancel</button>
+                <button id="act-t-save" onclick="createAType()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Create Activity Type</button>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!--Add/Edit activity modal-->
+    <div class="relative z-10 hidden" id="modal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+    
+        <div class="fixed z-10 inset-0 overflow-y-auto">
+        <div class="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
+            <div class="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full" style="min-width: 900px;">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                    <i class="fa-solid fa-check text-green-400"></i>
+                </div>
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title"></h3>
+                    <div class="mt-2">
+                        <div>
+                            {{activity_form.activity_select|safe}}
+                            {{activity_form.html|safe}}
+                            <div class="form-group">
+                                <label>Date</label>
+                                <br/>
+                                <input id="act-date" type="date" max="{{date}}" />
+                                <br/>
+                            </div>
+                            <div class="form-group">
+                                <label>Comment</label>
+                                <br/>
+                                <textarea type="text" id="act-comments" width="100px"></textarea>
+                                <br/>
+                            </div>
+                            <div class="form-group">
+                                <label>Images <span id="upload-msg" aria-multiple="true" multiple>(Upload to change)</span></label>
+                                <br/>
+                                <input type="file" id="act-file" />
+                                <br/>
+                            </div>
+                            
+                            <!--Hide until later-->
+                            <div class="hidden">
+                                <input type="checkbox" id="clear-img" onchange="disableUpload()"/>
+                                <label for="clear-img">Clear all images</label>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500"></p>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button onclick="closeModal()" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">Cancel</button>
+                <button id="act-save" onclick="finishActivityMod(true)" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"></button>
+            </div>
+            </div>
+        </div>
+        </div>
+  </div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/tablefilter@0.6.94/dist/tablefilter/tablefilter.min.js"></script>
+<script>
+    let inps = [];
+
+    function addInp() {
+        let name = $("#inp-name-t-inp").val();
+
+        if(!name) {
+            alert("Please enter a name/label for the input", "danger");
+            return;
+        }
+
+        if(name.toLowerCase() == "date" || name.toLowerCase() == "comments") {
+            alert("Date and comments is already recorded", "danger");
+            return;
+        }
+
+        let type = $("#inp-type-t-inp").val();
+
+        if(!type) {
+            alert("Please enter a type for the input", "danger");
+            return;
+        }
+
+        if(type != "text" && type != "number" && type != "date") {
+            alert("Please enter a valid type for the input (text, number or date)", "danger");
+            return;
+        }
+
+        for(let i = 0; i < inps.length; i++) {
+            if(inps[i].name == name) {
+                alert("Input with name " + name + " already exists", "danger");
+                return;
+            }
+        }
+
+        inps.push({
+            name: name,
+            type: type,
+        })
+
+        // Rerender
+        addAType(true)
+    }
+    
+    function removeInp(i) {
+        inps.splice(i, 1);
+        // Rerender
+        addAType(true)
+    }
+
+    function addAType(rerender) {
+        if(!rerender) {
+            inps = [];
+        }
+
+        $("#inp-name-t-inp").val("");
+        $("#inp-type-t-inp").val("");
+
+        // Reset choices-t
+        $("#choices-t").html("")
+
+        let html = ""
+
+        html += `
+        <table class="min-w-full">
+            <thead class="border-b">
+                <tr>
+                    <th scope="col" class="text-sm font-medium text-black px-6 py-4 text-left">Input Name</th>
+                    <th scope="col" class="text-sm font-medium text-black px-6 py-4 text-left">Input Type</th>
+                    <th scope="col" class="text-sm font-medium text-black px-6 py-4 text-left">Actions</th>
+                </tr>
+            </thead>
+            <tbody>`
+
+        inps.forEach(inp => {
+            html += `
+                <tr class="border-b">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">${inp.name}</td>
+                    <td class="text-sm text-black font-light px-6 py-4 whitespace-nowrap">${inp.type}</td>
+                    <td class="text-sm text-black font-light px-6 py-4 whitespace-nowrap">
+                        <button onclick="removeInp(${inps.indexOf(inp)})">
+                            <i class="fa-solid fa-trash-can text-red-400"></i>
+                        </button>
+                    </td>
+                </tr>
+            `
+        })
+
+        html += "</table>"
+
+        $("#choices-t").html(html)
+
+        $("#modal-2").removeClass("hidden");
+    }
+
+    async function delAType(id) {
+        let req = confirm("Are you sure you want to delete this activity type?");
+        if(!req) {
+            return;
+        }
+        let res = await fetch(`/v2/activity_types?id=${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        })
+
+        let data = await res.json();
+
+        if(res.ok) {
+            alert("Activity type deleted", "success");
+            closeModal();
+            location.reload();
+        } else {
+            alert(data.error.message, "danger");
+        }
+    }
+
+    async function createAType() {
+        let typeName = $("#type-name-t-inp").val();
+        
+        let res = await fetch(`/v2/activity_types`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: typeName,
+                inputs: inps
+            })
+        })
+
+        let data = await res.json();
+
+        if(res.ok) {
+            alert("Activity type created", "success");
+            closeModal();
+            location.reload();
+        } else {
+            alert(data.error.message, "danger");
+        }
+    }
+
+    function closeModal() {
+        $('#modal').addClass('hidden');
+        $('#modal-2').addClass('hidden');
+    }
+
+    function disableUpload() {
+        let check = document.getElementById('clear-img').checked;
+        if(check) {
+            document.getElementById('act-file').disabled = true;
+        } else {
+            document.getElementById('act-file').disabled = false;
+        }
+    }
+
+    var inpValues = {{activity_form.id_map|safe}};
+    let idNameMap = {{activity_form.id_name_map|safe}};
+
+    function showOtherPopup() {
+        //alert(document.querySelector("#act-activities").value)
+        let activity = document.querySelector("#act-activities").value;
+
+        $(".activity-specific").css("display", "none");
+        
+        if(activity) {
+            $(`#${activity}-div`).css("display", "initial")
+        }
+    }
+
+    function verifyFileIsImage(file) {
+        // verifies the file extension is one we support.
+        var extension = file.name.split('.').pop().toLowerCase(); //file.substr( (file.lastIndexOf('.') +1) );
+        switch (extension) {
+            case 'jpg':
+                return 2
+            case 'png':
+                return 1
+            case 'jpeg':
+                return 3
+            default:
+                return null
+        }
+    };
+
+    async function finishActivityMod(edit) {
+        var csrftoken = getCookie('csrftoken');
+
+        let selectedFile = document.querySelector('#act-file').files;
+
+        if(selectedFile.length > 1) {
+            alert("Please select *one* file (or less)", "danger");
+            return;
+        }
+
+        var data = new FormData(); // Create formdata objects to facilitate file transfer to the back end
+
+        let format = -1;
+        const type = 1 // upload doc type: 
+
+        //selectedFile.forEach(file => {})
+
+        if(selectedFile.length == 1) {
+            let file = selectedFile[0];
+
+            format = verifyFileIsImage(file);
+
+            if(!format) {
+                alert("Please select a valid image file", "danger");
+                return;
+            }
+            data.append("file", file) //To add (encapsulate) a file object to a formdata object
+            data.append("format", format)
+            data.append("doc_type", type);
+        }
+
+        let activity = document.querySelector("#act-activities").value;
+
+        data.append("center_id", {{ center_id }});
+        data.append("comments", document.querySelector("#act-comments").value);
+        data.append("activity", idNameMap[activity]);
+        data.append("date", document.querySelector("#act-date").value)
+       
+        let extData = {};
+
+        inpValues[activity].forEach((key) => {
+            console.log(key)
+            let inp = document.querySelector(`#${key}`);
+            if(inp) {
+                extData[key.replace(activity, "").replaceAll("-", " ").replaceAll("/", "")] = inp.value;
+            }
+        })
+
+        data.append("ext_data", JSON.stringify(extData));
+
+        let updateId = document.querySelector("#act-id").value;
+
+        if(updateId) {
+            data.append("update", 1);
+            data.append("update_id", updateId);
+            data.append("clear-img", document.querySelector("#clear-img").checked);
+        }
+
+	let res = await fetch(`/v2/activities?format=${format}&doc_type=${type}`, {
+		body: data,
+		method: "POST",
+                headers: {
+                   "X-CSRFToken": csrftoken
+                },
+	})
+
+	if(res.ok) {
+		alert("Activity added successfully", "success");
+		window.location.reload()
+	} else {
+		let resData = await res.json()
+		alert(resData.error.message, "danger");
+	}
+    }
+
+    function addActivity() {
+        $("#modal-title").html("Add Activity");
+        $("#act-comments").text("");
+        $("#act-date").val("");
+        $("#act-id").val("");
+        $("#act-activities").val("");
+        showOtherPopup();
+
+        dateFocusEventAdd()
+
+        $("#other-activity-inp").val("");
+
+        $("#act-save").text("Add Activity");
+
+        document.querySelector("#modal").classList.remove("hidden");
+    }
+
+    function dateFocusEventAdd() {
+        // For every input with type date, add focus event handler on click
+        let inputs = document.querySelectorAll("input[type=date]");
+
+        inputs.forEach(input => {
+            input.addEventListener("click", function() {
+                this.showPicker()
+            });
+        });
+    }
+
+    function editActivity(json) {
+        console.log(json)
+        $("#modal-title").html("Edit Activity");
+        $("#act-comments").text(json.comment);
+        $("#act-date").val(json.date_browser);
+        $("#act-id").val(json.id);
+        $("#act-activities").val(json.activity_type_parsed);
+        showOtherPopup();
+
+        dateFocusEventAdd()
+
+        $("#other-activity-inp").val(json.activity);
+
+        for (let key in json.values) {
+            let keyParsed = key.replaceAll(" ", "-").replaceAll("/", "") + "-" + json.activity_type_parsed;
+            console.log(keyParsed)
+            let inp = document.querySelector(`#${keyParsed}`);
+            if(inp) {
+                inp.value = json.values[key];
+            } 
+        }
+
+        $("#act-save").text("Edit Activity");
+
+        document.querySelector("#modal").classList.remove("hidden");
+    }
+
+    async function deleteActivity(idArr) {
+        let errorIds = [];
+        for (let i = 0; i < idArr.length; i++) {
+            let id = idArr[i];
+            let res = await fetch(`/v2/activities?id=${id}`, {
+		        method: "DELETE",
+                credentials: "include"
+	        })
+            if(!res.ok) {
+                errorIds.push(id);
+	        }
+        }
+
+        if(errorIds.length > 0) {
+            alert(`Failed to delete activities with ids: ${errorIds.join(", ")}. Try reloading?`, "danger");
+        } else {
+            alert("Successfully deleted activities", "success");
+        }
+    }
+
+    let markedActIds = [];
+
+    function markBulkDelete(id) {
+        if (markedActIds.includes(id)) {
+            // Remove id
+            markedActIds = markedActIds.filter(x => x != id);
+            $(`#bd-${id}`).prop("checked", false)
+            document.querySelector(`#tr-${id}`).classList.remove("red")
+        } else {
+            markedActIds.push(id);
+            $(`#bd-${id}`).prop("checked", true)
+            document.querySelector(`#tr-${id}`).classList.add("red")
+        }
+        console.log(markedActIds);
+
+        if(markedActIds.length > 0) {
+            $("#bdlink").css("display", "initial");
+        } else {
+            $("#bdlink").attr("style","display: none!important");
+        }
+    }
+
+    function bulkDelete() {
+        let askUser = confirm(`Are you sure you wish to bulk delete activites ${markedActIds.join(', ')}!`);
+        if(!askUser) {
+            return	
+        }
+        deleteActivity(markedActIds);
+    }
+
+    $(document).ready(() => {
+        var tf = new TableFilter(document.querySelector('#act-table'), {
+            base_path: 'https://cdn.jsdelivr.net/npm/tablefilter@0.6.94/dist/tablefilter/',
+            paging: {
+                results_per_page: ['Records: ', [10]]
+            },
+            status_bar: true,
+            rows_counter: true,
+            btn_reset: true,
+            loader: true,
+            alternate_rows: true,
+            no_results_message: true,
+            responsive: true,
+            col_0: "select",
+            col_3: "select",
+            col_5: "select",
+            auto_filter: {
+                delay: 100 //milliseconds
+            },
+            extensions:[{
+                name: 'sort'
+            }]
+        });
+
+        tf.init();
+
+        let searchPlace = () => {
+            let els = document.querySelectorAll("input.flt")
+            if(els.length == 0) {
+                setTimeout(searchPlace, 100);
+            }
+
+            for(let el of els) {
+                el.setAttribute("placeholder", "Search...")
+            }
+        }
+
+        setTimeout(searchPlace)
+    })
+</script>
+{% endblock %}
+

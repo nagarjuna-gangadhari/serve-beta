@@ -1,0 +1,152 @@
+{% extends 'new_base_temp.html' %}
+{% block content %}
+
+
+    <!-- schools Section
+    ================================================== -->
+    <section id="about" class="content text-center light demand-bg" style="padding:1.5em 0;">
+
+      <div class="container" style="margin-top:70px">
+        <!-- Three columns of text below the carousel -->
+        <div class="row" style="padding-bottom: 0.9em;">
+          <div class="col-lg-12 overlay-text">
+            <h2 style="font-size:2.1em;text-transform:none;margin-bottom:10px;color:black">Join the mission</h2>
+            <p style="font-size:1.3em;margin-top:0px;margin-bottom:10px;color:black;font-weight:500">where passionate <strong>volunteers</strong> connect online to provide quality education for the children of rural Vilalges of India.<br/>Let us contribute towards A knowledgeable & empowered Rural India, Be a part of the solution. How ?</p>
+          </div><!-- /.col-lg-12 -->
+        </div><!-- /.row -->
+
+        <div class="row">
+            <div class="col-md-6">
+                <img src="/static/images/teaching.jpg"class="img-responsive"style="min-height:305px;border-radius:7px">
+            </div>
+            <div class="col-md-6">
+                <div class="well" style="min-height:420px">
+                    <h3 style="color:black">Online teaching</h3>
+                    <p style="font-size:1em;margin-top:0px;margin-bottom:5px;color:black;font-weight:500">You can teach without having to change any of the personal commitments or priorities</p>
+                    <ul style="text-align:left;font-size: 1em;font-weight: 600;color: black;margin-bottom:100px" class="online_teach">
+                        <li>Passion to Teach Children</li>
+                        <li>Can speak, read and write in your mother tongue</li>
+                        <li>2 hrs per week of commitment over Skype, on time</li>
+                        <li>Access to PC , Broadband, Webcam and Headset</li>
+                        <li>Willing to be Patient and Response</li>
+                    </ul>
+                    <a class="btn btn-lg btn-primary scroll" href="/static/downloads/trainings/Teacher%20Guidelines_V1.0.pdf" target="_blank" role="button" style="font-weight:bold;background-color:#ff6699;">Learn More</a>
+                    {% if user.is_authenticated %}
+                    <a class="btn btn-lg btn-primary scroll start_btn" href="/demand/"role="button" style="font-weight:bold;background-color:#9966ff;">Contribute</a>
+                    {% else %}
+                    <a class="btn btn-lg btn-primary scroll start_btn not_already"data-toggle="modal"data-target="#login-modal"id="login-trigger" role="button" style="font-weight:bold;background-color:#9966ff;">Sign Up to Contribute</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div><!-- /.row -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="well"style="min-height:350px">
+                    <h3 style="color:black">Content development</h3>
+                    <p style="font-size:1em;margin-top:0px;margin-bottom:5px;color:black;font-weight:500">Nervous about being online and live? Not sure of your schedules, but passionate about education.</p>
+                    <ul style="text-align: left;font-size: 1em;font-weight: 600;color: black;margin-bottom:35px" class="online_teach">
+                            <li>Offline, at your pace</li>
+                            <li>Any number of hours per week</li>
+                            <li>Familiar with Browsing Internet & Search</li>
+                            <li>Curiosity about newer and interesting resources used in teaching</li>
+                            <li>Responsive over email</li>
+                            <li>Reading skill of mother tongue will be an added advantage</li>
+                    </ul>
+                    <a class="btn btn-lg btn-primary scroll" href="/static/downloads/eVidyaloka_Content_Volunteer_Handbook.pdf" target="_blank" role="button" style="font-weight:bold;background-color:#ff6565;">Learn More</a>
+                    {% if user.is_authenticated %}
+                    <a class="btn btn-lg btn-primary scroll start_btn" href="/myevidyaloka/"role="button" style="font-weight:bold;background-color:#9966ff;">Contribute</a>
+                    {% else %}
+                    <a class="btn btn-lg btn-primary scroll start_btn not_already"data-toggle="modal"data-target="#login-modal"id="login-trigger" role="button" style="font-weight:bold;background-color:#9966ff;">Sign Up to Contribute</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="well"style="min-height:350px">
+                    <h3 style="color:black">Class Admin</h3>
+                    <p style="font-size:1em;margin-top:0px;margin-bottom:5px;color:black;font-weight:500">Acads has never been your cup of Tea ? Running the show is your strength ? Sure, be a Class Admin</p>
+                    <ul style="text-align: left;font-size: 1em;font-weight: 600;color: black;margin-bottom:15px" class="online_teach">
+                        <li>Semi-online - Access to Skype/Internet over any device</li>
+                        <li>5 hours per week, on an average</li>
+                        <li>Comfortable with email/watsapp/skype modes of communications</li>
+                        <li>Enjoy coordinating with people</li>
+                        <li>Love taking ownership</li>
+                        <li>Put your Administrative / Managerial abilities to play</li>
+                        <li>Hear directly from a Volunteer -- <a href='#' data-toggle='modal' data-target='#vid_modal'> Click Here</a></li>
+                    </ul>
+                    <a class="btn btn-lg btn-primary scroll start_btn" href="/static/downloads/Class_Administrator_RnR.pdf" target="_blank" role="button" style="font-weight:bold;background-color:#ff6699;">Learn More</a>
+                    {% if user.is_authenticated %}
+                    <a class="btn btn-lg btn-primary scroll start_btn" href="/myevidyaloka/"role="button" style="font-weight:bold;background-color:#9966ff;">Contribute</a>
+                    {% else %}
+                    <a class="btn btn-lg btn-primary scroll start_btn not_already"data-toggle="modal"data-target="#login-modal"id="login-trigger" role="button" style="font-weight:bold;background-color:#9966ff;">Sign Up to Contribute</a>
+                    {% endif %}
+                </div>
+            </div>
+          </div><!--row-->
+        <div class="row">
+            <div class="col-md-4">
+                <a href="/demand/" style="text-decoration:none">
+                <div class="well">
+                    <h3>View opportunities</h3>
+                    <img src="/static/images/see_all_sample.JPG">
+                </div>
+                </a>
+            </div>
+            <div class="col-md-8">
+                <a href="/how/" style="text-decoration:none;">
+                <div class="well" style="min-height:415px;background:url('/static/images/how_evd.jpg')no-repeat;background-size:750px 420px">
+                    <h3 style="color:black;">How eVidyaloka works</h3>
+                    <p style="color:black;font-size:1.2em;font-weight:bold;">eVidyaloka improves the quality in education by connecting high quality teachers across the world through live, interactive online classes for the children via the Digital Classrooms setup in the village Government schools.</p>
+                    <span align="center"><p><a class="btn btn-lg btn-primary scroll" href="/how/" role="button" style="background-color:#ffcc33">Learn More</a></p></span>
+                    <!--<div style="background:url('/static/images/how_evd.jpg');min-height:328px;background-size:cover">
+                    </div>-->
+                    <!--<img src="/static/images/how_it.jpg" style="min-height:328px;" class="img-responsive">-->
+                </div>
+                </a>
+            </div>
+        </div><!--row-->
+
+
+      </div>
+
+
+    </section>
+
+    <section>
+<div id="vid_modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" >
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" style="font-size:30px">&times;</button>
+        <h4 class="modal-title">Hear directly from a Volunteer</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12" id="yt-player">
+                <iframe width='100%'  height="480" src="https://www.youtube.com/embed/JxsyXtNDCKU" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+ 
+    </section>
+
+    <style>
+        .demand-bg{
+            background: -moz-linear-gradient(90deg, #ffcc33 0%, #66cc99 44%, #33ccff 75%) !important;/* FF3.6+ */
+            background: -webkit-gradient(linear, 90deg, color-stop(0%, #ffcc33), color-stop(44%, #66cc99), color-stop(75%, #33ccff)) !important;/* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(90deg, #ffcc33 0%, #66cc99 44%, #33ccff 75%) !important;/* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(90deg, #ffcc33 0%, #66cc99 44%, #33ccff 75%) !important;/* Opera 11.10+ */
+            background: -ms-linear-gradient(90deg, #ffcc33 0%, #66cc99 44%, #33ccff 75%) !important;/* IE10+ */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffcc33', endColorstr='#33ccff', GradientType='0') !important; /* for IE */
+            background: linear-gradient(0deg, #ffcc33 0%, #66cc99 44%, #33ccff 75%) !important;/* W3C */
+        }
+        .online_teach li{
+            margin-bottom: 3px;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+
+    <style>
+        #myTable_filter {
+            display:none;
+        }
+        #myTable_previous {
+          font-family: Arial, Helvetica, sans-serif;
+        }
+        #myTable_next {
+          font-family: Arial, Helvetica, sans-serif;
+        }
+        .mySchoolDiv {
+            background-color:#ffffff;
+            padding : 15px 20px 20px 30px;
+        }
+        .verification{
+            margin-top:15px;
+        }
+        input, textarea {
+            margin-bottom : 0px !important;
+        }
+        thead{
+            background-color: #27A3E2 !important;
+            color: white;
+        }
+        thead th{
+            border-bottom: 1px solid white !important;
+            font-weight: bold !important;
+            vertical-align: middle !important;
+            text-align: center !important;
+        }
+        .tableCaption{
+            padding: 20px;
+            text-align: center;
+            font-size: 23px;
+            font-weight: bold;
+            background-color: #27A3E2;
+            color: white;
+        }
+        .spantext{
+            text-align: center !important;
+        }
+
+        tfoot {
+            display: table-header-group !important;
+        }
+
+    </style>
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_container %}
+    {{ block.super }}
+
+
+  {%if is_partner or is_school_admin%}
+    <div class="inner" style="height: 100%;">
+
+        <div class="col-md-2" style="height: 100%;">
+          {%include "navbar.html"%}
+        </div>
+        <div class="col-md-10" style="height: 100%;overflow-y: auto; right: -15px; padding-left: 3%">
+    {%else%}
+    <div class="admin_inner">
+         <div class="col-md-12">
+    {%endif%}
+      
+      {% include "../../web/templates/list_myschools.html" %}
+  </div>
+</div>
+
+{% endblock %}
+
+
+{% block bottom_scripts %}
+    {{ block.super }}
+
+    <!-- <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+
+
+        $(document).ready( function () {
+            $(".inner.clearfix").css("width","85%");
+
+            // Setup - add a text input to each footer cell
+            $('#myTable tfoot th').each( function () {
+                var title = $(this).text();
+                $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+            } );
+
+            $("#myTable").DataTable({
+                "bLengthChange": false,
+                "pageLength": 25,
+            });
+
+            // DataTable
+            var table = $('#myTable').DataTable();
+
+            // Apply the search
+            table.columns().every( function () {
+                var that = this;
+                $( 'input', this.footer() ).on( 'keyup change', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+        });
+
+
+     function myPartnerFilter() {
+          var input, filter, table, tr, td, i;
+          input = document.getElementById("partnerName");
+          filter = input.value.toUpperCase();
+          table = document.getElementById("myTable");
+          tr = table.getElementsByTagName("tr");
+          for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+              if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+              } else {
+                tr[i].style.display = "none";
+              }
+            }
+          }
+      }
+
+     function mySchoolFilter() {
+          var input, filter, table, tr, td, i;
+          input = document.getElementById("schoolName");
+          filter = input.value.toUpperCase();
+          table = document.getElementById("myTable");
+          tr = table.getElementsByTagName("tr");
+          for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+              if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+              } else {
+                tr[i].style.display = "none";
+              }
+            }
+          }
+      }
+     
+     function myVillageFilter(){
+    	 var input, filter, table, tr, td, i;
+         input = document.getElementById("villageName");
+         filter = input.value.toUpperCase();
+         table = document.getElementById("myTable");
+         tr = table.getElementsByTagName("tr");
+         for (i = 0; i < tr.length; i++) {
+           td = tr[i].getElementsByTagName("td")[2];
+           if (td) {
+             if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+               tr[i].style.display = "";
+             } else {
+               tr[i].style.display = "none";
+             }
+           }
+         } 
+    	 
+     }
+     
+     
+      function myStatusFilter() {
+          var input, filter, table, tr, td, i;
+          input = document.getElementById("myStatus");
+          filter = input.value.toUpperCase();
+          table = document.getElementById("myTable");
+          tr = table.getElementsByTagName("tr");
+          for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[3];
+            if (td) {
+              if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+              } else {
+                tr[i].style.display = "none";
+              }
+            }
+          }
+      }
+    </script>
+ -->
+
+{% endblock %}

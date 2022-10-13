@@ -1,0 +1,588 @@
+{% extends "base_generic.html" %}{% load filters %}{% load tags %} {% block title %}Content Demand | eVidyaloka{% endblock %} {% block head %}
+<link rel="stylesheet" href="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css">
+<style>
+    .tooltip {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 240px;
+        background-color: rgb(43, 90, 51);
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 1px 0;
+        /* Position the tooltip */
+        position: absolute;
+        left: -13px;
+        z-index: 1;
+    }
+    
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+    }
+</style>
+{% endblock %} {% block body %}
+
+<div class="w-full h-auto">
+    <div class="w-full h-screen flex flex-row">
+        <div id="fillter_wraper" class="z-10 sm:z-0 px-2 sm:px-0 w-full md:w-3/12 lg:w-2/12 h-full hidden md:block border-r absolute right-0 bg-gray-100 lg:relative lg:right-auto">
+            <div class="w-full py-4 text-center text-sm font-bold border-b bg-sky-800 hover:bg-sky-900 text-white space-x-2"><i class="fas fa-arrow-left"></i><a href="/v2/demand/">Show All Opportunities</a></div>
+            <div class="w-full h-full sm:px-2 space-y-6 text-sm font-semibold">
+                <div class="mt-4">
+                    <label class="pl-1" for="language">LANGUAGE</label>
+                    <select id="language" multiple="multiple" class="w-full demanFilterdropDown">
+                    </select>
+                </div>
+                <div>
+                    <label class="pl-1" for="subject">SUBJECT</label>
+                    <select id="subject" multiple="multiple" class="w-full demanFilterdropDown">
+                    </select>
+                </div>
+
+                <div>
+                    <label class="pl-1" for="grade">GRADE</label>
+                    <select id="grade" multiple="multiple" class="w-full demanFilterdropDown">
+                    </select>
+                </div>
+                <div>
+                    <label class="pl-1" for="work_stream">WORK STREAM</label>
+                    <select id="work_stream" multiple="multiple" class="w-full demanFilterdropDown">
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        <div class="w-full h-screen overflow-y-scroll">
+            <div class="w-full text-center font-bold pt-4 text-3xl">Content Demand</div>
+            <div class="flex justify-around md:justify-end items-stretch md:px-20 pt-4">
+                <div onclick="toggle_fillter_wraper('open')" class="md:hidden block"><i class="fas fa-filter fa-2x"></i></div>
+            </div>
+            <section class="tab max-w-auto mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <div id="releaseSlotsContainer" class="hidden w-full h-auto flex flex-col items-center justify-center mb-4">
+                    <div class="w-full">
+                        <table class="border-collapse w-full">
+                            <thead>
+                                <tr class="text-xs uppercase">
+                                    <th class="py-2 bg-gray-200 text-gray-600 border border-gray-300 lg:table-cell">id</th>
+                                    <th class="py-2 bg-gray-200 text-gray-600 border border-gray-300 lg:table-cell">Language</th>
+                                    <th class="py-2 bg-gray-200 text-gray-600 border border-gray-300 lg:table-cell">Board</th>
+                                    <th class="py-2 bg-gray-200 text-gray-600 border border-gray-300 lg:table-cell">Subject</th>
+                                    <th class="py-2 bg-gray-200 text-gray-600 border border-gray-300 lg:table-cell">Topic</th>
+                                    <th class="py-2 bg-gray-200 text-gray-600 border border-gray-300 lg:table-cell">Subtopic</th>
+                                    <th class="py-2 bg-gray-200 text-gray-600 border border-gray-300 lg:table-cell">work Stream</th>
+                                </tr>
+                            </thead>
+                            <tbody id="previous_booking_wraper"></tbody>
+                        </table>
+                    </div>
+                    <div id="releaseSlots" onclick="releaseSlots()" class="w-1/2 p-2 mt-2 w-full text-center rounded-full bg-yellow-400 cursor-pointer hover:scale-105 hover:bg-yellow-500">Release my previuosly booked demand <i class="fas fa-recycle"></i></div>
+                </div>
+                <div id="demand" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-10"></div>
+            </section>
+        </div>
+    </div>
+
+</div>
+
+<div id="redirect" class="z-30 hidden fixed top-0 left-0 w-full h-screen bg-gray-900 opacity-90 shadow-2xl flex items-center justify-center transform transition-transform duration-300">
+    <div class="w-3/4 h-1/4 xl:pb-20 rounded-full bg-white flex flex-col">
+        <div class="flex flex-col text-4xl text-green-400">
+            <div class="text-center">
+                <i class="fas fa-check fa-2x"></i>
+            </div>
+            <div class="text-center">
+                <p>Your demand has been booked successfully</p>
+            </div>
+        </div>
+        <div class="text-center">
+            <p>You will be redirected to the home page in <span id="redirectCount">10</span> seconds</p>
+        </div>
+        <div class="flex justify-center">
+            <button id="stopRedirect" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Stay here
+            </button>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %} {% block scripts %}
+
+<script src="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.js"></script>
+{{ pref_subject|json_script:"pref_subject" }} {{ user_details|json_script:"user_details" }} {{ demand|json_script:"demand_data" }} {{ previous_booking|json_script:"previous_booking" }}
+
+
+<script>
+    const subjects = JSON.parse(document.getElementById('pref_subject').textContent);
+    const content_demand = JSON.parse(document.getElementById('demand_data').textContent);
+    const user_details = JSON.parse(document.getElementById('user_details').textContent);
+    const previous_booking = JSON.parse(JSON.parse(document.getElementById('previous_booking').textContent));
+    const defaultSubject = '{{ pref_subject }}';
+    const primary_language = user_details.preferred_language[0];
+    var filtered_fltData = content_demand;
+
+    let queryString = window.location.search; 
+    let urlParams = new URLSearchParams(queryString);
+    let defaault_workstream = urlParams.get('workstream');
+
+    console.log(content_demand);
+    console.log(previous_booking)
+    console.log(user_details)
+
+
+    $(document).ready(function() {
+        if (previous_booking['is_booked'] == true) {
+            $("#releaseSlotsContainer").removeClass("hidden");
+
+        }
+
+        for (demands in previous_booking['slots']) {
+            let demand = previous_booking['slots'][demands];
+
+            $('#previous_booking_wraper').append(`<tr class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
+                                <td class="text-sm lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['id']}</td>
+                                <td class="text-sm lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['topic__course_id__language__name']}</td>
+                                <td class="text-sm lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['topic__course_id__board_name']}</td>
+                                <td class="text-sm lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['topic__course_id__grade']}th - ${demand['topic__course_id__subject']}</td>
+                                <td class="text-sm lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['topic__title']}</td>
+                                <td class="text-sm lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['subtopic__name']}</td>
+                                <td class="text-sm lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['workstream__name']}</td>
+                            </tr>`);
+        }
+
+    });
+
+
+    // handle the click event on the demand book confirmed
+    $(document).on("click", '#stopRedirect', function(event) {
+        clearTimeout(redirectTimer);
+        $('#redirect').addClass('hidden')
+        location.reload();
+    });
+
+
+    function make_demand_table(data) {
+        $('#demand div').remove();
+        let colors = {
+            'Math': 'green',
+            'Science': 'orange',
+            'English': 'yellow'
+        };
+
+        for (var i = 0; i < data.length; i++) {
+            const topic = data[i];
+            const subtopics = topic.subtopic__name
+            let topic_color = 'gray';
+            for (color in colors) {
+                if (topic.topic__course_id__subject.includes(color)) {
+                    topic_color = colors[color];
+                }
+            }
+            let tooltip = `<div class="flex flex-col py-1 divide-y-2">`
+            for (var j = 0; j < subtopics.length; j++) {
+                tooltip += `<div class="flex flex-row">
+                                <div class="w-1/4 text-sm">${j+1})</div>
+                                <div class="w-3/4 text-sm">${subtopics[j]}</div>
+                            </div>`
+            }
+            tooltip += `</div>`
+
+            let tile = `<div class="tile-button relative w-full bg-white rounded-lg flex flex-col justify-between items-center hover:scale-105 hover:drop-shadow-2xl">
+                <div class="text-lg text-white bg-${topic_color}-500 w-full text-center p-4 rounded-t-lg font-bold">${topic.topic__course_id__grade}th ${topic.topic__course_id__subject}</div>
+                <div class="w-full font-bold text-xs text-gray-600 p-4 pt-1">
+                    <div class="w-full flex py-1 text-sm">
+                        <div class="w-1/5">Topic</div>:
+                        <div class="w-5/5 ml-1">${topic.topic__title}</div>
+                    </div>
+                    <div class="w-full flex py-2 border-t tooltip cursor-pointer">
+                        <div class="w-1/2 mr-1">Subtopics</div>:
+                        <div class="w-1/2 font-thin ml-1">
+                            <p>${subtopics.length}</p>
+                            <div class="tooltiptext">
+                                ${tooltip}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full flex py-2 border-t">
+                        <div class="w-1/2 mr-1">Work Stream</div>:
+                        <div class="w-1/2 font-thin ml-1">${topic.workstream__name}</div>
+                    </div>
+                    <div class="w-full flex py-2 border-t">
+                        <div class="w-1/2 mr-1">Board</div>:
+                        <div class="w-1/2 font-thin ml-1">${topic.topic__course_id__board_name}</div>
+                    </div>
+                    <div class="w-full flex py-2 border-t">
+                        <div class="w-1/2 mr-1">Subject</div>:
+                        <div class="w-1/2 font-thin ml-1">${topic.topic__course_id__subject}</div>
+                    </div>
+                    <div class="w-full flex py-2 border-t">
+                        <div class="w-1/2 mr-1">Medium</div>:
+                        <div class="w-1/2 font-thin ml-1">${topic.topic__course_id__language__name}</div>
+                    </div>
+                    <div class="w-full flex py-2 border-t">
+                        <div class="w-1/2 mr-1">Estimated Efforts</div>:
+                        <div class="w-1/2 font-thin ml-1">${subtopics.length*2} Hrs</div>
+                    </div>
+                </div>
+                {% if request.user.is_superuser %}
+                
+                <div data-id='${topic.id}' onclick="bookDemand(${topic.id}, ${topic.topic__id},'${topic.topic__course_id__grade}','${topic.topic__course_id__subject}','${topic.workstream__id}')" class="w-3/4 my-2 p-2 rounded-full bg-blue-300 font-bold text-center hover:bg-blue-600 hover:scale-105 transition duration-150 ease-out hover:ease-in cursor-pointer">Book</div>
+                <div class="relative pb-2">
+                    <input data-id='${topic.id}' class="search_for_user placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="Search for content..."
+                        type="text" id="search__${topic.id}" name="search_for_user-${topic.id}" />
+                    <div data-id='${topic.id}' id="search_for_user_result-${topic.id}" class="search_for_user_result-${topic.id} w-full absolute inset-y-0 top-10 left-0 z-20 text-xs overflow-y-auto h-96"></div>
+                </div>
+                {% else %}
+                <div data-id='${topic.id}' onclick="bookDemand(${topic.id}, ${topic.topic__id},'${topic.topic__course_id__grade}','${topic.topic__course_id__subject}','${topic.workstream__id}')" class="w-3/4 my-2 p-2 rounded-full bg-blue-300 font-bold text-center hover:bg-blue-600 hover:scale-105 transition duration-150 ease-out hover:ease-in cursor-pointer">Book</div>
+                {% endif %}
+            </div>`
+
+            $('#demand').append(tile);
+
+        }
+    }
+
+
+
+    function getDataFromObject(Array, key) {
+        let func = {
+            'language': 'topic__course_id__language__name',
+            'subject': 'topic__course_id__subject',
+            'grade': 'topic__course_id__grade',
+            'workstream': 'workstream__name'
+        };
+        let func1 = {
+            'language': 'topic__course_id__language__name',
+            'subject': 'topic__course_id__language__name',
+            'grade': 'topic__course_id__subject',
+            'workstream': 'topic__course_id__grade'
+        };
+
+        let func2 = {
+            'language': null,
+            'subject': 'language',
+            'grade': 'subject',
+            'workstream': 'grade'
+        };
+
+        let mul = $('#' + func2[key]).val()
+        var result = []
+        for (item in Array) {
+            if (Array[item][func1[key]] != null && Array[item][func1[key]] != '' && Array[item][func1[key]] != 'undefined') {
+                if (mul != null && mul != 'undefined') { // filter with above multi select
+                    if (mul.includes(Array[item][func1[key]])) {
+                        result.push(Array[item][func[key]])
+                    }
+                } else {
+                    result.push(Array[item][func[key]])
+                }
+                //result.push(Array[item][key])
+            }
+        }
+        return [...new Set(result)];
+    }
+
+
+    // set multi select--------------------------------------------------------------------
+    function setMultiSelect(intialize = false, view = 1) {
+        if (intialize) {
+            let mylanguages = getDataFromObject(content_demand, 'language').sort()
+            console.log('mylanguages', mylanguages)
+            for (i = 0; i < mylanguages.length; i++) {
+                if (mylanguages != null && mylanguages != '' && mylanguages != 'undefined') {
+                    if (primary_language != null && primary_language != '' && primary_language != 'undefined') {
+                        if (mylanguages[i] == primary_language) {
+                            element = '<option class="text-green-400" selected value="' + mylanguages[i] + '">' + mylanguages[i] + '</option>';
+                            $('#language').append(element);
+                        } else {
+                            element = '<option value="' + mylanguages[i] + '">' + mylanguages[i] + '</option>';
+                            $('#language').append(element);
+                        }
+                    } else {
+                        element = '<option selected value="' + mylanguages[i] + '">' + mylanguages[i] + '</option>';
+                        $('#language').append(element);
+                    }
+                }
+            };
+
+            if (!mylanguages.includes(primary_language)){
+                $('#language option:first-child').prop("selected", true);
+                alert('You have selected non primary language', 'warning');
+            }
+        };
+
+
+        if (view >= 3) {
+            let mysubjects = getDataFromObject(content_demand, 'subject').sort()
+            console.log(mysubjects)
+            $('#subject option').remove();
+            for (i = 0; i < mysubjects.length; i++) {
+                if (defaultSubject != null && defaultSubject != '' && defaultSubject != 'undefined') {
+                    if (mysubjects[i] == defaultSubject) {
+                        element = '<option selected value="' + mysubjects[i] + '">' + mysubjects[i] + '</option>';
+                        $('#subject').append(element);
+                    } else {
+                        element = '<option value="' + mysubjects[i] + '">' + mysubjects[i] + '</option>';
+                        $('#subject').append(element);
+                    };
+                } else {
+                    element = '<option selected value="' + mysubjects[i] + '">' + mysubjects[i] + '</option>';
+                    $('#subject').append(element);
+                };
+            };
+        };
+
+
+        if (view >= 2) {
+            let mygrades = getDataFromObject(content_demand, 'grade').sort()
+            console.log(mygrades)
+            $('#grade option').remove();
+            for (i = 0; i < mygrades.length; i++) {
+                element = '<option selected value="' + mygrades[i] + '">' + mygrades[i] + '</option>';
+                $('#grade').append(element);
+            };
+        };
+
+        if (view >= 1) {
+            let myworkStream = getDataFromObject(content_demand, 'workstream').sort()
+            console.log(myworkStream)
+            $('#work_stream option').remove();
+            for (i = 0; i < myworkStream.length; i++) {
+
+                if (defaault_workstream != null && defaault_workstream != '' && defaault_workstream != 'undefined') {
+                    if (myworkStream[i] == defaault_workstream) {
+                        element = '<option selected value="' + myworkStream[i] + '">' + myworkStream[i] + '</option>';
+                        $('#work_stream').append(element);
+                    } else {
+                        element = '<option value="' + myworkStream[i] + '">' + myworkStream[i] + '</option>';
+                        $('#work_stream').append(element);
+                    };
+                } else {
+                    element = '<option selected value="' + myworkStream[i] + '">' + myworkStream[i] + '</option>';
+                    $('#work_stream').append(element);
+                };
+            };
+        }
+
+
+        get_filtered_demand(); // call demand filter to get filtered data
+    }
+
+    setMultiSelect(true, 3) // intialize the multi select
+
+
+    function get_filtered_demand() {
+        let filtered_demand = [];
+        let subject = $('#subject').val();
+        let language = $('#language').val();
+        let grade = $('#grade').val();
+        let workStream = $('#work_stream').val();
+
+        let getFilteredDamand = content_demand.filter(function(demand) {
+            return (language.includes(demand.topic__course_id__language__name) && subject.includes(demand.topic__course_id__subject) && grade.includes(demand.topic__course_id__grade) && workStream.includes(demand.workstream__name));
+        }).map(function(demand) {
+            return demand;
+        })
+        getFilteredDamand.forEach(function(content_demand) {
+            filtered_demand.push(content_demand)
+        });
+        make_demand_table(filtered_demand);
+        return filtered_demand;
+    }
+
+
+    $('#language').multipleSelect({
+        placeholder: 'Select Options',
+        openOnHover: true,
+        showClear: false,
+        checkAll: true,
+        selectAll: false,
+        onClick: function(view) {
+            setMultiSelect(false, 3)
+            console.log(3)
+                //get_demand_filter_for_demand_table();
+            $('.demanFilterdropDown').multipleSelect('refresh');
+            let language = $('#language').val();
+            if (primary_language != null && primary_language != '' && primary_language != 'undefined') {
+                if (language.length == 1 && !language.includes(primary_language)) {
+                    alert('You have selected non primary language', 'warning')
+                }
+            }
+        },
+    });
+
+    $('#subject').multipleSelect({
+        placeholder: 'Select Options',
+        openOnHover: true,
+        showClear: false,
+        checkAll: true,
+        selectAll: false,
+        onClick: function(view) {
+            setMultiSelect(false, 2)
+                //get_demand_filter_for_demand_table();
+            $('.demanFilterdropDown').multipleSelect('refresh');
+        },
+    });
+
+    $('#grade').multipleSelect({
+        placeholder: 'Select Options',
+        openOnHover: true,
+        showClear: false,
+        checkAll: true,
+        selectAll: false,
+        onClick: function(view) {
+            setMultiSelect(false, 1)
+                //get_demand_filter_for_demand_table();
+            $('.demanFilterdropDown').multipleSelect('refresh');
+        },
+    });
+
+    $('#work_stream').multipleSelect({
+        placeholder: 'Select Options',
+        openOnHover: true,
+        showClear: false,
+        checkAll: true,
+        selectAll: false,
+        onClick: function(view) {
+            setMultiSelect(false, 0)
+                // get_demand_filter_for_demand_table();
+                // $('.demanFilterdropDown').multipleSelect('refresh');
+        },
+    });
+</script>
+
+<script>
+
+
+    $('.search_for_user').on('keyup', function() {
+        $('.search_for_user_id').remove();
+        let search_text = $(this).val();
+        let id = $(this).attr("data-id")
+        if (search_text.length > 1) {
+            $.ajax({
+                url: "/v2/search-teacher/?teacher_type=Content Developer&search_text=" + search_text, // the endpoint
+                type: "GET", // http method
+                dataType: 'json',
+                success: function(response) {
+                    response.data = response.data.filter(function(item) { // filter out the inactive users
+                        return item.first_name != '';
+                    });
+                    if (response.data.length > 0) {
+                        for (let i = 0; i < response.data.length; i++) {
+                            let inpval = response.data[i].id + ' :: ' + response.data[i].first_name + ' ' + response.data[i].last_name;
+                            $('#search_for_user_result-'+id).append(`<div data-id="${id}" data-val="${inpval}" class="search_for_user_id border-b border-red-500 bg-white cursor-pointer hover:bg-gray-50 p-2">` + inpval + `</div>`);
+                        }
+                    }
+                },
+                error: function(xhr, errmsg, err) {
+                    alert('Oops! We have encountered an error: ' + xhr.responseText['error']['message'], 'danger'); // provide a bit more info about the error to the console
+                    console.log(xhr.status + ": " + xhr.responseText, xhr.responseText['error']['message']); // provide a bit more info about the error to the console
+                }
+            });
+        }
+
+    });
+
+
+    $('body').on('click', '.search_for_user_id', function() {
+        let id = $(this).attr("data-id")
+        let value = $(this).attr("data-val")
+        $("#search__"+id).val(value);
+        $('.search_for_user_id').remove();
+    });
+
+
+    function bookDemand(id, topic_id, grade, subject, workstream_id) {       
+
+        if (Alpine.store('login').on == false) {
+            Alpine.store('loginModal').toggle()
+            alert('Login to continue', 'warning')
+            return;
+        }
+
+        if (user_details.is_content_developer == false) {
+            alert('Content developer role required', 'warning')
+            return;
+        }
+        let author =  $("#search__"+id).val()
+        if (author){
+            authors_id = author.split('::')[0]
+        }else{
+            authors_id=null 
+        }
+
+        let data = {
+            'author_id':authors_id,
+            'topic_id': topic_id,
+            'grade': grade,
+            'subject': subject,
+            'workstream_id': workstream_id
+        }
+
+        console.log(data)
+
+        progressBar(35);
+        $.ajax({
+            url: "/v2/demand/content/", // the endpoint
+            type: "POST", // http method
+            data: JSON.stringify(data), // data sent with the post request
+            dataType: 'json',
+            success: function(response) {
+                //Alpine.store('login').toggle()
+                alert('Demand booked successfully', 'success')
+                $('#redirect').removeClass('hidden');
+
+                redirectTimer = setTimeout(function() {
+                    $('#redirect').addClass('hidden')
+                    window.location.href = '/myevidyaloka/'
+                }, 12000);
+
+                const element = document.getElementById("redirectCount");
+                setInterval(function() {
+                    element.innerHTML = (parseInt(element.innerHTML) - 1)
+                }, 1300); // every second
+            },
+            error: function(xhr, errmsg, err) {
+                if (JSON.parse(xhr.responseText).error.message.split(',').includes('kCustomErrorMsg')) {
+                    if (parseInt(JSON.parse(xhr.responseText).error.message.split(',')[1]) == 2) {
+                        alert(JSON.parse(xhr.responseText).error.message.split(',')[2], 'warning'); // provide a bit more info about the error to the console
+                    } else {
+
+                        alert(JSON.parse(xhr.responseText).error.message.split(',')[2], 'danger');
+                    }
+                } else {
+                    alert('Opps! error: Please try again or contact support', 'danger');
+                }
+                console.log(JSON.parse(xhr.responseText)); // provide a bit more info about the error to the console
+                console.log(JSON.parse(xhr.responseText).error.message.split(',')[1]); // provide a bit more info about the error to the console
+            }
+        });
+    }
+
+
+    function releaseSlots(topic_id) {
+        //$("#demandDetail div").remove();
+        progressBar(25);
+        $.ajax({
+            url: "/v2/demand/content/", // the endpoint
+            type: "PUT", // http method
+            success: function(response) {
+                $("#releaseSlotsContainer").addClass("hidden");
+                alert('Demand released successfully', 'success')
+                window.location.reload();
+
+            },
+
+            error: function(xhr, errmsg, err) {
+                alert('Oops! We have encountered an error: ' + xhr.responseText['error']['message'], 'danger'); // provide a bit more info about the error to the console
+                console.log(xhr.status + ": " + xhr.responseText, xhr.responseText['error']['message']); // provide a bit more info about the error to the console
+            }
+        });
+    }
+</script>
+
+
+{% endblock %}

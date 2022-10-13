@@ -1,0 +1,24 @@
+
+Dear {{username}},<br><br><br>
+
+
+Many students in the rural communities will benefit from the Worksheets that you create and share.<br><br>
+
+We are pleased to confirm that you have been assigned to create a set of {{demands.count}} worksheets relevant to sub-topics along with answer keys for the Chapter - {{topic_name}}, for  {{grade}} {{subject}} from {{board}} board in {{language}}.<br><br>
+
+The subtopics for the chapter are:<br><br>
+{% for demand in demands %}
+&nbsp;&nbsp;&nbsp;{{forloop.counter}}. &nbsp;&nbsp;  {{demand.subtopic.name}}
+{% endfor %}
+
+
+Please find below, the guidelines to follow, sample for your reference, and template to create the content. PFB the link for the books. Kindly submit the worksheets and the Answer keys as separate documents as shown in the sample below using the template provided below. <br><br>
+Textbook link: Not Available<br>
+Guideline: https://docs.google.com/document/d/1KFSViQT1UjcoJqqKsZlwFOpHJ_5esOzfCqM3th7F3So/edit?usp=sharing<br>
+Template: Not Available<br>
+Sample: https://onedrive.live.com/edit.aspx?resid=B2056AF1AAD6E0AC!135604&ithint=file%2cdocx&authkey=!ADJY95XFO8rt2O8<br>
+
+Please login at www.evidyaloka.org/myevidyaloka to view the details of the booked chapter.<br><br>
+
+Please feel free to reach out to us for further queries.<br>
+Email id: <content.development@evidyaloka.org><br><br><br>

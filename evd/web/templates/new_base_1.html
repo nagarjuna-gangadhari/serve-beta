@@ -1,0 +1,2693 @@
+{% extends "generic/base.html" %}
+{% load tags %}
+{% block head_title %}eVidyaloka{% endblock %}
+
+{% block head_styles %}
+    <!-- meta yet to be updated from evidyaloka -->
+    <meta name="description" content="eVidyaloka is a non-profit organization that focuses on transforming the educational landscape of rural India. eVidyaloka creates digital classrooms for children in remote villages, with support of local communities and Volunteer Teachers across globe with standardized lesson plans and teaching aids">
+    <meta name="keywords" content="evidyaloka, children, rural school, learn, rural education, children education, teachers, volunteers, volunteers to teach, volunteer teachers, education, student education, online teaching, digital classrooms, virtual teaching, ngo, free education, remote village education, internet education, teaching channel, sponsor for education, sponsor for school, donate for school, donate for education"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="">
+
+    <link href="/static/images/favicon.ico" type="image/x-icon" rel="icon" />
+    <link href="/static/images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
+
+
+    <!-- facebook share meta -->
+    <meta property="og:title" content=""/>
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <!-- end facebook  meta -->
+
+    <link rel="stylesheet" type="text/css" href="/static/css/main.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/evl.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/custom_styles.css" />
+    <link rel='stylesheet' href='/static/css/breadcrumb.css'>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/calendar/theme.css" />
+    <link rel='stylesheet' type='text/css' href='/static/css/calendar/fullcalendar.1.5.3.min.css'/>
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <!------------------------------------Inserted block ------------------------->
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="/static/images/evidyalogo.png">
+
+    <title>eVidyaloka</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css_new/bootstrap.css" rel="stylesheet">
+    <link href="/static/css_new/theme-minified.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css_new/magnific-popup.css" rel="stylesheet">
+    <link href="/static/css_new/login_modal.css" rel="stylesheet">
+    <link href="/static/css_new/social-buttons.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="/static/css_new/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Custom Popup -->
+    <link href="/static/css_new/custom_popup.css" rel="stylesheet">
+
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+    
+    <!-- amchart library -->
+    <script src="/static/amcharts/plugins/export/export.min.js"></script>
+    <script src="/static/amcharts/ammap.js"></script>
+    <script src="/static/amcharts/amcharts.js"></script>
+    <script src="/static/amcharts/gauge.js"></script>
+    <script src="/static/amcharts/serial.js"></script>
+    <script src="/static/amcharts/pie.js"></script>
+    <script src="/static/amcharts/themes/light.min.js"></script>
+    <script src="https://www.amcharts.com/lib/3/gauge.js"></script>
+    <link href="/static/css/select2.min.css" rel="stylesheet">
+    <script src="/static/js/select.min.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap-datepicker3.css">
+    <script type="text/javascript" src="/static/js/bootstrap-datepicker.min.js"></script>
+    <script   
+	  src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">  
+      </script>
+      
+      <!-- Global site tag (gtag.js) - Google Ads: 967708218 -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-967708218"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'AW-967708218');
+        </script>
+        <!-- Global site tag (gtag.js) - Google Ads: UA-35920468-1 -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-35920468-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-35920468-1');
+        </script>
+        <!-- End of GA tag -->
+
+<!-- 	 <script type="text/javascript">
+	 function open_chatbox()
+	 {
+	 $('#chat').fadeOut(500);
+	 $('#chatBox').fadeIn(1000);
+	 }
+	 function closeChat()
+	 {
+	 $('#chatBox').fadeOut(500);
+	 $('#chat').fadeIn(1000);
+	 }
+	 function curr_date(){
+		 var today = new Date();
+		 var dd = today.getDate();
+		 var mm = today.getMonth()+1;
+
+		 var yyyy = today.getFullYear();
+		 if(dd<10){
+		     dd='0'+dd;
+		 } 
+		 if(mm<10){
+		     mm='0'+mm;
+		 } 
+		 today = dd+'-'+mm+'-'+yyyy;
+		 $("#current_date").val(today);
+	 }
+	 </script> -->
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+      <![endif]-->
+
+      <!-- LiveChat -->
+      <script type="text/javascript" async="async" defer="defer" data-cfasync="false" src="https://mylivechat.com/chatinline.aspx?hccid=70724496"></script>
+      <!-- End -->
+
+      <script src="/static/js_new/modernizr.custom.js"></script>
+<!--      <div id="fb-root"></div>-->
+      <script>
+        /*(function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=499969136679992";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));*/
+    </script>
+    <!-- Facebook Pixel Code -->
+    <script>
+        //!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        //n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+        //n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+        //t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+        //document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        //fbq('init', '1264112123750308'); // Insert your pixel ID here.
+        //fbq('track', 'PageView');
+    </script>
+    <!--<noscript>
+        <img height="1" width="1" alt="fb_image" style="display:none" src="https://www.facebook.com/tr?id=1264112123750308&ev=PageView&noscript=1"/>
+    </noscript>-->
+    <!-- End Facebook Pixel Code -->
+
+
+
+<!--    <div id="fb-root">-->
+<!--        <script async="" src="https://connect.facebook.net/en_US/all.js" type="text/javascript"></script>-->
+<!--    </div>-->
+
+    <style>
+        .cust_btn:hover{
+           opacity:0.8;
+           cursor:pointer;
+       }
+       #bottom a {
+        color: white;
+        margin-left: 18px !important;
+        }
+        .by-kettle {
+            background: transparent !important;
+            text-indent: 0em !important;
+        }
+        .by-kettle span {
+            right: 20px !important;
+        }
+        {% if request.user.is_superuser %}
+        .avatar {
+            background: white !important;
+        }
+        {% endif %}
+        #header ul#main-nav li a {
+            text-shadow: none;
+        }
+        #header ul#main-nav li.main-nav-1 a {
+            font-family: 'PlutoCondRegular';
+        }
+        h1#logo {
+            margin-top:10px;
+        }
+        h1#logo > a {
+          background: none;
+          font-size: 36px;
+          margin-top: 2px;
+          font-style: italic;
+          text-indent: 0px;
+      }
+      h1#logo > a:hover {
+          color: #F15A22;
+      }
+      #footer {
+        position: relative;
+        width:100%;
+        }
+        #footer .inner > p{
+            display:block;
+        }
+        #footer .inner > a{
+            float:right;
+        }
+
+        #footer-centers-list li {
+          background: transparent url('/static/images/location.png') top left no-repeat;
+          width:175px;
+        }
+        #footer-centers-list {
+            width:350px;
+        }
+        #footer-subjects-list {
+            width:350px;
+        }
+        #footer-subjects-list li {
+            width:175px;
+            float:left;
+        }
+        #login.active, #sign-up.active {
+            color: #777;
+        }
+        .close-modal {
+            width: 18px;
+            height: 18px;
+            text-indent: -9999em;
+            display: block;
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background: transparent url(/static/images/wishbone_sprite.png) no-repeat -39px -185px;
+        }
+        #current-form-desc.error {
+            color:red;
+        }
+        #current-form-desc.success {
+            color:green;
+        }
+        #bottom {
+            background: transparent !important;
+        }
+    </style>
+
+    <style>
+        .modal-backdrop, .modal-backdrop.fade.in {
+            opacity: 0.8;
+            filter: alpha(opacity=80);
+        }
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1040;
+            background-color: black
+        }
+        .modal-layer {
+            z-index: 1041;
+        }
+        .modal.fade.in {
+            top: 50%;
+        }
+        .modal.fade {
+            top: -25%;
+            -webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
+            -moz-transition: opacity 0.3s linear, top 0.3s ease-out;
+            -ms-transition: opacity 0.3s linear, top 0.3s ease-out;
+            -o-transition: opacity 0.3s linear, top 0.3s ease-out;
+            transition: opacity 0.3s linear, top 0.3s ease-out;
+        }
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            z-index: 1050;
+            width: 560px;
+            margin: -250px 0 0 -280px;
+            background-color: white;
+            border: 1px solid #999;
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            -webkit-border-radius: 6px;
+            -moz-border-radius: 6px;
+            border-radius: 6px;
+            -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+            -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+            -webkit-background-clip: padding-box;
+            -moz-background-clip: padding-box;
+            background-clip: padding-box;
+        }
+        #login-modal {
+            width: 700px !important;
+            margin: 0px 0 0 -350px !important;
+        }
+        #login-modal small{
+            display: none;
+        } 
+        #form-error {
+            padding: 10px 0px;
+            text-align: center;
+        }
+        #form-success {
+            padding: 10px 0px;
+            text-align: center;
+            color:green;
+        }
+        span.login-signup-label:hover {
+            color: white;
+        }
+        .callout {
+            padding: 10px !important;
+            width: 100% !important;
+            margin: 0px !important;
+        }
+        .callout h5 {
+            margin: 0px 0px 5px 0px !important;
+        }
+        .modal-left {
+            width: 330px;
+            height: 393px;
+            position: absolute;
+            border-right: 1px solid #666;
+        }
+        div.modal-left > div {
+            height:85px;
+        }
+        div.modal-left p {
+            margin-left: 50px;
+            position: relative;
+            float: left;
+            margin-right:28px;
+        }
+        div.modal-left img {
+            height: 40px;
+            width: 40px;
+            position: absolute;
+            display: block;
+        }
+        div.vol-option {
+            height:40px !important;
+        }
+        div.vol-option p {
+            margin-left: 0px;
+            margin-top:5px;
+            font-size: 18px;
+            font-weight:bold;
+        }
+        #header {
+            background:transparent !important;
+            padding-bottom:0px !important;
+        }
+        #header .inner {
+            height:71px;
+            background:#FFFFFF;
+            position:relative;
+            padding-right:200px;
+
+        }
+        div.header_full {
+            height:71px;
+            width:auto;
+            background-color:white;
+            border-bottom:2px solid #909d71;
+        }
+        div.footer_full {
+            height: 60px;
+            width: auto;
+            background-color: #545453;
+            border-top: 1px solid #242423;
+            margin-bottom:-10px;
+        }
+        .nav_left {
+            width:272px;
+            height:71px;
+            margin:0px 0px 0px 0px;
+            display:inline;
+            float:left;
+            clear:both;
+
+        }
+        .nav_left img {
+            width:55px;
+            height:55px;
+            float:left;
+            padding:5px 5px 5px 5px;
+        }
+        .nav_left > h1 {
+            position:relative;
+            float:left;
+            display:inline;
+        }
+        h1#logo > a {
+            font-size:22px;
+        }
+        .nav_left > a {
+            float:left;
+            display:inline;
+        }
+        .nav_left > h3 {
+            float:left;
+            position:absolute;
+            font-size:12px;
+            top:40px;
+            left:75px;
+            color:#004f00;
+        }
+        .nav_right {
+            position: absolute;
+            right:0px;
+            float:left;
+            height:71px;
+        }
+        li.main-nav-list > a {
+            color:#F15A22 !important;
+        }
+        li.main-nav-list > a:hover {
+            color:#909D71 !important;
+        }
+        .nav-menu {
+            position:relative;
+            height:71px;
+            width:166px;
+            float:left;
+            border-left:1px solid #909D71;
+        }
+        div.nav-menu > ul.nav_main {
+            padding-top:0px;
+        }
+        #header ul#main-nav li a {
+            background:none;
+        }
+        .log-in {
+            right: 0px;
+            top: 35px;
+        }
+        .submenu li a {
+            padding: 0px 13px !important;
+        }
+        #header #login-badge ul li a {
+            text-align:center;
+        }
+        a.icon-foot{
+            background : none;
+        }
+    </style>
+    <style>
+/* help popup style */
+
+.box {
+	width: 70%;
+	margin: 0 auto;
+	background: rgba(255, 255, 255, 0.2);
+	padding: 35px;
+	border: 2px solid #fff;
+	border-radius: 20px/50px;
+	background-clip: padding-box;
+	text-align: center;
+}
+
+.overlay {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: rgba(0, 0, 0, 0.7);
+	transition: opacity 500ms;
+	visibility: hidden;
+	opacity: 0;
+}
+
+.overlay:target {
+	visibility: visible;
+	opacity: 1;
+}
+
+.popup {
+	margin: 70px auto;
+	padding: 20px;
+	background: #fcfcfc;
+	border-radius: 5px;
+	width: 30%;
+	position: relative;
+	transition: all 5s ease-in-out;
+}
+
+.popup h2 {
+	margin-top: 0;
+	color: #333;
+	font-family: Tahoma, Arial, sans-serif;
+}
+
+.popup .close {
+	position: absolute;
+	top: -6px;
+	right: 30px;
+	transition: all 200ms;
+	font-size: 30px;
+	font-weight: bold;
+	text-decoration: none;
+	color: #000000;
+}
+
+.popup .close:hover {
+	color: #06D85F;
+}
+
+.popup .content {
+	max-height: 30%;
+	overflow: auto;
+}
+
+.popup_header{
+background-color: #2E8DC7;
+color: #ffffff;
+top: 8px;
+position: absolute;
+left: 0;
+margin-left: 0px;
+padding-left:20px;
+font-size:18px;
+}
+
+@media screen and (max-width: 700px) {
+	.box {
+		width: 70%;
+	}
+	.popup {
+		width: 70%;
+	}
+}
+
+	</style>
+</head>
+{% endblock %}
+
+{% block head_scripts %}
+     <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+      <script id="twitter-wjs" src="/static/js/widgets.js" type="text/javascript"></script>
+      <!--<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>-->
+      <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+      <script type="text/javascript" src="/static/js/jquery.jcarousel.min.js"></script>
+      <script type="text/javascript" src="/static/js/jquery.placeholder.min.js"></script>
+      <script type="text/javascript" src="/static/js/scroll.js"></script>
+      <script type="text/javascript" src="/static/js/jquery.easing.1.3.min.js"></script>
+      <script type="text/javascript" src="/static/js/froogaloop.min.js"></script>
+      <link href="index.rss" type="application/rss+xml" rel="alternate" title="eVidyaloka" />
+      <link rel="stylesheet" type="text/css" href="/static/css/hp.min.css" />
+      <script type="text/javascript" src="/static/js/jquery.cycle.all.min.js"></script>
+      <script type="text/javascript" src="/static/js/bootstrap-dropdown.min.js"></script>
+      <script type="text/javascript" src="/static/js/application.js"></script>
+      <script src="/static/js/bootstrap-transition.min.js"></script>
+      <script src="/static/js/bootstrap-tooltip.min.js"></script>
+      <script type="text/javascript" src="/static/js/jquery.watermark.min.js"></script>
+      <script type="text/javascript" src="/static/js_new/jquery-ui.min.js"></script>
+      <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+      <script type="text/javascript" src="/static/js/jquery.tmpl.min.js"></script>
+      <script type="text/javascript" src="/static/js/jQuery.ellipsis.min.js"></script>
+      <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+      <script type="text/javascript" src="/static/js_new/custom_popup.js"></script>
+      <script type="text/javascript" src="/static/js_new/jquery.social-buttons.min.js"></script>
+        <script>
+            (function () {
+
+              window.EVL = window.EVL || {};
+            }());
+
+            $(document).ready(function(){
+                $(".esis").colorbox({iframe:true, fastIframe:false, width:"1100px", height:"760px", gtransition:"fade", scrolling : false, fixed:false });
+                var $caption = $("#current-form-desc"),
+                $login_signup_form = $("#login-signup-form"),
+                $modal = $("#login-modal");
+                $("#signup-trigger").click(function(e){
+                 var is_authenticated = "{{ user.is_authenticated }}";
+
+                 if(is_authenticated == "True"){
+                    window.location = "/myevidyaloka/";
+                    return;
+                }
+                show_signup_form($login_signup_form);
+                $modal.modal({backdrop:true, keyboard:true});
+                   /*$modal.find(".close").click(function(e){ 
+                       $(href).modal("hide");
+                       e.stopImmediatePropagation();
+                       e.preventDefault();
+                   });*/
+                   e.preventDefault();
+               });
+                $("#login-trigger").click(function(e){
+                    var is_authenticated = "{{ user.is_authenticated }}";
+
+                    if(is_authenticated == "True"){
+                        window.location = "/myevidyaloka/";
+                        return;
+                    }
+
+                    show_login_form($login_signup_form);
+                    $modal.modal({backdrop:true, keyboard:true});
+                    /*$modal.find(".close").click(function(e){ 
+                       $(href).modal("hide");
+                       e.stopImmediatePropagation();
+                       e.preventDefault();
+                   });*/
+                   e.stopPropagation();
+                   e.preventDefault();
+               });
+                window.form_status = "signup";
+                var show_login_form = function($form){
+                    $caption.removeClass("success error");
+                    $(".show-signup").removeClass("active");
+                    $(".show-login").addClass("active");
+                    if(form_status != "login"){
+                        if(form_status == "error" || form_status == "success"){
+                            $("#form-error,#form-success").fadeOut("fast",function(){
+                                $form.fadeIn("fast");
+                            });
+                        }
+                        $form.attr({"action": "/accounts/login/"});
+                        if($.support.transition){
+                            $form.children().not(".show-on-login").slideUp("fast",function(){
+                                var $inputs = $form.find(".show-on-login").slideDown().show().removeClass("hide").children("input").attr({"data-field-type": "not_empty"});
+                                $inputs.each(function(){
+                                    $(this).tooltip("destroy");
+                                });
+                                $("div.tooltip").remove();
+                            }).hide().addClass("hide");
+                        }
+                        else{
+                            $form.children().not(".show-on-login").hide().addClass("hide");
+                            var $inputs = $form.find(".show-on-login").show().removeClass("hide").children("input").attr({"data-field-type": "not_empty"});
+                            $inputs.each(function(){
+                                $(this).tooltip("destroy");
+                            });
+                            $("div.tooltip").remove();
+                        }
+                        $("#submit .ajax-button-label").text("Login");
+                        form_status = "login";
+                    }
+                },
+                show_signup_form = function($form){
+                    $(".show-login").removeClass("active");
+                    $(".show-signup").addClass("active");
+                    $caption.removeClass("success error");
+                    if(form_status != "signup"){
+                        $caption.text("");
+                        if(form_status == "error" || form_status == "success"){
+                            $("#form-error,#form-success").fadeOut("fast",function(){
+                                $form.fadeIn("fast");
+                            });
+                        }
+                        $("div.tooltip").remove();
+                        $form.attr({"action": "/accounts/register/"});
+                        if($.support.transition){
+                            $form.children().not(".show-on-signup").slideUp("fast",function(){
+                                var $inputs = $form.find(".show-on-signup").not("small").slideDown().show().removeClass("hide").children("input");
+                                $inputs.filter("[name=username]").attr({"data-field-type": "username;not_empty"}).tooltip("destroy");
+                                $inputs.filter("[name=password]").attr({"data-field-type": "password;not_empty"}).tooltip("destroy");
+                            }).hide().addClass("hide");
+                        }
+                        else{
+                            $form.children().not(".show-on-signup").hide().addClass("hide");
+                            var $inputs = $form.find(".show-on-signup").not("small").show().removeClass("hide").children("input");
+                            $inputs.filter("[name=username]").attr({"data-field-type": "username;not_empty"}).tooltip("destroy");
+                            $inputs.filter("[name=password]").attr({"data-field-type": "password;not_empty"}).tooltip("destroy");
+
+                        }
+                        $("#submit .ajax-button-label").text("Sign up");
+                        form_status = "signup";
+                    }
+                },
+                show_fp_form = function($form){
+                    $caption.removeClass("success error");
+                    $caption.text("Enter your email id, with which you are registered");
+                    $form.attr({"action": "/accounts/password/reset/"});
+                    $("div.tooltip").remove();
+                    if($.support.transition){
+                        $form.children().not(".show-on-fp").slideUp("fast",function(){
+                            $form.find(".show-on-fp").slideDown().show().removeClass("hide").children("input").tooltip("destroy");
+                        }).hide().addClass("hide");
+                    }else{
+                        $form.children().not(".show-on-fp").hide().addClass("hide");
+                        $form.find(".show-on-fp").show().removeClass("hide").children("input").tooltip("destroy");
+                    }
+                    $("#submit .ajax-button-label").text("Submit");
+                    form_status = "fp";
+                };
+                $("#login").click(function(){
+                    $(this).addClass("active");
+                    $(this).parent().hide();
+                    $("#p_sign").show();
+                    $("#sign-up").removeClass("active");
+                    $('#buffer').html('');
+                    show_login_form($("#login-signup-form"));
+                });
+                $("#sign-up").click(function(){
+                    $(this).addClass("active");
+                    $(this).parent().hide();
+                    $("#p_login").show();
+                    $("#login").removeClass("active");
+                    show_signup_form($("#login-signup-form"));
+                });
+                $("#fp").click(function(e){
+                 $("#sign-up,#login").removeClass("active");
+                 show_fp_form($("#login-signup-form"));
+                 e.preventDefault();
+             });
+                {% if show_popup.show_popup %}
+                {% if show_popup.type == "Sign_up" %}
+                $("#sign-up").trigger("click");
+                $("#login-modal").modal("show");
+                {% else %}
+                $("#login").trigger("click");
+                $("#login-modal").modal("show");
+                {% endif %}
+                {% endif %}
+                $.each($("[rel='submit']"),function(){
+                    var $form = $($(this).attr("href"));
+                    $form.keyup(function(e){
+                        if(e.which == 13){
+                            $(this).submit();
+                        }
+                    });
+                });
+            });
+        </script>
+        
+        <script>
+
+            $(document).ready(function(){
+                if($("#footer").position()){
+                    if($(window).height() > ($("#footer").position().top + $("#footer").height())){
+                        $("#footer").css({"position": "fixed","bottom": "0px", "width": "100%"});
+                    }
+                }
+
+            });
+
+            window.footer_adjust = function(){
+                if($("#footer").position()){
+                    if($(window).height() > ($("#footer").position().top + $("#footer").height())){
+                        $("#footer").css({"position": "fixed","bottom": "0px", "width": "100%"});
+                    }
+                    if($('#footer').position().top < ($('#content').height()+$('.header_full').height())){
+                        $("#footer").css({"position": "relative","width": "100%"});
+                    }
+                }
+            };
+
+            $(document).ready(function(){
+                $("div.log-in").on('mouseover','#login-badge',function(e){
+                  $("#login-badge ul").css("display","block");
+              })
+                $("div.log-in").on('mouseout','#login-badge',function(){
+                  $("#login-badge ul").css("display","none");
+              })
+            });
+        </script>
+
+        <script>
+        {% block pre_evd_init %}
+        {% endblock %}
+
+        $(document).ready(function(){
+            window.evd = window.evd.init();
+            evd.pre_submit = function(){
+                var $form = $(this).parents("form");
+                var $children = $form.children(":visible"),
+                valid = true;
+                $("input[name=username]").val($("input[name=username]").val().toLowerCase());
+                /*if( form_status == "signup" && !$("input[name='accept']").is(":checked")) {
+                    evd.show_msg("accept the Code of Conduct");
+                    valid = false;
+                }*/
+                if(form_status && ($children.find("input[name=password1]").val() != $children.find("input[name=password2]").val()))
+                {
+                    evd.show_msg("passwords didnt match!");
+                    valid = false;
+                }
+                else if(!evd.validate_form($form.children(":visible"))){
+                    valid = false;
+                }
+                return valid;
+            };
+            evd.after_submit = function(resp){
+                var $caption = $("#current-form-desc");
+
+                var respcopy = resp;
+                var errors = "";
+                $(respcopy).find('.errorlist').each(function(){console.log($(this).html()); errors+=$(this).html()  });
+                var temp = $('#buffer').html(errors );
+
+
+                resp = resp[0];
+                var pre_form_status = form_status;
+                if(resp.status == "error"){
+                    $("#sign-up,#login").removeClass("active");
+                    $caption.removeClass("success error").addClass("error").text(resp.message);
+                }
+
+                if(temp.text()!=''){
+                    $caption.text('');
+                    evd.clear_form($("#login-signup-form")[0]);
+                }else{
+                    $("#sign-up,#login").removeClass("active");
+                    /*$("#login-signup-form").fadeOut("fast",function(){
+                       var $success_msg = $("#form-success");
+                       if(pre_form_status == "signup")
+                            $success_msg.text("An activation link has been sent to your mail").fadeIn("slow");
+                       else if(pre_form_status == "fp")
+                            $success_msg.text("An activation link has been sent to your mail").fadeIn("slow");
+                       if(resp.redirect_url){
+                          $success_msg.text("redirecting...");
+                          window.setTimeout(function(){
+                              window.location = resp.redirect_url;
+                          },500);
+                       }
+                    });*/
+                       $caption.removeClass("success error").addClass("success");
+                       //During signup
+                       //During login
+                       if(resp.redirect_url){
+                            $caption.removeClass("success error");
+                            //$success_msg.text("redirecting...");
+                            $(this).children("span.ajax-button-label").attr({"data-after-success": "redirecting..."});
+                            window.setTimeout(function(){
+                                window.location = resp.redirect_url;
+                            },500);
+                        }else{
+                            if(pre_form_status == "signup")
+                                $caption.text("An activation link has been sent to your mail. Also please check your spam folder ");
+                                //During forgot password
+                            else if(pre_form_status == "fp")
+                                $caption.text("Password reset link has been sent to your mail");
+                            evd.clear_form($("#login-signup-form")[0]);
+                        }
+                }
+            };
+            /*$("#login-badge").toggle(function(){
+                $(this).addClass("open");
+                $(this).children("li.ribbon").children("ul").stop().slideDown();
+            },function(){
+                $(this).removeClass("open");
+                $(this).children("li.ribbon").children("ul").stop().slideUp();
+            });
+            $("#login-badge").children("li.ribbon").children("ul").click(function(e){
+                e.stopPropagation();
+            });
+            $(".icon-ribbon").click(function(e){
+                e.stopPropagation();
+            });*/
+            {% block doc_ready %}
+                window.evd.pre_add_course = function(){
+                    $("#add-course-modal select").each(function(){
+                        if($(this).children(":selected").val() == ""){
+                            $(this).attr({"rel":"tooltip", "data-placement":"right", "title":"select any one of these"}).tooltip("show");
+                            return false;
+                        }
+                    });
+
+                    var planned_topics = "",
+                    enroll_students = "",
+                    topics_len =  $("select#planned_topics").children(":selected").length,
+                    students_len = $("select#enroll_students").children(":selected").length;
+                    $("select#planned_topics").children(":selected").each(function(index, val){
+                        planned_topics += $(this).val() + (index < (topics_len - 1) ? ";" : "");
+                    });
+                    $("input[name='planned_topics']").val(planned_topics);
+                    $("select#enroll_students").children(":selected").each(function(index, val){
+                        enroll_students += $(this).val() + (index < (students_len - 1) ? ";" : "");
+                    });
+                    $("input[name='students']").val(enroll_students);
+                }
+                window.evd.after_add_course = function(){
+                    $("#add-course-modal").hide();
+                    window.location = window.location.pathname + window.location.search;
+                }
+                evd.pre_stu_filter = function(){
+                   $("#mystudents p.title").remove();
+                   $("#mystudents p.no-students").remove();
+                   $("#mystudents table").remove();
+                   $("#mystudents").find("a[rel='submit']").hide();
+                   $("#mystudents").append('<img style="display:block;margin:10px auto" src="/static/images/loader.gif" />');
+                }
+                evd.after_stu_filter = function(resp){
+                    var len = resp.length;
+                    $("#mystudents img").remove();
+                    if(len != 0) {
+                        var students = resp;
+                            //$("#mystudents").append("<ul id='students_list' style='max-height:400px;margin-right:20px;overflow-x:hidden;overflow-y:auto'></ul>");
+                            $("<p class='title' style='padding:10px 0px 0px 10px;'>Students for the selected offering are:</p>").insertAfter($(".select-box"));
+                            //$.template("student_template",student_html);
+                            var student_html = '<table class="current_session_table">'+
+                            '<thead>'+
+                            '<tr>'+
+                            '<th style="width:150px">Name</th>'+
+                            '<th>Strengths</th>'+
+                            '<th>Weakness</th>'+
+                            '<th>Observation</th>'+
+                            '<tr>'+
+                            '</thead>'+
+                            '<tbody>';
+                            var ids = "";
+                            for(var index in students){
+                                student = students[index];
+                                ids += student.id + (index < students.length-1 ? ";" : "");
+                                student_html += '<tr><td><div class="controls text"><p>' + student.name + '</p></div></td>'+
+                                '<td><div class="controls text"><input type="text" class="strengths" value="' + student.strengths + '" /></div></td>'+
+                                '<td><div class="controls text"><input type="text" class="weakness"  value="' + student.weakness + '"/></div></td>'+
+                                '<td><div class="controls text"><input type="text" class="observation"  value="' + student.observation + '"/></div></td></tr>';
+                            }
+                            student_html += "</tbody></table>";
+                            $("#mystudents form#students-form").append(student_html);
+                            $("#mystudents form#students-form input[name='student_ids']").val(ids);
+                            $("#mystudents").find("a[rel='submit']").show();
+                    }
+                    else {
+                        $("<p style='padding:10px 0px 0px 10px;' class='no-students'>The selected offering has no students assigned</p>").insertAfter($(".select-box"));
+                    }
+                }
+                window.evd.pre_students_save = function(){
+                    var strengths = "",
+                    weakness = "",
+                    observation = "",
+                    students_len = $("#mystudents form#students-form").find("input.strengths").length;
+                    $("#mystudents form#students-form").find("input.strengths").each(function(index, val){
+                        strengths += $(this).val() + (index < students_len-1 ? ";" : "");
+                    });
+                    $("#mystudents form#students-form").find("input.weakness").each(function(index, val){
+                        weakness += $(this).val() + (index < students_len-1 ? ";" : "");
+                    });
+                    $("##mystudents form#students-form").find("input.observation").each(function(index, val){
+                        observation += $(this).val() + (index < students_len-1 ? ";" : "");
+                    });
+                    $("#mystudents form#students-form input[name='strengths']").val(strengths);
+                    $("#mystudents form#students-form input[name='weakness']").val(weakness);
+                    $("#mystudents form#students-form input[name='observation']").val(observation);
+                }
+                window.evd.after_students_save = function(){
+                    $("#mystudents").modal("hide");
+                    evd.show_msg("Modified students successfully");
+                }
+            {% endblock %}
+        });
+        </script>
+
+{% endblock %}
+
+    <body>
+
+        {% block body %}
+            <!--
+            <div id="container">
+                <div id="login-modal" class="modal-layer modal hide">
+                  <div class="modal-layer-inner" style="width: 620px;">
+                    <a href="#" class="close" data-dismiss="modal" style="margin:-23px -30px 0px 0px;padding:0px;float:right">X</a>
+                    <div class="modal-left">
+                        <div class="vol-option">
+                            <p>Educate - Anywhere Anytime</p>
+                        </div>
+                        <div>
+                            <img src="/static/images/GLOBE.png">
+                            <p>Teach online</p>
+                            <p style="font-size:12px;line-height:1.4em;color:#777;">Primary activity where one connect with village through Skype and teach the children. 2 hrs in a week.</p>
+                        </div>
+                        <div>
+                            <img src="/static/images/SHARE.png">
+                            <p>Contribute to contents (offline)</p>
+                            <p style="font-size:12px;line-height:1.4em;color:#777;">Develop lesson plans, search videos, pictures, activities, for a given topic, that will be used by the Teachers. Work offline at your pace.</p>
+                        </div>
+                        <div>
+                            <img src="/static/images/ICON-5.png">
+                            <p>Class Administrator (Remote)</p>
+                            <p style="font-size:12px;line-height:1.4em;color:#777;">Coordinates with Teachers, Centre and makes sure, class happens on time, conduct review meetings over skype. 3-4 hrs in a week, over phone,email & Skype.</p>
+                        </div>
+                        <div style="margin-top:10px;">
+                            <img src="/static/images/ICON-4.png">
+                            <p>Be a well wisher</p>
+                            <p style="font-size:12px;line-height:1.4em;color:#777;">You believe in the cause, model and help Spread the word, give feedback and follow eVidyaloka</p>
+                        </div>
+                        <div style="margin-left: 152px;margin-top: -10px;">
+                            <p><a href="/volunteer/">Know more...</a></p>
+                        </div>
+                    </div>
+                    <div class="modal-content">
+                      <div id="login_modal_container">
+                        <div class="top">
+                          <p>Skip forms, use your Facebook account</p><a href="{% url socialauth_begin 'facebook' %}" id="" class=
+                          "fb-connect-trigger login-fb">Login with Facebook</a>
+                          
+                          <span class="divide">Or</span> 
+                          <div style="">
+                          <div id="p_sign" >Dont have an Account? &nbsp&nbsp&nbsp&nbsp<a  id="sign-up" href="#" style="height:30px;background-color:#2ecc71;width:110px;padding-left:5px;padding-right:5px;" class="show-signup btn">Sign up</a> </div><br>
+                          <div id="p_login" style="display:none" > Already registered? &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a id="login" href="#" style="background-color:#2ecc71;height:30px;width:110px;padding-left:5px;padding-right:5px;" class="show-login btn">Login</a></div>
+                          </div>
+                          <div id="current-form-desc" style="font-size:18px;" class="show-on-login show-on-fp alert alert-danger"></div>
+                          <span id='buffer' style='color:red'></span>
+
+                        </div>
+
+                        <div class="form hide-temp" id="login-form" style="">
+                          <form action="/accounts/register/" id="login-signup-form" method="POST" accept-charset="utf-8">
+
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value='/myevidyaloka/'/>
+                            <div class="input text show-on-login show-on-signup" style="">
+                              <label for="username">Your User Name</label> <input name="username" type="text" data-validate="true" data-field-type="username" data-show-tooltip="true" data-placement="right" placeholder="Your username" maxlength="80" id="username" />
+                            </div>
+                            <small class="show-on-signup">username should contain [a-z][0-9]<br/> ex: jhon, mike, amy</small>
+                            <div class="input text required show-on-fp show-on-signup" style="">
+                              <label for="username">Email</label> <input name="email" type="text" data-validate="true" data-field-type="email" data-show-tooltip="true" data-placement="right"  placeholder="Your Email" maxlength="80" id="email" />
+                            </div>
+                            <small class="show-on-signup">ex: you@yourdomain.com</small>
+                            <div class="input password required hide show-on-login" style="">
+                              <label for="password">Password</label> <input type="password" data-validate="true" data-field-type="password" data-show-tooltip="true" name="password" placeholder="Password" data-placement="right" id="password" />
+                            </div>
+
+                            <div class="input password required show-on-signup" style="">
+                              <label for="password">Password</label> <input type="password" data-validate="true" data-field-type="password" data-show-tooltip="true"  name="password1" placeholder="Password" data-placement="right" id="password" />
+                            </div>
+                            <small class="show-on-signup">atleast 5 characters</small>
+                            <div class="input password required show-on-signup">
+                              <label for="password2">Password( again )</label> <input type="password" data-validate="true" data-field-type="password" data-show-tooltip="true" name="password2" placeholder="Password again" data-placement="right" id="password2" />
+                            </div>
+                            <small class="show-on-signup" style="margin-bottom:10px">repeat the same password</small>
+                            <div class="clearfix row show-on-login" style="display:none">
+                              <div class="input checkbox row-left clearfix">
+                                <input type="checkbox" name="remember_me" value="1" id="UserRememberMe" checked /> <label for="UserRememberMe">Remember me</label>
+                              </div>
+
+                              <div class="row-right show-on-login" style="display:none">
+                                <a id="fp" href="#">Forgot your password?</a>
+                              </div>
+                            </div>
+                            <div id="submit" class="submit show-on-fp show-on-login show-on-signup" style="margin-top:10px">
+                                <a rel="submit" href="#login-signup-form" pre-call="pre_submit" callback="after_submit" class="btn">
+                                    <span class="ajax-button-label">Sign up</span>
+                                </a>
+                            </div>
+                          </form>
+                          <p id="form-error" style="font-style:italic;color:red;display:none"></p>
+                          <p id="form-success" style="font-style:italic;display:none"></p>
+                        </div>
+
+                        <div id="fb-root">
+                          <script async="" src="https://connect.facebook.net/en_US/all.js" type="text/javascript"></script>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+              </div>-->
+            {% block top_bar %}
+                <!--
+                <div class="header_full">
+                    <div id="header">
+                        <div class="inner clearfix">
+                            <div class="nav_left">
+                                <a href="/?home=true"><img src="/static/images/evidyalogo.png"/></a>
+                                <h1 id="logo"><a href="/?home=true">eVidyaloka</a></h1>
+                                <h3>To Educate-Anywhere Anytime</h3>
+                            </div>
+                            <div class="nav_right">
+                                <div class="nav-menu">
+                                    <ul id="main-nav" class="nav_main" class="clearfix">
+                                        <li class="main-nav-2 main-nav-list" style="margin-left:48px">
+                                            <a href="/?home=true"  style="cursor:pointer;">Home</a>
+                                            <ul class="dropdown-menu submenu" style="display: none;margin-left:-46px">
+                                                <li><a href="/about/">About Us</a></li>
+                                                <li><a href="/vision/">Vision and Mission</a></li>
+                                                <li><a href="/operating_principles/">Operating Principles</a></li>
+                                                <li><a href="/conduct/">Code of Conduct</a></li>
+                                                <li><a href="/who_we_are/">Who We Are</a></li>
+                                                <li><a href="/careers/">Careers</a></li>
+                                                <li><a href="/news_events/">News & Events</a></li>
+                                                <li><a href="/governance/">Governance</a></li>
+                                                <li><a href="/partners/">Partners</a></li>
+                                                <li><a href="/faq/">FAQ</a></li>
+                                                <li><a href="/contact_us/">Contact Us</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="nav-menu">
+                                    <ul id="main-nav" class="nav_main">
+                                        <li class="main-nav-3 main-nav-list">
+                                            <a style="cursor:pointer;padding-left:0px;margin-left:50px">Discover</a>
+                                            <ul class="dropdown-menu submenu" style="display: none;margin-left:14px;">
+                                                <li><a href="/volunteer/">Spend some Time</a></li>
+                                                <li><a href="/spread/">Spread the Word</a></li>
+                                                <li><a href="/sponsor/">Share the Joy</a></li>
+                                                <li><a href="/donors/">Know the Donors</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="nav-menu">
+                                    <ul id="main-nav" class="nav_main">
+                                        <li class="main-nav-1 main-nav-list" style="margin-left:6px">
+                                            <a style="cursor:pointer;">Education in India</a>
+                                            <ul class="dropdown-menu submenu" style="display: none;margin-left:-5px">
+                                              <li><a href="http://www.mhrd.gov.in/school-education" target="_blank">Ministry of HRD</a></li>
+                                              <li><a href="http://www.mhrd.gov.in/rte" target="_blank">Right to Education</a></li>
+                                              <li><a href="http://en.wikipedia.org/wiki/Education_in_India" target="_blank">Education in India</a></li>
+                                              <li><a href="http://www.educationforallinindia.com/" target="_blank">Educational Statistics</a></li>
+                                              <li><a href="http://www.asercentre.org/Keywords/p/205.html" target="_blank">ASER Reports</a></li>
+
+                                            </ul>
+                                        </li>
+                                    </ul>
+                               </div>
+                               <div class="nav-menu">
+                                    <ul id="main-nav" class="nav_main">
+                                    <li class="main-nav-3 main-nav-list"style="padding-left:50px">
+                                          <a style="cursor:pointer" href="/forums/" >Forums</a>
+                                    </li>
+                                    </ul>
+                               </div>
+                               <div class="nav-menu" style="padding-left:20px;text-align:center;">
+                                  <a href="/sponsor/" class="btn cust_btn"  id="hdr_donate"  style="background-color:#32CA65;border:none;padding-left:5px;font-size:14px;padding-right:5px;{% if user.is_authenticated %}margin-top:21px;{% else %}margin-top:3px;{% endif %} width:54%;height:40%;margin-bottom:3px;margin-left:3px;margin-right:3px;">Donate Now</a>
+                                  {% if not user.is_authenticated %}
+                                  <a href="/?show_popup=true&type=Login" class="btn cust_btn"  id="hdr_login"  style="background-color:#32CA65;border:none;padding-left:5px;padding-right:5px;font-size:14px;width:54%;height:40%;margin:3px;">Signup/Login</a>
+                                  {% endif %}
+                               </div>
+
+
+
+
+                            </div>
+                        </div>
+                <img src='/static/images/top-colored-bar.jpg' style='margin-top:1px;position:absolute;width:100%;' />
+                    </div>
+                </div>
+                -->
+            <div class="navbar-wrapper cbp-af-header cbp-af-header-shrink">
+              <div class="container">
+
+                <div class="navbar cbp-af-inner" role="navigation">
+                  <div class="container">
+                    <div class="navbar-header">
+                      <button type="button" class="navbar-toggle zindex_css" data-toggle="collapse" onclick="hide_line()" data-target="#navbar-collapse1"style="margin-right:80px">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <h1><a class="navbar-brand scroll" href="/?home=true">
+                        <img class="logo_img_css" src="/static/images/evidyalogo.jpg" width="55px" height="51px" style="margin-top:-14px;border-radius:100%;display:inline;position:absolute"/>
+                        <img class="logo_img_css1" src="/static/images/evidyaban_1000x250.png"height="75px" class="banner_large" width="275px" style="margin-left:50px;margin-top:-25px;float:left;display:inline;position:absolute">
+                    </a></h1>
+                </div>
+                <div id="navbar-collapse1" class="navbar-collapse collapse nav_margin" style="/*margin-right:40px;*/">
+                  <ul class="nav navbar-nav pull-right new_menu">
+                    <!--<li><a href="/?home=true">Home</a></li-->
+                    <!--<li><a href="/about/">About Us</a></li>-->
+<!--                      <li><a href="/rubaru17/">Rubaru '17</a></li> -->
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle text_color" data-toggle="dropdown" role="button" aria-expanded="false">About<span class="caret"></span></a>
+                        <ul class="dropdown-menu dropdown_css" role="menu">
+                            <li class="li__bgcolor border_radius"><a class="href_color" href='/about/'>About Us</a></li>
+<!--                             <li><a href="/rubaru 16/">Rubaru '16</a></li>  -->
+                        </ul>
+                    </li>
+                      <!-- <li><a class="text_color" href="/v2/newevdpage/" >Run for eVidyaloka</a></li> -->
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle text_color" data-toggle="dropdown" role="button" aria-expanded="false">Get Involved<span class="caret"></span></a>
+                        <ul class="dropdown-menu dropdown_css" role="menu">
+                            <li class="li__bgcolor"><a class="href_color" href='/engage/' target='_blank'><img src="/static/img_new/workplace_logo.png" width="25px" />&nbsp;&nbsp;Workplace</a></li>
+                            <li class="li__bgcolor"><a class="href_color" href="/" target="_blank">Blog</a></li>
+                            <!--<li class="li__bgcolor"><a class="href_color" href="/forums/"target="_blank">Forums</a></li>-->
+                            <li class="li__bgcolor"><a class="href_color" href="/newsletter/"target="_blank">News letters</a></li>
+                            {% if user.is_authenticated %}
+                            <li></li>
+                            {% else %}
+                            <li><a data-toggle="modal"data-target="#login-modal"id="login-trigger" class="already" onclick="change_to_signup()" style="cursor:pointer">
+                                Sign Up</a></li> 
+                                {% endif %}
+                            </ul>
+                        </li>
+                        <!--<li><a class="hidden-sm login" href="#" data-toggle="modal" data-target="#modal1">test-Login</a></li>-->
+                        <li><a class="text_color" href="/sponsor/">Donate</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle text_color" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color:yellow">Volunteer Helpline<span class="caret"></span></a>
+                            <ul class="dropdown-menu dropdown_cs">
+                                <div class="li__bgcolor volunteer_css" style="padding: 15px; width: 220px;line-height: 25px;">
+                                <label style=" font-size: 14px">Phone :</label>
+                                <p>(+91-80-46808983)</p>
+                                <img src="/static/images/wats.png" width="20px" height="20px"/>
+                                <p style="margin-top: -25px; margin-left: 25px;">+91 6361517776 </p>
+                                <label style=" font-size: 14px">Skype HelpDesk (Chat Only) :</label>
+                                <p>evidyaloka.helpdesk</p>
+                                {% if user.is_authenticated %}
+                                	<a href="javascript:void(0);" onclick="makeRequest('Raise a request')" style="padding-left:0px">Raise a request</a>
+                                	<a href="javascript:void(0);" onclick="makeRequest('Report an issue')" style="padding-left:0px">Report an issue</a>
+                                	<a href="javascript:void(0);" onclick="makeRequest('Share a feedback')" style="padding-left:0px">Share a feedback</a>
+                                {% endif %}
+                              </div>
+                              
+                            </ul>
+                        </li>
+                        <!--<li><a id="" class="" href="/rubaru/">RUBARU '16</a></li>-->
+                        {% if user.is_authenticated %}
+                        <li></li><!--<li style="border:none;"><a href="/accounts/logout/">Log Out</a></li>-->
+                        {% else %}
+                        <li><button class="btn btn-info btn-md already" style="margin: 18px 0 0 32px;" data-toggle="modal" data-target="#login-modal" id="login-trigger">Log In</button></li>
+                        {% endif %}
+
+                            <!--<div class="pull-right">
+                                <li class="dropdown" style="margin-top:15px">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">a<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="/accounts/logout/">LOG OUT</a></li>
+                                    </ul>
+                                </li>
+                            </div>-->
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            </div>
+<div id="make_request" class="overlay">
+	<div class="popup">
+		<div class="row popup_header"><h5><span id="request_heading_id"></span></h5></div>
+		<a class="close" href="javascript:void(0);" onclick="closeHelpRequest()" title="Close">&times;</a>
+		<br>
+		<br>
+		<div class="content">
+			<div id="request_msg_div">
+			</div>
+			<label>Subject<span style="color:red">*</span></label>
+			<span id="subject_msg" style="color:red"></span>
+			<input type="text" class="form-control" id="request_subject" placeholder="Enter Subject*" title="Enter Subject" />
+			<label>Comments:<span style="color:red">*</span></label>
+			<span id="comments_msg" style="color:red"></span>
+			<textarea rows="10" cols="50" class="form-control" placeholder="Enter comments*" id="request_comments" title="Enter comments"></textarea>
+			<a href="javascript:void(0);" class="btn btn-info" onclick="submitRequest()" style="margin-left:36%" title="Send">Send</a>
+		</div>
+	</div>
+</div>
+            <div class="log-in">
+                {% if user.is_authenticated %}
+                {%include  "new_login_badge_temp.html"%}
+                {% endif %}
+            </div>
+
+            <img  class="img_ribon img_ribon_css" src="/static/images/top-colored-bar.jpg" style="margin-top:0px;position:absolute;width:100%;">
+			<!-- <div id="chat" onClick="open_chatbox();"> <p style="padding-left: 9px">Help</p>
+            <div id="close"><i class="fa fa-window-maximize" aria-hidden="true"></i>
+ 			</div>
+            </div>
+            <form action="/saveTask/" id="formId" method="post" onsubmit="return validateMyForm();">
+            {% csrf_token %}
+ 		<div id="chatBox">
+ 			<div class="chat_heading" onclick="closeChat()"> <p style="padding-left: 9px">Help</p>
+ 			<div onclick="closeChat()" id="close"><i class="fa fa-window-minimize" aria-hidden="true"></i></div>
+ 			</div>
+ 			<br><br>
+			<label><span style="color: red;">*</span>Subject</label>
+				<input type="text" name="subject" class="form-control" placeholder="Enter Subject" required="required"/>
+			<label>Comments :</label>
+				<textarea class="form-control" name="comment"></textarea>
+			<input type="hidden" id="current_date" name="dueDate"/>
+			<input type="hidden"  name="type" value="MANUAL"/>
+			<input type="hidden"  name="statusId" value="Open"/>
+			<input type="hidden" id="priority_id" name="priorityId" value="Normal"/>
+			<button type="submit" class="btn btn-primary" style="background: #337ab7;float: right;" onclick="curr_date()">Save</button>
+ 		</div>
+ 		</form> -->
+            </div>
+
+            <!--added for login-->
+            <div id="login-modal" class="modal fade" role="dialog" align="center">
+                <div class="modal-dialog">
+                <div style="max-width:380px">
+                    <div class="">
+                        <button type="button" class="close" data-dismiss="modal"style="padding:10px;font-size:30px;color:#000">&times;</button>
+                    </div>
+                    <div style="border:5px solid rgb(98, 94, 94)">
+                        <div class="form">
+                            <span id="current-form-desc" style="font-size:18px;" class="show-on-login show-on-fp"></span>
+                            <span id='buffer'class="" style='color:red'></span>
+
+                            <ul class="tab-group hidden"id="log_tab">
+                                <li class="tab active sp"><a href="#signup">Sign Up</a></li>
+                                <li class="tab lg"><a href="#login">Log In</a></li>
+                            </ul>
+                            <div class="tab-content">
+                            <div id="signup"  align="center">
+                              <h2>Join eVidyaloka</h2>
+                              <a href="{% url socialauth_begin 'facebook' %}" id="" style='margin-top:20px;' class="fb-connect-trigger login-fb">Login with Facebook</a>
+                              <span style='margin:20px 0px;' class="divide">Or</span>
+                              <form action="/accounts/register/" id="login-signup-form" method="POST" accept-charset="utf-8">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="next" value='/myevidyaloka/'/>
+
+                                    <div class="field-wrap input text hidden" style="">
+                                      <label>
+                                        Name<span class="req">*</span>
+                                        </label>
+                                        <input type="text" name="username" data-field-type="username" maxlength="80" id="username"class="hidden" value="name" />
+                                    </div>
+
+                                    <div class="field-wrap input text required" style="">
+                                        <label>
+                                          Email Address<span class="req">*</span>
+                                          </label>
+                                          <input  type="email"required="required" autocomplete="off" name="email" data-validate="true" data-field-type="email" data-show-tooltip="true" data-placement="right" maxlength="80" id="email"/>
+                                    </div>
+
+                                    <div class="field-wrap input password required">
+                                        <label>
+                                          New Password<span class="req">*</span>
+                                        </label>
+                                        <input type="password"required autocomplete="off" data-validate="true" data-field-type="password" data-show-tooltip="true" name="password1"data-placement="right" id="password"/>
+                                    </div>
+
+                                    <div class="field-wrap input password required">
+                                        <label>
+                                            Confirm Password<span class="req">*</span>
+                                        </label>
+                                        <input type="password"required autocomplete="off" data-validate="true" data-field-type="password" data-show-tooltip="true" name="password2"data-placement="right" id="password2"/>
+                                    </div>
+                                    <div id="submit" class="submit" style="margin-bottom:5px">
+                                        <a rel="submit" href="#login-signup-form" pre-call="pre_submit" callback="after_submit" class="btn btn-success"style="width:80%;color:white;text-decoration:none;cursor:pointer">
+                                            <span class="ajax-button-label">Create Account</span>
+                                        </a>
+                                    </div>
+                                </form>
+                                <p style='padding:20px 20px 0px 20px;'>Already a member? <a class="already"style="cursor:pointer;color:#F15A28;margin-left:5px;">Sign in</a></p>
+                                <p id="form-error" style="font-style:italic;color:red;display:none"></p>
+                                <p id="form-success" style="font-style:italic;display:none"></p>
+                            </div>
+                            <div id="login" align="center">
+                              <h2>Welcome Back!</h2>
+                              <a href="{% url socialauth_begin 'facebook' %}" id="" class="fb-connect-trigger login-fb">Login with Facebook</a>
+                              <span style='margin:20px 0px;' class="divide">Or</span>
+                              <form action="/accounts/login/" id="login-form" method="POST" accept-charset="utf-8">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value='/profile/'/>
+
+                                <div class="field-wrap input text" style="">
+                                    <label style="">
+                                      Email <span class="req">*</span>
+                                  </label>
+                                  <input  style="margin-top:20px;margin-bottom:25px" type="text"required autocomplete="off" name="username" type="text" class="username_get" data-validate="true" data-field-type="username" data-show-tooltip="true" data-placement="right"maxlength="80" id="username"/>
+                              </div>
+
+                              <div class="field-wrap input password required">
+                                <label>
+                                  Password<span class="req">*</span>
+                                </label>
+                                <input type="password"required autocomplete="off" data-validate="true" data-field-type="password" data-show-tooltip="true" name="password"data-placement="right" id="password"/>
+                                </div>
+
+                                      <!--<div class="input checkbox row-left clearfix">
+                                        <input type="checkbox" name="remember_me" value="1" id="UserRememberMe" checked/>
+                                    </div><br/>-->
+                                    <!-- <p class="forgot"><a id="fp" href="#">Forgot Password?</a></p>-->
+                                    <div id="submit" class="submit" align="center" style="margin-bottom:5px">
+                                        <a rel="submit" href="#login-form" pre-call="pre_submit" callback="after_submit" class="btn btn-success" style="color:white;width:80%;text-decoration:none;cursor:pointer">
+                                            <span class="ajax-button-label">Log In</span>
+                                        </a>
+                                    </div>
+                                </form>
+                                <p style='padding: 20px 20px 0px 20px;'>Don't have an account? <a href="/volunteer/" class="not_already_"style=" color : #F15A28;margin-left:5px;cursor:pointer">Sign up here</a></p>
+                                </div>
+                            </div><!-- tab-content -->
+                        </div> <!-- /form -->
+                        </div>
+                    </div>
+                </div>
+                <!--
+                <script src="/static/js_new/jquery-1.10.2.min.js"></script>
+                <script src="/static/js_new/bootstrap.min.js"></script>
+                <script type="text/javascript" src="/static/js/bootstrap-modal.min.js"></script>
+
+                -->
+                <style>
+                @media only screen and (max-width: 480px) and (min-width: 0px)  {
+                    .dropdown_css {
+                        margin-left: 3% !important;
+                     }
+                    .navbar_width{
+                    	width: 72%;
+                    	position: absolute !important;
+                    	z-index:3000 !important;
+                    }
+                    .new_menu{
+                    	background: black;
+                    	z-index: 3000 !important;
+                    	position: absolute;
+                    	margin-left: 0% !important;
+                    	width: 90%;
+                    }
+                    .navbar_css{
+                        margin-right: 9.1% !important;
+                        background-color: white !important;
+                    }
+                    .dropdown_color {
+                        background-color: rebeccapurple !important;
+                        margin-left: 22.3%;
+                    }
+                    .zindex_css {
+                         z-index : 1000 !important;
+                         margin: 3.9% 0% 0% 0% !important;
+                     }
+                     .icon-bar {
+                         background: black !important;
+                     }
+                     .navbar-header {
+                         float : none !important;
+                     }
+                     .navbar-toggle {
+                         display : block !important;
+                     }
+                     .collapse {
+                          display: none;
+                        }
+                     .navbar-collapse ul {
+                          width: 96% !important;
+                        }
+                        .navbar-collapse.in {
+                          overflow-y: auto;
+                        }
+                        .navbar-nav > li {
+                          float: none !important;
+                        }
+                        .img_ribon_css {
+                          padding-top: 1.5%;
+                        }
+                        .navbar-header {
+                          margin: 0px !important;
+                          padding: 0px !important;
+                        }
+                        .container_css {
+                          padding:0px !important;
+                        }
+                        .navbar-brand {
+                          padding: 3.5% 0%!important;
+                        }
+                        <!--.navbar-brand > img {
+                           width: 13% !important;
+                        }-->
+                        .logo_img_css {
+                           height: 41px !important;
+                           width: 13% !important;
+                        }
+                        .logo_img_css1 {
+                           width: 52% !important;
+                           margin-left: 13% !important;
+                           height: 74px !important;
+                        }
+                        .logo_img_css {
+                           width: 13% !important;
+                           height:
+                        }
+                        .li__bgcolor {
+                          background-color: white !important;
+                        }
+                        .href_color {
+                           color: black !important;
+                        }
+                        .bgcolor_css {
+                          background-color: white !important;
+                        }
+                        .bgcolor_none {
+                          background-color: none !important;
+                        }
+                        .text_color {
+                          color: white !important;
+                        }
+                        .border_radius {
+                           border-radius: 15px !important;
+                        }
+                        .dropdown-menu {
+                                position: absolute;
+                                     top: 100%;
+                                    left: -10px;
+                                 z-index: 1000;
+                                 display: none !important;
+                                   float: left;
+                        }
+                        .open > .dropdown-menu {
+                               display: block !important;
+                        }
+                        .volunteer_css {
+                            width: 100% !important;
+                            margin-left: 1.7%;
+                        }
+                        .nav_margin{
+                            margin-top: 2%;
+                        }
+                        .navbar-default .navbar-nav > li > a {
+                            color: white !important;
+                            text-align: center;
+                        }
+                        .profile_pic {
+                            margin-right: 47%;
+                        }
+                        .margin_right {
+                            margin-right: 35%;
+                        }
+                }
+
+                @media only screen and (max-width: 767px) and (min-width: 480px)  {
+                    .navbar_width{
+                    	width: 72%;
+                    	position: absolute !important;
+                    	z-index:3000 !important;
+                    }
+                    .navbar_css{
+                        margin-right: 9.1% !important;
+                        background-color: white !important;
+                    }
+                    .dropdown_color {
+                        background-color: rebeccapurple !important;
+                        margin-left: 22.3%;
+                    }
+                     .zindex_css {
+                         z-index : 1000 !important;
+                         margin: 1.9% 0% 0% 0% !important;
+                     }
+                     .icon-bar {
+                         background: black !important;
+                     }
+                     .navbar-header {
+                         float : none !important;
+                     }
+                     .navbar-toggle {
+                         display : block !important;
+                     }
+                     .collapse {
+                          display: none;
+                        }
+                     .navbar-collapse ul {
+                          width: 96% !important;
+                        }
+                        .navbar-collapse.in {
+                          overflow-y: auto;
+                        }
+                        .navbar-nav > li {
+                          float: none !important;
+                        }
+                        .img_ribon_css {
+                          padding-top: 1.5%;
+                        }
+                        .navbar-header {
+                          margin: 0px !important;
+                          padding: 0px !important;
+                        }
+                        .container_css {
+                          padding:0px !important;
+                        }
+                        .navbar-brand {
+                          padding: 3.5% 0%!important;
+                        }
+                        <!--.navbar-brand > img {
+                           width: 13% !important;
+                        }-->
+                        .logo_img_css {
+                           height: 41px !important;
+                           width: 13% !important;
+                        }
+                        .logo_img_css1 {
+                           width: 52% !important;
+                           margin-left: 13% !important;
+                           height: 74px !important;
+                        }
+                        .logo_img_css {
+                           width: 13% !important;
+                           height:
+                        }
+                        .li__bgcolor {
+                          background-color: white !important;
+                        }
+                        .href_color {
+                           color: black !important;
+                        }
+                        .bgcolor_css {
+                          background-color: white !important;
+                        }
+                        .bgcolor_none {
+                          background-color: none !important;
+                        }
+                        .text_color {
+                          color: white !important;
+                        }
+                        .border_radius {
+                           border-radius: 15px !important;
+                        }
+                        .dropdown-menu {
+                                position: absolute;
+                                     top: 100%;
+                                    left: -10px;
+                                 z-index: 1000;
+                                 display: none !important;
+                                   float: left;
+                        }
+                        .open > .dropdown-menu {
+                               display: block !important;
+                        }
+                        .volunteer_css {
+                            width: 100% !important;
+                            margin-left: 1.7%;
+                        }
+                        .nav_margin{
+                            margin-top: 2%;
+                        }
+                        .navbar-default .navbar-nav > li > a {
+                            color: white !important;
+                            text-align: center;
+                        }
+                        }
+
+                @media only screen and (max-width: 1024px) and (min-width: 767px)  {
+                      .navbar_width{
+                            width: 50% !important;
+                            margin-top: -2.2% !important;
+                      }
+                      .navbar_css{
+                        margin-right: 9.1% !important;
+                        background-color: white !important;
+                    }
+                      .zindex_css {
+                         z-index : 1000 !important;
+                         margin: 2.5% 0% 0% 0% !important;
+                     }
+                     .navbar-toggle .icon-bar {
+                            background: black !important;
+                     }
+                     .navbar-collapse.collapse {
+                        display: none !important;
+                     }
+                      <!--.navbar-collapse.collapse {
+                        display: none;
+                     }
+                     .collapse.in{
+                        display: block !important;
+                     }
+                     .navbar-nav > li {
+                        float: none !important;
+                    }
+                    .navbar-nav{
+                        background: rgba(43, 45, 53, 0.9) !important;
+                        width: 45% !important;
+                    }
+                    .float_css {
+                        float: right !important;
+                    }
+                    .navbar-collapse {
+                        margin-left: 10% !important;
+                        margin-top: 9.8%;
+                    }-->
+                    .icon-bar {
+                         background: black !important;
+                     }
+                     .navbar-header {
+                         float : none !important;
+                     }
+                     .navbar-toggle {
+                         display : block !important;
+                     }
+                     .collapse {
+                          display: none;
+                        }
+                     .navbar-collapse ul {
+                          width: 96% !important;
+                        }
+                        .navbar-collapse.in {
+                          overflow-y: auto;
+                        }
+                        .navbar-nav > li {
+                          float: none !important;
+                        }
+                        .img_ribon_css {
+                          padding-top: 1.5%;
+                        }
+                        .navbar-header {
+                          margin: 0px !important;
+                          padding: 0px !important;
+                        }
+                        .container_css {
+                          padding:0px !important;
+                        }
+                        .navbar-brand {
+                          padding: 3.5% 0%!important;
+                        }
+                        <!--.navbar-brand > img {
+                           width: 13% !important;
+                        }-->
+                        .logo_img_css {
+                           height: 41px !important;
+                           width: 13% !important;
+                        }
+                        .logo_img_css1 {
+                           width: 52% !important;
+                           margin-left: 13% !important;
+                           height: 74px !important;
+                        }
+                        .logo_img_css {
+                           width: 13% !important;
+                           height:
+                        }
+                        .li__bgcolor {
+                          background-color: white !important;
+                        }
+                        .href_color {
+                           color: black !important;
+                        }
+                        .bgcolor_css {
+                          background-color: white !important;
+                        }
+                        .bgcolor_none {
+                          background-color: none !important;
+                        }
+                        .text_color {
+                          color: white !important;
+                        }
+                        .border_radius {
+                           border-radius: 15px !important;
+                        }
+                        .dropdown-menu {
+                                position: absolute;
+                                     top: 100%;
+                                    left: -10px;
+                                 z-index: 1000;
+                                 display: none !important;
+                                   float: left;
+                        }
+                        .open > .dropdown-menu {
+                               display: block !important;
+                        }
+                        .volunteer_css {
+                            width: 100% !important;
+                            margin-left: 1.7%;
+                        }
+                        .nav_margin{
+                            margin-top: 2%;
+                        }
+                        .navbar-default .navbar-nav > li > a {
+                            color: white !important;
+                            text-align: center;
+                        }
+                        .dashboard-breadcrumb{
+                            display: grid;
+                            background: rebeccapurple !important;
+                        }
+                        nav.breadcrumb_css ul.dashboard-breadcrumb{
+                            margin-left: 70.3% !important;
+                        }
+                        .dropdown_css {
+                         margin-left: 3% !important;
+                      }
+                      .dashboard-breadcrumb > li > a {
+                        color: white !important;
+                      }
+                      .dropdown > .dropdown-menu{
+                        margin: 10px !important;
+                      }
+                }
+                
+                    @media (max-width: 385px){
+                        .banner_large{
+                            display:none !important;
+                        }
+                    }
+
+                    @media only screen and (max-width: 480px) and (min-width: 0px)  {
+                    .inner-mob {
+                        width: 100%;
+                        margin: 0 auto;
+                        position: relative;
+                        overflow-x: hidden;
+                    }
+                    }
+
+                    @media only screen and (max-width: 768px) and (min-width: 480px)  {
+                    .inner-mob {
+                        width: 73%;
+                        margin: 0 auto;
+                        position: relative;
+                    }
+                    }
+
+                     @media only screen and (max-width: 1024px) and (min-width: 768px)  {
+                       .dropdown_css {
+                         margin-left: 3% !important;
+                      }
+                        .inner-mob {
+                        width: 73%;
+                        margin: 0 auto;
+                        position: relative;
+                    }
+                     }
+                    #content .login-fb {
+                        display: block
+                    }
+                    .login-fb {
+                        background: transparent url(/static/images/login_facebook.png) no-repeat 0 0;
+                        width: 262px;
+                        height: 34px;
+                        text-indent: -9999em;
+                        display: block;
+                        margin: 0 auto 5px
+                        padding : 10px 0px;
+                    }
+                    .login-fb:hover {
+                        background-position: 0 -34px
+                    }
+                    .login-fb:active {
+                        background-position: 0 -68px
+                    }
+                    .modal-content .top {
+                        text-align: center;
+                        font-size: 12px;
+                        font-family: 'PlutoCondRegularItalic';
+                        margin-bottom: 10px
+                    }
+                    .modal-content #login_modal_container .top {
+                        margin-bottom: 0
+                    }
+                    .modal-content #login_modal_container .form {
+                        margin-top: 10px
+                    }
+                    .modal-content #login_modal_container .form .text input,
+                    .modal-content #login_modal_container .form .password input {
+                        width: 240px
+                    }
+                    .modal-content .top p {
+                        margin-bottom: 5px;
+                        font-family: 'PlutoCondRegular'
+                    }
+                    .modal-content .form {
+                        width: 262px
+                    }
+                    #login_register_container .top {
+                        text-align: center;
+                        font-size: 14px;
+                        font-family: 'PlutoCondRegularItalic';
+                        color: #bcbcbc
+                    }
+                    #login_register_container .top p {
+                        margin-bottom: 7px;
+                        font-family: 'PlutoCondRegular';
+                        color: #4a4a4a
+                    }
+                    #login_register_container .top a,
+                    .modal-content #login_modal_container .top a {
+                        margin-bottom: 6px;
+                        font-size: 14px;
+                        display: inline-block
+                    }
+                    .lt-ie8 #login_register_container .top a {
+                        display: inline
+                    }
+                    .lt-ie8 .modal-content #login_modal_container .top a {
+                        display: inline
+                    }
+                    .modal-content #login_modal_container .top a.login-fb {
+                        display: block
+                    }
+                    .modal-content #login_modal_container .top p {
+                        font-size: 14px
+                    }
+                    #login_register_container .top a.login-fb {
+                        display: block
+                    }
+                    .top .divide {
+                        background: transparent url(/static/images/divide.gif) no-repeat 50% 50%;
+                        font-size: 14px;
+                        color: #bcbcbc;
+                        font-family: 'PlutoCondRegularItalic';
+                        display: block;
+                        margin-bottom: 4px
+                    }
+                    .divide {
+                        background: transparent url(/static/images/divide.gif) no-repeat 50% 50%;
+                        font-size: 14px;
+                        color: #bcbcbc;
+                        font-family: 'PlutoCondRegularItalic';
+                        display: block;
+                        margin-bottom: 4px
+                    }
+                    .top span {
+                        display: inline;
+                        font-size: 12px;
+                        color: #bcbcbc
+                    }
+                    #login_modal_container .top span,
+                    #login_register_container .top span {
+                        display: block
+                    }
+                    #login_register_container .form {
+                        width: 266px;
+                        margin-top: 16px
+                    }
+                    #login_register_container .form .text input,
+                    #login_register_container .form .password input {
+                        width: 246px
+                    }
+                    ::-webkit-input-placeholder {
+                        font-family: 'PlutoCondRegularItalic'
+                    }
+                    :-moz-placeholder {
+                        font-family: 'PlutoCondRegularItalic';
+                        color: #aaa
+                    }
+                    .form-error::-webkit-input-placeholder {
+                        color: #4a4a4a
+                    }
+                    .form-error:-moz-placeholder {
+                        color: #4a4a4a
+                    }
+                    .form p.note {
+                        font-size: 12px;
+                        color: #bcbcbc;
+                        font-family: 'PlutoCondRegularItalic';
+                        text-align: center;
+                        margin: 13px auto 0;
+                        width: 90%
+                    }
+                    label {
+                        font-size: 12px;
+                        font-family: 'PlutoCondRegularItalic';
+                    }
+                    .checkbox input {
+                        float: left;
+                        position: relative
+                    }
+                    .checkbox label {
+                        float: left;
+                        position: relative;
+                        margin: 0 0 0 10px
+                    }
+                    .modal-layer .checkbox label,
+                    .modal-layer .row a {
+                        line-height: 19px
+                    }
+                    .modal-layer .checkbox input {
+                        height: 19px
+                    }
+                    .lt-ie8.checkbox label {
+                        line-height: 20px
+                    }
+                    .standard-form .segment-step-1 .hide-temp {
+                        display: none
+                    }
+                    .standard-form .hide-temp input {
+                        margin-bottom: 0
+                    }
+                    #login_register_container .row a {
+                        line-height: 13px
+                    }
+                    .row-left {
+                        width: 50%;
+                        float: left;
+                        position: relative;
+                        text-align: right
+                    }
+                    .row-right {
+                        width: 50%;
+                        float: right;
+                        position: relative
+                    }
+                    .footer-logo{
+                        margin-top : 12%;
+                    }
+                </style>
+                <link href='/static/css_new/dropzone.min.css' rel='stylesheet'>
+                <link href='/static/css/myevd.css' rel='stylesheet'>
+
+                <!--added for login above-->
+            </div>
+
+            {% endblock %}
+            {% block user_info %}
+                {% if request.user.is_authenticated %}
+                    <div id="content" class="clearfix">
+                        <section id="featured1" class="dark with-bg_my_evd">
+                           <div class='row'>
+                              <div class="container" style='height:160px;'>
+                                <div class="row" >
+                                  <div class="profile-sec-1 col-xs-offset-3 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-xs-6 col-sm-1 col-md-1 col-lg-1">
+                                        <a data-toggle='modal' href='#'  data-target="#change_pic" class="thumbnail profile_pic_thumb">
+                                          <div class='flyout' >Change Pic</div>
+                                          <img class='profile_img img-responsive' src="{{ request.user.userprofile.picture }}" alt="...">
+                                        </a>
+                                    </div>
+                                      <div class="profile-sec-2 col-xs-offset-3 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                                        <div class='profile-edit-1'>
+                                            <div  class='user_dets'>
+                                                <p class='u_name' >{% if request.user.first_name %}{{ request.user.first_name|title }} {{ request.user.last_name }}{% else %}Add your name {%endif%}</p>
+                                                <div class='hidden-xs profile-lnk-sm'>
+                                                    <p> {% if request.user.userprofile.city %}From : {{ request.user.userprofile.city }}, {{ request.user.userprofile.country }} {% else %}
+                                                        Add your location {% endif %}</p>
+                                                    </div>
+                                                    <div class='row'>
+                                                        <div class='hidden-xs profile-lnk-sm col-sm-12'>
+                                                            <p class="edit_profile_btn"> <a href="/profile/">Edit profile</a></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='hidden-xs  col-sm-offset-5 col-sm-1'>
+                                            <div class='btn btn-default profile-edit-2'> <a href='/onboarding/'>Onboarding Status</a></div>
+                                            {% if request.user.userprofile.fbatwork_id %}
+                                                <div class='btn btn-default profile-edit-2'> <a href='http://evidyaloka.facebook.com' onclick="saveActivity();" >Visit community</a></div>
+                                            {% else %}
+                                                <div class='btn btn-default profile-edit-2'> <a href='/engage/'>Join Community</a></div>
+                                            {% endif %}
+                                        </div>
+                                        <div class='hidden-xs  col-sm-offset-5 col-sm-1'>
+                                            {%  activity_center request.user  %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="black"></div>
+                        </section>
+                {% endif %}
+            {% endblock %}
+                <div class="about-container" style='padding-bottom : 20px; padding-top:0px;'>
+                    {% if request.user.is_authenticated %}
+                    {% block breadcrumb %}
+                    <nav class="breadcrumb_css navbar navbar-default" style="margin-bottom: 0;">
+
+                        <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed navbar_css" data-toggle="collapse" data-target="#navbar1" aria-expanded="false" aria-controls="navbar1">
+                          <span class="sr-only">Toggle navigation</span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          </button>
+                      </div>
+                        <div id="navbar1" class="navbar-collapse collapse dropdown_color navbar_width" style="">
+                        <ul class="dashboard-breadcrumb" style="margin-bottom: 0;">
+                        <li class="header">
+                            <a href="/myevidyaloka/"><i class="fa fa-home fa-lg" aria-hidden="true"></i>&nbsp&nbspMy eVidyaloka</a>
+                            <span class="divider">&gt;</span>
+                        </li>
+                        {% block userprofile %}
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="/profile/">My Profile<b class="caret"></b></a>
+                            <ul class="dropdown-menu" style="display: none;">
+                                <li><a href="/profile/">Profile</a></li>
+                            </ul>
+                            <span class="divider">|</span>
+                        </li>
+                        {% endblock %}
+                        <li class="dropdown contributions">
+                            <a class="dropdown-toggle color_css" data-toggle="dropdown" href="/myevidyaloka/contributions/">My Contributions  <b class="caret"></b></a>
+                            <ul class="dropdown-menu" style="display: none; ">
+                                <li><a href="/myevidyaloka/contributions/">Donations</a></li>
+                                <li><a href="/donorupdate/">Donor Update</a></li>
+                                <li><a href="/v2/my_referrals/">My Referrals</a></li>
+                                <!-- {% if is_partner %}
+                                    <li><a href="/my_certificate/">My Certificate</a></li>
+                                {% endif %}
+                                {% if is_teacher %}
+                                    <li><a href="/config/my_certificate/">My Certificate</a></li>
+                                {% endif %} -->
+                            </ul>
+                            <span class="divider">|</span>
+                        </li>
+                        {% block breadcrumb_extras %}
+
+                        {% endblock %}
+                        {% breadcrumb request.user center.id %}
+                        {% endblock %}
+                        {% endif %}
+                        <div class="fig clearfix inner  inner-mob" >
+                            {% block body_container %}
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+                <div id="evd-notification" class="alert alert-warning hide">
+                    <div>
+                        <a type="button" class="close">X</a>
+                        <p class="msg-body"></p>
+                    </div>
+                </div>
+            {% block footer %}
+            <!-- Footer
+            ================================================== -->
+            <footer id="contact" class="footer" style="padding-top:0px;padding-bottom:2em">
+
+              <div class="container">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="col-sm-3 col-md-3">
+                      <div class="footer-logo">
+                        <h2 style="font-size:20px">eVidyaloka Trust</h2>
+                        <p>10 B, 1st A Main, MCHS Colony<br>5th Block, Sector 6, HSR Layout,<br/>Bangalore-560102</p>
+                        <p class="muted">© eVidyaloka Trust 2016</p>
+                        <a href="/policies_terms_conditions/">Terms of Service</a>
+                        <a href="/policies/">Privacy</a>
+                      </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3">
+                      <h3>Organization</h3>
+                      <ul class="list-unstyled" style="margin-bottom:0px">
+                        <li><a href="/governance/" target='_blank'>Governance</a></li>
+                        <li><a href="/operating_principles/" target='_blank'>Operating Principles</a></li>
+                        <li><a href="/faq/" target='_blank'>FAQs</a></li>
+                        <li><a href="/careers/" target='_blank'>Careers</a></li>
+                        <li><a href="/conduct/" target='_blank'>Code of conduct</a></li>
+                       </ul>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                      <h3>Resources</h3>
+                      <ul class="list-unstyled"  style="margin-bottom:0px">
+                        <li><a href="http://www.mhrd.gov.in/school-education"target="_blank">Ministry of HRD</a></li>
+                        <li><a href="http://www.mhrd.gov.in/rte"target="_blank">Right to Education</a></li>
+                        <li><a href="http://en.wikipedia.org/wiki/Education_in_India"target="_blank">Education in India</a></li>
+                        <li><a href="http://www.educationforallinindia.com/" target="_blank">Educational Statistics</a></li>
+                        <li><a href="http://www.asercentre.org/Keywords/p/205.html" target="_blank">ASER Reports</a></li>
+                      </ul>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        <h3>Community</h3>
+                        <ul class="list-unstyled"  style="margin-bottom:0px">
+                            <li><a href="/" target="_blank">Blogs</a></li>
+                            <li><a href="/forums/" target='_blank'>Forums</a></li>
+                            <li><a href="/partners/" target='_blank'>Partners</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                      <h3> </h3>
+                      <ul class="list-unstyled" style="margin-bottom:0px">
+                        <li><a href="" target='_blank'>Donate</a></li>
+                        <li><a href="/contact_us/" target='_blank' >Contact Us</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="row hidden">
+                  <div class="col-lg-12 text-center">
+                    <a class="icon icon-foot" href="https://twitter.com/evidyaloka" target="_blank"><i class="fa fa-twitter"></i></a>
+                    <a class="icon icon-foot" href="https://www.facebook.com/eVidyaloka/" target="_blank"><i class="fa fa-facebook"></i></a>
+                    <a class="icon icon-foot" href="https://www.youtube.com/user/eVidyaloka" target="_blank"><i class="fa fa-youtube"></i></a>
+                   </div>
+                </div>
+              </div>
+
+            </footer>
+
+            <!-- Profile Pic modal -->
+            <div id="change_pic" class="modal fade" role="dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content" >
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" style="font-size:30px">&times;</button>
+                    <h4 class="modal-title">Change profile pic</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="alert alert-warning hidden" id='profile_pic_warn'>
+                      <strong>Info!</strong><p></p>
+                  </div>
+                  <div class="row">
+                    <form class="dropzone" id="my-awesome-dropzone">
+                        {% csrf_token %}
+                    </form>
+                </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn btn-warning dz-click" >Choose</div>
+                    <div class="btn btn-danger dz-remove" >Clear</div>
+                    <div class="btn btn-success dz-start" >Save</div>
+                </div>
+                </div>
+
+            </div>
+            <!-- Modal -->
+      <div class="modal fade" id="releaseModal" role="dialog">
+        <div class="modal-dialog modal-lg" style=" display: inline;">
+        
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Your Previous Selected Slots:</h4>
+            </div>
+            <div class="modal-body modal_data">
+                 <div class="alert alert-info " style='display:none;' id='release_demand_alert' role="alert">
+                    <strong>Info!</strong> <p class='release_resp'></p>
+                </div>
+                <div class='row 'id="releaseSlotid" style='padding:0px 30px;'>
+                    <!-- {% for ent in course_details.user_slots %}
+                        <p> <span style='color:#FF6965;font-weight:bold;'>Slot {{forloop.counter}} : </span> {{ent.1}} {{ent.2}} to {{ent.3}} ( School : {{ent.0}} )</p>
+                    {% endfor %}   -->              
+                    </div> 
+            </div>
+            <div class="modal-footer">
+                    <div class='row' style='margin:0px;' >
+                            <button type="button" class="btn btn-danger" id="close_btn" data-dismiss="modal">Close</button>
+                    </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+   <div id="success_session" class="modal hide"
+	style="max-height: 550px; overflow-y: auto; top: 40%;width: 50%;">
+	<a class="close colse_modal" data-dismiss="modal"
+		style="float: right; cursor: pointer; position: absolute; top: 0px; right: 0px;">X</a>
+	<div style="clear: both">
+		<ul class="nav nav-tabs evd">
+			<li class="active" style="border: bottom:0px;"><a data-toggle="tab">Create Schedule</a></li>
+		</ul>
+		<div class="tab-content " id="session_details">
+		</div>
+	</div>
+  </div> 
+        {% endblock %}
+    </body>
+        {% block outside_container %}
+        {% endblock %}
+        {% block bottom_scripts %}
+        <script type='text/javascript' src='/static/js_new/dropzone.min.js' ></script>
+        <script type='text/javascript' src='/static/js_new/myevidyaloka.js' ></script>
+        <script>
+        	function closeHelpRequest(){
+        		$("#request_subject").val('');
+        		$("#request_comments").val('');
+        		$("#subject_msg").empty();
+            	$("#comments_msg").empty();
+        		$("#request_msg_div").empty();
+        		var a = document.createElement('a');
+    			a.href = '#';
+    			document.body.appendChild(a);
+    			a.click();
+        	}
+        	
+        	function makeRequest(heading){
+        		$("#request_heading_id").html(heading);
+        		var a = document.createElement('a');
+    			a.href = '#make_request';
+    			document.body.appendChild(a);
+    			a.click();
+        	}
+        
+        	function submitRequest(){
+        		$("#subject_msg").empty();
+            	$("#comments_msg").empty();
+            	$("#request_msg_div").empty();
+            	var type = $("#request_heading_id").text();
+            	var msg = '';
+            	var taskType = 'MANUAL';
+            	if (type == 'Raise a request'){
+            		taskType = 'HELP';
+            		msg = 'A ticket is created successfully. You can track the status here <a href="/task_list?tab=taskByMe" target="_blank">Task assigned by me</a>';
+            	}else if (type == 'Report an issue'){
+            		taskType = 'ISSUE';
+            		msg = 'Issue reported successfully.Please track the Ticket status, from <a href="/task_list?tab=taskByMe" target="_blank">Task assigned by me</a>';
+            	}else if (type == 'Share a feedback'){
+            		taskType = 'FEEDBACK';
+            		msg = 'Thank you for your Feedback. Your feedback status can be tracked from <a href="/task_list?tab=taskByMe" target="_blank" >Task assigned by me</a>';
+            	}
+        		var subject = $("#request_subject").val();
+        		var comments = $("#request_comments").val();
+        		if (subject==null || subject=='' || subject=='undefined'){
+        			$("#subject_msg").html('Please enter subject');
+        		}else if (comments==null || comments=='' || comments=='undefined'){
+        			$("#comments_msg").html('Please enter comments');
+        		}else{
+        			var ajaxUrl = '/v2/ajax/save_help?subject=' +subject+ '&comments=' +comments+ '&taskType='+taskType;
+        			$.ajax({
+        				url : ajaxUrl,
+        				success : function(data){
+        					if (data!=null && data.indexOf('success')>-1){
+        						$("#request_subject").val('');
+        		        		$("#request_comments").val('');
+        		        		$("#request_msg_div").html('<div class="alert alert-success alert-dismissable"><a href="#" data-dismiss="alert" class="close"style="font-size: x-large; top: 60px;">&times;</a>'+msg+'</div>');
+        					}else if (data!=null && data.indexOf('failure')>-1){
+        						$("#request_msg_div").html('<div class="alert alert-danger alert-dismissable"><a href="#" data-dismiss="alert" class="close"style="font-size: x-large; top: 60px;">&times;</a>AssignedTo not found.</div>');
+        					}else{
+        						$("#request_msg_div").html('<div class="alert alert-danger alert-dismissable"><a href="#" data-dismiss="alert" class="close"style="font-size: x-large; top: 60px;">&times;</a>Error! Please contact to administrator.</div>');
+        					}
+        				},
+        				error : function(){
+        					
+        				}
+        			});
+        		}
+        	}
+        	
+            $(document).ready(function(){
+            	$("#subject_msg").empty();
+            	$("#comments_msg").empty();
+            	$("#request_msg_div").empty();
+                $("li.main-nav-list a").mouseenter(function(){
+                    $(this).css({"color":"#f15a22"});
+                    $(this).next("ul").show();
+                });
+                $("li.main-nav-list a").mouseleave(function(){
+                    $(this).css({"color":"#505050"});
+                    $(this).next("ul").hide();
+                });
+                $("li.main-nav-list").children("ul").mouseenter(function(){
+                    $(this).show();
+                    $(this).prev("a").css({"color":"#f15a22"});
+                });
+                $("li.main-nav-list").children("ul").mouseleave(function(){
+                    $(this).hide();
+                    $(this).prev("a").css({"color":"#505050"});
+                });
+
+                $("li.dropdown, ul.dropdown-menu").mouseenter(function(){
+                    $(this).children("ul.dropdown-menu").show();
+                });
+                $("li.dropdown, ul.dropdown-menu").mouseleave(function(){
+                    $(this).children("ul.dropdown-menu").hide();
+                });
+                $("ul.custom-select li").toggle(function(){
+                    $("ul.custom-select > li.focus-f").not($(this)).trigger("click");
+                    $(this).addClass("focus-f");
+                },function(){
+                    $(this).removeClass("focus-f");
+                });
+                $("html").click(function(){
+                    $("ul.custom-select li.focus-f").trigger("click");
+                });
+                $("ul.custom-select li span.dropdown a").click(function(){
+                    $(this).parent("span.dropdown").prev().text($(this).text());
+                });
+                $("select[name='course_id']").change(function(){
+                    var course_id = $(this).children(":selected").val();
+                    $.get("/get_planned_topics/?course_id="+course_id,function(resp){
+                        $li =  $("select#planned_topics").parent("li");
+                        $("select#planned_topics option").remove();
+                        $("select#planned_topics").show();
+                        $li.children("p.no-topics").remove();
+                        if(resp.length > 0) {
+                            for(var index in resp){
+                                topic = resp[index]
+                                $("select#planned_topics").append("<option value=" + topic.topic_id + ">" + topic.title + "</option>");
+                            }
+                        }
+                        else {
+                            $("select#planned_topics").hide();
+                            $("<p class='no-topics' style='padding:0px;'>This course has no planned topics yet</p>").insertAfter($li.children("select#planned_topics"));
+                        }
+                    });
+                });
+                $("#add-course-modal select").each(function(){
+                    $(this).change(function(){
+                        $(this).tooltip("destroy");
+                    });
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function(){
+                $("#calendar").on("click", ".center", function(){
+                    var center_id = Number($(this).attr("data-centerid"));
+                    $.get("/getcenters/?center_id="+center_id, function(resp){
+                        resp = eval(resp);
+                        var center_html = '<div style="float:left;" id="center">'+
+                        '<div style="min-height:150px;overflow:hidden;clear:both;background:white">'+
+                        '<div style="float:left;width:133px;height:133px;background:gray url(${image});box-shadow: inset 0px 0px 5px #000;border-radius: 5px;margin-left: 10px;margin-top: 16px">'+
+                        '</div>'+
+                        '<div style="padding:10px;float:left;width:668px;">'+
+                        '<p style="font-weight:bold;color:#f15a22;font-size:x-large;">${title}</p>'+
+                        '<p class="ellipsis multiline" style="padding-top:10px;font-size:13px;height:36px;">${description}</p>'+
+                        '<div class="generalinfo">'+
+                        '<p class="title">Class Location</p><p>: &nbsp;${location}</p>'+
+                        '<p class="title">Grades</p><p>: &nbsp;${grades}</p>'+
+                        '<p class="title">Subjects Covered</p><p>: &nbsp;${subjects_covered}</p>'+
+                        '<p class="title">No.of Children</p><p>: &nbsp;${noofchildren}</p>'+
+                        '<p class="title">Launch date</p><p>: &nbsp;${launch_date}</p>'+
+                        '</div>'+
+                        '<div class="courses" style="font-size:14px;"></div>'+
+                        '</div>'+
+                        '</div>'+
+                        '</div>';
+                        $.template("center_template",center_html);
+                        $("#center-modal img").hide();
+                        $.tmpl("center_template",window.eval(resp)).insertAfter($("#center-modal img"));
+                        $(".ellipsis").ellipsis();
+                        $centers = $("#center-modal");
+                        $.each(resp, function(index,val){
+                            if(this.empty_courses.length > 0)
+                            {
+                                $.each(this.empty_courses,function(i,course){
+                                    $centers.eq(index).find("div.courses").append("<p class='requirements' style='margin-top:10px;'><b style='font-weight:bold;color:#f15a22'>Requirements:</b></p>");
+                                    var teachers = course.teachers;
+                                    $("div.courses").each(function(){
+                                        $(this).find(".requirements").not(":first").remove();
+                                    });
+                                    {% if not user.is_authenticated %}
+                                    teachers = '<p style="float:left;padding-top:10px;"><a class="label label-success" href="#login-modal" data-toggle="modal">contribute</a></p>';
+                                    {% else %}
+                                    if(!course.is_assigned_offering){
+                                        teachers = '<a rel="ajax-link" class="label label-success" pre-call="pre_assign_offering" callback="showmsg" href="/add_pref_course/?course_id='+ course.offering_id +'"><span class="ajax-button-label">contribute</span></a>';
+                                    }
+                                    else{
+                                        teachers = '<p style="float:left;padding-top:10px;"><a class="label label-success disabled"><span>contribute</span></a></p>';
+                                    }
+                                    {% endif %}
+
+                                    var $center_markup = $("<p style='width:200px;padding-top:10px;float:left;clear:both;'>"+ course.grade +" "+course.subject +" Teacher (" + course.center_language + ") " + teachers + "</p>");
+                                    $center_markup.find("[rel='ajax-link']").click(evd.ajax_link);
+                                    $centers.eq(index).find("div.courses").append($center_markup);
+                                });
+                            }
+                            {% if user.is_authenticated %}
+                            if(this.other_lang_courses.length > 0){
+                                $.each(this.other_lang_courses,function(i,course){
+                                    $centers.eq(index).find("div.courses").append("<p class='requirements' style='margin-top:10px;'><b style='font-weight:bold;color:#f15a22;'>Requirements:</b></p>");
+                                    $("div.courses").each(function(){
+                                        $(this).find(".requirements").not(":first").remove();
+                                    });
+                                    var teachers = course.teachers;
+                                    teachers = '<p style="float:left;padding-top:10px;"><a rel="ajax-link" class="label label-success" href="#"><span class="ajax-button-label">contribute</span></a></p>';
+                                    var $center_markup = $("<p style='float:left;clear:both;width:200px;padding-top:10px'>"+course.grade+" "+ course.subject +" Teacher (" + course.center_language + ") " + teachers + "</p>");
+                                    $center_markup.find("[rel='ajax-link']").click(function(e){ evd.show_msg("Sorry!, the medium to teach this course doesn't match your preferred medium"); e.preventDefault();});
+                                    $centers.eq(index).find("div.courses").append($center_markup);
+                                });
+                            }
+                            {% endif %}
+                            if(this.assigned_courses.length > 0){
+                                $.each(this.assigned_courses,function(i,course){
+                                    var teachers = course.teachers;
+                                    $centers.eq(index).find("div.courses").append("<p class='running-courses' style='clear:both;padding-top:10px;'><b style='font-weight:bold;color:#f15a22;'>Running Courses:</b></p>");
+                                    $("div.courses").each(function(){
+                                        $(this).find(".running-courses").not(":first").remove();
+                                    });
+                                    teachers = " by <span style='font-weight:bold;'>" + teachers + "</span>";
+                                    $center_markup = $("<p style='padding-top:10px'>"+ course.grade +" "+course.subject +" "+ teachers + "</p>");
+                                    $centers.eq(index).find("div.courses").append($center_markup);
+                                });
+                            }
+                        });
+            })
+            });
+            $("#center-modal").on("hide", function(){
+                $("#center-modal #center").remove();
+                $("#center-modal img").show();
+            });
+
+            });
+        </script>
+        <!-----------------------------qwiojroiwjroi----------------->
+
+            <!-- Bootstrap core JavaScript
+            ================================================== -->
+            <!-- Placed at the end of the document so the pages load faster -->
+            {% block import_scripts %}
+            <script src="/static/js_new/bootstrap.min.js"></script>
+            <script src="/static/js_new/classie.min.js"></script>
+            <!--<script src="/static/js_new/cbpAnimatedHeader.min.js"></script>-->
+            <script src="/static/js_new/owl.carousel.min.js"></script>
+            <script src="/static/js_new/scrollReveal.min.js"></script>
+            <script src="/static/js_new/jquery.scrollTo.js" defer="defer"></script>
+            <!--<script src="/static/js_new/jquery.nav.js" defer="defer"></script>-->
+            <script src="/static/js_new/imagesloaded.pkgd.min.js" defer="defer"></script>
+            <script src="/static/js_new/isotope.min.js" defer="defer"></script>
+            <script src="/static/js_new/jquery.magnific-popup.min.js" defer="defer"></script>
+            <script src="/static/js_new/jqBootstrapValidation.min.js" defer="defer"></script>
+            <script src="/static/js_new/custom.min.js"></script>
+            <script src="/static/js_new/login_modal.min.js"></script>
+            <script src="/static/js_new/login_function.js"></script>
+            {% endblock import_scripts %}
+
+
+            <script>
+
+              $(document).ready(function(){
+                isotope();
+                var path = window.location.href.split('/')[3];
+                if(path === "myevidyaloka"){
+                    $('#profName').css('margin-top', '0px'); 
+                }else{
+                    $('#profName').css('margin-top', '0px');  
+                }
+                });
+
+            </script>
+
+            <!--login script-->
+            <script>
+            $(document).ready(function(){
+                var $caption = $("#current-form-desc"),
+                $login_signup_form = $("#login-signup-form"),
+                $modal = $("#login-modal");
+                $("#signup-trigger").click(function(e){
+                     var is_authenticated = "{{ user.is_authenticated }}";
+                     if(is_authenticated == "True"){
+                        window.location = "/myevidyaloka/";
+                        return;
+                    }
+                    show_signup_form($login_signup_form);
+                    $modal.modal({backdrop:true, keyboard:true});
+                    e.preventDefault();
+                });
+                $("#login-trigger").click(function(e){
+                    var is_authenticated = "{{ user.is_authenticated }}";
+                    if(is_authenticated == "True"){
+                        window.location = "/myevidyaloka/";
+                        return;
+                    }
+                    $("#login-modal").modal('show');
+                    //show_login_form($login_signup_form);
+                    //$modal.modal({backdrop:true, keyboard:true});
+                    //e.stopPropagation();
+                    //e.preventDefault();
+                });
+                window.form_status = "signup";
+                {% if show_popup.show_popup %}
+                {% if show_popup.type == "Sign_up" %}
+                $(".not_already").trigger("click");
+                     //$("#login-modal").modal("show");
+                     {% else %}
+                     $(".already").trigger("click");
+                    //$("#login-modal").modal("show");
+                    {% endif %}
+                    {% endif %}
+                    $.each($("[rel='submit']"),function(){
+                        var $form = $($(this).attr("href"));
+                        $form.keyup(function(e){
+                            if(e.which == 13){
+                                $(this).submit();
+                            }
+                        });
+                    });
+            });
+            </script>
+
+            <script>
+                $(document).ready(function() {
+
+                /*if(localStorage['profile_or_preference'] === 'profile'){
+                    $('.orientation_and_preferences').addClass('hidden');
+                    $('.basic_profile').addClass('col-md-offset-4');
+                }*/
+                var $window = $(window);
+                function checkWidth() {
+                    var windowsize = $window.width();
+                    if(windowsize < 750){
+                        $(".dashboard-breadcrumb").addClass('nav navbar-nav');
+                    }
+                    else{
+                        $(".dashboard-breadcrumb").removeClass('nav navbar-nav');
+                    }
+                }
+                checkWidth();
+                $(window).resize(checkWidth);
+
+                //edit profile and preferences
+                /*$("body").on("click",".edit_profile_btn", function(){
+                    var pathname = window.location.pathname;
+                    if(pathname==="/profile/"){
+                        $('.orientation_and_preferences').addClass('hidden');
+                        $('.basic_profile').addClass('col-md-offset-4').removeClass('hidden');
+                    }else{
+                        localStorage['profile_or_preference'] = 'profile';
+                        window.location.pathname="/profile/";
+                    }
+                });
+                $("body").on("click",".edit_preferences_btn", function(){
+
+                    var pathname = window.location.pathname;
+                    debugger;
+                    if(pathname==="/profile/"){
+                        $('.basic_profile').addClass('hidden');
+                        $('.orientation_and_preferences').addClass('col-md-offset-2').removeClass('hidden');
+                    }else{
+                        localStorage['profile_or_preference'] = 'profile';
+                        window.location.pathname="/profile/";
+                    }
+                });*/
+               });
+            </script>
+            <script>
+                function change_to_signup(){
+                    setTimeout(function() {
+                      $('.not_already').click()
+                  }, 0);
+                }
+                
+                function saveActivity(){
+                	activity_name="Viewed Communities";
+                	activity_type="Page Visit"
+                	ajaxUrl = 'ajax/save_user_activity_by_ajax?activity_name='+activity_name+'&activity_type='+activity_type
+                	$.ajax({
+                	        url : ajaxUrl,
+                	        success: function (jsonStr) {
+                	        	//alert(jsonStr);
+                	        },
+                	        error: function() {
+//                 	        alert("error");
+                	          }
+                	      });
+                }
+                
+                function hide_line(){
+                	if($('.img_ribon_css').css('display')=='block'){
+                		$('.img_ribon_css').css('display', 'none');
+                	}else{
+                		$('.img_ribon_css').css('display', 'block');	
+                	}
+                }
+            </script>
+            <script>
+            
+            $(document).ready(function(){
+            	if (window.location.href.indexOf('?offering') != -1){
+            		var url = window.location.href;
+                	 var offering_teacher = url.split('?')[1];
+                	 var splited_data = offering_teacher.split('&');
+                	 if (splited_data.length>=2){
+                		var offering_data = splited_data[0];
+                		var teacher_data = splited_data[1];
+                		var offering = offering_data.split('=')[1];
+                		var teacher = teacher_data.split('=')[1];
+                		ajaxUrl = '/v2/created_Session?offering='+offering+'&teacher='+teacher
+                    	$.ajax({
+                    	        url : ajaxUrl,
+                    	        success: function (jsonStr) {
+                    	        	var  offerdata = jsonStr.offer_data;
+                    	        	var acceptBody = '';
+                            		   acceptBody +='<span>Course:'+offerdata+' </span>';
+                            		   if (jsonStr.session_arr!=null && jsonStr.session_arr!='' && jsonStr.session_arr!='undefined'){
+                            			   for(j=0;j<jsonStr.session_arr.length;j++){
+                                  			 acceptBody +='<p style="margin-left: 10%;"><span>'+jsonStr.session_arr[j]+'</span></p>';
+                                      	 } 
+                            		   }else{
+                            			   acceptBody +='<p style="margin-left: 10%;"><span> This Offering has been expire.</span></p>';
+                            		   }
+                            		  
+                            		$('#session_details').html(acceptBody)
+                            		$("#success_session").modal("show");
+                    	        },
+                    	        error: function() {
+//                     	        alert("error");
+                    	          }
+                    	      });
+                	 }
+                	 
+            	}
+            	
+           
+            	if (window.location.href.indexOf("?demandRelease") != -1){
+            		var releaseSlotboday = '';
+           		 	releaseSlotboday ='<p style="font-weight: 100;"> <span style="color:#FF6965;font-weight:bold;">Slot has been  already released or allocated </p>';
+         			$("#releaseSlotid").html(releaseSlotboday);
+               		$("#releaseModal").modal("show");
+            	}else if (window.location.href.indexOf("?slot") != -1){
+                	 var decodedUrl = decodeURIComponent(window.location.href);
+                	 var slot_data = decodedUrl.split('=')[1];
+                	 var slotData = slot_data.split('&')[0];
+                	 var splitedstring = slotData.split(' ');
+                	 var centerName = splitedstring[0];
+                	 //slotData = slotData.replace(centerName, "");
+                	 var slots = slotData.split('and');
+                	 var center = decodedUrl.split('=')[2];
+                	 var releaseSlotboday = '';
+                	 for(j=0;j<slots.length;j++){
+                		 releaseSlotboday +='<p style="font-weight: 100;"> <span style="color:#FF6965;font-weight:bold;">Slot '+(j+1)+' : </span> '+slots[j]+' ( School :'+center+'  )</p>';
+                	 }
+                	 $("#releaseSlotid").html(releaseSlotboday);
+
+                	 $("#releaseModal").modal("show");
+                 }else{
+               	 $("#releaseModal").modal("hide");
+               	 $("#success_session").modal("hide");
+                  }
+            });
+
+            $("#close_btn").click(function() {
+        	    window.location = '/v2/demandList/';
+        	});
+            $(".colse_modal").click(function() {
+        	    window.location = '/myevidyaloka';
+        	});
+        
+            </script>
+    {% endblock %}
+{% endblock %}

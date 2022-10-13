@@ -1,0 +1,564 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% load filters %}
+{% block head_styles %}
+ {{ block.super }}
+<link rel="stylesheet" type="text/css" href="/static/css/admindash.css" />
+<link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+<style>
+.form-horizontal .control-label {
+    text-align: left;
+
+}
+
+.form-container h4::before {
+    content: " ------------------------------ ";
+}
+.form-container h4::after {
+    content: " ------------------------------";
+}
+h4 {
+    display: block;
+    margin-block-start: 1.33em;
+    margin-block-end: 1.33em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    font-size:18px;
+}
+.col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9
+{
+    float: left;
+}
+
+.form-container .form-control {
+    border-radius: 0;
+    background: #f5f5f5;
+    color: #000!important;
+}
+
+.form-control{
+    background:#f0f0f0;
+    color:black !important;
+}
+.form-horizontal .form-group {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+.form-container .form-control.btn-submit {
+    color: white!important;
+    background: linear-gradient(to right, #4461ac, #00aeef)!important;
+    border-radius: 0!important;
+    text-transform: uppercase;
+    border: 1px solid #4461ac!important;
+}
+
+.rounded-top-corner-10 {
+         border-radius: 10px 10px 0px 0px;
+        background: white;
+}
+.form-container span.heading {
+    width: auto;
+    margin-right:-22pt;
+    display: block;
+    font-size: 31px;
+    background: linear-gradient(to right, #4461ac, #00aeef);
+    color: white;
+    text-transform: uppercase;
+    margin-left: 0pt;
+}
+
+.control-label{
+    font-family:'Montserrat', sans-serif !important;
+}
+
+.label_fontstyle{
+    font-family:'Montserrat', sans-serif !important;
+}
+
+label {
+    font-size: 16px !important;
+}
+.main-box {
+    background: #FFFFFF;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.13);
+    margin-bottom: 16px;
+    border-radius: 3px;
+    background-clip: padding-box;
+}
+.main-box .main-box-header {
+    background-color: rgb(207, 238, 241) !important;
+    font-size: 9px !important;
+    min-height: initial !important;
+    background: #f3f3f3 !important;
+    font-size: 9px;
+    padding: 3px 15px;
+}
+
+section h3 {
+    font-size: 16px !important;
+    font-weight: normal;
+    letter-spacing: 0px;
+    color: #000000;
+    text-align: center;
+}
+
+.main-box .main-box-body {
+    background-color: rgb(255, 255, 255) !important;
+    padding: 20px 20px 20px 20px;
+}
+
+.bottom_line {
+    border-bottom: 1px solid #e1e1e1;
+    padding: 5px 5px;
+}
+
+.y {
+        height:26px !important;
+        left: 0px !important;
+        width:30px !important;
+}
+
+.checkbox_margin_1{
+    height:26px !important;
+    left: 0px !important;
+    width:30px !important;
+}
+
+#search_result
+{
+    width:281px;
+    height:36px;
+    background-color: white;
+    color: black;
+    margin-top:21px;
+    border:10px soild black;
+    display: block !important;
+    text-align:left !important;
+    padding:5px;
+}
+
+.inner{
+    width: 100% !important;
+}
+
+.message_popup {
+    display: none,
+    height: 100%,
+    boarder-radius: 5px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    z-index: 10000;
+}
+
+</style>
+
+{% endblock %}
+
+{% block body_container %}
+{{ block.super }}
+<div class="container">
+    <div class="card align-items-start shadow-v3 mob_css p-5" style="padding-top: 5rem !important;">
+        <section class="section p-t-30 p-b-30 bg-grey-light">
+            <div class="col-lg-12  col-sm-12 col-xs-12 bg-white form-container rounded-top-corner-10 p-b-20">
+                <div class="row">
+                    <span class="text-center m-b-20 p-t-5 p-b-5 heading rounded-top-corner-10">Registration</span>
+                </div>
+                <form class="form-horizontal" method="GET" action="/school/search/" >
+                    <div class="col-lg-12 col-sm-12 col-xs-12" >
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-12 col-xs-12 ">
+                                <br/>
+                                <label class="control-label">Search a Government School:</label>
+                            </div>
+                            <div class="col-lg-6 col-sm-12 col-xs-12">
+                                <input type="hidden" name="schoolId" id="school_id" value="{{ schoolId }}"/>
+                                <input type="hidden" name="user_type" id="user_type" value=""/>
+                                    <input type = "text"
+                                        autocomplete="on" id="search_result"  name= "schoolname" placeholder="DISE Code/School Name/Block/Village"
+                                        value="{{ schoolname }}"
+                                        onclick="getSchools('search_result','school_id');" style="width:100%">
+                                <label id="please_wait" style="float:left;font-family:sans_serif !important;display:none;">Searching, please wait...</label>
+                                <div class="alert alert-warning" id="no_search_result" style="display:none;">
+                                    No school found matching your search!&nbsp;&nbsp;
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12 col-xs-12 ">
+                                <br/>
+                                <button  type="submit" class="btn btn-success" >Get Details</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                <div class="col-sm-12 col-lg-12 col-xs-12" id="div_school_details">
+                    {% if school_flag and school %}
+                        <div id="school_registration" class="form-horizontal">
+                            <input id="schoolId" type="hidden" name="schoolId" value="{{ school.id }}"/>
+                            <input type="hidden" name="stage" value="stage1"/>
+                            <div class="main-box clearfix">
+                                <header class="main-box-header">
+                                    <h3>({{ school.school_code }}) - {{ school.name }}, {{ school.village }} {{ school.district_Details }} - {{ school.pincode }}, {{ school.state }}</h3>
+                                </header>
+
+                                {% if anotherPartnerSchool %}
+                                    <div class="alert alert-warning">
+                                        <strong>Info!</strong> The School is already added by a partner.&nbsp;&nbsp;
+                                        <a href="/school/search">New Search</a>
+                                    </div>
+                                {% endif %}
+
+                                {% if not anotherPartnerSchool %}
+                                    {% if iAmPartnerSchool %}
+                                        <div class="alert alert-warning">
+                                            <strong>Info!</strong> You have already added this school.&nbsp;&nbsp;
+                                            {% if isAPartnerAdmin %}
+                                                <a href="/partner/myschools/">My Schools</a>&nbsp;|&nbsp;<a href="/school/search">New Search</a>
+                                            {% else %}
+                                                <a href="/v2/vLounge#schoolslist">My Schools</a>&nbsp;|&nbsp;<a href="/school/search">New Search</a>
+                                            {% endif %}
+
+                                        </div>
+                                    {% endif %}
+                                    {% if not iAmPartnerSchool and user_type != "school_user" %}
+                                        <div class="main-box-body">
+                                            <div class="col-lg-12 col-sm-12 bottom_line">
+                                                <div class="row">
+                                                    <label class="control-label col-lg-4 col-sm-12 col-xs-12" style="margin-left:-5pt; font-weight: normal;">Grades Available in the School</label>
+                                                    <div class="col-lg-2 col-sm-6 col-xs-6">
+                                                        <input class='y' type="checkbox" id="grade5" value="5" name="grade5"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5th
+                                                    </div>
+                                                    <div class="col-lg-2 col-sm-6 col-xs-6">
+                                                        <input class='y' type="checkbox" id="grade6" value="6"  name="grade6" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6th
+                                                    </div>
+                                                    <div class="col-lg-2 col-sm-6 col-xs-6">
+                                                        <input class='y' type="checkbox" id="grade7" value="7" name="grade7" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7th
+                                                    </div>
+                                                    <div class="col-lg-2 col-sm-6 col-xs-6">
+                                                        <input class='y' type="checkbox" id="grade8" value="8" name="grade8" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8th
+                                                    </div>
+                                                </div><br>
+                                            </div>
+                                        </div>
+                                        {% if not is_school_admin %}
+                                            <div class=" col-lg-12 col-sm-12 col-xs-12 bottom_line">
+                                                <div class="row">
+                                                    <label class="control-label col-lg-5 col-sm-12 col-xs-12" style="margin-left:10pt; margin-top:13.5px; font-weight:normal;">Number of teachers for these grades</label>
+                                                    <div class="col-lg-3 col-sm-6 col-xs-12" style="margin-top:15px;">
+                                                        <input  name= "teachersAvailable" id="teachersAvailable" type = "text" maxlength="3" placeholder="Available" class="form-control" onkeypress="return forceNumeric(event)"/>
+                                                    </div>
+                                                    <div class="col-lg-3 col-sm-6 col-xs-12" style="margin-top:15px;">
+                                                        <input name= "teachersRequired" id="teachersRequired" type = "text" maxlength="3" placeholder="Required" class="form-control" onkeypress="return forceNumeric(event)"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class=" col-lg-12 col-sm-12 col-xs-12" >
+                                                <div class="row">
+                                                        <label class="control-label col-lg-12 col-sm-12 col-xs-12" style="margin-left:2pt; font-weight:normal;"> Facilities in the School (Tick which is available):</label>
+                                                </div>
+                                                <div class="row"><br>
+                                                        <div class="col-sm-12 col-lg-4  col-xs-6 col-lg-offset-1">
+                                                            <input name="facilityElectricity" value="electricity" id="electricity" class="checkbox_margin_1" type="checkbox" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Electricity
+                                                        </div>
+                                                        <div class="col-sm-12 col-lg-4 col-xs-6 ">
+                                                            <input name="facilityWorkingComputer" value="workingComputer" id="computer"  class="checkbox_margin_1" type="checkbox"  > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Working Computer System
+                                                        </div>
+                                                </div><br>
+                                                <div class="row">
+                                                        <div class="col-sm-12 col-lg-4  col-xs-6 col-lg-offset-1">
+                                                        <input  name="facilityProjector" value="projector" id="projector" class="checkbox_margin_1" type="checkbox"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Projector/LED
+                                                        </div>
+                                                        <div class="col-sm-12 col-lg-4 col-xs-6  "  >
+                                                            <input  name="facilityInternet" value="internet" id="internet" class="checkbox_margin_1" type="checkbox" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Internet
+                                                        </div>
+                                                </div><br>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <div style="display: none;text-align: center;" id="loader">
+                                <img src='/static/images/loader_demand.gif' />
+                            </div>
+                            {% if not anotherPartnerSchool and not iAmPartnerSchool %}
+                                {% if not userloggedIn %}
+                                    <h4 class="text-bold text-capital text-center m-t-40 m-b-20">
+                                        How Can We Reach You?
+                                    </h4>
+                                    <div class="form-group">
+                                        <div class="col-lg-8 col-sm-12 col-md-offset-2">
+                                            <input class="form-control" name="firstName" type = "text"  id="Fname" placeholder="First Name" onkeyup="validateName(this,this.name)">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-lg-8 col-sm-12 col-md-offset-2">
+                                            <input class="form-control" name="lastName" type = "text"  id="lname" placeholder="Last Name" onkeyup="validateName(this,this.name)">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-lg-8 col-sm-12 col-md-offset-2">
+                                            <input class="form-control" name="phone" type = "tel"  id="Phone" placeholder="Phone Number" maxlength="14" onkeypress="return isValidForPhoneNumber(event)">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-lg-8 col-sm-12 col-md-offset-2">
+                                            <input class="form-control" name="email" type = "text"  id="Email" placeholder="Email-Id" onblur="validateEmail(this)">
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="form-group">
+                                    <div class="col-sm-8 col-md-offset-2">
+                                        <input type="submit" id='submit_btn'
+                                        {% if not userloggedIn %}
+                                        name="SUBMIT" onclick="register_school()" value="SUBMIT"
+                                        {% endif %}
+                                        {% if userloggedIn %}
+                                        name="PROCEED" onclick="register_school(true)" value="PROCEED"
+                                        {% endif %}
+                                        class="btn form-control btn-submit">
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                {% endif %}
+                </div>
+                {% if school_flag and not school %}
+                    <label> School not found.</label>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <!-- <script src="https://code.jquery.com/ui/1.9.1/jquery-ui.min.js"></script> -->
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        const urlParams = new URLSearchParams(window.location.search);
+        const user_type = urlParams.get('user_type');
+        // alert(user_type);
+        $('#user_type').attr('value', user_type);
+    });
+
+    function validate_onboarding_form(is_logged_in_user = true) {
+        var ret_val = true
+        console.log("Validating Form");
+        if ( !$("#grade5").prop('checked') && !$("#grade6").prop('checked') && !$("#grade7").prop('checked') &&
+            !$("#grade8").prop('checked') ) {
+            ret_val = false;
+            alert("Please select grades taught in school");
+        }
+        if ( (!$("#teachersAvailable").val() || !$("#teachersRequired").val()) && "{{is_school_admin}}" != 'True') {
+            ret_val = false;
+            alert("Please mention number of teachers available and required");
+        }
+
+        /* If a non-logged in user is registering then check for missing fields */
+        if ( is_logged_in_user === false && (!$("#Fname").val() || !$("#lname").val() || !$("#Phone").val() ||
+            !$("#Email").val()) ) {
+            ret_val = false;
+            alert("Please fill your contact details");
+        }
+        return ret_val;
+    }
+
+    function register_school(is_logged_in_user = false) {
+        $('#loader').css('display', 'block');
+        /* 'is_logged_in_user' flag/variable plays important role
+         * since there is already a business logic applied
+         * based on which registration form is displayed or user details are asked
+         * So making direct use of it and passing back to server
+         */
+        const urlParams = new URLSearchParams(window.location.search);
+        const user_type = urlParams.get('user_type');
+        if(user_type == 'school_user'){
+            /* If a non-logged in user is registering then check for missing fields */
+            if ( is_logged_in_user === false && (!$("#Fname").val() || !$("#lname").val() || !$("#Phone").val() ||
+                !$("#Email").val()) ) {
+                alert("Please fill your contact details");
+                return 0;
+            }
+        } else {
+            if ( validate_onboarding_form(is_logged_in_user) === false ) {
+                return 0;
+            }
+        }
+
+
+        var schoolId            = $("#schoolId").val()
+        var grade5              = $("#grade5").prop('checked')
+        var grade6              = $("#grade6").prop('checked')
+        var grade7              = $("#grade7").prop('checked')
+        var grade8              = $("#grade8").prop('checked')
+        var teachersAvailable   = $("#teachersAvailable").val()
+        var teachersRequired    = $("#teachersRequired").val()
+        var electricity         = $("#electricity").prop('checked')
+        var computer            = $("#computer").prop('checked')
+        var projector           = $("#projector").prop('checked')
+        var internet            = $("#internet").prop('checked')
+
+        var firstName           = ""
+        var lastName            = ""
+        var phoneNumber         = ""
+        var emailId             = ""
+
+        if ( is_logged_in_user === false ) {
+            firstName           = $("#Fname").val()
+            lastName            = $("#lname").val()
+            phoneNumber         = $("#Phone").val()
+            emailId             = $("#Email").val()
+        }
+
+        var queryUrl="/school/search/";
+        let post_data = {
+            'school_id'             : schoolId,
+            'grade5'                : grade5,
+            'grade6'                : grade6,
+            'grade7'                : grade7,
+            'grade8'                : grade8,
+            'teachers_available'    : teachersAvailable,
+            'teachers_required'     : teachersRequired,
+            'electricity'           : electricity,
+            'computer'              : computer,
+            'projector'             : projector,
+            'internet'              : internet,
+            'first_name'            : firstName,
+            'last_name'             : lastName,
+            'phone_number'          : phoneNumber,
+            'email_id'              : emailId,
+            'is_logged_in'          : is_logged_in_user
+        }
+        if(user_type == 'school_user'){
+            $('#submit_btn').prop('disabled', true);
+            queryUrl = "/v2/sign_up_school_admin/"
+            post_data = {
+                'school_id'             : schoolId,
+                'first_name'            : firstName,
+                'last_name'             : lastName,
+                'phone_number'          : phoneNumber,
+                'email_id'              : emailId,
+                'is_logged_in'          : is_logged_in_user
+            }
+        }
+        $.post(queryUrl, post_data, function(data) {
+            var active_ref = String(window.location);
+            var temp = active_ref.indexOf(":");
+            var protocol_method = active_ref.substring(0, temp + 3);
+            active_ref = active_ref.substring(temp + 3,);
+            active_ref = active_ref.substring(0, active_ref.indexOf("/"));
+            if(user_type == 'school_user'){
+                if(data.success != undefined && data.success.message != undefined) {
+                    $('#loader').css('display', 'none');
+                    alert(data.success.message);
+                    window.location = protocol_method + active_ref + '/myevidyaloka/';
+                } else {
+                    $('#loader').css('display', 'none');
+                    alert(data.message);
+                    $('#submit_btn').prop('disabled', false);
+                }
+            } else {
+                $('#loader').css('display', 'none');
+                alert(data.message);
+                if (data['redirect_blank'] != "" ) {
+                    window.open(data['redirect_blank'], '_blank');
+                }
+                window.location = protocol_method + active_ref + data['redirect_self']
+            }
+        });
+    }
+
+    function isValidForPhoneNumber(evt)
+    {
+        var ret_value = false;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if ( charCode == 43 || charCode == 45 || (charCode >= 48 && charCode <= 57) ) {
+            ret_value = true;
+        }
+        return ret_value;
+    }
+
+    function forceNumeric(evt) {
+        var ret_value = false;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode >= 48 && charCode <= 57) {
+            ret_value = true;
+        }
+        return ret_value;
+    }
+
+    function validateEmail(emailField) {
+        var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+
+        if (reg.test(emailField.value) == false) {
+            alert('Invalid Email Address');
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateName(name,id) {
+        var reg = /^[A-Za-z]+$/;
+        if (!name.value.match(reg)) {
+            //alert('Invalid '+id);
+            return false;
+        }
+        return true;
+    }
+
+    function getSchools(search_results,school_id_inputfield_id) {
+	    $('#'+search_results).autocomplete(
+		{
+			source : "/v2/ajax/getSchools",
+			minLength : 4,
+			autoFocus : true,
+			select : function(event, ui) {
+			    /* console.log("******* SELECT"); */
+                $(this).val(ui.item.label);
+                $("#"+school_id_inputfield_id).val(ui.item.value);
+                return false;
+			},
+			open : function(event, ui) {
+			    /* console.log("******* OPEN"); */
+			},
+			search : function(event, ui) {
+			    /* console.log("******* SEARCH"); */
+                /* Show Loading or Please Wait */
+                $("#please_wait").show();
+                $("#no_search_result").hide();
+                $("#div_school_details").hide();
+			},
+			response : function(event, ui) {
+			    /* console.log("******* RESPONSE"); */
+                /* Hide Loading or Please Wait */
+                $("#please_wait").hide();
+                if ( (ui.content).length == 0 ) {
+                    $("#no_search_result").show();
+                    setTimeout(hide_no_search_result, 5000);
+                }
+			},
+			change : function(event, ui) {
+			    /* console.log("******* CHANGE"); */
+				if (ui.item) {
+					return;
+				} else {
+					$(this).val('');
+				}
+			}
+		});
+    }
+
+    function hide_no_search_result() {
+        $("#no_search_result").hide();
+    }
+
+</script>
+{% endblock head_scripts %}

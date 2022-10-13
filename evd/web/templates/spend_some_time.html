@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+     html{
+        background-image: url(/static/images/ev_bg_white.png);
+          }
+
+        div.box-content {
+            height:970px;
+            width:940px;
+            background-color:#F5F7F5;
+            z-index:-1;
+        }
+        div.top-left {
+            height:374px;
+            width:535px;
+            background-color: #67A863;
+            margin:10px 0px 0px 10px;
+            float:left;
+            clear:both;
+            border:5px solid #bfc069;
+        }
+        div.top-right {
+            position:relative;
+            height:384px;
+            width:360px;
+            background-color: #F5F7F5;
+            margin:10px 10px 10px 5px;
+            border:1px solid black;
+            float:right;
+        }
+        div.left-bottom {
+            height:550px;
+            width:310px;
+            position: relative;
+            float: left;
+            margin:15px 5px 10px 10px;
+            background-color:#C3D6C6;
+        }
+        div.mid-mid {
+            height:338px;
+            width:225px;
+            margin:15px 5px 0px 5px;
+            position:relative;
+            float:left;
+            background-color:#A6F6F7;
+        }
+        div.mid-bottom {
+            height:200px;
+            width:225px;
+            position:relative;
+            float:left;
+            margin:10px 5px 0px 5px;
+            border: 1px solid black;
+        }
+        div.right-mid {
+            position:relative;
+            height:339px;
+            width:360px;
+            float:right;
+            border:1px solid black;
+            margin-right: 10px;
+        }
+        div.right-bottom {
+            height:200px;
+            width:360px;
+            position:relative;
+            float:right;
+            border:1px solid black;
+            margin:10px 10px 10px 0px;
+        }
+        div.left-bottom p,
+        div.top-left p {
+            margin:10px 2px 0px 10px;
+            font-size:12px;
+            line-height:1.4em;
+        }
+        div.left-bottom h5,
+        div.mid-mid h5 {
+            margin:10px 2px 0px 10px;
+            font-weight:bold;
+        }
+        div.mid-mid ul {
+            list-style:disc;
+        }
+        div.mid-mid li {
+            margin:5px 0px 0px 25px;
+            font-size:12px;
+            line-height:1.4em;
+        }
+        div.top-left strong {
+            font-size:18px;
+            font-style:italic;
+            color:#EDA92B;
+        }
+        div.top-left h6 {
+            margin:10px 2px 0px 10px;
+            font-size:14px;
+            color:#FCFCFA;
+            line-height:1.4em;
+        }
+        div.right-bottom img {
+            height: 150px;
+            margin: 23px 0px 0 10px;
+        } 
+        div.evidya_cus {
+            font-size: 25px;
+            color: #F59E64;
+            display: inline-block;
+            position: relative;
+            float:left;
+            margin: 70px 0px 0px 10px;
+            font-style: italic
+        }
+        .second {
+            background: #92d050;
+            border: 3px solid #622423;
+            height:337px;
+            width:355px;
+            z-index:1;
+            margin: -107px 0px 0px 0px;
+         }
+        img.first {
+            height: 52px;
+            z-index: 2;
+            margin: 50px 0px 0px 30px;
+            position: relative;
+            padding-left: 45px;
+        }
+        img.third {
+            height: 35px;
+            width: 170px;
+            margin: 0px 0px 45px 45px;
+            z-index: 3;
+            position: relative;
+            padding-left: 50px;
+        }
+        pre{
+           color:yellow
+        
+        }
+    </style>
+
+{% endblock %}
+
+{% block body_container %}
+    <div class="box-content">
+        <div class="top-left">
+            <h6><strong>eVidyaloka </strong>'s mission is to connect passionate volunteers to provide quality education for rural children<br>for<br>A knowledgeable & empowered Rural India
+            </h6>
+            <p style="color:black;">Today we have good enrollment and infrastructure in the Govt. schools. And the need of the hour is to impart quality in teaching. The lack is due to shortage of teachers and quality in available teachers</p>
+            <p style="color:black;">The supply of quality teaching may not exist where it is required, but they are spread across the globe. The role of eVidyaloka is to play the bridge in bringing them together on a common platform by connecting and empowering people and applying technology and help the children to reap the intended benefits.</p>
+            <p style="color:yellow;">This Academic Year 2015-16 begins on June 15th - We are reaching out to 50 Centers covering 2500+ Children in villages across Andhrapradesh, Telangana, Jharkhand, Karnataka and Tamil Nadu. This calls for over 400+ Teaching volunteers, apart from other volunteering contributions.</p>
+            <p style="color:yellow">  Minimum Pre-requisite:</P>
+            <pre>        - 2 hours per week (any two 1-hr slots, Mon-Sat)</pre>
+            <pre>        - Minimum commitment for 6-12 weeks</pre>
+            <pre>        - Read & Write one local language (Hindi, Telugu, Kannada, Tamil)</pre>
+        </div>
+        <div class="top-right">
+            <img src="/static/images/spend_time_top.png"style="height:384px;width:360px;">
+        </div>
+        <div class="left-bottom">
+            <h5>Why we need Volunteers:</h5>
+            <p>eVidyaloka believes in involving and
+            empowering as many people as possible
+            in this journey of enabling quality in
+            education, from wherever they are. All
+            of the results, ranging from Teaching,
+            content dev, IT, Admin, so far are an
+            outcome of volunteer contributions.</p>
+            <p>@eVidyaloka,<br/>
+            Volunteering = Passion + Ownership</p>
+            <h5>Teach online</h5>
+            <p>Be a part of the solution. One can teach,
+            without having to change any of the
+            personal commitments or priorities.
+            Passion and a bit of familiarity to use
+            Skype, makes you a valuable person to
+            our children, in imparting education</p>
+            <h5>Contribute to contents</h5>
+            <p>Nervous about being online and live?
+            Not sure of your schedules ? But
+            passionate about education. Sure, you
+            can contribute in building the contents, to
+            be used by Teaching volunteers, on your
+            pace and schedule.</p>
+            <h5>Administer the Class</h5>
+            <p>Acads has never been your cup of Tea ?
+            Running the show is your strength ?
+            Sure, be a Class Admin, and here is a
+            chance to tell Teachers, what to teach
+            J. You only need to speak the local
+            language and be on skype, phone and
+            emails.</p>
+        </div>
+        <div class="mid-mid">
+            <h5>What is required?</h5>
+            <ul>
+                <li>Passion to teach children</li>
+                <li>Commitment to deliver on time</li>
+                <li>Graduate qualified</li>
+                <li>Access to PC ,Broadband
+                Webcam and Headset (for Teaching online)
+                </li>
+                <li>Willing to be Patient & Responsive</li>
+            </ul>
+            <h5>How eVidyaloka works?</h5>
+            <ul>
+                <li>A digital class room at the village.</li>
+                <li>Teachers-spread across the globe.</li>
+                <li>Contents-Online Text book, enriched with multimedia aids, & language support.</li>
+                <li>A class operating framework (through IT) that brings the Teachers and Children together.</li>
+            </ul>
+        </div>
+        <div class="right-mid">
+             <a style="cursor:pointer;" id="login-trigger"><img src="/static/images/signup_img.png" class="first"/></a>
+<!--             <a href="http://www.facebook.com/eVidyaloka" target="_blank"><img src="/static/images/fb_link.png" class="third"/></a>-->
+             <div class="second">
+             </div>
+<div style="position:absolute;top:0;margin-top:180px;margin-left:20px;" >
+<div style="display:inline-block;">
+ <a href="#teacherfaq" data-toggle="modal"style="float:left; margin-left:10px; margin-bottom:10px;">     <div id="faq" style="border-radius:50%; height:70px;width:70px;cursor:pointer; background-color:#e1570d; border:1px solid white;  text-align:center;color:white;margin-left:30px; "><p style="margin-top:20px;">Click</br> Here</p></div></a>
+<h1>Have some doubts ? </h1>
+
+</div>
+<div style="display:inline-block">
+   <a href="#playl" data-toggle="modal"style="float:left; margin-left:20px; margin-bottom:10px;">     <div id="class_recod"  style="border-radius:50%; height:70px;width:70px;cursor:pointer; background-color:#e1570d; border:1px solid white; text-align:center;color:white;margin-left:30px; "><p style="margin-top:20px;">Click</br> Here</p></div></a>
+<h1 style="margin-top:20px;margin-left:10px;">Curious to see a class ? </h1>
+
+</div>
+</div>
+        </div>
+        <!--<div class="mid-bottom"></div>-->
+        <div class="right-bottom">
+        <!--<img src="/static/images/evidyalogo.png" style="width:65px;height:65px;float:left;padding:5px 0px 5px 0px;">-->
+            <div style="float:left;">
+                <img src="/static/images/evidyalogo.png">
+            </div>
+            <div class="evidya_cus">
+                <p>eVidyaloka</p>
+                <p style="font-size: 12px;float: right;margin: -2px 0px 0px 10px;">-To Educate-Anywhere Anytime</p>
+            </div>
+        </div>
+        <div class="mid-bottom">
+
+                <img src="/static/images/spend_time.png"/>
+        </div>
+    </div>
+
+<div id="teacherfaq" class="modal simplemodal-container" style="display: none;width:590px; "><!--FAQ-->
+    <a class="modalCloseImg close" data-dismiss="modal"></a>
+<div style="height:500px; width:610px; overflow:auto;">
+<div id="headr" style="height:25px;width:585px;padding-top:5px;color:white;padding-left:5px; background-color:#f26721; text-align:left;">Frequently Asked Questions</div>
+<div class="body_content" style="margin:10px;">
+
+
+<div style="margin:10px;">
+<a style="color:black;  cursor:pointer;margin-right:10px; text-align:justify;"  onclick="toggler('q1');" > ► &nbsp&nbsp&nbspI can read and write my native language, but have done my education in English medium and not conversant with the technical subject terms. Won't that be a problem?</b></br> </a>
+<div  id="q1"style="color:black; margin-top:10px;margin-right:30px; text-align:justify;margin-left:40px;" > <strong style="color:green">Ans:</strong> Passion and commitment along with linguistic ability to read and write, we have observed most of the teachers in the past were able to manage quite comfortably to teach in local language. To support, both English version and the local language version books are available side by side for preparation. Infact, by 3rd or 4th class, the children start teaching you some of the language terms ☺ </div></br>
+</div>
+
+
+<div style="margin:10px;" >
+<a style="color:black; cursor:pointer;margin-bottom:10px;"  onclick="toggler('q2');" > ►  &nbsp&nbsp&nbspCan I teach only during weekends on Saturday and Sunday?</a></br>
+<div  id="q2" style="color:black; margin-left:40px; display:none; margin-top:10px; margin-right:30px; text-align:justify;" ><strong style="color:green"     >Ans:</strong> eVidyaloka classes happen within the school premises, during school hours. Hence we require volunteers to provide at least 1 hour in the weekday between 10 am to 4 pm (for JH & TN ) and 9am to 4pm (for AP). The second 1 hour could be on a Saturday and shall be worked out during the class planning discussion with the Class Administrators
+</div></br>
+</div>
+
+<div style="margin:10px;">
+<a style="color:black; cursor:pointer;margin-bottom:10px;"  onclick="toggler('q3');" >► &nbsp&nbsp&nbspI'm a working professional. How can I give teach during this time ?
+</a></br>
+<div  id="q3" style="color:black; margin-left:40px; display:none; text-align:justify;margin-right:30px;margin-top:10px;" ><strong style="color:green"     >Ans:</strong> More 60% of current teaching volunteers work full time in their professions. They adopt typicall any of these 3 approaches: 1) Take take the earliest slot at 9am or 10 am and head to work on these two days. 2) They check with their organisation/supervisor to take these two one hour slots for volunteering. And typically no one is being refused, provided the networking infrastructure supports 3) They manage one of the slots around lunch time and another one on a Saturday.</div></br>
+</div>
+
+<div style="margin:10px;">
+<a style="color:black; cusor:pointer; margin-bottom:10px;"  onclick="toggler('q4');" >►  &nbsp&nbsp&nbspDo you provide teaching resources and any trainings to teach?</a></br>
+<div  id="q4" style="color:black; display:none; margin-left:40px; text-align:justify;margin-right:30px;margin-top:10px;" ><strong style="color:green"     >Ans:</strong> Yes. A curriculum plan of recommended topics will provided along with the Timetable. The reference to the Online version of the text books. We are also in the process of developing additional resources like videos, worksheets etc and will be shared as and when available through our content platform â€“ Wikividya. 
+Regarding trainings, we have put together certain basic training resources under My Trainings. We encourage all the recommended Teachers to go through the resources and equip themselves with enhanced Teaching capabilities, prior to the class start.</div></br>
+</div>
+
+
+<div style="margin:10px;">
+<a style="color:black; cursor:pointer;margin-bottom:10px; "  onclick="toggler('q5');" >► &nbsp&nbsp&nbspDo I have to have a physical blackboard for teaching?How is the blackboard need addressed in this online teaching model? </a></br>
+<div  id="q5" style="color:black; display:none; margin-left:40px; text-align:justify;margin-right:30px;margin-top:10px;" ><strong style="color:green"     >Ans:</strong> The screen share feature in Skype allows the teacher to share their desktop. You can open the Paint, Powerpoint of MS Word and use it as a Whiteboard. What ever is written will be available as display in the 32â€ screen for the children. In fact this is even more powerful, where you can play Videos, show pictures and the class becomes a truly smart classroom.</div></br>
+</div>
+
+</div>
+
+
+</div>
+</div><!--end of FAQ-->
+<div id="playl" class="modal simplemodal-container" style="width:600px;;display: none;">
+    <a class="modalCloseImg close" data-dismiss="modal"></a>
+    <iframe width="600" height="315" src="https://www.youtube.com/embed/videoseries?list=PLbdxk95Fm6YyzIv5Yp_389XPJ33E9CKm5" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+<script>
+$(document).ready(function(){
+$('#playl,#offline-orientation,#profile-help').on('hidden.bs.modal', function () {
+     var src = $(this).find('iframe').attr('src');
+     $(this).find('iframe').attr('src', '');
+     $(this).find('iframe').attr('src', src);
+ });
+
+});
+
+ function toggler(divId) {
+    $("#" + divId).toggle("fast");
+     }
+</script>
+
+{% endblock %}

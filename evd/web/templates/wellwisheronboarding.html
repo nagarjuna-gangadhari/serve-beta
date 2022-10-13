@@ -1,0 +1,356 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <script defer src="https://www.youtube.com/iframe_api"></script>
+    <script defer src="https://rawgit.com/kimmobrunfeldt/progressbar.js/master/dist/progressbar.js"></script>
+    <script defer src="/static/js/selectize.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/selectize.css" />
+    <script src='/static/js_new/parsley.min.js' type='text/javascript' ></script>
+    <script src='/static/js/underscore_1.5.2.min.js' type='text/javascript' ></script>
+    <script src='/static/js_new/profile.js' type='text/javascript' ></script>
+    <script src='/static/js_new/fb_feed/fb_feed.min.js' type='text/javascript' ></script>
+    <script src='/static/js_new/play_orient_video.js' type='text/javascript' ></script>
+    <script>
+        {% include "underscore_temps/teacher_demand.tmpl" with container="#render_demand" only %}
+    </script>
+    <script>
+      var members_len = [{'fb_id': '100011607874861', 'member_token' : '{{ member_token }}'}];
+      $(document).ready(function(){
+            for (var i = 0; i<members_len.length; i++) {
+                $('.render_feed').evdFacebook({
+                id: members_len[i].fb_id,
+                member_token : members_len[i].member_token
+                })
+            };
+        });
+    </script>
+
+<style>
+ @media only screen and (max-width: 480px) and (min-width: 0px)  {
+
+    .in-col12{
+        margin-bottom: 1%;
+        margin-left: auto !important;
+        width: 98%;
+        text-align: left;
+     }
+    .col-sm-3 {
+    margin-top: 8%;
+    }
+    .orient-align{
+        padding-bottom: 55% !important;
+        padding-top: 30px;
+        background-color: #F2F2F2;
+     }
+    #triggeringModal {
+        width: 94%;
+        height: 150px;
+        cursor: pointer;
+        box-shadow: rgb(136, 136, 136) 0.5px 0.5px 3px;
+        float: right;
+        margin-top: -60% !important;
+        margin-right: 3% !important;
+    }
+    .col-md-11{
+    position: absolute;
+    bottom: 5%;
+    margin-left: 23% !important;
+    }
+   .hight {
+    height: 100% !important;
+    margin-top: 10px !important;
+    }
+
+    .cont-chg{
+            margin-left: 33%;
+            margin-top: -29%;
+            margin-bottom: 6%;
+        }
+
+     .cont-align{
+         padding-right: 0px;
+         margin-left: -5%;
+         margin-right: 1%;
+
+        }
+
+        .demand_sm_dp {
+            border-radius: 100% !important;
+            margin: 5% -3% -3% -4%!important;
+            background-color: <%= random_color %> !important;
+            height: 0 !important;
+            width: 0 !important;
+            text-align: center !important;
+            color: white !important;
+            font-size: 11px !important;
+            padding: 11% 15% 15% 12% !important;
+        }
+
+        .card-align{
+        margin-bottom: 4%;
+        margin-top: 4%;
+        }
+        .step-align{
+        margin-left: 72% !important;
+        }
+        .model-chg{
+        margin: 19% !important;
+        }
+            .new_dash_container {
+        margin-left: 0 !important;
+        width: 100% !important;
+        min-height: 500px !important;
+    }
+
+    .modal-content {
+    margin: 20% !important;
+    position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+}
+
+    }
+
+
+
+
+      @media only screen and (max-width: 768px) and (min-width: 480px)  {
+
+        .model-chg{
+        margin-top: 23% !important;
+        margin-left: 6% !important;
+        margin-right: 6% !important;
+        }
+       .in-col12{
+        margin-bottom: 1%;
+        margin-left: auto !important;
+        width: 98%;
+        text-align: left;
+        }
+        .col-sm-3 {
+        margin-top: 8%;
+        }
+       .cont-chg {
+            margin-left: 48%;
+            margin-top: -21%;
+            margin-bottom: 2%;
+        }
+        .cont-align{
+         padding-right: 0px;
+         margin-left: -2%;
+         margin-right: 0.5%;
+
+        }
+        .demand_sm_dp {
+            border-radius: 100% !important;
+           margin: 4% -1% 8% 4%!important;
+            background-color: <%= random_color %> !important;
+            height: 0 !important;
+            width: 0 !important;
+            text-align: center !important;
+            color: white !important;
+            font-size: 11px !important;
+            padding: 4% 7% 7% 5% !important;
+        }
+
+        #triggeringModal {
+            width: 100% !important;
+            height: 100% !important;
+            cursor: pointer !important;
+            box-shadow: rgb(136, 136, 136) 0.5px 0.5px 3px !important;
+            float: right !important;
+            margin-bottom: 0% !important;
+            margin-top: -42% !important;
+        }
+
+        .orient-align{
+        padding-bottom: 40% !important;
+        padding-top: 4% !important;
+        background-color: #F2F2F2 !important;
+        }
+         .hight{
+        height: 100% !important;
+        margin-top: 10px !important;
+        }
+
+        .col-sm-6 {
+            width: 99%;
+            /* margin-right: 23%; */
+            margin-bottom: 2%;
+        }
+         .col-md-11{
+            position: absolute;
+            bottom: 5%;
+            margin-left: 35% !important;
+            }
+
+         .modal-cont-chg {
+    margin: 9% !important;
+    position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    bottom: -5% !important;
+    }
+
+     .card-align{
+        margin-bottom: 4%;
+        margin-top: 4%;
+        }
+        .step-align{
+        margin-left: 229% !important;
+        }
+
+        }
+</style>
+    <script>
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: 'Oi9MnA-2Tyw',
+          controls : 0,
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        //event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        if(event.data == 0 ){
+            evd.save_wellwisher_training();
+        }
+        //if (event.data == YT.PlayerState.PLAYING && !done) {
+          //setTimeout(stopVideo, 6000);
+          //done = true;
+        //}
+      }
+
+      //reload page on close content admin training vedio
+      $("body").on("click", ".content_admin_modal_close", function(){
+        player.stopVideo();
+      });
+      function stopVideo() {
+        player.stopVideo();
+      }
+    $('.render_feed').evdFacebook({
+        id:'100011607874861'
+    });
+
+    </script>
+
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+
+    <div class="container-fluid new_dash_container" >
+        <div class='row onboarding material_div standard_row row-centered' >
+            <div class='onboarding_status'>
+                <h4>Well Wisher Onboarding</h4>
+               <div class="progress" style="width:19.5%;position: absolute;left: 280px;top: 10px;">
+                  <div class="progress-bar progress-bar-striped active progress-bar-success" role="progressbar" 
+                       aria-valuenow="{{onboarding.role_onboarding_status}}" aria-valuemin="0" aria-valuemax="100"
+                       style="width:{{onboarding.role_onboarding_status}}%;position:relative;">
+                        {{onboarding.role_onboarding_status}} %
+                  </div>
+                </div>
+                <hr>
+
+                {% include "new_orientation_block.html" %}
+
+                {% for step in steps %}
+                        <div class='col-md-offset-3 col-sm-6'>
+                        {% if step.status %}
+                        <img src="/static/images/ribbon_complated.png" id="completed_ribbon">
+                        {% endif %}
+                        <div class='self_eval onboarding-step' style="height: 450px;">
+                           <h3>Step {{ forloop.counter }} </h3>
+                           <div class='col-md-12'>
+                                <img src='/static/images/self-evaluate.png' height=150px>
+                           </div>
+                           <div class='col-md-12' style="height:55px">
+                                <h4>{{ step.step_name }}</h4>
+                           </div>
+                           <div class='col-md-12'>
+                                <p>{{step.desc}}</p>
+                           </div>
+                           <div class='col-md-12' style="position: absolute;bottom: 8%;">
+                             {% if step.repeatable %}
+                                    <div class='btn btn-info step_action step-align' >
+                                    <a data-toggle='modal' data-target="#{{ step.short_name }}">
+                                    Take this Step</a></div>
+                             {% else %}
+                                 {% if  step.status %}
+                                    <div class='btn btn-link disabled step_action' disabled>Completed &nbsp&nbsp&nbsp
+                                        <i class="fa fa-check-circle" aria-hidden="true"></i></div>
+                                 {% else %}
+                                    <div class='btn btn-warning step_action' > <a data-toggle='modal'
+                                    data-target="#{{ step.short_name }}">
+                                    Take this Step </a></div>
+                                 {% endif %}
+                             {% endif %}
+                           </div>
+                        </div>
+                        </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+        {% include "new_view_oppourtunities_going_on.html" %}
+
+    </div>
+
+<div id="Training" data-onboard_id='{{ onboarding.id }}' data-step_name='Training' class="modal fade" role="dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content model-chg" >
+        <div class="modal-header">
+            <button type="button" class="close content_admin_modal_close" data-dismiss="modal" style="font-size:30px">&times;</button>
+            <h4 class="modal-title">Training</h4>
+        </div>
+        <div class="modal-body">
+            <div class="embed-responsive embed-responsive-16by9">
+                <div id="player"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "new_orientation_modal.html" %}
+
+{% endblock %}
+
+
+

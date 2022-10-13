@@ -1,0 +1,22 @@
+<html lang="en">
+ <head>
+ <style>
+
+</style>
+</head>
+
+<p>Dear {{dc_name}},</p>
+
+<p>Greetings of the day!</p>
+
+<p>Please find below the details of volunteers who are having their 1st class on {{date}}.</p>
+
+
+<p><b>Ev id</b>:{{id}}</p>
+<p><b>Name</b>:{{first_name}} {{last_name}}</p>
+<p><b>City</b>:{{city}}</p>
+<p><b>Center Name</b>:{{center_name}}</p>
+<p><b>Time slot</b>:{{slots}}</p>
+
+</body>
+

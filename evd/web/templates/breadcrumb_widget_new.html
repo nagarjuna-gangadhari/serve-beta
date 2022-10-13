@@ -1,0 +1,2345 @@
+<link rel="stylesheet" href="/static/css/jquery.timepicker.css" />
+
+<script type="text/javascript" src="/static/js_new/user_center_incremental_search.js"></script>
+<link rel="stylesheet" href="/static/css/stats.css" />
+<style>
+    #myModalForSearchCenter {
+        height: 226px;
+        width: 440px;
+        overflow-y: hidden;
+        color: #337ab7;
+        border: 0px hidden white;
+        background-color: #4aae61;
+    }
+
+    @media only screen and (max-width: 600px) {
+        #myModalForSearchCenter {
+            width: 100%;
+            top: 20%;
+            left: 0;
+            margin: 0 0 0 0;
+            overflow-x: scroll;
+        }
+    }
+
+    @media only screen and (max-width: 1024px) and (min-width: 767px) {
+        nav.breadcrumb_css ul.dashboard-breadcrumb {
+            margin-left: 70.3% !important;
+            height: 555px;
+        }
+        .inner-mob{
+            width:100%;
+        }
+    }
+</style>
+<div class="modal" id="modalForAward">
+    <div style="width: 25%;height: 25%;margin-top: 15%;display:block;left: 35%;position: fixed;background-color: black;border: 1px solid white;font-size: 16px;">
+        <button type="button" id="topClose" class="close" data-dismiss="modal" style="color: white; margin-right: 6px;">&times;</button>
+        <div style="margin-top: 45px;color: white;margin-left: 25px;">
+            <p><span>Please select a center to review awards</span></p>
+        </div>
+    </div>
+</div>
+{% if is_partner or is_pam_volunteer%}
+<!--<li class="dropdown">-->
+<!--<a class="dropdown-toggle   " data-toggle="dropdown">Organization Details<b class="caret"></b></a>-->
+<!--<ul class="dropdown-menu">-->
+<!--{% if is_delivery %}-->
+<!--<li><a href='/partner/deliverypartner_org/'>Delivery Partner Org Details</a></li>-->
+<!--{% endif %}-->
+<!--{% if is_funding %}-->
+<!--<li><a href='/partner/organization_details/'>Funding Partner Org Details</a></li>-->
+<!--{% endif %}-->
+<!--{% if is_volunteer %}-->
+<!--<li><a href='/partner/organization_details/'>Volunteering Partner Org Details</a></li>-->
+<!--{% endif %}-->
+<!--</ul>-->
+<!--<span class="divider">|</span>-->
+<!--</li>-->
+{% if not is_delivery or not is_pam_volunteer %} {% if is_volunteer %}
+<li><a href='/partner/volunteer_dash/'>My Volunteers</a></li>
+<span class="divider">|</span> {% endif %} {%if is_pam_volunteer%}
+<li><a href='/partner/contributions/'>Activities</a></li>
+<span class="divider">|</span> {% endif %} {% endif %} {% endif %} {% if is_partner and partner_status %}
+
+<!--<li>-->
+<!--<a id="showModal"> My Center</a>-->
+
+<!--&lt;!&ndash; MY CENTER MODAL START (stats) &ndash;&gt;-->
+
+<!--<div class="modal" data-backdrop="static" id="myModalForSearchCenter"-->
+<!--style="height: 226px; width: 440px; overflow-y: hidden; color: #337ab7;">-->
+<!--<div class="modal-content ">-->
+
+<!--<div class="modal-header" id="popupHead">-->
+<!--<button type="button" id="topClose" class="close" data-dismiss="modal">&times;</button>-->
+<!--<h4 class="modal-title">-->
+<!--<span style="color: black;">Search Center </span>-->
+<!--</h4>-->
+<!--</div>-->
+<!--<div class="modal-body" id="popupBody" style="color: #337ab7;">-->
+<!---->
+<!--<table>-->
+<!--<tr>-->
+<!--<td><input class="ui-autocomplete-input" autocomplete="on" id="search_results" placeholder="Search Center" style="text-align:left !important;" onclick="getCentersForPartner(search_results, gotocenterID);" style="z-index: 3000 !important;"></td>-->
+<!---->
+<!--<td><span style="margin-left: -17px;"><button type="button" class="btn btn-success" style="color: black; height: 38px; width: 97px; margin-top: -2px; margin-left: 30px; display: block !important;" id="gotocenterID" onclick="waitJustLoading()" >GO TO</button> </span></td>-->
+<!--</tr>-->
+<!--</table>-->
+<!--</div>-->
+<!--<div class="modal-footer" id="popupFooter" >-->
+<!--<button type="button" class="btn btn-danger" data-dismiss="modal"-->
+<!--style="color: black; font-size: 16px; margin-left:340px; " id="closeCenterModalforPartner">Cancel</button>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div> -->
+<!--&lt;!&ndash; MY CENTER MODAL END&ndash;&gt; -->
+<!--<span class="divider">|</span>-->
+<!--</li>-->
+
+
+
+{%if is_delivery or not is_funding%}
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">My Students<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <li> <a href='#esis_msg' id='my_stud_admin' data-toggle="modal">My Students</a></li>
+        {% if is_delivery %}
+        <li>
+            <a href="#select_center" id='enroll_stud_admin' data-toggle="modal">Enroll Student</a>
+        </li>
+        <li>
+            <a href="#select_center_bulk" id='bulk_enroll_stud_admin' data-toggle="modal">Bulk Enroll Student</a>
+        </li>
+        {% endif %} {% if is_superuser %}
+        <li>
+            <a href="#select_center_bulk" id='bulk_enroll_stud_multi_center_admin' data-toggle="modal">Bulk Enroll Student - multi center</a>
+        </li>
+        {% endif %} {% if is_funding or is_volunteer %}
+        <li>
+            <a href='#esisMsg' id="studentListId" data-toggle="modal">Students List</a>
+        </li>
+        {% endif %}
+        <li> <a href='#student_log_msg' id='students_log' data-toggle="modal">Students Log</a></li>
+        <li> <a href='/lr_bulk_upload/'>Bulk Upload Assessments</a></li>
+        <li> <a href='/static/downloads/Guidelines_to_develop_Assessment.pdf'>Guidelines to develop Assessment</a></li>
+        <li>
+            <a href="#reports" data-toggle="modal" class='report'>Student Reports</a>
+        </li>
+        <!--<li> <a href='/students_dashboard/'>Students Dashboard</a></li>-->
+    </ul>
+    <span class="divider">|</span>
+</li>
+{%endif%}
+<!-- <li id="teachers_of_center">
+            <a href="#my_teachers_modal" data-toggle="modal" class="my_teachers">My Teachers</a>
+            <span class="divider">|</span>
+        </li> -->
+
+{% if is_delivery %}
+<!-- <li class="dropdown">
+                <a class="dropdown-toggle  " data-toggle="dropdown">Add School<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/partner/add_schools">Add a School</a></li>
+                    <li><a href="/school/search/">Search School</a></li>
+                </ul>
+                <span class="divider">|</span>
+            </li> -->
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">My Schools<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <!-- <li><a href="/partner/my_schools">My Schools</a></li> -->
+        <li><a href="/school/search/">Search & Add School</a></li>
+        <li><a href="/partner/myschools/">My Schools</a></li>
+    </ul>
+    <span class="divider">|</span>
+</li>
+<li class="dropdown">
+    <a href="/partner/partner_mou/">Agreement</a>
+
+</li>
+<span class="divider">|</span>
+<li>
+    <a href="/partner/centers/">My Centers</a>
+    <span class="divider">|</span>
+</li>
+
+{% endif %} {% endif %} {% if is_fc_partnerchannel and not is_partner %}
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">My Schools<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <!-- <li><a href="/partner/my_schools">My Schools</a></li> -->
+        <li><a href="/school/search/">Search & Add School</a></li>
+        <li><a href="/partner/myschools/">My Schools</a></li>
+    </ul>
+    <span class="divider">|</span>
+</li>
+{% endif %} {% if is_field_coordinator %}
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">My Schools<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <!-- <li><a href="/partner/my_schools">My Schools</a></li> -->
+        <li><a href="/school/search/">Search & Add School</a></li>
+        <li><a href="/partner/myschools/">My Schools</a></li>
+    </ul>
+    <span class="divider">|</span>
+</li>
+{% endif %} {%if not is_partner %} {% if is_centeradmin or is_superuser or is_classassistant or is_field_coordinator or is_delivery_coordinator or is_orgUnit%}
+
+<li>
+    <a id="showModal"> My Center</a>
+
+    <!-- MY CENTER MODAL START-->
+
+    <div class="modal" data-backdrop="static" id="myModalForSearchCenter">
+        <div class="modal-content ">
+            <div class="modal-header" id="popupHead">
+                <button type="button" id="topClose" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">
+                    <span style="color: black;">Search Center </span>
+                </h4>
+            </div>
+            <div class="modal-body" id="popupBody" style="color: #337ab7;">
+                <table>
+                    <tr>
+                        <td><input autocomplete="on" id="search_results" placeholder="Search Center" onclick="getCenters(search_results, gotocenterID);" style="z-index: 3000 !important; text-align:left !important; display:block !important;"></td>
+                        <td><span style="margin-left: -17px;"><button
+									type="button" class="btn btn-success"
+									style="color: black; height: 38px; width: 97px; margin-top: -2px; margin-left: 30px; display:block !important;"
+									id="gotocenterID" onclick="waitJustLoading()">GO
+									TO</button> </span></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer" id="popupFooter">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" style="color: black; font-size: 16px; margin-left:340px; display:block !important; " id="closeCenterModal">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <!-- MY CENTER MODAL END-->
+    <span class="divider">|</span>
+</li>
+{% endif %} {% endif %} {% if not is_partner %} {% if is_centeradmin or is_superuser or is_classassistant or is_field_coordinator or is_delivery_coordinator %}
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">My Students<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <li> <a href='#esis_msg' id='my_stud_admin' data-toggle="modal">My Students</a></li>
+        {% if not is_funding or not is_volunteer or is_superuser %}
+        <li>
+            <a href="#select_center" id='enroll_stud_admin' data-toggle="modal">Enroll Student</a>
+        </li>
+        <li>
+            <a href="#select_center_bulk" id='bulk_enroll_stud_admin' data-toggle="modal">Bulk Enroll Student</a>
+        </li>
+        {% endif %} {% if is_superuser %}
+        <li>
+            <a href="/v2/bulk_enroll_student_multi_center/" class="esis" id='bulk_enroll_stud_multi_center_admin' data-toggle="modal">Bulk Enroll Student - multi center</a>
+        </li>
+        {% endif %} {% if is_superuser or is_field_coordinator or is_classassistant or is_delivery_coordinator %}
+        <li>
+            <a href='#esisMsg' id="studentListId" data-toggle="modal">Students List</a>
+        </li>
+        <li>
+            <a href="/v2/bulk-promote-students/" class="esis" id='bulk_student_promot_multi_center' data-toggle="modal">Bulk Promote Student</a>
+        </li>
+        {% endif %} {% if not is_delivery_coordinator %}
+        <li> <a href='#student_log_msg' id='students_log' data-toggle="modal">Students Log</a></li>
+        {% endif %} {% if is_centeradmin or is_superuser or is_field_coordinator or is_delivery_coordinator %}
+        <li> <a href='/lr_bulk_upload/'>Bulk Upload Assessments</a></li>
+        {% endif %}
+        <li> <a href='/static/downloads/Guidelines_to_develop_Assessment.pdf'>Guidelines to develop Assessment</a></li>
+        <!--<li> <a href='/students_dashboard/'>Students Dashboard</a></li>-->
+        <li>
+            <a href="#reports" data-toggle="modal" class='report'>Student Reports</a>
+        </li>
+        {% if is_superuser or is_delivery_coordinator %}
+        <li><a class="review_award_btn">Review Awards</a></li>
+        {% endif %} {% if is_superuser %}
+        <li>
+            <a class="quiz_result" id='quiz_result_admin' data-toggle="modal">Quiz Result</a>
+        </li>
+        {% endif %}
+    </ul>
+    <span class="divider">|</span>
+</li>
+{% if not is_classassistant %}
+<!--  <li>
+            <a href="#my_teachers_modal" data-toggle="modal" class="my_teachers">My Teachers</a>
+            <input type="hidden" id="landing_center_id">
+            <span class="divider">|</span>
+        </li> -->
+<li class="dropdown">
+    <a class="dropdown-toggle  " data-toggle="dropdown">My Teachers<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <li><a href="#my_teachers_modal" id='my_teachers' data-toggle="modal" class="my_teachers">My Teachers</a></li>
+        <li><a href='#' data-toggle="modal" class="li-appreciate-Modal">Appreciate</a></li>
+    </ul>
+    <span class="divider">|</span>
+</li>
+{% endif %} {% endif %} {% endif %} {% if is_centeradmin or is_superuser or is_contentadmin or is_classassistant or is_field_coordinator or is_delivery_coordinator and not is_partner%}
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">My Trainings<b class="caret"></b></a>
+    <ul class="dropdown-menu" style="display: none; ">
+        <li>
+            <a href="/aidsntools/">Aids &amp; tools</a>
+        </li>
+        <li>
+            <a href="/mytrainings/">My Trainings</a>
+        </li>
+        <li>
+            <a id="role_guide" data-toggle="modal" href="#role_guide_modal">Teacher Role Guide</a>
+        </li>
+
+        <li>
+            <a href="/curriculumreview/"> Curriculum Review</a>
+        </li>
+    </ul>
+    <span class="divider">|</span>
+</li>
+{% endif %} {% if is_delivery or is_content_reviewer or not is_funding and not is_partner_account_manager %}
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">My Book<b class="caret"></b></a>
+    <ul class="dropdown-menu" style="display: none;">
+        {% if is_centeradmin or is_content_reviewer or is_superuser or is_contentadmin or is_contentdeveloper or is_classassistant or is_field_coordinator or is_delivery_coordinator or is_teacher %}
+
+        <li>
+            <a href="http://wikividya.evidyaloka.org/" target="_blank">Wikividya</a>
+        </li>
+
+        <li><a href='/static/downloads/eVidyaloka_Content_Volunteer_Handbook.pdf' target="_blank">eVidyaloka Content Volunteer Handbook</a></li>
+        {%if is_superuser or is_teacher%}
+        <li><a href="/v2/bulk_upload/">Bulk Update</a></li>
+        {% endif %} {% endif %}
+        <li><a href='https://docs.google.com/forms/d/1V4OoT-R1AJBo1lked_rOjw9DbCQI5s-EGxCyWI2agd0/viewform' target="_blank">Submit Assesment Questions</a></li>
+
+        {%if assigned_usr_offering_id %}
+        <li><a id='changeOfferingInMenu' href="/v2/plan_topics/{{assigned_usr_center_id}}/{{assigned_usr_offering_id}}" style="margin-left: 1px;" target="_blank" class="tag modifenroll">Plan your Topics</a></li>
+        {% endif %} {% if is_delivery or not is_funding and not is_partner_account_manager or is_content_reviewer%}
+        <p style="font-weight: bold;" class="dropdown-toggle" data-toggle="dropdown">Question Bank<b class=""></b></p>
+        <li>
+            <a href="/questions/">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspView Questions</a>
+        </li>
+        <li>
+            <a href="/questions/add">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspAdd Questions</a>
+        </li>
+        <li>
+            <a href="/questions/assesment">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspAssessment Builder</a>
+        </li>
+         <li>
+            <a href="/questions/upload/quiz/view">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspQuiz Upload</a>
+        </li>
+        {% endif %}
+
+    </ul>
+    <span class="divider">|</span>
+</li>
+
+{% endif %}
+{% if is_centeradmin or is_superuser or is_field_coordinator or is_delivery_coordinator %}
+
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">Courses<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <li>
+            <a id="add-course" href="#add-course-modal" data-toggle="modal">Add Course</a>
+        </li>
+        {% if is_superuser or is_field_coordinator or is_delivery_coordinator %}
+        <li>
+            <a id="provisional-demand" href="/v2/provisional_demand/" data-toggle="modal">Provisional Demand</a>
+        </li>
+        {% endif %}
+        <li>
+            <a id="completed-course" href="#Completed-course-modal" data-toggle="modal">Completed Courses</a>
+        </li>
+        <li>
+            <a href="/v2/centerNew/" data-toggle="modal">Centers</a>
+        </li>
+    </ul>
+    <span class="divider">|</span>
+</li>
+
+<!--<li>
+           <a href="/teachers/?role=Teacher&medium={{ center.language }}">Find teachers</a>
+        </li>-->
+<!--<li>
+            <a href="{% if is_centeradmin or is_superuser %} #my_teachers_modal {% else %} #select_center_modal {% endif %}" data-toggle="modal" class="my_teachers">My
+            Teachers</a>
+            <span class="divider">|</span>
+        </li>-->
+
+
+{% elif is_teacher %} {% if my_offering %}
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">My Students<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <li><a class='esis' href="/my_students/?tab_id=my_stud_teach" id='my_stud_teach' data-toggle="modal">My Students</a></li>
+        <li><a href='/lr_bulk_upload/'>Bulk Upload Assessments  </a></li>
+        <li> <a href='/static/downloads/Guidelines_to_develop_Assessment.pdf'>Guidelines to develop Assessment</a></li>
+        <li> <a class='esis' href="/my_students/?tab_id=appreciation_tab" id='appreciation_tab' data-toggle="modal">Appreciate</a></li>
+    </ul>
+    <span class="divider">|</span>
+</li>
+{% endif %}
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">My Trainings<b class="caret"></b></a>
+    <ul class="dropdown-menu" style="display: none; ">
+        <!--    <li>
+                    <a href="/intro/">Intro to evidyaloka</a>
+                </li>
+                <li>
+                    <a href="/code_conduct/">Code of Conduct</a>
+                </li>
+                <li>
+                    <a href="/skype/">How to use Skype</a>
+                </li>
+                <li>
+                    <a href="/mybook/">How to use My Book</a>
+                </li>-->
+        <li>
+            <a href="/aidsntools/">Aids &amp; tools</a>
+        </li>
+        <li>
+            <a href="/mytrainings/">My Trainings</a>
+        </li>
+
+        <li>
+            <a href="/curriculumreview/">Curriculum Review</a>
+        </li>
+        <li>
+            <a id="role_guide" data-toggle="modal" href="#role_guide_modal">Teacher Role Guide</a>
+        </li>
+        <!--
+                <li><a href='/static/downloads/Using_My_eVidyaloka_2.0.pdf' target="_blank">How to use MyeVidyaloka</a></li>-->
+    </ul>
+    <span class="divider">|</span>
+</li>
+<!-- <li class="dropdown">
+            <a class="dropdown-toggle   " data-toggle="dropdown">My Book<b class="caret"></b></a>
+            <ul class="dropdown-menu" style="display: none; ">
+                <li>
+                   <a href="http://wikividya.evidyaloka.org/" target="_blank">Wikividya</a>
+                </li>
+                <li>
+                    <a href="#mytopics" data-toggle="modal">My Topics</a>
+                </li>
+                <li><a href='/static/downloads/eVidyaloka_Content_Volunteer_Handbook.pdf' target="_blank">eVidyaloka Content Volunteer Handbook</a></li>
+                <li><a href='https://docs.google.com/forms/d/1V4OoT-R1AJBo1lked_rOjw9DbCQI5s-EGxCyWI2agd0/viewform' target="_blank">Submit Assesment Questions</a></li>
+
+                {%if assigned_usr_offering_id %}
+				<li><a id='changeOfferingInMenu' href="/v2/plan_topics/{{assigned_usr_center_id}}/{{assigned_usr_offering_id}}" style="margin-left: 1px;" target="_blank"class="tag modifenroll">Plan your Topics</a></li>
+				{% endif %}
+            </ul>
+
+        </li> -->
+{% endif %} {% if is_superuser %}
+
+<!--<span class="divider">|</span>-->
+<!-- <li class="dropdown">
+                <a href="/partner/partner_mou/">Agreement</a>
+
+            </li> -->
+<span class="divider">|</span>
+<li class="dropdown">
+
+    <a class="dropdown-toggle" data-toggle="dropdown">Manage Donations<b class="caret"></b></a>
+    <ul class="dropdown-menu" style="display: none; ">
+        <li>
+            <a href="/donate_dash/">Donations Dashboard</a>
+        </li>
+        <li>
+            <a href="/bulk_donate/" target="_blank">Bulk Donation</a>
+        </li>
+        <li>
+            <a href="/bulk_pledge/">Receipt Generation</a>
+        </li>
+
+    </ul>
+    <span class="divider">|</span>
+</li>
+{% endif %} {% if is_superuser or is_pam_delivery %}
+<li class="dropdown">
+
+    <a class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
+    <ul class="dropdown-menu" style="display: none; ">
+        {% if is_superuser and not is_pam_delivery %}
+        <li>
+            <a href="/partner/partners/">Partners</a>
+        </li>
+        <!-- <li>
+                    <a href="/v2/school_admins/" >School Admins</a>
+                </li> -->
+        {% endif %}
+        <li>
+            <a href="/partner/myschools/">Partner Schools</a>
+        </li>
+        {% if is_superuser and not is_pam_delivery %}
+        <li>
+            <a href="/partner/digitalschools/">Digital Schools</a>
+        </li>
+        {% endif %}
+        <li>
+            <a href="/partner/centers/">Centers</a>
+        </li>
+        {% if is_superuser and not is_pam_delivery %}
+        <li>
+            <a href="/config/roles/">Roles</a>
+        </li>
+        <li>
+            <a href="/config/appreciationreasons/">Appreciation Reasons</a>
+        </li>
+        <li>
+            <a href="/config/stickers/">Stickers</a>
+        </li>
+        <li>
+            <a href="/config/generate_certificate">Generate Certificate</a>
+        </li>
+        <li>
+            <a href="/partner/partner_mou/">Agreement</a>
+        </li>
+
+        {% endif %}
+        {% if is_superuser and not is_pam_delivery %}
+        <li>
+            <a href="/v2/admin/content/upload">Content Upload</a>
+        </li>
+        {% endif %}
+    </ul>
+    <span class="divider">|</span>
+</li>
+
+{% endif %}
+
+
+<li class="dropdown">
+
+
+    <a class="dropdown-toggle" data-toggle="dropdown">Dashboard<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        {% if is_funding or is_approved %}
+        <li>
+            <a href="/partner/centers/">Center List</a>
+        </li>
+        <li>
+            <a href="/projectsummary/">Project Summary</a>
+        </li>
+        {% endif %} {% if is_superuser or is_orgUnit or is_delivery or is_pam_funding or is_delivery_coordinator or is_field_coordinator or is_classassistant or is_centeradmin or is_pam_delivery or is_teacher or is_well_wisher%}
+        <li><a href="/stats/">Operations Dashboard</a></li>
+        <!-- <li><a href="/multi_stat/">Operations Dashboard NEW</a></li> -->
+        <li> <a href='/students_dashboard/'>Students Dashboard</a></li>
+        <!-- {% if is_superuser or is_orgUnit or is_delivery_coordinator or is_partner_account_manager or is_vol_coordinator or is_vol_admin %}
+                <li> <a href='/v2/class_completion_dashboard/'>Class Completion Dashboard</a></li>
+              {% endif %}
+            {% if is_superuser or  is_vol_coordinator or is_vol_admin or is_partner_account_manager%}
+                <li> <a href='/v2/teacher_dashboard/'>Teacher Dashboard</a></li>
+                {% endif %}
+                {% if is_superuser or is_orgUnit or is_vol_coordinator or is_vol_admin or is_partner_account_manager%}
+                <li> <a href='/v2/offering_dashboard/'>Offering Dashboard</a></li>
+                {%endif%}
+                {%if is_orgUnit or is_superuser%}
+                <li> <a href='/v2/partner_dashboard/'>Partner Dashboard</a></li>
+                {%endif%}
+                <li> <a href='/v2/reports/'>Reports</a></li> -->
+        {% endif %} {% if is_superuser or is_vol_admin or is_delivery_coordinator or is_volunteer or is_delivery or is_orgUnit %}
+        <li>
+            <a href="/volunteer_db/">Volunteer Dashboard</a>
+        </li>
+        {% endif %} {% if is_superuser %}
+        <li>
+            <a href="/se_response_sheet/">Self Evaluation Responses</a>
+        </li>
+        {% endif %} {% if is_centeradmin or is_superuser or is_pam_funding or is_pam_delivery or is_field_coordinator or is_delivery_coordinator or is_orgUnit or is_delivery%}
+        <li>
+            <a href="/v2/demand/stats/">Demand Dashboard</a>
+        </li>
+        {% endif %} {% if is_superuser or is_orgUnit or is_delivery or is_pam_funding or is_delivery_coordinator or is_field_coordinator or is_classassistant or is_centeradmin or is_pam_delivery or is_teacher or is_well_wisher%}
+        <li class="dropdown-submenu dropdown"><a>Analytics<span class="caret"></span></a>
+            <ul class="dropdown-menu" style="position: relative;">
+                {% if is_superuser or is_orgUnit or is_delivery_coordinator or is_partner_account_manager or is_vol_coordinator or is_vol_admin %}
+                <li> <a href='/v2/class_completion_dashboard/'>Class Completion Dashboard</a></li>
+                {% endif %} {% if is_superuser or is_vol_coordinator or is_vol_admin or is_partner_account_manager%}
+                <li> <a href='/v2/teacher_dashboard/'>Teacher Dashboard</a></li>
+                {% endif %} {% if is_superuser or is_orgUnit or is_vol_coordinator or is_vol_admin or is_partner_account_manager%}
+                <li> <a href='/v2/offering_dashboard/'>Offering Dashboard</a></li>
+                {%endif%} {%if is_orgUnit or is_superuser%}
+                <li> <a href='/v2/partner_dashboard/'>Partner Dashboard</a></li>
+                {%endif%}
+                <li> <a href='/v2/reports/'>Reports</a></li>
+
+
+            </ul>
+        </li>
+    </ul>
+    {%endif%}
+    <span class="divider">|</span>
+</li>
+{% if is_superuser or is_delivery_coordinator or is_vol_coordinator or tsd_panel_member or csd_panel_member %}
+<li class="dropdown">
+    <a class="dropdown-toggle   " data-toggle="dropdown">Manage TSD<b class="caret"></b></a>
+    <ul class="dropdown-menu" style="display: none; ">
+        {% if is_superuser or is_volunteer or tsd_panel_member or csd_panel_member or is_delivery_coordinator %}
+        <li>
+            <a href="/v2/publish_booking_slots">Publish Booking Slots</a>
+        </li>
+        {% endif %} {% if is_superuser or is_delivery_coordinator or is_volunteer or is_vol_coordinator or tsd_panel_member %}
+        <li>
+            <a href="/manage_booking/">Manage Booking</a>
+        </li>
+        {% endif %} {% if is_superuser %}
+        <li>
+            <a href="/v2/book-slots/">Book Slots for Others</a>
+        </li>
+        {% endif %}
+    </ul>
+    <span class="divider">|</span>
+</li>
+{% endif %} {% if is_superuser or is_pam_delivery or is_pam_funding%}
+<li class="dropdown">
+    <a class="dropdown-toggle   task_menu" data-toggle="dropdown">Task<b class="caret"></b></a>
+    <ul class="dropdown-menu" style="display: none; ">
+        <li>
+            <a href='https://forms.gle/2gerKZqGw9rvTy446' target="_blank">Raise Jupiter Request</a>
+        </li>
+        <li>
+            <a class="task_list" href="/task_list/">Task</a>
+        </li>
+        <li>
+            <a href="/approve_offering/?tab=offering">My Approval</a>
+        </li>
+        <li>
+            <a href="/v2/task_reporting">Task Report</a>
+        </li>
+        {% if is_superuser %}
+        <li>
+            <a href="/v2/bulkUploadTask/">Bulk Upload Task</a>
+        </li>
+        <li>
+            <a href="/manage_tttinfo/">Manage Tv Shedule</a>
+        </li>
+        {% endif %} {% if is_superuser or is_digital_partner %}
+        <li>
+            <a href="/bulk-upload-digital-school/">Bulk school upload</a>
+        </li>
+        {% endif %}
+    </ul>
+    <span class="divider">|</span>
+</li>
+
+{% elif is_delivery_coordinator %}
+<li class="dropdown">
+    <a class="dropdown-toggle   task_menu" data-toggle="dropdown">Task<b class="caret"></b></a>
+    <ul class="dropdown-menu" style="display: none; ">
+
+        <li>
+            <a href='https://forms.gle/2gerKZqGw9rvTy446' target="_blank">Raise Jupiter Request</a>
+        </li>
+        {% if is_superuser or is_digital_partner %}
+        <li>
+            <a href="/bulk-upload-digital-school/">Bulk school upload</a>
+        </li>
+        {% endif %}
+    </ul>
+</li>
+{% else %}
+<li>
+    <a class="task_menu" href="/task_list/">My Tasks</a>
+    <span class="divider">|</span>
+</li>
+{% endif %} {% if is_superuser %}
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">User Activity<b class="caret"></b></a>
+    <ul class="dropdown-menu" style="display: none; ">
+        <li>
+
+            <a href="/userActivity/">User Activity</a>
+
+        </li>
+    </ul>
+    <span class="divider">|</span>
+</li>
+{% endif %} {% if is_superuser %}
+<li>
+    <a class="" href="/v2/list_vol_of_month/">Vol Of Month</a>
+    <span class="divider">|</span>
+</li>
+{% endif %} {% if is_superuser or is_classassistant or is_field_coordinator or is_delivery_coordinator%}
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">Manage Holidays <b class="caret"></b> <span class="divider">|</span></a>
+    <ul class="dropdown-menu" style="display: none; ">
+        {% if is_superuser%}
+        <li>
+            <a href="/v2/holidaylist">Holiday List</a>
+        </li>
+        {%endif%} {%if is_field_coordinator or is_delivery_coordinator or is_superuser %}
+        <li>
+            <a href="/v2/Applyholidays" id="apply_holiday">Apply Holidays</a>
+
+        </li>
+        {%endif%}
+    </ul>
+</li>
+{%endif%}
+<!-- {%  if not is_partner_account_manager %}
+    <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" >Questions<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a  href="/questions/">List Questions</a>
+                    </li>
+                    <li>
+                        <a  href="/questions/add">Add Questions</a>
+                    </li>
+                    <li>
+                        <a  href="/questions/assesment">Assessment</a>
+                    </li>
+                 </ul>
+            </li>
+{% endif %} -->
+
+</ul>
+</div>
+</nav>
+{% if is_centeradmin or is_superuser or is_classassistant or is_partner or is_field_coordinator or is_delivery_coordinator %}
+<div id="role_guide_modal" class="modal hide" style='left:41% !important;width:800px !important;'>
+    <div class="header ">
+        <p>Teacher Role Guide</p>
+        <a class="close close-btn hide" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+        <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+    </div>
+    <div class='role_guide_body' id='yt-player'>
+        <iframe width="800" height="420" id='vid_main' src="https://www.youtube.com/embed/videoseries?list=PLbdxk95Fm6YxpUvIugGyRjDWDPkfbhCUk" frameborder="0" allowfullscreen></iframe>
+    </div>
+</div>
+
+<div id="uploadholiday_file" class="modal hide" style='left:41% !important;width:800px !important;height: 22%'>
+    <div class="header ">
+        <p style="margin-left: 242px;">Upload Holidays List </p>
+        <a class="close close-btn hide" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+        <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+    </div>
+    <div class='role_guide_body' style="margin-left: 144px;margin-top: 46px;">
+        <div class="col-md-4">
+            <span>Upload file</span>
+        </div>
+        <div class="col-md-8" style="width: 267px;margin-left: -70px">
+            <input type="file" name="">
+        </div>
+        <button type="submit" class="btn btn-success" style="margin-left: 136px;">Submit</button>
+    </div>
+</div>
+
+<div id="reports" class="modal hide" style="overflow:visible;min-height:100px;width:800px !important;left:41% !important;">
+    <div class="header">
+        <p>Student Report Card Generation</p>
+        <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+    </div>
+    <div class="body" style='padding:40px 20px;'>
+        <img src="/static/images/loader.gif" alt="spinner" style="display:block;margin:10px auto" />
+        <select id='center_list'>
+            <option value=''>-- Select Center --</option>
+        </select>
+        <select id='grade_list'>
+            <option value=''>-- Select grade --</option>
+        </select>
+        <select id='ay_list'>
+            <option value=''>-- Select Academic year --</option>
+        </select>
+        <select id='action_list'>
+            <option value=''>-- Select Action --</option>
+            <option value='generate'>Generate & Download</option>
+            <option value='download'>Download</option>
+        </select>
+        <button class='btn' id='generate_report' style='cursor:pointer;display:inline-block;font-size:15px;'>Submit</button>
+    </div>
+</div>
+<div id="esis_msg" class="modal hide" style="overflow:visible;min-height:54px;">
+    <div class="header">
+        <p>Info</p>
+        <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+    </div>
+    <p style='padding:30px;text-align:center'>Please select a center to view your students..</p>
+</div>
+<div id="select_center" class="modal hide" style="overflow:visible;min-height:54px;">
+    <div class="header">
+        <p>Info</p>
+        <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+    </div>
+    <p style='padding:30px;text-align:center'>Please select a center to enroll students..</p>
+</div>
+<div id="esisMsg" class="modal hide" style="overflow:visible;min-height:54px;">
+    <div class="header">
+        <p>Info</p>
+        <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+    </div>
+    <p style='padding:30px;text-align:center'>Please select a center to view students List..</p>
+</div>
+<div id="student_log_msg" class="modal hide" style="overflow:visible;min-height:54px;">
+    <div class="header">
+        <p>Info</p>
+        <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+    </div>
+    <p style='padding:30px;text-align:center'>Please select a center to view Students Log..</p>
+</div>
+<div id="mystudents" class="modal hide" style="overflow:visible;min-height:54px;">
+    <div class="header">
+        <p>My Students</p>
+        <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+    </div>
+    <div>
+        {% if center_courses %}
+        <div class="select-box select-pin" style="margin-left:10px">
+            <ul class="custom-select" style="position:relative;margin-top:10px;">
+                <li>
+                    <span class="selected-item">Select a Course</span>
+                    <span class="dropdown">
+                            {% for course in center_courses %}
+                                <a rel="ajax-link" href="/mystudents/?id={{ course.offering_id }}" pre-call="pre_stu_filter" callback="after_stu_filter" style="cursor:pointer;padding-bottom:5px;">
+                                    {{ course.course }}, {{ course.center }} {% if course.start_date %}, {{ course.start_date }}{% endif %} {% if course.end_date %} to {{ course.end_date }}{% endif %}
+                                </a>
+                            {% endfor %}
+                        </span>
+                </li>
+            </ul>
+        </div>
+        {% else %}
+        <a class="close" data-dismiss="modal" style="padding:3px;cursor:pointer;position:absolute;top:0px;right:0px;">X</a>
+        <p style="text-align:center;padding:15px;background:wheat;margin:20px;">This center has no students assigned</p>
+        {% endif %}
+    </div>
+    <div style="max-height:450px;overflow-y:auto;">
+        <form method="POST" id="students-form" style="margin-top:15px;" action="save_students">
+            {% csrf_token %}
+            <input name="student_ids" type="hidden" />
+            <input name="strengths" type="hidden" />
+            <input name="weakness" type="hidden" />
+            <input name="observation" type="hidden" />
+        </form>
+    </div>
+    <a class="hide btn modify-btn" rel="submit" href="#students-form" pre-call="pre_students_save" callback="after_students_save">
+        <span class="ajax-button-label" data-loading="please-wait">Save</span>
+    </a>
+</div>
+<div id="add-course-modal" class="modal hide">
+    {% if is_superuser %}
+    <a class="close close-btn" data-dismiss="modal" style="padding:3px;cursor:pointer">X</a>
+    <img src="/static/images/loader.gif" alt="spinner" style="display:block;margin:10px auto" />
+    <div class="hide">
+        {% else %}
+        <div>
+            {% endif %}
+            <div class="header">
+                <p>Add Offering</p>
+                <a class="close close-btn hide" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+                <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+            </div>
+            <form method="POST" id="add_course_form" action="/add_course/">
+                {% csrf_token %}
+                <ul>
+                    <li>
+                        <p style="font-weight: bold;">Course:</p>
+                        <select id="courses" name="course_id" style="float:left;padding-right:0px;">
+                            <option value="">Select a Course</option>
+                            {% for course in courses %}
+                            <option value="{{ course.id }}">{{ course }}</option>
+                            {% endfor %}
+                        </select>
+                        <a href="/admin/web/course/add/" target="_blank" class="btn add_course_dj">+</a>
+                    </li>
+                    <div class="" style="display: grid; grid-auto-flow: column dense;grid-column-gap: -15px ">
+                        <li>
+                            <p style="font-weight: bold;">Program Type:</p>
+                            <select name="program_type" required>
+                                <option value="0" selected>None</option>
+                                <option value="1">Digital Classroom</option>
+                                <option value="2">LFH</option>
+                                <option value="3">Worksheets</option>
+                                <option value="4">Alumni</option>
+                                <option value="5">Digital School</option>
+                            </select>
+                        </li>
+                        <li>Batch Type: 
+                            <select name="batch">
+                                <option selected value="0">None</option>
+                                <option value="1">Batch-1</option>
+                                <option value="2">Batch-2</option>
+                                <option value="3">Batch-3</option>
+                            </select>
+                        </li>
+                    </div>
+
+                    <li>
+                        <p style="font-weight: bold;">Academic Year:</p><select id="add_offer_ay" name="ay_id" style="float:left;padding-right:0px;">
+                        <option value="">Select an AY</option>
+                        {% for ay in all_ay %}
+                        <option value="{{ ay.id }}">{{ ay }}</option>
+                        {% endfor %}
+                    </select>
+                    </li>
+                    <input name="center_id" value="{{ center_id }}" type="hidden" />
+                    <input name="language" value="{{ center.language }}" type="hidden" />
+                    <li>
+                        <p style="font-weight: bold;">Start date:</p>
+                        <div class="controls text">
+                            <input type="date" value="{{ current_ay.start_date|date:'Y-m-d' }}" min="{{ current_ay.start_date|date:'Y-m-d' }}"  max="{{ current_ay.end_date|date:'Y-m-d' }}"  style="width:150px;" name="start_date" />
+                        </div>
+                    </li>
+                    <li>
+                        <p style="font-weight: bold;">End date:</p>
+                        <div class="controls text">
+                            <input type="date" value="{{ current_ay.end_date|date:'Y-m-d' }}"  min="{{ current_ay.start_date|date:'Y-m-d' }}" max="{{ current_ay.end_date|date:'Y-m-d' }}"  style="width:150px;" name="end_date" />
+                        </div>
+                    </li>
+                    <li>
+                        <p style="font-weight: bold;">Planned Topics:</p>
+                        <select multiple="multiple" id="planned_topics" style="float:left; width:300px">
+                        {% for topic in all_topics %}
+                            <option value="{{ topic.id }}" data-course-id="{{ topic.course_id.id }}">{{ topic.title }}</option>
+                        {% endfor %}
+                    </select>
+                        <a href="/admin/web/topic/add/" class="btn add_topic_dj" target="_blank" style="margin-left:10px;width:20px;height:20px;line-height:18px;float:left;">+</a>
+                    </li>
+                    <li>
+                        <p style="font-weight: bold;">Enrolled Students:</p>
+                        <select multiple="multiple" id="enroll_students" style="width:300px">
+                        {% for student in students %}
+                            <option value="{{ student.id }}">{{ student.name }}</option>
+                        {% endfor %}
+                    </select>
+                    </li>
+                    <input type="hidden" name="students" />
+                    <input type="hidden" name="planned_topics" />
+                    <input type="hidden" name="center_id" value="{{ center_id }}" />
+                </ul>
+                <div style='float:right;'>
+                    <a href="#add_course_form" class="btn" rel="submit" style="width:120px; background:green;" pre-call="pre_add_course" callback="after_add_course">
+                        <span class="ajax-button-label" data-loading="Please wait">Save</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="se_resp-modal" class="modal hide" style="overflow-x:hidden;min-height:55px;">
+        <div class="header">
+            <p>Self Evaluation Response</p>
+            <a class="close close-btn hide" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+            <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+        </div>
+        <div class='se_resp-body'>
+            <img src="/static/images/loader.gif" alt="spinner" style="display:block;margin:10px auto" />
+            <div class="empty-comments hide" style="text-align: center;line-height: 65px;">
+                <p>Teacher doesn't have any comments</p>
+            </div>
+            <div class='comments' style="line-height: 1.6em;margin:10px 0px 10px 10px;max-height: 450px;overflow-x: hidden;overflow-y: scroll;">
+
+            </div>
+        </div>
+    </div>
+
+    {% elif is_teacher %}
+    <div id="mystudents" class="modal hide" style="overflow:visible;min-height:54px;">
+        <div>
+            {% if my_offering %}
+            <div class="header">
+                <p>My Students</p>
+                <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+            </div>
+
+            <div class="select-box select-pin" style="margin-left:10px">
+                <!-- <span class="icon"></span> -->
+                <ul class="custom-select" style="position:relative;margin-top:10px;">
+                    <li>
+                        <span class="selected-item">Select a Course</span>
+                        <span class="dropdown">
+                                {% for offering in my_offering %}
+                                    <a rel="ajax-link" href="/mystudents/?id={{ offering.id }}" pre-call="pre_stu_filter" callback="after_stu_filter" style="cursor:pointer;">{{ offering.grade }} {{ offering.subject }}, {{ offering.center }} - {{ offering.date }} {{ offering.start }}
+                                    </a>
+                                {% endfor %}
+                            </span>
+                    </li>
+                </ul>
+            </div>
+            {% else %}
+            <a class="close" data-dismiss="modal" style="padding:3px;cursor:pointer;position:absolute;top:0px;right:0px;">X</a>
+            <p style="text-align:center;padding:15px;background:wheat;margin:20px;">You have no students assigned</p>
+            {% endif %}
+        </div>
+        <div style="max-height:450px;overflow-y:auto;">
+            <form method="POST" id="students-form" style="margin-top:15px;" action="save_students">
+                {% csrf_token %}
+                <input name="student_ids" type="hidden" />
+                <input name="strengths" type="hidden" />
+                <input name="weakness" type="hidden" />
+                <input type="hidden" name="observation" />
+            </form>
+        </div>
+        <a class="hide btn modify-btn" rel="submit" href="#students-form" pre-call="pre_students_save" callback="after_students_save">
+            <span class="ajax-button-label" data-loading="please-wait">Save</span>
+        </a>
+    </div>
+    <div id="role_guide_modal" class="modal hide" style='left:41% !important;width:800px !important;'>
+        <div class="header ">
+            <p>Teacher Role Guide</p>
+            <a class="close close-btn hide" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+            <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+        </div>
+        <div class='role_guide_body' id='yt-player'>
+            <iframe width="800" height="420" id='vid_main' src="https://www.youtube.com/embed/videoseries?list=PLbdxk95Fm6YxpUvIugGyRjDWDPkfbhCUk" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    {% endif %}
+    <div id="Completed-course-modal" class="modal hide" style="overflow-x:hidden;min-height:55px;">
+        <a class="close close-btn" data-dismiss="modal" style="padding:3px;cursor:pointer">X</a>
+        <div class="header hide">
+            <p>Completed Courses</p>
+            <a class="close close-btn hide" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+            <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+        </div>
+        <div class='not_center_admin'>
+            <div id='select-center'>
+                <p style='padding:20px;background:wheat;'>Select a center to see the Completed Course</p>
+            </div>
+        </div>
+    </div>
+    {% if is_superuser or is_teacher or is_classassistant or is_centeradmin or is_partner or is_field_coordinator or is_delivery_coordinator%}
+
+    <div id="Comments-modal" class="modal hide" style="overflow-x:hidden;min-height:55px;">
+        <div class="header">
+            <p>Teacher Comments</p>
+            <a class="close close-btn hide" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+            <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+        </div>
+        <div class='coments-body'>
+            <img src="/static/images/loader.gif" alt="spinner" style="display:block;margin:10px auto" />
+            <div class="empty-comments hide" style="text-align: center;line-height: 65px;">
+                <p>Teacher doesn't have any comments</p>
+            </div>
+            <div class='comments' style="line-height: 1.6em;margin:10px 0px 10px 10px;max-height: 450px;overflow-x: hidden;overflow-y: scroll;">
+
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div id="mytopics" class="modal hide">
+        {% if topics %}
+        <div class="header">
+            <p>My Topics:</p>
+            <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer;">X</a>
+        </div>
+        <div style="margin:10px;max-height:500px;overflow-y:auto;">
+            {% for topic in topics %}
+            <p style="margin-bottom: 10px;">Course: {{ topic.grade }}th {{ topic.subject }}, {{ topic.board }} Board</p>
+            <ul id="mytopics-list">
+                {% for t in topic.my_topics %} {% if t.url %}
+                <li><a href="{{ t.url }}" target="_blank">{{ t.title }}</a></li>
+                {% else %}
+                <li><a href="#">{{ t.title }}</a></li>
+                {% endif %} {% endfor %}
+            </ul>
+            {% endfor %}
+        </div>
+        {% else %}
+        <a class="close" data-dismiss="modal" style="padding:3px;cursor:pointer;">X</a>
+        <p style="text-align:center;padding: 15px;background: wheat;margin:20px;">There are no topics</p>
+        {% endif %}
+    </div>
+    {% if is_contentdeveloper %}
+    <div id="my-topic-Modal" class="modal hide">
+        <div class="header">
+            <p>{{ user.username }}: My Published Topics</p>
+            <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer;">X</a>
+        </div>
+        <div style="margin:10px;max-height:500px;overflow-y:auto;" class='body'>
+            <table>
+                <thead>
+                    <th width="30%">Topic</th>
+                    <th width="25%">Work Stream</th>
+                    <th width="20%">Board</th>
+                    <th width="15%">Subject</th>
+                    <th width="10%">Grade</th>
+                </thead>
+                <tbody class='modal-body'>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+
+    <!-- My teachers Modal -->
+    <style>
+        #my_teachers_modal {
+            width: 80%;
+            padding: 0;
+            margin: 0;
+            left: 10%;
+            top: 10%;
+            border-radius: 0;
+        }
+
+        div#my_teachers_modal * {
+            border-radius: 0;
+        }
+
+        div#my_teachers_modal a {
+            color: black;
+        }
+
+        .dashboard-breadcrumb>li:last-child ul {
+            right: 5px;
+            left: auto;
+        }
+    </style>
+
+    <!-- MY CENTER MODAL -->
+    <style>
+        /*  ( "#myModalForSearchCenter" ).dialog({
+    create: function( e, ui ) { this.element.css( "z-index", "101" ); },
+    // The rest of your dialog options...
+}); */
+        /* .modal.fade {
+          z-index: 10000000 !important;
+      }
+      .modal.data-dropbak{
+        data-dropback:hide;
+      } */
+
+        .ui-autocomplete {
+            z-index: 3000 !important;
+        }
+
+        .ui-datepicker {
+            z-index: 3000;
+        }
+
+        #popupHead {
+            /* background-color: #459a9252; */
+            background-color: #4aae61;
+        }
+
+        #popupBody {
+            /* background-color: #ffeb005c; */
+            background-color: white;
+        }
+
+        #search_results {
+            width: 249px;
+            height: 36px;
+            background-color: white;
+            margin-left: 29px;
+            color: black;
+            margin-top: 22px;
+            border: 10px soild black;
+            display: block !important;
+            text-align: left !important;
+            padding: 5px;
+        }
+
+        #popupFooter {
+            background-color: white;
+            padding: 20px;
+            display: block !important;
+        }
+
+        input.searchBox {
+            border-style: solid;
+            border-width: medium;
+        }
+
+        #closeCenterModal {
+            color: #459a9252;
+            margin-bottom: 5px;
+            display: block !important;
+        }
+
+        .modal-dialog {
+            border-width: 0px;
+            border-bottom-style: hidden;
+        }
+
+        #gotocenterID {
+            display: block !important;
+        }
+
+        #topClose {
+            display: block !important;
+        }
+
+        #closeCenterModalforPartner {
+            display: block !important;
+        }
+
+        tbody tr td:first-child {
+            background-color: #9da6ea00 !important;
+            color: black;
+        }
+
+        .teacherSticker:hover {
+            -webkit-filter: drop-shadow(8px 8px 10px green);
+            filter: drop-shadow(8px 8px 10px green);
+            transform: scale(1.3);
+        }
+
+        .teacherStickerActive {
+            -webkit-filter: drop-shadow(8px 8px 10px green);
+            filter: drop-shadow(8px 8px 10px green);
+            transform: scale(1.3);
+        }
+    </style>
+
+    <input type="hidden" id="myteacher_id">
+    <input type="hidden" id="request_for_ter_id">
+    <input type="hidden" id="logged_in_user_role_id">
+    <input type="hidden" id="request_for_more_sess_id">
+    <div class="modal fade" id="my_teachers_modal" role="dialog">
+        <div class="">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="text-align:center">
+                    <div class='col-md-7'>
+                        <h4 class="modal-title" style="float: right;">My Teachers</h4>
+                    </div>
+                    <!--  <div class="col-md-4">
+
+                <a href="#request_ter_teachers_modal" id="request_ter_teachers_id" data-toggle="modal" class="my_teachers">
+                </a>
+
+                </div> -->
+                    <div class="col-md-5"><button type="button" class="close" data-dismiss="modal">&times;</button></div>
+                </div>
+                <div class="modal-body" style="padding:15px 0;border-left: 30px solid white">
+                    <div class="row">
+                        <div class="col-md-4" style="padding-left:15px;margin-bottom:0px;height:325px;background:whitesmoke">
+                            <ul class="nav nav-pills nav-stacked teachers_li" style="max-height:295px;overflow-y:auto;padding-top: 15px;">
+                            </ul>
+                        </div>
+                        <!--col-md-4-->
+
+                        <div class="col-md-8 no_data" style="max-height:345px;overflow-y:auto">
+                            <div class="tab-content my_teachers_content">
+                            </div>
+                        </div>
+                        <!--col-md-8-->
+                    </div>
+                    <!--row-->
+                    <div id="evd-notification " class="alert alert-warning hide dropMsgDiv" style="color: white;border: 2px solid white;background-image: url(/static/images/blackslate.png);width: 25%;top: 30%;display:none;left: 35%;position: fixed;">
+                        <div>
+                            <a type="button" class="close_alert pull-right drop_load" style="cursor: pointer; ">X</a>
+                            <p><span id='drop_msg_id'></span>
+                                <br><span id='drop_msg_reason'></span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- <div class="row" id="drop_teacher_div_id" style="display: none;">
+            <div class="col-md-4"></div>
+            <div class="col-md-3">
+            <div class="controls text" style="margin-top:-23px;">
+            <div style="margin-top: 12%;">
+            <label> Select Date<span style="color:red;">*</span></label>
+            <input type="text" class="date-picker" id="drop_date_id" style="width:204px;height: 30px;" name="start_date" placeholder="Start Date" required="required">
+        </div>
+        <div style="margin-top: -25%;margin-left: 90%;">
+            <label for="drop_category">Category<span style="color:red;">*</span></label>
+        <select name="drop_category" id="drop_category" onchange="category_change()">
+            <option value="">Select Category</option>
+        </select>
+        <br><br>
+        </div>
+        <div style="margin-left: 155%;margin-top: -28%;">
+            <label for="cars">Reason<span style="color:red;">*</span></label>
+            <select name="drop_reason" id="drop_reason" required>
+            </select>
+            <br><br>
+        </div>
+        </div>
+        </div>
+             <div class="col-md-1">
+             <button type="button" class="btn btn-info" onclick="dropTeacher();" id="dropBtnId" style="margin-left: -440%;margin-top: 128%;">Drop Teacher</button>
+             </div>
+             <div class="col-md-3"></div>
+
+
+               <div id='ajax_loader'style="position: fixed; left: 48%; top: 48%; display: none; z-index: 999;">
+                                   <img src="/static/img_new/ajax-loader.gif" alt="spinner" />
+                           </div>
+             </div> -->
+                    <div id="drop_teacher_div_id" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-2">
+                                <label> Select Date<span style="color:red;">*</span></label>
+                                <input type="text" class="date-picker" id="drop_date_id" name="start_date" placeholder="Start Date" required="required">
+                            </div>
+                            <div class="col-md-2">
+                                <label for="drop_category">Category<span style="color:red;">*</span></label>
+                                <select name="drop_category" id="drop_category" onchange="category_change()">
+                            <option value="">Select Category</option>
+                        </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="drop_reason">Reason<span style="color:red;">*</span></label>
+                                <select name="drop_reason" id="drop_reason" style="width: 200px;" required>
+                        </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-info" onclick="dropTeacher();" id="dropBtnId">Drop Teacher</button>
+                            </div>
+                        </div>
+                        <div id='ajax_loader' style="position: fixed; left: 48%; top: 48%; display: none; z-index: 999;">
+                            <img src="/static/img_new/ajax-loader.gif" alt="spinner" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" onclick="hideAndShow();">Drop</button>
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- end myTeachers modal -->
+
+
+    <div class="modal" data-backdrop="static" id="appreciateTeacherModel" style=" overflow-y: hidden; color: #337ab7;" role="dialog">
+        <div class="modal-content ">
+
+            <div class="modal-header" id="popupHead">
+                <button type="button" id="appreciateTeacherModelClose" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">
+                    <span style="color: black;">Appreciate Volunteer</span>
+                </h4>
+            </div>
+            <div class="modal-body" id="popupBody" style="color: #337ab7;">
+                <div class='row'>
+                    <div class='col-md-6'>
+                        <label>Search Volunteer:<span style="color: red">*</span><span
+							style="color: red; display: none; font-size: 9px; margin-top: -15px; margin-left: 106px;"
+							class="breadcrumb_usrch">(Please Enter Volunteer)</span></label>
+
+                    </div>
+                    <div class='col-md-6'>
+                        <input class="form-control" autocomplete="on" id="search_data" placeholder="Search Volunteer" onclick="getExternalRoleVolunteer(search_data)">
+
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col-md-6'>
+                        <label>Select the Reason :<span style="color: red">*</span><span
+							style="color: red; display: none; font-size: 9px; margin-top: -15px; margin-left: 106px;"
+							class="validation_msg_rsn">(Please Select Reason)</span></label>
+
+                    </div>
+                    <div class='col-md-6'>
+                        <select name="reason" id="appreciate_reason_id" class="form-control" tabindex="-1" aria-hidden="true">
+                  <option value="others "> Others</option>
+                  </select>
+
+
+                    </div>
+                </div>
+
+
+
+                <div class='row add_custom_reason' style="display: none;">
+                    <br>
+                    <div class='col-md-6'>
+                        <label>Add Custom Reason:<span style="color: red">*</span><span
+							style="color: red; display: none; font-size: 9px; margin-top: -15px; margin-left: 118px;"
+							class="validation_msg_crsn">(Please Enter Reason)</span></label>
+
+                    </div>
+                    <div class='col-md-6'>
+                        <input type="text" class="form-control " id='customReasonId'>
+
+                    </div>
+
+                </div>
+                <br>
+
+                <div class='row comment'>
+                    <div class='col-md-6'>
+                        <label>Comment:</label>
+
+                    </div>
+                    <div class='col-md-6'>
+                        <input type="text" class="form-control" id='commentID' placeholder="Comment">
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer" id="popupFooter">
+                <button type="button" class="btn btn-success breadcrumb_save_appreciation" style="color: white;font-size: 16px;margin-left: 458px;display: block !important;">Submit</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- publish TSD slots modal will append through underscore template -->
+    <div id="append_tsd_modal">
+
+    </div>
+    <!-- end publish TSD slots modal -->
+
+    <!-- Publish TSD slots script -->
+    <script type="text/javascript" src="/static/js/underscore-min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.timepicker.min.js"></script>
+    <script id="publish_slots_tmpl" type="template">
+        {% include "publish_slots.tmpl" %}
+    </script>
+
+    <script>
+        /* jQuery(function($) {
+                                    $(document).ajaxStop(function() {
+                                        $("#overlay").remove();
+                                        $("#ajax_loader").hide();
+                                    });
+                                    $(document).ajaxStart(function() {
+                                        $(".modal-content").append('<div id="overlay" style="background-color:rgba(192,192,192,0.4);top:0;left:0;height:100%;width:100%;z-index:100"></div>');
+                                        $("#ajax_loader").show();
+                                    });
+                                }); */
+
+        $(document).ready(function() {
+            $(".modifenroll").colorbox({
+                iframe: true,
+                fastIframe: false,
+                width: "900px",
+                height: "600px",
+                gtransition: "fade",
+                scrolling: false
+            });
+
+            //add publish slots function:
+            $('body').on('click', '.publish_slots', function() {
+                $.get("/publish_slots/", function(resp) {
+                    var publish_slots_tmpl = $("#publish_slots_tmpl").html();
+                    var compiledTemplate = _.template(publish_slots_tmpl);
+                    var templateResult = compiledTemplate({
+                        'resp': resp
+                    });
+                    var x = $(templateResult);
+                    $("#append_tsd_modal").html(x);
+
+                    $('#from_date, #to_date').datepicker({});
+
+                    $("#slot_time_from").timepicker({
+                        'minTime': '6:00am',
+                        'maxTime': '5:45am',
+                        'step': 15,
+
+                    });
+
+                    $("#slot_time_to").timepicker({
+                        'minTime': '6:00am',
+                        'maxTime': '5:45am',
+                        'step': 15,
+
+                    });
+
+                    $('[data-toggle="popover"]').popover();
+                    $("#publish_slots_modal").modal().show();
+
+                });
+
+            });
+
+
+
+            /* jQuery(function($) {
+                   $(document).ajaxStop(function() {
+                       $("#overlay").remove();
+                       $("#ajax_loader").hide();
+                   });
+                   $(document).ajaxStart(function() {
+                       $(".modal-content").append('<div id="overlay" style="background-color:rgba(192,192,192,0.4);top:0;left:0;height:100%;width:100%;z-index:100"></div>');
+                       $("#ajax_loader").show();
+                   });
+               }); */
+
+            //delete publish slots function:
+            delete_publish_list = [];
+            $('body').on("change", ".add_to_delete_publish", function() {
+                day = $(this).attr("data-day");
+                slot = $(this).attr("data-time").split("to");
+                id = $(this).attr("data-id");
+                if ($(this).prop('checked')) {
+                    //add to delete array
+                    delete_publish_list.push({
+                        'day': day,
+                        'start_time': slot[0],
+                        'end_time': slot[1],
+                        'id': id
+                    });
+                } else {
+                    //remove from delete array
+                    delete_publish_list = jQuery.grep(delete_publish_list, function(value) {
+                        if (value["day"] == day && value["start_time"] == slot[0] && value["end_time"] == slot[1]) {
+                            return null;
+                        } else {
+                            return value;
+                        }
+                        //return value != {'day':day,'start_time':slot[0],'end_time':slot[1]};
+                    });
+                }
+            });
+
+            $('body').on("click", ".delete_publish_slot", function() {
+                if (jQuery.isEmptyObject(delete_publish_list)) {
+                    $(".publish_delete_select").removeClass("hidden");
+
+                } else {
+                    $.get("/delete_publish_slots/", {
+                        'data': JSON.stringify(delete_publish_list)
+                    }, function(resp) {
+                        $('.add_slot_success_msg_publish').html(delete_publish_list.length + " slots deleted successfully");
+                        $('.save_success').removeClass('hide');
+                        localStorage.setItem("isPopup", "1");
+                    });
+                }
+            });
+            $('body').on("click", ".close_msg", function() {
+                $(".publish_delete_select").addClass("hidden");
+            });
+
+
+
+            /*$("body").on("focus", "#from_date", function(){
+                $("#ui-datepicker-div").addClass("show_calander");
+            });
+            $("body").on("focusout", "#from_date", function(){
+                $("#ui-datepicker-div").removeClass("show_calander");
+            });*/
+
+            //after add slot page reload:
+            var isPopup = localStorage.getItem("isPopup");
+            if (isPopup === "1") {
+                $(".publish_slots").trigger("click");
+                localStorage.setItem("isPopup", "0");
+            }
+
+        }); //document ready
+
+        //reload after save:
+
+        $('body').on("click", ".reload_on_save", function() {
+            $(this).parent("div").parent("div").addClass("hide");
+            window.location.reload();
+        });
+
+        function group_slots() {
+            if ($('input.slots').is(':checked')) {
+                $('#group_slot').css('display', 'block');
+
+            } else {
+                $('#group_slot').css('display', 'none')
+            }
+        }
+
+
+        //add slot button click
+        function add_publish_slots() {
+
+            var atLeastOneIsChecked = $('input[name="day"]:checked').length > 0;
+            if ($('input.slots').is(':checked')) {
+                var slots_count = $("#slots_count").val()
+                var group_sots = 1
+            } else {
+                var group_sots = ''
+                slots_count = 1
+            }
+            console.log("group_sots", group_sots)
+            if (atLeastOneIsChecked === false) {
+                //$(".error_pop").trigger("click");
+                $('.error_pop').popover('show');
+            } else {
+                $('.error_pop').popover('hide');
+                var checkedObj = $('input[name="day"]:checked');
+
+                var days = []
+                $.each(checkedObj, function(index, value) {
+                    days.push(value.value);
+                });
+                var t1 = $("#slot_time_from").val(),
+                    t2 = $("#slot_time_to").val(),
+                    ampm1 = t1.slice(-2),
+                    ampm2 = t2.slice(-2),
+                    start_time = t1.split(ampm1)[0] + " " + ampm1,
+                    end_time = t2.split(ampm2)[0] + " " + ampm2;
+                debugger;
+                start_time = $("#slot_time_from").val(); //new Date('1 January 1970, ' + start_time).getTime();
+                end_time = $("#slot_time_to").val(); //new Date('1 January 1970, ' + end_time).getTime();
+                //var start_time = $("#slot_time_from").timepicker('getTime').getTime();//$("#slot_time_from").val();
+                //var end_time = $("#slot_time_to").timepicker('getTime').getTime();//$("#slot_time_to").val();
+
+                $.get('/save_publish_slots/', {
+                    'start_date': $("#from_date").val(),
+                    'end_date': $("#to_date").val(),
+                    'group_sots': group_sots,
+                    'days': JSON.stringify(days),
+                    'slots_counts': slots_count,
+                    'start_time': start_time,
+                    'end_time': end_time
+                }, function(resp) {
+                    var isPopup = "1";
+                    localStorage.setItem("isPopup", isPopup);
+                    $('.add_slot_success_msg_publish').html(resp);
+                    $('.save_success').removeClass('hide');
+                });
+
+                frm = $('#add_publish_slot_form')[0];
+                frm.reset();
+            }
+
+
+        }
+    </script>
+    <!-- End publish TSD slots script -->
+    <script type="text/javascript">
+        $('#role_guide_modal').find('a.close').click(function() {
+            $('#role_guide_modal').hide();
+            $('#vid_main').attr('src', $('#vid_main').attr('src'))
+        });
+    </script>
+    <script id="li-Template" type="text/x-jquery-tmpl">
+        <li>${comment}</li><br/>
+    </script>
+    <script id="header-Template" type="text/x-jquery-tmpl">
+        <h4 style='font-weight:bold;text-transform: capitalize;'>Teacher:&nbsp${teacher}</h4>
+        <p><strong>Comments:</strong></p><br/>
+        <ul style='margin-left:25px;list-style:circle !important;'></ul>
+    </script>
+
+    <script id="volunteer-topic" type="text/x-jquery-tmpl">
+        <tr>
+            <td><a href="${url}" target="_blank"><span class="topic">${topic}</span></a></td>
+            <td>${workstream}</td>
+            <td>${board}</td>
+            <td>${subject}</td>
+            <td>${grade}</td>
+        </tr>
+    </script>
+    <script id="empty-Template" type="text/x-jquery-tmpl">
+        <p>${teacher} doesnot have any comments</p>
+    </script>
+    <script type="text/javascript">
+        $("#action_list").change(function() {
+            $("#generate_report").prop('disabled', false).css('background-color', '#FB6030');
+        });
+    </script>
+
+    <script type="text/javascript">
+        function matchSearchLocation(key) {
+            var list = window.location.search.split("&");
+
+            for (var i = 0; i < list.length; i++) {
+                var item = list[i].split("=")[0];
+                if (i === 0)
+                    item = item.substr(1, item.length - 1);
+
+                if (item === key) return true;
+            }
+            return false;
+        }
+
+        $(document).ready(function() {
+            if (matchSearchLocation("center_id"))
+                $("#teachers_of_center").show();
+            else
+                $("#teachers_of_center").hide();
+        })
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            var center_id_dashboard = $("#edit-timings-modal").find("input[name='center_id']").attr('value');
+            $("#add_course_form").find("input[name='center_id']").attr('value', center_id_dashboard);
+
+            {% if is_superuser or is_centeradmin or is_field_coordinator or is_delivery_coordinator %}
+                var pathname = window.location.pathname;
+                $("#add-course").click(function() {
+                    $.get("/get_students/?pathname=" + pathname + "&center_id=" + window.center_id, function(resp) {
+                        $("#add-course-modal #select-center").remove();
+                        $("#add-course-modal img").hide();
+
+                        if (resp == "Failed") {
+                            $("#add-course-modal").children("div").hide();
+                            $("#add-course-modal").append("<div id='select-center'><p style='padding:20px;background:wheat;'>Select a center to add Course</p></div>")
+                        } else {
+                            $(".close-btn").hide();
+                            $("#add-course-modal").children("div").show();
+                            $("#add-course-modal #select-center").remove();
+                            $("#enroll_students").children().remove();
+                            for (var i in resp) {
+                                var student = resp[i];
+                                $("#enroll_students").append("<option value='" + student.id + "'>" + student.name + "</option>");
+                            }
+                            $("input[name='center_id']").val(window.center_id);
+                        }
+                    });
+                });
+                $('#courses').on('change', function() {
+                    let course_id = $(this).val();
+                    let ay = $('#add_offer_ay :selected').val();
+                    $.ajax({
+                        url: "/v2/get-similar-course/", // the endpoint
+                        type: "GET", // http method
+                        data: {
+                            "ay": ay,
+                            "center_id": window.center_id,
+                            "course_id": course_id
+                        },
+                        success: function(response) {
+                            console.log(response)
+                            console.log(response.data.offerings)
+                            let offerings = ''
+                            for (let i in response.data.offerings) {
+                                let offering = response.data.offerings[i]
+                                offerings +=  offering.course__grade + 'th ' + offering.course__subject + ' -- ' + offering.status + '\n'
+                            }
+                            if (response.data.exist == true){
+                                alert('Similar list course exist in this center \n\n' + offerings)
+                            }
+                        },
+
+                        error: function(xhr, errmsg, err) {
+                            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                        }
+                    });
+                })
+                $('#courses').on('change', function() {
+                    let course_id = $(this).val();
+                    $.ajax({
+                        url: "/get_students/", // the endpoint
+                        type: "GET", // http method
+                        data: {
+                            "pathname": pathname,
+                            "center_id": window.center_id,
+                            "course_id": course_id
+                        },
+                        success: function(response) {
+                            $("#enroll_students").children().remove();
+                            for (var i in response) {
+                                var student = response[i];
+                                $("#enroll_students").append("<option value='" + student.id + "'>" + student.name + "</option>");
+                            }
+                        },
+
+                        error: function(xhr, errmsg, err) {
+                            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                        }
+                    });
+
+                    
+                });
+            {% endif %}
+            var center_id = window.location.search.split("=")[1] || '';
+            var centerId = center_id.split("&")[0] || ''
+            if (center_id == '' || window.location.pathname === "/review_awards/") {
+                $('#my_stud_admin').removeClass('esis');
+                $('#my_stud_admin').parent().hide();
+
+                $('#students_log').removeClass('student_log_msg');
+                $('#students_log').parent().hide();
+            } else {
+                $('#my_stud_admin').parent().show();
+
+                $('#students_log').parent().show();
+                $('#my_stud_admin').addClass('esis').attr('href', '/my_students/');
+                $('#students_log').addClass('esis').attr('href', '/v2/students_log/');
+            }
+            if (center_id == '' || window.location.pathname === "/review_awards/") {
+                $('#studentListId').removeClass('esis');
+                $('#studentListId').parent().hide();
+                $('#my_teachers').removeClass('my_teachers');
+                $('#my_teachers').parent().hide();
+                $('#enroll_stud_admin').removeClass('select_center');
+                $('#enroll_stud_admin').parent().hide();
+                $('#bulk_enroll_stud_admin').removeClass('select_center_bulk');
+                $('#bulk_enroll_stud_admin').parent().hide();
+            } else {
+                if (location.search.split("=")[0] === "?center_id") {
+                    $('#enroll_stud_admin').parent().show();
+                    $('#enroll_stud_admin').addClass('esis').attr('href', '/v2/enroll_student/?center_id=' + centerId + '')
+                    $('#bulk_enroll_stud_admin').parent().show();
+                    $('#bulk_enroll_stud_admin').addClass('esis').attr('href', '/v2/bulk_enroll_student/?center_id=' + centerId + '')
+                    $('#my_teachers').parent().show();
+                    $('#my_teachers').addClass('my_teachers')
+                    $('#studentListId').parent().show();
+                    $('#studentListId').addClass('esis').attr('href', '/v2/enrollStudent_list/?center_id=' + location.search.split("=")[1]);
+                }
+            }
+            $('.report').click(function() {
+                $('#reports').find('button').bind('click', gen_report).prop('disabled', false).css('background-color', '#FB6030');
+                $.post('/get_active_centers/', {}, function(resp) {
+                    var center_list = '<option value="">-- Select Center --</option>';
+                    data_as_dict = {}
+                    $.each(resp.data, function(i, val) {
+                        center_list += '<option value=' + val.center_id + '>' + val.center_name + '</option>'
+                        data_as_dict[val.center_id] = val
+                    });
+                    $('#center_list').html(center_list);
+                    $('#reports').find('.body').find('img').hide();
+                    $('#center_list').change(function() {
+                        console.log($(this).val());
+                        var sel_ind = $('#center_list :selected').val();
+                        var grades = data_as_dict[sel_ind].grade_list;
+                        var grade_html = '<option value="">-- Select Grade --</option>';
+                        $.each(grades, function(i, val) {
+                            grade_html += '<option value=' + val + ' >' + val + ' Grade</option>';
+                        });
+                        $('#grade_list').html(grade_html);
+
+                        var ays = data_as_dict[sel_ind].ayfy;
+                        var ay_html = '<option value="">-- Select Academic Year --</option>';
+                        $.each(ays, function(i, val) {
+                            ay_html += '<option value=' + val + ' >' + val + '</option>';
+                        });
+                        $('#ay_list').html(ay_html);
+                    });
+                });
+            });
+            jQuery.download = function(url, data, method) {
+                if (url && data) {
+                    data = typeof data == 'string' ? data : jQuery.param(data);
+                    var inputs = "";
+                    jQuery.each(data.split("&"), function() {
+                        var pair = this.split("=");
+                        inputs += "<input type='hidden' name='" + pair[0] + "' value='" + pair[1] + "' />";
+                    });
+                    //send request
+                    jQuery("<form action='" + url + "' method='" + (method || "post") + "'>{% csrf_token %}" + inputs + "</form>")
+                        .appendTo('body').submit().remove();
+                    setTimeout(function() {
+                        $('#reports').find('.body').find('img').hide();
+                    }, 2000);
+                };
+
+            };
+            var gen_report = function() {
+                var center = $('#center_list :selected').val();
+                var grade = $('#grade_list :selected').val();
+                var action = $('#action_list :selected').val();
+                var ay = $('#ay_list :selected').val();
+                if (center == '' || grade == '' || action == '' || ay == '') {
+                    evd.show_msg('All Fields are required!..');
+                } else {
+                    // $(this).unbind('click').css('background-color','grey');
+
+                    // $(this).prop('disabled', true).css('background-color','grey');
+                    $('#reports').find('.body').find('img').show();
+                    var data = 'center_id=' + center + '&grade=' + grade + '&action=' + action + '&ay=' + ay
+                    $.download('/download_report_card/', data, 'POST');
+                }
+            };
+
+            $("#completed-course").click(function(e) {
+                e.preventDefault();
+                var flag = $('#content').find('#completed-course-modal .completed-offering');
+                if (flag.length > 0) {
+                    $("#Completed-course-modal > .not_center_admin").empty().append($("#completed-course-modal > .completed-offering")).show();
+                    $("#Completed-course-modal > .header").removeClass('hide');
+                    $("#Completed-course-modal > a.close").addClass('hide');
+                } else {
+                    $("#Completed-course-modal > .not_center_admin").show();
+                }
+            });
+            $(".dashboard-inner-container").on('click', '#comments', function(e) {
+                e.preventDefault();
+                $("#Comments-modal").modal('show');
+                offering_id = $("#attendence-board").children("select[name='my_offerings']").val()
+                if (!(offering_id)) {
+                    $("#Comments-modal").find('img').hide();
+                    var $empty_comments = $("#Comments-modal").find('.empty-comments');
+                    $empty_comments.empty();
+                    $("<p>You should have atleast one offering</p>").appendTo($empty_comments);
+
+                    $empty_comments.removeClass('hide');
+                    return;
+                }
+                $.get("/get_comments/?offering_id=" + offering_id, function(resp) {
+                    $("#Comments-modal").find('img').hide();
+                    if ((resp['comments'].length) <= 0) {
+                        $("#Comments-modal").find('.comments').addClass('hide');
+                        var $empty_comments = $("#Comments-modal").find('.empty-comments');
+                        $empty_comments.empty();
+                        if (resp['teacher'].length > 0) {
+                            $('#empty-Template').tmpl({
+                                'teacher': resp['teacher']
+                            }).appendTo($empty_comments);
+                        } else {
+                            $("<p>Teacher Doesnot have any comments</p>").appendTo($empty_comments);
+                        }
+                        $empty_comments.removeClass('hide');
+                    } else {
+                        $("#Comments-modal").find('.empty-comments').addClass('hide');
+                        $("#Comments-modal").find('.comments').removeClass('hide').empty();
+                        $("#header-Template").tmpl({
+                            'teacher': resp['teacher']
+                        }).appendTo($("#Comments-modal").find('.comments'));
+                        $.each(resp['comments'], function(ind, comment) {
+                            $("#li-Template").tmpl({
+                                'comment': comment
+                            }).appendTo($("#Comments-modal").find('.comments > ul'));
+                        });
+                    }
+
+                });
+            });
+
+            $('.li-topic-Modal').click(function(e) {
+                e.preventDefault();
+                $('#my-topic-Modal').modal('show');
+                var data_attr = $(this).attr('data-attr');
+                $("#my-topic-Modal").find('.modal-body').empty();
+                $("#my-topic-Modal").find('.body > table').css({
+                    "display": "block"
+                });
+                $("#my-topic-Modal").find('.body > p').remove();
+                $.post('/get_volunteers_topics/', {
+                    'filter': data_attr
+                }, function(resp) {
+                    if (resp && resp['topic_details'].length > 0) {
+                        $.each(resp['topic_details'], function(ind, obj) {
+                            $("#volunteer-topic").tmpl(obj).appendTo($("#my-topic-Modal").find('.modal-body'));
+                        });
+                    } else {
+                        $("#my-topic-Modal").find('.body > table').css({
+                            "display": "none"
+                        });
+                        $("<p> There is no topics </p>").appendTo($("#my-topic-Modal").find('.body'));
+                    }
+                });
+            });
+
+        });
+    </script>
+    <!-- my teachers modal script -->
+    <script>
+        $(document).ready(function() {
+            $('#modalForAward').modal('hide');
+            $('body').on('click', '.my_teachers', function() {
+                console.log("location" + window.location);
+            });
+            $('body').on('click', '.my_teachers', function() {
+                $('.my_teachers_content').html("");
+                $('.teachers_li').html("");
+                var center_id = window.location.search.split("=")[1] || '';
+                var teacher_id = $('#myteacher_id').val();
+                var ajaxUrl = ''
+                if (teacher_id != null & teacher_id != '' & teacher_id != 'undefined') {
+                    ajaxUrl = "/myteachers/?center_id=" + center_id + "&teacher_id=" + teacher_id;
+                } else {
+                    ajaxUrl = "/myteachers/?center_id=" + center_id;
+                }
+                $('#myteacher_id').val('');
+                //select a center
+                if (center_id == '') {
+                    $('.no_data').html("");
+                    $('.no_data').append("<div class='alert alert-info'style='text-align: center; margin-top: 20%;'><h3>Please Select a center to view the Teachers</h3></div>");
+                } else {
+                    //fetch data
+                    $.get(ajaxUrl, function(resp) {
+                        if (jQuery.isEmptyObject(resp)) {
+                            $('.no_data').html("");
+                            $('.no_data').append("<div class='alert alert-info'style='text-align: center; margin-top: 20%;'><h3>This center doesn't have any running courses</h3></div>");
+                        } else {
+                            for (var key in resp) {
+
+                                $('.teachers_li').append("<li><a data-toggle='pill' href='#" + key + "' style='font-family:inherit'>" + resp[key]['name'] + "</a></li>");
+                            }
+                            $('.teachers_li').append("<li class='hidden'><a data-toggle='pill' href='#'></a></li>");
+                            $('.teachers_li li:first').addClass("active");
+
+                            for (var key in resp) {
+                                if (resp[key]['picture'] == "") {
+                                    resp[key]['picture'] = "/static/images/no_image_thumb.gif";
+                                }
+                                console.log(resp[key]['picture']);
+
+                                $('.my_teachers_content').append("<div id='" + key + "' class='tab-pane fade' style='height:325px'>" +
+                                    "<div class='row' style='padding: 10px;'>" +
+                                    "<div class='col-md-3'>" +
+                                    "<img alt='Teacher image' src='" + resp[key]['picture'] + "' style='width:150px;height:150px;border:2px solid black'/>" +
+                                    "</div>" +
+                                    "<div class='col-md-8'>" +
+                                    "<h4>Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;" + resp[key]['name'] + "</h4>" +
+                                    "<h5>Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;" +
+                                    resp[key]['email'] + "</h5>" +
+                                    "<h5>City&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;&nbsp;" +
+                                    resp[key]['city'] + "</h5>" +
+                                    "<h5>Skype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;" +
+                                    resp[key]['skype'] + "</h5>" +
+                                    "<h5>Phone&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;" +
+                                    resp[key]['phone'] + "</h5>" +
+                                    "</div>" +
+                                    "</div><hr>" +
+                                    "<div class='row'>" +
+                                    "<div class='col-md-12' style='padding-left: 74px'>" +
+                                    "<h5>Availability &nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp; Available From " + resp[key]['from_date'] + " &nbsp;&nbsp;To  " + resp[key]['to_date'] +
+                                    "</h5>" +
+                                    "<h5>Short Notes &nbsp;:</h5>" +
+                                    "<div class='col-md-offset-2' style='margin-top:-23px'><h6>" + resp[key]['short_notes'] + "</h6></div>" +
+                                    "</div>" +
+                                    "</div>" +
+                                    "</div>"
+                                );
+                            }
+                            $('.my_teachers_content').append("<div id=''class='tab-pane fade'></div>");
+                            $('.my_teachers_content div:first').addClass("active").addClass("in");
+                        }
+                    });
+                } //center_id else end
+            });
+            //award review
+            $("body").on("click", ".review_award_btn", function() {
+                if (location.search.split("=")[0] === "?center_id") {
+                    location.href = "/review_awards/?center_id=" + location.search.split("=")[1];
+                } else {
+                    //evd.show_msg("Please select a center to review awards");
+                    $('#modalForAward').modal('show');
+                }
+            });
+            //student quiz result
+            $("body").on("click", ".quiz_result", function() {
+                window.open("/v2/quiz_result/", "_blank");
+            });
+            //Open Task Notification
+            var ajaxUrl = '/ajax/task_list?flag=true';
+            $.get(ajaxUrl, function(resp) {
+                if (resp.allTask.length > 0) {
+                    $("li a.task_menu").find("span").remove();
+                    $("li a.task_menu").find("b").remove();
+                    $("li a.task_menu").before($("<span style='color:red'><i class='fa fa-circle' style='font-size: x-small;' aria-hidden='true'></i>&nbsp;</span>"));
+                    var task_value = $("li a.task_menu").text();
+                    if (task_value == "Task") {
+                        $("li a.task_menu").append($("<b class='caret'></b>"));
+                    }
+                    $("ul li a.task_list").find("span").remove();
+                    $("ul li a.task_list").text('');
+                    $("ul li a.task_list").append($("<span style='color:red'><i class='fa fa-circle' style='font-size: x-small;' aria-hidden='true'></i></span>"));
+                    $("ul li a.task_list").append('&nbsp;Task');
+                }
+            });
+
+        }); //doc ready end
+
+        function getCookieValue(a) {
+            var b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+            return b ? b.pop() : '';
+        }
+
+        function hideAndShow() {
+            var post_data = {
+                'csrfmiddlewaretoken': getCookieValue('csrftoken'),
+                'drop_teacher': "category"
+            }
+            $.get("/myteachers/", post_data, function(response) {
+                select = document.getElementById('drop_category');
+                category = response['category']
+                for (i = 0; i < category.length; i++) {
+                    var opt = document.createElement('option');
+                    opt.value = category[i];
+                    opt.innerHTML = category[i];
+                    select.appendChild(opt);
+                }
+
+            });
+            var x = document.getElementById('drop_teacher_div_id');
+            if (x.style.display === 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+
+        }
+
+        function category_change() {
+            category_selected = document.getElementById("drop_category").value
+            var post_data = {
+                'csrfmiddlewaretoken': getCookieValue('csrftoken'),
+                'drop_teacher': "reason",
+                'category_selected': category_selected
+            }
+            $.get("/myteachers/", post_data, function(response) {
+                reason = ''
+                document.getElementById('drop_reason').innerHTML = ""
+                document.getElementById('drop_reason').value = ""
+                select = document.getElementById('drop_reason');
+                reason = response['reason']
+                for (i = 0; i < reason.length; i++) {
+                    var opt = document.createElement('option');
+                    opt.value = reason[i];
+                    opt.innerHTML = reason[i];
+                    select.appendChild(opt);
+                }
+
+
+            });
+
+        }
+
+
+
+        function dropTeacher() {
+            var drop_date = $("#drop_date_id").val();
+            var drop_category_val = $('#drop_category').val();
+            var drop_reason_val = $('#drop_reason').val();
+            var offeringId = $("#offeringIDForDropTeacherId").val();
+            if (drop_date != null && drop_date != '' && drop_date != 'undefined' && drop_reason_val != null) {
+                var center_id = window.location.search.split("=")[1] || '';
+                var centerId = center_id.split("&")[0] || '';
+                var teacher_ids = $('ul.teachers_li li.active a').attr('href');
+                var teacher_id = teacher_ids.replace("#", "");
+                var ajaxUrl = '/v2/dropTeacher/?teacher_id=' + teacher_id + '&drop_date=' + drop_date + '&center_id=' + centerId + '&offeringId=' + offeringId + '&drop_reason_val=' + drop_reason_val + '&drop_category_val=' + drop_category_val;
+                $.get(ajaxUrl, function(data) {
+                    $("#drop_msg_id").text(data.msg);
+                    $(".dropMsgDiv").show();
+
+                });
+            } else {
+                $("#drop_msg_id").text("Select date");
+                $("#drop_msg_reason").text("Enter the Reason");
+                $(".dropMsgDiv").show();
+
+            }
+        }
+
+        $("body").on("click", ".close_alert", function() {
+            $(".dropMsgDiv").hide();
+            $('#my_teachers_modal').modal('toggle');
+        });
+    </script>
+    <script>
+        $(function() {
+            var date = new Date();
+            var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            $('#drop_date_id').datepicker({
+                dateFormat: 'dd-mm-yy',
+                minDate: today
+
+            });
+
+        });
+        $('body').on("click", ".drop_load", function() {
+            window.location.reload();
+        });
+    </script>
+
+    <script type="text/javascript">
+        $('#showModal').click(function() {
+            $('#myModalForSearchCenter').modal('show');
+
+        });
+
+
+        $('#closeModal').click(function() {
+            $('#myModalForSearchCenter').modal('hide');
+        });
+
+
+        $("#search_results").keyup(function() {
+            if ($("#search_results").val().trim().length > 0) {
+                $("#gotocenterID").removeAttr('disabled');
+            } else {
+                $("#gotocenterID").attr('disabled', 'disabled');
+            }
+        });
+
+        $("#topClose").click(function() {
+            $("#myModalForSearchCenter").modal('hide');
+        });
+
+
+        $("#closeCenterModalforPartner").click(function() {
+            $("#myModalForSearchCenter").modal('hide');
+        });
+
+
+        $("#closeCenterModal").click(function() {
+            $("#myModalForSearchCenter").modal('hide');
+        });
+
+
+
+
+        function waitJustLoading() {
+            var control = document.getElementById('gotocenterID');
+            var textValue = document.getElementById('search_results').value
+
+            if (textValue) {
+                control.disabled = true;
+                control.innerHTML = '<i class="fa fa-spinner fa-spin" style="font-size:100px; color:#232222;"></i>';
+            }
+
+        }
+        $('.li-appreciate-Modal').click(function() {
+            $('#appreciateTeacherModel').modal('show');
+            $.get("/v2/ajax/getStickerAndReason/", {
+                'reason_type': 'appreciation',
+                'for_whom': 'volunteer'
+            }, function(resp) {
+                var resonList = resp.reason;
+                var stickerList = resp.sticker;
+                var resonOptionList = '';
+                resonOptionList += '<option value="null" selected >--Select Reason--</option>';
+                for (i = 0; i < resonList.length; i++) {
+                    resonOptionList += '<option value="' + resonList[i].id + '" >' + resonList[i].reason + '</option>';
+                }
+                resonOptionList += '<option value="others" >Others</option>';
+                $('#appreciateTeacherModel').find('#appreciate_reason_id').html(resonOptionList);
+                var sticker_row = '';
+                sticker_row += '<div class="row sticker_parent_row" style="margin-left: -14px;"><div class="col-md-12"><label>Select Sticker:<span style="color: red">*</span><span style="color: red;display: none;font-size: 9px;margin-top: -15px;margin-left: 79px;" class="validation_msg_sticker">(Please Select Sticker)</span></label></div>';
+
+                for (i = 0; i < stickerList.length; i++) {
+                    k = i + 1;
+
+                    if (i % 4 == 0 || i == 0) {
+
+                        if (i == 0) {
+                            sticker_row += '<div class=" col-md-12 stickerRow" style="margin-left: 122px;">';
+                        } else {
+                            sticker_row += '<div class=" col-md-12 stickerRow" style="margin-left: 122px;margin-top: 15px;">';
+                        }
+
+                    }
+
+                    sticker_row += '<img style="display: inline-block; width: 75px;height: 75px;border-radius: 50%;MARGIN-LEFT: 20PX;" onclick="breadcrumbActiveSticker(' + stickerList[i].id + ')" id="' + stickerList[i].id + '" class="teacherSticker" title="' + stickerList[i].sticker_name + '" src="/' + stickerList[i].path + '">';
+
+                    if (k % 4 == 0) {
+                        sticker_row += '</div>';
+                    }
+
+                }
+                sticker_row += '</div></div>';
+
+
+                $('#appreciateTeacherModel').find('.modal-body').append(sticker_row);
+
+            });
+
+
+        });
+        $('#appreciateTeacherModel').find('#appreciate_reason_id').on('change', function() {
+            if (this.value == 'others') {
+                $('#appreciateTeacherModel').find('.add_custom_reason').css('display', 'block');
+            } else {
+                $('#appreciateTeacherModel').find('.add_custom_reason').css('display', 'none');
+            }
+        });
+        $('#appreciateTeacherModelClose').click(function() {
+            $('#appreciateTeacherModel').modal('hide');
+            $('#appreciateTeacherModel').find(".modal-body").find('.sticker_parent_row').html("");
+        });
+
+        function breadcrumbActiveSticker(id) {
+            $("#appreciateTeacherModel").find(".stickerRow").find('.teacherStickerActive').removeClass('teacherStickerActive');
+            $("#appreciateTeacherModel").find(".stickerRow").find("#" + id).toggleClass('teacherStickerActive');
+        }
+
+
+
+
+        $('.breadcrumb_save_appreciation').click(function() {
+
+            var validate = false;
+            var stickerId = $('#appreciateTeacherModel').find(".stickerRow").find('.teacherStickerActive').attr('id');
+            var volunteerId = '';
+            var otherReason = '';
+            var volunteer = $('#appreciateTeacherModel').find('#search_data').val();
+            if (volunteer != null && volunteer != '') {
+                volunteerId = volunteer.split('::')[0];
+            }
+            appreciationId = $('#appreciateTeacherModel').find('#appreciate_reason_id').val();
+            if (appreciationId == 'others') {
+                otherReason = $('#appreciateTeacherModel').find('#customReasonId').val();
+            }
+            var comment = $('#appreciateTeacherModel').find('#commentID').val();
+
+            if (volunteer != '') {
+                if (appreciationId != 'null') {
+                    if (appreciationId == 'others') {
+                        if (otherReason != '') {
+                            if (typeof stickerId != "undefined") {
+                                validate = true;
+                            } else {
+                                validate = false;
+                                $('#appreciateTeacherModel').find('.validation_msg_crsn').css('display', 'none');
+                                $('#appreciateTeacherModel').find('.validation_msg_sticker').css('display', 'block');
+                            }
+                        } else {
+                            validate = false;
+                            $('#appreciateTeacherModel').find('.validation_msg_rsn').css('display', 'none');
+                            $('#appreciateTeacherModel').find('.validation_msg_crsn').css('display', 'block');
+                        }
+
+                    } else if (typeof stickerId != "undefined") {
+                        validate = true;
+
+                    } else {
+                        validate = false;
+                        $('#appreciateTeacherModel').find('.validation_msg_rsn').css('display', 'none');
+                        $('#appreciateTeacherModel').find('.validation_msg_sticker').css('display', 'block');
+                    }
+                } else {
+                    validate = false;
+                    $('#appreciateTeacherModel').find('.validation_msg_rsn').css('display', 'block');
+                    $('#appreciateTeacherModel').find('.breadcrumb_usrch').css('display', 'none');
+                }
+            } else {
+                $('#appreciateTeacherModel').find('.breadcrumb_usrch').css('display', 'block');
+                validate = false;
+            }
+
+
+            if (validate) {
+                $.post("/v2/ajax/submittAppreciation/", {
+                    'appreciationId': appreciationId,
+                    'stickerId': stickerId,
+                    'volunteerId': volunteerId,
+                    'for_whom': 'volunteer',
+                    'otherReason': otherReason,
+                    'reason_type': 'appreciation',
+                    'comment': comment
+                }, function(resp) {
+                    alert(resp);
+                    $('#appreciateModel').find('#appreciate_reason_id').val('null');
+                    $('#appreciateModel').find('#customReasonId').val('');
+                    $('#appreciateModel').find(".stickerRow").find('.stickerActive').removeClass('stickerActive');
+                    $('#appreciateModel').find('#search_data').val('');
+                    $('#appreciateModel').find('#commentID').val('');
+                    $('#appreciateTeacherModel').modal('hide');
+                });
+            }
+            /* $('#appreciateModel').modal('hide');
+     $('#appreciateModel').find(".modal-body").find('.sticker_row').html(""); */
+        });
+
+        function getExternalRoleVolunteer(search_results) {
+            $(search_results).autocomplete({
+                source: "/v2/ajax/getExternalRoleVolunteer",
+                minLength: 1,
+                autoFocus: true,
+                select: function(event, ui) {
+
+                    $(this).val(ui.item.value);
+                },
+
+                change: function(event, ui) {
+                    if (ui.item) {
+                        return;
+                    } else {
+                        $(this).val('');
+
+                    }
+                }
+            });
+        }
+    </script>

@@ -1,0 +1,1353 @@
+{% extends "base_generic.html" %} {% load filters %} {% block title %}Online Demand | eVidyaloka{% endblock %} {% block head %}
+<link rel="stylesheet" href="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css">
+<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css"> -->
+<!-- <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script> -->
+<style>
+    input[type='range'] {
+        width: 190px;
+        height: 30px;
+        overflow: hidden;
+        cursor: pointer;
+        outline: none;
+    }
+    
+    input[type='range'],
+    input[type='range']::-webkit-slider-runnable-track,
+    input[type='range']::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        background: none;
+    }
+    
+    input[type='range']::-webkit-slider-runnable-track {
+        width: 200px;
+        height: 1px;
+        background: #003D7C;
+    }
+    
+    input[type='range']:nth-child(2)::-webkit-slider-runnable-track {
+        background: none;
+    }
+    
+    input[type='range']::-webkit-slider-thumb {
+        position: relative;
+        height: 15px;
+        width: 15px;
+        margin-top: -7px;
+        background: rgb(226, 14, 14);
+        border: 1px solid #003D7C;
+        border-radius: 25px;
+        z-index: 1;
+    }
+    
+    input[type='range']:nth-child(1)::-webkit-slider-thumb {
+        z-index: 2;
+    }
+    
+    .rangeslider {
+        position: relative;
+        height: 60px;
+        width: 190px;
+        display: inline-block;
+    }
+    
+    .rangeslider input {
+        position: absolute;
+    }
+    
+    .rangeslider {
+        position: absolute;
+    }
+    
+    .rangeslider span {
+        position: absolute;
+        margin-top: 30px;
+        left: 0;
+    }
+    
+    .rangeslider .right {
+        position: relative;
+        float: right;
+        margin-right: -5px;
+    }
+    /* Proof of concept for Firefox */
+    
+    @-moz-document url-prefix() {
+        .rangeslider::before {
+            content: '';
+            width: 100%;
+            height: 2px;
+            background: #003D7C;
+            display: block;
+            position: relative;
+            top: 16px;
+        }
+        input[type='range']:nth-child(1) {
+            position: absolute;
+            top: 35px !important;
+            overflow: visible !important;
+            height: 0;
+        }
+        input[type='range']:nth-child(2) {
+            position: absolute;
+            top: 35px !important;
+            overflow: visible !important;
+            height: 0;
+        }
+        input[type='range']::-moz-range-thumb {
+            position: relative;
+            height: 15px;
+            width: 15px;
+            margin-top: -7px;
+            background: #fff;
+            border: 1px solid #003D7C;
+            border-radius: 25px;
+            z-index: 1;
+        }
+        input[type='range']:nth-child(1)::-moz-range-thumb {
+            transform: translateY(-20px);
+        }
+        input[type='range']:nth-child(2)::-moz-range-thumb {
+            transform: translateY(-20px);
+        }
+    }
+</style>
+<!-- <style>
+    .multi-select-container {
+        display: inline-block;
+        position: relative;
+        width: 100%;
+    }
+    
+    .multi-select-menu {
+        position: absolute;
+        left: 0;
+        top: 0.8em;
+        z-index: 1;
+        float: left;
+        width: 100%;
+        background: #fff;
+        margin: 1em 0;
+        border: 1px solid #aaa;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        display: none;
+    }
+    
+    .multi-select-menuitem {
+        display: block;
+        font-size: 0.875em;
+        width: 100%;
+        padding: 0.6em 1em 0.6em 30px;
+    }
+    
+    .multi-select-menuitems {
+        display: block;
+        font-size: 0.875em;
+        width: 100%;
+        padding: 0.6em 1em 0.6em 30px;
+        white-space: nowrap;
+    }
+    
+    .multi-select-menuitem--titled:before {
+        display: block;
+        font-weight: bold;
+        content: attr(data-group-title);
+        margin: 0 0 0.25em -20px;
+    }
+    
+    .multi-select-menuitem--titledsr:before {
+        display: block;
+        font-weight: bold;
+        content: attr(data-group-title);
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+    
+    .multi-select-menuitem+.multi-select-menuitem {
+        padding-top: 0;
+    }
+    
+    .multi-select-presets {
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .multi-select-menuitem input {
+        position: absolute;
+        margin-top: 0.25em;
+        margin-left: -20px;
+    }
+    
+    .multi-select-button {
+        display: inline-block;
+        font-size: 0.875em;
+        padding: 0.2em 0.6em;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: -0.5em;
+        background-color: #fff;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        cursor: default;
+    }
+    
+    .multi-select-button:after {
+        content: "";
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0.4em 0.4em 0 0.4em;
+        border-color: #999 transparent transparent transparent;
+        margin-left: 0.4em;
+        vertical-align: 0.1em;
+    }
+    
+    .multi-select-container--open .multi-select-menu {
+        display: block;
+    }
+    
+    .multi-select-container--open .multi-select-button:after {
+        border-width: 0 0.4em 0.4em 0.4em;
+        border-color: transparent transparent #999 transparent;
+    }
+    
+    .multi-select-container--positioned .multi-select-menu {
+        /* Avoid border/padding on menu messing with JavaScript width calculation */
+        box-sizing: border-box;
+    }
+    
+    .multi-select-container--positioned .multi-select-menu label {
+        /* Allow labels to line wrap when menu is artificially narrowed */
+        white-space: normal;
+    }
+</style> -->
+<style>
+    .popover__wrapper {
+        position: relative;
+        margin-top: 1.5rem;
+        display: inline-block;
+    }
+    
+    .popover__content {
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+        border-radius: 10px;
+        left: -10px;
+        top: 40px;
+        transform: translate(0, 10px);
+        background-color: #bfbfbf;
+        padding: 1rem;
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+        width: auto;
+    }
+    
+    .popover__content:before {
+        position: absolute;
+        z-index: -1;
+        content: "";
+        right: calc(50% - 10px);
+        top: -8px;
+        border-style: solid;
+        border-width: 0 10px 10px 10px;
+        border-color: transparent transparent #bfbfbf transparent;
+        transition-duration: 0.3s;
+        transition-property: transform;
+    }
+    
+    .popover__wrapper:hover .popover__content {
+        z-index: 10;
+        opacity: 1;
+        visibility: visible;
+        transform: translate(0, -20px);
+        transition: all 0.5s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+    }
+</style>
+
+
+{% endblock %} {% block body %}
+
+<div class="w-full h-screen flex flex-row">
+    <div id="fillter_wraper" class="z-10 sm:z-0 px-2 sm:px-0 w-full md:w-3/12 lg:w-2/12 h-full hidden md:block border-r absolute right-0 bg-gray-100 lg:relative lg:right-auto">
+        <div id="cart_wraper-close" onclick="toggle_fillter_wraper()" type="button" class="lg:hidden block w-full flex justify-end px-10 py-2 focus:outline-none hover:text-red-500 pl-4 cursor-pointer">
+            <i class="fas fa-times fa-2x"></i>
+        </div>
+        <div class="w-full py-4 text-center text-sm font-bold border-b bg-sky-800 hover:bg-sky-900 text-white space-x-2"><i class="fas fa-arrow-left"></i><a href="/v2/demand/">Show All Opportunities</a></div>
+        <div class="w-full h-full sm:px-2 space-y-6 text-sm font-semibold">
+            <div>
+                <label class="pl-1" for="language">LANGUAGE</label>
+                <select id="language" multiple="multiple" class="w-full demanFilterdropDown">
+              </select>
+            </div>
+            <div>
+                <label class="pl-1" for="subject">SUBJECT</label>
+                <select id="subject" multiple="multiple" class="w-full demanFilterdropDown">
+              </select>
+            </div>
+
+            <div>
+                <label class="pl-1" for="grade">GRADE</label>
+                <select id="grade" multiple="multiple" class="w-full demanFilterdropDown">
+              </select>
+            </div>
+            <div>
+                <label class="pl-1" for="days">DAYS</label>
+                <select id="days" multiple="multiple" class="w-full demanFilterdropDown">
+              </select>
+            </div>
+
+            <div>
+                <div class="pl-1">TIMINGS</div>
+                <div class="rangeslider">
+                    <input id="start_time" class="min" name="range_1" type="range" min="7" max="20" value="7" />
+                    <input id="end_time" class="max" name="range_1" type="range" min="8" max="21" value="21" />
+                    <span class="range_min light left">07</span>
+                    <span class="range_max light right">21</span>
+                </div>
+            </div>
+
+            <div class="pt-12">
+                <div class="p-2 bg-orange-400 rounded hover:bg-orange-600 cursor-pointer" onclick="$('#demand_task_wraper').show();">Not able to find opportunities</div>
+            </div>
+        </div>
+    </div>
+    <div class="w-full md:w-9/12 lg:w-7/12 h-screen overflow-y-scroll">
+        <div class="flex justify-around md:justify-end items-stretch md:px-20 pt-4">
+            <div onclick="toggle_fillter_wraper('open')" class="md:hidden block"><i class="fas fa-filter fa-2x"></i></div>
+            <div onclick="toggle_cart_wraper('open')" class="lg:hidden block cursor-pointer"><i class="fas fa-shopping-cart fa-2x"></i></div>
+        </div>
+        <section class="tab max-w-auto mx-auto px-4 sm:px-6 lg:px-4 py-2">
+            <div id="releaseSlotsContainer" class="hidden w-full h-auto flex flex-col items-center justify-center mb-4">
+                <div class="w-full">
+                    <table class="border-collapse w-full">
+                        <thead>
+                            <tr class="text-xs uppercase">
+                                <th class="py-2 bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Language</th>
+                                <th class="py-2 bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Center name</th>
+                                <th class="py-2 bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Subject</th>
+                                <th class="py-2 bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Day</th>
+                                <th class="py-2 bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Start Time</th>
+                                <th class="py-2 bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">End Time</th>
+                                <th class="py-2 bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Booked Date</th>
+                                <th class="py-2 bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">select</th>
+                            </tr>
+                        </thead>
+                        <tbody id="previous_booking_wraper"></tbody>
+                    </table>
+                </div>
+                <div id="releaseSlots" onclick="releaseSlots()" class="w-1/2 p-2 mt-2 w-full text-center rounded-full bg-yellow-400 cursor-pointer hover:scale-105 hover:bg-yellow-500">Release my previuosly booked demand <i class="fas fa-recycle"></i></div>
+            </div>
+            <div id="demand" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-2"></div>
+            <div id="no-demand" class="hidden">
+                <div class="w-full">
+                    <div class="w-full text-center text-2xl font-bold">No Demand Found</div>
+                    <div class="flex items-center justify-center"><img class="w-48 h-36" src="/static/img/giphy.gif" alt=""></div>
+                    <div class="px-12 pt-6">
+                        <p class="font-bold">We would not like you to go empty handed. Please explore the following : </p>
+                        <ul class="pl-4 py-4">
+                            <li>a) Try broadening your preferences for - Timings, Day, Subjects and Grade</li>
+                            <li>b) Try diffrent languages.</li>
+                        </ul>
+                        <p class="font-bold">If you still not able to find opportunities : </p>
+                        <p class="pl-4 text-sm">Please click below and place your request and one of the eV representatives, will get back to you within 48 hours.</p>
+                    </div>
+                    <div onclick="$('#demand_task_wraper').show();" class="cursor-pointer p-2 bg-orange-400 rounded hover:bg-orange-600 text-center rounded drop-shadow-2xl">Not able to find opportunities</div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div id="cart_wraper" class="hidden lg:block w-full md:w-9/12 lg:w-3/12 h-screen overflow-x-scroll lg:hover:w-5/12 lg:hover:z-10
+                    absolute right-0 bg-gray-100 lg:relative lg:right-auto border-l border-blue-900
+                    lg:hover:absolute lg:hover:right-0 lg:hover:bg-gray-100 hover:border-l hover:border-orange-400">
+        <div id="cart_wraper-close" onclick="toggle_cart_wraper()" type="button" class="lg:hidden block w-full flex justify-end px-10 py-2 focus:outline-none hover:text-red-500 pl-4 cursor-pointer">
+            <i class="fas fa-times fa-2x"></i>
+        </div>
+        <div class="w-full flex items-center py-2">
+            <div id="cartCount" class="w-3/4 text-xs text-start font-bold pl-2">Slots selected: <a class="text-blue-900">0</a> <br> Online: <a class="text-blue-900">0 hrs</a><br> Offline: <a class="text-blue-900">0 hrs</a><br> Total hours in a week to volunteer: <a class="text-blue-900">0 hrs</a></div>
+            <div x-data class="cartCheckuot hidden w-1/4 mr-2">
+                <div x-on:click="confirmCart(false)" class="mt-2 w-full border-2 border-green-500 rounded-full font-semibold px-3 py-1 hover:bg-green-500 hover:text-white text-center cursor-pointer">Confirm</div>
+            </div>
+        </div>
+        <div class="cartCheckuot hidden">
+            <div x-data x-show="$store.is_book_for_others.on" class=" w-full flex flex-row space-x-2 p-2 border-t border-red-400 items-center justify-center">
+                <div class="w-full relative w-1/2">
+                    <input class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="Search for teacher..."
+                        type="text" id="search_for_user" name="search_for_user" />
+                    <div id="search_for_user_result" class="w-full absolute inset-y-0 top-10 left-0 z-20 text-xs overflow-y-auto h-96"></div>
+                </div>
+                <div x-on:click="confirmCart(true)" class="w-1/2 border-2 border-green-500 rounded-full font-semibold px-3 py-1 hover:bg-green-500 hover:text-white text-center cursor-pointer">Book for other</div>
+            </div>
+        </div>
+        <div class="text-sm text-left">
+            <div class="w-full flex flex-row items-center justify-around bg-gray-200 border-b border-gray-300 py-2 font-semibold text-center text-blue-800">
+                <div class="w-4/12 border-r border-white">Center</div>
+                <div class="w-3/12 border-r border-white">Course</div>
+                <div class="w-2/12 border-r border-white">Day</div>
+                <div class="w-2/12 border-r border-white">Slots</div>
+                <div class="w-1/12 text-red-600"><i class="fa-regular fa-trash-can"></i></div>
+            </div>
+            <div id="cart" class="w-full overflow-x-auto"></div>
+        </div>
+    </div>
+</div>
+<div id="modal" class="z-10 fixed top-0 left-0 w-full lg:w-9/12 h-screen flex items-center justify-center bg-gray-500 bg-opacity-80 transform scale-0 transition-transform duration-300">
+    <!-- Modal content -->
+    <div class="bg-white w-11/12 h-3/4 p-2 rounded-lg">
+        <!--Close modal button-->
+        <div class="flex items-center">
+            <div id="demandHeader" class="w-11/12 text-center text-base font-semibold text-green-600">Selected demand Details</div>
+            <div id="closebutton" type="button" class="w-1/12 focus:outline-none hover:text-red-500 pl-4 cursor-pointer">
+                <i class="fas fa-times fa-2x"></i>
+            </div>
+        </div>
+        <!-- Test content -->
+        <div class="">
+            <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+                <div class="min-w-full text-left">
+                    <div class="w-full border-b-2 flex flex-row items-center justify-around bg-gray-100 py-2 text-left text-sm font-semibold">
+                        <div class="w-2/6 border-r px-2">School</div>
+                        <div class="w-1/6 border-r">Enrolled Students</div>
+                        <div class="w-3/6 text-center">Slots</div>
+                    </div>
+                    <div id="demandDetail" class="w-full h-96 text-sm overflow-y-auto">
+                        <div class="flex flex-row items-center justify-around bg-gray-100 py-2 text-left text-sm font-semibold">
+                            <div class="w-2/8 border-r px-2">Demo center</div>
+                            <div class="w-1/8 border-r">7</div>
+                            <div class="w-3/6 text-center">
+                                <div class="flex items-center justify-start space-x-2 border-b">
+                                    <div>Monday</div>
+                                    <div class="w-40 text-left flex">
+                                        <div class="flex items-center justify-center px-2 border-r space-x-2 ">
+                                            <div><input type="checkbox" name="" id="" class="slotInput" data-demandId="222" data-offeringId="6878"></div>
+                                            <div>9-10</div>
+                                        </div>
+                                        <div class="flex items-center justify-center px-2 border-r space-x-2 ">
+                                            <div><input type="checkbox" name="" id="" class="slotInput" data-demandId="223" data-offeringId="6878"></div>
+                                            <div>9-10</div>
+                                        </div>
+                                        <div class="flex items-center justify-center px-2 border-r space-x-2 ">
+                                            <div><input type="checkbox" name="" id="" class="slotInput" data-demandId="224" data-offeringId="6878"></div>
+                                            <div>9-10</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="redirect" class="z-30 hidden fixed top-0 left-0 w-full h-screen bg-gray-900 opacity-90 shadow-2xl flex items-center justify-center transform transition-transform duration-300">
+    <div class="w-3/4 h-1/4 xl:pb-20 rounded-full bg-white flex flex-col">
+        <div class="flex flex-col text-4xl text-green-400">
+            <div class="text-center">
+                <i class="fas fa-check fa-2x"></i>
+            </div>
+            <div class="text-center">
+                <p>Your demand has been booked successfully</p>
+            </div>
+        </div>
+        <div class="text-center">
+            <p>You will be redirected to the home page in <span id="redirectCount">10</span> seconds</p>
+        </div>
+        <div class="flex justify-center">
+            <button id="stopRedirect" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Stay here
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<div id="demand_task_wraper" class="hidden z-10 fixed top-0 left-0 w-full h-screen bg-gray-200 opacity-90 shadow-2xl">
+    <div class="relative mt-48 bg-white drop-shadow-2xl p-10 mx-64 px-12 border-2 border-red-400 rounded drop-shadow-2xl">
+        <div onclick="$('#demand_task_wraper').hide();" class="absolute top-0 right-3 text-2xl text-red-500 font-bold hover:scale-125 cursor-pointer">x</div>
+        <form id="demand_task_form" class="w-full flex space-x-8">
+            <div class="w-1/2 px-4">
+                <input type="radio" id="css" name="fav_language" value="No opportunities found">
+                <label for="css">No opportunities found</label><br>
+
+                <input type="radio" id="css2" name="fav_language" value="Time slots not available">
+                <label for="css2">Time slots not available</label><br>
+
+                <input type="radio" id="css2" name="fav_language" value="Days not suiting">
+                <label for="css2">Days not suiting</label><br>
+
+                <input type="radio" id="css3" name="fav_language" value="Preferred Subject not available">
+                <label for="css3">Preferred Subject not available</label><br>
+
+                <input type="radio" id="css2" name="fav_language" value="Preferred Language not available">
+                <label for="css2">Preferred Language not available</label><br>
+            </div>
+            <div class="w-1/2 flex justify-center items-center">
+                <div><button class="ml-20 p-2 bg-green-400 rounded hover:scale-110 hover:bg-green-500" type="submit">Send Request</button></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %} {% block scripts %}
+
+<script src="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.js"></script>
+{{ flt_data|json_script:"flt_data" }} {{ user_details|json_script:"user_details" }} {{ previous_booking|json_script:"previous_booking" }} {{ is_book_for_others|json_script:"is_book_for_others" }}
+<script type="text/javascript">
+    //document.getElementById('fromDate').valueAsDate = new Date();
+    //document.getElementById('toDate').valueAsDate = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
+    var redirectTimer;
+    const fltdump = JSON.parse(JSON.parse(document.getElementById('flt_data').textContent));
+    const user_details = JSON.parse(document.getElementById('user_details').textContent);
+    const previous_booking = JSON.parse(JSON.parse(document.getElementById('previous_booking').textContent));
+    const is_book_for_others = JSON.parse(document.getElementById('is_book_for_others').textContent);
+    const primary_language = user_details.preferred_language[0];
+    const known_languages = user_details.preferred_language;
+    const fltData = fltdump.flt_data;
+    var filtered_fltData = fltData;
+    const defaultSubject = fltdump.subject; // defaultSubject is the subject selected by the user
+    var cart = []; //cart is an array of objects of slots
+    const weeksOrder = {
+        // "sunday": 0, // << if sunday is first day of week
+        "monday": 1,
+        "tuesday": 2,
+        "wednesday": 3,
+        "thursday": 4,
+        "friday": 5,
+        "saturday": 6,
+        "sunday": 7
+    }
+
+    console.log(fltData)
+
+    var subject_demand = []
+    // handle the click event on the demand details
+    const closebutton = document.getElementById('closebutton')
+    const modal = document.getElementById('modal')
+    closebutton.addEventListener('click', () => modal.classList.remove('scale-100'))
+    $(document).keyup(function(e) {
+        if (e.key === "Escape") { // escape key maps to keycode `27`
+            modal.classList.remove('scale-100')
+            $('#demand_task_wraper').hide();
+
+        }
+    });
+
+    function toggle_cart_wraper(a) {
+        if (a == 'open') {
+            document.getElementById('cart_wraper').classList.remove('hidden')
+        } else {
+            document.getElementById('cart_wraper').classList.add('hidden')
+        }
+    }
+
+    function toggle_fillter_wraper(a) {
+        if (a == 'open') {
+            document.getElementById('fillter_wraper').classList.remove('hidden')
+        } else {
+            document.getElementById('fillter_wraper').classList.add('hidden')
+        }
+    }
+
+    // handle the click event on the demand details
+    $(document).on("click", '.tile-button', function(event) {
+        $('#demandHeader').text($(this).attr('data-grade') + 'th ' +  $(this).attr('data-subject') + ' - ' + $(this).attr('data-language'));
+        modal.classList.add('scale-100')
+        getSlots(grade = $(this).attr('data-grade'), subject = $(this).attr('data-subject'), language = $(this).attr('data-language'));
+    });
+
+    // handle the click event on the demand book confirmed
+    $(document).on("click", '#stopRedirect', function(event) {
+        clearTimeout(redirectTimer);
+        $('#redirect').addClass('hidden')
+        location.reload();
+    });
+
+    // handle the click event on the cart
+    $(document).on("click", '.cart-demand-cross', function(event) {
+        $(this).parent().remove();
+        modify_cart('remove', null, null, null, null, null, $(this).attr('data-offeringId'), null, null, null, $(this).attr('data-demandId'));
+        $('#' + $(this).attr('data-demandId')).prop('checked', false);
+        $('#' + $(this).attr('data-demandId')).prop('disabled', false);
+    });
+
+    // handle the click event on the slots
+    $(document).on("change", '.slotInput', function(event) {
+        let centerid = $(this).attr('data-centerId');
+        let demandId = $(this).attr('data-demandId');
+        let status = false
+        if (this.checked) {
+            status = true
+        }
+        // $('.center' + centerid).prop('checked', false);
+
+        if (status) {
+            $(this).prop('checked', true);
+            //modify_cart('remove', $(this).attr('data-language'), $(this).attr('data-centerName'), $(this).attr('data-centerId'), $(this).attr('data-courseId'), $(this).attr('data-subject'), $(this).attr('data-offeringId'), $(this).attr('data-batch'), $(this).attr('data-day'), $(this).attr('data-slot'), $(this).attr('data-demandId'));
+            modify_cart('add', $(this).attr('data-language'), $(this).attr('data-centerName'), $(this).attr('data-centerId'), $(this).attr('data-courseId'), $(this).attr('data-subject'), $(this).attr('data-offeringId'), $(this).attr('data-batch'), $(this).attr('data-day'), $(this).attr('data-slot'), $(this).attr('data-demandId'), $(this).attr('data-grade'));
+        } else {
+            $(this).prop('checked', false);
+            modify_cart('remove', $(this).attr('data-language'), $(this).attr('data-centerName'), $(this).attr('data-centerId'), $(this).attr('data-courseId'), $(this).attr('data-subject'), $(this).attr('data-offeringId'), $(this).attr('data-batch'), $(this).attr('data-day'), $(this).attr('data-slot'), $(this).attr('data-demandId'), $(this).attr('data-grade'));
+
+        }
+    });
+
+
+    $(document).ready(function() {
+        if (previous_booking['is_booked'] == true) {
+            $("#releaseSlotsContainer").removeClass("hidden");
+
+
+            for (demands in previous_booking['slots']) {
+                let demand = previous_booking['slots'][demands];
+
+                $('#previous_booking_wraper').append(`<tr class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">\
+                                <td class="text-sm lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['offering__language']}</td>\
+                                <td class="text-sm lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['center__name']}</td>\
+                                <td class="text-sm lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['offering__course__grade']}th - ${demand['offering__course__subject']}</td>\
+                                <td class="text-sm lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['day']}</td>\
+                                <td class="text-sm lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['start_time']}</td>\
+                                <td class="text-sm lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['end_time']}</td>\
+                                <td class="text-sm lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['date_booked']}</td>\
+                                <td class="text-sm lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static"><input type="checkbox" data-id="${demand['id']}" disabled checked class="previous_book_select"> </td>\
+                            </tr>`);
+            }
+        }
+
+    });
+
+
+    // set multi select--------------------------------------------------------------------
+    function setMultiSelect(intialize = false, view = 1) {
+        if (intialize) {
+
+            let mylanguages = getDataFromObject(fltData, 'language').sort()
+            for (i = 0; i < mylanguages.length; i++) {
+                const ml = mylanguages[i]
+                if (mylanguages != null && mylanguages != '' && mylanguages != 'undefined') {
+                    if (known_languages != null && known_languages != '' && known_languages != 'undefined') {
+                        if (known_languages.includes(ml) || ml == 'English'){
+                            if (ml == primary_language) {
+                                element = '<option class="text-green-400" selected value="' + ml + '">' + ml + '</option>';
+                                $('#language').append(element);
+                            } else {
+                                element = '<option selected value="' + ml + '">' + ml + '</option>';
+                                $('#language').append(element);
+                            }
+                        } else {
+                            element = '<option value="' + ml + '">' + ml + '</option>';
+                            $('#language').append(element);
+                        }
+                    } else {
+                        element = '<option selected value="' + ml + '">' + ml + '</option>';
+                        $('#language').append(element);
+                    }
+                }
+            };
+        };
+
+
+        if (view >= 3) {
+            let mysubjects = getDataFromObject(fltData, 'subject').sort()
+            $('#subject option').remove();
+            for (i = 0; i < mysubjects.length; i++) {
+                if (defaultSubject != null && defaultSubject != '' && defaultSubject != 'undefined') {
+                    if (mysubjects[i] == defaultSubject) {
+                        element = '<option selected value="' + mysubjects[i] + '">' + mysubjects[i] + '</option>';
+                        $('#subject').append(element);
+                    } else {
+                        element = '<option value="' + mysubjects[i] + '">' + mysubjects[i] + '</option>';
+                        $('#subject').append(element);
+                    };
+                } else {
+                    element = '<option selected value="' + mysubjects[i] + '">' + mysubjects[i] + '</option>';
+                    $('#subject').append(element);
+                };
+            };
+        };
+
+
+        if (view >= 2) {
+            let mygrades = getDataFromObject(fltData, 'grade').sort()
+            $('#grade option').remove();
+            for (i = 0; i < mygrades.length; i++) {
+                element = '<option selected value="' + mygrades[i] + '">' + mygrades[i] + '</option>';
+                $('#grade').append(element);
+            };
+        };
+
+        if (view >= 1) {
+            let mydays = get_unique_days(fltData, 'days').sort()
+            $('#days option').remove();
+            for (i = 0; i < mydays.length; i++) {
+                element = '<option selected value="' + mydays[i] + '">' + mydays[i] + '</option>';
+                $('#days').append(element);
+            };
+        }
+
+
+        get_demand_filter_for_demand_table(); // call demand filter to get filtered data
+    }
+
+    setMultiSelect(true, 4) // intialize the multi select
+
+    $('#language').multipleSelect({
+        placeholder: 'Select Options',
+        openOnHover: true,
+        showClear: false,
+        checkAll: true,
+        selectAll: false,
+        onClick: function(view) {
+            setMultiSelect(false, 4)
+                //get_demand_filter_for_demand_table();
+            $('.demanFilterdropDown').multipleSelect('refresh');
+            let language = $('#language').val();
+            if (primary_language != null && primary_language != '' && primary_language != 'undefined') {
+                if (language.length == 1 && !language.includes(primary_language)) {
+                    alert('You have selected non primary language', 'warning')
+                }
+            }
+        },
+    });
+
+
+    $('#subject').multipleSelect({
+        placeholder: 'Select Options',
+        openOnHover: true,
+        showClear: false,
+        checkAll: true,
+        selectAll: false,
+        onClick: function(view) {
+            setMultiSelect(false, 2)
+                //get_demand_filter_for_demand_table();
+            $('.demanFilterdropDown').multipleSelect('refresh');
+        },
+    });
+
+    $('#grade').multipleSelect({
+        placeholder: 'Select Options',
+        openOnHover: true,
+        showClear: false,
+        checkAll: true,
+        selectAll: false,
+        onClick: function(view) {
+            setMultiSelect(false, 1)
+                //get_demand_filter_for_demand_table();
+            $('.demanFilterdropDown').multipleSelect('refresh');
+        },
+    });
+
+    $('#days').multipleSelect({
+        placeholder: 'Select Options',
+        openOnHover: true,
+        showClear: false,
+        checkAll: true,
+        selectAll: false,
+        onClick: function(view) {
+            setMultiSelect(false, 0)
+                // get_demand_filter_for_demand_table();
+                // $('.demanFilterdropDown').multipleSelect('refresh');
+        },
+    });
+
+
+
+    // filter multi select
+    function filterFltData() {
+        let filteredFltData = [];
+        let grade = $('#grade').val();
+        let subject = $('#subject').val();
+        let language = $('#language').val();
+        let days = $('#days').val();
+
+        let getFilteredDamand = fltData.filter(function(demand) {
+            let dd = days.filter(function(val) { // retutn if no days selected
+                return demand.days.indexOf(val) != -1;
+            });
+            return (language.includes(demand.language) && subject.includes(demand.subject) && grade.includes(demand.grade) && dd.length > 0 && demandstartTime >= parseInt(start_time) && demandendTime <= parseInt(end_time));
+        }).map(function(demand) {
+            return demand;
+        })
+        getFilteredDamand.forEach(function(fltData) {
+            filteredFltData.push(fltData)
+        });
+
+    }
+
+
+    function getDataFromObject(Array, key) {
+        let func = {
+            'subject': 'language',
+            'grade': 'subject',
+            'days': 'grade'
+        };
+        let mul = $('#' + func[key]).val()
+        var result = []
+        for (item in Array) {
+            if (Array[item][key] != null && Array[item][key] != '' && Array[item][key] != 'undefined') {
+                if (mul != null && mul != 'undefined') { // filter with above multi select
+                    if (mul.includes(Array[item][func[key]])) {
+                        result.push(Array[item][key])
+                    }
+                } else {
+                    result.push(Array[item][key])
+                }
+                //result.push(Array[item][key])
+            }
+        }
+        return [...new Set(result)];
+    }
+
+
+    function get_unique_days(Array, key) {
+        var result = []
+        let mul = $('#grade').val()
+        if (Array != null && Array != [] && Array != 'undefined') {
+            for (item in Array) {
+                if (Array[item][key] != null && Array[item][key] != [] && Array[item][key] != 'undefined') {
+                    for (day in Array[item][key]) {
+                        if (mul != null && mul != 'undefined') { // filter with above multi select
+                            if (mul.includes(Array[item]['grade'])) {
+                                result.push(Array[item][key][day])
+                            }
+                        } else {
+                            result.push(Array[item][key][day])
+                        }
+                    }
+                }
+            }
+        }
+
+        let unique_days = [...new Set(result)];
+        unique_days.sort(function sortByDay(a, b) {
+            return weeksOrder[a.toLowerCase()] - weeksOrder[b.toLowerCase()];
+        });
+        return unique_days;
+    }
+
+
+
+    //end of multi select-----------------------------------------------------------------------------
+
+    function modify_cart(operation, language = null, centerName = null, centerId = null, courseId = null, subject = null, offeringId = null, batch = null, day = null, slot = null, demandId = null, grade = null) {
+        
+        $("#cart div").remove();
+        if (operation == 'add') {
+            let cart_item = fltData.filter(function(item) {
+                return item.courseId == courseId && item.centerId.includes(centerId);
+            });
+            cart.push({
+                'centerName': centerName,
+                'subject': subject,
+                'language': language,
+                'grade': grade,
+                'demandId': demandId,
+                'offeringId': offeringId,
+                'batch': batch,
+                'centerId': centerId,
+                'day': day,
+                'slot': slot
+            });
+        } else if (operation == 'remove') {
+            cart = cart.filter(function(item) {
+                return item.demandId != demandId;
+            });
+        }
+        make_cart_table();
+        single_offer = 0
+        for (let i = 0; i < cart.length; i++) {
+            const demand = cart[i]
+        }
+        
+        if (cart.length >= 2 && cart.length%2==0) {
+            $('.cartCheckuot').removeClass('hidden');
+        } else {
+            $('.cartCheckuot').addClass('hidden');
+        }
+        // $('#cartCount').text(cart.length + ' slots x 1Hr online + 0.5Hr offline  = ' + cart.length * 1.5 + ' Hrs/Week');
+        // $('#cartCount').html('Slots selected: ' +cart.length+ ' <br> Online: ' +cart.length+ ' hrs <br>Offline: ' +cart.length*0.5 + ' hr <br> Total hours in a week to volunteer: ' +cart.length*1.5 + ' hrs');
+        $('#cartCount').html('Slots selected: <a class="text-blue-900">' + cart.length + '</a> <br> Online: <a class="text-blue-900">' + cart.length + ' hrs</a><br>Prepare for class (Offline): <a class="text-blue-900">' + 0.5 + ' hrs</a><br> Total hours in a week to volunteer: <a class="text-blue-900">' + (cart.length + 0.5) + ' hrs</a>');
+        make_demand_detail_table(subject_demand)
+    }
+
+
+
+
+
+    function get_demand_filter_for_demand_table() {
+        let filtered_demand = [];
+        let grade = $('#grade').val();
+        let subject = $('#subject').val();
+        let language = $('#language').val();
+        let days = $('#days').val();
+        let start_time = $('#start_time').val();
+        let end_time = $('#end_time').val();
+
+
+        let getFilteredDamand = fltData.filter(function(demand) {
+            const demandstartTime = Math.floor(new Date(demand.start_time).getTime() / 3600);
+            const demandendTime = Math.floor(new Date(demand.end_time).getTime() / 3600);
+            let dd = days.filter(function(val) { // retutn if no days selected
+                return demand.days.indexOf(val) != -1;
+            });
+            return (language.includes(demand.language) && subject.includes(demand.subject) && grade.includes(demand.grade) && dd.length > 0 && demandstartTime >= parseInt(start_time) && demandendTime <= parseInt(end_time));
+        }).map(function(demand) {
+            return demand;
+        })
+        getFilteredDamand.forEach(function(fltData) {
+            filtered_demand.push(fltData)
+        });
+        console.log(filtered_demand)
+        make_demand_table(filtered_demand);
+        return filtered_demand;
+    }
+
+
+    function make_demand_table(data) {
+        $('#no-demand').hide();
+        $("#demand div").remove();
+        var div = document.getElementById('demand');
+        if (data.length > 0 && data != null && data != '' && data != 'undefined') {
+            for (var i = 0; i < data.length; i++) {
+                const item = data[i];
+                let priority = ''
+                icon = '<i class="fas fa-book-open fa-3x"></i>';
+                if (item['subject'].includes('English')) {
+                    icon = '<i class="fas fa-language fa-3x"></i>';
+                } else if (item['subject'].includes('Science')) {
+                    icon = '<i class="fas fa-microscope fa-3x"></i>';
+                } else if (item['subject'].includes('Math')) {
+                    icon = '<i class="fa-solid fa-plus-minus fa-3x"></i>';
+                }
+
+                if (item['backfill'] > 0) {
+                    priority = `<div class="absolute top-0 left-0 bg-blue-300 shadow-lg p-2 rounded-tl-lg text-xs text-white font-bold">High Priority - ${item['backfill']}</div>`
+                }
+
+
+                div.innerHTML += '<div data-grade="' + item['grade'] + '" data-subject="' + item['subject'] + '" data-language="' + item['language'] + '"  data-board="' + item['centerBoard'] + '" class="tile-button relative w-full bg-white hover:bg-orange-400 hover:scale-105 transition duration-150 ease-out hover:ease-in rounded-lg p-4 flex flex-col justify-center items-center cursor-pointer">\
+                    <div class="mb-4">' + icon + '</div>\
+                    <div class="text-lg text-green-600 font-bold tile-title">' + item['grade'] + 'th ' + item['subject'] + '</div>\
+                    <div class="text-center flex w-full text-sm">\
+                        <div class="w-1/2 border-r-2 flex items-center">' + item['teaching'] + ' Teaching\
+                            <i class="fa fa-circle Blink text-red-600 text-[5px] px-1"></i>\
+                        </div>\
+                        <div class="w-1/2">' + item['required'] + ' Required</div>\
+                    </div>\
+                    <div class="absolute top-0 right-0 bg-gray-50 shadow-lg p-2 rounded-tr-lg text-xs">' + item['language'] + '</div>'+priority+'\
+                    </div>'
+            }
+        } else {
+
+            $('#no-demand').show();
+
+
+        }
+    }
+
+
+    function make_demand_detail_table(data) {
+        $("#demandDetail div").remove();
+        var div = document.getElementById('demandDetail');
+        const cart_demand_ids = []
+        if (cart != null && cart != '' && cart != 'undefined') {
+            for (var i = 0; i < cart.length; i++) {
+                cart_demand_ids.push(cart[i]['demandId'])
+            }
+        }
+
+        if (data != null && data != '' && data != 'undefined') {
+            for (var i = 0; i < data.length; i++) {
+                let item = data[i];
+                let tmp = [];
+                let batch = '';
+                if (parseInt(item['batch']) != 0 && item['batch'] != 'null') {
+                    batch = ', Batch-' + item['batch'];
+                }
+                Object.keys(item['slots']).forEach(function(key) {
+                    let value = item['slots'][key];
+                    let index = weeksOrder[key.toLowerCase()];
+                    tmp[index] = {
+                        key: key,
+                        value: value
+                    };
+                });
+                let orderedData = {};
+                tmp.forEach(function(obj) {
+                    orderedData[obj.key] = obj.value;
+                });
+                let slots = ""
+                let center_same_day = ''
+                for (const day in orderedData) {
+                    var timeSlotDiv = "";
+                    for (slot in orderedData[day]) {
+                        let start_time = orderedData[day][slot]['startTime'].split(':')[0] + ':' + orderedData[day][slot]['startTime'].split(':')[1]
+                        let end_time = orderedData[day][slot]['endTime'].split(':')[0] + ':' + orderedData[day][slot]['endTime'].split(':')[1]
+                        let time_slot = start_time + "-" + end_time;
+                        let is_checked = '';
+                        let is_disabled = '';
+                        for (x in cart) {
+                            if (cart[x]['demandId'] == orderedData[day][slot]['demandId'] && cart[x]['centerId'] == item['centerId']  && parseInt(cart[x]['offeringId']) == parseInt(item['offeringId'])) {
+                                is_checked = 'checked';
+                            }
+
+                            if (cart.length >=2){  // allow only 2 slots for book
+                                if (cart[x]['demandId'] != orderedData[day][slot]['demandId'] && !cart_demand_ids.includes(orderedData[day][slot]['demandId']) ) {
+                                    is_disabled = 'disabled';
+                                }
+                            }else{
+                                if (cart[x]['day'] == day) {
+                                    is_disabled = 'disabled';
+                                }
+                            }
+                            if (cart[x]['demandId'] == orderedData[day][slot]['demandId'] && cart[x]['centerId'] == parseInt(item['centerId'])) {
+                                is_disabled = 'disabled';
+                            }
+                            if (cart[x]['centerId'] != parseInt(item['centerId'])) {
+                                is_disabled = 'disabled';
+                            }
+                            if (cart[x]['demandId'] == orderedData[day][slot]['demandId'] && parseInt(cart[x]['offeringId']) == parseInt(item['offeringId'])) {
+                                is_disabled = '';
+                            }
+                        }
+
+                        timeSlotDiv += '<div class="flex items-center justify-center px-2 border-r space-x-1">\
+                                        <div><input ' + is_checked + ' ' + is_disabled + ' id="' + orderedData[day][slot]['demandId'] + '" \
+                                            type="checkbox" class="slotInput center' + item['centerId'] + '" data-slot="' + time_slot + '" data-day="' + day + '" \
+                                            data-offeringId="' + item['offeringId'] + '" data-courseId="' + item['courseId'] + '" data-centerId="' + item['centerId'] + '" \
+                                            data-demandId="' + orderedData[day][slot]['demandId'] + '" data-centerName="' + item['centerName'] + '" data-batch="' + item['batch'] + '" \
+                                            data-subject="' + item['subject'] + '" data-grade="' + item['grade'] + '" data-language="' + item['language'] + '" ></div>\
+                                        <div>' + time_slot + '</div>\
+                                    </div>'
+                    }
+                    slots += '<div class="flex items-center justify-start space-x-2 border-b hover:bg-gray-50 hover:border-red-300 ">\
+                                    <div class="w-28 text-left">' + day + '</div><div class="w-96 flex flex-row noScrollBar overflow-x-auto">' + timeSlotDiv + '</div></div>'
+                }
+                let enroll_students = item['enrolledStudents'] > 0 ? item['enrolledStudents'] : 'Not started'
+                let priority = item['enrolledStudents'] > 0 ? '<div class="text-blue-400"><i class="text-red-500 fa-solid fa-bolt-lightning fa-1x"></i> High Priority</div>' : ''
+                let pincode = item['centerPincode'] == null ? 'Not available' : item['centerPincode'];
+                let location = (item['location_map'] == null || item['location_map'] == '') ? 'Not available' : `<a class="text-blue-800" href="${item['location_map']}" target="_blank">Open <i class="fa-solid fa-up-right-from-square"></i></a>`;
+                div.innerHTML += '<div class="border-b w-full flex flex-row items-center justify-around py-2">\
+                                        <div class="w-2/6 cursor-pointer popover__wrapper">' + item['centerName'] + '' + batch + priority +' \
+                                            <div class="popover__content text-left">\
+                                                <div class="flex sapce-x-2"> <div class="w-16 text-left font-bold"> District</div> ' + item['centerDistrict'] + '</div>\
+                                                <div class="flex sapce-x-2"><div class="w-16 text-left font-bold">State</div> <div>' + item['centerState'] + '</div></div>\
+                                                <div class="flex sapce-x-2"><div class="w-16 text-left font-bold">Pincode</div> <div>' + pincode + '</div></div>\
+                                                <div class="flex sapce-x-2"><div class="w-16 text-left font-bold">Board</div> <div>' + item['centerBoard'] + '</div></div>\
+                                                <div class="flex sapce-x-2"><div class="w-16 text-left font-bold">Location</div> <div>' + location + '</div></div>\
+                                            </div>\
+                                        </div>\
+                                        <div class="w-1/6">' + enroll_students + '</div>\
+                                        <div class="w-3/6 flex flex-col"> ' + slots + '</div>\
+                                    </div>'
+            }
+        }
+    }
+
+
+    function make_cart_table() {
+        $("#cart div").remove();
+        let div = document.getElementById('cart');
+        if (cart != null && cart != '' && cart != 'undefined') {
+            for (var i = 0; i < cart.length; i++) {
+                let item = cart[i];
+                if (parseInt(item['batch']) != 0) {
+                    batch = ', Batch-' + item['batch'];
+                } else {
+                    batch = '';
+                }
+                div.innerHTML += '<div id="' + item['demandId'] + '" class="w-full flex flex-row items-center justify-between p-2 border-b text-center hover:bg-white">\
+                                        <input value="' + item['offeringId'] + '" class="hidden">\
+                                        <div class="w-4/12 truncate border-r cursor-vertical-text hover:text-clip  hover:overflow-x-auto noScrollBar">' + item['centerName'] + batch + '</div>\
+                                        <div class="w-3/12 border-r">' + item['grade'] + 'th-' + item['subject'] + '</div>\
+                                        <div class="w-2/12 border-r truncate">' + item['day'] + '</div>\
+                                        <div class="w-2/12 border-r truncate">' + item['slot'] + '</div>\
+                                        <div data-demandId="' + item['demandId'] + '" data-offeringId="' + item['offeringId'] + '" class="w-1/12 cart-demand-cross cursor-pointer text-red-400 hover:text-red-600 text-xl"><i class="fas fa-times"></i></div>\
+                                    </div>'
+            }
+        }
+    }
+
+
+    function getSlots(grade, subject, language) {
+        $("#demandDetail div").remove();
+        $("#demandDetail").append(`<div class="px-12 py-2" style="position: fixed; left: 48%; top: 48%;"><img src="/static/img_new/ajax-loader.gif" alt="spinner" /></div>`);
+        progressBar(6);
+        let Data = {
+            'grades': grade,
+            'subjects': subject,
+            'languages': language,
+            'prefred_languages': $('#language').val(),
+            'days': $('#days').val(),
+            'startTime': $('#start_time').val(),
+            'endTime': $('#end_time').val(),
+        }
+        $.ajax({
+            url: "/v2/demand/online/", // the endpoint
+            type: "POST", // http method
+            data: JSON.stringify(Data), // data sent with the post request
+            dataType: 'json',
+            success: function(response) {
+                console.log(response)
+                subject_demand = response.data
+                make_demand_detail_table(subject_demand)
+
+            },
+
+            error: function(xhr, errmsg, err) {
+                alert('Oops! We have encountered an error: ' + xhr.responseText['error']['message'], 'danger'); // provide a bit more info about the error to the console
+                console.log(xhr.status + ": " + xhr.responseText, xhr.responseText['error']['message']); // provide a bit more info about the error to the console
+            }
+        });
+    }
+
+
+    function confirmCart(book_for_others = false) {
+        if (Alpine.store('login').on == false) {
+            modal.classList.remove('scale-100')
+            Alpine.store('loginModal').toggle()
+            alert('Login to continue', 'warning')
+            return;
+        }
+
+        let teacher_id = $('#search_for_user').val().split(' ')[0]
+
+        if (book_for_others == true && (teacher_id == '' || teacher_id == null)) {
+            alert('Please enter a valid teacher id', 'warning')
+            return;
+        }
+
+        let data = {
+            'teacher_id': teacher_id,
+            'cart': cart,
+            'book_for_others': book_for_others
+        }
+
+        $('#search_for_user').val('')
+        modal.classList.remove('scale-100')
+        progressBar(35);
+        $.ajax({
+            url: "/v2/demand/online/book/", // the endpoint
+            type: "POST", // http method
+            data: JSON.stringify(data), // data sent with the post request
+            dataType: 'json',
+            success: function(response) {
+                Alpine.store('login').toggle()
+                alert('Demand booked successfully', 'success')
+                $("#cart div").remove();
+                $('#cartCount').html('Slots selected: <a class="text-blue-900">0</a> <br> Online: <a class="text-blue-900">0 hrs</a><br> Offline: <a class="text-blue-900">0 hrs</a><br> Total hours in a week to volunteer: <a class="text-blue-900">0 hrs</a>');
+                $(".cartCheckuot").addClass("hidden");
+                $('#redirect').removeClass('hidden');
+                modal.classList.remove('scale-100')
+                cart = [] // to reset cart
+
+
+                redirectTimer = setTimeout(function() {
+                    $('#redirect').addClass('hidden')
+                    window.location.href = '/myevidyaloka/'
+                }, 12000);
+
+                const element = document.getElementById("redirectCount");
+                setInterval(function() {
+                    element.innerHTML = (parseInt(element.innerHTML) - 1)
+                }, 1300); // every second
+            },
+            error: function(xhr, errmsg, err) {
+                modal.classList.remove('scale-100')
+                if (JSON.parse(xhr.responseText).error.message.split(',').includes('kCustomErrorMsg')) {
+                    if (parseInt(JSON.parse(xhr.responseText).error.message.split(',')[1]) == 3) {
+                        $("#releaseSlotsContainer").removeClass("hidden");
+                        alert(JSON.parse(xhr.responseText).error.message.split(',')[2], 'danger'); // provide a bit more info about the error to the console
+                    } else {
+
+                        alert(JSON.parse(xhr.responseText).error.message.split(',')[2], 'danger');
+                    }
+                } else {
+                    alert('Opps! error: Please try again or contact support', 'danger');
+                }
+                console.log(JSON.parse(xhr.responseText)); // provide a bit more info about the error to the console
+                console.log(JSON.parse(xhr.responseText).error.message.split(',')[1]); // provide a bit more info about the error to the console
+            }
+        });
+    }
+
+    function releaseSlots() {
+
+        var selected = [];
+        $('.previous_book_select:input:checked').each(function() {
+            selected.push($(this).attr('data-id'));
+        });
+
+        if (selected.length == 0) {
+            alert('Please select atleast one slot', 'warning')
+            return;
+        }
+
+        let data = {
+            'selected': selected
+        }
+
+        $("#demandDetail div").remove();
+        progressBar(6);
+        $.ajax({
+            url: "/v2/demand/online/book/", // the endpoint
+            type: "PUT", // http method
+            data: JSON.stringify(data),
+            dataType: 'json',
+            success: function(response) {
+                alert('Demand released successfully', 'success')
+                location.reload();
+
+            },
+
+            error: function(xhr, errmsg, err) {
+                alert('Oops! We have encountered an error: ' + xhr.responseText['error']['message'], 'danger'); // provide a bit more info about the error to the console
+                console.log(xhr.status + ": " + xhr.responseText, xhr.responseText['error']['message']); // provide a bit more info about the error to the console
+            }
+        });
+    }
+
+
+    document.addEventListener('alpine:init', () => {
+
+        Alpine.store('is_book_for_others', {
+            on: is_book_for_others,
+
+            toggle() {
+                this.on = !this.on
+            }
+        })
+
+    })
+
+
+    // $("#slider-range").slider({
+    //     range: true,
+    //     min: 9,
+    //     max: 17,
+    //     step: 1,
+    //     values: [9, 17],
+    //     slide: function(event, ui) {
+    //         console.log(ui.values[0], ui.values[1]);
+    //         $("#time_delta").text(ui.values[0] + " - " + ui.values[1]);
+    //     }
+    // });
+    // $("#time_delta").text($("#slider-range").slider("values", 0) + " - " + $("#slider-range").slider("values", 1));
+</script>
+
+<script>
+    $('#demand_task_form').on('submit', function(e) {
+        e.preventDefault();
+        let data = $('#demand_task_form').serializeArray();
+        demand_task(data[0]['value']);
+        $('#demand_task_wraper').hide();
+    });
+
+
+    function demand_task(comment) {
+        // raise request
+        $.ajax({
+            url: "/v2/demand_task/", // the endpoint
+            type: "GET", // http method
+            data: {
+                'comment': comment
+            }, // data sent with the post request
+            dataType: 'json',
+            success: function(response) {
+                alert('Request send', 'success')
+
+            },
+            error: function(xhr, errmsg, err) {
+                alert('Oops! We have encountered an error: ' + xhr.responseText['error']['message'], 'danger'); // provide a bit more info about the error to the console
+                console.log(xhr.status + ": " + xhr.responseText, xhr.responseText['error']['message']); // provide a bit more info about the error to the console
+            }
+        });
+
+    }
+
+
+
+    $('#search_for_user').on('keyup', function() {
+        $('#search_for_user_result div').remove();
+        let search_text = $('#search_for_user').val();
+        if (search_text.length > 1) {
+            $.ajax({
+                url: "/v2/search-teacher/?teacher_type=Teacher&search_text=" + search_text, // the endpoint
+                type: "GET", // http method
+                dataType: 'json',
+                success: function(response) {
+                    response.data = response.data.filter(function(item) { // filter out the inactive users
+                        return item.first_name != '';
+                    });
+                    if (response.data.length > 0) {
+                        for (let i = 0; i < response.data.length; i++) {
+                            let inpval = response.data[i].id + ' :: ' + response.data[i].first_name + ' ' + response.data[i].last_name;
+                            $('#search_for_user_result').append(`<div class="border-b border-red-500 bg-white cursor-pointer hover:bg-gray-50 p-2" onclick="addUser('` + inpval + `')">` + inpval + `</div>`);
+                        }
+                    }
+                },
+                error: function(xhr, errmsg, err) {
+                    alert('Oops! We have encountered an error: ' + xhr.responseText['error']['message'], 'danger'); // provide a bit more info about the error to the console
+                    console.log(xhr.status + ": " + xhr.responseText, xhr.responseText['error']['message']); // provide a bit more info about the error to the console
+                }
+            });
+        }
+
+    });
+
+
+
+    function addUser(val) {
+        $("#search_for_user").val(val);
+        $('#search_for_user_result div').remove();
+    }
+
+    function addSeparator(nStr) {
+        nStr += '';
+        var x = nStr.split('.');
+        var x1 = x[0];
+        var x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + '.' + '$2');
+        }
+        return x1 + x2;
+    }
+
+    function rangeInputChangeEventHandler(e) {
+        var rangeGroup = $(this).attr('name'),
+            minBtn = $(this).parent().children('.min'),
+            maxBtn = $(this).parent().children('.max'),
+            range_min = $(this).parent().children('.range_min'),
+            range_max = $(this).parent().children('.range_max'),
+            minVal = parseInt($(minBtn).val()),
+            maxVal = parseInt($(maxBtn).val()),
+            origin = $(this).className;
+
+        if (origin === 'min' && minVal > maxVal - 1) {
+            $(minBtn).val(maxVal - 1);
+        }
+        var minVal = parseInt($(minBtn).val());
+        $(range_min).html(addSeparator(minVal));
+
+
+        if (origin === 'max' && maxVal - 1 < minVal) {
+            $(maxBtn).val(1 + minVal);
+        }
+        var maxVal = parseInt($(maxBtn).val());
+        $(range_max).html(addSeparator(maxVal));
+        get_demand_filter_for_demand_table();
+    }
+
+    $('input[type="range"]').on('input', rangeInputChangeEventHandler);
+</script>
+
+{% endblock %}

@@ -1,0 +1,7 @@
+Hello {{username}}, <br><br><br>
+
+The {{topic_name}} submitted for  {{grade}} {{subject}} from {{board}} board in {{language}} have been approved. <br><br>
+Thank you for your time and effort towards creating quality content resources for our students. <br><br><br>
+
+Looking forward to more quality content from you.<br><br><br>
+

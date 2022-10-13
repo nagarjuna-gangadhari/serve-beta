@@ -1,0 +1,1389 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+ <style>
+ .divider {
+   	 border-bottom: 0px solid #ddd ! important;
+     margin: 0px ! important;
+}
+ .navbar .nav > li ul li a {
+    font-size: 0.9em;
+}
+.tab-content>div:last-child {
+	display: block !important;
+}
+
+.export-app {
+	display: table;
+	width: 100%;
+	height: 750px;
+	padding: 0;
+}
+
+.export-app .demo-section {
+	margin: 0 auto;
+	border: 0;
+}
+
+.content-wrapper {
+	display: table-cell;
+	vertical-align: top;
+}
+.rowCss{
+ margin-top:20px;
+}
+
+.border {
+     border: 1px solid black;
+}
+
+.borderH {
+    
+    border: 1px solid black;
+}
+
+.borderLeftFix{
+   
+    border: 1px solid black;
+    border-left: 0px;
+}
+
+.borderTopFix{
+    height: 70px;
+    border: 1px solid black;
+    border-top: 0;
+}
+
+p {
+      margin-top: 10px !important; 
+    
+}
+
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.over img {
+	margin: 20%;	
+	display: block;
+}
+.btnCss {       
+    margin-top: 26px; 
+   
+}
+
+ .verticalLine {
+ margin-top:10px;
+ height:50px;
+ border-left: thick solid #ff0000;
+}
+
+.point{
+cursor:pointer;
+margin-top: 28px; 
+left:40px;
+}
+
+.space{
+margin-top: -12px;
+}
+a{
+color: #337ab7; !important;
+}
+a:hover{
+color: #23527c; !important;
+}
+
+.btn-primary:hover, .btn:focus, .btn.focus {
+    color: #333;
+    text-decoration: none;
+}
+.chartBoxCss {
+     height: 400px;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    padding-top: 3px;
+    height: 32px;
+}
+.btn-primary:active:hover{
+    color: #fff;
+    background-color: #204d74;
+    border-color: #122b40;
+}
+</style>
+<!-- <script src="https://kendo.cdn.telerik.com/2017.1.223/js/jquery.min.js"></script> -->
+<script src="https://kendo.cdn.telerik.com/2017.1.223/js/jszip.min.js"></script>
+<script
+	src="https://kendo.cdn.telerik.com/2017.1.223/js/kendo.all.min.js"></script>
+
+
+
+<!-- Bootstrap -->
+<!-- <link href="/static/css/bootstrap.min.css" rel="stylesheet"> -->
+<!-- Font Awesome -->
+<!-- <link href="/static/css/select2.min.css" rel="stylesheet"> -->
+<!-- Custom Theme Style -->
+<!-- <link href="/static/css/custom.css" rel="stylesheet"> -->
+<!-- jQuery -->
+<!-- <script src="/static/js/jquery.min.js"></script> -->
+
+<!-- Select2 -->
+<!-- <script src="/static/js/select.min.js"></script> -->
+
+<!-- Font Awesome -->
+<link href="/static/css/select2.min.css" rel="stylesheet">
+<!-- Custom Theme Style -->
+<link href="/static/css/custom.css" rel="stylesheet">
+<!-- jQuery -->
+<!-- <script src="/static/js_new/jquery.min.js"></script> -->
+<script src="/static/js_new/jquery-ui.min.js"></script>
+<script src="/static/js_new/jquery-ui.js" ></script>
+<!-- Bootstrap -->
+<!-- <script src="/static/js/bootstrap.min.js"></script> -->
+<!-- Select2 -->
+<script src="/static/js/select.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap-datepicker.min.js"></script>
+
+
+{% endblock %} {% block body_container %} {{ block.super }}
+
+
+<div class="container-fluid new_dash_container"
+	data-profile_completion_status="{{user_profile.profile_completion_status}}">
+	<div class='row my_profile' style="position: relative">
+		<div class="col-lg-12 col-sm-12">
+			<div class="tab-content">
+				<div class="tab-pane fade in active">
+					<div class='basic_profile col-xs-12 col-sm-12 col-md-12'>
+					   
+					     <div class="row rowCss">
+					         <div class="col-md-12">  
+			                    <div class="row"
+									style="background-color: #ddd; margin-left: 14px;">
+									<div class="col-sm-12"
+										style="margin-left: -17px; postion: absolute">
+										<div class="btn-group">
+											<button style="text-align: center; width: 120px;background: #337ab7 !important;"
+												type="button"  onclick="location.href='/students_dashboard/'" class=" btn btn-primary size">Dashboard</button>
+
+											<button style="text-align: center;background: #337ab7 !important;" type="button" onclick="location.href='/students_progress_report/'"
+												class=" btn btn-primary size">Student Progress
+												Report</button>
+
+											<button style="text-align: center; width: 120px; background-color:#2d5477" onclick="location.href='/reportCard/'"
+												type="button" class=" btn btn-primary size">Report
+												Card</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					
+					
+						<div class="row rowCss">
+						<form action="/reportCard/"  id="advancedFilterForm" method="get" >
+							<div class="col-md-12">
+							<input type="hidden" value="true" name="flag1">
+                               <div class="row rowCss" style="margin-left: 5px;">							
+								<div class="col-md-4 col-sm-6 col-xs-12">
+									<label>Select State</label>
+									<div class="col-md-12 input-group">
+									<input type="hidden" id="state_count" value="{{states|length}}">
+										<select id="state_id" name="stateId"
+											class="select2_multiple form-control select2-hidden-accessible"
+											multiple="multiple"  tabindex="-1" aria-hidden="true">
+											{% if states|length == 0  %}
+									<option value="No_state" id="stateId" selected="selected">State Not Found</option>
+								{%else%}
+											{% if statenames.0 == "All" or statenames.0 == '' %}
+									<option value="All" id="stateId" selected="selected">All</option>
+								{% else %}
+									<option value="All">All</option>
+								{% endif %}
+							{% endif %}
+									{% for state in states %}
+										<option value="{{state.state}}"
+											{% for state_base in statenames %}
+												{% if state.state == state_base%}
+													selected="selected"
+												{% endif %}
+											{% endfor %}
+										>{{state.state}}</option>
+									{% endfor %}
+										</select><label class="input-group-addon btn" for="state_id"
+											title="Student Name"> <span class="fa fa-angle-down"
+											title="Student Name"></span>
+										</label>
+									</div>
+								</div>
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<label>Partner</label>
+									<div class="col-md-12 input-group">
+										<input type="hidden" value="{{delivery_partner}}" id="partnerid"/>
+									<select id='id_partner' name='partner_id' class="select2_multiple form-control select2-hidden-accessible" multiple="multiple" tabindex="-1" aria-hidden="true">
+										<option value=-1>All</option>
+									</select>
+									<label class="input-group-addon btn" for="centerId"
+											title="Select Center" style="cursor: default !important;">
+											<span class="fa fa-angle-down" title="Select partner"
+											style="cursor: default !important;"></span>
+										</label>
+									</div>
+								</div>
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<label>Donor</label>
+									<div class="col-md-12 input-group">
+										<input type="hidden" value="{{funding_partner}}" id="fundpartner_id"/>
+									<select id='id_fund_partner' name='fund_partner_id' class="select2_multiple form-control select2-hidden-accessible" multiple="multiple"  tabindex="-1" aria-hidden="true">
+										<option value=-1 >All</option>
+										</select><label class="input-group-addon btn" for="centerId"
+										title="Select Center" style="cursor: default !important;">
+										<span class="fa fa-angle-down" title="Select donor"
+										style="cursor: default !important;"></span>
+									</label>
+										</label>
+									</div>
+								</div>
+								</div>
+								<div class="row rowCss" style="margin-left: 5px;">							
+								
+								<div class="col-md-4 col-sm-6 col-xs-12">
+									<label>Select Center</label>
+									<div class="col-md-12 input-group">
+									<input type="hidden" value="{{centernames}}" id="centerDataId"/>
+										<select id="center_id" name="centerId"
+											class="select2_multiple form-control select2-hidden-accessible"
+											multiple="multiple" required="required" tabindex="-1" aria-hidden="true" style="width:323px ! important;">
+											{% if states|length == 0  %}
+											<option value="no_center" id="centerId" selected="">Center Not Found</option>
+											{% else %}
+											<option value="All" id="centerId" selected="">Alsl</option>
+											{% endif %}
+											
+
+										</select><label class="input-group-addon btn" for="centerId"
+											title="Select Center" style="cursor: default !important;">
+											<span class="fa fa-angle-down" title="Select Center"
+											style="cursor: default !important;"></span>
+										</label>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-6 col-xs-12">
+
+
+
+
+								<label>Select Student Name/Roll No</label>
+									<div class="col-md-12 input-group">
+									<input type="hidden" value="{{student_id}}" id="studentDataId" />
+										<select id="student_id" name="studentName"
+											class="select2_multiple form-control select2-hidden-accessible"
+											required="required" tabindex="0" aria-hidden="true">
+											
+										</select>
+									</div>
+								</div>
+								</div>
+                               <div class="row rowCss" style="margin-left: 5px;">
+								<div class="col-md-4 col-sm-6 col-xs-12">
+									<label>Select Grade</label>
+									<div class="col-md-12 input-group">
+									<input type="hidden" value="{{student_grade}}" id="gradeDataId" />
+										<select id="grade_id" name="gradeId"
+											class="select2_multiple form-control select2-hidden-accessible"
+											 tabindex="0" aria-hidden="true" >
+											
+										</select>
+									</div>
+								</div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <label>Select AY</label>
+									<div class="col-md-12 input-group">
+                                     <input type="hidden" value="{{assessmentYears}}" id="aYDataId" />
+										<select name="yearpicker" id="yearpicker"
+											class="select2_multiple form-control select2-hidden-accessible"
+											 tabindex="-1" aria-hidden="true">
+											 <option value="All">All</option>
+												 {% for ay in ayfy %}
+												 <option value="{{ ay.start_date.year }}">{{ ay.title }} - {{ ay.board }}</option>
+												 {% endfor %}
+										</select>
+									</div>
+								</div>
+
+								<div class="col-md-2 col-sm-6 col-xs-12 btnCss">
+									<input type="button" class="btn btn-primary btnCSS" onclick="validateMyForm();" value="Generate" style="background: #337ab7 !important;" />
+								</div>								
+								
+
+								<div class="col-md-2 col-sm-6 col-xs-12 point" id="target">
+									<a href="#" class='export-pdf'><i class="fa fa-file-pdf-o fa-2x"
+										aria-hidden="true"></i>
+										<div class="outline">pdf</div> </a>
+								</div>
+							</div>	
+							</div>
+							</form>
+						</div>
+
+
+						<div class="export-app">
+							<div class="content-wrapper">
+								<div class="row" id="reportCard">
+									<div class="col-md-12">
+										<div class="col-md-1"></div>
+										<div class="col-md-10">
+
+											<div class="row border rowCss" style="margin-left: 1px;">
+												<h4 style="text-align: center; margin-bottom: 0px">
+												{% if from_progress_report or flag %}
+												<b> Student Report Card</b>
+												{% else %}
+												<b>Sample Report Card</b>
+												{% endif %}
+												</h4>
+												<div class="col-md-12" style="margin: 15px;">
+													<div class="row row-eq-height">
+														<div class="col-md-2 borderH">
+															<img src="{{photo}}" style="width: 125px; 
+															height: 130px; margin-top: 10px; margin-bottom: 10px; margin-left: -3px">
+														</div>
+														<div class="col-md-5 borderLeftFix">
+															<div class="col-md-12">
+																<div class="col-md-3">
+																	<p>
+																		<b>Name </b>
+																	</p>
+																</div>
+
+																<div class="col-md-1">
+																	<p>
+																		<b>:</b>
+																	</p>
+																</div>
+
+																<div class="col-md-7">
+																	<p>{{student.name}}</p>
+																</div>
+															</div>
+
+															<div class="col-md-12 space">
+																<div class="col-md-3">
+																	<p>
+																		<b>Age </b>
+																	</p>
+																</div>
+
+																<div class="col-md-1">
+																	<p>
+																		<b>:</b>
+																	</p>
+																</div>
+
+																<div class="col-md-7">
+																	<p>14</p>
+																</div>
+															</div>
+
+															<div class="col-md-12 space">
+																<div class="col-md-3">
+																	<p>
+																		<b>Gender </b>
+																	</p>
+																</div>
+
+																<div class="col-md-1">
+																	<p>
+																		<b>:</b>
+																	</p>
+																</div>
+
+																<div class="col-md-7">
+																	<p>{{student.gender}}</p>
+																</div>
+															</div>
+
+															<div class="col-md-12 space">
+																<div class="col-md-3">
+																	<p>
+																		<b>Grade </b>
+																	</p>
+																</div>
+
+																<div class="col-md-1">
+																	<p>
+																		<b>:</b>
+																	</p>
+																</div>
+
+																<div class="col-md-7">
+																	<p>
+																{% if grade_progressreport %}
+																   {% for grade in grade_progressreport%}
+																		{{grade}}
+																		{%if not forloop.last%},{%endif%}
+																    {%endfor%}
+																{% else %}
+																    <p>{{student_grade}}</p>
+																 {% endif %}
+																   </p>
+																</div>
+															</div>
+
+														</div>
+
+														<div class="col-md-5 borderLeftFix">
+															<div class="col-md-12">
+																<div class="col-md-3">
+																	<p>
+																		<b>School </b>
+																	</p>
+																</div>
+
+																<div class="col-md-1">
+																	<p>
+																		<b>:</b>
+																	</p>
+																</div>
+
+																<div class="col-md-7">
+																	<p>{{student.center.name}}</p>
+																</div>
+															</div>
+
+															<div class="col-md-12 space">
+																<div class="col-md-3">
+																	<p>
+																		<b>Village </b>
+																	</p>
+																</div>
+
+																<div class="col-md-1">
+																	<p>
+																		<b>:</b>
+																	</p>
+																</div>
+
+																<div class="col-md-7 ">
+																	<p>{{student.center.village}}</p>
+																</div>
+															</div>
+
+															<div class="col-md-12 space">
+																<div class="col-md-3">
+																	<p>
+																		<b>State </b>
+																	</p>
+																</div>
+
+																<div class="col-md-1">
+																	<p>
+																		<b>:</b>
+																	</p>
+																</div>
+
+																<div class="col-md-7">
+																	<p>{{student.center.state}}</p>
+																</div>
+															</div>
+														</div>
+
+													</div>
+
+
+													<div class="row borderTopFix">
+														<div class="col-md-10" style="padding-left:15px;">
+															<p>eVidyaloka is a not for profit organization
+																registered under the Trusts Act. It focuses on
+																transforming the education landscape in the rural and
+																remote regions of the India.</p>
+														</div>
+
+														<div class="col-md-1 verticalLine"margin-left:10px;>
+														</div>
+
+														<div class="col-md-1  ">
+															<img src="/static/images/evidya.png"
+																style="width: 40px; height: 40px; margin-top: 10px; margin-left: -30px;">
+														</div>
+													</div>
+
+													<div class="row borderTopFix"
+														style="height: 50px !important">
+														<div class="col-md-1">
+															<img src="/static/images/read.png"
+																style="width: 45px; height: 25px; margin-top: 10px; margin-left: 10px">
+														</div>
+														<div class="col-md-11">
+															<input type="hidden" value="" id="startyearid">
+															<input type="hidden" value="" id="endyearid">
+															<p>
+																<b>Reporting period :</b>
+																{% if startDateForStudent and endDateForStudent %} 
+																<b> {{startDateForStudent}}-{{endDateForStudent}} </b>
+																{% endif %}
+															</p>
+														</div>
+													</div>
+
+
+													<div class="row row-eq-height"
+														style="width: 100%; margin-top: 20px">
+														<div class="border" style="width: 35%; float: left;">
+															<div class="row ">
+																<h4
+																	style="margin-left: 35px; margin-top: -15px; background-color: #fff; width: 110px; padding: 5px; color: orange">Attendance</h4>
+																<table id="testTable" name="Table"
+																	class="table-condensed" style="margin-left:20px;">
+																	<thead>
+																		<tr>
+																			<th width="25%"><b>Course</b></th>
+																			<th width="25%"><b>Present</b></th>
+																			<th width="20%"><b>Absent</b></th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																	{% for attendance in student_attendance %}
+																		<tr>
+																			<td>{{attendance.subject}}</td>
+																			<td>{{attendance.Present}}</td>
+																			<td>{{attendance.Absent}}</td>
+																		</tr>
+																	{% endfor %}
+
+
+																	</tbody>
+																</table>
+															</div>
+														</div>
+
+														<div class="border"
+															style="width: 65%; float: right; margin-left: 10px">
+															<div class="row">
+																<h4
+																	style="margin-left: 30px; margin-top: -15px; background-color: #fff; width: 110px; padding: 5px; color: orange">Diagnostics</h4>
+																<table id="testTable" name="Table"
+																	class="table-condensed" style="margin-left:25px;">
+																	<thead>
+																		<tr>
+																			<th width="40%"><b>Subject</b></th>
+																			<th width="40%"><b>Date</b></th>
+																			<th width="19%"><b>Level Scored</b></th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																	{% for ent in diag_details %}
+																		<tr>
+																			<td>{{ent.subject}}</td>
+																			<td>{{ent.eval_date}}</td>
+																			<td>{{ent.agg_level}}</td>
+																		</tr>
+																	{% endfor %}
+																	</tbody>
+																</table>
+															</div>
+
+														</div>
+													</div>
+
+
+
+													<div class="row border" style="margin-top: 20px;">
+														<table id="testTable" name="Table" class="table-condensed">
+															<h4
+																style="margin-left: 15px; margin-top: -15px; background-color: #fff; width: 100px; padding: 5px; color: orange">Scholastic</h4>
+															<thead>
+																<tr>
+																	<th width="10%"><b>Subject</b></th>
+																	<th width="10%"><b>Present</b></th>
+																	<th width="5%"><b>Obtained Marks</b></th>
+																	<th width="10%"><b>Total Marks</b></th>
+																	<th width="10%"><b>Obtained (%)</b></th>
+																	<th width="10%"><b>Assessed Date</b></th>
+																</tr>
+
+															</thead>
+															<tbody>
+															 {% for ent in scholastic_details %}
+																<tr>
+																	<td>{{ent.subject}}</td>
+																	<td>{{ent.is_present}}</td>
+																	<td>{{ent.obtained_marks}}</td>
+																	<td>{{ent.total_marks}}</td>
+																	<td>{% widthratio ent.obtained_marks ent.total_marks 100 %}</td>
+																	<td>{{ent.eval_date}}</td>
+																</tr>
+																{% endfor %}
+
+															</tbody>
+														</table>
+													</div>
+
+													<br>
+
+													<div class="row border">
+														<table id="testTable" name="Table" class="table-condensed">
+														<h4
+																style="margin-left: 15px; margin-top: -15px; background-color: #fff; width: 125px; padding: 5px; color: orange">
+																Co-Scholastic
+																</h4>
+																<thead>
+																	<tr>
+																		<th width="10%"><b>Attribute</b></th>
+																		<th width="10%"><b>Remarks</b></th>
+																	</tr>
+																</thead>
+																<tbody>
+																  {% for coschol_detail in coschol_details %}
+
+																	{% for key , value in coschol_detail.items %}
+																	<tr>
+                                                                        <td>{{ key }} </td>
+                                                                        <td>{{ value }}</td>
+                                                                     </tr>
+      																{% endfor %}
+																	{% endfor %}
+																</tbody>
+														</table>
+													</div>
+
+                                                     <br>
+                                                    <div class="row border">
+														<table id="testTable" name="Table" class="table-condensed">
+														<h4
+																style="margin-left: 15px; margin-top: -15px; background-color: #fff; width: 125px; padding: 5px; color: orange">
+																Appreciation
+																</h4>
+																<thead>
+																	<tr>
+																		<th width="20%"><b style="margin-left: 15%;">Sticker</b></th>
+																		<th width="20%"><b>Count</b></th>
+																	</tr>
+																</thead>
+																<tbody>
+                                                                {% if stickers %}
+																  {% for stic in stickers %}
+
+																	<tr>
+                                                                        <td><img title={{stic.sticker__sticker_name}} src="/{{stic.sticker__sticker_path}}" style='width: 12%;height: 10%;margin-left: 15%;margin-top: 0%;' /> </td>
+                                                                        <td>{{ stic.countofreg }}</td>
+                                                                     </tr>
+      																{% endfor %}
+
+                                                                {% else %}
+                                                                    <tr> <td>Not found</td><td>Not found</td></tr>
+                                                                {% endif %}
+																</tbody>
+														</table>
+													</div>
+
+													<br>
+													{% if comments %}
+													<div class="row border">
+														<div class="col-md-9">
+															<h4 style="margin-left: 5px; margin-top: -15px; background-color: #fff; width: 105px; padding: 5px; color: orange">
+																Comments
+															</h4>
+															<ul style="margin-left: 10px; text-align: justify">
+															
+																{% for comment in comments%}
+																<li><p>{{comment}}</p></li>
+																{%endfor%}
+															
+															
+															</ul>
+														</div>
+
+													</div>
+													{%endif%}
+												</div>
+											</div>
+										</div>
+										<div class="col-md-1"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<script>
+/* 	for (var i = new Date().getFullYear()-1; i > 1970; i--) {
+		$('#yearpicker').append($('<option />').val(i).html(i));
+	} */
+</script>
+<script>
+	$(".select2_multiple").select2({
+		maximumSelectionLength : 1000
+	});
+
+	$(".select2_multiple").select2({
+		maximumSelectionLength : 1000
+	});
+</script>
+
+<script>
+$("#target").click(function(){
+  var reportCard = $(this).prev("table:first").attr("id");
+});
+</script>
+
+<script>
+$(document).ready(function() {
+    $(".export-pdf").click(function() {
+        // Convert the DOM element to a drawing using kendo.drawing.drawDOM
+        kendo.drawing.drawDOM($(".content-wrapper"))
+        .then(function(group) {
+            // Render the result as a PDF file
+            return kendo.drawing.exportPDF(group, {
+                paperSize: "auto",
+                margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" }
+            });
+        })
+        .done(function(data) {
+            // Save the PDF file
+            kendo.saveAs({
+                dataURI: data,
+                fileName: "ReportCard.pdf",
+                proxyURL: "google.com"
+            });
+        });
+    }); 
+
+ });
+</script>
+<script>
+$(document).ready(function(){
+	loadCentersByState();
+});
+
+$("#state_id").on("change", function() {
+	loadCentersByState();
+    });
+    
+    function loadCentersByState(){
+    	var state = []; 
+    	var state_count = $('#state_count').val();
+		$('#state_id :selected').each(function(i, selected){ 
+		  state[i] = $(selected).text(); 
+		});
+		if(state==null || state=='' || state=='undefined'){
+			state = 'All';
+		}
+		var ajaxUrl = '/ajax/getCourses/?state='+state;
+		if (state_count == '0'){
+			ajaxUrl = "";
+		}
+	$.ajax({
+	        url : ajaxUrl,
+	        async: false,
+	        success: function (data) {
+	        	if(data != null){
+	        		var backend_center_data = $("#centerDataId").val();
+	        		var json_backend_data = '';
+	        		if (backend_center_data!=null && backend_center_data!='' && backend_center_data!='undefined'){
+	        			json_backend_data = JSON.parse(backend_center_data);
+	        		}
+	        		var optionList = '';
+	        		if (json_backend_data!=null){
+	        			if(json_backend_data[0]=='All' || json_backend_data[0]==''){
+	        				optionList += '<option value = "All" id="centerId" selected="selected" >All</option>';
+	        			}
+	        			else{
+	        				optionList += '<option value = "All" >All</option>';
+	        			}
+	        		}
+	        		for(i=0;i<data.center_list.length;i++){
+	        			var value = data.center_list[i]['value'];
+	        			value = escape(value);
+	        			optionList += '<option value = '+value;
+	        			  if (json_backend_data!=null){
+        				for(j=0;j<json_backend_data.length;j++){
+        					value = value.replace('%20-%20',' - ');
+        					if(value==json_backend_data[j]){
+        						optionList += ' selected="selected"';
+        					}
+        				}
+        			}  
+	        			optionList += ' >'+data.center_list[i]['label']+'</option>';
+	        			val1 = ["All"];
+	        		}
+	        		$("#center_id").html(optionList);
+					var partner_list = []
+						for (i=0;i<data.center_list.length;i++){
+						var is_present = 'no';
+						for(j=0;j<partner_list.length;j++){
+						if(data.center_list[i]['funding_partner_id'] == partner_list[j]['funding_partner_id']){
+
+							is_present = 'yes';
+							break;
+						}
+					}
+				
+					if((is_present == 'no') && (data.center_list[i]['funding_partner_id'] != 'undefined')){
+						partner_list.push({'funding_partner_id':data.center_list[i]['funding_partner_id'],'funding_partner':data.center_list[i]['funding_partner']});
+					}
+				}
+
+				var options = '<option value=-1>All</option>';
+				for (i=0;i<partner_list.length;i++){
+					options += '<option value="'+partner_list[i]['funding_partner_id']+'"';
+					if (partner_list[i]['funding_partner_id']=='{{funding_partner}}')
+						options += 'selected="selected" ';
+					options += '>'+partner_list[i]['funding_partner']+'</option>';
+				}
+				$("#id_fund_partner").empty();
+
+				$("#id_fund_partner").append(options);
+				
+
+				var partner_list = []
+				for (i=0;i<data.center_list.length;i++){
+					var is_present = 'no';
+					for(j=0;j<partner_list.length;j++){
+						if(data.center_list[i]['delivery_partner_id'] == partner_list[j]['delivery_partner_id']){
+
+							is_present = 'yes';
+							break;
+						}
+					}
+				
+					if((is_present == 'no') && (data.center_list[i]['delivery_partner_id'] != 'undefined')){
+						partner_list.push({'delivery_partner_id':data.center_list[i]['delivery_partner_id'],'delivery_partner':data.center_list[i]['delivery_partner']});
+					}
+				}
+
+				var options = '<option value=-1>All</option>';
+				for (i=0;i<partner_list.length;i++){
+					options += '<option value="'+partner_list[i]['delivery_partner_id']+'"';
+					if (partner_list[i]['delivery_partner_id']=='{{delivery_partner}}')
+						options += 'selected="selected" ';
+					options += '>'+partner_list[i]['delivery_partner']+'</option>';
+				}
+				$("#id_partner").empty();
+
+				$("#id_partner").append(options);
+	        	}
+	        	loadStudentsByCenter();
+	        },
+	        error: function() {
+	              // alert("error");
+	           }
+	      });
+    }
+
+
+
+	$("#id_partner").on("change", function() {
+			
+			$("#id_partner option[value=All]").remove()
+			;
+		
+    	loadCentersBypartner();
+        });
+        
+        function loadCentersBypartner(){
+			var partner =[] ; 
+			var state= $("#state_id").val();
+        	var state_count = $('#state_count').val();
+			$('#id_partner :selected').each(function(i, selected){ 
+				
+				partner[i] = $(selected).val(); 
+    		});
+			console.log("FRF",state)
+			if(state==null || state=='' || state=='undefined'){
+    			state = 'All';
+    		}
+    		if(partner==null || partner=='' || partner=='undefined'){
+    			partner = 'All';
+    		}
+			console.log(partner,state)
+    		var ajaxUrl = '/ajax/getCourses/?state='+state+'&partner='+partner;
+    		if (state_count == '0'){
+    			ajaxUrl = "";
+    		}
+    	$.ajax({
+    	        url : ajaxUrl,
+    	        success: function (data) {
+    	        	if(data != null){
+    	        		
+    	        		var backend_center_data = $("#centerDataId").val();
+    	        		var json_backend_data = '';
+    	        		if (backend_center_data!=null && backend_center_data!='' && backend_center_data!='undefined'){
+    	        			json_backend_data = JSON.parse(backend_center_data);
+    	        		}
+    	        		var optionList = '';
+    	        		if (json_backend_data!=null){
+    	        			if(json_backend_data[0]=='All' || json_backend_data[0]=='' || json_backend_data[0] == undefined){
+    	        				optionList += '<option value = "All" id="centerId" selected="selected" >All</option>';
+    	        			}
+    	        			else{
+    	        				optionList += '<option value = "All"  id="centerId" >All</option>';
+    	        			}
+    	        		}
+    	        		for(i=0;i<data.center_list.length;i++){
+    	        			var value = data.center_list[i]['value'];
+    	        			value = escape(value);
+    	        			optionList += '<option value = '+value;
+    	        			  if (json_backend_data!=null){
+            				for(j=0;j<json_backend_data.length;j++){
+            					if(value==json_backend_data[j]){
+            						optionList += ' selected="selected"';
+            					}
+            				}
+            			}  
+    	        			optionList += ' >'+data.center_list[i]['label']+'</option>';
+    	        		}
+    	        		$("#center_id").html(optionList);
+    	        		val1 = $("#center_id").val();
+    	        		if(val1 == null || val1 == '' || val1 == 'undefined') {
+    	        			val1 = ['All'];
+    	        			var x = $("#centerId").val();
+    	        			//$("#center_id").select2(x);
+    	        			$("#center_id").val(x);
+    	        		}
+						var partner_list = []
+				for (i=0;i<data.center_list.length;i++){
+					var is_present = 'no';
+					for(j=0;j<partner_list.length;j++){
+						if(data.center_list[i]['funding_partner_id'] == partner_list[j]['funding_partner_id']){
+
+							is_present = 'yes';
+							break;
+						}
+					}
+				
+					if((is_present == 'no') && (data.center_list[i]['funding_partner_id'] != 'undefined')){
+						partner_list.push({'funding_partner_id':data.center_list[i]['funding_partner_id'],'funding_partner':data.center_list[i]['funding_partner']});
+					}
+				}
+
+				var options = '<option value=-1>All</option>';
+				for (i=0;i<partner_list.length;i++){
+					options += '<option value="'+partner_list[i]['funding_partner_id']+'"';
+					if (partner_list[i]['funding_partner_id']=='{{funding_partner}}')
+						options += 'selected="selected" ';
+					options += '>'+partner_list[i]['funding_partner']+'</option>';
+				}
+				$("#id_fund_partner").empty();
+
+				$("#id_fund_partner").append(options);
+						
+    	        		
+    	        	}
+    	        },
+    	        error: function() {
+    	              alert("error");
+    	           }
+    	      });
+        }
+
+
+
+
+
+		$("#id_fund_partner").on("change", function() {
+			
+			$("#id_fund_partner option[value=All]").remove()
+			;
+		
+    	loadCentersByfundpartner();
+        });
+        
+        function loadCentersByfundpartner(){
+			var fund_partner =[] ; 
+			var state= $("#state_id").val();
+			var partner= $("#id_partner").val();
+        	var state_count = $('#state_count').val();
+			$('#id_fund_partner :selected').each(function(i, selected){ 
+				
+				fund_partner[i] = $(selected).val(); 
+    		});
+			console.log("FRF",state,partner)
+			if(state==null || state=='' || state=='undefined'){
+    			state = 'All';
+    		}
+    		if(partner==null || partner=='' || partner=='undefined'){
+    			partner = 'All';
+    		}
+			if(fund_partner==null || fund_partner=='' || fund_partner=='undefined'){
+    			fund_partner = 'All';
+    		}
+			console.log("fund_partner",partner,state,fund_partner,$("#id_fund_partner").val())
+    		var ajaxUrl = '/ajax/getCourses/?state='+state+'&partner='+partner+'&funding_partner_id='+fund_partner;
+    		if (state_count == '0'){
+    			ajaxUrl = "";
+    		}
+    	$.ajax({
+    	        url : ajaxUrl,
+    	        success: function (data) {
+    	        	if(data != null){
+    	        		
+    	        		var backend_center_data = $("#centerDataId").val();
+    	        		var json_backend_data = '';
+    	        		if (backend_center_data!=null && backend_center_data!='' && backend_center_data!='undefined'){
+    	        			json_backend_data = JSON.parse(backend_center_data);
+    	        		}
+    	        		var optionList = '';
+    	        		if (json_backend_data!=null){
+    	        			if(json_backend_data[0]=='All' || json_backend_data[0]=='' || json_backend_data[0] == undefined){
+    	        				optionList += '<option value = "All" id="centerId" selected="selected" >All</option>';
+    	        			}
+    	        			else{
+    	        				optionList += '<option value = "All"  id="centerId" >All</option>';
+    	        			}
+    	        		}
+    	        		for(i=0;i<data.center_list.length;i++){
+    	        			var value = data.center_list[i]['value'];
+    	        			value = escape(value);
+    	        			optionList += '<option value = '+value;
+    	        			  if (json_backend_data!=null){
+            				for(j=0;j<json_backend_data.length;j++){
+            					if(value==json_backend_data[j]){
+            						optionList += ' selected="selected"';
+            					}
+            				}
+            			}  
+    	        			optionList += ' >'+data.center_list[i]['label']+'</option>';
+    	        		}
+    	        		$("#center_id").html(optionList);
+    	        		val1 = $("#center_id").val();
+    	        		if(val1 == null || val1 == '' || val1 == 'undefined') {
+    	        			val1 = ['All'];
+    	        			var x = $("#centerId").val();
+    	        			//$("#center_id").select2(x);
+    	        			$("#center_id").val(x);
+    	        		}
+						
+						
+    	        		
+    	        	}
+    	        },
+    	        error: function() {
+    	              alert("error");
+    	           }
+    	      });
+        }
+    
+</script>
+<script>
+
+$("#center_id").select2();
+var val1 = ["All"];
+var newSelectedOption1;
+$("#center_id").on('change', function() {
+	var newArray=[];
+	var selected = $(this).val();
+	var newVal = $(this).val();
+	if(newVal != null) {
+		for(var i=0; i<newVal.length; i++) {
+		     if($.inArray(newVal[i], val1) == -1) {
+		    	 newSelectedOption1 = $(this).find('option[value="' + newVal[i] + '"]').text();
+		    	 newArray.push(newSelectedOption1);
+		    	 selected = newSelectedOption1;
+		     }
+		 }
+	if (selected != null) {
+		if (selected == 'All') {
+			$(this).val('All').select2();
+		} 
+	}
+	 if (selected != 'All') {
+		$("#center_id option[value='All']").remove();
+		$("#center_id").prepend('<option id="centerId" value="All">All</option>');
+		var selectedOptions = $(this).val();
+		$("#center_id").val('');
+		$("#center_id").val(selectedOptions);
+	} 
+	 val1 = $(this).val();
+	} 
+});
+
+	$("#center_id").on("change", function() {
+		loadStudentsByCenter();
+	});
+	
+	function loadStudentsByCenter() {
+		var center = [];
+		$('#center_id :selected').each(function(i, selected) {
+			center[i] = $(selected).text();
+		});
+		var states = $("#state_id").val();
+		if(states==null || states=='' || states=='undefined'){
+			states = 'All';
+		}
+		var ajaxUrl = '/ajax/get_Students_for_report_card/?center_id=' + center
+				+ '&states=' + states;
+		$.ajax({
+					url : ajaxUrl,
+					success : function(data) {
+						if (data != null) {
+							var studentId = $("#studentDataId").val();
+							var optionList = '';
+							for (i = 0; i < data.length; i++) {
+								if (i == 0
+										&& (studentId == null
+												|| studentId == '' || studentId == 'undefined')) {
+									optionList += '<option value = '+data[i]['value']+' selected="selected">'
+											+ data[i]['label'] + '</option>';
+								} else {
+									optionList += '<option value = '
+											+ data[i]['value'];
+									if (studentId != null && studentId != ''
+											&& studentId != 'undefined') {
+										if (studentId == data[i]['value']) {
+											optionList += ' selected="selected"';
+										}
+										optionList += ' >' + data[i]['label']
+												+ '</option>';
+									}
+								}
+							}
+							$("#student_id").html(optionList);
+						}
+						loadGradesByStudents();
+					},
+					error : function() {
+						// alert("error");
+					}
+				});
+	}
+</script>
+<script>
+$("#student_id").on("change", function() {
+	loadGradesByStudents();
+    });
+    function loadGradesByStudents(){
+    	var student = []; 
+		$('#student_id :selected').each(function(i,selected){ 
+		  student[i] = $(selected).val(); 
+		});
+		var ajaxUrl = '/ajax/getgradeforReortCard/?student_id='+student;
+	$.ajax({
+	        url : ajaxUrl,
+	        success: function (data) {
+	          if (data != null){
+	        	var optionList = '';
+        		var gradeDataId = $("#gradeDataId").val();
+        		for(i=0;i<data.length;i++){
+        			optionList += '<option value='+data[i]['value'];
+        			 if(gradeDataId!=null && gradeDataId!=''&& gradeDataId!='undefined'){
+ 	        			if(gradeDataId==data[i]['value']){
+ 	        				optionList += ' selected="selected"';
+ 	        			}
+ 	        		}   
+        			 optionList += ' >'+data[i]['label']+'</option>';
+        		}
+        		$("#grade_id").html(optionList);
+	          }
+        		loadAyByStudents();
+	        },
+	        error: function() {
+	              // alert("error");
+	           }
+	      });
+    }
+    function loadAyByStudents(){
+   /*  var aYDataId = $("#aYDataId").val();
+    	var student = [];
+		$('#student_id :selected').each(function(i,selected){
+		  student[i] = $(selected).val();
+		}); */
+		var selectedYear = $("#aYDataId").val();
+		var state = []; 
+		$('#state_id :selected').each(function(i, selected){ 
+		  state[i] = $(selected).text(); 
+		});
+		var ajaxUrl = '/ajax/getyearfor_student/?state='+state+'&selectedYear='+selectedYear;
+	 $.ajax({
+	        url : ajaxUrl,
+	        success: function (data) {
+                var optionList = '';
+               /*  var aYDataId = $("#aYDataId").val();
+                   for(i=0;i<data.listdata.length;i++){
+                       ay=data[i]['date_created'];
+                       optionList += '<option value='+ay;
+					   if(aYDataId!=null && aYDataId!='' && aYDataId!='undefined'){
+	        					if(aYDataId==ay){
+	        						optionList += ' selected="selected"';
+	        					}
+	        						        				}
+        			   optionList += ' >'+ay+'</option>';
+        		}
+                  $("#yearpicker").html(optionList);
+                 */  
+                  
+                  if(data.ayfyData != null) {
+  	        		var optionListYear = '';
+  	        		if(data.selectedYear == 'All' || data.selectedYear == '' || data.selectedYear == undefined) {
+  	        			//alert("selectedYear "+selectedYear);
+  	        			optionListYear += '<option value = "All" selected="selected" >All</option>';
+  	        		} else {
+  	        			optionListYear += '<option value = "All" >All</option>';
+  	        		}
+  	        		for(i=0; i< data.ayfyData.length;i++) {
+  	        			var academicYear = data.ayfyData[i]['id']+""
+  	        			if (academicYear == data.selectedYear){
+  	        				optionListYear += '<option value = '+data.ayfyData[i]['id']+' selected="selected" >'+data.ayfyData[i]['board']+' '+data.ayfyData[i]['title']+'</option>';
+  	        			} else {
+  	        				optionListYear += '<option value = '+data.ayfyData[i]['id']+' >'+data.ayfyData[i]['board']+' '+data.ayfyData[i]['title']+'</option>';
+  	        			}
+  	        		}
+  	        		$("#yearpicker").html(optionListYear);
+  	        	}
+                 $("#aYDataId").val($("#yearpicker").val()) ;
+	        },
+	        error: function() {
+// 	              alert("error");
+	           }
+	      });
+    }
+</script>
+<script>
+$("#yearpicker").on("change",function() {
+	$("#aYDataId").val($("#yearpicker").val()) ;
+}) 
+ 
+function validateForm() {
+	var states1 = $("#state_id").val();
+	var ayYear = $("#yearpicker").val();
+	if((states1 =="All" || states1.length > 1) && ayYear != "All") {
+		alert("Please select Academic as 'All' if you are selecting more than 1 state");
+		
+		//return false
+	}
+	else {
+		return true
+	}
+}
+
+
+</script>
+<div id='ajax_loader' style="position: fixed; left: 48%; top: 48%; display:none; z-index: 999;">
+	<img src="/static/img_new/ajax-loader.gif" />
+	</div>
+<script>
+$(document).ready(function() {
+	jQuery(function($) {
+		$(document).ajaxStop(function() {
+			$("#overlay").remove();
+			$("#ajax_loader").hide();
+		});
+		$(document).ajaxStart(function() {
+			$("body").append('<div id="overlay" style="background-color:rgba(192,192,192,0.4);position:absolute;top:0;left:0;height:100%;width:100%;z-index:100"></div>');
+			$("#ajax_loader").show();
+		});
+	});
+
+	
+});
+</script>
+
+
+<script type="text/javascript">
+	$("#state_id").select2();
+	$("#stateId").removeAttr("selected");
+	$("#state_id").on('change', function() {
+		var selected = $(this).val();
+		if (selected != null) {
+			if (selected.indexOf('All') >= 0) {
+				$(this).val('All').select2();
+			}
+		}
+		if (selected != 'All') {
+			document.getElementById('stateId').selected = false;
+		}
+	});
+
+</script>
+<script type="text/javascript">
+/* $("#center_id").select2();
+alert($('#center_id option:selected').val());
+$(".centerId_for_change").removeAttr("selected");
+alert($('#center_id option:selected').val());
+$("#center_id").on('change', function() {
+	var selected = $(this).val();
+	alert("hello");
+	if (selected != null) {
+		if (selected.indexOf('All') >= 0) {
+			$(this).val('All').select2();
+		}
+	}
+	if (selected != 'All') {
+		document.getElementByClass('centerId_for_change').selected = false;
+	}
+}); */
+</script>
+<script>
+function validateMyForm(){
+	   var studentname = $("#student_id").val();
+	   if(studentname == null){
+		   alert("Please Enter Student Name/Roll No  Fields !!!");
+		  // return false;
+	   }
+	//   else{alert("else");
+		  // return true;
+		   /* var stateName = []; 
+			var centerName = [];
+			var grade = [];
+			var AssessmentYear = [];
+			var course = [];
+			var flag = "true";
+			urlForReportCard = '/reportCard?student_id='+$("#student_id").val();
+			$('#state_id :selected').each(function(i, selected){ 
+				stateName[i] = $(selected).text(); 
+			});
+			$('#center_id :selected').each(function(i, selected){ 
+				centerName[i] = $(selected).text(); 
+			});
+			$('#grade_id :selected').each(function(i, selected){ 
+				grade[i] = $(selected).text(); 
+			});
+			$('#yearpicker :selected').each(function(i, selected){ 
+				AssessmentYear[i] = $(selected).text(); 
+			});
+			if (stateName !=null && stateName!='' && stateName!='undefined'){
+				urlForReportCard += '&stateName='+stateName;
+			}
+			if (centerName !=null && centerName!='' && centerName!='undefined'){
+				urlForReportCard += '&centerName='+centerName;
+			}
+			if (grade !=null && grade!='' && grade!='undefined'){
+				urlForReportCard += '&grade='+grade;
+			}
+		    if (AssessmentYear !=null && AssessmentYear!='' && AssessmentYear!='undefined'){
+		    	urlForReportCard += '&AssessmentYear='+AssessmentYear;
+			} 
+		   window.location = urlForReportCard; */
+	  // }
+	   
+	    var ayYear = $("#yearpicker").val();
+	    var state = []; 
+		$('#state_id :selected').each(function(i, selected){ 
+		  state[i] = $(selected).text(); 
+		});
+		if(state==null || state=='' || state=='undefined'){
+			state = 'All';
+		}
+		if((state =="All" || state.length > 1) && ayYear != "All") {
+			alert("Please select Academic as 'All' if you are selecting more than 1 state");
+		}
+		else {
+			$("#advancedFilterForm").submit();
+		}
+	   
+}
+</script>
+
+{% endblock %}

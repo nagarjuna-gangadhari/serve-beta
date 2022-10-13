@@ -1,0 +1,237 @@
+{% extends "footer_base.html" %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <script src="https://raw.github.com/carhartl/jquery-cookie/master/jquery.cookie.js"></script>
+{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+        a:hover {
+            color:#F15A22 !important;
+        }
+        div.resource li,
+        div.references li {
+            margin:10px 0px 0px 0px;
+        }
+        div.resource ul {
+            list-style:disc;
+        }
+        div.resource h5 {
+            margin:10px 0px 0px 0px;
+        }
+        div.signature {
+            margin:15px 0px 0px 0px;
+        }
+        div.signature img {
+            height: 50px;
+            width: 50px;
+            float: left;
+            padding-right: 10px;
+        }
+        div.post,
+        div.host {
+            display:block;
+            float:left;
+            clear:both;
+            margin:0px 0px 0px 0px ;
+        }
+        div.post div {
+            float:left;
+            margin:5px 10px 0px 0px;
+            display:inline-block;
+        }
+        div.post p {
+            padding:5px 5px 0px 0px;
+        }
+        div.host p {
+            padding:10px 0px 0px 0px;
+            line-height:1.6em;
+        }
+        div.bottom {
+            padding:16px 0px 0px 0px !important;
+        }
+        div#footer {
+            min-height:55px;
+            padding:0px;
+        }
+        div.right_box {
+            float:right;
+            margin-right:-35px;
+        }
+        div.left_box {
+            padding-right: 15px;
+            float:left;
+            height:444px;
+            border-right:1px solid #ccc;
+        }
+        h5 {
+            margin-bottom:0px !important;
+            margin-left:-15px;
+            font-weight:bold !important;
+        }
+        .host h5 {
+            margin-top:20px;
+        }
+        .references {
+            margin-top:10px;
+        }
+        div.tw-share {
+            margin-top:10px !important;
+        }
+    </style>
+
+{% endblock %}
+
+{% block leftnav_list %}
+    <li><a href="/volunteer/" ><span>Spend some Time</span></a></li>
+    <li><a href="/spread/" class="active"><span>Spread the Word</span></a></li>
+    <li><a href="/sponsor/" ><span>Share the Joy</span></a></li>
+    <li><a href="/donors/" ><span>Know the Donors</span></a></li>
+{% endblock %}
+
+{% block top_content %}
+    <!--<div class="top clearfix">
+        <div class="intro">
+            <h1>Spread the Word</h1>
+        </div>
+    </div>-->
+{% endblock %}
+
+
+{% block bottom_content %}
+
+<div class="paper-bg-wrapper">
+    <div class="paper-bg" style="border-top:0px;">
+        <div id="spread-word" class="subcontent clearfix">
+            <div class="right_box">
+                <div>
+                    <h5>Resources you can use:</h5>
+                </div>
+                <div class="resource">
+                    <p><strong>Documents</strong> - Click to Download</p>
+                    <ul>
+                        <li>
+                            <a href="/static/downloads/evd_teaser.pdf" target="_blank">A Brief about eVidyaloka</a>
+                        </li>
+                        <li>
+                            <a href="/static/downloads/evd_volunteering_opportunities.pdf" target="_blank">A Brief note on Volunteering Opportunities</a>
+                        </li>
+                        <li>
+                            <a href="/static/downloads/email_signature.png" download="email_signature" target="_blank">Email Signature</a>
+                        </li>
+                        <li>
+                            <a href="/static/downloads/introductory_note.docx">Standard Mailer</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--
+                <div class="signature" >
+                    <img src="/static/images/evidyalogo.png"/>
+                    <p>Add to your Email Signature</p>
+                    <p>To teach Rural India<br/>
+                        <a id="signup-trigger" style="cursor:pointer">Sign Up</a> Now @
+                        <a href="http://www.evidyaloka.org">www.evidyaloka.org</a>
+                    </p>
+                </div>-->
+                <div class="references">
+                    <p><strong>References:</strong></p>
+                    <ul>
+                        <li>
+                            <a target="_blank" href="http://www.youtube.com/watch?v=h2bbbAC_IqU">eVidyaloka - Concept video</a> - 2mins
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://www.youtube.com/watch?v=CCTMz-MpPyE">A Video Session by the Founders</a> - 18mins
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://www.facebook.com/photo.php?v=10151495914270854&set=vb.167665383277007&type=2&theater">Video of a class - Teacher side</a> - 2mins
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://www.youtube.com/watch?feature=player_embedded&v=ICMmZACBVBg">Video of a class - Students side</a> 2mins
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://www.youtube.com/watch?v=8VxUyOtmeDI">Volunteer & Student feedback</a> - 9mins
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="left_box">
+                <div class="post">
+                    <div>
+                        <h5>Methods you use:</h5>
+                    </div>
+                    <br/>
+                    <div>
+                        <p>Like us on Facebook: </p>
+                    </div>
+                    <div class="fb-share">
+                        <div class="fb-like" data-href="https://www.facebook.com/evidyaloka" data-send="false"
+                            data-layout="button_count" data-width="105" data-show-faces="false" data-colorscheme="dark"></div>
+                    </div>
+                </div>
+
+                <div class="post">
+                    <div>
+                        <p>Follow us on Twitter: </p>
+                    </div>
+                    <div class="tw-share">
+                        <a href="https://twitter.com/evidyaloka" class=
+                        "twitter-follow-button" data-show-count="false"
+                        data-show-screen-name="false">Follow @evidyaloka</a>
+                        <script type="text/javascript">
+            //<![CDATA[
+                        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.cogets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+                        //]]>
+                        </script>
+                    </div>
+
+                </div>
+
+                <div class="post">
+                    <div>
+                        <p>Subscribe to eVidyaloka Channel:</p>
+                    </div>
+                    <div>
+                        <a href="//www.youtube.com/subscription_center?add_user_id=Owv8EUnb3rzI_9VSrOYP-Q&feature=creators_cornier-//s.ytimg.com/yt/img/creators_corner/Subscribe_to_my_videos/YT_Subscribe_130x36_red.png">
+                            <img src="//s.ytimg.com/yt/img/creators_corner/Subscribe_to_my_videos/YT_Subscribe_130x36_red.png" alt="Subscribe to me on Youtube" style="width:75px;"/>
+                        </a>
+                        <img src="//www.youtube-nocookie.com/gen_204?feature=creators_cornier-//s.ytimg.com/yt/img/creators_corner/Subscribe_to_my_videos/YT_Subscribe_130x36_red.png" style="display: none"/>
+                    </div>
+                </div>
+
+                <div class="host">
+                    <p>Talk to your friends and family</p>
+                    <p>simply send an email to a group</p>
+                    <p>Add to your Email signature</p>
+                    <h5>Channels of Info:</h5>
+                    <p><a href="https://www.facebook.com/eVidyaloka/events" target="_blank">Join </a>a Skype event</p>
+                    <p><a href="mailto:venkat.sriraman@evidyaloka.org">Contact</a>
+                    to host an informational Session.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footer %}
+    <div id="footer">
+        <div class="inner clearfix">
+            <div class="nav-container clearfix">
+                <div id="bottom">
+                    <div class="inner clearfix">
+                        <p>eVidyaloka.org is a registered Trust under Indian Trusts Act
+                            <a href="/about/">About us</a>
+                            <a href="/vision">Vision &amp; Mission</a>
+                            <a href="/operating_principles">Operating Principles</a>
+                            <a href="/faq">FAQ</a>
+                            <a href="/contact_us">Contact US</a>
+                        </p>
+                        <a href="http://www.headrun.com/" target="_blank" class="by-kettle" style="width:120px;">Powered by Headrun<span>come say hi!</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

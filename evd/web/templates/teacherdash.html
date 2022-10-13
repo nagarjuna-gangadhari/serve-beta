@@ -1,0 +1,436 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block head_title %}eVidyaloka - Teacher dashboard{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <link rel='stylesheet' type='text/css' href='/static/css/calendar/fullcalendar.1.5.3.min.css'/>
+    <link rel="stylesheet" type="text/css" href="/static/css/calendar/theme.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/teacherdash.css" />
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+    window.evd.pre_submission = function(){
+        var q = "";
+        var $att_form = $($(this).attr("href"));
+        var stu_len = $att_form.find("input.student").length;
+        $att_form.find("input.student").each(function(index, val){
+            stu_name = $(this).attr("value");
+            q += stu_name + ((index < stu_len-1) ? ";" : "");
+        });
+        $att_form.find("input[name='student']").val(q);
+        q="";
+        var attend_len = $att_form.find("input.attend").not(":checked").length;
+        $att_form.find("input.attend").not(":checked").each(function(index,val){
+            attend = parseInt($(this).val());
+            q += attend + (( index < attend_len - 1) ? ";" : "");
+        });
+        $att_form.find("input[name='attend']").val(q);
+    }
+     window.evd.closemodal = function() {
+        $(this).parents(".modal").modal("hide");
+        evd.show_msg("Attendance has been submitted for this session");
+    }
+
+    window.evd.pre_feedback = function(){
+        var $form = $($(this).attr("href"));
+        var len = $form.find("input[type='checkbox'].feedback").filter(":checked").length;
+        var $topic_ids = $form.find("input[name='topic_ids']");
+        var q = "";
+        /*$(this).parent().find("input[type='checkbox'].feedback").filter(":checked").each(function(index,val){
+             q += $(this).val() + (index < (len-1) ? ";" : "") ;
+        });*/
+        q = $(this).parent().find("select.topics").children(":selected").attr("data-topic-id");
+        $topic_ids.val(q);
+        var comment = $form.find("textarea").val().trim();
+        if(comment == ""){
+            alert("Feedback cannot be empty");
+            return false;
+        }
+        var stat = $(this).parent().find('#status').val(),
+            reasoncode = $(this).parent().find('.reason-code').find("select[name='reason']").val();
+        if(stat === 'Cancelled' || stat === 'Rescheduled'){
+            if(!reasoncode){
+                alert("You should select a Reason code");
+                return false;
+            }
+        }
+
+    }
+    window.evd.fd_calback = function(){
+        $(this).parent().children("textarea").val("");
+        $(".feedback-modal").modal("hide");
+        evd.show_msg("Your feedback has been submitted for this session");
+         render_event(window.last_clicked_day.attr("data-event-id"), window.dte);
+    }
+
+    var accept =  "";
+    evd.pre_response = function(){
+        accept = $(this).children("span").text();
+    }
+    evd.response_cb = function(resp){
+        if(resp == "success"){
+            var notification = $(this).parents("li").attr("data-notification");
+            var center = $("li[data-notification='"+ notification +"']").children("p:first").text().split(",")[1].split("-")[0];
+            $("li[data-notification='"+ notification +"']").remove();
+            $("#my-notifications").children(":first-child").appendTo($("#my-notifications").next("ul"));
+            $("#my-notifications").children(":first-child").addClass("active"); 
+            if(accept == "accept")
+                evd.show_msg("Thankyou for accepting the offer. Our " + center + " centeradmin will contact you soon");    
+            else
+                evd.show_msg("Thanks for the reply. We will get back to you with future requirements");
+        }
+    }
+    $("ul.custom-select li").toggle(function(){
+        $("ul.custom-select > li.focus-f").not($(this)).trigger("click");
+        $(this).addClass("focus-f");
+    },function(){
+        $(this).removeClass("focus-f");
+    });
+    $("html").click(function(){
+        $("ul.custom-select li.focus-f").trigger("click");
+    });
+    $("ul.custom-select li span.dropdown a").click(function(){
+        $(this).parent("span.dropdown").prev().text($(this).text());
+    });
+
+
+
+
+{% endblock %}
+
+{% block body_container %}
+        {% if assigned_offerings %}
+            <div style="clear:both"></div>
+            {% if not new_centeradmin %}
+            <div class="dashboard-inner-container">
+                <div class="dashboard-notifications-container" style="width:560px;min-height:500px;float:left;padding-right:10px">
+                    {% if stack %}
+                    <div class="notification note-box">
+                       <h3>Notifications <div class="pagination"><i rel="#my-notifications" data-step="1" class="prev icon"></i><i rel="#my-notifications" data-step="1" class="next icon"></i></div></h3>
+                       <ul id="my-notifications" class="cycle">
+                            {% for notification in stack %}
+                                <li data-notification="notification-{{ forloop.counter }}" class="{% if forloop.counter == 1 %} active{% endif %}">
+                                    <p style="text-align:center">{{ notification.grade }} {{ notification.subject }}, {{ notification.center }} - {{ notification.date }} to {{ notification.end_date }}</p>
+                                    <p style="text-align:center;width:235px;margin-top:10px;margin-left:auto;margin-right:auto;overflow:hidden">
+                                        <a class="btn" rel="ajax-link" pre-call="pre_response" callback="response_cb" href="/response/?reply=accept&offering={{ notification.id }}" style="width:100px;float:left">
+                                            <span class="ajax-button-label">accept</span>
+                                        </a>
+                                        <a class="btn" rel="ajax-link" pre-call="pre_response" callback="response_cb" href="/response/?reply=reject&offering={{ notification.id }}" style="width:100px;float:left;margin-left:10px">
+                                            <span class="ajax-button-label">reject</span>
+                                        </a>
+
+                                    </p>
+                                </li>
+                            {% endfor %}
+                       </ul>
+                       <ul>
+                            {% for notification in stack %}
+                                {% if forloop.counter == 1 %}
+                                <li data-notification="notification-1">
+                                    <p style="text-align:center">{{ notification.grade }} {{ notification.subject }}, {{ notification.center }} - {{ notification.date }} to {{ notification.end_date }}</p>
+                                    <p style="text-align:center;width:235px;margin-top:10px;margin-left:auto;margin-right:auto;overflow:hidden">
+                                        <a class="btn" rel="ajax-link" pre-call="pre_response" callback="response_cb" href="/response/?reply=accept&offering={{ notification.id }}" style="width:100px;float:left">
+                                            <span class="ajax-button-label">accept</span>
+                                        </a>
+                                        <a class="btn" rel="ajax-link" pre-call="pre_response" callback="response_cb" href="/response/?reply=reject&offering={{ notification.id }}" style="width:100px;float:left;margin-left:10px">
+                                            <span class="ajax-button-label">reject</span>
+                                        </a>
+                                    </p>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                       </ul>
+                    </div>
+                    {% endif %}
+                    {% if sessions %}
+                    <div class="my-classes note-box">
+                       <h3>Next Class <div class="pagination"><i rel="#my-classes" data-step="1" class="prev icon"></i><i rel="#my-classes" data-step="1" class="next icon"></i></div></h3>
+                       <ul id="my-classes" class="cycle">
+                            {% for session in sessions %}
+                                <li {% if forloop.counter == 1 %}class="active"{% endif %}>
+                                    <p style="text-align:center;margin-top:20px">{{ session.grade }} {{ session.subject }}, {{ session.center}} - <i>{{ session.date }} {{ session.start }}</i></p>
+
+                                </li>
+                            {% endfor %}
+                       </ul>
+                       <ul>
+                            {% for session in sessions %}
+                                {% if forloop.counter == 1 %}
+                                <li>
+                                    <p style="text-align:center;margin-top:20px">{{ session.grade }} {{ session.subject }}, {{ session.center}} - <i>{{ session.date }} {{ session.start }}</i></p>
+                                    <p style="text-align:center;margin-top:10px"><a class="tag" target="_blank" href="http://en.wikipedia.org/wiki/{{ session.subject }}">wiki</a></p>
+
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                       </ul>
+                    </div>
+                    {% endif %}
+                    {% if my_offering %}
+                    <div class="note-box" style="" >
+                        <h3>My Classroom</h3>
+<div class="clas-img" style=" height:250px; text-align:center;padding-left:200px;z-index:-1;padding-top:75px;" >
+                          <p style="color:white;margin-left:-240px; margin-bottom:20px;" > Welcome to Classroom </p>
+                          <div class=" myclasscls enter" target="_blank" style="z-index:1; margin-left:5px;width:40px;height:15px;cursor:pointer " href="/myclass/">
+                            <span style='margin-top: -10px;position: absolute;margin-left: -17px;'>Enter</span>
+                          </div>
+                    </div>
+
+
+                        <a id="comments" href="#Comments-modal" rel="tooltip" data-title="Comments" style="float:right;margin:13px 5px">
+                            <img src='/static/images/comments.png'/>
+                        </a>
+
+                        <div id='attendence-board' class="select-box select-pin attendence-board" style="margin:10px;font-size:14px;">
+                            <select name='my_offerings' style='border-radius: 7px;background: whitesmoke;width:330px!important;'>
+                                {% for offering in my_offering%}
+                                <option value={{ offering.id }}>
+                                        {{ offering.grade }} {{ offering.subject }}, {{ offering.center }} - {{ offering.date }} {{ offering.start }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <select name="my_students" style='border-radius: 7px;background: whitesmoke;min-width:175px;max-width:185px !important'>
+                                <option></option>
+                                {%for offering in my_offering%}
+                                    {% if forloop.counter == 1%}
+                                        {% for stu in offering.students%}
+                                            <option data-offering-id={{ offering.id }} stu-name="{{ stu.name }}" value={{ stu.id}}>{{ stu.name }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <div class="student_options hide">
+                                {%for offering in my_offering%}
+                                    <select name="{{ offering.id }}">
+                                        <option></option>
+                                        {% for stu in offering.students%}
+                                            <option data-offering-id={{ offering.id }} stu-name="{{ stu.name }}" value={{ stu.id}}>{{ stu.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endfor %}
+                            </div>
+                            <div class="student_info hide" style="margin:5px;margin-top:10px;line-height:1.6em">
+                                <table style="width: 100%;text-align: left">
+                                    <thead>
+                                        <tr>
+                                            <th><h3>Subject</h3></th>
+                                            <th><h3>Present</h3></th>
+                                            <th><h3>Absent</h3></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                       </div>
+                    
+                    {% endif %}
+                   <!-- <div class="note-box">
+                        <h3>Things you can do</h3>
+                        <ul>
+                            <li>Your On Boarding status <a href='/user_profile/?{{prof_cm_status}}' style="color:#13AF45;font-weight: bold;">{{prof_cm_status}}</a>
+                            <li>Join one of the Orientation events <a href= http://www.facebook.com/evidyaloka/events>here</a></li>
+                            <li>Know more about <a href="/intro/">eVidyaloka</a></li>
+                            <li>Know more about <a href="/centers/">our centers</a></li>
+                            <li>Check your <a href="/user_profile/?readiness">readiness</a> to start contributing</li>
+                        </ul>
+                    </div>-->
+                    <div class="pref-courses note-box">
+                       <h3>My Courses <div class="pagination"><i rel="#my-courses" data-step="3" class="prev icon"></i><i rel="#my-courses" data-step="3"  class="next icon"></i></div></h3>
+                       {% if assigned_offerings %}
+                       <ul id="my-courses" class="cycle">
+                            {% for offering in assigned_offerings %}
+                                <li {% if forloop.counter < 4 %}class="active"{% endif %}>{{ offering.course_offered }} {{ offering.center }} -<i> {{ offering.start_date }}</i></li>
+                            {% endfor %}
+                       </ul>
+                       <ul>
+                            {% for offering in assigned_offerings %}
+                                {% if forloop.counter < 4 %}
+                                <li>{{ offering.course_offered }} {{ offering.center }} -<i>{{ offering.start_date }} to {{ offering.end_date }}</i></li>
+                                {% endif %}
+                            {% endfor %}
+                       </ul>
+                       {% else %}
+                       <p>wekkdfytgsy</p>
+                       {% endif %}
+                    </div>
+
+
+                </div>
+                {% else %}
+                    <p>You will have admin features when evidyaloka administrator assigns you a center</p>
+                {% endif %}
+                <div style="min-height:120px;float:left;width:370px;">
+                    <div style="margin:10px;text-align:center">
+                        <a class="btn" href="/role_onboarding/teacher/#availability_preference">Manage My Availability</a><br><br>
+                    </div>
+                </div>
+                <div class="dashboard-calendar-container" style="width:370px;min-height:500px;float:left">
+                    <div id="calendar"></div>
+                    
+                </div>
+            </div>
+            
+           <a class="twitter-timeline" href="https://twitter.com/evidyaloka" data-widget-id="506517147732811776">
+           Tweets by @evidyaloka</a>
+           
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+        {% else %}
+            <div class='col-md-offset-1 col-sm-10' style=' padding-left:0px;height:45px;margin-bottom: 12px;'>
+                <div class='material_div sec_title' style='min-height:35px;'>
+                    <div class='row'>
+                        <div class='col-sm-4'>
+                            <h5>Your Onboarding Status : </h5>
+                        </div>
+                        <div class='col-sm-5' style='padding-top:17px;'>
+                            <div class="progress">
+                                  <div class="progress-bar progress-bar-success progress-bar-striped"
+                                  role="progressbar"  aria-valuenow="{{ teacher_role_status }}"
+                                  aria-valuemin="0" aria-valuemax="100" style="width:{{ teacher_role_status }}%; background-color: #5cb85c;">
+                                    {{ teacher_role_status }}% Complete
+                                  </div>
+                            </div>
+                        </div>
+                        <div class='col-sm-3' style='padding-top:12px;'>
+                            {% if teacher_role_status < 100 %}
+                                <a href='/role_onboarding/teacher/' class='btn btn-info' style='line-height:20px;font-family:"open sans"'>Complete Onboarding</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-offset-1 col-sm-5' style=' padding-left:0px;'>
+                <div class='material_div sec_title' style='min-height:221px;'>
+                    <h5>Things you can do..</h5>
+                    <hr>
+                    <div class='row'>
+                        <div class='col-sm-12'>
+                            <ul class='can_do'>
+                               <li>Please review the Curriculum under 'My Book'</li>
+                               <li>You can undergo the available Trainings under 'My Trainings'</li>
+                                {% if fbatwork_status %}
+                                   <li><a href='http://evidyaloka.facebook.com/' style='line-height:20px;'
+                                    target='_blank' class='btn btn-success'>Connect with Community</a></li>
+                                {% else %}
+                                   <li><a class='btn btn-success' data-toggle='modal' style='line-height:20px;'
+                                     data-target='#contact'>Join Community</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-5' style=' padding-left:0px;'>
+                <div class='material_div sec_title' style='min-height:221px;'>
+                    <h5 >Explore class videos</h5>
+                    <hr>
+                    <div class='row'>
+                        <div class='col-sm-12' style='padding:0px 0px 30px 0px;'>
+                            <img src="/static/images/video1.jpg" data-toggle="modal" data-target="#Modal_evd"
+                                     style='height:130px;margin:auto;cursor:pointer' class=" img img-responsive">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-offset-1 col-sm-10' style=' padding-left:0px;'>
+                <div class='material_div sec_title' style='min-height:221px;'>
+                    <h5>View oppourtunities</h5>
+                    <hr>
+                    <a href='/demand/' style='font-family : inherit; line-height : normal;margin-top:25px; color : black;'>
+                        <div class='row standard_row' id='render_demand' data-toggle="tooltip" data-placement="top" title="Click to explore more..">
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-offset-1 col-sm-10" style=' padding-left:0px;'>
+                <div class='material_div sec_title' style='min-height:150px;'>
+                    <h5>Selected Slots</h5>
+                    <hr>
+                    {% if slot_details %}
+                        <ul style="margin-left:50px">
+                            {% for slot in slot_details %}
+                                <li><strong>{{slot.0}} : </strong>on {{slot.1}} ( From {{slot.2}} To {{slot.3}} )</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <div class='row standard_row'>
+                            <div class='col-sm-offset-1 col-sm-10 alert alert-info'>
+                                <p>You have not preferred on any available opportunities. You may find a class by yourself suiting your pereferences by exploring 'View Opportunities'</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!--video modal-->
+            <div id="Modal_evd" class="modal fade" role="dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content" >
+                    <div class="modal-header">
+                        <button type="button" class="close content_admin_modal_close" data-dismiss="modal" style="font-size:30px">&times;</button>
+                        <h4 class="modal-title">Class videos</h4>
+                    </div>
+                    <div class="modal-body" style='padding:10px;'>
+                        <div class='row standard_row embed-responsive embed-responsive-4by3'>
+                           <iframe width="667" height="476" class='video embed-responsive-item'
+                            src="https://www.youtube.com/embed/THyfdA8rttQ?list=PLbdxk95Fm6YyzIv5Yp_389XPJ33E9CKm5"
+                            frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="contact" class="modal fade" role="dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content" >
+                    <div class="modal-header">
+                        <button type="button" class="close content_admin_modal_close" data-dismiss="modal" style="font-size:30px">&times;</button>
+                        <h4 class="modal-title">Contact</h4>
+                    </div>
+                    <div class="modal-body" style='padding:10px;'>
+                        <div class="alert alert-warning">
+                            <div class="row standard_row">
+                                <p>Please send your request to Join the Community to Rini Jose, email :
+                                     <a href="mailto:rini.jose@evidyaloka.org">rini.jose@evidyaloka.org</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+{% endblock %}
+
+{% block bottom_scripts %}
+    {{ block.super }}
+<script src='/static/js/underscore_1.5.2.min.js' type='text/javascript' ></script>
+<script>
+    {% include "underscore_temps/teacher_demand.tmpl" with container="#render_demand" only %}
+</script>
+<script>
+ $(document).ready(function(){
+                 $(".myclasscls").colorbox({iframe:true, fastIframe:false, width:"1100px", height:"760px", gtransition:"fade", scrolling : false, fixed:false });
+ });
+</script>
+<script>
+    $(document).ready(function(){
+        $('#Modal_evd').on('hidden.bs.modal', function (e) {
+          // do something...
+          $('#Modal_evd .video').attr("src", $("#Modal_evd  .video").attr("src"));
+        });
+    });
+</script>
+    <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/calendar/jquery-ui-1.8.17.custom.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="/static/js/teacherdash.js"></script>
+{% endblock %}

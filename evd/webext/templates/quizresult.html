@@ -1,0 +1,365 @@
+{% extends "base.html" %}{% load staticfiles%} {% load filters %} {% block body_container2 %}
+
+<link rel="stylesheet" href="{% static 'css/tailwind.min.css' %}">
+<script src="{% static 'css/fontawesome/js/all.min.js' %}"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+
+
+<script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+<script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+<style>
+    
+    .center_div {
+			margin: 0 auto;
+		}
+
+    .new_booking_form {
+        border: 2px solid #27A3E2;
+        border-radius: 5px;
+        margin-top: 50px;
+    }
+
+    .options_container {
+        width: 90%;
+        margin-top: 24px;
+    }
+
+    .row_container {
+        height: 30px;
+        font-size: 16px;
+    }
+
+    .row_child {
+        width: 35%;
+        height: inherit;
+        padding-left: 6px;
+        outline: none;
+        border-radius: 5px;
+        border: 1px solid rgb(166, 166, 166);
+    }
+
+    .option_label {
+        width: 10%;
+        color: black;
+        text-align: right;
+        margin-right: 10px;
+        font-family: sans-serif;
+    }
+
+    thead{
+            background-color: #27a3e2 !important;
+            color: white;
+            /*display: block;*/
+        }
+    
+    #myTable_length{
+        display:none !important;
+    }
+
+    input{
+        font-weight: normal;
+    }
+
+    .btn-sm{
+       background:#ee9c39;
+       color: white!important;
+    
+        border-radius: 1!important;
+    }
+    tfoot {
+        display: table-header-group !important;
+    }
+
+    .dataTables_filter{
+                margin-bottom: -38pt !important;
+                display: none !important;
+            }
+
+    .paginate_button{
+        font-family: sans-serif !important;
+    }
+
+</style>
+
+<style>
+
+</style>
+
+<div>
+    <div class="center_div" style="margin-top: 2.5%;">
+    <form id="quizform" method="post" enctype="multipart/form-data" onsubmit="">
+		{% csrf_token %}
+        <div id="new_booking_form" class="center_div new_booking_form my-10" style="width: 940px;">
+            <div class="center_div options_container">
+                <div id="alert_message" class="alert" style="display: None;">
+                </div>
+                    <div class="row_container">
+                        <label class="option_label">center<span style="color:red;">*</span></label>
+                        <select name="centerId" id="centerId" class="row_child quiz-form-filter" required>
+                            <option value="">Select Center</option>
+                            {% for center in data.centers %}
+                                <option value="{{ center.id }}">{{ center }}</option>
+                            {% endfor %}
+                        </select>
+                        
+                        <label class="option_label">year<span style="color:red;">*</span></label>
+                        <select name="academicYear" id="academicYear" class="row_child quiz-form-filter" required>
+                            <option value="">Select year</option>
+                            {% for year in data.ay %}
+                                <option value="{{ year.id }}">{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <br>
+                    <div class="row_container">
+                        <label class="option_label">Grade</label>
+                        <select name="grade" id="grade" placeholder="select center" class="row_child">
+                            <option value="">Select Grade</option>
+
+                        </select>
+                        
+                        <label class="option_label">Subject</label>
+                        <select name="subject" id="subject" class="row_child">
+                            <option value="">Subject</option>
+
+                        </select>
+                    </div>
+                    <br>
+                    <div class="flex">
+                        <div class="flex flex-row text-base row_container ml-10 ">
+                            <div class="flex flex-row">
+                                <label class="font-sans">From Date:<span style="color:red; ">*</span></label>
+                                <input required class="rounded mx-2 h-14 w-80 p-2" value="" type="date" name="fromDate" id="fromDate">
+                            </div>
+                            <div class="flex flex-row  ml-56">
+                                <label class="font-sans">To Date:<span style="color:red;">*</span></label>
+                                <input required class="rounded mx-2 h-14 w-80 p-2" value="" type="date" name="toDate" id="toDate">
+                            </div>
+
+                        </div>
+                    </div>
+                    <br>
+                    <br><br>
+                    <div class="row_container" style="text-align: center;">
+                        <button id='getResults' type="submit" class="ml-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">Submit</button>
+                    </div>
+                    <br>
+                
+
+                <!-- </form> -->
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+
+<div class="col-md-12 col-sm-12 col-xm-12 col-lg-12" style = "top:15px;padding-left: 0px;" >
+    <div style="overflow-x:auto;">
+        {% if   isExternal %}
+        <button class="btn btn-sm btn-submit float-right" style="font-family: sans-serif; font-size: 1.2em;margin-bottom: 5px;margin-right: 3px;" title="Add School" onclick="location.href='/school/search/'">Add School</button>
+        {% endif %}
+
+        <table class="table table-bordered dataTable " id="myTable" role="grid" aria-describedby="myTable_info">
+            {% if   isExternal %}
+            {% else %}
+                {% if is_school_admin %}
+                    <div class="tableCaption">Students Results</div>
+                {% else %}
+                    <div class="tableCaption"></div>
+                {% endif %}
+            <br>
+                   <!-- <button class="btn btn-success pull-left" title="Add School" onclick="location.href='/school/search/'">Add School</button>
+                    <input id="searchInWholeTable" type="text" placeholder="Search" class="form-control" style="width: 120px; float: right"> -->
+
+                    <br>
+                </div>
+                <br>
+
+            {% endif %}
+            <thead>
+                <tr>
+                    {% if isExternal %}
+                    <th></th>
+                    {% else %}
+                    <th>Center Name</th>
+                    {% endif %}
+                    <th>offering Id</th>
+                    <th>Student Id</th>
+                    <th>Student Name</th>
+                    <th>Subject</th>
+                    <th>Grade</th>
+                    <th>Attempt</th>
+                    <th>Max Score</th>
+                    <th>Actual Score</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+
+                    <th><input class='form-control' id="centerName"  type="text" onkeyup="myCenterName()"  placeholder="Search" value=""></th>
+                    <th><input class='form-control' id="offeringId"  type="text" onkeyup="myOfferingId()"  placeholder="Search" value=""></th>
+                    <th><input class='form-control' id="studentId"  type="text" onkeyup="myStudentId()"  placeholder="Search" value=""></th>
+                    <th><input class='form-control' id="studentName"  type="text" onkeyup="myStudentName()" placeholder="Search"  value=""></th>
+                    <th><input class='form-control' id="studSubject"  type="text" onkeyup="myStudSubject()" placeholder="Search"  value=""></th>
+                    <th><input class='form-control' id="studGrade"  type="text" onkeyup="myStudGrade()" placeholder="Search"  value=""></th>
+                    <th><input class='form-control' id="attempt"  type="text" onkeyup="myAttempt()" placeholder="Search"  value=""></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    
+                </tr>
+            </tfoot>
+            <tbody>
+                {% for stud in studList %}
+                    <tr>
+                        <td>{{stud.centerName}}</td>
+                        <td>{{stud.offeringId}}</td>
+                        <td>{{stud.studentId}}</td>
+                        <td>{{stud.studentName}}</td>
+                        <td>{{stud.subject}}</td>
+                        <td>{{stud.grade}}</td>
+                        <td>{{stud.attempt}}</td>
+                        <td>{{stud.maxScore}}</td>
+                        <td>{{stud.actualScore}}</td>
+                        <td>{{stud.date}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    let fromday = new Date();
+    let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+
+    let fromday_date = fromday.getDate()
+    let fromday_month = fromday.getMonth() - 1
+    let fromday_year = fromday.getFullYear()
+
+    let yesterday_date = yesterday.getDate()
+    let yesterday_month = yesterday.getMonth() + 1
+    let yesterday_year = yesterday.getFullYear()
+
+
+    if (fromday_date < 10) {
+        fromday_date = "0" + fromday_date;
+    }
+    if (fromday_month < 10) {
+        fromday_month = "0" + fromday_month;
+    }
+    if (yesterday_date < 10) {
+        yesterday_date = "0" + yesterday_date;
+    }
+    if (yesterday_month < 10) {
+        yesterday_month = "0" + yesterday_month;
+    }
+
+    var yesterday2 = yesterday_year + '-' + yesterday_month + '-' + yesterday_date;
+    var fromday2 = fromday_year + '-' + fromday_month + '-' + fromday_date;
+    // console.log('yester day ', yesterday2, fromday2)
+    $('#fromDate').val(fromday2);
+    $('#toDate').val(yesterday2);
+    console.log('yester day ', fromday2, yesterday2)
+
+
+    $(document).ready(function () {
+            $('#selectCen').selectize({
+                sortField: 'text',
+            
+            onChange: function(val) {
+            var selectedCenter= this.options[val]; // <-- pull data-data from the original options
+            studentId = selectedCenter.value
+            console.log(selectedCenter.value); // stores the data-data as a json object
+            }
+        });
+    });
+
+    $('.quiz-form-filter').change(function() {
+        var centerId = $('#centerId').val();
+        var ay = $('#academicYear').val();
+
+        grade_html = '<option value="">Select Grade</option>'
+        subject_html = '<option value="">Subject</option>'
+
+        $.ajax({
+                url: "/v2/quiz_filter/",
+                type: "GET", 
+                data: {
+                    'centerId'  : centerId,
+                    'ay'        : ay,
+                }, 
+                success: function(response) {
+                    resp = response
+                    console.log(resp.data)
+                    $.each( resp.data.grade, function( key, value ) {
+                        grade_html += '<option value=' + value + '>' + value + '</option>';
+                        console.log( key + ": " + value );
+                    });
+
+                    $.each( resp.data.subject, function( key, value ) {
+                        subject_html += '<option value=' + value + '>' + value + '</option>';
+                        console.log(value );
+                    });
+
+                    $('#grade').html(grade_html);
+                    $('#subject').html(subject_html);
+                    
+
+                },
+            })
+        
+    });
+
+    function myCenterName() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("CenterName");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+                } else {
+                tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    var table = $('#myTable').DataTable();
+
+            // Apply the search
+            var table = $('#myTable').DataTable();
+        $('#searchInWholeTable_centers').on( 'keyup', function () {
+                    table.search( this.value ).draw();
+        } );
+
+        table.columns().every( function () {
+            var that = this;
+            $( 'input', this.footer() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+
+
+
+
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,274 @@
+{% extends "base.html" %}{% load staticfiles%} {% block body_container2 %}
+
+<link rel="stylesheet" href="{% static 'css/tailwind.min.css' %}">
+<style>
+    .headtext {
+        color: #1ebea5;
+    }
+    
+    .head {
+        background-color: #e4f0e4;
+    }
+    
+    ul {
+        list-style-type: none;
+    }
+    
+    .hide_eliment {
+        display: none;
+    }
+    
+    @media screen and (min-width: 768px) {
+        .unhide {
+            display: block;
+        }
+    }
+    
+     ::-webkit-scrollbar {
+        width: 5px;
+    }
+    
+     ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+    }
+    
+     ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+    }
+</style>
+
+<script src="{% static 'css/fontawesome/js/all.min.js' %}"></script>
+<div {% if request.user.is_authenticated %}{% else %}class="mt-28 md:mt-32 bg-gray-100" {% endif %}>
+    <div class="flex absolute h-20 w-40 my-24 md:my-26 md:my-14 right-20">
+        <div class="text-4xl mx-2"><i class="fas fa-globe"></i></div>
+        <div class="text-2xl">
+            <div class="relative inline-flex">
+                <div class="w-2 h-2 absolute top-0 right-4 pointer-events-none"><i class="fas fa-sort-down"></i></div>
+                <select onchange="location = this.value;" class=" border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
+                    <option {% if language = 'en' %} selected {%endif%} value="/faq/{{answer.id}}/?lan=en{% if user1 %}&user={{user1}}{%endif%}">English</option>
+                    <option {% if language = 'bn' %} selected {%endif%} value="/faq/{{answer.id}}/?lan=bn{% if user1 %}&user={{user1}}{%endif%}">বাংলা</option>
+                    <option {% if language = 'gu' %} selected {%endif%} value="/faq/{{answer.id}}/?lan=gu{% if user1 %}&user={{user1}}{%endif%}">ગુજરાતી</option>
+                    <option {% if language = 'hi' %} selected {%endif%} value="/faq/{{answer.id}}/?lan=hi{% if user1 %}&user={{user1}}{%endif%}">हिंदी</option>
+                    <option {% if language = 'ka' %} selected {%endif%} value="/faq/{{answer.id}}/?lan=kn{% if user1 %}&user={{user1}}{%endif%}">ಕನ್ನಡ</option>
+                    <option {% if language = 'ml' %} selected {%endif%} value="/faq/{{answer.id}}/?lan=ml{% if user1 %}&user={{user1}}{%endif%}">മലയാളം</option>
+                    <option {% if language = 'mr' %} selected {%endif%} value="/faq/{{answer.id}}/?lan=mr{% if user1 %}&user={{user1}}{%endif%}">मराठी</option>
+                    <option {% if language = 'or' %} selected {%endif%} value="/faq/{{answer.id}}/?lan=or{% if user1 %}&user={{user1}}{%endif%}">ଓଡ଼ିଆ</option>
+                    <option {% if language = 'pa' %} selected {%endif%} value="/faq/{{answer.id}}/?lan=pa{% if user1 %}&user={{user1}}{%endif%}">ਪੰਜਾਬੀ</option>
+                    <option {% if language = 'te' %} selected {%endif%} value="/faq/{{answer.id}}/?lan=te{% if user1 %}&user={{user1}}{%endif%}" >తెలుగు</option>
+                    <option {% if language = 'ta' %} selected {%endif%} value="/faq/{{answer.id}}/?lan=ta{% if user1 %}&user={{user1}}{%endif%}">தமிழ்</option>
+                    <option {% if language = 'ur' %} selected {%endif%} value="/faq/{{answer.id}}/?lan=ur{% if user1 %}&user={{user1}}{%endif%}">اُردُو</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col items-center md:justify-center h-36 head">
+        <div class="flex w-11/12 md:w-2/5 mt-4 md:mt-0">
+            <div class="h-14 md:h-20 w-14 md:w-20 flex justify-center items-center rounded-l-full bg-white">
+                <div class="cursor-pointer text-3xl"><i class="fas fa-search"></i></div>
+            </div>
+            <input type="text" name="searchbox" id="searchbox" placeholder="Type key words to find answer" class="bg-white h-14 w-11/12 md:h-20 rounded-none border-0 placeholder-gray-600 placeholder-opacity-50 text-2xl">
+            <div class="h-14 md:h-20 w-14 md:w-20 flex justify-center items-center rounded-r-full bg-white">
+                <div id="close_result" class="cursor-pointer hide_eliment text-3xl"><i class="fas fa-times"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-center">
+        <div id="result" class="md:absolute w-full md:w-3/5 h-96 md:max-h-96 flex items-center justify-center hide_eliment bg-gray-50 p-4 rounded-lg border-b-2 border-gray-800">
+            <!-- component -->
+            <div class="flex flex-col h-full">
+                <div class="flex-grow overflow-auto overscroll-auto scrollbar">
+                    <div class="relative w-full border-0">
+                        <div id="result_data" class="divide-y-4 divide-white bg-white border-0">
+                            <!--append items through js-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="flex items-center justify-center w-full">
+    <div class="flex justify-center w-full min-h-screen">
+        <div class="w-full md:w-4/5 pb-12 p-4 md:px-20 bg-white">
+            <div class="flex items-center w-full h-auto md:h-28 border-b-2 border-gray-200 text-2xl " style="display: none;">
+                <div class="mr-4 text-green-400 font-bold "> <a href="/faq">{{answer.category|title}}</a> </div>
+                <div class="mx-2"><i class="fas fa-long-arrow-alt-right"></i></div>
+                {% if language == 'bn' %}
+                <div class="mx-4"><a href="/faq/{{answer.id}}/?lan=bn">{% for b in questions_list %}{% if b.language.name = 'Bengali' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%}</a> </div>
+                {% elif language == 'gu' %}
+                <div class="mx-4"><a href="/faq/{{answer.id}}/?lan=gu">{% for b in questions_list %}{% if b.language.name = 'Gujarathi' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%}</a> </div>
+                {% elif language == 'hi' %}
+                <div class="mx-4"><a href="/faq/{{answer.id}}/?lan=hi">{% for b in questions_list %}{% if b.language.name = 'Hindi' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%}</a> </div>
+                {% elif language == 'kn' %}
+                <div class="mx-4"><a href="/faq/{{answer.id}}/?lan=kn">{% for b in questions_list %}{% if b.language.name = 'Kannada' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%}</a> </div>
+                {% elif language == 'ml' %}
+                <div class="mx-4"><a href="/faq/{{answer.id}}/?lan=ml">{% for b in questions_list %}{% if b.language.name = 'Malayalam' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%}</a> </div>
+                {% elif language == 'mr' %}
+                <div class="mx-4"><a href="/faq/{{answer.id}}/?lan=mr">{% for b in questions_list %}{% if b.language.name = 'Marathi' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%}</a> </div>
+                {% elif language == 'or' %}
+                <div class="mx-4"><a href="/faq/{{answer.id}}/?lan=or">{% for b in questions_list %}{% if b.language.name = 'Oriya' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%}</a> </div>
+                {% elif language == 'pa' %}
+                <div class="mx-4"><a href="/faq/{{answer.id}}/?lan=pa">{% for b in questions_list %}{% if b.language.name = 'Punjabi' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%}</a> </div>
+                {% elif language == 'te' %}
+                <div class="mx-4"><a href="/faq/{{answer.id}}/?lan=te">{% for b in questions_list %}{% if b.language.name = 'Telugu' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%}</a> </div>
+                {% elif language == 'ta' %}
+                <div class="mx-4"><a href="/faq/{{answer.id}}/?lan=ta">{% for b in questions_list %}{% if b.language.name = 'Tamil' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%}</a> </div>
+                {% elif language == 'ur' %}
+                <div class="mx-4"><a href="/faq/{{answer.id}}/?lan=ur">{% for b in questions_list %}{% if b.language.name = 'Urdu' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%}</a> </div>
+                {% else %}
+                <div class="mx-4"><a href="/faq/{{answer.id}}/">{{answer.question}}</a> </div>
+                {% endif %}
+            </div>
+            <div class="flex items-center w-full h-auto md:h-28 border-b-2 border-gray-200 text-2xl ">
+            <div class="mx-2 my-2 text-4xl"><a href="/faq{% if language %}?lan={{language}}{%endif%}{% if user1 %}&user={{user1}}{%endif%}" ><i class="fas fa-long-arrow-alt-left"></i></a></div>
+            <div class="ml-4 text-green-200 font-bold "> <a href="/faq{% if language %}?lan={{language}}{%endif%}{% if user %}&user={{user}}{%endif%}">{{answer.category|title}}</a> </div>
+            </div>
+
+            <div class="md:mx-2">
+                <div class="text-4xl md:text-5xl my-4 md:my-16 text-green-400">
+                    {% if language == 'bn' %}{% for b in questions_list %}{% if b.language.name = 'Bengali' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%} 
+                    {% elif language == 'gu' %}{% for b in questions_list %}{% if b.language.name = 'Gujarathi' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%} 
+                    {% elif language == 'hi' %}{% for b in questions_list %}{% if b.language.name = 'Hindi' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%} 
+                    {% elif language == 'kn' %}{% for b in questions_list %}{% if b.language.name = 'Kannada' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%} 
+                    {% elif language == 'ml' %}{% for b in questions_list %}{% if b.language.name = 'Malayalam' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%} 
+                    {% elif language == 'mr' %}{% for b in questions_list %}{% if b.language.name = 'Marathi' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%} 
+                    {% elif language == 'or' %}{% for b in questions_list %}{% if b.language.name = 'Oriya' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%} 
+                    {% elif language == 'pa' %}{% for b in questions_list %}{% if b.language.name = 'Punjabi' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%} 
+                    {% elif language == 'te' %}{% for b in questions_list %}{% if b.language.name = 'Telugu' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%} 
+                    {% elif language == 'ta' %}{% for b in questions_list %}{% if b.language.name = 'Tamil' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%} 
+                    {% elif language == 'ur' %}{% for b in questions_list %}{% if b.language.name = 'Urdu' and b.parent_faq.id == answer.id %} {{b.question|title}} {% endif %}{%endfor%} 
+                    {% else %} {{answer.question|capfirst}} {% endif %}
+
+                </div>
+                <div class="my-2 md:my-4 text-2xl md:text-2xl min-h-full">
+                    {% if language == 'bn' %} {% for b in questions_list %}{% if b.language.name = 'Bengali' and b.parent_faq.id == answer.id %} {{b.answer|escape|linebreaks|linebreaksbr}} {% endif %}{%endfor%} 
+                    {% elif language == 'gu' %} {% for b in questions_list %}{% if b.language.name = 'Gujarathi' and b.parent_faq.id == answer.id %} {{b.answer|escape|linebreaks|linebreaksbr}} {% endif %}{%endfor%} 
+                    {% elif language == 'hi' %} {% for b in questions_list %}{% if b.language.name = 'Hindi' and b.parent_faq.id == answer.id %} {{b.answer|escape|linebreaks|linebreaksbr}} {% endif %}{%endfor%} 
+                    {% elif language == 'kn' %} {% for b in questions_list %}{% if b.language.name = 'Kannada' and b.parent_faq.id == answer.id %} {{b.answer|escape|linebreaks|linebreaksbr}} {% endif %}{%endfor%} 
+                    {% elif language == 'ml' %} {% for b in questions_list %}{% if b.language.name = 'Malayalam' and b.parent_faq.id == answer.id %} {{b.answer|escape|linebreaks|linebreaksbr}} {% endif %}{%endfor%} 
+                    {% elif language == 'mr' %} {% for b in questions_list %}{% if b.language.name = 'Marathi' and b.parent_faq.id == answer.id %} {{b.answer|escape|linebreaks|linebreaksbr}} {% endif %}{%endfor%} 
+                    {% elif language == 'or' %} {% for b in questions_list %}{% if b.language.name = 'Oriya' and b.parent_faq.id == answer.id %} {{b.answer|escape|linebreaks|linebreaksbr}} {% endif %}{%endfor%} 
+                    {% elif language == 'pa' %} {% for b in questions_list %}{% if b.language.name = 'Punjabi' and b.parent_faq.id == answer.id %} {{b.answer|escape|linebreaks|linebreaksbr}} {% endif %}{%endfor%} 
+                    {% elif language == 'te' %} {% for b in questions_list %}{% if b.language.name = 'Telugu' and b.parent_faq.id == answer.id %} {{b.answer|escape|linebreaks|linebreaksbr}} {% endif %}{%endfor%} 
+                    {% elif language == 'ta' %} {% for b in questions_list %}{% if b.language.name = 'Tamil' and b.parent_faq.id == answer.id %} {{b.answer|escape|linebreaks|linebreaksbr}} {% endif %}{%endfor%} 
+                    {% elif language == 'ur' %} {% for b in questions_list %}{% if b.language.name = 'Urdu' and b.parent_faq.id == answer.id %} {{b.answer|escape|linebreaks|linebreaksbr}} {% endif %}{%endfor%} 
+                    {% else %} {{answer.answer|escape|linebreaks|linebreaksbr}} {% endif %}
+                </div>
+                <div class="md:flex items-center justify-center md:justify-between w-full h-44 md:h-28 border-t-2 border-gray-200">
+                    <div id="feedback_text" class="text-2xl my-4 text-gray-500 text-center">Was this helpfull ?</div>
+                    <div id="feedback_buttons" class="flex justify-center my-8 items-center">
+                        <div class="py-3 px-8 mx-4 rounded-full border-2 cursor-pointer border-green-400" onclick="feedback(1)">Yes</div>
+                        <div class="py-3 px-8 mx-4 rounded-full border-2 cursor-pointer border-green-400" onclick="feedback(0)">No</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %} {% block bottom_scripts %} {{ block.super }}
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+
+
+    function toggleanswer(answer) {
+        var x = document.getElementById("a" + answer);
+        var y = document.getElementById("m" + answer);
+        var z = document.getElementById("n" + answer);
+        var q = document.getElementById("q" + answer);
+
+
+        if (x.style.display === "none") {
+            x.style.display = "block";
+            y.style.display = "none";
+            z.style.display = "block";
+            q.style.backgroundColor = "#1ebea5";
+            q.style.color = "#ffffff";
+        } else {
+            x.style.display = "none";
+            y.style.display = "block";
+            z.style.display = "none";
+            q.style.backgroundColor = "#ffffff";
+            q.style.color = "#059681";
+        }
+    }
+
+
+    function search_view(response) {
+        if (response['answers'] != false) {
+            var results = response['answers'];
+            document.getElementById("result").style.display = "block";
+            document.getElementById("close_result").style.display = "block";
+            $("#result_data div").remove();
+
+            for (const result in results) {
+
+                $("#result_data").append('<a href="/faq/' + results[result]['id'] + '"style="text-decoration:none;"><div class="reg bg-gray-100 rounded-xl px-2 py-4 w-full h-36">\
+                    <div class="text-3xl text-green-600">' + results[result]['title'] + '</div>\
+                    <div class="overflow-ellipsis overflow-hidden h-16">' + results[result]['answer'] + '</div></div></a>');
+
+            }
+
+        }
+    }
+
+    $('#close_result').click(function() {
+        document.getElementById("result").style.display = "none";
+        document.getElementById("close_result").style.display = "none";
+        $("#result_data div").remove();
+        $('#searchbox').val('')
+
+    });
+
+    function feedback(params) {
+        document.getElementById("feedback_buttons").style.display = "none";
+        document.getElementById("feedback_text").innerHTML = 'Thank you for your feedback'
+
+    }
+
+
+    $('#searchbox').keyup(function() {
+        var text = $(this).val();
+        console.log(text)
+        $.ajax({
+            url: "/faq/", // the endpoint
+            type: "POST", // http method
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            data: {
+                'text': text
+            },
+
+            success: function(response) {
+
+                document.getElementById("result").style.display = "none";
+                $("#result_data div").remove();
+                search_view(response)
+            },
+
+        });
+    });
+</script>
+
+
+{% endblock %}

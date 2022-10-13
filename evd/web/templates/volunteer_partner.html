@@ -1,0 +1,218 @@
+ {% extends "intermediate_base.html" %}
+ {% load tags %}
+ {% block head_title %}eVidyaloka{% endblock %}
+ {% block head_styles %}
+   {{ block.super }}
+
+
+ <style>
+ thk{ font-weight:bold; color:black;  }
+ .thick{ font-weight: bold; color:black }
+ .listpad { padding-left:40px; padding-bottom:10px; }
+ td{ padding:10px; width:50%; }
+ a { font-size: 14px; }
+ p{
+ font-size:15px;
+text-align: justify;
+    text-justify: inter-word;
+ }
+ h1{  font-size:18px;  color:black; font-weight:bold; }
+ </style>
+ {% endblock %}
+  {% block head_scripts %}
+  {{ block.super }}
+  {% endblock %}
+  {% block body_container %}
+
+  <link href="/static/css_new/login_modal.css" rel="stylesheet">
+  <script src="/static/js_new/login_function.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+        var $partner_modal = $('#partner-signup-trigger');
+    });
+  </script>
+
+  <div style="background-color:white;margin-bottom:20px; padding:20px;">
+    <div class="row">
+        <h1 style="color:#F15A22;text-align:center;font-size:20px; ">Volunteer Partner</h1> 
+        <button class="btn btn-info btn-md already" style="position:relative;float:right;top:-10px;" data-toggle="modal" data-target="#partner-modal" id="partner-signup-trig">Register</button>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h1 style="font-size: 16px;">Why Partner with eVidyaloka:</h1><br>
+            <p>
+                eVidyaloka believes in partnering with like-minded people to help the children across villages receive quality education, and address the shortage of more than 1.2 million teachers in the Indian government schools.
+            </p>
+            <p>
+                eVidyaloka is seeking out partner organizations to join hands with, and strengthen the Indian volunteer community across the globe. The endeavor is to work closely with groups of varied number of members and cultivate long-term partnerships with corporates, social enterprises, fellow non-profits and volunteer organizations among others. The objective is to assist one another and welcome more Volunteer Teachers to impart education to children in remote villages of India via Digital Classrooms.
+            </p>
+            <p>
+                Volunteers share their time and skills to teach, and a variety of organizations and/or groups of varied intents and purposes get together to collectively extend the resource of their efforts to become a Volunteer Teacher.
+            </p>
+        </div>
+    </div><br><br>
+    <div class="row">
+        <div class="col-md-12">
+            <h1 style="font-size: 16px;">Who do we welcome:</h1><br>
+            <ul style="list-style:inherit; margin-left: 40px;">
+                <li>Corporates (Corporate Employee Engagement)</li>
+                <li>Volunteer Groups</li>
+                <li>Social Enterprises</li>
+                <li>Language-based Groups</li>
+                <li>Ethnicity-based Groups</li>
+                <li>Profession-based Groups</li>
+                <li>Alumni Associations</li>
+                <li>College Groups (Volunteer-based and otherwise)</li>
+                <li>Note: We also welcome individuals who’d like to spearhead a volunteer group</li>
+            </ul>
+        </div>
+    </div><br><br>
+    <div class="row">
+        <div class="col-md-12">
+            <h1 style="font-size: 16px;">How can you help:</h1><br>
+            <ul style="list-style:inherit; margin-left: 40px;">
+                <li>Float a volunteer mail among the employees, groups’ members, students, individuals</li>
+                <li>Organize an Orientation Session to throw light on the eVidyaloka model and how one can contribute</li>
+                <li>Social Media Support</li>
+                <li>Support eVidyaloka’s volunteer campaigns</li>
+                <li>Organize and pitch volunteering opportunities of eVidyaloka at events</li>
+            </ul>
+            <br><br>
+            <h1 style="font-size:17px">Become an agent of change and partner with eVidyaloka to initiate and encourage volunteerism. Help us create a volunteer community that actively empowers rural India.&nbsp;&nbsp;&nbsp;<a  style="line-height: 1;font-size: 17px"href="#" data-toggle="modal" data-target="#partner-modal" id="partner-signup-trigger">Register</a></h1>
+            <br>
+        </div>
+    </div>
+
+<style>
+    .form-error::-webkit-input-placeholder {
+      color: #4a4a4a
+    }
+    .form-error:-moz-placeholder {
+      color: #4a4a4a
+    }
+    .form p.note {
+      font-size: 12px;
+      color: #bcbcbc;
+      font-family: 'PlutoCondRegularItalic';
+      text-align: center;
+      margin: 13px auto 0;
+      width: 90%
+    }
+    .form{
+    display: block;
+    margin-top: 0em;
+    }
+    input, textarea {
+    font-size: 12px;
+    display: block;
+    width: 80%;
+    height: 100%;
+    padding: 5px 0px;
+    margin-bottom: 20px;
+    background: none;
+    background-image: none;
+    border: 1px solid #a0b3b0;
+    }
+    .modal-dialog{
+        width : 700px;
+        max-width: 700px;
+    }
+    .form{
+        max-width : 700px;
+    }
+    label{
+        font-weight: normal; !important
+    }
+</style>
+
+<!-- Partner Signup Form-->
+    <div id="partner-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="position: relative;">
+            <div class="">
+                <button type="button" class="close" data-dismiss="modal"style="padding:10px;font-size:30px;color:#000">&times;</button>
+            </div>
+            <div style="border:5px solid rgb(98, 94, 94)">
+                <div class="form">
+                    <form id="partner-signup-trigger" align="center" style="padding:5px 20px 0px 33px; text-align:left;" >
+                    <span id="partnertype" class="hide">Volunteer Partner</span>
+                    {% csrf_token %}
+                        <input type="hidden" name="referral_id"  id="user_id"/>
+                        <input type="hidden" name="next" value='/myevidyaloka/'/>
+                        <h1>Welcome!</h1>
+                        <p style="position: relative;right: -180px;margin: 11px;">Please fill in the details to get started</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                            <input name="name" class="form-control" placeholder = "Your name" type="text" required=""/>
+                            </div>
+                            <div class="col-md-6">
+                                <input name="name_of_organization" class="form-control" placeholder = "Organization Name" type="text" required=""/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type='email' class="form-control" name='email' placeholder="Organization Email" type="text" required=""/>
+                            </div>
+                            <div class="col-md-6">
+                                <input type='phone' class="form-control" name='phone' placeholder="Organization Phone" type="text" required=""/>
+                            </div>
+                        </div>
+                        <div id='ajax_loader'
+                             style="position: fixed; left: 48%; top: 48%; display: none; z-index: 999;">
+                            <img src="/static/img_new/ajax-loader.gif"/>
+                        </div>
+                        <input type='address' style="width:580px;" class="form-control" name='address' placeholder="Address" type="text" required=""/>
+                        <div class="row" style="left: 17px;">
+                            <div>
+                                <h5 style="position: relative;top: -8px;font-weight: bolder;">Contact Person Details</h5>
+                                <span style="font-size:12px;">(An user will be created based on the below details and assigned as default Partner Admin)</span>
+                            </div>
+                            <input type='poc_name' style="width:580px;" class="form-control" name='poc_name' placeholder="Full Name" type="text" required=""/>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type='poc_email' class="form-control" name='poc_email' placeholder="Email" type="text" required=""/>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type='poc_phone' class="form-control" name='poc_phone' placeholder="Phone" type="text" required=""/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="left:17px;">
+                            <h5 style="position: relative;top: -8px;font-weight: bolder;">Select Partner Types</h5>
+                            <div class="row" style="top:10px;">
+                                <div class="col-md-4">
+                                    <input type="checkbox" id="Volunteering Partner" name="ptype" value="Volunteering Partner" checked="checked"/>
+                                    <label for="Volunteering Partner">Would like to engage for Online volunteering opporutnities</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="checkbox" id="Delivery Partner" name="ptype" value="Delivery Partner"/>
+                                    <label for="Delivery Partner">Would like to start eVidyaloka Digital classroom in the village school</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="checkbox" id="Funding Partner" name="ptype" value="Funding Partner"/>
+                                    <label for="Funding Partner">Would like to enagage and Understand Funding Opportunities</label>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <button id="partner-signup" class="btn btn-success" style="margin-bottom:22px;width:580px;position: relative;top: 22px;">Sign Up</button>
+                        <br>
+                    </form>
+                </div>
+            </div>
+    </div>
+    </div>
+
+    <!-- PartnerSignup Done-->
+
+  {% endblock %}
+	{% block scripts %}
+		{{ block.super }}
+	<script type="text/javascript">
+	var urlSplitArray= window.location.pathname.split("/");
+   /*  alert("url split "+urlSplitArray); */
+    var len=urlSplitArray.length;
+    var referral_user_id=urlSplitArray[len-1];
+    /* alert(referral_user_id); */
+    $("#user_id").val(referral_user_id);
+	</script>
+	{% endblock scripts %}

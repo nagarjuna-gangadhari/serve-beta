@@ -1,0 +1,20 @@
+<p style="font-size:14px;" >Dear {{first_name}} {{last_name}},</p>
+<p style="font-size:14px;" >You registered to volunteer at evidyaloka with the Preferred role {{pref_role}} on {{joined_date}}. Your registration is incomplete and must be completed in order to start at the earliest.</p>
+<p style="font-size:14px;" ><b>Let us know if you need any help in completing your registration.</b></p>
+<p style="font-size:14px;" >This 12 min video will give an overview of how it works:</p>
+<p><div style="margin: 25px;"><span style="margin: 0px;"><a style="padding: 7px; color: #fff; background-color: #49ba8e; font-size: 15px; border: none; text-decoration: none; border-radius: 15px;" href="{{host}}/profile/#orientation">Watch Now</a></span>
+<span style="margin:0px;"><a style="padding: 7px; color: #fff; background-color: #49ba8e; font-size: 15px; border: none; text-decoration: none; border-radius: 15px;"href="{{host}}/onboarding/">Start Onboarding</a></span>
+<span style="margin:0px;"><a style="padding: 7px; color: #fff; background-color: #49ba8e; font-size: 15px; border: none; text-decoration: none; border-radius: 15px;"href="{{host}}/demand/">Browse Volunteer Opportunities</a></span></div></p>
+{% if fb_user %}
+    <p style="font-size:14px;" >Facebook Login : <a href="{{host}}/?show_popup=true">Click here to Login.</a></p>
+{% else %}
+    <p style="font-size:14px;" >Your User Name is {{username}} : <a href="{{host}}/?show_popup=true">Click here to Login.</a></p>
+    <p style="font-size:14px;" >Forgot Password? No problem -<div><span><a style="padding: 7px; color: #fff; background-color: #49ba8e; font-size: 15px; border: none; text-decoration: none; border-radius: 15px;margin-left:188px;" href="{{host}}/accounts/password/reset/">Reset Password</a></span></div></p>
+{% endif %}
+<p style="font-size:14px;" >Any other issues, Just reach out to our Volunteer Helpline</p>
+
+<p><div><span><img style="height: 16px;width: 16px;"src="{{host}}/static/images/call_contact.png"/><span style="margin:10px;">+91-80-46808983</span></span><span style="margin:10px;"><img style="height: 16px;width:16px;"src="{{host}}/static/images/skype.png"/><a style="margin:10px;position: relative;bottom: 5px;" href="skype:evidyaloka.helpdesk?call">evidyaloka.helpdesk</a></span><span style="margin:10px;"><img style="height: 16px;width: 16px;" src="{{host}}/static/images/mail_contact.png"><a style="margin:10px;bottom: 5px;position: relative;"href="mailto:volunteer@evidyaloka.org">volunteer@evidyaloka.org</a></span></div></p>
+
+<p style="font-size:14px;" ><b>We are happy to inform you that currently over 600+ teachers across 282 cities are Teaching Online to 6000+ children in villages across India. Connect with them at eVidyaloka Workplace!</b></p>
+<p><div><span><a style="padding: 7px; color: #fff; background-color: #49ba8e; font-size: 13px; border: none; text-decoration: none; border-radius: 15px;margin-left:188px;" href="{{host}}/engage/">Take me to Workplace</a></span></div></p>
+<br>

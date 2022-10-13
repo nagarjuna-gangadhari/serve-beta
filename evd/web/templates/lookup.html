@@ -1,0 +1,361 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+  <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+  <link rel="stylesheet" href="/static/css/lookup.css"/>
+{% endblock %}
+
+{% block pre_evd_init %}
+        $("body").append("<a id='dummylink' rel='ajax-link' style='display:none' pre-call='pre_filter' href='/get_teachers?subject={{ cur_subject }}&medium={{ cur_medium }}&role={{ cur_role }}&from={{ cur_from_date }}&to={{ cur_to_date }}&teacher_id={{ teacher_id }}' callback='after_filter'></a>");
+{% endblock %}
+
+{% block doc_ready %}
+        evd.after_sent_mail = function(resp){
+            if(resp=="success"){
+                $("#send-mail-modal").modal("hide");
+                $("#send-mail-modal input").not("input[name='csrfmiddlewaretoken']").val("");
+                $("#send-mail-modal textarea").val("");
+                evd.show_msg("Sent mail successfully");
+            }
+        }
+        $("#footer").css({"position": "relative"});
+        var $loading = $("#loading"),
+            remove_centers = function(){
+                $loading.nextAll().remove();
+                $(".user-block").remove();
+                $loading.fadeIn("slow");
+            },
+            serialize = function(obj) {
+              var str = [];
+              for(var p in obj)
+                 str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+              return str.join("&");
+            };
+        //$.template("center_template",center_html);
+        window.filters = { day:"all", subject:"all", medium:"all", from:"all", to: "all" };
+        evd.pre_filter = function(){
+            var href = $(this).attr("href"),
+                filter_type = $(this).attr("data-filter"),
+                q = "";
+            if(href.indexOf("?") >= 0)
+                q = href.substring(href.indexOf("?")+1);
+            (function (q) {
+                 var e,
+                 a = /\+/g,  // Regex for replacing addition symbol with a space
+                 r = /([^&=]+)=?([^&]*)/g,
+                 d = function (s) { return decodeURIComponent(s.replace(a, " ")); };
+                 while (e = r.exec(q))
+                    filters[d(e[1])] = d(e[2]);
+            }(q));
+            var q = serialize(filters);
+            if(href.indexOf("?") >= 0)
+                href = href.substring(0,href.indexOf("?") + 1) + q;
+            else
+                href += "?"+q;
+
+            if($(this).attr("data-filter") == "from")
+                $("#date-to").attr({"href":href});
+            else if($(this).attr("data-filter") == "to")
+                $("#date-from").attr({"href":href});
+
+            $(this).attr({"href": href});
+            window.links = href.split("?")
+            download_link = links[0].replace(links[0], "/download/?") + links[1]
+            $("#download").attr({"href": download_link});
+            remove_centers();
+        }
+        evd.after_filter = function(resp){
+            resp = eval(resp);
+            $loading.fadeOut("fast",function(){
+                if(resp.length > 0){
+                   for(var i in resp){
+                        if(i%2 == 0)
+                            var placement = "left";
+                        else
+                            var placement = "right";
+                        var user_info = resp[i];
+                        if(user_info.short_notes == "")
+                            var title = "No notes is available";
+                        else
+                            var title = user_info.short_notes;
+                        var $user_block = "<div class='user-block' style='float:left;width:470px' rel='tooltip' title='"+title+"' data-placement='"+placement+"'>"+
+                                            "<div style='width:460px;border:1px solid #8E8B8A;min-height:260px;overflow:hidden;clear:both;margin-top:10px;'>"+
+                                                "<div style='overflow:hidden;position:absolute;'>"+
+                                                    "<form action='/save_remarks/' method='POST' id='remarks-form"+i+"' data-userid='"+user_info.id+"'>{% csrf_token %}"+
+                                                    "<div style='overflow:hidden;background:#E6E6FA'>"+
+                                                          "<img class='user-pic' src='"+user_info.picture+"' style='float:left;width:100px;height:100px'>"+
+                                                          "<div class='general-information'>"+
+                                                              "<p class='username'>"+user_info.name+"</p>"+
+                                                              "<p style='float:right'>"+
+                                                                "<select name='status' style='float:right;padding-right:0px'>"+
+                                                                    "<option>"+user_info.status+"</option>"+
+                                                                    "<option>New</option>"+
+                                                                    "<option>Ready</option>"+
+                                                                    "<option>Active</option>"+
+                                                                    "<option>Dormat</option>"+
+                                                                    "<option>Non-active</option>"+
+                                                                "</select>"+
+                                                              "</p>"+
+                                                              "<p style='clear:both;margin-top:0px;width:340px;'>"+user_info.role+"</p>"+
+                                                              "<p style='clear:both;width:130px;'><label>Medium: </label>"+user_info.medium+"</p>"+
+                                                              "<p style='width:210px;'><label>Location: </label>"+user_info.location+"</p>"+
+                                                              "<!--<p><label>Avail From: </label>"+user_info.from+"</p>-->"+
+                                                              "<!--<p style='margin-left: -19px;'><label>Avail To: </label>"+user_info.to+"</p>-->"+
+                                                          "</div>"+
+                                                      "</div>"+
+                                                      "<div style='width:440px;min-height:50px;font-size:small;padding:0px 10px;'>"+
+                                                        "<div class='info'>"+
+                                                          "<p class='email'><label>Email: </label>"+user_info.email+"</p>"+
+                                                          "<p class='skypeid'><label>Skype: </label>"+user_info.skype_id+"</p>"+
+                                                          "<p class='phone'><label>Phone: </label>"+user_info.phone+"</p>"+
+                                                         " <p class='hours'><label>Hours Contributed: </label>"+user_info.hrs_contributed+"</p>"+
+                                                        "</div>"+
+                                                        "<p style='margin-top:5px;'><label style='font-size:13px;'>Current courses: </label>"+user_info.current_courses+"</p>"+
+                                                      "</div>"+
+                                                      "<div class='general_info preferences'>"+
+                                                          "<p style='float:left'><label style='font-size:13px;'>Remarks: </label></p>"+
+                                                          "<p style='float:left;padding-left:10px;'>"+
+                                                                "<input type='hidden' name='step' value=5 />"+
+                                                                "<input type='hidden' name='user_id' value='"+user_info.id+"' />"+
+                                                                "<textarea class='enabled' name='remarks' rows=2 cols=50 style='width:100%'>"+user_info.remarks+"</textarea>"+
+                                                          "</p>"+
+                                                          "<a class='btn hide' data-userid='"+user_info.id+"' rel='submit' callback='after_save' href='#remarks-form"+i+"' style='cursor:pointer;width:50px;font-size:12px;float:right;line-height:18px;height:20px;'><span class='ajax-button-label' data-loading='wait'>Save</span></a>"+
+                                                      "</div>"+
+                                                    "</form>"+
+                                                  "</div>"+
+                                                  "<div class='preferences' style='padding:10px;float:left;width:440px;display:none'>"+
+                                                      "<p><label>Preferred Courses: </label></p>"+
+                                                      "<p>"+user_info.courses+"</p>"+
+                                                  "</div>"+
+                                        "</div>"+
+                                    "</div>";
+                      $("#users-block").append($user_block);
+                    }
+                    //$("#user-tmpl").tmpl(window.eval(resp)).insertAfter($loading);
+                    $(".user-block").on("click", ".btn", evd.ajax_submit);
+                }
+                else
+                    $("<p style='text-align:center;padding:20px 0px'><b>no teahcers found to suit your requirements</b></p>").insertAfter($loading);
+            });
+        }
+        evd.pre_save = function(){
+            var user_id = $(this).attr("data-userid");
+            $(this).prevAll("input[name='user_id']").val(user_id);
+        }
+        evd.after_save = function(){
+            $(this).hide();
+        }
+        $("#dummylink").trigger("click");
+        $("ul.custom-select li").toggle(function(){
+            $("ul.custom-select > li.focus-f").not($(this)).trigger("click");
+            $(this).addClass("focus-f");
+        },function(){
+            $(this).removeClass("focus-f");
+        });
+        $("html").click(function(){
+            $("ul.custom-select li.focus-f").trigger("click");
+        });
+        $("ul.custom-select li span.dropdown a").click(function(){
+            $(this).parent("span.dropdown").prev().text($(this).text());
+        });
+        evd.pre_stu_filter = function(){
+                     $("#mystudents p.title").remove();
+                     $("#mystudents p.no-students").remove();
+                     $("#mystudents table").remove();
+                     $("#mystudents").find("a[rel='submit']").hide();
+                     $("#mystudents").append('<img style="display:block;margin:10px auto" src="/static/images/loader.gif" />');
+                }
+                evd.after_stu_filter = function(resp){
+                    var len = resp.length;
+                    $("#mystudents img").remove();
+                    if(len != 0) {
+                        var students = resp;
+                        //$("#mystudents").append("<ul id='students_list' style='max-height:400px;margin-right:20px;overflow-x:hidden;overflow-y:auto'></ul>");
+                        $("<p class='title' style='padding:10px 0px 0px 10px;'>Students for the selected offering are:</p>").insertAfter($("#mystudents .select-box"));
+                        //$.template("student_template",student_html);
+                        var student_html = '<table class="current_session_table">'+
+                                                '<thead>'+
+                                                    '<tr>'+
+                                                        '<th style="width:150px">Name</th>'+
+                                                        '<th>Strengths</th>'+
+                                                        '<th>Weakness</th>'+
+                                                        '<th>Observation</th>'+
+                                                    '<tr>'+
+                                                '</thead>'+
+                                                '<tbody>';
+                        var ids = "";
+                        for(var index in students){
+                            student = students[index];
+                            ids += student.id + (index < students.length-1 ? ";" : "");
+                            student_html += '<tr><td><div class="controls text"><p>' + student.name + '</p></div></td>'+
+                                                '<td><div class="controls text"><input type="text" class="strengths" value="' + student.strengths + '" /></div></td>'+
+                                                '<td><div class="controls text"><input type="text" class="weakness"  value="' + student.weakness + '"/></div></td>'+
+                                                '<td><div class="controls text"><input type="text" class="observation"  value="' + student.observation + '"/></div></td></tr>';                        }
+                        student_html += "</tbody></table>";
+                        $("#mystudents form#students-form").append(student_html);
+                        $("#mystudents form#students-form input[name='student_ids']").val(ids);
+                        $("#mystudents").find("a[rel='submit']").show();
+                    }
+                    else {
+                        $("<p style='padding:10px 0px 0px 10px;' class='no-students'>The selected offering has no students assigned</p>").insertAfter($("#mystudents .select-box"));
+                    }
+                }
+                window.evd.pre_students_save = function(){
+                    var strengths = "",
+                        weakness = "",
+                        observation = "",
+                        students_len = $("#mystudents form#students-form").find("input.strengths").length;
+                    $("#mystudents form#students-form").find("input.strengths").each(function(index, val){
+                        strengths += $(this).val() + (index < students_len-1 ? ";" : "");
+                    });
+                    $("#mystudents form#students-form").find("input.weakness").each(function(index, val){
+                        weakness += $(this).val() + (index < students_len-1 ? ";" : "");
+                    });
+                    $("##mystudents form#students-form").find("input.observation").each(function(index, val){
+                        observation += $(this).val() + (index < students_len-1 ? ";" : "");
+                    });
+                    $("#mystudents form#students-form input[name='strengths']").val(strengths);
+                    $("#mystudents form#students-form input[name='weakness']").val(weakness);
+                    $("#mystudents form#students-form input[name='observation']").val(observation);
+                }
+                window.evd.after_students_save = function(){
+                    $("#mystudents").modal("hide");
+                    evd.show_msg("Modified students successfully");
+                }
+{% endblock %}
+
+ {% block body_container %} 
+    <div id="content" class="clearfix" style="padding-bottom:0px">
+        <div id="filter-top-wrapper" class="clearfix">
+            <div id="filter-top">
+                <div class="inner clearfix">
+                    <div class="intro clearfix">
+                        <h2>Find Passionate teachers </h2>
+                        <!--<p style="margin-bottom:5px;">We have hand-selected  passionate teachers to participate in our launch.</p>-->
+                    </div>
+                    <div class="clearfix">
+                        <span class="label-filter">Filters: </span>
+                        <div class="select-box select-int">
+                            <span class="icon"></span>
+                            <ul class="custom-select">
+                                <li><span class="selected_item">{% if cur_subject == "all" %}All Subjects{% else %}{{ cur_subject }}{% endif %}</span>
+                                    <span class="dropdown">
+                                        <a rel="ajax-link" class="filter-sensitive" data-filter="subject" pre-call="pre_filter" callback="after_filter" href="/get_teachers/?subject=all" style="cursor:pointer"><span>All Subjects</span></a>
+                                        {% for subject in subjects %}
+                                            <a rel="ajax-link" class="filter-sensitive" data-filter="subject" pre-call="pre_filter" callback="after_filter" href="/get_teachers/?subject={{ subject }}" style="cursor:pointer"><span>{{ subject }}</span></a>
+                                        {% endfor %}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="select-box select-int">
+                            <span class="icon"></span>
+                            <ul class="custom-select">
+                                <li><span class="selected_item">{% if cur_medium == "all" %}All Languages{% else %}{{ cur_medium }}{% endif %}</span>
+                                    <span class="dropdown">
+                                        <a rel="ajax-link" class="filter-sensitive" data-filter="medium" pre-call="pre_filter" callback="after_filter" href="/get_teachers/?medium=all" style="cursor:pointer"><span>All Languages</span></a>
+                                        {% for medium in medium %}
+                                            <a rel="ajax-link" class="filter-sensitive" data-filter="medium" pre-call="pre_filter" callback="after_filter" href="/get_teachers/?medium={{ medium }}" style="cursor:pointer"><span>{{ medium }}</span></a>
+                                        {% endfor %}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="select-box select-pin">
+                            <span class="icon"></span>
+                            <ul class="custom-select">
+                                <li><span class="selected_item">All Days</span>
+                                    <span class="dropdown">
+                                        <a rel="ajax-link" class="filter-sensitive" href="/get_teachers/?day=all" data-filter="day" pre-call="pre_filter" callback="after_filter" style="cursor:pointer"><span>All Days</span></a>
+                                        {% for day in days %}
+                                        <a rel="ajax-link" class="filter-sensitive" href="/get_teachers/?day={{ day|slice:":3"|capfirst }}" data-filter="day" pre-call="pre_filter" callback="after_filter" style="cursor:pointer"><span>{{ day }}</span></a>
+                                        {% endfor %}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="select-box select-pin">
+                            <span class="icon"></span>
+                            <ul class="custom-select">
+                                <li style="width:155px !important;"><span class="selected_item">{% if cur_role == "all" %}All Roles{% else %}{{ cur_role }}{% endif %}</span>
+                                    <span class="dropdown" style="width:175px !important;">
+                                        <a rel="ajax-link" class="filter-sensitive" href="/get_teachers/?role=all" data-filter="role" pre-call="pre_filter" callback="after_filter" style="cursor:pointer;width:163px !important"><span>All Roles</span></a>
+                                        {% for role in roles %}
+                                        <a rel="ajax-link" class="filter-sensitive" href="/get_teachers/?role={{ role }}" data-filter="role" pre-call="pre_filter" callback="after_filter" style="cursor:pointer;width:163px !important"><span>{{ role }}</span></a>
+                                        {% endfor %}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="input text" style="float:left">
+                            <input type="text" class="date-picker" style="margin-left:7px;width:94px;padding:8px 9px;" placeholder="available from" {% if not cur_from_date == "all" %}value="{{ cur_from_date }}"{% endif %}/>
+                            <input type="text" class="date-picker" style="width:94px;padding:8px 9px;margin-left:5px;" placeholder="available upto" {% if not cur_to_date == "all" %}value="{{ cur_to_date }}"{% endif %}/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div>
+                <div class="teachers-sidebar">
+                    <a href="/download/?day=all&subject=all&medium=all&from=all&to=all&role=Teacher&teacher_id=None" style="color:#505050" id="download"><div><p>Download</p></div></a>
+                </div>
+                <div class="teachers-sidebar">
+                    <a href="#send-mail-modal" data-toggle="modal"><div><p>Send Mail</p></div></a>
+                </div>
+            </div>
+        </div>
+        <div style="min-height:400px;margin-bottom:10px;" id="users-block">
+            <div style="width:940px;margin:0px auto;overflow:hidden">
+                <a id="date-from" rel="ajax-link" class="filter-sensitive" data-filter="from" pre-call="pre_filter" callback="after_filter" href="/get_teachers/?from=" style="cursor:pointer;display:none"><span></span></a>
+                <a id="date-to" rel="ajax-link" class="filter-sensitive" data-filter="to" pre-call="pre_filter" callback="after_filter" href="/get_teachers/?to=" style="cursor:pointer;display:none"><span></span></a>
+                <p id="loading" style="text-align:center;padding:20px 0px;"><b>Loading...</b></p>
+            </div>
+        </div>
+    </div>
+    <div id="send-mail-modal" class="modal hide">
+        <img src="/static/images/loader.gif" />
+        <div class="hide">
+            <div class="header">
+                <p>New Message</p>
+                <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+            </div>
+            <form method="POST" action='/send_mail/' id="send-mail-form">
+                {% csrf_token %}
+                <div class="control-group control">
+                    <label>To: </label>
+                    <div class="controls text" style="padding-left:46px;">
+                        <textarea rows=4 type="text" name="user_emails" data-validate="true" data-field-type="not_empty" data-show-tooltip="true" rel="tooltip" data-placement="right"></textarea>
+                    </div>
+                </div>
+                <div class="control-group control">
+                    <label>Subject: </label>
+                    <div class="controls text" style="padding-left:14px;">
+                        <input type="text" name="subject" data-validate="true" data-field-type="not_empty" data-show-tooltip="true" rel="tooltip" data-placement="right" />
+                    </div>
+                </div>
+                <div class="control-group control">
+                    <label>Message: </label>
+                    <div class="controls text" style="padding-left:8px;">
+                        <textarea name="message" rows="10"></textarea>
+                    </div>
+                </div>
+                <a class="btn" rel="submit" href="#send-mail-form" callback="after_sent_mail" validate="true">
+                    <span class="ajax-button-label" data-loading="please wait">Send</span>
+                </a>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block bottom_scripts %}
+    {{ block.super }}
+    <script type="text/javascript" src="/static/js/bootstrap-popover.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="/static/js/jQuery.ellipsis.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
+    <script id="user-tmpl" type="text/x-jquery-tmpl">
+	{{ TEACHER_TEMPLATE|safe }}
+    </script>
+    <script type="text/javascript" src="/static/js/lookup.js"></script>
+{% endblock %}
+

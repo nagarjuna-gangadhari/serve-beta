@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block head_styles %}
+{{ block.super }}
+
+    <style>
+        .mySchoolDiv {
+            background-color:#ffffff;
+            padding : 15px 20px 20px 30px;
+        }
+        .verification{
+            margin-top:15px;
+        }
+        input, textarea {
+            margin-bottom : 0px !important;
+        }
+        thead{
+            background-color: #525A99 !important;
+            color: white;
+        }
+        thead th{
+            border-bottom: 1px solid #111;
+            font-weight: bold !important;
+        }
+        .tableCaption{
+            padding: 20px;
+            text-align: center;
+            font-size: 23px;
+            font-weight: bold;
+            background-color: #27A3E2;
+            color: white;
+        }
+        .spantext{
+            text-align: center !important;
+        }
+
+        tfoot {
+            display: table-header-group !important;
+        }
+
+        .zoom {
+            transition: transform .2s; /* Animation */
+            margin: 0 auto;
+        }
+
+        .zoom:hover {
+            transform: scale(5.2); /* (1.5 = 150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+        }
+
+    </style>
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_container %}
+    {{ block.super }}
+
+
+
+<div class="row" style="min-height: 450px !important;">
+    <div class="col-md-12 col-sm-12 mySchoolDiv" >
+        <div style="overflow-x:auto;">
+            <table class="table table-bordered" id="myTable">
+                <caption class="tableCaption">Stickers</caption>
+                <thead>
+                    <tr>
+                        <th><b>Sticker Name</b></th>
+                        <th><b>Sticker</b></th>
+                        <th><b>Sticker Type</b></th>
+                        <th><b>For Whom</b></th>
+                        <th><b>Added By</b></th>
+                        <th><b>Update </b></th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Sticker Name</th>
+                        <th>Sticker</th>
+                        <th>Sticker Type</th>
+                        <th>For Whom</th>
+                        <th>Added By</th>
+                        <th>Update</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% for sticker in stickers %}
+                        <tr>
+                            <td>{{sticker.sticker_name}}</td>
+                            <td style="text-align:center;"><a href="/{{sticker.sticker_path}}" target="_blank"><img style="display: inline-block; width: 50px; height: 50px;" src="/{{sticker.sticker_path}}" class="zoom"/></a></td>
+                            <td>{{sticker.get_sticker_type_display}}</td>
+                            <td>{{sticker.get_for_whom_display}}</td>
+                            <td>{{sticker.added_by.first_name}} {{sticker.added_by.last_name}}</td>
+                            <td style="text-align:center"><button class="btn btn-sm" title="Update Sticker Info" onclick="myfunc({{sticker.id}},{{ stickers|getmyitem:sticker.id }})" data-toggle="modal" data-target="#addStickerModal">Update</button> </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+     <!-- Modal -->
+            <div id="addStickerModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="stickerModalLabel" aria-hidden="true">
+                <div class="" role="document">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title col-sm-10" id="exampleModalLabel" style="font-weight:bold">Add Sticker</h4>
+                            <button type="button" class="close col-sm-2" data-dismiss="modal" aria-label="Close">
+                               <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body col-sm-12">
+                            <form id="modal_form_addupdate" action="/config/sticker/add/" method="POST" style="border:None;" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <label style="width:30%">Select Type</label>
+                                <select id="modal_sticker_type" name="sticker_type" style="width:60%; height: 32px; margin:7px 0px;" required="required">
+                                    {% for sticekr in sticker_types_choices %}
+                                        <option value="{{sticekr.0}}">{{sticekr.1}}</option>
+                                    {% endfor %}
+                                </select>
+                                <br/>
+                                <label style="width:30%">Select For Whom</label>
+                                <select id="modal_for_whom" name="for_whom" style="width:60%; height: 32px; margin:7px 0px;" required="required">
+                                    {% for fwchoice in for_whom_choices %}
+                                        <option value="{{fwchoice.0}}">{{fwchoice.1}}</option>
+                                    {% endfor %}
+                                </select>
+                                <br/>
+                                <label style="width:30%">Sticker Name</label>
+                                <input style="width:60%; display: inline; margin:7px 0px;" clas="form-control" id="modal_sticker_name" name="sticker_name" type="text" value="" required="required">
+                                <input style="width:60%; display: inline; margin:7px 0px;" clas="form-control" id="modal_sticker_id" name="sticker_id" type="hidden" value="">
+                                <br/>
+                                <label style="width:30%">Sticker</label>
+                                <input id="modal_id_photo" style="width:60%; display: inline; margin:7px 0px;" type="file" accept="image/*" class="form-control" name="photo" required="required">
+                                <br/>
+                                <button id="modal_form_submit" type="submit" class="btn btn-success">Save</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal end-->
+</div>
+
+{% endblock %}
+
+
+{% block bottom_scripts %}
+    {{ block.super }}
+
+    <script type="text/javascript" src="/static/js/jquery.colorbox.js"></script>
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tab.js"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+
+        $('#addStickerModal').on('shown.bs.modal', function () {
+              $('#myInput').trigger('focus')
+        })
+        $('#addStickerModal').on('hide.bs.modal', function () {
+              $('#myInput').trigger('focus')
+              $('#exampleModalLabel').text('Add Sticker');
+              $('#modal_form_submit').text('Save');
+              var action = '/config/sticker/add/';
+              $('#modal_form_addupdate').attr('action', action);
+              $('#modal_sticker_type').val()
+              $('#modal_for_whom').val()
+              $('#modal_sticker_name').val('')
+              $('#modal_sticker_id').val('')
+        })
+        function myfunc(id,data){
+            $('#exampleModalLabel').text('Update Sticker');
+            $('#modal_form_submit').text('Update');
+            var action = '/config/sticker/add/';
+            $('#modal_form_addupdate').attr('action', action+id+'/');
+            $('#modal_sticker_type').val(data.sticker_type)
+            $('#modal_for_whom').val(data.for_whom)
+            $('#modal_sticker_name').val(data.sticker_name)
+            $('#modal_sticker_id').val(data.id)
+
+
+        }
+     </script>
+    <script type="text/javascript">
+
+
+        $(document).ready( function () {
+            $(".inner.clearfix").css("width","85%");
+
+            // Setup - add a text input to each footer cell
+            $('#myTable tfoot th').each( function () {
+                var title = $(this).text();
+                $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+            } );
+
+
+            $("#myTable").DataTable({
+                "bLengthChange": false,
+                "pageLength": 25,
+            });
+
+            // DataTable
+            var table = $('#myTable').DataTable();
+
+            // Apply the search
+            table.columns().every( function () {
+                var that = this;
+                $( 'input', this.footer() ).on( 'keyup change', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+
+            $('#myTable_filter').append('<div style="display: inline;float: left;padding-top: 15px;"><button id="add_sticker" class="btn btn-success" data-toggle="modal" data-target="#addStickerModal">Add Sticker</button></div>')
+        });
+
+
+    </script>
+
+{% endblock %}

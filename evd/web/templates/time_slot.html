@@ -1,0 +1,122 @@
+{% load filters %}
+
+<input name="prefered_days" type="hidden"/>
+<input name="prefered_timings" type="hidden"/>
+<div {% if id %}id="{{ id }}"{% endif %} class="span6 offset1" style="overflow:hidden;clear:both">
+    <div class="control-group" style="margin-right:20px;float:left;">
+        {% if label %}
+        <label class="control-label text-left">{{ label }}</label>
+        {% endif %}
+        {% if not  w_days %}
+        <div id="timing-wrapper-{{ forloop.counter }}" class="timing-wrapper">
+            <div class="timing-inner-wrapper controls">
+                <select class="prefered_days" class="span1">
+                    {% for week_day in week_days %}
+                    <option {% if day == week_day %}selected="selected"{% endif %} value="{{ week_day }}">{{ week_day }}</option>
+                    {% endfor %}
+                </select>
+                <select class="span1" name="prefered_timings_mor" class="prefered_timings_mor">
+                        <option vlaue="From">From</option>
+                    {% for i in 1234567891011|make_list %}
+                        <option value="{{ forloop.counter0 }}:00">{{ forloop.counter0 }}:00</option>
+                        <option value="{{ forloop.counter0 }}:15">{{ forloop.counter0 }}:15</option>
+                        <option value="{{ forloop.counter0 }}:30">{{ forloop.counter0 }}:30</option>
+                        <option value="{{ forloop.counter0 }}:45">{{ forloop.counter0 }}:45</option>
+                    {% endfor %}
+                    {% for i in 12345678910|make_list %}
+                        <option value="{{ forloop.counter|add_digits:12 }}:00">{{ forloop.counter|add_digits:12 }}:00</option>
+                        <option value="{{ forloop.counter|add_digits:12 }}:15">{{ forloop.counter|add_digits:12 }}:15</option>
+                        <option value="{{ forloop.counter|add_digits:12 }}:30">{{ forloop.counter|add_digits:12 }}:30</option>
+                        <option value="{{ forloop.counter|add_digits:12 }}:45">{{ forloop.counter|add_digits:12 }}:45</option>
+                    {% endfor %}
+                </select>
+                <select class="span1" name="prefered_timings_eve" class="prefered_timings_eve">
+                        <option value="To">To</option>
+                    {% for i in 1234567891011|make_list %}
+                        <option value="{{ forloop.counter0 }}:00">{{ forloop.counter0 }}:00</option>
+                        <option value="{{ forloop.counter0 }}:15">{{ forloop.counter0 }}:15</option>
+                        <option value="{{ forloop.counter0 }}:30">{{ forloop.counter0 }}:30</option>
+                        <option value="{{ forloop.counter0 }}:45">{{ forloop.counter0 }}:45</option>
+                    {% endfor %}
+                    {% for i in 12345678910|make_list %}
+                        <option value="{{ forloop.counter|add_digits:12 }}:00">{{ forloop.counter|add_digits:12 }}:00</option>
+                        <option value="{{ forloop.counter|add_digits:12 }}:15">{{ forloop.counter|add_digits:12 }}:15</option>
+                        <option value="{{ forloop.counter|add_digits:12 }}:30">{{ forloop.counter|add_digits:12 }}:30</option>
+                        <option value="{{ forloop.counter|add_digits:12 }}:45">{{ forloop.counter|add_digits:12 }}:45</option>
+                    {% endfor %}
+                </select>
+                <a class="btn add-timing"><span style="display:block;font-size:16px">+</span></a>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+
+        {% endif %}
+        {% for day in w_days %}
+        <div id="timing-wrapper-{{ forloop.counter }}" class="timing-wrapper">
+            <div class="timing-inner-wrapper controls">
+                <select class="prefered_days" class="span1">
+                    {% for week_day in week_days %}
+                    <option {% if day == week_day %}selected="selected"{% endif %} value="{{ week_day }}">{{ week_day }}</option>
+                    {% endfor %}
+                </select>
+                <select class="span1" name="prefered_timings_mor" class="prefered_timings_mor">
+                        <option vlaue="From">From</option>
+                    {% for i in 1234567891011|make_list %}
+                        <option {% if week_map|fetch:day|fetch:0 == forloop.counter0 %}selected="selected"{% endif %} value="{{ forloop.counter0 }}:00">{{ forloop.counter0 }}:00</option>
+                        <option {% if week_map|fetch:day|fetch:0 == forloop.counter0 %}selected="selected"{% endif %} value="{{ forloop.counter0 }}:15">{{ forloop.counter0 }}:15</option>
+                        <option {% if week_map|fetch:day|fetch:0 == forloop.counter0 %}selected="selected"{% endif %} value="{{ forloop.counter0 }}:30">{{ forloop.counter0 }}:30</option>
+                        <option {% if week_map|fetch:day|fetch:0 == forloop.counter0 %}selected="selected"{% endif %} value="{{ forloop.counter0 }}:45">{{ forloop.counter0 }}:45</option>
+                    {% endfor %}
+                    {% for i in 12345678910|make_list %}
+                        <option {% if week_map|fetch:day|fetch:0 == forloop.counter0|add_digits:13 %}selected="selected"{% endif %} value="{{ forloop.counter|add_digits:12 }}:00">{{ forloop.counter|add_digits:12 }}:00</option>
+                        <option {% if week_map|fetch:day|fetch:0 == forloop.counter0|add_digits:13 %}selected="selected"{% endif %} value="{{ forloop.counter|add_digits:12 }}:15">{{ forloop.counter|add_digits:12 }}:15</option>
+                        <option {% if week_map|fetch:day|fetch:0 == forloop.counter0|add_digits:13 %}selected="selected"{% endif %} value="{{ forloop.counter|add_digits:12 }}:30">{{ forloop.counter|add_digits:12 }}:30</option>
+                        <option {% if week_map|fetch:day|fetch:0 == forloop.counter0|add_digits:13 %}selected="selected"{% endif %} value="{{ forloop.counter|add_digits:12 }}:45">{{ forloop.counter|add_digits:12 }}:45</option>
+
+                    {% endfor %}
+                </select>
+                <select class="span1" name="prefered_timings_eve" class="prefered_timings_eve">
+                        <option value="To">To</option>
+                    {% for i in 1234567891011|make_list %}
+                        <option {% if week_map|fetch:day|fetch:1 == forloop.counter0 %}selected="selected"{% endif %} value="{{ forloop.counter0 }}:00">{{ forloop.counter0 }}:00</option>
+                        <option {% if week_map|fetch:day|fetch:1 == forloop.counter0 %}selected="selected"{% endif %} value="{{ forloop.counter0 }}:15">{{ forloop.counter0 }}:15</option>
+                        <option {% if week_map|fetch:day|fetch:1 == forloop.counter0 %}selected="selected"{% endif %} value="{{ forloop.counter0 }}:30">{{ forloop.counter0 }}:30</option>
+                        <option {% if week_map|fetch:day|fetch:1 == forloop.counter0 %}selected="selected"{% endif %} value="{{ forloop.counter0 }}:45">{{ forloop.counter0 }}:45</option>
+                    {% endfor %}
+                    {% for i in 12345678910|make_list %}
+                        <option {% if week_map|fetch:day|fetch:1 == forloop.counter0|add_digits:13 %}selected="selected"{% endif %} value="{{ forloop.counter|add_digits:12 }}:00">{{ forloop.counter|add_digits:12 }}:00</option>
+                        <option {% if week_map|fetch:day|fetch:1 == forloop.counter0|add_digits:13 %}selected="selected"{% endif %} value="{{ forloop.counter|add_digits:12 }}:15">{{ forloop.counter|add_digits:12 }}:15</option>
+                        <option {% if week_map|fetch:day|fetch:1 == forloop.counter0|add_digits:13 %}selected="selected"{% endif %} value="{{ forloop.counter|add_digits:12 }}:30">{{ forloop.counter|add_digits:12 }}:30</option>
+                        <option {% if week_map|fetch:day|fetch:1 == forloop.counter0|add_digits:13 %}selected="selected"{% endif %} value="{{ forloop.counter|add_digits:12 }}:45">{{ forloop.counter|add_digits:12 }}:45</option>
+                    {% endfor %}
+                </select>
+                <a class="btn add-timing"><span style="display:block;font-size:16px">{% if forloop.last %}+{% else %}-{% endif %}</span></a>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $("#{{ id }}").find(".add-timing").click(function(e) {
+            if($(this).children("span").text()=="+"){
+                var $parent = $(this).parents("div.control-group");
+                var $wrapper = $(this).parents("div.timing-wrapper").clone(true);
+                //var $clone = $wrapper.children("div.timing-inner-wrapper").slice(0,1).clone(true);
+                $parent.append($wrapper);
+                /*$wrapper.find(".prefered_days").children("option").removeAttr("selected").eq(0).attr("selected","selected");
+                $wrapper.find("[name=prefered_timings_mor]").children("option").removeAttr("selected").eq(0).attr("selected","selected");
+                $wrapper.find("[name=prefered_timings_eve]").children("option").removeAttr("selected").eq(0).attr("selected","selected");*/
+                $wrapper.attr({"id": "timing-wrapper-"+$("div.timing-wrapper").length + 1});
+                $(this).children("span").text("-");
+                $("#{{ id }}").find(".add-timing").last().children("span").text("+");
+                e.preventDefault();
+            }
+            else {
+                $(this).parents(".timing-wrapper").remove();
+            }
+        });
+    });
+</script>

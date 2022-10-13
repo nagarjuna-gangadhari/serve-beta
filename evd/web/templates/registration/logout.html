@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+        h3.logout {
+            padding: 20px 40px;
+            background: wheat;
+            border: 1px solid black;
+            text-align: center;
+            margin-top: 220px;
+            width: 290px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+        @media only screen and (max-width: 480px) and (min-width: 0px)  {
+        h3.logout {
+            padding: 5%;
+            background: wheat;
+            border: 1px solid black;
+            text-align: center;
+
+            width: 290px;
+            margin-left: 5% !important;
+            margin: 10%;
+            display: block;
+        }
+        }
+
+         @media only screen and (max-width: 760px) and (min-width: 481px)  {
+        h3.logout {
+
+            background: wheat;
+            border: 1px solid black;
+            text-align: center;
+            margin: 20%;
+
+            margin-left: 10% !important;
+
+            display: block;
+        }
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block body_container %}
+    <div id="content" class="clearfix">
+        <div>
+            <div class="inner clearfix" style="min-height:500px;">
+                <h3 class="logout">You have been succesfully logged out</h3>
+            </div>
+        </div>
+    </div>
+    <script>
+    /* $(document).ready(function(){
+    	alert("ok");
+      var ajaxUrl = '/ajax/save_user_activity?activityName=logout&activityType=action';
+     //var ajaxUrl = '/ajax/getgradeforReortCard/?student_id='+student;
+   	      $.ajax({
+   	        url : ajaxUrl,
+   	        success: function (data) {
+   	        	
+   	        },
+   	        error: function() {
+   	              alert("error");
+   	           }
+   	      });  */
+   
+    
+        window.location = "/";
+        
+    </script>
+{% endblock body_container %}

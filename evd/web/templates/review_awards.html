@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+    <style>
+    a.se_resp_col:hover{
+        text-decoration:underline;
+        cursor:pointer;
+    }
+    </style>
+    <div class="container-fluid new_dash_container" style="margin-left:-15%;width:130%">
+    <div class="table-responsive">
+      <h3>Review Awards</h3>
+      <table class="table table-bordered table-striped awards_table">
+        <thead class="search">
+          <tr>
+            <th>Award</th>
+            <th>Student</th>
+            <th>Grade</th>
+            <th>Offering</th>
+            <th>Nominated By</th>
+            <th>Academic Year</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <thead>
+          <tr class="btn-info">
+            <th>Award</th>
+            <th>Student</th>
+            <th>Grade</th>
+            <th>Offering</th>
+            <th>Nominated By</th>
+            <th>AY</th>
+            <th>Approve</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for nomination in stud_nominations %}
+          <tr class="" data-stud_id = "{{nomination.student.id}}" data-offer_id = "{{nomination.offering.id}}" 
+                       data-award_id = "{{nomination.award.id}}" data-teacher_id = "{{nomination.teacher.id}}">
+            <td>{{nomination.award.name}}</td>
+            <td>{{nomination.student.name}} - {{nomination.student.id}}</td>
+            <td>{{nomination.offering.course.grade}}</td>
+            <td>{{nomination.offering.course.board_name}} {{nomination.offering.course.subject}} {{nomination.offering.course.grade}}</td>
+            <td>{{nomination.teacher.first_name}} {{nomination.teacher.last_name}} - {{nomination.teacher.id}}</td>
+            <td>{{nomination.offering.academic_year.title}}
+            <td style="text-align:center">{% if nomination.status == 'Approved' %}Winner !
+                {% else %}
+                <input type="checkbox" name="approve"{% if nomination.status == 'Approved' %}checked{% endif %} 
+                 id="{{nomination.student.id}}{{nomination.offering.id}}{{nomination.award.id}}{{nomination.teacher.id}}" 
+                 style='position:static; height:20px; margin-left:10%;'
+                 data-stud_id = "{{nomination.student.id}}" data-offer_id = "{{nomination.offering.id}}"
+                 data-award_id = "{{nomination.award.id}}" data-teacher_id = "{{nomination.teacher.id}}"/>
+                 {% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="btn btn-info approve_btn" style="float: right; color: white; text-shadow: none; font-size: 15px; margin-top: 2%;">Approve Nominations</div>
+      </div>
+
+
+<!-- Modal -->
+<div id="confirm_modal" class="modal fade" role="dialog" style="left:30%;top:30%;margin:0">
+  <div class="">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Are you sure ?</h4>
+      </div>
+      <div class="modal-body">
+        <p class="confirm_msg">Click OK to approve nominations.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success confirm_btn" style="width: 80px;">OK</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+    </div>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<!--<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>-->
+<script>
+    $(document).ready(function(){
+        var approve_list = [];
+        // Setup - add a text input to each footer cell
+        var count = 1;
+        $('.awards_table > thead.search th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+        });
+        var table = $(".awards_table").DataTable();
+        $(".dataTables_filter").css('display','none')
+
+        table.columns().every( function () {
+            var that = this;
+ 
+            $( 'input', this.header() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that
+                        .search( this.value )
+                        .draw();
+                }
+            });
+        });
+
+        //check list
+        $("body").on("change", "input[name='approve']", function(){
+            var data = $(this).data();
+            if(_.contains(approve_list, data)){
+                var indx = approve_list.indexOf(data);
+                approve_list.splice(indx,1);
+            } else{
+                approve_list.push(data);
+            }
+        });//end check
+
+        //approve nominations click
+        $("body").on("click", ".approve_btn", function(){
+            $(".confirm_msg").html("Click <strong>OK</strong> to approve <strong>" + approve_list.length + "</strong> nominations");
+            $("#confirm_modal").modal().show();
+        });
+        $("body").on("click", ".confirm_btn", function(){
+            console.log(approve_list);
+            $.get('/save_nomination/', {'type': 'approve', 'approve_list': JSON.stringify(approve_list)}, function(resp){
+                evd.show_msg("Successfully Approved");
+                $("#confirm_modal").modal().hide();
+                setTimeout(function(){location.reload()},0);
+            });//end ajax
+        });//end click
+
+    });
+    </script>
+{% endblock %}
+
+
+

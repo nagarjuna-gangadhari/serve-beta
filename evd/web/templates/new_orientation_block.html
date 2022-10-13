@@ -1,0 +1,30 @@
+<div class="col-md-12 in-col12" style="margin-bottom: 1%;margin-left: 15px;width: 98%;text-align: left;">
+    <div class="col-md-1"></div>
+    <div class="col-md-5 orient-align" style="padding-bottom: 29px;padding-top: 30px;background-color: #F2F2F2;">
+        <h4> ORIENTATION </h4>
+        <p>This 12 mins video provides complete details about how eVidyaloka works. It is encouraged to complete this video, before proceeding with Onboarding for any volunteering role.</p>
+    </div>
+    <div class='col-md-5' style="padding-bottom: 15px;padding-top: 15px;background-color: #F2F2F2;">
+       <!-- <img src="/static/images/ribbon_complated.png" id="orient_complete" style="width: 125px;position: absolute;right: -7px;top: -7px;z-index: 1;-webkit-transform: rotate(180deg);-moz-transform: rotate(180deg);-ms-transform: rotate(180deg);-o-transform: rotate(180deg);transform: rotate(90deg);" class="{% if evd_rep_check %}show{% else %}hide{% endif %}">-->
+        <div class=''>
+            <img src="/static/images/orientation_youtube.jpg" id="triggeringModal"class="img-responsive video0" data-toggle='modal' data-target="#orientation_modal" onclick="play_video();viewVideo();">
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+<script>
+    function viewVideo(){
+    	 activity_name="Viewed Orietation Video";
+    	activity_type="Page Visit"
+    	ajaxUrl = '/ajax/save_user_activity_by_ajax?activity_name='+activity_name+'&activity_type='+activity_type
+    	$.ajax({
+    	        url : ajaxUrl,
+    	        success: function (jsonStr) {
+    	        	//alert(jsonStr);
+    	        },
+    	        error: function() {
+    	        alert("error");
+    	          }
+    	      }); 
+    }
+    </script> 

@@ -1,0 +1,690 @@
+{% extends 'new_ui.html' %}
+{% load tags %}
+
+{% block content %}
+<body data-spy="scroll" data-offset="180">
+<div class="col-md-3 col-xl-3 col-xs-3 col-sm-3 my-2 hide_for_portal custom " id="myScrollspy">
+
+	 <div class="nav flex-column" aria-orientation="vertical" style="background:#1e2022!important; ">
+		<ul class="nav nav-pills nav-stacked navBarForMobile" id="myTabs" >
+			<li> <a class="nav-link active" href="#Volunteer_of_Month">Volunteer of Month</a></li>
+			<li> <a class="nav-link" href="#Acharyas">Acharyas</a></li>
+			<li><a class="nav-link" href="#Gurus">Gurus</a></li>
+			<li><a class="nav-link" href="#Shikshaks">Shikshaks</a></li>
+		</ul>
+
+	</div>
+</div>
+
+
+	<div class="wrapper disp_prop overflow-css col-md-12 col-xl-12 col-xs-12 col-sm-12 " style="padding: 2.5%;">
+		<div class="sidebar1 col-md-2 col-xl-2 col-xs-2 col-sm-2 hide_for_mob"
+			style="padding: 0px;width: 86% ;height: 100vh !important;display: inline-block;position: sticky !important;top: 19.4% !important;">
+			<div class="container-fluid h-100">
+				<div class="row h-100">
+					<aside class="col-12 col-md-12 col-xl-12 col-xs-12 col-sm-12 p-0 bg-dark" >
+
+						<nav class="navbar navbar-expand navbar-dark bg-dark flex-md-column flex-row align-items-start py-2 "
+							id="myScrollspy">
+							<!-- <div class="nav flex-column" aria-orientation="vertical"> -->
+								<ul class="nav nav-link nav-stacked" id="myTab">
+									<li> <a class="nav-link active" id="buttonId" href="#Volunteer_of_Month">Volunteer of Month</a>
+									</li>
+									<li> <a class="nav-link" id="volL1" href="#Acharyas">Acharyas</a></li>
+									<li> <a class="nav-link" id="volL2" href="#Gurus">Gurus</a></li>
+									<li><a class="nav-link" id="volL3" href="#Shikshaks">Shikshaks</a></li>
+								</ul>
+							<!-- </div> -->
+						</nav>
+					</aside>
+				</div>
+			</div>
+		</div>
+
+		<div class="main add_css_mob" style="background: white;">
+
+			<div class="container">
+				<div id="Volunteer_of_Month"  aria-labelledby="pills-home-tab">
+					<h4 class="affix" data-spy="affix" data-offset-top="10">Volunteers of the month</h4>
+					<hr>
+					{% if vol_of_month %}
+					<div id="media" data-arrow="true" data-interval="false" data-wrap="false"
+						style="background: white;">
+						<div class="row"
+							style="margin-bottom:4rem; margin-left: 13px; margin-right: 13px;margin-top: 28px">
+							{% for vol_of_month in vol_of_month %}
+							<div class="col-md-3 col-xl-3 col-xs-3 col-sm-3" style="margin-bottom:75px">
+
+
+								<div data-wow-delay="10s">
+									{% if  vol_of_month.elected_user.userprofile.picture %}
+									<img class="rounded-circle" style="width:100% !important;height: 240px !important;  border-radius:50%;"
+										src="{{ vol_of_month.elected_user.userprofile.picture }}" alt="">
+									{% else %}
+									<img src="/static/images/defaultteacherimg_1.png" class="rounded-circle"
+										style="width:100% !important;height: 240px !important;  border-radius:50%;" alt="image">
+									{% endif %}
+									<div class="contain">
+										<div class="middle">
+											 <div class="text">
+							<p>
+							Name : {{ vol_of_month.elected_user.first_name  }} {{ vol_of_month.elected_user.last_name  }}<br>
+							{% with vol_of_month.elected_user.id|vol_of_month_centerName as center %}{% if center %} Center : {{center.name}} <br></p> {% endif %} {% endwith %}
+							<p><div class="writeup">Write Up : {{vol_of_month.writeup}}<br></div>
+							{% if request.user.username == vol_of_month.elected_user.username%}
+								<a href="https://twitter.com/share?url=http://www.evidyaloka.org/v2/vol_of_fame#Volunteer_of_Month&hashtags=evidyaloka" target="_blank"
+									class="fa fa-twitter" alt="Twitter" />
+								</a>
+
+								
+								<!-- LinkedIn -->
+								<a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.evidyaloka.org/v2/vol_of_fame#Volunteer_of_Month"
+									target="_blank" class="fa fa-linkedin" alt="LinkedIn" />
+								</a>
+
+
+								<!-- Facebook -->
+								<a href="http://www.facebook.com/sharer.php?u=http://www.evidyaloka.org/v2/vol_of_fame#Volunteer_of_Month"
+									target="_blank" class="fa fa-facebook" alt="Facebook" />
+								</a>
+
+								<!-- Email -->
+								<a href="mailto:?Subject=eVidyaloka&amp;Body=http://www.evidyaloka.org/v2/vol_of_fame#Volunteer_of_Month"
+									target="_blank" class="fa fa-envelope" alt="Email" />
+								</a>
+								{% endif %}
+							</p>
+
+											</div>
+										</div>
+									</div>
+									<div class="card">
+
+
+										<p class="text-center" style="font-style:normal;
+						font-size:14px;
+					
+						color: black; word-wrap: break-word;">{{ vol_of_month.elected_user.first_name }}
+											{{ vol_of_month.elected_user.last_name  }}</p>
+									</div>
+								</div>
+
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+					{% else %}
+					<div class='pl-4' style='color:red;font-size:18px;'>No volunteers nominated for this month</div>
+					{% endif %}
+				</div>
+
+
+
+				<div id="Acharyas" aria-labelledby="pills-profile-tab">
+					<h4 class="affix" data-spy="affix" data-offset-top="10">Acharyas</h4>
+					<hr>
+					{% if years_6 %}
+					<div id="preferences" data-arrow="true" data-interval="false" data-wrap="false"
+						style="background: white;">
+						<div class="row"
+							style="margin-bottom:4rem; margin-left: 13px; margin-right: 13px;margin-top: 28px">
+							{% for years_6 in years_6 %}
+							<div class="col-md-3 col-xl-3 col-xs-3 col-sm-3" style="margin-bottom: 75px">
+
+								<div class="" data-wow-delay="1s">
+									{% if  years_6.picture %}
+									<img class="rounded-circle" style="width:100%!important; height: 240px !important; border-radius:50%;"
+										src="{{ years_6.picture }}" alt="">
+									{% else %}
+									<img src="/static/images/defaultteacherimg_1.png" class="rounded-circle"
+										style="width:100%!important;height: 240px !important; border-radius:50%;" alt="image">
+									{% endif %}
+									<div class="contain">
+										<div class="middle">
+											<div class="text">
+												<p>Sessions completed : {{ years_6.teacher_count  }}<br>
+													Name : {{ years_6.first_name  }} {{ years_6.last_name  }}<br>
+													Place : {{ years_6.city  }} <br>
+													Language : {{ years_6.pref_medium  }}<br>
+													{% if request.user.username == years_6.username%}
+														<a href="https://twitter.com/share?url=http://www.evidyaloka.org/v2/vol_of_fame#Acharyas&hashtags=evidyaloka"
+															target="_blank" class="fa fa-twitter" alt="Twitter" />
+														</a>
+
+														<!-- LinkedIn -->
+														<a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.evidyaloka.org/v2/vol_of_fame#Acharyas"
+															target="_blank" class="fa fa-linkedin" alt="LinkedIn" />
+														</a>
+
+
+														<!-- Facebook -->
+														<a href="http://www.facebook.com/sharer.php?u=http://www.evidyaloka.org/v2/vol_of_fame#Acharyas"
+															target="_blank" class="fa fa-facebook" alt="Facebook" />
+														</a>
+
+														<!-- Email -->
+														<a href="mailto:?Subject=eVidyaloka&amp;Body=http://www.evidyaloka.org/v2/vol_of_fame#Acharyas"
+															target="_blank" class="fa fa-envelope" alt="Email" />
+														</a>
+													{% endif %}
+												</p>
+
+											</div>
+										</div>
+									</div>
+									<div class="card">
+
+
+
+										<p class="text-center" style="font-style:normal;
+						font-size:14px;
+						
+						color: black;word-wrap: break-word;">{{ years_6.first_name }} {{ years_6.last_name  }}</p>
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+					{% else %}
+					<div class='pl-4' style='color:red;font-size:18px;'>No volunteers found</div>
+					{% endif %}
+				</div>
+
+
+				<div id="Gurus" aria-labelledby="pills-contact-tab">
+
+					<h4 class="affix" data-spy="affix" data-offset-top="10">Gurus</h4>
+
+					<hr>
+
+					{% if years_5 %}
+					<div id="profile" data-arrow="true" data-interval="false" data-wrap="false"
+						style="background: white;">
+						<div class="row"
+							style="margin-bottom:4rem; margin-left: 13px; margin-right: 13px;margin-top: 28px">
+							{% for years_5 in years_5%}
+							<div class="col-md-3 col-xl-3 col-xs-3 col-sm-3" style="margin-bottom: 75px">
+
+
+								<div class="" data-wow-delay="10s">
+									{% if  years_5.picture %}
+									<img class="rounded-circle" style="width:100%!important;height: 240px !important; border-radius:50%;"
+										src="{{ years_5.picture }}" alt="">
+									{% else %}
+									<img src="/static/images/defaultteacherimg_1.png" class="rounded-circle"
+										style="width:100% !important;height: 240px !important;  border-radius:50%;" alt="image">
+									{% endif %}
+									<div class="contain">
+										<div class="middle">
+											<div class="text">
+												<p>Sessions completed : {{ years_5.teacher_count  }}<br>
+													Name : {{ years_5.first_name  }} {{ years_5.last_name  }}<br>
+													Place : {{ years_5.city  }} <br>
+													Language : {{ years_5.pref_medium  }}<br>
+													{% if request.user.username == years_5.username%}
+														<a href="https://twitter.com/share?url=http://www.evidyaloka.org/v2/vol_of_fame#Gurus/&hashtags=evidyaloka"
+															target="_blank" class="fa fa-twitter" alt="Twitter" />
+														</a>
+
+														<!-- LinkedIn -->
+														<a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.evidyaloka.org/v2/vol_of_fame#Gurus"
+															target="_blank" class="fa fa-linkedin" alt="LinkedIn" />
+														</a>
+
+
+														<!-- Facebook -->
+														<a href="http://www.facebook.com/sharer.php?u=http://www.evidyaloka.org/v2/vol_of_fame#Gurus"
+															target="_blank" class="fa fa-facebook" alt="Facebook" />
+														</a>
+
+														<!-- Email -->
+														<a href="mailto:?Subject=eVidyaloka&amp;Body=http://www.evidyaloka.org/v2/vol_of_fame#Gurus "
+															target="_blank" class="fa fa-envelope" alt="Email" />
+														</a>
+													{% endif %}
+												</p>
+
+
+											</div>
+										</div>
+									</div>
+									<div class="card">
+										<p class="text-center" style="font-style: normal;
+						font-size:14px;
+						
+						color: black;word-wrap: break-word; ">{{ years_5.first_name}} {{ years_5.last_name  }}</p>
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+					{% else %}
+					<div class='pl-4' style='color:red;font-size:18px;'>No volunteers found</div>
+					{% endif %}
+				</div>
+
+
+
+
+
+				<div id="Shikshaks" aria-labelledby="pills-contact-tab">
+
+					<h4 class="affix" data-spy="affix" data-offset-top="10">Shikshaks</h4>
+
+					<hr>
+
+					{% if years_4 %}
+					<div id="settings" data-arrow="true" data-interval="false" data-wrap="false"
+						style="background: white; ">
+						<div class="row" style="margin-left: 13px; margin-right: 13px;margin-top: 28px">
+							{% for years_4 in years_4%}
+
+							<div class="col-md-3 col-xl-3 col-xs-3 col-sm-3" style="margin-bottom:75px">
+
+								<div class="" data-wow-delay="10s">
+									{% if  years_4.picture %}
+									<img class="rounded-circle" style="width:100%!important;height: 240px !important;  border-radius:50%;"
+										src="{{ years_4.picture }}" alt="">
+									{% else %}
+									<img src="/static/images/defaultteacherimg_1.png" class="rounded-circle"
+										style="width:100% !important;height: 240px !important; border-radius:50%;" alt="image">
+									{% endif %}
+									<div class="contain">
+										<div class="middle">
+											<div class="text">
+												<p>Sessions completed : {{ years_4.teacher_count  }}<br>
+													Name : {{ years_4.first_name  }} {{ years_4.last_name  }}<br>
+													Place : {{ years_4.city  }}<br>
+													Language : {{ years_4.pref_medium  }}<br>
+
+													{% if request.user.username == years_4.username%}
+
+														<a href="https://twitter.com/share?url=http://www.evidyaloka.org/v2/vol_of_fame#Shikshaks&hashtags=evidyaloka"
+															target="_blank" class="fa fa-twitter" alt="Twitter" />
+														</a>
+
+														<!-- LinkedIn -->
+														<a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.evidyaloka.org/v2/vol_of_fame#Shikshaks"
+															target="_blank" class="fa fa-linkedin" alt="LinkedIn" />
+														</a>
+
+
+														<!-- Facebook -->
+														<a href="http://www.facebook.com/sharer.php?u=http://www.evidyaloka.org/v2/vol_of_fame#Shikshaks"
+															target="_blank" class="fa fa-facebook" alt="Facebook" />
+														</a>
+
+
+														<!-- Email -->
+														<a href="mailto:?Subject=eVidyaloka&amp;Body=http://www.evidyaloka.org/v2/vol_of_fame#Shikshaks/"
+															target="_blank" class="fa fa-envelope" alt="Email" />
+														</a>
+													{% endif %}
+												</p>
+
+
+											</div>
+										</div>
+									</div>
+									<div class="card">
+										<p class="text-center" style="font-style: normal;
+							font-size:14px;
+							
+							color: black; word-wrap: break-word;">{{years_4.first_name}} {{ years_4.last_name  }}</p>
+									</div>
+								</div>
+							</div>
+
+							{% endfor %}
+						</div>
+					</div>
+					{% else %}
+					<div class='pl-4' style='color:red;font-size:18px;'>No volunteers found</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+
+<style>
+	.fa {
+		padding: 2px;
+		font-size: 20px;
+		width: 20px;
+	}
+	.card {
+		position: absolute;
+		height: auto;
+		width: 214px;
+		padding: 5px 0px;
+	}
+	.contain:hover .image {
+		opacity: 0.3;
+	}
+	.middle {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 13px;
+		right: 0;
+		height: 100%;
+		width: 90%;
+		transition: .5s ease;
+		background-color: #6c757d;
+		border-radius: 50%;
+		opacity: 0;
+	}
+	.contain:hover .middle {
+		opacity: 0.7;
+	}
+	/* .affix{
+
+    position: sticky;
+    z-index: 02;
+		top: 30%;
+    background: white;
+	} */
+	.text {
+		/* position: absolute; */
+		color: white;
+		font-size: 14px;
+		position: relative;
+		top: -30%;
+		left: 0%;
+		height: 100%;
+		width: 220px;
+	
+		-webkit-transform: translate(-50%, -50%);
+		-ms-transform: translate(-50%, -50%);
+		transform: translate(0%, 50%);
+		text-align: center;
+	}
+	 .writeup{
+
+	
+		transform: translate(0%, -20%);
+		text-align: center;
+		line-height: 16px;  
+            max-height: 80px;      
+						overflow: hidden; 
+            text-overflow: ellipsis; 
+            display: -webkit-box; 
+            /* The number of lines to be displayed */ 
+            -webkit-line-clamp: 4;  
+            -webkit-box-orient: vertical; 
+	/* overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; */
+	} 
+	 	.video_width,
+		.frame_width {
+		height: 300px !important;
+	}
+	.sidebar1 {
+		/*   position: -webkit-sticky !important; */
+		/* position: sticky !important; */
+		top: 0;
+		height: 60vh;
+	}
+	.wrapper {
+		display: inline-flex !important;
+		/*   justify-content: space-between; */
+		padding: 1.5% !important;
+	}
+	/* .sidebar1 {
+			position: -webkit-sticky !important;
+			width: 25% !important;
+			height: 100vh !important; 
+			display: inline-block !important;
+			width: 82% !important;
+		} */
+	.main {
+		width: 83% !important;
+		/* height: 100vh !important; */
+		display: inline-block !important;
+		background: white !important;
+	}
+	@media only screen and (min-width : 320px) and (max-width : 768px) {
+		.affix{
+
+    position: sticky;
+		background-color:#111;
+    z-index: 02;
+		top: 30px;
+    background: white;
+	}
+		.custom {
+			position: sticky;
+			top: 93px !important;
+			z-index: 9999;
+		}
+		 .navBarForMobile {
+			width: 100%;
+overflow: auto;
+overflow-y: hidden;
+height: 50px;
+display:-webkit-inline-box;
+		 }
+
+		a.active, a:active, a:focus, a:hover
+		{
+    color: grey!important;
+		}
+	}
+ </style>
+ <script>
+ $("#buttonId").click(function() {
+		$(".nav-link").removeClass("active");
+event.target.classList.add("active");
+		$('html, body').animate({
+			scrollTop: $("#Volunteer_of_Month").offset().top - 135
+		}, 2000);
+	 });
+	 $("#volL1").click(function() {
+		$(".nav-link").removeClass("active");
+event.target.classList.add("active");
+		$('html, body').animate({
+			scrollTop: $("#Acharyas").offset().top - 135
+		}, 2000);
+	 });
+	 $("#volL2").click(function() {
+		$(".nav-link").removeClass("active");
+event.target.classList.add("active");
+		$('html, body').animate({
+			scrollTop: $("#Gurus").offset().top - 135
+		}, 2000);
+	 });
+	 $("#volL3").click(function() {
+		$(".nav-link").removeClass("active");
+event.target.classList.add("active");
+		$('html, body').animate({
+			scrollTop: $("#Shikshaks").offset().top - 135
+		}, 2000);
+	 });
+// 	 if($(window).width() <= 768){
+// 		$("#buttonId").click(function() {
+// 		$(".nav-link").removeClass("active");
+// event.target.classList.add("active");
+// 		$('html, body').animate({
+// 			scrollTop: $("#divId").offset().top - 300
+// 		}, 2000);
+// 	 });
+// 	 $("#volL1").click(function() {
+// 		$(".nav-link").removeClass("active");
+// event.target.classList.add("active");
+// 		$('html, body').animate({
+// 			scrollTop: $("#vol_L1").offset().top - 300
+// 		}, 2000);
+// 	 });
+// 	 $("#volL2").click(function() {
+// 		$(".nav-link").removeClass("active");
+// event.target.classList.add("active");
+// 		$('html, body').animate({
+// 			scrollTop: $("#vol_L2").offset().top - 300
+// 		}, 2000);
+// 	 });
+// 	 $("#volL3").click(function() {
+// 		$(".nav-link").removeClass("active");
+// event.target.classList.add("active");
+// 		$('html, body').animate({
+// 			scrollTop: $("#vol_L3").offset().top - 300
+// 		}, 2000);
+// 	 });
+// 	 }
+	 </script>
+ <!-- <script>
+ $('ul.nav').find('a').click(function(){
+    var $href = $(this).attr('href');
+    var $anchor = $('#'+$href).offset();
+    window.scrollTo($anchor.left,$anchor.top);
+    return false;
+});
+
+if($(window).width() <= 768)
+{
+	$('ul.nav').find('a').click(function(){
+    var $href = $(this).attr('href');
+    var $anchor = $('#'+$href).offset();
+    window.scrollTo($anchor.left,$anchor.top);
+    return false;
+});
+}
+
+</script> -->
+
+
+	 <script>
+			var lastId,
+			   topMenu = $("#myTabs"),
+			   topMenuHeight = topMenu.outerHeight()+30,
+			   menuItems = topMenu.find("a"),
+			   scrollItems = menuItems.map(function(){
+				 var item = $($(this).attr("href"));
+				 if (item.length) { return item; }
+			   });
+
+			menuItems.click(function(e){
+			 var href = $(this).attr("href"),
+				 offsetTop = href === "#" ? 0 : $(href).offset().top-topMenuHeight+1;
+			 $('html, body').stop().animate({
+				 scrollTop: offsetTop
+			 }, 300);
+			 e.preventDefault();
+			});
+
+			$(window).scroll(function(){
+			  var fromTop = $(this).scrollTop()+topMenuHeight;
+
+			  var cur = scrollItems.map(function(){
+				if ($(this).offset().top < fromTop)
+				  return this;
+			  });
+			  cur = cur[cur.length-1];
+			  var id = cur && cur.length ? cur[0].id : "";
+
+			  if (lastId !== id) {
+				  lastId = id;
+				  menuItems
+					.parent().removeClass("active")
+					.end().filter("[href='#"+id+"']").parent().addClass("active");
+				  if (id === "Gurus") {
+					 $('#myTabs').animate({
+						 scrollLeft: $('#volL2').css('left')
+					 }, function() {
+
+						 $('#myTabs').animate({
+							 scrollLeft: 270
+						 });
+
+					 });
+				  }
+				  if (id === "Acharyas") {
+			  $('#myTabs').animate({
+				  scrollLeft: $('#volL1').css('left')
+			  }, function() {
+
+				  $('#myTabs').animate({
+					  scrollLeft: 0
+				  });
+
+			  });
+				  }
+			  }
+			});
+			</script>
+		 <!-- <script>
+					var lastId,
+					   topMenu = $("#myTab"),
+					   topMenuHeight = topMenu.outerHeight()+180,
+					   menuItems = topMenu.find("a"),
+					   scrollItems = menuItems.map(function(){
+						 var item = $($(this).attr("href"));
+						 if (item.length) { return item; }
+					   });
+
+					menuItems.click(function(e){
+					 var href = $(this).attr("href"),
+						 offsetTop = href === "#" ? 0 : $(href).offset().top-topMenuHeight+1;
+					 $('html, body').stop().animate({
+						 scrollTop: offsetTop
+					 }, 300);
+					 e.preventDefault();
+					});
+
+					$(window).scroll(function(){
+					  var fromTop = $(this).scrollTop()+topMenuHeight;
+
+					  var cur = scrollItems.map(function(){
+						if ($(this).offset().top < fromTop)
+						  return this;
+					  });
+					  cur = cur[cur.length-1];
+					  var id = cur && cur.length ? cur[0].id : "";
+
+					  if (lastId !== id) {
+						  lastId = id;
+						  menuItems
+							.parent().removeClass("active")
+							.end().filter("[href='#"+id+"']").parent().addClass("active");
+						  if (id === "specificationDiv") {
+							 $('#myTabs').animate({
+								 scrollLeft: $('#specButton').css('left')
+							 }, function() {
+
+								 $('#myTas').animate({
+									 scrollLeft: 270
+								 });
+
+							 });
+						  }
+						  if (id === "amenities_div") {
+					  $('#myTabs').animate({
+						  scrollLeft: $('#amenitiesButton').css('left')
+					  }, function() {
+
+						  $('#myTabs').animate({
+							  scrollLeft: 0
+						  });
+
+					  });
+						  }
+					  }
+					});
+					</script>   -->
+<!--
+ <script>
+		 $(document).ready(function(){
+
+			$("div").mouseenter(function(){
+				 var id = $(this).attr('id');
+				 $('a').removeClass('active');
+				 $("[href=#"+id+"]").addClass('active');
+			});
+
+		 });
+		 </script>   -->
+{% endblock content %}

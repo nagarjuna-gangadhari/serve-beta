@@ -1,0 +1,402 @@
+{% extends "base.html" %} {% load filters %} {% load tags %} {% block head_title %}Content Reviewer {% endblock %} {% block head_styles %} {{ block.super }} {% endblock %} {% block body_container %}
+<script src="/static/css/tailwindcss3.js"></script>
+<link rel="stylesheet" href="/static/css/jquery-ui.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+<div x-data="{ modelOpen: false, model2Open: false }" style="margin-left: -15rem; margin-right: -15rem;">
+    <div class="">
+        <h3 class="w-full p-4 text-center rounded mt-10 text-white font-bold bg-gradient-to-r from-violet-500 to-fuchsia-500">Need for review content table</h3>
+        <div class="overflow-x-auto border">
+            <table id="reviewTable1" class="">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Language</th>
+                        <th>Board</th>
+                        <th>Subject</th>
+                        <th>Topic</th>
+                        <th>Subtopic</th>
+                        <th>WorkStream</th>
+                        <th>Status</th>
+                        <th>Author</th>
+                        <th>Reviewer</th>
+                        <th>Comment</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+        <h3 class="w-full p-4 mt-10 text-center rounded text-white font-bold bg-gradient-to-r from-green-500 to-fuchsia-500">Published content table</h3>
+        <div class="overflow-x-auto border">
+            <table id="reviewTable2" class="w-full ">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Language</th>
+                        <th>Board</th>
+                        <th>Subject</th>
+                        <th>Topic</th>
+                        <th>Subtopic</th>
+                        <th>WorkStream</th>
+                        <th>Status</th>
+                        <th>Author</th>
+                        <th>Reviewer</th>
+                        <th>Comment</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+
+            </table>
+        </div>
+
+    </div>
+    <!-- Modal  -->
+    <div>
+        <div x-show="modelOpen" class="fixed inset-0 top-20 z-20" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
+            <div class="flex items-end justify-center min-h-screen px-4 text-center md:items-center sm:block sm:p-0">
+                <div x-cloak @click="modelOpen = false" x-show="modelOpen" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200 transform"
+                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-40" aria-hidden="true"></div>
+
+                <div x-cloak x-show="modelOpen" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="transition ease-in duration-200 transform"
+                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block w-full max-w-7xl  p-8 my-20 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl">
+                    <div class="flex items-center justify-between space-x-4">
+                        <h1 class="text-2xl font-bold w-full text-center text-gray-800 ">Content Approve Checklist</h1>
+
+                        <button @click="modelOpen = false" class="text-red-600 focus:outline-none hover:text-red-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <form class="mt-5">
+                        <div class="mt-4 space-y-10">
+
+                            <div id="checks" class="mt-4 space-y-5 h-[24rem] overflow-y-auto">
+                                <div class="flex items-center space-x-3 cursor-pointer" x-data="{ show: true }" @click="show =!show">
+                                    <div class="relative w-10 h-5 transition duration-200 ease-linear rounded-full" :class="[show ? 'bg-indigo-500' : 'bg-gray-300']">
+                                        <label for="show" @click="show =!show" class="absolute left-0 w-5 h-5 mb-2 transition duration-100 ease-linear transform bg-white border-2 rounded-full cursor-pointer" :class="[show ? 'translate-x-full border-indigo-500' : 'translate-x-0 border-gray-300']"></label>
+                                        <input type="checkbox" name="show" class="hidden w-full h-full rounded-full appearance-none active:outline-none focus:outline-none" />
+                                    </div>
+
+                                    <p class="text-gray-500">Can make task</p>
+
+                                </div>
+
+                                <div class="flex items-center space-x-3 cursor-pointer" x-data="{ show: false }" @click="show =!show">
+                                    <div class="relative w-10 h-5 transition duration-200 ease-linear rounded-full" :class="[show ? 'bg-indigo-500' : 'bg-gray-300']">
+                                        <label for="show" @click="show =!show" class="absolute left-0 w-5 h-5 mb-2 transition duration-100 ease-linear transform bg-white border-2 rounded-full cursor-pointer" :class="[show ? 'translate-x-full border-indigo-500' : 'translate-x-0 border-gray-300']"></label>
+                                        <input type="checkbox" name="show" class="hidden w-full h-full rounded-full appearance-none active:outline-none focus:outline-none" />
+                                    </div>
+
+                                    <p class="text-gray-500">Can delete task</p>
+                                </div>
+
+                                <div class="flex items-center space-x-3 cursor-pointer" x-data="{ show: true }" @click="show =!show">
+                                    <div class="relative w-10 h-5 transition duration-200 ease-linear rounded-full" :class="[show ? 'bg-indigo-500' : 'bg-gray-300']">
+                                        <label for="show" @click="show =!show" class="absolute left-0 w-5 h-5 mb-2 transition duration-100 ease-linear transform bg-white border-2 rounded-full cursor-pointer" :class="[show ? 'translate-x-full border-indigo-500' : 'translate-x-0 border-gray-300']"></label>
+                                        <input type="checkbox" name="show" class="hidden w-full h-full rounded-full appearance-none active:outline-none focus:outline-none" />
+                                    </div>
+
+                                    <p class="text-gray-500">Can edit task</p>
+                                </div>
+                                <div class="flex items-center space-x-3 cursor-pointer" x-data="{ show: true }" @click="show =!show">
+                                    <div class="relative w-10 h-5 transition duration-200 ease-linear rounded-full" :class="[show ? 'bg-indigo-500' : 'bg-gray-300']">
+                                        <label for="show" @click="show =!show" class="absolute left-0 w-5 h-5 mb-2 transition duration-100 ease-linear transform bg-white border-2 rounded-full cursor-pointer" :class="[show ? 'translate-x-full border-indigo-500' : 'translate-x-0 border-gray-300']"></label>
+                                        <input type="checkbox" name="show" class="hidden w-full h-full rounded-full appearance-none active:outline-none focus:outline-none" />
+                                    </div>
+
+                                    <p class="text-gray-500">Can make task</p>
+                                </div>
+
+                                <div class="flex items-center space-x-3 cursor-pointer" x-data="{ show: false }" @click="show =!show">
+                                    <div class="relative w-10 h-5 transition duration-200 ease-linear rounded-full" :class="[show ? 'bg-indigo-500' : 'bg-gray-300']">
+                                        <label for="show" @click="show =!show" class="absolute left-0 w-5 h-5 mb-2 transition duration-100 ease-linear transform bg-white border-2 rounded-full cursor-pointer" :class="[show ? 'translate-x-full border-indigo-500' : 'translate-x-0 border-gray-300']"></label>
+                                        <input type="checkbox" name="show" class="hidden w-full h-full rounded-full appearance-none active:outline-none focus:outline-none" />
+                                    </div>
+
+                                    <p class="text-gray-500">Can delete task</p>
+                                </div>
+
+                                <div class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50" x-data="{ show: true }" @click="show =!show">
+                                    <div class="relative w-10 h-5 transition duration-200 ease-linear rounded-full" :class="[show ? 'bg-indigo-500' : 'bg-gray-300']">
+                                        <label for="show" @click="show =!show" class="absolute left-0 w-5 h-5 mb-2 transition duration-100 ease-linear transform bg-white border-2 rounded-full cursor-pointer" :class="[show ? 'translate-x-full border-indigo-500' : 'translate-x-0 border-gray-300']"></label>
+                                        <input type="checkbox" name="show" class="hidden w-full h-full rounded-full appearance-none active:outline-none focus:outline-none" />
+                                    </div>
+
+                                    <p class="text-gray-500">Can edit task</p>
+                                </div>
+                            </div>
+                            <div class="space-y-2 mr-10">
+                                <label for="sbd_comment font-bold">Comments On Content</label>
+                                <textarea class="w-full h-36 p-2 border" name="sbd_comment" id="sbd_comment" cols="30" rows="10"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end space-x-10 mt-6">
+                            <button @click="modelOpen = false; save_content_checklist(7)" type="button" class="px-3 py-2 text-xl tracking-wide text-white capitalize transition-colors duration-200 transform bg-red-500 rounded-md dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:bg-indigo-700 hover:bg-red-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
+                                Resubmit
+                            </button>
+                            <button @click="modelOpen = false; save_content_checklist(6)" type="button" class="px-3 py-2 text-xl tracking-wide text-white capitalize transition-colors duration-200 transform bg-green-500 rounded-md dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:bg-indigo-700 hover:bg-green-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
+                                Approve
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{{review_content|json_script:"review_content_data"}} {{published_content|json_script:"published_content_data"}} {{checklist|json_script:"checklist_data"}}
+<script type="text/javascript" src="/static/js_new/jquery-ui.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
+<script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+</script>
+<script>
+    const review_content = JSON.parse(document.getElementById('review_content_data').textContent)
+    const published_content = JSON.parse(document.getElementById('published_content_data').textContent)
+    const checklist = JSON.parse(document.getElementById('checklist_data').textContent)
+
+    console.log(checklist)
+    console.log(review_content)
+    console.log(published_content)
+    var is_assigned = false;
+    var ReviewDataSet = [];
+    var PublishedDataSet = [];
+    var is_checklist_given = false;
+    var content_demand_id = null
+    const choicess = {
+        1: 'Not Started',
+        2: 'Booked',
+        3: 'Assigned',
+        4: 'Submitted',
+        5: 'In Review',
+        6: 'Approved',
+        7: 'Resubmit',
+        8: 'Published',
+        9: 'Inactive'
+    }
+
+
+    for (let index = 0; index < review_content.length; ++index) {
+        const element = review_content[index];
+        ReviewDataSet.push([
+            `<div @click="modelOpen = true; get_content_checklist(${element.id}, ${element.workstream__id})" class="cursor-pointer bg-blue-200 p-1 rounded text-center hover:bg-blue-300">${element.id}</div>`,
+            element.topic__course_id__language__name,
+            element.topic__course_id__board_name,
+            element.topic__course_id__grade + 'th ' + element.topic__course_id__subject,
+            element.topic__title,
+            element.subtopic__name ? element.subtopic__name.substring(0, 20) + '...': '',
+            element.workstream__name,
+            choicess[element.status],
+            element.author__id + '-' + element.author__first_name + ' ' + element.author__last_name,
+            element.reviewer__id ? element.reviewer__id + '-' + element.reviewer__first_name + ' ' + element.reviewer__last_name : '',
+            element.comment ? element.comment.substring(0, 10) + '...' : '',
+            element.url ? `<a class="cursor-pointer" href="//${element.url}" target="__blank">Link</a>` : ''
+            
+        ]);
+    }
+
+    for (let index = 0; index < published_content.length; ++index) {
+        const element = published_content[index];
+        PublishedDataSet.push([
+            element.id,
+            element.topic__course_id__language__name,
+            element.topic__course_id__board_name,
+            element.topic__course_id__grade + 'th ' + element.topic__course_id__subject,
+            element.topic__title,
+            element.subtopic__name ? element.subtopic__name.substring(0, 20) + '...': '',
+            element.workstream__name,
+            choicess[element.status],
+            element.author__id + '-' + element.author__first_name + ' ' + element.author__last_name,
+            element.reviewer__id ? element.reviewer__id + '-' + element.reviewer__first_name + ' ' + element.reviewer__last_name : '',
+            element.comment ? element.comment.substring(0, 10) + '...' : '',
+            element.url ? `<a class="cursor-pointer" href="//${element.url}" target="__blank">Link</a>` : '',
+            `<div @click="modelOpen = true; get_publish_centet(${element.id})" class="cursor-pointer bg-blue-400 p-2 rounded text-center hover:bg-blue-600">Edit</div>`
+        ]);
+    }
+    console.log('ReviewDataSet',ReviewDataSet)
+
+    $('#reviewTable1').DataTable({
+        data: ReviewDataSet,
+        columns: [{
+            title: 'Id'
+        }, {
+            title: 'Language'
+        }, {
+            title: 'Board'
+        }, {
+            title: 'Subject'
+        }, {
+            title: 'Topic'
+        }, {
+            title: 'Subtopic'
+        }, {
+            title: 'WorkStream'
+        }, {
+            title: 'Status'
+        }, {
+            title: 'Auther'
+        }, {
+            title: 'Reviewer'
+        }, {
+            title: 'Comment'
+        }, {
+            title: 'Link'
+        }],
+        
+        
+        
+    });
+
+    $('#reviewTable2').DataTable({
+        data: PublishedDataSet,
+        columns: [{
+            title: 'Id'
+        }, {
+            title: 'Language'
+        }, {
+            title: 'Board'
+        }, {
+            title: 'Subject'
+        }, {
+            title: 'Topic'
+        }, {
+            title: 'Subtopic'
+        }, {
+            title: 'WorkStream'
+        }, {
+            title: 'Status'
+        }, {
+            title: 'Auther'
+        }, {
+            title: 'Reviewer'
+        }, {
+            title: 'Comment'
+        }, {
+            title: 'Link'
+        }],
+        
+    });
+
+    function get_content_checklist(content_demand_id, workstream_id) {
+        $.ajax({
+            url: '/v2/content_review_check_list/',
+            type: 'GET',
+            data: {
+                'content_demand_id': content_demand_id,
+                'workstream_id': workstream_id
+            },
+            success: function(response) {
+                console.log(response);
+                make_checks(response)
+
+            },
+            error: function(response) {
+                console.log(response);
+                alert('Something went wrong');
+            }
+        });
+    }
+
+    function save_content_checklist(resp) {
+        let checklist_data = [];
+
+        $('input[name="checklist"]').each(function() {
+            let data = {
+                'id': $(this).attr('data-id'),
+                'checklist_id': $(this).attr('data-checklist_id'),
+                'check': $(this).is(':checked'),
+                'note': $('#note_' + $(this).attr('data-checklist_id')).val()
+            }
+
+            checklist_data.push(data);
+        });
+
+        let data = {
+            'is_checklist_given': is_checklist_given,
+            'content_demand_id': content_demand_id,
+            'response': resp,
+            'checklist_data': checklist_data,
+            'comment': $('#sbd_comment').val()
+        }
+
+        console.log(data);
+
+        $.ajax({
+            url: '/v2/content_review_check_list/',
+            type: 'POST',
+            data: JSON.stringify(data),
+            success: function(response) {
+                console.log(response);
+                alert('Saved');
+                window.location.reload();
+            },
+            error: function(response) {
+                console.log(response);
+                alert('Something went wrong');
+            }
+        });
+    }
+
+
+
+    function make_checks(data) {
+        $('#checks').empty();
+        is_checklist_given = data.exist;
+        content_demand_id = data.content_demand_id;
+        let checks = data.checks;
+        for (let index = 0; index < checks.length; ++index) {
+            const element = checks[index];
+            $('#checks').append(`<div class="flex items-center space-x-3 cursor-pointer border-b py-2" x-data="{ show: ${element['answers']==0 ? false:true } }" >
+                <div @click="show =!show" class="relative w-14 h-7 transition duration-200 ease-linear rounded-full" :class="[show ? 'bg-green-500' : 'bg-red-400']">
+                    <label for="show"  class="absolute left-0 w-7 h-7 mb-2 transition duration-100 ease-linear transform bg-white border-2 rounded-full cursor-pointer" :class="[show ? 'translate-x-full border-green-500' : 'translate-x-0 border-red-400']"></label>
+                    <input type="checkbox" name="checklist" x-model="show" data-id="${element['id']}" data-checklist_id="${element['checklist_id']}"  class="checks hidden w-full h-full rounded-full appearance-none active:outline-none focus:outline-none" />
+                </div>
+                <div class="flex flex-col space-y-1">
+                    <div><p class="text-xl text-gray-500">${element['checklist']}</p></div>
+                    <div class="flex space-x-2"><p class="text-xl text-gray-500 font-bold">Note: </p><input type="text" id="note_${element['checklist_id']}" class="w-96 h-10 p-2 rounded text-lg" value="${element['check_comment']}"></div>
+                </div>
+                
+            </div>`);
+        }
+        $('#sbd_comment').val(data.comment);
+
+    }
+</script>
+
+
+{% endblock %}

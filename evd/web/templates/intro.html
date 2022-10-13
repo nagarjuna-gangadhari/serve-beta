@@ -1,0 +1,100 @@
+{% extends "footer_base.html" %}
+{% load tags %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+        .subcontent .sub-menu {
+            padding:10px 20px;
+        }
+        .subcontent ul {
+            margin-top:10px;
+        }
+        .subcontent ul li {
+            font-size:14px;
+        }
+        .sub-menu p {
+            margin-bottom:10px;
+        }
+        .subcontent ul {
+            margin-bottom:0px;
+        }
+        .sub-menu ul li {
+            margin-bottom:0px;
+        }
+        .sub-menu .blue {
+            color:#f2a587;
+        }
+        .blue {
+            color: #11BEEE;
+            text-shadow: 0 -1px #f2a587,0 1px
+        }
+    </style>
+{% endblock %}
+
+
+{% block leftnav_list %}
+    <li><a href="/intro/" class="about-1 active"><span>Intro</span></a></li>
+    <li><a href="/code_conduct/" class="about-2"><span>Code of Conduct</span></a></li>
+    <li><a href="/aidsntools" class="about-6"><span>Aids & tools</span></a></li>
+    <li><a href="/selfpaced" class="about-6"><span>Self Trainings</span></a></li>
+    <li><a href="/curriculumreview" class="about-6"><span>Curriculum Review</span></a></li> 
+{% endblock %}
+{% block top_content %}
+    <div class="top clearfix">
+        <div class="intro">
+            <h1>eVidyaloka -  An Introduction</h1>
+        </div>
+    </div>
+{% endblock %}
+{% block bottom_content %}
+    <div class="paper-bg-wrapper">
+        <div class="paper-bg">
+            <div class="subcontent">
+                <h1 class="blue">eVidyaloka - A Prelude</h1>
+                <ul>
+                    <li>
+                        eVidyaloka is a non-profit organization registered in Karnataka with its vision to transform education for the rural children of India by Satish & Venkat.
+                    </li>
+                    <li>
+                        The two bring together a deeper understanding of educational issues, rural challenges & corporate practices through their professional experience.
+                    </li>
+                    <li>
+                        Starting with a Summer camp in Thenur village, partnering with <a href="http://www.payri.org/">Payir Trust</a> in May 2010, over the past year we have our presence in 5 Villages, 3 states & 3 Languages. Our Pilot phase covers approx. 100 children, across Rural India studying in Government school for classes 6th to 8th.
+                    </li>
+                </ul>
+                <h1 class="blue">Why eVidyaloka</h1>
+                <div class="sub-menu">
+                    <p>There have been systemic investments by the State in the areas of Infrastructure and enrollment in Schools. However the desired quality of learning by the children has been consistently below threshold levels leading to Gap in Education. This has been reiterated by the surveys being done nationally by Pratham who carries out this activity for past few years.</p>
+                    <h1 class="blue">Causes lead to two key issues:</h1>
+                    <ul>
+                        <li>Teacher Shortage</li>
+                        <li>Quality Teaching</li>
+                    </ul>
+                </div>
+                <h1 class="blue">Key Tenets of eVidyaloka</h1>
+                <div class="sub-menu">
+                    <h1 class="blue">Remote & Rural</h1>
+                    <p>Working over the challenges in delivering this model to reach the remotest and rural parts of this country</p>
+                    <h1 class="blue">Connecting people</h1>
+                    <p>Our ability to deliver gets multifold, when build win-win synergetic partnerships with the other NGOs, Schools, local establishments and other like minded stakeholders.</p>
+                    <h1 class="blue">Local empowerment</h1>
+                    <p>The local community is empowered to take ownership of the digital class room and see that as an opportunity that is being brought for their benefit.</p>
+                    <h1 class="blue">Multilingual</h1>
+                    <p>We segment our teaching supply and enable delivery of classes as per local and regional needs. Local language is used as medium of instruction</p>
+                </div>
+                <h1 class="blue">How can I help</h1>
+                <div class="sub-menu">
+                    <p>Time now to go over our FAQ Section <a href="/faq/">Frequently Asked Questions</a></p>
+                    <p>And a browse of our website <a href="/">eVidyaloka</a></p>
+                </div>
+                <h1 class="blue">Spread the word Through...</h1>
+                <div class="sub-menu">
+                    <p>WORD OF MOUTH - <a href="#">Promote Sign ups</a></p>
+                    <p>WORD OF EMAILS - <a href="http://www.facebook.com/evidyaloka">eVidyaloka on Facebook</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

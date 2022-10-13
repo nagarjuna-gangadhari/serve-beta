@@ -1,0 +1,15 @@
+Subject: Your request has been Approved for New Custom offering
+
+Dear {{user}},
+
+You have recently submitted a request for New custom offering. Please find Below Details for the same.
+
+Board Name:{{boardName}}
+Subject:{{subject}}
+Grade:{{grade}}
+Start Date:{{startDate}}
+End Date:{{endDate}}
+Offering Type:Custom
+Status: Approved
+
+Click here to view* {{confirm_url}}

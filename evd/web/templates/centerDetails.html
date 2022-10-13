@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% load tags %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="/static/css/centers.css" />
+    
+<style>
+.generalinfo p.title{
+ width:130px;
+}
+.generalinfo p {
+    font-size: 14px;
+}
+</style>
+{% endblock %}
+
+{% block body_container %}
+    {{ block.super }}
+    {% include "code_conduct_modal.html" %}
+<head>
+</head>
+<br>
+<div class="row">
+	<div class='col-md-12 col-sm-2' style="text-align:right">
+		<a class='btn btn-danger myevd' href='/v2/centerNew/'> Show all centers </a>
+	</div>
+</div>
+<div style="margin: 30px auto; width: 940px">
+	<div class="thumbnail" style="width: 938px; min-height: 150px; overflow: hidden; clear: both;">
+		{% for centerData in centers_data%}
+		<div style="float: left; margin-left: 25px; margin-top: 20px">
+			<img src="{{centerData.image}}" height="133px" width="133px"
+				style="border-radius: 5px;" />
+		</div>
+		<div style="padding: 15px; float: left; width: 770px;">
+			<p style="font-weight: bold; color: #f15a22; font-size: x-large;">{{centerData.title}}</p>
+			<p style="font-weight: bold; font-size: large;">
+				<span style="color: #f15a22;">Digital Classroom Setup Sponsor
+					By</span> : {{centerData.donor}}
+			</p>
+			<p style="font-weight: bold; font-size: large;">
+				<span style="color: #f15a22;">Digital Classroom Operations
+					Sponsor By</span> :{% if centerData.ops_donor %}{{centerData.ops_donor}}{% endif %}
+			</p>
+			<p class="ellipsis multiline"
+				style="padding-top: 10px;padding-right: 10px; font-size: 14px;">{{centerData.description}}</p>
+			<div class="generalinfo">
+				<p class="title">Class Location</p>
+				<p>: &nbsp;{{centerData.location}}</p>
+				<p class="title">Grades</p>
+				<p>: &nbsp;{{centerData.grades}}</p>
+				<p class="title">Subjects Covered</p>
+				<p>: &nbsp;{{centerData.subjects_covered}}</p>
+				<p class="title">No.of Students</p>
+				<p>: &nbsp;{{centerData.noofchildren}}</p>
+				<p class="title">Launch date</p>
+				<p>: &nbsp;{{centerData.launch_date}}</p>
+			</div>
+			<input type="hidden" value="{{centerData}}" id="assigned_coursesId" />
+		<!-- 	<div class="courses" style="font-size: 14px;">
+					{% if centerData.empty_courses or centerData.other_lang_courses %}
+						<p class='requirements' style='margin-top:10px;'><b style='font-weight:bold;color:#f15a22;'>Requirements:</b></p>
+						{% if centerData.empty_courses %}
+							{% for data in centerData.empty_courses %}
+								{% for course_data in data.course%}
+                             <p style=' width:200px; padding-top:10px;float:left;clear:both;'>{{course_data.grade}} {{course_data.subject}} Teacher ({{data.center_language}})</p>
+                             <p style="float:left;padding-top:10px;"><a class="label label-success disabled"><span>contribute</span></a></p>
+                             	{% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if centerData.other_lang_courses %}
+							{% for data in centerData.other_lang_courses %}
+								{% for course_data in data.course%}
+                             <p style=' width:200px; padding-top:10px;float:left;clear:both;'>{{course_data.grade}} {{course_data.subject}} Teacher ({{data.center_language}})</p>
+                              <p style="float:left;padding-top:10px;"><a class="label label-success disabled"><span>contribute</span></a></p>
+                             	{% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                   {% endif %}
+                    	 {% if centerData.assigned_courses %}
+                    		 <p class='running-courses' style='clear:both;padding-top:10px;'><b style='font-weight:bold;color:#f15a22;'>Running Courses:</b></p>
+							{% for data in centerData.assigned_courses %}
+								{% for course_data in data.course%}
+                             <p style='padding-top:10px;float:left;clear:both;'>{{course_data.grade}} {{course_data.subject}} by <span style="font-weight:bold;">{{data.teachers}}</span></p>
+                             	{% endfor %}
+                            {% endfor %}
+                        {% endif %}
+			</div> -->
+		</div>
+		{% endfor %}
+	</div>
+</div>
+
+
+{% endblock %}
+

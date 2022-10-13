@@ -1,0 +1,15 @@
+Dear {{username}},<br><br><br>
+
+Thank you for submitting {{subtopics.count}} for the Chapter {{topic_name}}, for  {{grade}} {{subject}} from {{board}} in {{language}} <br><br>
+
+Your submission will be reviewed by our Subject Matter Experts.<br> 
+In the meantime, feel free to book a new chapter to create. <br>
+Please click <a href='https://www.evidyaloka.org/demand/content/'>here</a> to book a chapter.<br><br> 
+
+
+
+Kindly reach out to us for further queries.<br><br>
+
+Email id: <content.development@evidyaloka.org><br>
+
+Thank you for your will and time to help students in rural India have quality education.<br><br><br>

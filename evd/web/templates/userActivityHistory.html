@@ -1,0 +1,1610 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+ <style>
+.tab-content > div:last-child {
+  display : block !important;
+ }
+
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: lightblue;
+}
+ 
+.rowCss{
+margin-top:20px;
+} 
+.alphabet {
+    list-style-type: none;
+    margin:10px auto 0;
+    padding:0;
+    cursor: pointer;
+    width:80%;
+    text-align:center;
+}
+
+.alphabet li {
+    float:left;
+    margin:0;
+    padding:0;
+    border-right:1px solid darkgrey;
+    font-size: 13px;
+    -moz-box-sizing:border-box;
+    color:black;
+    display:inline-block;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
+    width:3.84%;
+}
+
+.alphabet li:last-child {
+    border-right: none;
+}
+
+.alphabet li:hover {
+    color:green;
+    background-color: lightgrey;
+}
+.acticveli{
+color:red !important;}
+.activity_tab2{
+color:red !important;}
+.tbodyId:last-child {
+     page-break-after: auto;
+}​
+ </style>
+ <style>
+
+.btn-primary{
+background: #337ab7 !important;
+}
+a{
+color: #337ab7; !important;
+}
+a:hover{
+color: #23527c; !important;
+}
+
+.btn-primary:hover, .btn:focus, .btn.focus {
+    color: #333;
+    text-decoration: none;
+}
+.pagination > li > a, .pagination > li > span {
+    position: relative;
+    float: none ! important;
+    }
+    
+.pagination{
+   margin: 20px 0 ! important;
+}
+a span {
+	display:none;
+}
+table.dataTable thead .sorting_asc{
+  background-image: none !important;
+}
+</style>
+ <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> 
+<script src="https://kendo.cdn.telerik.com/2017.1.223/js/jszip.min.js"></script>
+<script
+	src="https://kendo.cdn.telerik.com/2017.1.223/js/kendo.all.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+<link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+<link href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
+<script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.js"></script>
+
+ <script type="text/javascript" src="/static/js/bootstrap-datepicker.min.js"></script>
+<!-- <script type="text/javascript" src="/static/js/bootstrap-datepicker.min.js"></script>
+<link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+   -->
+
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+    {% include "code_conduct_modal.html" %}
+
+<div class="container-fluid new_dash_container"
+    data-profile_completion_status="{{user_profile.profile_completion_status}}">
+    <div class='row my_profile' style="position: relative">
+        <div class="col-lg-12 col-sm-12">
+
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#logon" data-toggle="tab"
+                    aria-expanded="false" id='1'>Logon</a></li>
+                <li><a href="#activity" data-toggle="tab"
+                    aria-expanded="true" id='2'>Activity</a></li>
+                <li><a href="#performedOn" data-toggle="tab"
+                    aria-expanded="true" id='3'>Task Performed</a></li>
+            </ul>
+
+
+            <div class="tab-content">
+                <div id="logon" class="tab-pane fade in active">
+                    <div class='basic_profile col-xs-12 col-sm-12 col-md-12'>
+                    <input type="hidden" id="pageId1" />
+                    <input type="hidden" id='downloadMsgForLogon'>
+                        <div class="row rowCss">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="col-md-2">
+                                            <label>Name</label>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <p>
+                                                <b>:</b>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-9">
+                                            {% if user.first_name %}
+                                            <label style="font-weight: normal">
+                                                {{user.first_name}}
+                                                {% endif %}
+                                                {% if user.last_name %}
+                                                {{user.last_name}}
+                                                </label>
+                                                {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="col-md-5">
+                                        <label>Last Login Date-Time</label>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <p>
+                                                <b>:</b>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                       <label style="font-weight:normal">
+                                        	{{last_logged_in.activity_date_time|date:'d-m-Y H:i:s'}}
+                                      </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="col-md-2">
+                                            <label>Role</label>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <p>
+                                                <b>:</b>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-9">
+                                           <label style="font-weight:normal">{% for role in pref_roles %}
+                                            {% if role == pref_roles|last %}
+                                            {{role}}
+                                            {% else %}
+                                            {{role}},
+                                            {% endif %}
+                                            {% endfor %}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="col-md-5">
+                                        <label>Last Logout Date-Time</label>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <p>
+                                            <b>:</b>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                           <label style="font-weight:normal">{{last_logged_out.activity_date_time|date:'d-m-Y H:i:s'}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="col-md-2">
+                                        <label>State</label>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <p>
+                                                <b>:</b>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-9">
+                                           <label style="font-weight:normal">{{user.userprofile.state}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="col-md-5">
+                                        <label>Gender</label>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <p>
+                                                <b>:</b>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                           <label style="font-weight:normal">{{user.userprofile.gender}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row rowCss">
+                            <div class="col-md-12">
+                                <div class="col-md-2" style="margin-top: -5px;margin-left:30px">
+                                    <h4>
+                                        <b>Logon Events</b>
+                                    </h4>
+                                </div>
+                                <div class="col-md-5"></div>
+                                	<div class="col-md-3" style="margin-left: 82px;">
+								<b>Download User Activity:</b>
+							</div>
+							<div class="col-md-1" style="margin-left: -83px;margin-right: -14px;">
+								<a title="Download Data" id="excelData"
+									style="visibility: visible;"><i
+									class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i></a>
+							</div>
+							<div class="col-md-1" style="margin-left: -16px;">
+								<a title="Download All Data" id="excelAllData"
+									style="visibility: visible;"><i
+									class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i></a>
+							</div>
+
+                            </div>
+                        </div>
+                        <input type="hidden" value="{{user.id}}" id="user_id">
+                        <div id="messageForLogon"></div>
+                        <hr>
+                        <!-- <div class="row">
+                         <div class="col-md-8"></div>
+                            <div class="col-md-9" style="margin-left:-50px">
+                                <ul class="alphabet">
+                                    <li><a id="A" onclick="alphabetSearch('A')">A</a></li>
+                                    <li><a id="B" onclick="alphabetSearch('B')">B</a></li>
+                                    <li><a id="C" onclick="alphabetSearch('C')">C</a></li>
+                                    <li><a id="D" onclick="alphabetSearch('D')">D</a></li>
+                                    <li><a id="E" onclick="alphabetSearch('E')">E</a></li>
+                                    <li><a id="F" onclick="alphabetSearch('F')">F</a></li>
+                                    <li><a id="G" onclick="alphabetSearch('G')">G</a></li>
+                                    <li><a id="H" onclick="alphabetSearch('H')">H</a></li>
+                                    <li><a id="I" onclick="alphabetSearch('I')">I</a></li>
+                                    <li><a id="J" onclick="alphabetSearch('J')">J</a></li>
+                                    <li><a id="K" onclick="alphabetSearch('K')">K</a></li>
+                                    <li><a id="L" onclick="alphabetSearch('L')">L</a></li>
+                                    <li><a id="M" onclick="alphabetSearch('M')">M</a></li>
+                                    <li><a id="N" onclick="alphabetSearch('N')">N</a></li>
+                                    <li><a id="O" onclick="alphabetSearch('O')">O</a></li>
+                                    <li><a id="P" onclick="alphabetSearch('P')">P</a></li>
+                                    <li><a id="Q" onclick="alphabetSearch('Q')">Q</a></li>
+                                    <li><a id="R" onclick="alphabetSearch('R')">R</a></li>
+                                    <li><a id="S" onclick="alphabetSearch('S')">S</a></li>
+                                    <li><a id="T" onclick="alphabetSearch('T')">T</a></li>
+                                    <li><a id="U" onclick="alphabetSearch('U')">U</a></li>
+                                    <li><a id="V" onclick="alphabetSearch('V')">V</a></li>
+                                    <li><a id="W" onclick="alphabetSearch('W')">W</a></li>
+                                    <li><a id="X" onclick="alphabetSearch('X')">X</a></li>
+                                    <li><a id="Y" onclick="alphabetSearch('Y')">Y</a></li>
+                                    <li><a id="Z" onclick="alphabetSearch('Z')">Z</a></li>
+                                </ul>
+                            </div>
+						</div> -->
+						
+                        <div class="row rowCss">
+                          <div class="col-md-1" style="margin-left:-50px"></div>
+                            <div class="col-md-2">
+                                <label> Select Activity Type</label> 
+                                <select id="activity_id"class="form-control" onchange="userActivityHistory_logon('type')">
+                                    <option value="All">All Activity</option>
+                                    {% if activityType %}
+                                    {% for activity in activityType %}
+                                      {% if activity.activity_type == 'Action'  %}
+                                    <option value="{{activity.activity_type}}">{{activity.activity_type}}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="col-md-2 ">
+                            <label> Select Activity Name</label>
+                            <select id="activityNameFilter_id" class="form-control" onchange="userActivityHistory_logon('')" required="required" tabindex="-1" aria-hidden="true">
+                                    <option value="All">All Activities</option>
+                                    {% if activity_activity_name %}
+                                    {% for activity in activity_activity_name %}
+                                     {% if activity.activity_name == 'Logged In' or  activity.activity_name == 'Logged Out'  %}
+                                    <option value="{{activity.activity_name}}">{{activity.activity_name}}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endif %}
+                             </select>
+                             </div>
+                            <div class="col-md-3">
+                                <label> Select Start Date</label>
+                                <div class="col-md-12 input-group">
+                                    <input type="text" id="sdate" name="startDate"
+                                        class="form-control readonly"
+                                        value="{{start_date|date:'d-m-Y'}}"> <label
+                                        class="input-group-addon btn" for="sdate" title="Start Date"
+                                        style="cursor: default !important;"> <span
+                                        class="fa fa-calendar" title="Start Date"
+                                        style="cursor: default !important;"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label> Select End Date</label>
+                                <div class="col-md-12 input-group">
+                                    <input type="text" id="edate" name="endDate"
+                                        class="form-control readonly"
+                                        value="{{end_date|date:'d-m-Y'}}"> <label
+                                        class="input-group-addon btn" for="edate" title="End Date"
+                                        style="cursor: default !important;"> <span
+                                        class="fa fa-calendar" title="End Date"
+                                        style="cursor: default !important;"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-1" style="margin-top: 22px">
+                                <button class="btn btn-primary" title="Generate" onclick="userActivityHistory_logon('')">Generate</button>
+                            </div>
+                        </div>
+                        <br>
+                        <hr>
+                     <div class="panel-body">
+                        <div class="content-wrapper">
+                            <div class="row" id="countPaginationId1" align="right"></div>
+								<div class="row" id="ajaxTableDiv1">
+									<div class="col-md-12">
+										<table id="table_id1" name="Table"
+											class="table table-hover table-striped table-condensed"
+											style="margin-left: 10px;"></table>
+									</div>
+								</div>
+								<div class="row" id="hideDivId1">
+							    <div class="col-md-12">
+								<table id="hiddenTableId1" name="Table"
+									class="table table-hover table-striped table-condensed"
+									style="margin-left: 10px;">
+								</table>
+							</div>
+							
+						</div>
+								<div class="row" id="pagination_data1" style="text-align:center"></div>
+							</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="activity" class="tab-pane fade">
+                    <div class='basic_profile col-xs-12 col-sm-12 col-md-12'>
+                      <input type="hidden" id="pageId2" />
+                      <input type="hidden" id='downloadMsgForActivity'>
+                        <div class="row rowCss">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="col-md-2">
+                                        <label>Name</label>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <p>
+                                                <b>:</b>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-9">
+                                            {% if user.first_name %}
+                                            <label style="font-weight: normal">
+                                                {{user.first_name}}
+                                                {% endif %}
+                                                {% if user.last_name %}
+                                                {{user.last_name}}
+                                                </label>
+                                                {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="col-md-5">
+                                        <label>Last Login Date-Time</label>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <p>
+                                                <b>:</b>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                      <label style="font-weight:normal">{{last_logged_in.activity_date_time|date:'d-m-Y H:i:s'}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="col-md-2">
+                                        <label>Role</label>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <p>
+                                                <b>:</b>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-9">
+                                            <label style="font-weight:normal">{% for role in pref_roles %}
+                                            {% if role == pref_roles|last %}
+                                            {{role}}
+                                            {% else %}
+                                            {{role}},
+                                            {% endif %}
+                                            {% endfor %}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="col-md-5">
+                                        <label>Last Logout Date-Time</label>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <p>
+                                                <b>:</b>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                           <label style="font-weight:normal">{{last_logged_out.activity_date_time|date:'d-m-Y H:i:s'}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="col-md-2">
+                                        <label>State</label>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <p>
+                                                <b>:</b>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-9">
+                                          <label style="font-weight:normal">{{user.userprofile.state}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="col-md-5">
+                                        <label>Gender</label>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <p>
+                                                <b>:</b>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                        <label style="font-weight:normal">{{user.userprofile.gender}} </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row rowCss">
+                            <div class="col-md-12">
+                                <div class="col-md-2" style="margin-top: -5px;margin-left:30px">
+                                    <h4>
+                                        <b>Activity</b>
+                                    </h4>
+                                </div>
+                                <div class="col-md-5"></div>
+                                  <div class="col-md-3" style="margin-left: 82px;">
+								<b>Download User Activity:</b>
+							</div>
+                     		<div class="col-md-1" style="margin-left: -83px;margin-right: -14px;">
+                                <a title="Download Data" id="excelData2" style="visibility: visible;"><i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i></a>
+                            </div>
+                           <div class="col-md-1" style="margin-left: -16px;">
+                                <a title="Download All Data" id="excelAllData2" style="visibility: visible;"><i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i></a>
+                            </div>
+
+                            </div>
+                        </div>
+                        <input type="hidden" value="{{user.id}}" id="user_id1">
+                       
+                        <div id="messageForActivity"></div>
+                  <!--       <div class="row">
+                        <div class="col-md-8"></div>
+                            <div class="col-md-9" style="margin-left:-50px">
+                                <ul class="alphabet">
+                                    <li><a id="A1" onclick="alphabetSearch_activity('A')">A</a></li>
+                                    <li><a id="B1" onclick="alphabetSearch_activity('B')">B</a></li>
+                                    <li><a id="C1" onclick="alphabetSearch_activity('C')">C</a></li>
+                                    <li><a id="D1" onclick="alphabetSearch_activity('D')">D</a></li>
+                                    <li><a id="E1" onclick="alphabetSearch_activity('E')">E</a></li>
+                                    <li><a id="F1" onclick="alphabetSearch_activity('F')">F</a></li>
+                                    <li><a id="G1" onclick="alphabetSearch_activity('G')">G</a></li>
+                                    <li><a id="H1" onclick="alphabetSearch_activity('H')">H</a></li>
+                                    <li><a id="I1" onclick="alphabetSearch_activity('I')">I</a></li>
+                                    <li><a id="J1" onclick="alphabetSearch_activity('J')">J</a></li>
+                                    <li><a id="K1" onclick="alphabetSearch_activity('K')">K</a></li>
+                                    <li><a id="L1" onclick="alphabetSearch_activity('L')">L</a></li>
+                                    <li><a id="M1" onclick="alphabetSearch_activity('M')">M</a></li>
+                                    <li><a id="N1" onclick="alphabetSearch_activity('N')">N</a></li>
+                                    <li><a id="O1" onclick="alphabetSearch_activity('O')">O</a></li>
+                                    <li><a id="P1" onclick="alphabetSearch_activity('P')">P</a></li>
+                                    <li><a id="Q1" onclick="alphabetSearch_activity('Q')">Q</a></li>
+                                    <li><a id="R1" onclick="alphabetSearch_activity('R')">R</a></li>
+                                    <li><a id="S1" onclick="alphabetSearch_activity('S')">S</a></li>
+                                    <li><a id="T1" onclick="alphabetSearch_activity('T')">T</a></li>
+                                    <li><a id="U1" onclick="alphabetSearch_activity('U')">U</a></li>
+                                    <li><a id="V1" onclick="alphabetSearch_activity('V')">V</a></li>
+                                    <li><a id="W1" onclick="alphabetSearch_activity('W')">W</a></li>
+                                    <li><a id="X1" onclick="alphabetSearch_activity('X')">X</a></li>
+                                    <li><a id="Y1" onclick="alphabetSearch_activity('Y')">Y</a></li>
+                                    <li><a id="Z1" onclick="alphabetSearch_activity('Z')">Z</a></li>
+                                </ul>
+                            </div>
+                          
+                        </div> -->
+                        <hr>
+                        <div class="row rowCss">
+                          <div class="col-md-1" style="margin-left:-50px"></div>
+                            <div class="col-md-2">
+                                <label> Select Activity Type</label> <select id="activity_id1" class="form-control" onchange="userActivityHistory_activity('type')">
+                                    <option value="All">All Activity</option>
+                                    {% if activityType %}
+                                    {% for activity in activityType %}
+                                    <option value="{{activity.activity_type}}">{{activity.activity_type}}</option>
+                                    {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="col-md-2 ">
+                            <label> Select Activity Name</label>
+                                        <select id="activityNameFilter_id1" class="form-control" onchange="userActivityHistory_activity('')" required="required" tabindex="-1" aria-hidden="true">
+                                        <option value="All">All Activities</option>
+                                        {% if activity_activity_name %}
+                                            {% for activity in activity_activity_name %}
+                                            <option value="{{activity.activity_name}}">{{activity.activity_name}}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                        </select>
+                                    </div>
+                           <div class="col-md-3">
+                                <label> Select Start Date</label>
+                                <div class="col-md-12 input-group">
+                                    <input type="text" id="sdate1" name="startDate1"
+                                        class="form-control readonly"
+                                        value="{{start_date|date:'d-m-Y'}}"> <label
+                                        class="input-group-addon btn" for="sdate1" title="Start Date"
+                                        style="cursor: default !important;"> <span
+                                        class="fa fa-calendar" title="Start Date"
+                                        style="cursor: default !important;"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label> Select End Date</label>
+                                <div class="col-md-12 input-group">
+                                    <input type="text" id="edate1" name="endDate1"
+                                        class="form-control readonly"
+                                        value="{{end_date|date:'d-m-Y'}}"> <label
+                                        class="input-group-addon btn" for="edate1" title="End Date"
+                                        style="cursor: default !important;"> <span
+                                        class="fa fa-calendar" title="End Date"
+                                        style="cursor: default !important;"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-1" style="margin-top: 22px">
+                                <button class="btn btn-primary" title="Generate" onclick="userActivityHistory_activity('')">Generate</button>
+                            </div>
+                        </div>
+                        <br>
+                        <hr>
+                     <div class="panel-body">
+                        <div class="content-wrapper1">
+                             <div class="row" id="countPaginationId2" align="right"></div>
+                             <div class="row" id="ajaxTableDiv2">
+                                        <div class="col-md-12">
+                                            <table id="table_id2" name="Table"
+                                                class="table table-hover table-striped table-condensed"
+                                                style="margin-left: 10px;">
+                                            </table>
+                                        </div>
+                                 </div>
+                                 <div class="row" id="hideDivId2">
+							    <div class="col-md-12">
+								<table id="hiddenTableId2" name="Table"
+									class="table table-hover table-striped table-condensed"
+									style="margin-left: 10px;">
+								</table>
+							</div>
+							
+						</div>
+						 <div class="row" id="pagination_data2" style="text-align:center"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div  id="performedOn" class="tab-pane fade">
+                     <form action="" id="formId" method="post">
+                        <div class="basic_profile col-xs-12 col-sm-12 col-md-12">
+                            <div class='col-xs-12 col-sm-12 col-md-12'>
+                                <div class='section_title'>
+                                    <h3>Performed On</h3>
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row rowCss">
+                                <div class="col-xs-4">
+                                    <label>Name :</label> {% if user.first_name %} <label style="font-weight:normal"> {{user.first_name}}
+                                        {% endif %}
+                                     {% if user.last_name %} {{user.last_name}}</label>
+                                        {% endif %}
+                                </div>
+                                <div class="col-xs-4">
+                                    <label>Email Id :</label> <label style="font-weight:normal">{{user.email}}</label>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label>Date Of Joining :</label><label style="font-weight:normal">{{user.date_joined|date:'d-m-Y'}}</label>
+                                </div>
+                            </div>
+                            <div class="row rowCss">
+                                <div class="col-xs-4">
+                                    <label>State :</label> <label style="font-weight:normal">{{userDetails.state}}</label>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label>City :</label> <label style="font-weight:normal">{{userDetails.city}}</label>
+                                </div>
+                            </div><br>
+                            <div class=" rowCss well">
+                                <div class="row rowCss">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <h3>Open Activities</h3>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12"></div>
+                                    <div class="col-md-2 col-xs-12">
+                                        <div class="input-group" align="left">
+                                         <a href="/create_task/">
+                                            <button type="button" class="btn btn-primary"
+                                                style="background: #337DFF;">
+                                                <i class="fa fa-plus"></i> Add New Task
+                                            </button>
+                                        </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table id="openActivites_tableId" class="table table-striped ">
+                                    <thead>
+                                        <tr>
+                                            <th>Due Date</th>
+                                            <th>Status</th>
+                                            <th>Subject</th>
+                                            <th>Priority</th>
+                                            <th>Assigned To</th>
+                                            <th>Created By</th>
+                                            <th>Last Modified</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for activity in openActivity %}
+                                        <tr>
+                                            <td>{{activity.dueDate|date:'d-m-Y'}}</td>
+                                            <td>{{activity.taskStatus}}</td>
+                                            <td>{{activity.subject}}</td>
+                                            <td>{{activity.priority}}</td>
+                                            <td>{{activity.assignedTo}}</td>
+                                            <td>{{activity.taskCreatedBy_userId}}</td>
+                                            <td>{{activity.taskUpdatedDate|date:'d-m-Y'}}</td>
+                                            <td><a href="/edit_task/?id={{activity.id}}">&nbsp;Edit</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class=" rowCss well">
+                                <div class="row rowCss">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <h3>Activity History</h3>
+                                    </div>
+                                </div>
+                                <table id="activityHistory_tableId" class="table table-striped ">
+                                    <thead>
+                                        <tr>
+                                            <th>Due Date</th>
+                                            <th>Status</th>
+                                            <th>Subject</th>
+                                            <th>Priority</th>
+                                            <th>Assign To</th>
+                                            <th>Created By</th>
+                                            <th>Last Modified</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for historyActivity in history %}
+                                        <tr>
+
+                                            <td>{{historyActivity.dueDate|date:'d-m-Y'}}</td>
+                                            <td>{{historyActivity.taskStatus}}</td>
+                                            <td>{{historyActivity.subject}}</td>
+                                            <td>{{historyActivity.priority}}</td>
+                                            <td>{{historyActivity.assignedTo}}</td>
+                                            <td>{{historyActivity.taskCreatedBy_userId}}</td>
+                                            <td>{{historyActivity.taskUpdatedDate|date:'d-m-Y'}}</td>
+                                            <td><a href="/edit_task/?id={{historyActivity.id}}">&nbsp;Edit</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+               
+            </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+<script>
+$(".readonly").keydown(function(e) {
+    e.preventDefault();
+});
+$(document).ready(
+       
+        function() {
+            var date_input = $('input[id="sdate"]');
+            var container = $('.bootstrap-iso form').length > 0 ? $(
+                    '.bootstrap-iso form').parent() : "body";
+            var options = {
+                format : 'dd-mm-yyyy',
+                container : container,
+                todayHighlight : true,
+                autoclose : true,
+            };
+            date_input.datepicker(options).on('changeDate',
+                    function(selected) {
+                        var startDate = new Date(selected.date.valueOf());
+                        $('#edate').datepicker('setStartDate', startDate);
+                    }).on('clearDate', function(selected) {
+                $('#edate').datepicker('setStartDate', null);
+            });
+
+            var date_input = $('input[id="edate"]');
+            var container = $('.bootstrap-iso form').length > 0 ? $(
+                    '.bootstrap-iso form').parent() : "body";
+            var options = {
+                format : 'dd-mm-yyyy',
+                container : container,
+                todayHighlight : true,
+                autoclose : true,
+            };
+            date_input.datepicker(options).on('changeDate',
+                    function(selected) {
+                        var endDate = new Date(selected.date.valueOf());
+                        //$('#sdate').datepicker('setEndDate', endDate);
+                    }).on('clearDate', function(selected) {
+                $('#sdate').datepicker('setEndDate', null);
+            });
+        })
+
+
+$(document).ready(
+       
+        function() {
+            var date_input = $('input[id="sdate1"]');
+            var container = $('.bootstrap-iso form').length > 0 ? $(
+                    '.bootstrap-iso form').parent() : "body";
+            var options = {
+                format : 'dd-mm-yyyy',
+                container : container,
+                todayHighlight : true,
+                autoclose : true,
+            };
+            date_input.datepicker(options).on('changeDate',
+                    function(selected) {
+                        var startDate = new Date(selected.date.valueOf());
+                        $('#edate1').datepicker('setStartDate', startDate);
+                    }).on('clearDate', function(selected) {
+                $('#edate1').datepicker('setStartDate', startDate);
+            });
+
+            var date_input = $('input[id="edate1"]');
+            var container = $('.bootstrap-iso form').length > 0 ? $(
+                    '.bootstrap-iso form').parent() : "body";
+            var options = {
+                format : 'dd-mm-yyyy',
+                container : container,
+                todayHighlight : true,
+                autoclose : true,
+            };
+            date_input.datepicker(options).on('changeDate',
+                    function(selected) {
+                        var endDate = new Date(selected.date.valueOf());
+                        $('#sdate1').datepicker('setEndDate', endDate);
+                    }).on('clearDate', function(selected) {
+                $('#sdate1').datepicker('setEndDate', null);
+            });
+        })
+/* $(".select2_multiple").select2({
+    maximumSelectionLength : 1000
+});
+
+$(".select2_multiple").select2({
+    maximumSelectionLength : 1000
+}); */
+</script>
+<script type="text/javascript">
+function removeComma(){
+//     var value = $("#pref_roleId").val();
+//     value.splice(-1,1)
+//     value.replace(',', '');
+}
+</script>
+<script>
+$(document).ready(function(){
+	if ($.fn.dataTable.isDataTable('#openActivites_tableId')) {
+				$('#openActivites_tableId').dataTable().fnDestroy();
+				} 
+		$('#openActivites_tableId').dataTable({
+			"lengthMenu" : false,
+			"bLengthChange" : false,
+			"bFilter" : false,
+			"pageLength" : 20,
+			"aaSorting" : [],
+			"bStateSave" : false
+			});
+		if ($.fn.dataTable.isDataTable('#activityHistory_tableId')) {
+			$('#activityHistory_tableId').dataTable().fnDestroy();
+			} 
+	$('#activityHistory_tableId').dataTable({
+		"lengthMenu" : false,
+		"bLengthChange" : false,
+		"bFilter" : false,
+		"pageLength" : 20,
+		"aaSorting" : [],
+		"bStateSave" : false
+		});  
+});</script>
+<script>
+function userActivityHistory_logon(value){
+    var activeAlph = $(".acticveli").text();
+    var aphabate = value;
+    var first = "A", last = "Z";
+    if (value!='type'){
+    for(var i = first.charCodeAt(0); i <= last.charCodeAt(0); i++) {
+        var alpha = ( eval("String.fromCharCode(" + i + ")") + " " );
+        if (aphabate!=null && aphabate!='' && aphabate!='undefined' && aphabate!='type'){
+            $("#"+alpha).removeClass("acticveli");
+        }
+    } }
+    var userId=$("#user_id").val();
+    var startDate = $("#sdate").val();
+    var endDate = $("#edate").val();
+    var type=$("#activity_id").val();
+    var activity_name=$("#activityNameFilter_id").val();
+    var activeAlph = $(".acticveli").text();
+    var pageId = $("#pageId1").val();
+    var ajaxUrl = '/ajax/userActivityHistoryFilter?flag=true&user_id='+userId+'&page='+pageId+'&tab=true';
+    if (aphabate!=null && aphabate!='' && aphabate!='undefined'){
+        $("#"+aphabate).addClass("acticveli");
+    }
+    if ((aphabate!=null && aphabate!='' && aphabate!='undefined') && aphabate!='type' || (activeAlph!=null && activeAlph!='' && activeAlph!='undefined')){
+        if (activeAlph!=null && activeAlph!='' && activeAlph!='undefined'){
+            aphabate = activeAlph;
+        }
+        ajaxUrl += '&alphabatesActivityName='+aphabate;
+    }
+     if(startDate!=null && startDate!='' && startDate!='undefined'){
+        ajaxUrl += '&start_date='+startDate;
+    }
+    if(endDate!=null && endDate!='' && endDate!='undefined'){
+        ajaxUrl += '&end_date='+endDate;
+    }
+     if (value=='type'){
+         if(type!=null && type!='' && type!='undefined'){
+                ajaxUrl += '&type='+type;
+         }
+     }else{
+         if(activity_name!=null && activity_name!='' && activity_name!='undefined' && type!=''&& activity_name!='All'){
+             ajaxUrl += '&type='+type;   
+             ajaxUrl += '&activityName='+activity_name;
+         }
+    }
+     if (ajaxUrl.search("&type")==-1 || type=='All' ){
+         ajaxUrl += '&type=Action';
+     }
+    $.ajax({
+            url : ajaxUrl,
+            success: function (data,textStatus, jqXHR) {
+                var jsonStr = data.activity_history;
+                var current_page = data.current;
+    			var prev_page = data.prev;
+    			var next_page = data.next;
+    			var total_page = data.total;
+    			var count=data.count;
+    			var all_Data=data.allActivity;
+    			var msg=data.errorMsg;
+    			$("#messageForLogon").empty();
+    			$("#messageForLogon").hide();
+    			$("#downloadMsgForLogon").val('');
+    			if (msg !=null && msg !='' && msg!='undefined'){
+    				$("#downloadMsgForLogon").val(msg);
+    			}
+    			allData(all_Data,1);
+                $("#ajaxTableDiv1").show();
+                var check=false;
+                if (jsonStr !=null && jsonStr !='' && jsonStr!='undefined'){
+                          var table='';   
+                          var thead = '';
+                          var tab1 = '';
+                          thead += '<thead>';
+                          thead +='<tr><th width="100px"><b>Date</b></th><th width="100px"><b>Time</b></th><th width="100px"><b>Activity</b></th>';
+                          thead +='</thead>';
+                          tab1 = '<tbody>';
+                            for (i = 0; i < jsonStr.length; i++) {
+                               	var jsonObj = jsonStr[i];
+                               	var date = new Date();
+                               	var loginData = jsonObj['last_login'];
+                               	if (loginData == null || loginData=='None'){
+                                   loginData = '';
+                               	}
+                               var date = new Date(jsonObj['activity_date_time']);
+                               var finalDate = ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2)+"-"+date.getFullYear() ;
+                               var hours=date.getHours();
+                               var minutes=date.getMinutes();
+                               var second=date.getSeconds()
+                               hours = hours < 10 ? '0'+hours : hours;
+                               minutes = minutes < 10 ? '0'+minutes : minutes;
+                               second = second < 10 ? "0" + second : second;
+                               var finalTime=hours + ":" + minutes +":"+ second;
+                                   tab1 += '<tr>';
+                                      tab1 += '<td>' + finalDate +'</td>';
+                                      tab1 += '<td>' + finalTime+'</td>';
+                                      tab1 += '<td>' + jsonObj['activity_name'] +'</td>';
+                                   tab1 += '</tr>';
+                           
+                               }
+                              tab1 += '</tbody>';
+                              var tableData1 = thead+tab1;
+        	      	   		  $("#table_id1").html(tableData1);
+        	      	   		  var pagination_template='';
+        	      	   		  var id=1;
+        	      	   		  download(id);
+         	      	   		  downloadAllData(id);
+        	      	   		  pagination(tableData1,total_page,current_page,pagination_template,prev_page,next_page,id,count);
+        	      	   			
+                             }else{
+                        	   var table='';   
+                               var thead = '';
+                               var tab1 = '';
+                               thead += '<thead>';
+                               thead +='<tr><th width="100px"><b>Date</b></th><th width="100px"><b>Time</b></th><th width="100px"><b>Activity</b></th>';
+                               thead +='</thead>';
+                               tab1 = '<tbody align="center" >';
+                               tab1 += '<tr>';
+                               tab1 += '<td colspan="3" >No data Found</td>';
+                               tab1 += '</tr>';
+                               tab1 += '</tbody>';
+                               var tableData1 = thead+tab1;
+                        	   $("#table_id1").html(tableData1);
+                        	   $("#pagination_data1").html('');
+                        	   $('#countPaginationId1').html('');
+                           }
+                
+                $('#target_ajax').removeAttr('style');
+                $('#targe').removeAttr('style');
+                $('#target').attr('style','visibility:hidden;');
+                $('#target_ajax').attr('style','visibility:visible;');
+            },
+            error: function() {
+//             alert("error");
+              }
+          });
+}
+function userActivityHistory_activity(value){
+    var activeAlph = $(".activity_tab2").text();
+    var aphabate = value;
+    var first = "A", last = "Z";
+    if (value!='type'){
+    for(var i = first.charCodeAt(0); i <= last.charCodeAt(0); i++) {
+        var alpha = ( eval("String.fromCharCode(" + i + ")") + "" );
+        if (aphabate!=null && aphabate!='' && aphabate!='undefined' && aphabate!='type'){
+            $("#"+alpha+"1").removeClass("activity_tab2");
+        }
+    } }
+    var userId=$("#user_id1").val();
+    var startDate = $("#sdate1").val();
+    var endDate = $("#edate1").val();
+    var type=$("#activity_id1").val();
+    var pageId = $("#pageId2").val();
+    var activity_name=$("#activityNameFilter_id1").val();
+    var activeAlph = $(".activity_tab2").text();
+    var ajaxUrl = '/ajax/userActivityHistoryFilter?flag=true&user_id='+userId+'&page='+pageId;
+    if (aphabate!=null && aphabate!='' && aphabate!='undefined'){
+        $("#"+aphabate+"1").addClass("activity_tab2");
+    }
+    if ((aphabate!=null && aphabate!='' && aphabate!='undefined') && aphabate!='type' || (activeAlph!=null && activeAlph!='' && activeAlph!='undefined')){
+        if (activeAlph!=null && activeAlph!='' && activeAlph!='undefined'){
+            aphabate = activeAlph;
+        }
+        ajaxUrl += '&alphabatesActivityName='+aphabate;
+    }
+     if(startDate!=null && startDate!='' && startDate!='undefined'){
+        ajaxUrl += '&start_date='+startDate;
+    }
+    if(endDate!=null && endDate!='' && endDate!='undefined'){
+        ajaxUrl += '&end_date='+endDate;
+    }
+     if (value=='type'){
+         if(type!=null && type!='' && type!='undefined'){
+                ajaxUrl += '&type='+type;
+         }
+     }else{
+         if(activity_name!=null && activity_name!='' && activity_name!='undefined' && type!=''&& activity_name!='All'){
+             ajaxUrl += '&type='+type;   
+             ajaxUrl += '&activityName='+activity_name;
+         }
+    }
+     if (ajaxUrl.search("&type")==-1 && type!='All' ){
+         ajaxUrl += '&type='+type;
+     }
+    $.ajax({
+            url : ajaxUrl,
+            success: function (data,textStatus, jqXHR) {
+            var jsonStr = data.activity_history;
+            var current_page = data.current;
+			var prev_page = data.prev;
+			var next_page = data.next;
+			var total_page = data.total;
+			var all_Data=data.allActivity;
+			var msg=data.errorMsg;
+			$("#messageForActivity").empty();
+			$("#messageForActivity").hide();
+			$("#downloadMsgForActivity").val('')
+			if (msg !=null && msg !='' && msg!='undefined'){
+				$("#downloadMsgForActivity").val(msg);
+			}
+			allData(all_Data,2);
+			var count=data.count;
+                $("#ajaxTableDiv2").show();
+                if (jsonStr !=null && jsonStr !='' && jsonStr!='undefined'){
+                             var table='';   
+                          var thead = '';
+                             var tab1 = '';
+                             thead += '<thead>';
+                          thead +='<tr><th width="100px"><b>Date</b></th><th width="100px"><b>Time</b></th><th width="100px"><b>Activity</b></th>';
+                          thead +='</thead>';
+                                tab1 = '<tbody>';
+                            for (i = 0; i < jsonStr.length; i++) {
+                               var jsonObj = jsonStr[i];
+                               var date = new Date();
+                               var loginData = jsonObj['last_login'];
+                               if (loginData == null || loginData=='None'){
+                                   loginData = '';
+                               }
+                               var date = new Date(jsonObj['activity_date_time']);
+                               var finalDate = ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2)+"-"+date.getFullYear() ;
+                               var hours=date.getHours();
+                               var minutes=date.getMinutes();
+                               var second=date.getSeconds()
+                              
+                               hours = hours < 10 ? '0'+hours : hours;
+                               minutes = minutes < 10 ? '0'+minutes : minutes;
+                               second = second < 10 ? "0" + second : second;
+                               var finalTime=hours + ":" + minutes +":"+ second;
+                                   tab1 += '<tr>';
+                                      tab1 += '<td>' +finalDate +'</td>';
+                                      tab1 += '<td>' + finalTime+'</td>';
+                                      tab1 += '<td>' + jsonObj['activity_name'] +'</td>';
+                                   tab1 += '</tr>';
+                           }
+                            tab1 += '</tbody>';
+      	   				 	var tableData1 = thead+tab1;
+      	   					$("#table_id2").html(tableData1);
+      	   			 		var id=2;
+      	   					download(id);
+     	   		    		downloadAllData(id);
+      	   			   		var pagination_template='';
+      	   					pagination(tableData1,total_page,current_page,pagination_template,prev_page,next_page,id,count);
+         	   			
+                           }else{
+                        	   var table='';   
+                               var thead = '';
+                               var tab1 = '';
+                               thead += '<thead>';
+                               thead +='<tr><th width="100px"><b>Date</b></th><th width="100px"><b>Time</b></th><th width="100px"><b>Activity</b></th>';
+                               thead +='</thead>';
+                               tab1 = '<tbody align="center">';
+                               tab1 += '<tr>';
+                               tab1 += '<td colspan="3" > No data Found</td>';
+                               tab1 += '</tr>';
+                               tab1 += '</tbody>';
+                               var tableData1 = thead+tab1;
+                        	   $("#table_id2").html(tableData1);
+                 	   	       $("#pagination_data2").html('');
+                 	   	       $('#countPaginationId2').html('');
+                           }
+                $('#target1_ajax').removeAttr('style');
+                $('#target1').removeAttr('style');
+                $('#target1').attr('style','visibility:hidden;');
+                $('#target1_ajax').attr('style','visibility:visible;');
+            },
+            error: function() {
+//             alert("error");
+              }
+          });
+}
+
+</script>
+    <div id='ajax_loader'
+        style="position: fixed; left: 48%; top: 48%; display: none; z-index: 999;">
+        <img src="/static/img_new/ajax-loader.gif" />
+    </div>
+    <script>
+$(document).ready(function() {
+    jQuery(function($) {
+        $(document).ajaxStop(function() {
+            $("#overlay").remove();
+            $("#ajax_loader").hide();
+        });
+        $(document).ajaxStart(function() {
+            $("body").append('<div id="overlay" style="background-color:rgba(192,192,192,0.4);position:absolute;top:0;left:0;height:100%;width:100%;z-index:100"></div>');
+            $("#ajax_loader").show();
+        });
+    });
+});
+
+</script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#hiddenTableId1").hide();
+	$("#hideDivId1").hide();
+	$("#hiddenTableId2").hide();
+	$("#hideDivId2").hide();
+	userActivityHistory_activity('');
+	userActivityHistory_logon('');
+	
+});
+</script>
+
+<script>
+$('#activity_id').on('change', function() {
+    var activity_type=this.value ;
+    var userId=$("#user_id").val();
+    if(activity_type!=''){
+    var ajaxUrl = '/ajax/getActivityNameByActivityType?flag=true&activityType='+activity_type+'&user_id='+userId
+      $.ajax({
+            url : ajaxUrl,
+            success: function (data) {
+                if (data !=null && data !='' && data!='undefined'){
+                    var optionList='';
+                    optionList += '<option value="All">All Activities</option>';
+                     for(i=0;i<data.length;i++){
+                    	 var activityValue =data[i]['activity_name'];
+                    	 if (activityValue=='Logged In'||activityValue=='Logged Out'){
+                    		 optionList +='<option value="'+ activityValue+'">' +activityValue+ '</option>';
+                    	 }
+	        			
+                         }
+                         $("#activityNameFilter_id").html(optionList);
+                    }else{
+                        var optionList='';
+                        optionList += '<option value="All">All Activities</option>';
+                         $("#activityNameFilter_id").html(optionList);
+                       
+                    }
+               
+            },
+            error: function() {
+//             alert("error");
+              }
+          });
+      }else{
+          var optionList='';
+            optionList += '<option value="All">All Activities</option>';
+             $("#activityNameFilter_id1").html(optionList);
+      }
+    });
+$('#activity_id1').on('change', function() {
+    var activity_type=this.value ;
+    var userId=$("#user_id1").val();
+    if(activity_type!=''){
+    var ajaxUrl = '/ajax/getActivityNameByActivityType?flag=true&activityType='+activity_type+'&user_id='+userId
+      $.ajax({
+            url : ajaxUrl,
+            success: function (data) {
+                if (data !=null && data !='' && data!='undefined'){
+                    var optionList='';
+                    optionList += '<option value="All">All Activities</option>';
+                     for(i=0;i<data.length;i++){
+                    	 var activityValue =data[i]['activity_name'];
+	        			 optionList +='<option value="'+ activityValue+'">' +activityValue+ '</option>';
+                         }
+                         $("#activityNameFilter_id1").html(optionList);
+                    }else{
+                        var optionList='';
+                        optionList += '<option value="All">All Activities</option>';
+                         $("#activityNameFilter_id1").html(optionList);
+                    }
+            },
+            error: function() {
+//             alert("error");
+              }
+          });
+      }else{
+          var optionList='';
+            optionList += '<option value="All">All Activities</option>';
+            $("#activityNameFilter_id1").html(optionList);
+      }
+    });
+    
+</script>
+
+<script>
+$("#activityNameFilter_id").val('All');
+$("#activity_id").val('All'); 
+</script>
+<script>
+function pagination(tableData,total_page,current_page,pagination_template,prev_page,next_page,id,count){
+		if (tableData != null && tableData != ' ' && tableData != 'undefined' && tableData.length > '0') {
+			pagination_template += "<ul class='pagination' style='padding-left: 210px;padding-right: 187px;'>";
+			if(total_page >=1){
+				if(current_page >1){
+		    		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+prev_page+","+id+")'"+prev_page+"' ><i class='fa fa-chevron-left'></i></a></li> ";
+		   	 	}else{
+		    		pagination_template += "<li><a class='page' href='javascript:void(0);'><i class='fa fa-chevron-left'></i></a></li> ";
+		    	}
+		   		 if(current_page !=1){
+		    		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(1,"+id+")'>1</a></li> ";
+		     	}
+		    	 if(current_page > 4 && current_page <= 10){
+		        	pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-1)+","+id+")'"+(current_page-1)+"' >...</a></li> ";
+		     	}
+		     	if((current_page-50)>0){
+		        	pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-50)+","+id+")'"+(current_page-50)+"' >...</a></li> ";
+		     	}
+		     	if((current_page-11) > 0 && (current_page-11) != 1){
+		        	pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-11)+","+id+")'"+(current_page-11)+"' >"+(current_page-11)+"</a></li> ";
+		     	}
+		     	if((current_page-10)>0){
+		         	pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-10)+","+id+")'"+(current_page-10)+"' >...</a></li> ";
+		     	}
+		     	if((current_page-2) > 0 && (current_page-2) != 1){
+		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-2)+","+id+")'"+(current_page-2)+"' >"+(current_page-2)+"</a></li> ";
+		     	}
+		     	if((current_page-1) > 0 && (current_page-1) != 1){
+		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-1)+","+id+")'"+(current_page-1)+"' >"+(current_page-1)+"</a></li> ";
+		     	}
+		     		pagination_template += "<li  class='active'><a class='page' href='javascript:void(0);' onclick='loadPagination("+current_page+","+id+")'"+current_page+"' >"+current_page+"</a></li> ";
+		     	if((current_page+1) <= total_page){
+		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+1)+","+id+")'"+(current_page+1)+"' >"+(current_page+1)+"</a></li> ";
+		     	}
+		     	if((current_page+2) <= total_page){
+		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+2)+","+id+")'"+(current_page+2)+"' >"+(current_page+2)+"</a></li> ";
+		     	}
+		     	if((current_page+10) < total_page){
+		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+10)+","+id+")'"+(current_page+10)+"' >...</a></li> ";
+		     	}
+		     	if((current_page+11) < total_page){
+		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+11)+","+id+")'"+(current_page+11)+"' >"+(current_page+11)+"</a></li> ";
+		     	}
+		     	if((current_page+50) < total_page){
+		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+50)+","+id+")'"+(current_page+50)+"' >...</a></li> ";
+		     	}
+		     	if((current_page >= (total_page-10)) && (current_page < (total_page-3))){
+		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+1)+","+id+")'"+(current_page+1)+"' >...</a></li> ";
+		     	}
+		     	if((current_page+3) <= total_page){
+		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+total_page+","+id+")'"+total_page+"' >"+total_page+"</a></li> ";
+		     	}
+		     	if(current_page < total_page){
+		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+next_page+","+id+")'"+next_page+"' ><i class='fa fa-chevron-right'></i></a></li> ";
+		     	}else{
+		     	pagination_template += "<li><a class='page' href='javascript:void(0);'><i class='fa fa-chevron-right'></i></a></li> ";
+		     	}
+		 	}
+			pagination_template += "</ul>";
+		   var span='';
+               span='<span class="col-sm" style="text-align :right;" >';
+              var curent_count_end='';
+               var curent_count='';
+               if(total_page>0){
+            	   curent_count=(current_page*50)-49;
+                   if (current_page<total_page){
+                		  span +='Showing '+curent_count+' to '+current_page*50+' Activity of '+count+' Activity';
+                	  } else{
+                		  span +='Showing '+curent_count+' to '+count+' Activity of '+count +' Activity';
+                	  }  
+                  }  
+                 span +='</span>';
+                 $("#countPaginationId"+id).html(span); 
+		}else{
+			$("#pagination_data"+id).html('');
+		}
+	$("#pagination_data"+id).html(pagination_template);
+	
+}
+
+function loadPagination(Page,id) {
+	if (id==1){
+		var pageId = $("#pageId1").val(Page);
+		userActivityHistory_logon('');
+	}else{
+		var pageId = $("#pageId2").val(Page);
+		userActivityHistory_activity('');
+	}
+}
+
+$('#excelData').on( 'click', function () {
+		if ($.fn.dataTable.isDataTable('#table_id'+2)) {
+			$('#table_id'+2).dataTable().fnDestroy();
+		} 
+		$("#messageForLogon").empty();
+	 	$("#messageForLogon").hide();
+	 	var msg=$("#downloadMsgForLogon").val();
+		if (msg !=null && msg !='' && msg!='undefined'){
+		    messageBox = '<div class="alert alert-';
+	        messageBox +=  'danger';
+	        messageBox += ' Box alert-dismissable" style="line-height: 0;">';
+	        messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+	        messageBox += msg+'</div>';
+	        $("#messageForLogon").append(messageBox);
+	        $("#messageForLogon").show();
+		}else{
+		 	$(".excelButton").trigger('click');
+		 	var id=1;
+		 	download(id);
+	}
+	
+	});
+	
+$('#excelAllData').on( 'click', function () {
+	if ($.fn.dataTable.isDataTable('#table_id'+2)) {
+		$('#table_id'+2).dataTable().fnDestroy();
+	} 
+	$("#messageForLogon").empty();
+	$("#messageForLogon").hide();
+	var msg=$("#downloadMsgForLogon").val();
+	if (msg !=null && msg !='' && msg!='undefined'){
+		messageBox = '<div class="alert alert-';
+	    messageBox +=  'danger';
+	    messageBox += ' Box alert-dismissable" style="line-height: 0;">';
+	    messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+	    messageBox += msg+'</div>';
+	    $("#messageForLogon").append(messageBox);
+	    $("#messageForLogon").show();
+	}else{
+		 $(".excelButton2").trigger('click');
+		 var id=1;
+	     downloadAllData(id);
+	}
+	});
+	
+$('#excelData2').on( 'click', function () {
+	if ($.fn.dataTable.isDataTable('#table_id'+1)) {
+		$('#table_id'+1).dataTable().fnDestroy();
+	} 
+	$("#messageForActivity").empty();
+	$("#messageForActivity").hide();
+	var msg=$("#downloadMsgForActivity").val();
+	if (msg !=null && msg !='' && msg!='undefined'){
+		messageBox = '<div class="alert alert-';
+	    messageBox +=  'danger';
+	    messageBox += ' Box alert-dismissable" style="line-height: 0;">';
+	    messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+	    messageBox += msg+'</div>';
+	    $("#messageForActivity").append(messageBox);
+	    $("#messageForActivity").show();
+	}else{
+		 $(".excelButton").trigger('click');
+		 var id=2;
+		 download(id);
+	}
+	});
+	
+$('#excelAllData2').on( 'click', function () {
+	if ($.fn.dataTable.isDataTable('#hiddenTableId'+1)) {
+		$('#hiddenTableId'+1).dataTable().fnDestroy();
+	} 
+	$("#messageForActivity").empty();
+	$("#messageForActivity").hide();
+	var msg=$("#downloadMsgForActivity").val();
+	if (msg !=null && msg !='' && msg!='undefined'){
+		messageBox = '<div class="alert alert-';
+	    messageBox +=  'danger';
+	    messageBox += ' Box alert-dismissable" style="line-height: 0;">';
+	    messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+	    messageBox += msg+'</div>';
+	    $("#messageForActivity").append(messageBox);
+	    $("#messageForActivity").show();
+	}else{
+		$(".excelButton2").trigger('click');
+		var id=2;
+		 downloadAllData(id);
+	}
+	
+	} );
+	
+function download(tableId){
+	if (tableId==1){
+		if ($.fn.dataTable.isDataTable('#hiddenTableId'+2)) {
+			$('#hiddenTableId'+2).dataTable().fnDestroy();
+		} 
+	}else{
+		if ($.fn.dataTable.isDataTable('#hiddenTableId'+1)) {
+			$('#hiddenTableId'+1).dataTable().fnDestroy();
+		} 
+	}
+	var table = $('#table_id'+tableId).DataTable();
+	table.destroy();
+	$('#table_id'+tableId).dataTable({
+		    "destroy": true,
+			"lengthMenu" : false,
+			"bLengthChange" : false,
+			"bFilter" : false,
+			"pageLength" : 20,
+			"aaSorting" : [],
+			"bStateSave" : false,
+			"paging":   false,
+			"ordering": false,
+			"info":     false,
+			dom: 'Bfrtip',
+		        buttons: [
+             {
+              extend: 'excel',
+          	 filename: 'User Activity',
+          	 className: 'excelButton',  
+          	 exportOptions: {
+                   columns:[0,1,2]
+                }
+             }
+                
+		        ]
+		}); 
+} 
+
+function downloadAllData(id){
+	 $('#hiddenTableId'+id).dataTable({
+		    "destroy": true,
+			"lengthMenu" : false,
+			"bLengthChange" : false,
+			"bFilter" : false,
+			"pageLength" : 20,
+			"aaSorting" : [],
+			"bStateSave" : false,
+			 "paging":   false,
+			 "ordering": false,
+			 "info":     false,
+			 dom: 'Bfrtip',
+		        buttons: [
+            {
+              extend: 'excel',
+         	 filename: 'All User Activity',
+         	 className: 'excelButton2',  
+         	 exportOptions: {
+                  columns:[0,1,2]
+               }
+            }
+               
+		        ]
+		});
+}
+</script>
+<script>
+
+function allData(jsonStr,id){
+	var table='';   
+    var thead = '';
+    var tab1 = '';
+    thead += '<thead>';
+    thead +='<tr><th width="100px"><b>Date</b></th><th width="100px"><b>Time</b></th><th width="100px"><b>Activity</b></th>';
+    thead +='</thead>';
+    tab1 = '<tbody>';
+    for (i = 0; i < jsonStr.length; i++) {
+         	var jsonObj = jsonStr[i];
+         	var date = new Date();
+         	var loginData = jsonObj['last_login'];
+         	if (loginData == null || loginData=='None'){
+             loginData = '';
+     }
+     var date = new Date(jsonObj['activity_date_time']);
+     var finalDate = ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2)+"-"+date.getFullYear() ;
+     var hours=date.getHours();
+     var minutes=date.getMinutes();
+     var second=date.getSeconds()
+         hours = hours < 10 ? '0'+hours : hours;
+         minutes = minutes < 10 ? '0'+minutes : minutes;
+         second = second < 10 ? "0" + second : second;
+         var finalTime=hours + ":" + minutes +":"+ second;
+             tab1 += '<tr>';
+                tab1 += '<td>' +finalDate +'</td>';
+                tab1 += '<td>' + finalTime+'</td>';
+                tab1 += '<td>' + jsonObj['activity_name'] +'</td>';
+             tab1 += '</tr>';
+         }
+        tab1 += '</tbody>';
+        var tableData1 = thead+tab1;
+   	    $("#hiddenTableId"+id).html(tableData1);
+}
+
+
+
+</script>
+{% endblock %}

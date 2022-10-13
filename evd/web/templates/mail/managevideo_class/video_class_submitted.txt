@@ -1,0 +1,19 @@
+
+
+<p>Dear {{volunteer_name}},</p>
+
+
+<p>Thank you for submitting the video capsules for the Chapter {{topic_title}} of {{grade}} {{subject}} in {{board}}! </p>
+<p>The video is sent for review to our Review Council.</p> 
+ 
+<p>Please feel free to reach out to us for further queries.</p>
+
+<p>Thank you once again, and we look forward for further contribution for our children in rural India.</p>
+
+
+<p>With Regards,</p>
+<p>eVidyaloka Team</p>
+  	
+<p>www.evidyaloka.org</p>
+<p>Skype: evidyaloka.helpdesk | Phone: 080 - 40903939 | Email: videoclass@evidyaloka.org<p/>
+

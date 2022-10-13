@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <style>
+   
+   html {
+  scroll-behavior: smooth;
+}
+.landingVdo {
+    width: 100.666667%;
+}
+.syllabus {
+      border-radius: 0;
+      width: 130px;
+      background: #f15a22;
+   }
+   .community {
+      border-radius: 0;
+      width: 130px;
+      background: #9166ca;
+   }
+   .tool {
+      border-radius: 0;
+       width: 130px;
+      background:  #88b54e;;
+   }
+   .task {
+      border-radius: 0;
+      width: 130px;
+       background: #3ea5be;
+   }
+  
+   .btn-danger {
+      border-radius: 0;
+      width: 136px;
+      margin-right: -30px;
+   }
+   .btn-primary {
+    width: 85px;
+    margin-right: 127px;
+    margin-top: -33px;
+}
+.nl{
+ background:#d021cb;
+ width: 85px;
+ margin-right: 127px;
+ margin-top: -33px;
+}
+
+</style>
+    <script defer src="https://rawgit.com/kimmobrunfeldt/progressbar.js/master/dist/progressbar.js"></script>
+    <script defer src="/static/js/selectize.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/selectize.css" />
+    <script src='/static/js/underscore_1.5.2.min.js' type='text/javascript' ></script>
+    <script src='/static/js_new/profile.js' type='text/javascript' ></script>
+    <script src='/static/js_new/fb_feed/fb_feed.min.js' type='text/javascript' ></script>
+    <script src='/static/js_new/play_orient_video.js' type='text/javascript' ></script>
+    <script>
+        {% include "underscore_temps/teacher_demand.tmpl" with container="#render_demand" only %}
+    </script>
+    <script>
+      var members_len = [{'fb_id': '100011607874861', 'member_token' : '{{ member_token }}'}];
+      $(document).ready(function(){
+            for (var i = 0; i<members_len.length; i++) {
+                $('.render_feed').evdFacebook({
+                id: members_len[i].fb_id,
+                member_token : members_len[i].member_token
+                })
+            };
+            //popover
+            $('[data-toggle="popover"]').popover({ trigger: "hover" });
+
+        });
+    </script>
+
+   <script>
+    $(document).ready(function(){
+                        $.each($('.progress_role'),function(){
+                        var progress_id = '#'+$(this).attr('id');
+                        var role_status = Number($(this).data('role_status'))/100;
+                        var role = $(this).data('role');
+                        if(role_status == 0){
+                            role_status = 0;
+                        }
+                        var bar = new ProgressBar.SemiCircle(progress_id, {
+                          strokeWidth: 6,
+                          color: '#FFEA82',
+                          trailColor: '#eee',
+                          trailWidth: 1,
+                          easing: 'easeInOut',
+                          duration: 1400,
+                          svgStyle: null,
+                          text: {
+                            value: '',
+                            alignToBottom: false
+                          },
+                          from: {color: '#FFEA82'},
+                          to: {color: '#ED6A5A'},
+                          // Set default step function for all animate calls
+                          step: (state, bar) => {
+                            bar.path.setAttribute('stroke', state.color);
+                            var value = Math.round(bar.value() * 100);
+                            if (value === 0) {
+                              bar.setText('0%');
+                            } else {
+                              bar.setText(value + '%');
+                            }
+
+                            bar.text.style.color = state.color;
+                          }
+                        });
+                        bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+                        bar.text.style.fontSize = '2rem';
+
+                        bar.animate(role_status);  // Number from 0.0 to 1.0
+                    });
+
+        //change button target if onboarding status is 100%
+
+
+    });
+
+    $(document).ready(function () {
+    // Handler for .ready() called.
+    $('html, body').animate({
+        scrollTop: $('#video_class').offset.top
+    }, 'slow');
+});
+    </script>
+
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+    <div class='container-fluid new_dash_container'>
+    <div class='row onboarding material_div standard_row row-centered'id="newRft" style="width: 1027px;position: relative;left: 95px;top: 20px;">
+    <div class='col-md-12'>
+    <div class='col-md-10'>
+     {% if role_status == 'Inactive' %}
+      <h4>Have a look at what eVidyaloka has been upto in this month </h4><a class="btn nl pull-right"href="/newsletter/" target="_blank">Newsletter</a> 
+       <br>
+      {% endif %}
+      </div>
+       <div class='col-md-2'>
+     {% if not  slot_details%} 
+     <a class="btn btn-danger pull-right"href="/role_onboarding/teacher/#availability_preference" target="_blank">Share My Availability</a> 
+	 {% endif %}
+	</div>
+    </div>
+     <div class='col-md-12'>
+    
+       {% if not  slot_details%}
+       <h4>View Teacher Requirements in {{pref_lang}}</h4>
+    <h4>Select a school to teach in {{pref_lang}}</h4>
+    {% endif %}
+   
+    </div>
+   
+    <div class='col-md-12'>
+    {% if slot_details%}
+    <br>
+    {% for slot in slot_details %}
+    {% if forloop.first %}
+<p>Your booked Center {{slot.0}} {{slot.5}} 
+on {{slot.1}} ( From {{slot.2}} To {{slot.3}} )  
+{% else %}
+and {{slot.1}} ( From {{slot.2}} To {{slot.3}} )    as on {{slot.4}}</p>
+{% endif %}
+
+ {% endfor %}
+
+ <p>You will receive an update on the booking status in 3 days. In the meantime, you may check the following pages.
+ <br>If you have already received the mail please accept the offering and come back</p>
+{% else %} 
+<a class="btn btn-success btn-lg" href="/v2/demand/" >Select Your Class</a> 
+{% endif %}
+<hr>
+</div>
+
+     <hr>
+     <div class='col-md-12'></div>
+		<div class='col-md-12' align="center">
+			<div class="col-md-6" style="margin-top: 50px;">
+				<div class="col-sm-12">
+					<a class="btn syllabus btn-lg"
+						href="http://wikividya.evidyaloka.org"
+						style="margin-top: 20px; margin-left: 0px;" target="_blank">Syllabus</a>
+					<a class=" btn community btn-lg"
+						href="http://evidyaloka.facebook.com"
+						style="margin-top: 20px; margin-left: 40px;" target="_blank">Community</a>
+				</div>
+
+
+				<br>
+				<div class="col-sm-12">
+					<a class="btn tool btn-lg" href="/aidsntools/"
+						style="margin-top: 40px;" target="_blank">Tools to Teach</a> <a
+						class=" btn task btn-lg" href="/task_list/"
+						style="margin-top: 40px; margin-left: 40px;" target="_blank">My
+						Tasks</a>
+                </div>
+                <div class="col-sm-12">
+					<a class="btn tool btn-lg" href="/v2/content_demand"
+						style="margin-top: 40px; width: 180px;background: darkorange;" target="_blank">Record a video class</a> 
+				</div>
+
+			</div>
+
+			<!-- <div class='col-md-6'> -->
+			<div class='col-sm-5' style=' padding-left:0px;'>
+			<div class='material_div sec_title' style='min-height:221px;'>
+                    <h5>See how classes are conducted</h5>
+                    <hr>
+                    <div class='row'>
+						<div class='col-sm-12' style='padding: 0px 0px 30px 0px;'>
+							<img src="/static/images/video1.jpg" data-toggle="modal"
+								data-target="#Modal_evd"
+								style="height: 158px; margin: auto; cursor: pointer; width: 366px;"
+								class=" img img-responsive">
+						</div>
+					</div>
+                </div>
+			</div>
+			
+		</div>
+	</div>
+    <div id="Modal_evd" class="modal fade" role="dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content" >
+                    <div class="modal-header">
+                        <button type="button" class="close content_admin_modal_close" data-dismiss="modal" style="font-size:30px">&times;</button>
+                        <h4 class="modal-title">Class videos</h4>
+                    </div>
+                    <div class="modal-body" style='padding:10px;'>
+                        <div class='row standard_row embed-responsive embed-responsive-4by3'>
+                           <iframe width="667" height="476" class='video embed-responsive-item'
+                            src="https://www.youtube.com/embed/THyfdA8rttQ?list=PLbdxk95Fm6YyzIv5Yp_389XPJ33E9CKm5"
+                            frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    {% if topic_booked != 0 %}
+    
+
+<div id="video_class">
+
+		<div class="col-md-12" style="background-color: white;position: relative;top:4px;height: 420px;width: 1027px;left: -61px;">
+		
+			<div class="note-box" style="height: 310px;position: relative;left: 124px;top:32px" >
+				<table style="position: relative;top: 12px;">
+					<td style="position: relative;left: 10px;width: 400px;"><p style="font-weight: bold;">Topic Booked: {{topic_booked}}</p></td>
+					{% if submit_video == 1 %}
+					<td style="position: relative;left: 156px;"><a href="/v2/video_assignment"><button style="width: 150px;background-color: green;color: #FFFFFF;height: 30px;"> Submit Video Link</button></a></td>
+					{% else %}
+					<td style="position: relative;left: 156px;"><button style="width: 150px;background-color: #F15A22;color: #FFFFFF;">Pending Approval</button></td>
+					{% endif %}
+        </table>
+        <br>
+        <div>
+          <p></p>&nbsp;&nbsp;<span style="color:black;"> Total Subtopics: {{ subtopic_count }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span style="color: blue;">Submitted: {{ submitted }}</span>
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: green;">Approved: {{ approved }}</span> </p>   
+        </div>
+					
+				<div style="position: relative;left: 36px;top: 31px;">
+					<a href="https://www.youtube.com/embed/WPeyFBA-AFY" target="_blank" class="btn btn-secondary btn-lg mystudentcls" style="position: relative;left: 12px;"><b>Why (appeal)</b></a>
+					<a href="https://medium.com/@monosnap/windows-how-to-record-videos-b6ded8e63cd1" target="_blank" class="btn btn-secondary btn-lg mystudentcls" style="position: relative;left: 29px;"><b>How (Monosnap guide)</b></a>
+					<a href="https://www.youtube.com/embed/_qZHUWveyQI" target="_blank" class="btn btn-secondary btn-lg mystudentcls" style="position: relative;left: 48px"><b>How it looks like</b></a>
+					<a href="https://www.youtube.com/embed/DvxjRj-Ukcs" target="_blank" class="btn btn-secondary btn-lg mystudentcls" style="position: relative;left: 80px"><b>References</b></a>
+					<br>
+					<br>
+          <a href="https://www.youtube.com/embed/WPeyFBA-AFY" target="_blank">
+						<iframe width="160px" height="120px" src="https://www.youtube.com/embed/WPeyFBA-AFY" style="position: relative;left: -10px;" frameborder="0" allowfullscreen allow="accelerometer; encrypted-media; gyroscope; picture-in-picture">
+						 </iframe>
+					  </a>
+					  <!-- <a href="https://medium.com/@monosnap/windows-how-to-record-videos-b6ded8e63cd1" target="_blank">
+						<iframe width="160px" height="120px" src="https://medium.com/@monosnap/windows-how-to-record-videos-b6ded8e63cd1" frameborder="0" allowfullscreen allow="accelerometer; encrypted-media; gyroscope; picture-in-picture">
+						 </iframe>
+            </a> -->
+            <a target="_blank" href="https://medium.com/@monosnap/windows-how-to-record-videos-b6ded8e63cd1">
+              <img src="/static/images/procedure.png" alt="Forest" style="width:150px;    position: relative;top: -57px;">
+            </a>
+					  <a href="https://www.youtube.com/embed/5sB_hy8b0M4" target="_blank">
+						<iframe width="160px" height="120px" src="https://www.youtube.com/embed/5sB_hy8b0M4" style="position: relative;left: 10px;" frameborder="0" allowfullscreen allow="accelerometer; encrypted-media; gyroscope; picture-in-picture">
+						 </iframe>
+					  </a>
+					  <a href="https://www.youtube.com/embed/DvxjRj-Ukcs" target="_blank">
+						<iframe width="160px" height="120px" src="https://www.youtube.com/embed/ui7sHfaLc0c" style="position: relative;left: 18px;" frameborder="0" allowfullscreen allow="accelerometer; encrypted-media; gyroscope; picture-in-picture">
+						 </iframe>
+					  </a>
+            <a href="/static/images/Checklist_for_videomodulecreation.pdf" target="_blank" class="btn btn-success btn-lg mystudentcls" style="position: relative;left:-503px;top: 36px;"><b>Guidelines</b></a>
+            <form method="get" action="/static/images/Template_forVideoCapsule.pptx">
+              <button class="btn btn-info btn-lg " style="position: relative;left: 264px;left:267px;top: -43px;" type="submit"><b>Template</b></button>
+             </form>
+            </form><form method="get" action="https://wikividya.evidyaloka.org" target="_blank">
+              <button class="btn btn-info btn-lg " style="position: relative;left: 264px;left:381px;top: -83px;" type="submit"><b>Textbook</b></button>
+             </form>
+  
+  
+				</div>
+        	</div>
+        </div>
+      </div>
+    {% endif %}
+{% include "new_orientation_modal.html" %}
+{% endblock %}
+

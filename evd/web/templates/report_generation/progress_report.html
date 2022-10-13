@@ -1,0 +1,1513 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+   <style>
+	   
+  .divider {
+    border-bottom: 0px solid #ddd ! important; 
+    margin: 0px ! important;
+}
+ .navbar .nav > li ul li a {
+    font-size: 0.9em;
+}
+.tab-content>div:last-child {
+	display: block !important;
+}
+
+.sharp {
+	border-radius: 0;
+}
+
+.table td, .table th {
+	border: none;
+}
+
+table.table.table-condensed {
+	border: 2px solid lightblue;
+}
+
+.space {
+	padding-left: 2.5em;
+}
+
+.rowCss {
+	margin: 25px 0px;
+}
+
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: lightblue;
+}
+
+
+
+
+</style>
+
+<style>
+
+.radioCss {
+  
+    display: inline-block;
+    width: 13%;
+    }
+    
+    
+    input[type='radio'] {
+  -webkit-appearance:none;
+  width:15px;
+  height:15px; 
+  border-radius:50%;
+  outline:none;
+  box-shadow:0 0 5px 0px gray inset;
+}
+
+input[type='radio']:hover {
+  box-shadow:0 0 5px 0px brown inset;
+}
+
+input[type='radio']:before {
+  content:'';
+  display:block;
+  width:60%;
+  height:60%;
+  margin: 20% auto;    
+  border-radius:50%;    
+}
+input[type='radio']:checked:before {
+  background:brown;
+}
+
+.btnCSS{
+width:110px;
+}
+
+.point{
+cursor:pointer;
+}
+a.dt-button.pdfButton {
+     color: white;
+ }
+ 
+a.dt-button.excelButton{
+     color: white;     
+}
+
+a.dt-button.pdfButton:hover {
+ cursor: default; 
+}
+
+a.dt-button.excelButton:hover {
+ cursor: default; 
+}
+a{
+color: #337ab7; !important;
+}
+a:hover{
+color: #23527c; !important;
+}
+
+.btn-primary:hover, .btn:focus, .btn.focus {
+    color: #333;
+    text-decoration: none;
+}
+.chartBoxCss {
+     height: 400px;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    /* padding-top: 3px;
+    height: 32px; */
+}
+.select2-container .select2-selection {
+	    height: auto;
+	    max-height:35px;
+	    overflow-y : scroll;
+	} 
+	
+.btn-primary:active:hover{
+    color: #fff;
+    background-color: #204d74;
+    border-color: #122b40;
+}
+</style>
+
+<!-- <script src="https://kendo.cdn.telerik.com/2017.1.223/js/jquery.min.js"></script> -->
+<script src="https://kendo.cdn.telerik.com/2017.1.223/js/jszip.min.js"></script>
+<script
+	src="https://kendo.cdn.telerik.com/2017.1.223/js/kendo.all.min.js"></script>
+
+
+<!-- Bootstrap -->
+<!-- <link href="/static/css/bootstrap.min.css" rel="stylesheet"> -->
+<!-- Font Awesome -->
+<!-- <link href="/static/css/select2.min.css" rel="stylesheet"> -->
+<!-- Custom Theme Style -->
+<!-- <link href="/static/css/custom.css" rel="stylesheet"> -->
+<!-- jQuery -->
+<!-- <script src="/static/js/jquery.min.js"></script> -->
+
+<!-- Select2 -->
+<!-- <script src="/static/js/select.min.js"></script> -->
+
+
+<!-- OLD LIBRARY -->
+
+<!-- Font Awesome -->
+<!-- <link href="/static/css/select2.min.css" rel="stylesheet">
+
+Custom Theme Style
+<link href="/static/css/custom.css" rel="stylesheet">
+jQuery
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/jquery-ui.min.js"></script>
+<script src="/static/js_new/jquery-ui.js" ></script>
+Bootstrap
+<script src="/static/js/bootstrap.min.js"></script>
+Select2
+<script src="/static/js_new/select.js"></script>
+<script src="/static/js_new/bootstrap-select_new.js"></script>
+<script src="/static/js_new/wSelect.js"></script>
+<script src="/static/js_new/wSelect.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap-datepicker.min.js"></script> -->
+
+<!-- END OLD LIBRARY -->
+
+<!-- NEW LIBRARY -->
+
+<!-- Font Awesome -->
+<link href="/static/css/select2.min.css" rel="stylesheet">
+
+<!-- Custom Theme Style -->
+<link href="/static/css/custom.css" rel="stylesheet">
+
+<!-- jQuery -->
+<script src="/static/js_new/jquery-ui.min.js"></script>
+<script src="/static/js_new/jquery-ui.js" ></script>
+<!-- <script src="/static/js/jquery.min.js"></script> -->
+<!-- <script src="/static/js/jquery.js" ></script> -->
+
+
+<!-- My Library -->
+<link href="/static/css/jquery-ui.css" rel="Stylesheet"></link>
+<script type="text/javascript" src="/static/js_new/user_center_incremental_search.js"></script>
+
+<!-- Bootstrap -->
+<!-- <script src="/static/js/bootstrap.min.js"></script> -->
+
+<!-- Datepicker -->
+<script type="text/javascript" src="/static/js/bootstrap-datepicker.min.js"></script>
+
+<!-- Select -->
+<link href="/static/css/select2.min.css" rel="stylesheet">
+<script src="/static/js/select.min.js"></script>
+
+<!-- Extra -->
+<script src="https://www.amcharts.com/lib/3/gauge.js"></script>
+
+<!-- END NEW LIBRARY -->
+
+{% endblock %} {% block body_container %} {{ block.super }} 
+
+
+<div class="container-fluid new_dash_container"
+	data-profile_completion_status="{{user_profile.profile_completion_status}}">
+	<div class='row my_profile' style="position: relative">
+		<div class="col-lg-12 col-sm-12">
+			<div class="tab-content">
+				<div class="tab-pane fade in active">
+					<div class='basic_profile col-xs-12 col-sm-12 col-md-12'>
+						<input type="hidden" value="{{students_reports}}" id="student_report_data_id" />
+						<div class="row rowCss">
+							<div class="col-md-12">
+								<div class="row"
+									style="background-color: #ddd; margin-left: 14px;">
+									<div class="col-sm-12"
+										style="margin-left: -17px; postion: absolute">
+										<div class="btn-group">
+											<button style="text-align: center; width: 120px; background: #337ab7 !important;"
+												type="button"  onclick="location.href='/students_dashboard/'" class=" btn btn-primary size">Dashboard</button>
+
+											<button style="text-align: center; background-color:#2d5477" type="button" onclick="location.href='/students_progress_report/'"
+												class=" btn btn-primary size">Student Progress
+												Report</button>
+
+											<button style="text-align: center; width: 120px;background: #337ab7 !important;" onclick="location.href='/reportCard/'"
+												type="button" class=" btn btn-primary size">Report
+												Card</button>
+										</div>
+									</div>
+								</div>
+
+								<div class="row rowCss" style="margin-left: 5px;">
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<label><span style="color: red;">*</span>Select State</label>
+										<div class="col-md-12 input-group">
+											<select id="state_id" name="stateName"
+												class="select2_multiple form-control select2-hidden-accessible"
+												multiple="multiple" required="required" tabindex="-1" aria-hidden="true">
+												{% if statenames.0 == "All" or statenames.0 == '' or statenames.0 == "undefined" %}
+													<option value="All" id="stateId" selected="selected" >All</option>
+												{% else %}
+													<option value="All">All</option>
+												{% endif %}
+												{% for state in states %}
+													{% if state.state %}
+														<option value="{{state.state}}"
+														{% for state_base in statenames %}
+														{% if state.state == state_base%}
+														selected="selected"
+														{% endif %}
+														{% endfor %}
+														>{{state.state}}</option>
+													{% endif %}
+												{% endfor %}
+											</select><label class="input-group-addon btn" for="stateId"
+												title="Select State" style="cursor: default !important;">
+												<span class="fa fa-angle-down" title="Select State"
+												style="cursor: default !important;"></span>
+											</label>
+										</div><span id="stateErrorId" style="color: red; display:none">Please Select State</span>
+									</div>
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<label>Partner</label>
+										<div class="col-md-12 input-group">
+											<input type="hidden" value="{{delivery_partner}}" id="partnerid"/>
+										<select id='id_partner' name='partner_id' class="select2_multiple form-control select2-hidden-accessible" multiple="multiple" tabindex="-1" aria-hidden="true">
+											<option value=-1>All</option>
+										</select>
+										</div>
+									</div>
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<label>Donor</label>
+										<div class="col-md-12 input-group">
+											<input type="hidden" value="{{funding_partner}}" id="fundpartner_id"/>
+										<select id='id_fund_partner' name='fund_partner_id' class="select2_multiple form-control select2-hidden-accessible" multiple="multiple"  tabindex="-1" aria-hidden="true">
+											<option value=-1>All</option>
+											</select>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="row rowCss" style="margin-left: 5px;">
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<label><span style="color: red;">*</span>Select Center</label>
+										<div class="col-md-12 input-group">
+											<select id="center_id" name="centerId"
+												class="select2_multiple form-control select2-hidden-accessible" onchange="removeErrorMsg(this.id)"
+												multiple="multiple" required="required" tabindex="-1" aria-hidden="true">
+												<option id="centerId" value="All" selected="selected">All</option>
+												{% for center in centers %}
+												 <option value="{{ center.name }}">{{  center.name  }}</option>
+												 {% endfor %}
+												
+											</select><label class="input-group-addon btn" for="centerId"
+												title="Select Center" style="cursor: default !important;">
+												<span class="fa fa-angle-down" title="Select Center"
+												style="cursor: default !important;"></span>
+											</label>
+										</div><span id="centerErrorId" style="color: red; display:none">Please Select Center</span>
+									</div>
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<label><span style="color: red;">*</span>Select Grade</label>
+										<div class="col-md-12 input-group">
+											<select id="grade_id" name="gradeId" onchange="removeErrorMsg(this.id)"
+												class="select2_multiple form-control select2-hidden-accessible"
+												multiple="multiple" required="required" tabindex="-1" aria-hidden="true">
+												<option id="gradeId" selected value="All" >All</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+												<option value="6">6</option>
+												<option value="7">7</option>
+												<option value="8">8</option>
+											</select><label class="input-group-addon btn" for="gradeId"
+												title="Select Grade" style="cursor: default !important;">
+												<span class="fa fa-angle-down" title="Select Grade"
+												style="cursor: default !important;"></span>
+											</label>
+										</div><span id="gradeErrorId" style="color: red; display:none">Please Select Grade</span>
+									</div>
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<label><span style="color: red;">*</span>Select AY</label>
+										<div class="col-md-12 input-group">
+											<select name="yearpicker" id="yearpicker" onchange="removeErrorMsg(this.id)"
+												class="select2_multiple form-control select2-hidden-accessible"
+												 required="required" tabindex="-1" aria-hidden="true" >
+												 <option value="All">All</option>
+												 {% for ay in ayfy %}
+												 <option value="{{ ay.id }}">{{ ay.title }} - {{ ay.board }}</option>
+												 {% endfor %}
+												 
+											</select>
+										</div><span id="ayErrorId" style="color: red; display:none">Please Select AY</span>
+									</div>
+								</div>
+								<div class="row" style="margin-left: 5px;">
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<label><span style="color: red;">*</span>Select Course</label>
+										<div class="col-md-12 input-group">
+											<select id="course_id" name="courseId" onchange="removeErrorMsg(this.id)"
+												class="select2_multiple form-control select2-hidden-accessible"
+												multiple="multiple" required="required" tabindex="-1" aria-hidden="true">
+												<option value="All" id="courseId" selected="selected">All</option>
+												{% for course in courses %}
+												<option value="{{course.subject}}">{{course.subject}}</option>
+												{% endfor %}
+											</select><label class="input-group-addon btn" for="courseId"
+												title="Course" style="cursor: default !important;">
+												<span class="fa fa-angle-down" title="Select State"
+												style="cursor: default !important;"></span>
+											</label>
+										</div><span id="courseErrorId" style="color: red; display:none">Please Select Course</span>
+									</div>
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<label><span style="color: red;">*</span>Select Assessment Type</label>
+										<div class="col-md-12 input-group">
+											<select id="assessment_id" name="assessmentId"
+												onchange="controlterms()" onchange="removeErrorMsg(this.id)"
+												class="select2_multiple form-control select2-hidden-accessible"
+												required="required" tabindex="-1" aria-hidden="true">
+												<option value="scholastic" selected>Scholastic</option>
+												<option value="coscholastic">Coscholastic</option>
+												<option value="diagnostic">Diagnostic</option>
+											</select>
+										</div>
+										<span id="assessmentErrorId" style="color: red; display: none">Please
+											Select Assessment Type</span>
+									</div>
+									{% for diag_category in diag_terms %}
+										<input class="diag_cat" type="hidden" value={{diag_category.category}}>
+									{% endfor %}
+									{% for category in terms %}
+										<input class="schol_cat" type="hidden" value={{category.category}}>
+									{% endfor %}
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<label><span style="color: red;">*</span>Select Term/Sem</label>
+										<div class="col-md-12 input-group">
+											<select id="term_id" name="termId" onchange="removeErrorMsg(this.id)"
+												class="select2_multiple form-control select2-hidden-accessible"
+												 required="required" tabindex="-1" aria-hidden="true">
+												<option value="" selected="selected">All</option>
+												<option value="Term1">Term1</option>
+												<option value="Term2">Term2</option>
+												<!-- <option id='term3' value="Term3">Term3</option> -->
+												<option value="Class Test">Class Test</option>
+												<option value="Worksheet">Worksheet</option>
+												<option value="Quiz">Quiz</option>
+											
+											</select>
+										</div><span id="termErrorId" style="color: red; display:none">Please Select Assessment Term</span>
+									</div>
+
+									<div class="col-md-3 col-sm-6 col-xs-12 rowCss">
+										<div class="col-md-8">
+											<button  type="submit" class="btn btn-primary btnCSS" style="background: #337ab7 !important;"
+												onclick="return generater('data')">Generate</button>
+
+										</div>
+
+										<div class="col-md-2 point hideFirstLoad" id="target" >
+											<a href="#" ><i class="fa fa-file-pdf-o fa-2x"
+												aria-hidden="true"></i>
+												<p class="outline">pdf</p> </a>
+										</div>
+
+										<div class="col-md-2 hideFirstLoad" id="excelTarget">
+											<a href="#"><i class="fa fa-file-excel-o fa-2x" 
+											    aria-hidden="true"></i>
+												<p class="outline">xls</p> </a>
+
+										</div>
+
+									</div>
+								</div>
+
+
+								<div class="row hideFirstLoad" style="margin-left: -2px;">
+									<div class="col-md-12">
+										<div class="col-md-1">
+											<input type="radio" class="radioCss" name="Allradio" id="radio_all_id"><label
+												style="margin-left: 5px;">All</label>
+										</div>
+										<div class="col-md-2">
+											<input type="radio" class="radioCss" name="radio" id="radio_top10_id"><label
+												style="margin-left: 5px;">Top 10 student</label>
+										</div>
+										<div class="col-md-2">
+											<input type="radio" class="radioCss" name="radio" id="radio_btm10_id"><label
+												style="margin-left: 5px;"> Bottom 10 student</label>
+										</div>
+
+										<div class="col-md-7"></div>
+
+									</div>
+								</div>
+
+
+
+								<div class="rowCss">
+
+										<table id="table_id" name="Table"
+											class="table table-hover table-striped table-condensed"
+											style="margin-left: 10px;">
+												
+
+										</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+/* function selectOption(){
+	 var value = $("#state_id").val();
+	 if (value !=null && value.length>0){
+		 var flag = false;
+		for(var i = 0; i < value.length; i++){
+			alert(value[i]);
+			 if(value[i]=='All'){
+				flag = true;
+				alert()
+				 if(flag && i> 0){
+					 
+					 $("#state_id option : selected").removeAttr("selected", "selected");
+				 }
+			 }
+			
+			 
+			 if(selectedValue == 'All' && value[i].innerHTML == 'All'){ 
+				alert("**");	
+				alert(value[i].innerHTML);
+				value[0].selected = false;
+			} 
+		}	 
+	 }
+} */
+</script>
+<script>
+	
+</script>
+
+<script>
+	$(".select2_multiple").select2({
+		maximumSelectionLength : 1000
+	});
+
+	$(".select2_multiple").select2({
+		maximumSelectionLength : 1000
+	});
+</script>
+<script>
+		var tableToExcel = (function () {
+		    var uri = 'data:application/vnd.ms-excel;base64,'
+		    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table cellspacing="0" rules="rows" border="1" style="color:Black;background-color:White;border-color:#CCCCCC;border-width:1px;border-style:None;width:100%;border-collapse:collapse;font-size:9pt;text-align:center;">{table}</table></body></html>'
+		    , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+		    , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+		    return function (table, name) {
+		        if (!table.nodeType) table = document.getElementById(table)
+		        var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+		        if (navigator.msSaveBlob) {
+		            var blob = new Blob([format(template, ctx)], { type: 'application/vnd.ms-excel', endings: 'native' });
+		            navigator.msSaveBlob(blob, 'export.xls')
+		        } else {
+		            window.location.href = uri + base64(format(template, ctx))
+		        }
+		    }
+		})()
+
+</script>
+
+
+
+<script>
+
+$("#state_id").select2();
+var val3=["All"];
+var newSelectedOption3;
+	$("#state_id").on('change', function() {
+		var newArray=[];
+		var selected = $(this).val();
+		var newVal = $(this).val();
+		//alert("newVal "+newVal);
+		//alert("val2 "+val3);
+		if(newVal != null) {
+		for(var i=0; i<newVal.length; i++) {
+		     if($.inArray(newVal[i], val3) == -1) {
+		    	 newSelectedOption3 = $(this).find('option[value="' + newVal[i] + '"]').text();
+		    	 newArray.push(newSelectedOption3);
+		  //  	 alert("newArray "+newArray);
+		    	 selected = newSelectedOption3;
+		     }
+		 }
+		//alert("All options "+selected);
+		if (selected != null) {
+			if (selected.indexOf('All') >= 0) {
+				$(this).val('All').select2();
+			//	alert("inside");
+			} 
+		}
+		 if (selected != 'All') {
+			document.getElementById('stateId').selected = false;
+			var selectedOptions = $(this).val();
+			//alert("selectedOptions "+selectedOptions);
+			$("#state_id").select2(selectedOptions);
+		 } 
+		 val3 = $(this).val();
+		 //alert("val3 "+val3);
+		} 
+	});
+
+$("#state_id").on("change", function() {
+	$('#stateErrorId').hide();
+		var state = []; 
+		$('#state_id :selected').each(function(i, selected){ 
+		  state[i] = $(selected).text(); 
+		});
+		var ajaxUrl = '/ajax/getCourses/?state='+state;
+	$.ajax({
+	        url : ajaxUrl,
+	        success: function (data) {
+	        	if(data.center_list != null){
+	        		$('#centerErrorId').hide();
+	        		var optionList = '';
+	        		optionList += '<option id="centerId" value = "All" selected="selected" >All</option>';
+	        		for(i=0;i<data.center_list.length;i++){
+	        			optionList += '<option value = '+data.center_list[i]['value']+' >'+data.center_list[i]['label']+'</option>';
+	        		}
+	        		$("#center_id").html(optionList);
+	        	    val1=["All"];
+	        	}
+				var partner_list = []
+						for (i=0;i<data.center_list.length;i++){
+						var is_present = 'no';
+						for(j=0;j<partner_list.length;j++){
+						if(data.center_list[i]['funding_partner_id'] == partner_list[j]['funding_partner_id']){
+
+							is_present = 'yes';
+							break;
+						}
+					}
+				
+					if((is_present == 'no') && (data.center_list[i]['funding_partner_id'] != 'undefined')){
+						partner_list.push({'funding_partner_id':data.center_list[i]['funding_partner_id'],'funding_partner':data.center_list[i]['funding_partner']});
+					}
+				}
+
+				var options = '<option value=-1>All</option>';
+				for (i=0;i<partner_list.length;i++){
+					options += '<option value="'+partner_list[i]['funding_partner_id']+'"';
+					if (partner_list[i]['funding_partner_id']=='{{funding_partner}}')
+						options += 'selected="selected" ';
+					options += '>'+partner_list[i]['funding_partner']+'</option>';
+				}
+				$("#id_fund_partner").empty();
+
+				$("#id_fund_partner").append(options);
+				
+
+				var partner_list = []
+				for (i=0;i<data.center_list.length;i++){
+					var is_present = 'no';
+					for(j=0;j<partner_list.length;j++){
+						if(data.center_list[i]['delivery_partner_id'] == partner_list[j]['delivery_partner_id']){
+
+							is_present = 'yes';
+							break;
+						}
+					}
+				
+					if((is_present == 'no') && (data.center_list[i]['delivery_partner_id'] != 'undefined')){
+						partner_list.push({'delivery_partner_id':data.center_list[i]['delivery_partner_id'],'delivery_partner':data.center_list[i]['delivery_partner']});
+					}
+				}
+
+				var options = '<option value=-1>All</option>';
+				for (i=0;i<partner_list.length;i++){
+					options += '<option value="'+partner_list[i]['delivery_partner_id']+'"';
+					if (partner_list[i]['delivery_partner_id']=='{{delivery_partner}}')
+						options += 'selected="selected" ';
+					options += '>'+partner_list[i]['delivery_partner']+'</option>';
+				}
+				$("#id_partner").empty();
+
+				$("#id_partner").append(options);
+	        	if(data.listdata != null) {
+	        		var optionListYear = '';
+	        		optionListYear += '<option value = "All" selected="selected" >All</option>';
+	        		for(i=0; i< data.listdata.length;i++) {
+	        			var academicYear = data.listdata[i]['year']+""
+	        			optionListYear += '<option value = '+data.listdata[i]['id']+' >'+data.listdata[i]['board']+' '+data.listdata[i]['title']+'</option>';
+	        		}
+	        		$("#yearpicker").html(optionListYear);
+	        	}
+	        },
+	        error: function() {
+	            //  alert("error");
+	           }
+	      });
+    });
+    
+	$("#id_partner").on("change", function() {
+			
+			$("#id_partner option[value=All]").remove()
+			;
+		
+    	loadCentersBypartner();
+        });
+        
+        function loadCentersBypartner(){
+			var partner =[] ; 
+			var state= $("#state_id").val();
+        	var state_count = $('#state_count').val();
+			$('#id_partner :selected').each(function(i, selected){ 
+				
+				partner[i] = $(selected).val(); 
+    		});
+			console.log("FRF",state)
+			if(state==null || state=='' || state=='undefined'){
+    			state = 'All';
+    		}
+    		if(partner==null || partner=='' || partner=='undefined'){
+    			partner = 'All';
+    		}
+			console.log("partner --------------------------------")
+			console.log(partner,state)
+    		var ajaxUrl = '/ajax/getCourses/?state='+state+'&partner='+partner;
+    		if (state_count == '0'){
+    			ajaxUrl = "";
+    		}
+			$.ajax({
+	        url : ajaxUrl,
+	        success: function (data) {
+	        	if(data.center_list != null){
+	        		$('#centerErrorId').hide();
+	        		var optionList = '';
+	        		optionList += '<option id="centerId" value = "All" selected="selected" >All</option>';
+	        		for(i=0;i<data.center_list.length;i++){
+	        			optionList += '<option value = '+data.center_list[i]['value']+' >'+data.center_list[i]['label']+'</option>';
+	        		}
+	        		$("#center_id").html(optionList);
+	        	    val1=["All"];
+	        	}
+				var partner_list = []
+						for (i=0;i<data.center_list.length;i++){
+						var is_present = 'no';
+						for(j=0;j<partner_list.length;j++){
+						if(data.center_list[i]['funding_partner_id'] == partner_list[j]['funding_partner_id']){
+
+							is_present = 'yes';
+							break;
+						}
+					}
+				
+					if((is_present == 'no') && (data.center_list[i]['funding_partner_id'] != 'undefined')){
+						partner_list.push({'funding_partner_id':data.center_list[i]['funding_partner_id'],'funding_partner':data.center_list[i]['funding_partner']});
+					}
+				}
+
+				var options = '<option value=-1>All</option>';
+				for (i=0;i<partner_list.length;i++){
+					options += '<option value="'+partner_list[i]['funding_partner_id']+'"';
+					if (partner_list[i]['funding_partner_id']=='{{funding_partner}}')
+						options += 'selected="selected" ';
+					options += '>'+partner_list[i]['funding_partner']+'</option>';
+				}
+				$("#id_fund_partner").empty();
+
+				$("#id_fund_partner").append(options);
+				
+	        	if(data.listdata != null) {
+	        		var optionListYear = '';
+	        		optionListYear += '<option value = "All" selected="selected" >All</option>';
+	        		for(i=0; i< data.listdata.length;i++) {
+	        			var academicYear = data.listdata[i]['year']+""
+	        			optionListYear += '<option value = '+data.listdata[i]['id']+' >'+data.listdata[i]['board']+' '+data.listdata[i]['title']+'</option>';
+	        		}
+	        		$("#yearpicker").html(optionListYear);
+	        	}
+	        },
+	        error: function() {
+	            //  alert("error");
+	           }
+    	      });
+        }
+
+
+
+	$("#id_fund_partner").on("change", function() {
+			
+			$("#id_fund_partner option[value=All]").remove()
+			;
+		
+    	loadCentersByfundpartner();
+        });
+        
+        function loadCentersByfundpartner(){
+			var fund_partner =[] ; 
+			var state= $("#state_id").val();
+			var partner= $("#id_partner").val();
+        	var state_count = $('#state_count').val();
+			$('#id_fund_partner :selected').each(function(i, selected){ 
+				
+				fund_partner[i] = $(selected).val(); 
+    		});
+			console.log("FRF",state,partner)
+			if(state==null || state=='' || state=='undefined'){
+    			state = 'All';
+    		}
+    		if(partner==null || partner=='' || partner=='undefined'){
+    			partner = 'All';
+    		}
+			if(fund_partner==null || fund_partner=='' || fund_partner=='undefined'){
+    			fund_partner = 'All';
+    		}
+			console.log("fund_partner",partner,state,fund_partner,$("#id_fund_partner").val())
+    		var ajaxUrl = '/ajax/getCourses/?state='+state+'&partner='+partner+'&funding_partner_id='+fund_partner;
+    		if (state_count == '0'){
+    			ajaxUrl = "";
+    		}
+			$.ajax({
+	        url : ajaxUrl,
+	        success: function (data) {
+	        	if(data.center_list != null){
+	        		$('#centerErrorId').hide();
+	        		var optionList = '';
+	        		optionList += '<option id="centerId" value = "All" selected="selected" >All</option>';
+	        		for(i=0;i<data.center_list.length;i++){
+	        			optionList += '<option value = '+data.center_list[i]['value']+' >'+data.center_list[i]['label']+'</option>';
+	        		}
+	        		$("#center_id").html(optionList);
+	        	    val1=["All"];
+	        	}
+				
+	        	if(data.listdata != null) {
+	        		var optionListYear = '';
+	        		optionListYear += '<option value = "All" selected="selected" >All</option>';
+	        		for(i=0; i< data.listdata.length;i++) {
+	        			var academicYear = data.listdata[i]['year']+""
+	        			optionListYear += '<option value = '+data.listdata[i]['id']+' >'+data.listdata[i]['board']+' '+data.listdata[i]['title']+'</option>';
+	        		}
+	        		$("#yearpicker").html(optionListYear);
+	        	}
+	        },
+	        error: function() {
+	            //  alert("error");
+	           }
+    	      });
+        }
+    
+</script>
+
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" /> -->
+<link rel="stylesheet" type="text/css" href="static/css_new/jquery.dataTables.min.css" />
+<!-- <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> -->
+<script src="/static/js_new/jquery.dataTables.min.js"></script>
+<script src="/static/js_new/dataTables.bootstrap.min.js"></script>
+<!-- <script src="/static/js_new/jquery-3.3.1.js"></script> -->
+
+<script>
+	$(".hideFirstLoad").hide();
+</script>
+<script>
+$(document).ready(function(){
+	$(function() {
+	    var $radios = $("#radio_all_id");
+	    if($radios.is(':checked') === false) {
+	        $radios.prop('checked', true);
+	        $("#radio_top10_id").prop("checked", false);
+	        $("#radio_btm10_id").prop("checked", false); 
+	    }
+	});
+	var assessment_type = $("#assessment_id").val();
+	if(assessment_type != 'scholastic'){
+		$("#term_id").attr("disabled", "disabled");
+	}
+	else{
+		$("#term_id").removeAttr('disabled');
+	}
+	var jsonData = $("#student_report_data_id").val();
+	var newJsonData = JSON.parse(jsonData);
+	if(newJsonData ==null){
+		newJsonData = jsonData;
+	}
+	loadDataInTable(newJsonData);
+
+});
+
+function controlterms(){
+	var assessment_type = $("#assessment_id").val();
+	if(assessment_type == 'diagnostic' || assessment_type == 'scholastic'){
+		$("#term_id").removeAttr('disabled');
+		var diag_Arr = [];
+		var options = "<option value='All'>All</option>";
+		var diag_cat = $(".diag_cat");
+		if (assessment_type == 'diagnostic'){
+			assessType_class = "diag_cat";
+		} else {
+			assessType_class = "schol_cat";
+		}
+		$("."+assessType_class).each(function(i, element){
+			diag_Arr.push($(element).val());
+			options += "<option value="+diag_Arr[i]+">"+diag_Arr[i]+"</option>"
+			
+		});
+		$("#term_id").html(options);
+	} else {
+		$("#term_id").attr("disabled", "disabled");
+	}
+}
+
+function loadDataInTable(jsonData){
+	var year = $("#yearpicker").val();
+	if(year == 'All') {
+		var d = new Date();
+		var n = d.getFullYear();
+		year = n;		
+	}
+	var tab1 = '<tbody>';
+    var thead = '<thead>';
+            thead +='<tr><th width="10%">Student Name</th><th width="15%"> Center</th><th width="15%"> Grade</th><th width="15%">Term</th>';
+            thead +='<th width="10%">&nbsp;Maths</th><th width="5%">English</th><th width="5%">Science</th><!-- <th width="5%">Digital Literacy Program</th>';
+            thead +='<th width="5%">Joy of Reading</th><th width="5%">Extras</th> --><th width="10%">Obtained Marks</th><th width="10%">Obtained(%)  </th><!-- <th width="10%">Attendance %</th>';
+            thead +='<th width="5%">Rank</th> --><th width="5%">Action</th></tr>';
+            thead += '</thead>';
+ 	if (jsonData != null && jsonData != 'undefined') {
+		var jsonStr = jQuery.parseJSON(jsonData);
+		 for (i = 0; i < 0; i++) {
+			var jsonObj = jsonStr[i];
+			var jsonObj = jsonStr[i];
+            var maths = jsonObj['maths'];
+            if(maths == null)
+            	maths = 0;
+            var science = jsonObj['science'];
+            if (science ==null)
+            	science = 0;
+            var english = jsonObj['english'];
+            if (english==null)
+            	english = 0;
+            var total = jsonObj['total'];
+            if (total ==null)
+            	total = 0;
+            maths = Math.round(maths);
+            english = Math.round(english);
+            science = Math.round(science);
+            total = Math.round(total);
+			tab1 += '<tr>';
+			tab1 += '<td>' + jsonObj['name'] + '</td>';
+			tab1 += '<td>' + jsonObj['centername'] +'</td>';
+			tab1 += '<td>' + jsonObj['grade'] +'th</td>';
+			tab1 += '<td>' + jsonObj['category'] +'</td>';
+			tab1 += '<td>' + maths + '</td>';
+			tab1 += '<td>' + english + '</td>';
+			tab1 += '<td>' + science + '</td>';
+			tab1 += '<td>' + total + '</td>';
+			tab1 += '<td>' + Math.round(total/jsonObj ['sumOfTotal']*100) + '</td>';
+			tab1 += '<td><a href="/reportCard?flag=true&studentName='+jsonObj['id']+'&grade='+jsonObj['grade']+'&year='+year+' "><span class="fa fa-line-chart"></span>&nbsp;</a></td>';
+			tab1 += '</tr>';
+			}
+			tab1 += '</tbody>';
+			var tableData = thead+tab1;
+
+			if ($.fn.dataTable.isDataTable('#table_id')) {
+			$('#table_id').dataTable().fnDestroy();
+			} 
+			$("#table_id").html(tableData);
+			$("#table_id").hide();
+
+			$('#table_id').dataTable({
+			"lengthMenu" : false,
+			"bLengthChange" : false,
+			"bFilter" : false,
+			"pageLength" : 20,
+			"aaSorting" : [],
+			"bStateSave" : false,
+			"bInfo": false,
+			"bPaginate": false,
+			"scrollX": true
+			});
+			$('#target').on( 'click', function () {
+				download();
+				$(".pdfButton").trigger('click');
+			} );
+			
+			$('#excelTarget').on( 'click', function () {
+				download();
+				$(".excelButton").trigger('click');
+			} );
+			  function download(){ 
+			var assessment_type = $("#assessment_id").val();
+			  if(assessment_type == 'diagnostic'){
+			   $('#table_id').dataTable({
+				    "destroy": true,
+					"lengthMenu" : false,
+					"bLengthChange" : false,
+					"bFilter" : false,
+					"pageLength" : 20,
+					"aaSorting" : [],
+					"bStateSave" : false,
+					 dom: 'Bfrtip',
+				        buttons: [
+		                     {
+		                    extend: 'pdf',
+		                    filename: 'Student Progress Report',
+		                    className: 'pdfButton',
+		                    pageSize:'LETTER',
+		                    exportOptions: {
+		                        columns:[0,1,2,3,4,5,6,7]
+                                  }
+		                   },
+		                     
+		                   {
+		                     extend: 'excel',
+		                	 filename: 'Student Progress Report',
+		                	 className: 'excelButton',                	
+		                     exportOptions: {
+		                         columns:[0,1,2,3,4,5,6,7]
+		                      }
+		                   }
+		                      
+				        ]
+
+				});
+				} 
+				else if(assessment_type == 'coscholastic') {
+               $('#table_id').dataTable({
+				    "destroy": true,
+					"lengthMenu" : false,
+					"bLengthChange" : false,
+					"bFilter" : false,
+					"pageLength" : 20,
+					"aaSorting" : [],
+					"bStateSave" : false,
+					 "scrollX": true,
+					 dom: 'Bfrtip',
+				        buttons: [
+		                     {
+		                    extend: 'pdf',
+		                    filename: 'Student Progress Report',
+		                    className: 'pdfButton',
+							 pageSize: 'A2',
+		                    exportOptions: {
+		                        columns:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+		                        		   }
+		                   },
+		                     
+		                   { extend: 'excel',
+		                	 filename: 'Student Progress Report',
+		                	 className: 'excelButton',                	
+		                     exportOptions: {
+		                         columns:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+		                      }
+		                   }
+		                       
+				        ]
+				}); 
+			} else {
+				$('#table_id').dataTable({
+				    "destroy": true,
+					"lengthMenu" : false,
+					"bLengthChange" : false,
+					"bFilter" : false,
+					"pageLength" : 20,
+					"aaSorting" : [],
+					"bStateSave" : false,
+					 "scrollX": true,
+					 dom: 'Bfrtip',
+				        buttons: [
+		                     {
+		                    extend: 'pdf',
+		                    filename: 'Student Progress Report',
+		                    className: 'pdfButton',
+		                    pageSize:'A3',
+
+		                    exportOptions: {
+		                        columns:[0,1,2,3,4,5,6,7,8,9,10,11,12,13]
+		                        		   }
+		                   },
+		                     
+		                   { extend: 'excel',
+		                	 filename: 'Student Progress Report',
+		                	 className: 'excelButton',                	
+		                     exportOptions: {
+		                         columns:[0,1,2,3,4,5,6,7,8,9,10,11,12,13]
+		                      }
+		                   }
+		                       
+				        ]
+				}); 
+			}
+		}
+			
+			} 
+		}
+</script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+<link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+<link href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
+<script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
+<script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+
+
+<script>
+function generater(data){
+	$(".hideFirstLoad").show();
+	var states1 = $("#state_id").val();
+	var ayYear = $("#yearpicker").val();
+	if((states1 =="All" || states1.length > 1) && ayYear != "All") {
+		alert("Please select Academic as 'All' if you are selecting more than 1 state");
+		return false
+	}
+	var year = $("#yearpicker").val();
+	
+	var value = data;
+	if(value == 'data'){
+		$(function() {
+		    var $radios = $('input:radio[name=Allradio]');
+		    if($radios.is(':checked') === false) {
+		        $radios.prop('checked', true);
+		       $("#radio_top10_id").prop("checked", false);
+		       $("#radio_btm10_id").prop("checked", false);
+		    }
+		});
+	}
+	var stateName = []; 
+	var centerName = [];
+	var grade = [];
+	var AssessmentYear = [];
+	var course = [];
+	var flag = "true";
+// 	if($('#state_id').val() == null){
+// 		alert("Please enter State");
+// 	}
+	if($('#state_id').val() !=null && $('#state_id').val() !='' && $('#state_id').val() !='undefined'){
+		$('#state_id :selected').each(function(i, selected){ 
+			stateName[i] = $(selected).text(); 
+			console.log("stateName[i] :"+stateName[i]);
+			$('#stateErrorId').hide();
+		});
+	}else{
+		$('#stateErrorId').show();
+	}
+	if($('#center_id').val() !=null && $('#center_id').val() !='' && $('#center_id').val() !='undefined'){
+		$('#center_id :selected').each(function(i, selected){
+			if($(selected).text() == 'All') {
+				$("#center_id").find('option').not(':selected').each(function(j, notSelected){
+					centerName[j] = $(notSelected).text();
+				})
+			} else {
+				centerName[i] = $(selected).text();
+				console.log('center value '+$('#center_id').val());
+			}
+			$('#centerErrorId').hide();
+		});	
+	}else{
+		$('#centerErrorId').show();
+		console.log('center value error :'+$('#center_id').val());
+	}
+	console.log($('#grade_id').val());
+	if($('#grade_id').val() !=null && $('#grade_id').val() !='' && $('#grade_id').val() !='undefined'){
+		$('#grade_id :selected').each(function(i, selected){ 
+			grade[i] = $(selected).text(); 
+			console.log('grade value '+$('#grade_id').val());
+			$('#gradeErrorId').hide();
+		});		
+	}else{
+		$('#gradeErrorId').show();
+		console.log('grade value error'+$('#grade_id').val());
+	}
+	if($('#yearpicker').val() !=null && $('#yearpicker').val() !='' && $('#yearpicker').val() !='undefined'){
+		$('#yearpicker :selected').each(function(i, selected){ 
+			AssessmentYear[i] = $(selected).val();
+			$('#ayErrorId').hide();
+		});		
+	}else{
+		$('#ayErrorId').show();
+	}
+	if($('#course_id').val() !=null && $('#course_id').val() !='' && $('#course_id').val() !='undefined'){
+		$('#course_id :selected').each(function(i, selected){ 
+			course[i] = $(selected).text();
+			$('#courseErrorId').hide();
+		});	
+	}else{
+		$('#courseErrorId').show();
+	}
+	if($('#state_id').val() !=null && $('#center_id').val() !=null && $('#grade_id').val() !=null 
+			&& $('#yearpicker').val() !=null && $('#course_id').val() !=null ){
+		ajaxUrl = '/ajax/getTableList/?stateName=' + stateName+ '&flag=' + flag ;
+		
+	}else{
+		return false;
+	}
+// 	console.log("state : "+$('#state_id').val());
+// 	console.log("center_id : "+$('#center_id').val());
+// 	console.log("grade_id : "+$('#grade_id').val());
+// 	console.log("course_id : "+$('#course_id').val());
+	
+	if (centerName !=null && centerName!='' && centerName!='undefined'){
+		ajaxUrl += '&centerName='+centerName;
+	}
+	if (grade !=null && grade!='' && grade!='undefined'){
+		ajaxUrl += '&grade='+grade;
+	}
+	if (course !=null && course!='' && course!='undefined'){
+		ajaxUrl += '&course='+course;
+	}
+    if (AssessmentYear !=null && AssessmentYear!='' && AssessmentYear!='undefined'){
+		ajaxUrl += '&AssessmentYear='+AssessmentYear;
+	} 
+    var assessment_type = $("#assessment_id").val();
+    if (assessment_type != null && assessment_type != '' && assessment_type != 'undefined'){
+            ajaxUrl += '&assessment_id='+assessment_type;
+    }
+    if(assessment_type == 'scholastic' || assessment_type == 'diagnostic'){
+    	var termId = $("#term_id").val();
+    	if (termId != null && termId != '' && termId != 'undefined'){
+    		ajaxUrl += '&termId='+termId;
+    	}
+    }
+    if(document.getElementById('radio_top10_id').checked) {
+    ajaxUrl += '&rediobtn=top10';
+    } else if(document.getElementById('radio_btm10_id').checked) {
+    ajaxUrl += '&rediobtn=btm10';
+    }else if(document.getElementById('radio_all_id').checked){
+     ajaxUrl += '&rediobtn=all';
+    }
+	$.ajax({
+		url : ajaxUrl,
+		success: function (jsonStr) {
+	   				$('#table_id').dataTable().fnClearTable();
+	   				$("#table_id").show();
+		   			if (jsonStr !=null && jsonStr !='' && jsonStr!='undefined'){
+		   				if (assessment_type=='scholastic'){
+		   					jsonStr = jQuery.parseJSON(jsonStr);
+		   				}
+		   				if(assessment_type != null && assessment_type!='' && assessment_type!='undefined'){
+		   					var thead = '';
+		   					var tab1 = '';
+		   					if (assessment_type == 'coscholastic'){
+// 		   						loadCoscholasticTable(jsonStr);
+		   					  thead += '<thead>';
+		                      thead +='<tr><th width="8%">Student Id</td><th width="15%">Student Name</th><th width="15%">Center</th><th width="5%">Grade</th><th width="7%">Subject</th><th width="7%">Assessed Date</th><th width="15%">Curious</th>';
+		                      thead +='<th width="10%">&nbsp;Attentiveness</th><th width="5%">Self Confidence</th><th width="5%">Supportiveness</th><th width="5%">Positive Attitude</th>';
+		                      thead +='<th width="5%">Initiatveness</th>';
+		                      thead +='<th width="5%">Courteousness</th>';
+		                      thead +='<th width="5%">Wider Perspective</th>';
+		                      thead +='<th width="5%">Emotional Connect</th>';
+		                      thead +='<th width="5%">Technology Exposure</th>';
+				      thead +='<th width="5%">Action</th></tr>';
+		                      thead +='</thead>';
+			   		   		tab1 = '<tbody>';
+		   				 	for (i = 0; i < jsonStr.length; i++) {
+		   						var jsonObj = jsonStr[i];
+		   						if(year == 'All') {
+		   			        		year = jsonObj['academic_year_id'];		
+		   			        	}
+		   						tab1 += '<tr>';
+		   						tab1 += '<td>' + jsonObj['student_id'] + '</td>';
+		   						tab1 += '<td>' + jsonObj['Student Name'] + '</td>';
+		   			   			tab1 += '<td>' + jsonObj['centername'] +'</td>';
+		   			   			tab1 += '<td>' + jsonObj['grade'] +'th</td>';
+		   			   			tab1 += '<td>' + jsonObj['subject'] +'</td>';
+		   			   			tab1 += '<td>' + jsonObj['date_created'] +'</td>';
+		   			   			tab1 += '<td>' + jsonObj['curious'] + '</td>';
+		   			   			tab1 += '<td>' + jsonObj['attentiveness'] + '</td>';
+		   			   			tab1 += '<td>' + jsonObj['self_confidence'] + '</td>';
+		   			   			tab1 += '<td>' + jsonObj['supportiveness'] + '</td>';
+		   			   			tab1 += '<td>' + jsonObj['positive_attitude'] + '</td>';
+		   			   			tab1 += '<td>' + jsonObj['initiativeness'] + '</td>';
+		   			   			tab1 += '<td>' + jsonObj['courteousness'] + '</td>';
+		   			   			tab1 += '<td>' + jsonObj['widerperspective'] + '</td>';
+		   			   			tab1 += '<td>' + jsonObj['emotional_connect'] + '</td>';
+		   			   			tab1 += '<td>' + jsonObj['technology_exposure'] + '</td>';
+		   			   			tab1 += '<td><a href="/reportCard?flag=true&studentName='+jsonObj['student_id']+'&grade='+jsonObj['grade']+'&year='+year+' "><span class="fa fa-line-chart"></span>&nbsp;</a></td>';
+		   						tab1 += '</tr>';
+		   					}
+		   					tab1 += '</tbody>';
+		   					}
+		   					else if(assessment_type == 'scholastic'){
+		   					   	thead += '<thead>';
+  			   		            thead +='<tr><th width="8%">Student Id</td><th width="10%">Student Name</th><th width="15%"> Center</th><th width="15%"> Grade</th><th width="7%">Assessed Date</th><th width="15%"> Term</th>';
+  			   		            thead +='<th width="10%">&nbsp;Maths Total</th><th width="10%">&nbsp;Maths Obtained</th><th width="5%">English Total</th><th width="5%">English Obtained</th><th width="5%">Science Total</th><th width="5%">Science Obtained</th><!-- <th width="5%">Digital Literacy Program</th>';
+  			   		            thead +='<th width="5%">Joy of Reading</th><th width="5%">Extras</th> --><th width="10%">Total Obtained Marks</th><th width="10%">Total Obtained(%)  </th><!-- <th width="10%">Attendance %</th>';
+  			   		            thead +='<th width="5%">Rank</th> --><th width="5%">Action</th></tr>';
+  			   		            thead += '</thead>';
+  			   		   			tab1 = '<tbody>';
+			   				 	for (i = 0; i < jsonStr.length; i++) {
+			   						var jsonObj = jsonStr[i];
+			   						if(year == 'All') {
+			   			        		year = jsonObj['academic_year_id'];		
+			   			        	}
+			   						var math = jsonObj['maths'];
+			   						if (math == null)
+			   							math =0;
+			   						var totalMaths = jsonObj['totalMaths'];
+			   						if (totalMaths == null)
+			   							totalMaths =0;
+			   						var science = jsonObj['science'];
+			   						if (science == null)
+			   							science = 0;
+			   						var totalScience = jsonObj['toalScience'];
+			   						if (totalScience == null)
+			   							totalScience = 0;
+			   						var english = jsonObj['english'];
+			   						if (english==null)
+			   							english = 0;
+			   						var totalEnglish = jsonObj['totalEnglish'];
+			   						if (totalEnglish==null)
+			   							totalEnglish = 0;
+			   						var total1 = Math.round(jsonObj['total']);
+			   						var sumOfTotal = Math.round(jsonObj ['sumOfTotal']);
+			   						tab1 += '<tr>';
+			   						tab1 += '<td>' + jsonObj['id'] + '</td>';
+			   						tab1 += '<td>' + jsonObj['name'] + '</td>';
+			   						tab1 += '<td>' + jsonObj['centername'] +'</td>';
+			   						tab1 += '<td>' + jsonObj['grade'] +'th</td>';
+			   						tab1 += '<td>' + jsonObj['date_created'] +'</td>';
+			   						tab1 += '<td>' + jsonObj['category'] +'</td>';
+			   						tab1 += '<td>' + Math.round(totalMaths) + '</td>';
+			   						tab1 += '<td>' + Math.round(math) + '</td>';
+			   						tab1 += '<td>' + Math.round(totalEnglish) + '</td>';
+			   						tab1 += '<td>' + Math.round(english) + '</td>';
+			   						tab1 += '<td>' + Math.round(totalScience) + '</td>';
+			   						tab1 += '<td>' + Math.round(science) + '</td>';
+			   						tab1 += '<td>' + Math.round(jsonObj['total']) + '</td>';
+			   						tab1 += '<td>' + Math.round(total1/sumOfTotal*100) + '</td>';
+			   						tab1 += '<td><a href="/reportCard?flag=true&studentName='+jsonObj['id']+'&grade='+jsonObj['grade']+'&year='+year+' "><span class="fa fa-line-chart"></span>&nbsp;</a></td>';
+			   						tab1 += '</tr>';
+			   					}
+			   					tab1 += '</tbody>';
+		   				  }else if(assessment_type == 'diagnostic'){
+                              thead += '<thead>';
+                 thead +='<tr><th width="8%">Student Id</td><th width="10%">Student Name</th><th width="10%">Center</th><th width="5%">Grade</th><th width="7%">Assessed Date</th><th width="15%">Subject</th>';
+                 thead +='<th width="10%">Aggregate Level</th><th width="10%">Category</th><th width="5%">Action</th></tr>';
+                 thead += '</thead>';
+                                tab1 = '<tbody>';
+                            for (i = 0; i < jsonStr.length; i++) {
+                                   var jsonObj = jsonStr[i];
+                                   if(year == 'All') {
+			   			        		year = jsonObj['academic_year_id'];		
+			   			        	}
+                                   tab1 += '<tr>';
+                                   tab1 += '<td>'+ jsonObj['student_id'] + '</td>'
+                                   tab1 += '<td>' + jsonObj['Student Name'] + '</td>';
+                                   tab1 += '<td>' + jsonObj['Center'] + '</td>';
+                                   tab1 += '<td>' + jsonObj['Grade'] +'th</td>';
+                                   tab1 += '<td>' + jsonObj['date_created'] +'</td>';
+                                   tab1 += '<td>' + jsonObj['Subject'] +'</td>';
+                                   tab1 += '<td>' + jsonObj['Aggregate Level'] + '</td>';
+                                   tab1 += '<td>' + jsonObj['Category'] + '</td>';
+                                   tab1 += '<td><a href="/reportCard?flag=true&studentName='+jsonObj['student_id']+'&grade='+jsonObj['Grade']+'&year='+year+' "><span class="fa fa-line-chart"></span>&nbsp;</a></td>';
+                                   tab1 += '</tr>';
+                           }
+                           tab1 += '</tbody>';
+		   					}
+		   			   					var tableData = thead+tab1;
+		   			   					if ($.fn.dataTable.isDataTable('#table_id')) {
+		   			   					$('#table_id').dataTable().fnDestroy();
+		   			   					} 
+		   			   					$("#table_id").html(tableData);
+		   			   					$('#table_id').dataTable({
+		   			   					"lengthMenu" : false,
+		   			   					"bLengthChange" : false,
+		   			   					"bFilter" : false,
+		   			   					"pageLength" : 20,
+		   			   					"aaSorting" : [],
+		   			   					"bStateSave" : false,
+		   			   				 	"scrollX": true
+		   			   					});
+		   				}
+		   				
+		   			}
+        },
+        error: function() {
+             // alert("error");
+           }
+      });
+}
+	$('#radio_top10_id').click(function() {
+   	if($('#radio_top10_id').is(':checked')) {
+   	generater('top10');
+   	}
+	});
+	$('#radio_btm10_id').click(function() {
+   	if($('#radio_btm10_id').is(':checked')) {
+   	generater('btm10');
+   	}
+	});
+	$('#radio_all_id').click(function() {
+   	if($('#radio_all_id').is(':checked')) {
+   	  $("#radio_top10_id").prop("checked", false);
+      $("#radio_btm10_id").prop("checked", false);
+   		generater('all');
+   	}
+	});
+	
+</script>
+<div id='ajax_loader' style="position: fixed; left: 48%; top: 48%; display:none; z-index: 999;">
+	<img src="/static/img_new/ajax-loader.gif" />
+	</div>
+	<script>
+	var val1=["All"];
+	</script>
+<script>
+$(document).ready(function() {
+	jQuery(function($) {
+		$(document).ajaxStop(function() {
+			$("#overlay").remove();
+			$("#ajax_loader").hide();
+		});
+		$(document).ajaxStart(function() {
+			$("body").append('<div id="overlay" style="background-color:rgba(192,192,192,0.4);position:absolute;top:0;left:0;height:100%;width:100%;z-index:100"></div>');
+			$("#ajax_loader").show();
+		});
+	});
+	
+$("#grade_id").select2();
+var val=["All"];
+var newSelectedOption;
+	$("#grade_id").on('change', function() {
+		$('#gradeErrorId').hide();
+		var newArray=[];
+		var selected = $(this).val();
+		var newVal = $(this).val();
+		if(newVal != null) {
+		for(var i=0; i<newVal.length; i++) {
+		     if($.inArray(newVal[i], val) == -1) {
+		    	 newSelectedOption = $(this).find('option[value="' + newVal[i] + '"]').text();
+		    	 selected = newSelectedOption;
+		     }
+		 }
+		if (selected != null) {
+			if (selected.indexOf('All') >= 0) {
+				$(this).val('All').select2();
+			} 
+		}
+		 if (selected != 'All') {
+			document.getElementById('gradeId').selected = false;
+			var selectedOptions = $(this).val();
+			$("#grade_id").select2(selectedOptions);
+		 } 
+		 val = $(this).val();
+		} 
+	});
+
+	$("#center_id").select2();
+	var newSelectedOption1;
+	$("#center_id").on('change', function() {
+		$('#centerErrorId').hide();
+		var newArray=[];
+		var selected = $(this).val();
+		var newVal = $(this).val();
+		
+		if(newVal != null) {
+			for(var i=0; i<newVal.length; i++) {
+			     if($.inArray(newVal[i], val1) == -1) {
+			    	 newSelectedOption1 = $(this).find('option[value="' + newVal[i] + '"]').text();
+			    	 selected = newSelectedOption1;
+			     }
+			 }
+		if (selected != null) {
+			if(selected == 'All'){
+				$(this).val('All').select2();
+			} 
+		}
+		 if (selected != 'All') {
+			$("#center_id option[value='All']").remove();
+			$("#center_id").prepend('<option id="centerId" value="All">All</option>');
+			var selectedOptions = $(this).val();
+			$("#center_id").val('');
+			$("#center_id").val(selectedOptions);
+		} 
+		 val1 = $(this).val();
+		} 
+	});
+
+	$("#course_id").select2();
+	var val2=["All"];
+	var newSelectedOption2;
+		$("#course_id").on('change', function() {
+			$('#courseErrorId').hide();
+			var newArray=[];
+			var selected = $(this).val();
+			var newVal = $(this).val();
+			if(newVal != null) {
+			for(var i=0; i<newVal.length; i++) {
+			     if($.inArray(newVal[i], val2) == -1) {
+			    	 newSelectedOption2 = $(this).find('option[value="' + newVal[i] + '"]').text();
+			    	 selected = newSelectedOption2;
+			     }
+			 }
+			if (selected != null) {
+				if (selected.indexOf('All') >= 0) {
+					$(this).val('All').select2();
+				} 
+			}
+			 if (selected != 'All') {
+				document.getElementById('courseId').selected = false;
+				var selectedOptions = $(this).val();
+				$("#course_id").select2(selectedOptions);
+			 } 
+			 val2 = $(this).val();
+			} 
+		});
+	
+});
+</script>
+<script>
+$("#radio_all_id").change(function(){
+    $("#radio_top10_id").prop("checked", false);
+    $("#radio_btm10_id").prop("checked", false);
+});
+$("#radio_top10_id").change(function(){
+    $("#radio_all_id").prop("checked", false);
+    $("#radio_btm10_id").prop("checked", false);
+});
+$("#radio_btm10_id").change(function(){
+	$("#radio_all_id").prop("checked", false);
+	$("#radio_top10_id").prop("checked", false);
+});
+</script>
+<script>
+function removeErrorMsg(e){
+	ayfy_id = $('#yearpicker').val() 
+	$("#term_id option[value='Term3']").remove();
+	console.log("fgfvhgfvh",ayfy_id)
+	if( ayfy_id < 68){
+		console.log("dddddd")
+		optionText = 'Term3'; 
+            optionValue = 'Term3'; 
+  
+            $('#term_id').append(`<option value="${optionValue}"> 
+                                       ${optionText} 
+                                  </option>`); 
+
+	}
+	else{
+		$("#term_id option[value='Term3']").remove();
+	}
+	if(e != null && e != '' && e != 'undefined'){
+		if(e == "center_id"){
+			$('#centerErrorId').hide();
+		}else if( e == "grade_id"){
+			$('#gradeErrorId').hide();
+		}else if(e == "course_id"){
+			$('#courseErrorId').hide();
+		}
+	}
+
+}
+</script>
+
+{% endblock %}

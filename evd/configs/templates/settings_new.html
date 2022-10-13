@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block head_styles %}
+    {{ block.super }}
+<style>
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{
+	background-color: #22567d;
+	color: #f5f5f5;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+    background-color: #167ac6;
+}
+.nav-tabs > li > a{
+    color: #f5f5f5;
+    cursor: default;
+    background-color: #167ac6;
+    border: 1px solid #ddd;
+    border-bottom-color: #f5f5f5;
+    font-size: 15px;
+}
+[type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+    display: inline !important;
+    width: 10%;
+    position:static !important;
+}
+</style>
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+{% endblock %}
+
+
+{% block body_container%}
+{{ block.super }}
+
+<div class="container-fluid" style="background-color:white;min-height: 450px !important;">
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			<div class="row">
+                <div class="col-sm-9">
+                    <h3 style="margin-left:3%;font-weight:bold;">User Info</h3>
+                </div>
+                <div class="col-sm-3">
+                    <span class="pull-right" style="margin-top:20px">Go back</span>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-2 col-sm-2">
+                      <ul class="nav nav-tabs nav-stacked" style="margin-right: -4%; text-align:center">
+                            <li class="active"><a href="#profile" data-toggle="tab"
+                                aria-expanded="false" id='1'>Profile</a></li>
+                            <li><a href="#settings" data-toggle="tab"
+                                aria-expanded="true" id='2'>Settings</a></li>
+                            <li><a href="#preferences" data-toggle="tab"
+                                aria-expanded="true" id='3'>Preferences</a></li>
+                              <li></li>
+                      </ul>
+                </div>
+                <div class="col-md-10 col-sm-10">
+                    <div class="tab-content">
+                        <div id="profile" class="tab-pane fade in active">
+                            <form action="#" id="forminternetgeo" method="POST">
+                                {% csrf_token %}
+                                <p>Existing Profile will be displayed here...!!!</p>
+                            </form>
+                        </div>
+                        <div id="settings" class="tab-pane fade">
+                            {% for setting in settings %}
+                                <div id="{{setting.group}}">
+                                    <form  method="post">
+                                        {% csrf_token %}
+                                        <div class="col-sm-12" style="border:1px solid #e5e5e5;margin:5px 0px;">
+                                            <fieldset>
+                                                <legend>{{setting.groupLabel}}</legend>
+                                                <div class="row" style="padding-bottom:10px;">
+                                                    <div class="col-sm-4"><span>Apply Settings:</span></div>
+                                                    <div class="col-sm-8">
+                                                        <label class="radio-inline">
+                                                        <input class="col-sm-2" type="radio" name="{{setting.groupLabel}}_allornone" value="all" checked> All</label>
+                                                        <label class="radio-inline"><input class="col-sm-2" type="radio" name="{{setting.groupLabel}}_allornone" value="none"> None</label>
+                                                    </div>
+                                                </div>
+                                                {% if setting.items %}
+                                                    <div class="col-sm-12">
+                                                    {% for item in setting.items %}
+                                                        {% if item.inputType == "Choices" %}
+                                                            {{item.inputLabel}}  <select name="{{item.inputName}}">
+                                                                    {% with item.values|split:"," as values %}
+                                                                        {% for value in values %}
+                                                                            <option value="{{value}}">{{value}}</option>
+                                                                        {% endfor %}
+                                                                    {% endwith %}
+                                                                    </select><br>
+                                                        {% else %}
+                                                            <label style="margin-left:4%;">
+                                                                <input style="vertical-align: middle;" type="checkbox" name="{{item.inputLabel}}">{{item.inputLabel}}
+                                                            </label>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                                <button class='btn btn-success pull-right' style="margin:0px 0px 15px 0px;" id="evDiv_submit">Submit</button>
+                                            </fieldset>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                        <div id="preferences" class="tab-pane fade">
+                            <form action="#" id="visualverify" method="POST">
+                                {% csrf_token %}
+                                <p>UserPreferences like Language, Availability and Role will be displayed here...!!!</p>
+                            </form>
+                        </div>
+                        <div  id="" class="tab-pane fade">
+                            <div class="row" style="margin-left:5%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block bottom_scripts %}
+ {{ block.super }}
+<script>
+$(document).ready(function() {
+
+    $(".inner.clearfix").css("width","85%");
+	
+	
+});
+
+</script>
+{% endblock %}

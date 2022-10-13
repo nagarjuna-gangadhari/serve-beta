@@ -1,0 +1,7 @@
+<p>Dear Sushreeta Mohapatra ,</p>
+
+{{user}} - has booked a demand in {{center}} for {{course}}. The Role Outcome of the volunteer is {{role_outcome}}. Please complete the onboarding steps.
+
+Click here to view the tasks : {{confirm_url}}
+
+<p>Thanks & Regards</p>

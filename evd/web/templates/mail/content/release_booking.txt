@@ -1,0 +1,5 @@
+Hello {{username}},<br><br><br>
+
+The {{topic_name}}, for  {{grade}} {{subject}} from {{board}} board in {{language}} have been released. <br><br>
+
+Looking forward to more quality content from you.<br><br><br>

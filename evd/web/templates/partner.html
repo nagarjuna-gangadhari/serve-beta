@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% block head_title %}eVidyaloka{% endblock %}
+{% block  body_container %}
+<div style='height:740px;'>
+    <!--<div class='btn instr' data-toggle="modal" data-target="#myModal" style='position:absolute;left:45%;height:28px;width:100px;font-size:15px;cursor:pointer;{% if user.is_authenticated %}top:46%;{% else %} top:38%; {% endif %}'> <span style='margin-top:-2px;position:absolute;left:8px;'>Instructions</span> </div>-->
+    <a href="/volunteer"><img alt="EV_Joy" id=''  style='cursor:pointer;width:100%; height: 550px' src='/static/images/EV_Joy.jpg' /></a>
+    <hr>
+    <p style='margin : 10px 0px;'>Volunteer Onboarding Process:</p>
+    <img alt="onboard_process" src='/static/images/onboard_process.png'  width=100% />
+
+</div>
+
+<!-- Modal -->
+<div id="myModal" class="modal simplemodal-container" role="dialog" style="width:900px;display:none;max-height:500px;overflow-y:auto;left:38% !important;">
+         <a class="modalCloseImg close" data-dismiss="modal">X</a>
+        <div id="headr" style="height:28px;width:877px;padding-top:13px;color:white;padding-left:5px; background-color:#f26721; text-align:left;">Volunteer Onboarding FAQ :</div>
+        <div id='body' style='padding:10px;'>
+        <br>
+        <p class='qtn'> 1. I didn't receive the Activation link in my email, what do I do ?<p>
+            <p class='ans'>- Please check your SPAM folder of the mail id provided</p>
+            <p class='ans'>- The email entered, may have typographical errors. Please try registering again, with the correct email address</p>
+        <br>
+        <p class='qtn'>2.  What do I do after Account activation ?</p>
+        <p class='ans'>    - Please login to your account and update your profile to initiate the volunteer onboarding process. Please do select the respective reference channel ( Corporate- Brillio ).</p>
+        <p class='ans' >    - The onboarding process for Teacher role involve 5 steps as below</p>
+            <img alt="onboard_process" src='/static/images/onboard_process.png'  width=87% style='margin-left:28px;' />
+        <p class='ans'>    - For other roles, you will reached out to by an eVidyaloka rep, on updation of the profile</p>
+        <br>
+
+        <p class='qtn'> 3. What are the next steps to volunteer, on Signing up ?</p>
+        <p class='ans'>     - The onboarding process for Teacher role involve 5 steps as below</p>
+            <img alt="onboard_process" src='/static/images/onboard_process.png' width=87%   style='margin-left:28px;'/>
+        <br>
+
+        <p class='qtn'>4. Whom do I reach out to for any queries on Volunteer Onboarding ?</p>
+        <p class='ans'>    - After logging in, certain standard queries are answered in the FAQ section of Onboarding, which is under My Profile > Onboarding Info</p>
+        <p class='ans'>    - You can simply any email communication you would have received during the course of onboarding</p>
+        <p class='ans'>    - You can reach out to your local point of contact, in case of Corporate employee volunteers</p>
+        <p class='ans' >    - You could also write to onboarding@evidyaloka.org</p>
+        <br>
+        <p class='qtn'>5. Why do I see two different user interface experience, one while browsing the website and another after logging in?</p>
+        <p class='ans'>    - We are in the process of refreshing our overall website and as a first iteration, have released the static components of the website. We will soon be refreshing the logged in mode of the interface as well, which is currently under development.</p>
+        <br>
+        <div style='text-align:center;'><p style='display:inline'> More FAQ's : </p><a href='/faq/'>Click here.. </a></div>
+        </div>
+</div>
+
+<style>
+    #container > #footer{
+        position : relative !important;
+    }
+    .qtn{
+        font-weight: bold;
+    }
+    .ans{
+    margin-left: 17px;
+    font-size: 13px;
+    margin-top: 5px;
+    }
+</style>
+
+{% endblock %}
+

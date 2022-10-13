@@ -1,0 +1,170 @@
+{% extends "footer_base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+        .media {
+            width: 65%;
+        }
+        .events{
+            width: 35%;
+        }
+        .positioning {
+            float: left;
+            position: relative;
+        }
+        .media-ul {
+            list-style: none !important;
+            margin: 0px !important;
+            padding-right: 0px !important;
+        }
+        .media-ul > li{
+            float: left;
+            margin-right: 10px;
+            cursor:pointer;
+            height:125px;
+            width:145px;
+        }
+
+        .hide {
+            display:none !important;
+        }
+        .media-ul > li > img:hover {
+            box-shadow: 1.5px 1.5px 1.5px #615F5F;
+        }
+
+        .active-image {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background : rgba(0, 0, 0, 0.5);
+            text-align: center;
+            color: white;
+            font-size: 22px;            
+        }
+        img.small-image {
+           width = 145px !important;
+           height = 100px !important;
+        }
+        img.large-image {
+            height = 250px;
+            width = 300px;
+        }
+        .news_from {
+            float: left;
+        }
+    </style>
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+        evd.ajust_footer();
+        $(".media-ul > li > img").click(function(e){
+            var url = $(this).parent('li').children('img.large-image').attr('src');
+            $(".active-image").find("img").attr("src", url);
+            if (url) $(".active-image").removeClass("hide");
+        });
+
+        $(".active-image").not("img.full-image").click(function(e){
+            $(".active-image").addClass("hide");
+        });
+{% endblock %}
+
+{% block leftnav_list %}
+    <li><a href="/about/" class="about-1"><span>About us</span></a></li>
+    <li><a href="/vision/" class="about-2"><span>Vision & Mission</span></a></li>
+    <li><a href="/operating_principles/" class="about-3"><span>Principles</span></a></li>
+    <li><a href="/conduct/" class="about-4"><span>Code of Conduct</span></a></li>
+    <li><a href="/who_we_are/" class="about-5"><span>Who We Are</a></li>
+    <li><a href="/careers/" class="about-6" ><span>Careers</span></a></li>
+    <li><a href="/news_events/" class="about-7 active" ><span>News & Events</span></a></li>
+    <li><a href="/governance/" class="about-8" ><span>Governance</span></a></li>
+    <li><a href="/partners/" class="about-9"><span>Partners</span></a></li>
+    <li><a href="/faq/" class="about-10"><span>FAQ</span></a></li>
+    <li><a href="/contact_us/" class="about-11"><span>Contact Us</span></a></li>
+{% endblock %}
+
+{% block top_content %}
+    <!--<div class="top clearfix">
+        <div class="intro">
+            <h1>News & Events </h1>
+        </div>
+    </div>-->
+{% endblock %}
+
+{% block bottom_content %}
+    <div class="paper-bg-wrapper">
+        <div class="paper-bg">
+            <div class='subcontent'>
+                <div class='media positioning'>
+                  <!--Code by akash-->
+                  <div>
+                   <h4>2014</h4>
+                   <ul Class='media-ul'>
+                   <li><img alt='image' class='small-image' width="145px" height="100px" src='/static/images/hindu_17_feb_2014.jpg'/>
+                       <img alt='Image' class='hide large-image'  width="300px" height="350px" src='/static/images/hindu_17_feb_2014_big.jpg'/>
+                                <a href='http://www.thehindu.com/todays-paper/tp-national/tp-tamilnadu/tribal-students-top-slip-and-technology-a-winning-combination/article5697524.ece' class='news_from' target='_blank'>The Hindu</a>
+                            </li>
+                  </ul>
+                   <div style="clear:both"></div>
+                   </div>
+                <!-- Code ends-->
+                  <div>
+                        <h4>2013</h4>
+                        <ul class='media-ul'>
+                            <li><img alt='Image' class='small-image' width="145px" height="100px" src='/static/images/ESPN Cricinfo - 25th Sept 2013_145x100.png '/>
+                                <img alt='Image' class='hide large-image'  width="300px" height="350px" src='/static/images/ESPN Cricinfo - 25th Sept 2013.png'/>
+                                <a href='http://www.eventfaqs.com/eventfaqs/wcms/en/home/news/ESPN-Cricinfo-and-Idea-come-to-1380055060027.html' class='news_from' target='_blank'>ESPN CricInfo</a>
+                            </li>
+                            <li><img alt='image' class='small-image' width="145px" height="100px" src='/static/images/Khabar Mantra - 22nd Oct 2013_145X100.png' />
+                                <img alt='image' class='hide large-image' src='/static/images/Khabar Mantra - 22nd Oct 2013_.png' />
+                            </li>
+                            <li><img alt='image' class='small-image' width="145px" height="100px" src='/static/images/Prabhat - 22nd Oct 2013_145x100.png'/>
+                                <img alt='image' class='hide large-image' src='/static/images/Prabhat - 22nd Oct 2013.png' />
+                            </li>
+                        </ul>
+                        <div style="clear:both"></div>
+                    </div>
+                    <div>
+                        <h4>2012</h4>
+                        <ul class='media-ul'>
+                            <li><img alt='image' class='small-image' width="145px" height="100px" src='/static/images/The Telegraph - 28th Jan 2012_103x100.png'/>
+                                <img alt='image' class='hide large-image' src='/static/images/The Telegraph - 28th Jan 2012.png'/>
+                                <a href='http://www.telegraphindia.com/1120128/jsp/jharkhand/story_15058696.jsp' target='_blank'>The Telegraph</a>
+                            </li>
+                            <li><img alt='image' class='small-image' width="145px" height="100px" src='/static/images/The Hindu - 9th July 2012_145x100.jpg '/>
+                                <img alt='image' class='hide large-image' src='/static/images/The Hindu - 9th July 2012.jpg'/>
+                                <a href='http://www.thehindu.com/todays-paper/tp-national/tp-tamilnadu/village-kids-take-skype-route-to-education/article3618407.ece' target='_blank'>The Hindu</a>
+                            </li>
+                            <li><img alt='image' class='small-image' width="145px" height="100px" src='/static/images/CSIM - Conversations - Dec 2012_145x100.png'/>
+                                <img alt='image' class='hide large-image' src='/static/images/CSIM - Conversations - Dec 2012.png'/>
+                                <a href='http://csim.in/conversations/Conversations-December2012.pdf' target='_blank'> CSIM - Conversations</a>
+                            </li>
+                        </ul>
+                        <div style="clear:both"></div>
+                    </div>
+                    <div>
+                        <h4>2011</h4>
+                        <ul class='media-ul'>
+                            <li><img alt='image' class='small-image'  width="145px" height="100px" src='/static/images/The Telegraph - 26th July 2011_145x100.jpg'/>
+                                <img alt='image' class='hide large-image' src='/static/images/The Telegraph - 26th July 2011.jpg'/>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class='events positioning'>
+                    <h4>Events</h4>
+                    <div>
+                        <a href="https://www.facebook.com/eVidyaloka/events" target="_blank">Events on Facebooks</a><br>
+                     <br>   <a href="https://plus.google.com/110437733223423859176/posts" target="_blank">Events on Google Plus</a>
+                   </div>
+                </div>
+                <div style="clear:both"></div>
+            </div>
+        </div>
+    </div>
+    <div class="active-image hide"><img class='full-image' style="top: 25%; position: absolute; left:30%;"  width="600px" height="450px"/></div>
+{% endblock %}

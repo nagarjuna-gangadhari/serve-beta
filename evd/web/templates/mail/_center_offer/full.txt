@@ -1,0 +1,9 @@
+{{ user.first_name }} {{ user.last_name }} has prefered a Course
+
+email-id : {{ user.email }}
+
+Course Details:
+---------------
+course : {{ offer }}
+
+center : {{ center }}

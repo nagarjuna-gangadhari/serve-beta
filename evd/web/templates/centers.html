@@ -1,0 +1,412 @@
+{% extends 'base.html' %}
+
+{% load tags %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="/static/css/centers.css" />
+{% endblock %}
+
+{% block pre_evd_init %}
+        $("body").append("<a id='dummylink' rel='ajax-link' style='display:none' pre-call='pre_filter_subject' href='/getcenters?location={{ cur_location }}&subject={{ cur_subject }}&center_id={{ cur_center_id }}&status={{ cur_center_status }}' callback='after_filter'></a>");
+{% endblock %}
+
+{% block doc_ready %}
+
+        $("#footer").css({"position": "relative"});
+        var $loading = $("#loading"),
+            center_html = '<div style="margin:30px auto;width:940px">'+
+                              '<div style="width:938px;border:1px solid;min-height:150px;overflow:hidden;clear:both;background:white">'+
+                                '<div style="float:left;margin-left: 10px;margin-top: 16px">'+
+                                    '<img src="${image}" height="133px" width="133px" style="border-radius:5px;" />'+
+                                '</div>'+
+                                '<div style="padding:10px;float:left;width:770px;">'+
+                                    '<p style="font-weight:bold;color:#f15a22;font-size:x-large;">${title}</p>'+
+                                    '<p style="font-weight:bold;font-size:large;">'+
+                                        '<span style="color:#f15a22;">Digital Classroom Setup Sponsor By</span> : ${donor}</p>'+
+                                    '<p style="font-weight:bold;font-size:large;">'+
+                                        '<span style="color:#f15a22;">Digital Classroom Operations Sponsor By</span> :{% templatetag openvariable %}html ops_donor{% templatetag closevariable %}'+
+                                    '</p>'+
+                                    '<p class="ellipsis multiline" style="padding-top:10px;font-size:13px;">${description}</p>'+
+                                    '<div class="generalinfo">'+
+                                        '<p class="title">Class Location</p><p>: &nbsp;${location}</p>'+
+                                        '<p class="title">Grades</p><p>: &nbsp;${grades}</p>'+
+                                        '<p class="title">Subjects Covered</p><p>: &nbsp;${subjects_covered}</p>'+
+                                        '<p class="title">No.of Children</p><p>: &nbsp;${noofchildren}</p>'+
+                                        '<p class="title">Launch date</p><p>: &nbsp;${launch_date}</p>'+
+                                    '</div>'+
+                                    '<div class="courses" style="font-size:14px;"></div>'+
+                                '</div>'+
+                              '</div>'+
+                          '</div>',
+            remove_centers = function(){
+                $loading.nextAll().remove();
+                $loading.fadeIn("slow");
+            };
+        $.template("center_template",center_html);
+        var center_location = "{{ cur_location }}";
+        var center_subject = "{{ cur_subject }}";
+        var center_medium = "{{ cur_medium }}";
+        var center_id = "{{ cur_center_id }}";
+        var center_status = "{{ cur_center_status }}";
+        evd.pre_filter_state = function(){
+            debugger;
+            $("ul.custom-select > li").removeClass("focus-f");
+            var href = $(this).attr("href");
+            center_location = /(?:(?:\?|&)location=([^&$]+))/.exec(href)[1];
+            //center_location = /(?:(?:\?|&)location=([^&$]+))/.exec(href);
+            if(center_id==="None"){
+                href = "/getcenters/?location="+center_location+"&subject="+center_subject+"&medium="+center_medium+"&status="+center_status;
+            } else{
+                href = "/getcenters/?location="+center_location+"&subject="+center_subject+"&medium="+center_medium+"&center_id="+center_id+"&status="+center_status;
+            }
+            $(this).attr({"href": href});
+            remove_centers();
+        }
+        evd.pre_filter_subject = function(){
+            var href = $(this).attr("href");
+            center_subject = /(?:(?:\?|&)subject=([^&$]+))/.exec(href)[1];
+            if(center_id!="None"){
+                href = "/getcenters/?location="+center_location+"&subject="+center_subject+"&medium="+center_medium+"&center_id="+center_id+"&status="+center_status;
+            } else{
+                href = "/getcenters/?location="+center_location+"&subject="+center_subject+"&medium="+center_medium+"&status="+center_status;
+            }
+            $(this).attr({"href": href});
+            remove_centers();
+        }
+        evd.pre_filter_medium = function(){
+            var href = $(this).attr("href");
+            center_medium = /(?:(?:\?|&)medium=([^&$]+))/.exec(href)[1];
+            if(center_id==="None"){
+                href = "/getcenters/?location="+center_location+"&subject="+center_subject+"&medium="+center_medium+"&status="+center_status;
+            } else{
+                href = "/getcenters/?location="+center_location+"&subject="+center_subject+"&medium="+center_medium+"&center_id="+center_id+"&status="+center_status;
+            }
+            $(this).attr({"href": href});
+            remove_centers();
+        }
+        evd.pre_filter_status = function(){
+            var href = $(this).attr("href");
+            center_status = /(?:(?:\?|&)status=([^&$]+))/.exec(href)[1];
+            if(center_id==="None"){
+                href = "/getcenters/?location="+center_location+"&subject="+center_subject+"&medium="+center_medium+"&status="+center_status;
+            } else{
+                href = "/getcenters/?location="+center_location+"&subject="+center_subject+"&medium="+center_medium+"&center_id="+center_id+"&status="+center_status;
+            }
+            $(this).attr({"href": href});
+            remove_centers();
+        }
+
+        evd.after_filter = function(resp){
+            resp = eval(resp);
+            $loading.fadeOut("fast",function(){
+                if(resp.length > 0){
+                    $.tmpl("center_template",window.eval(resp)).insertAfter($loading);
+                    //$(".ellipsis").ellipsis();
+                    var $centers = $loading.nextAll();
+                    $.each(resp, function(index,val){
+                        if(this.empty_courses.length > 0)
+                        {
+                            $.each(this.empty_courses,function(i,course){
+                                $centers.eq(index).find("div.courses").append("<p class='requirements' style='margin-top:10px;'><b style='font-weight:bold;color:#f15a22;'>Requirements:</b></p>");
+                                var teachers = course.teachers;
+                                    $("div.courses").each(function(){
+                                        $(this).find(".requirements").not(":first").remove();
+                                    });
+                                    {% if not user.is_authenticated %}
+                                        teachers = '<p style="float:left;padding-top:10px;"><a class="label label-success" href="#login-modal" data-toggle="modal">contribute</a></p>';
+                                    {% else %}
+                                    if(!course.is_assigned_offering){
+                                        teachers = '<p style="float:left;padding-top:10px;"><a rel="ajax-link" class="label label-success" pre-call="pre_assign_offering" callback="showmsg" href="/add_pref_course/?course_id='+ course.offering_id +'"><span class="ajax-button-label">contribute</span></a></p>';
+                                    }
+                                    else{
+                                        teachers = '<p style="float:left;padding-top:10px;"><a class="label label-success disabled"><span>contribute</span></a></p>';
+                                    }
+                                    {% endif %}
+                                var $center_markup = $("<p style='width:200px;padding-top:10px;float:left;clear:both;'>"+course.grade + " " + course.subject +" Teacher (" + course.center_language + ")</p>" + teachers);
+                                $center_markup.find("[rel='ajax-link']").click(evd.ajax_link);
+                                $centers.eq(index).find("div.courses").append($center_markup);
+                            });
+                        }
+                        {% if user.is_authenticated %}
+                        if(this.other_lang_courses.length > 0){
+                            $.each(this.other_lang_courses,function(i,course){
+                            $centers.eq(index).find("div.courses").append("<p class='requirements' style='margin-top:10px;'><b style='font-weight:bold;color:#f15a22;'>Requirements:</b></p>");
+                                $("div.courses").each(function(){
+                                    $(this).find(".requirements").not(":first").remove();
+                                });
+                                var teachers = course.teachers;
+                                teachers = '<p style="float:left;padding-top:10px;"><a rel="ajax-link" class="label label-success" href="#"><span class="ajax-button-label">contribute</span></a></p>';
+                                var $center_markup = $("<p style='width:200px;padding-top:10px;float:left;clear:both;'>"+course.grade + " " + course.subject +" Teacher (" + course.center_language + ") </p>" + teachers);
+                                $center_markup.find("[rel='ajax-link']").click(function(e){ evd.show_msg("Sorry!, the medium to teach this course doesn't match your preferred medium"); e.preventDefault();});
+                                $centers.eq(index).find("div.courses").append($center_markup);
+                            });
+                        }
+                        {% endif %}
+                        if(this.assigned_courses.length > 0){
+                            $.each(this.assigned_courses,function(i,course){
+                                    var teachers = course.teachers;
+                                    $centers.eq(index).find("div.courses").append("<p class='running-courses' style='clear:both;padding-top:10px;'><b style='font-weight:bold;color:#f15a22;'>Running Courses:</b></p>");
+                                    $("div.courses").each(function(){
+                                        $(this).find(".running-courses").not(":first").remove();
+                                    });
+                                    teachers = " by " + "<span style='font-weight:bold;'>" + teachers + "</span>";
+                                    $center_markup = $("<p style='padding-top:10px;clear:both;'>"+ course.grade + " " + course.subject +" "+ teachers + "</p>");
+                                    $centers.eq(index).find("div.courses").append($center_markup);
+                            });
+                        }
+
+                    });
+                }
+                else
+                    $("<p style='text-align:center;padding:20px 0px'><b>no centers found in location <strong>&quot; "+ center_location +" &quot;</strong> and subject <strong>&quot; "+ center_subject + " &quot;</strong> and medium <strong>&quot; " + center_medium +" &quot;</strong></b></p>").insertAfter($loading);
+
+            });
+            $('#ui-datepicker-div').hide()
+        }
+        evd.pre_assign_offering = function(){
+            $(this).unbind("click");
+        }
+        evd.showmsg = function(resp){
+            if(resp == "success"){
+                $(this).removeAttr("href");
+                $(this).removeAttr("rel");
+                $(this).addClass("disabled");
+                evd.show_msg("This Course is added to your preferred courses. We will get back to you.");
+            }
+            else if(resp == "not_teacher"){
+                evd.show_msg("You are not a teacher to contribute.");
+                $(this).click(evd.ajax_link);
+            }
+            else{
+                evd.show_msg("Your request failed, please try again");
+                $(this).click(evd.ajax_link);
+            }
+        }
+        //$("#dummylink").trigger("click").remove();
+        $("body").find("#dummylink").trigger("click");
+        /*var stop_click = 0;
+        $('.custom-select').click(function(e){
+            debugger;
+            if(stop_click === 0){
+                $(this).find('li').addClass("focus-f");
+            }
+            //stop_click = 1;
+            e.stopImmediatePropagation();
+        });
+        */
+
+        /*$("ul.custom-select li").toggle(function(){
+            debugger;
+            $("ul.custom-select > li.focus-f").not($(this)).trigger("click");
+            $(this).addClass("focus-f");
+        },function(){
+            debugger;
+            //$(this).removeClass("focus-f");
+        });
+        $("html").click(function(){
+            debugger;
+            //$("ul.custom-select li.focus-f").trigger("click");
+        });
+        $("ul.custom-select li span.dropdown a").click(function(){
+            debugger;
+            $(this).parent("span.dropdown").prev().text($(this).text());
+        });*/
+
+
+{% endblock %}
+
+ {% block body_container %}
+    <div id="content" class="clearfix" style="padding-bottom:0px">
+        <div id="filter-top-wrapper" class="clearfix">
+            <div id="filter-top">
+                <div class="inner clearfix">
+                    <div class="intro clearfix">
+                        <h2>Find Centers to Support</h2>
+                        <!--<p style="margin-bottom:5px;">We have hand-selected  passionate centers to participate in our launch.</p>-->
+                    </div>
+                    <div class="clearfix">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <span class="label-filter">Filters: </span>
+                      </div>
+<div class="col-md-3">
+<div class="dropdown">
+    <button class="dropdown-toggle state_btn" type="button" data-toggle="dropdown">{% if cur_location == "all" %}All Locations{% else %}{{ cur_location }}{% endif %}
+    <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+        <li class="filter_state">
+            <a rel="ajax-link" class="filter-sensitive" pre-call="pre_filter_state" callback="after_filter" href="/getcenters/?location=all"
+                style="cursor:pointer">
+            <span>All Locations</span></a>
+        </li>
+        {% for state in states %}
+            <li class="filter_state">
+                <a rel="ajax-link" class="filter-sensitive" pre-call="pre_filter_state" callback="after_filter" href="/getcenters/?location={{ state }}" 
+                    style="cursor:pointer">
+                <span>{{ state }}</span></a>
+            </li>
+        {% endfor %}
+    </ul>
+  </div>
+</div>
+
+
+
+                        <!--<div class="select-box select-pin">
+                            <span class="icon"></span>
+                            <ul class="custom-select">
+                                <li><span class="selected_item">{% if cur_location == "all" %}All Locations{% else %}{{ cur_location }}{% endif %}</span>
+                                    <span class="dropdown">
+                                        <a rel="ajax-link" class="filter-sensitive" href="/getcenters/?location=all" pre-call="pre_filter_state" callback="after_filter" style="cursor:pointer"><span>All Locations</span></a>
+                                        {% for state in states %}
+                                            <a rel="ajax-link" class="filter-sensitive" pre-call="pre_filter_state" callback="after_filter" href="/getcenters/?location={{ state }}" style="cursor:pointer"><span>{{ state }}</span></a>
+                                        {% endfor %}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>-->
+
+<div class="col-md-3">
+<div class="dropdown">
+    <button class="dropdown-toggle sub_btn" type="button" data-toggle="dropdown">{% if cur_subject == "all" %}All Subjects{% else %}{{ cur_subject }}{% endif %}
+    <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+        <li class="filter_sub">
+            <a rel="ajax-link" class="filter-sensitive" pre-call="pre_filter_state" callback="after_filter" href="/getcenters/?subject=all"
+                style="cursor:pointer">
+            <span>All Subjects</span></a>
+        </li>
+        {% for subject in subjects %}
+            <li class="filter_sub">
+                <a rel="ajax-link" class="filter-sensitive" pre-call="pre_filter_subject" callback="after_filter" href="/getcenters/?subject={{ subject }}" 
+                    style="cursor:pointer">
+                <span>{{ subject }}</span></a>
+            </li>
+        {% endfor %}
+    </ul>
+  </div>
+</div>
+
+                        <!--<div class="select-box select-int">
+                            <span class="icon"></span>
+                            <ul class="custom-select">
+                                <li><span class="selected_item">{% if cur_subject == "all" %}All Subjects{% else %}{{ cur_subject }}{% endif %}</span>
+                                    <span class="dropdown">
+                                        <a rel="ajax-link" class="filter-sensitive" href="/getcenters/?subject=all" pre-call="pre_filter_subject" callback="after_filter" style="cursor:pointer"><span>All Subjects</span></a>
+                                        {% for subject in subjects %}
+                                            <a rel="ajax-link" class="filter-sensitive" pre-call="pre_filter_subject" callback="after_filter" href="/getcenters/?subject={{ subject }}" style="cursor:pointer"><span>{{ subject }}</span></a>
+                                        {% endfor %}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>-->
+
+
+<div class="col-md-3">
+<div class="dropdown">
+    <button class="dropdown-toggle med_btn" type="button" data-toggle="dropdown">{% if cur_medium == "all" %}All Languages{% else %}{{ cur_medium }}{% endif %}
+    <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+        <li class="filter_med">
+            <a rel="ajax-link" class="filter-sensitive" pre-call="pre_filter_state" callback="after_filter" href="/getcenters/?medium=all"
+                style="cursor:pointer">
+            <span>All Languages</span></a>
+        </li>
+        {% for medi in medium %}
+            <li class="filter_med">
+                <a rel="ajax-link" class="filter-sensitive" pre-call="pre_filter_medium" callback="after_filter" href="/getcenters/?medium={{medi}}" 
+                    style="cursor:pointer">
+                <span>{{ medi }}</span></a>
+            </li>
+        {% endfor %}
+    </ul>
+  </div>
+</div>
+
+
+                        <!--<div class="select-box select-int">
+                            <span class="icon"></span>
+                            <ul class="custom-select">
+                                <li><span class="selected_item">{% if cur_medium == "all" %}All Languages{% else %}{{ cur_medium }}{% endif %}</span>
+                                    <span class="dropdown">
+                                        <a rel="ajax-link" class="filter-sensitive" href="/getcenters/?medium=all" pre-call="pre_filter_medium" callback="after_filter" style="cursor:pointer"><span>All Languages</span></a>
+                                        {% for medium in medium %}
+                                            <a rel="ajax-link" class="filter-sensitive" pre-call="pre_filter_medium" callback="after_filter" href="/getcenters/?medium={{ medium }}" style="cursor:pointer"><span>{{ medium }}</span></a>
+                                        {% endfor %}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>-->
+                        <!--<div class="select-box select-int">
+                            <span class="icon"></span>
+                            <ul class="custom-select">
+                                <li><span class="selected_item">{% if cur_center_status == "Active" %}All Active{% else %}{{ cur_center_status }}{% endif %}</span>
+                                    <span class="dropdown">
+                                        <a rel="ajax-link" class="filter-sensitive" href="/getcenters/?status=all" pre-call="pre_filter_status"
+                                                callback="after_filter" style="cursor:pointer">
+                                                <span>All</span>
+                                        </a>
+                                        {% for stat in status %}
+                                        <a rel="ajax-link" class="filter-sensitive" pre-call="pre_filter_status" callback="after_filter"
+                                            href="/getcenters/?status={{stat}}" style="cursor:pointer">
+                                            <span>{{stat}}</span>
+                                        </a>
+                                        {% endfor %}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>-->
+
+                    </div>
+                    </div><!--row-->
+                </div>
+            </div>
+        </div>
+        <div style="min-height:400px">
+            <!--<p id="loading" style="text-align:center;padding:20px 0px;"><b>Loading...</b></p>-->
+            <p id="loading" style="text-align:center;padding:20px 0px;"><img class="" src="/static/images/table_loader.gif"></p>
+        </div>
+        <div id="teach-now-modal" class="modal hide">
+            <p style="float:left;">This course is added to your prefered offerings</p>
+            <a class="close" data-dismiss="modal" style="flaot:right;">X</a>
+        </div>
+
+        <style>
+            button.dropdown-toggle {
+                height: 30px;
+                width: 200px;
+                border-radius: 10px;
+            }
+        </style>
+
+        <script>
+
+ $(function(){
+
+    $(".dropdown-menu").on('click', 'li.filter_state a, li.filter_sub a, li.filter_med a', function(){
+      if($(this).closest('li').hasClass('filter_state')){
+        $(".state_btn").text($(this).text());
+        $(".state_btn").val($(this).text());
+      }
+      else if($(this).closest('li').hasClass('filter_sub')){
+        $(".sub_btn").text($(this).text());
+        $(".sub_btn").val($(this).text());
+      }
+      else if($(this).closest('li').hasClass('filter_med')){
+        $(".med_btn").text($(this).text());
+        $(".med_btn").val($(this).text());
+      }
+   });
+
+});
+
+        </script>
+{% endblock %}
+
+{% block bottom_scripts %}
+  {{ block.super }}
+  <script type="text/javascript" src="/static/js/jquery.tmpl.min.js"></script>
+  <script type="text/javascript" src="/static/js/jQuery.ellipsis.min.js"></script>
+{% endblock %}
+

@@ -1,0 +1,342 @@
+{% extends "base.html" %}
+{% load filters %}
+{% load tags %}
+
+{% block head_title %}eVidyaloka - My Contributions{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+
+    <style>
+    #donation-table {
+
+        width: 100%;
+    }
+    #donation-table thead tr th {
+
+        padding: 10px;
+        text-align: center;
+    }
+    #donation-table tbody tr td {
+
+        padding: 10px;
+        text-align: center;
+    }
+    #donation-table tbody tr.more-details {
+
+        cursor: default;
+        background-color:rgba(255, 255, 255, 0.49);
+    }
+    #donation-table tbody tr {
+
+        cursor: pointer;
+        background-color: white;
+        border: 1px solid #aaa;
+    }
+    .control-group {
+
+        overflow: hidden;
+    }
+    .control-group > div.form-part {
+
+        width: 50%;
+        float: left;
+        padding: 5px 10px;
+        padding-left: 110px;
+        position:relative;
+    }
+    .control-group > div.form-part.full {
+
+        width: 100%;
+    }
+
+    .control-group > div.form-part.full > label {
+
+        right: 836px;
+    }
+
+    .control-group > div.form-part > label {
+
+        position:absolute;
+        right: 365px;
+    }
+    #donation-table * {
+
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -o-box-sizing: border-box;
+    }
+    [type="submit"] {
+
+        cursor: pointer;
+    }
+    a.no-receipt {
+
+        color: gray;
+    }
+    .donate-row{
+        margin : 0px 0px 30px 0px;
+    }
+    </style>
+{% endblock %}
+
+{% block body_container %}
+
+<p style="margin-bottom: 20px; text-align: center; font-size:1.5em">
+    Your Contributions
+</p>
+<div class='row donate-row'>
+        <table id="donation-table" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>Transaction</th>
+                    <th>Donation Status</th>
+                    <th>Donation Type</th>
+                    <th>Donation Date</th>
+                    <th>Payment Mode</th>
+                    <th>Online</th>
+                    <th>Amount</th>
+                    <th>Receipt</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for donation in donations %}
+                <tr>
+                    <td>{{ donation.id }}</td>
+                    <td>{{ donation.status }}</td>
+                    <td>{{ donation.donation_type }}</td>
+                    <td>{{ donation.donation_time }}</td>
+                    <td>{{ donation.payment_type }}</td>
+                    <td>{{ donation.online_txn_status }}</td>
+                    <td>Rs. {{ donation.amount }}</td>
+                    <td>
+                        {% if donation.receipt %}
+                            <a target="_blank" href="/{{ donation.receipt.url }}">Download Receipt</a>
+                        {% else %}
+                            Not Available
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr class="more-details hide">
+                    <td colspan="9">
+                        <div>
+                            <form action="/update_pledge/" method="POST">
+                                <input type="hidden" name="id"
+                                       value="{{ donation.id }}"/>
+                                {% csrf_token %}
+                            {% if donation.payment_type == "cheque" %}
+                                <div class="control-group">
+                                    <div class="form-part required">
+                                        <label>Cheque Number:</label>
+                                        <div class='input text'>
+                                            <input type='text'
+                                                   data-validate="true"
+                                                   data-title="Cheque Number"
+                                                   value="{{ donation.chequenumber }}"
+                                                   name='chequenumber'/>
+                                        </div>
+                                    </div>
+                                    <div class="form-part required">
+                                        <label>Bank Drawn:</label>
+                                        <div class='input text'>
+                                            <input type='text'
+                                                   data-validate="true"
+                                                   data-title="Bank Drawn"
+                                                   value="{{ donation.chequebank }}"
+                                                   name='chequebank'/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <div class="form-part required">
+                                        <label>Date On Cheque:</label>
+                                        <div class='input text'>
+                                            <input type='text'
+                                                   data-type="date"
+                                                   data-validate="true"
+                                                   data-title="Date On Cheque"
+                                                   value="{{ donation.chequedate }}"
+                                                   name='chequedate'/>
+                                        </div>
+                                    </div>
+                                    <div class="form-part required">
+                                        <label>Deposit Date:</label>
+                                        <div class='input text'>
+                                            <input type='text'
+                                                   data-type="date"
+                                                   data-validate="true"
+                                                   data-title="Deposit Date"
+                                                   value="{{ donation.checkdeposite_date }}"
+                                                   name='checkdeposite_date'/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="control-group {% if not user.is_superuser %}hide{% endif %}">
+                                    <div class="form-part required">
+                                        <label>Credited Date:</label>
+                                        <div class='input text'>
+                                            <input type='text'
+                                                   name='cheque_credited_date'
+                                                   data-type="date"
+                                                   data-validate="true"
+                                                   value="{{ donation.cheque_credited_date }}"
+                                                   data-title="Credited Date"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-part required">
+                                        <label>eVidyaloka txn ref:</label>
+                                        <div class='input text'>
+                                            <input type='text'
+                                                   name='transaction_key'
+                                                   value="{{ donation.transaction_key }}"
+                                                   data-validate="true"
+                                                   data-title="Bank Name"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if donation.payment_type == "neft" %}
+                                <div class="control-group">
+                                    <div class="form-part required">
+                                        <label>Bank Name:</label>
+                                        <div class='input text'>
+                                            <input type='text'
+                                                   name='neft_bank_name'
+                                                   data-validate="true"
+                                                   value="{{ donation.neft_bank_name }}"
+                                                   data-title="Bank Name"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-part required">
+                                        <label>Transaction Ref:</label>
+                                        <div class='input text'>
+                                            <input type='text'
+                                                   data-validate="true"
+                                                   data-title="Transaction ID"
+                                                   value="{{ donation.neft_transaction_id }}"
+                                                   name='neft_transaction_id'/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <div class="form-part required">
+                                        <label>Transaction Date:</label>
+                                        <div class='input text'>
+                                            <input type='text'
+                                                   data-type="date"
+                                                   data-validate="true"
+                                                   value="{{ donation.neft_transaction_date }}"
+                                                   data-title="Transaction Date"
+                                                   name='neft_transaction_date'/>
+                                        </div>
+                                    </div>
+                                    <div class="form-part required {% if not user.is_superuser %}hide{% endif %}">
+                                        <label>Credited Date:</label>
+                                        <div class='input text'>
+                                            <input type='text'
+                                                   data-type="date"
+                                                   name='neft_credited_date'
+                                                   value="{{ donation.neft_credited_date }}"
+                                                   data-validate="true"
+                                                   data-title="Credited Date"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="control-group {% if not user.is_superuser %}hide{% endif %}">
+                                    <div class="form-part required">
+                                        <label>eVidyaloka txn ref:</label>
+                                        <div class='input text'>
+                                            <input type='text'
+                                                   name='transaction_key'
+                                                   value="{{ donation.transaction_key }}"
+                                                   data-validate="true"
+                                                   data-title="Bank Name"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if donation.payment_type == "online" %}
+                            <div class="control-group {% if not user.is_superuser %}hide{% endif %}">
+                                <div class="form-part required full">
+                                    <label>eVidyaloka txn ref:</label>
+                                    <div class='input text'>
+                                        <input type='text'
+                                               name='transaction_key'
+                                               value="{{ donation.transaction_key }}"
+                                               data-validate="true"
+                                               data-title="Bank Name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            <br/>
+                            <button class="{% if donation.payment_type == 'online' and not user.is_superuser %}hide{% endif %}"
+                                    type="submit"
+                                    style="background-color: #F15A22; padding: 10px;">Update</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not donations %}
+                <tr>
+                    <td colspan="5">
+                        No contributions yet from you,<br/>
+                        Please make contributions here
+                        <a href="http://www.evidyaloka.org/sponsor/">http://www.evidyaloka.org/sponsor/</a>
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+        $("input[data-type=date]").datepicker({
+            dateFormat: "dd-mm-yy"
+        });
+
+        $("#donation-table").on("click", "tbody tr:not('.more-details')", function () {
+
+            $(this).siblings("tr.more-details").addClass("hide");
+            $(this).next().removeClass("hide");
+            footer_adjust();
+        });
+        $("tr.more-details").on("submit", "form", function (e){
+
+            e.preventDefault();
+
+            var form_data = $(this).serializeArray(),
+                post_data = {};
+
+            $.each(form_data, function (i, data) {
+
+                post_data[data.name] = data.value;
+            });
+
+            var $submit = $(this).find("[type=submit]");
+
+            $submit.text("Processing...");
+
+            $.post("/update_pledge/", post_data).done(function () {
+
+                alert("Details updated successfully");
+            }).fail(function () {
+
+                alert("Oops!, something went wrong!, please try again later");
+            }).always(function () {
+
+                $submit.text("Update");
+            });
+        });
+
+        $("a.no-receipt").click(function (e){
+
+            e.preventDefault();
+            alert("Your receipt is not available for download at this moment!, we shall let you know once it is available for download.");
+        });
+    });
+</script>
+{% endblock %}

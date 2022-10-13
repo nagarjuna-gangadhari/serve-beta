@@ -1,0 +1,146 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/static/css/mystud.css" />
+<style>
+.container-fluid{
+/*background-image: url('/static/images/chalk.PNG');*/
+    background-repeat: no-repeat;
+    background-size:100% 100%;
+    background-attachment: fixed;
+    background-position: center;
+    padding-left:0px;
+    padding-right:0px;
+}
+
+
+.active_stud{
+   background-color : #FF7043;
+
+}
+
+
+</style>
+
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="/static/js/underscore-min.js"></script>
+<script src="/static/js/student_log.js"></script>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/student-module.css">
+<link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+
+
+</head>
+<body style="background-color:white; ">
+<div class="container-fluid" style=" height:720px;">
+    <div class="row" style="background-color:#27ae60;padding:10px;" > <!-- Row 1 -->
+    <a class="clos" 
+				style="padding-left: 1015px; font-size: 25px; margin-top: 100px;"><span
+				id="menuClose" class="glyphicon glyphicon-remove-circle"
+				style="background-color: #5ba75c; color: black;"></span></a>
+        <div class="col-sm-offset-5 col-sm-2" style="color:white;text-align:center;font-weight:bold;">Students Log</div>
+    </div> <!-- end row 1 -->
+    <div class="row" ><!--Row 2 -->
+        <div class="col-sm-3" style="height:652px;background-color:#A5C57F; " >
+           <h5  style="color:white;" >Academic Year </h5>
+           <div id ="ay" class="ay">
+               <select id="sel_ay" class="form-control" style="margin-top:5px;width:100%;">
+                   <option value="">Academic Year</option>
+                   <option value="6th maths">AY 16-17 NCERT</option>
+               </select>
+           </div>
+
+           <h5  style="color:white;" >Offerings  <span id="off_badge" class="badge">0</span></h5>
+           <div id ="offer" class="offer">
+               <select id="sel_offer" class="form-control" style="margin-top:5px;width:100%;">
+                  <option value="">Offering</option>
+                  <option value="6th maths">6th maths</option>
+               </select>
+           </div>
+           
+			<div id="log_type" style="max-height:540px;" >
+				
+           </div>
+
+           <h5 style="color:white;" >Students <span id="stud_badge" class="badge">0</span></h5>
+           <div id="students" style="max-height:540px;" >
+           </div>
+
+        </div> <!--end row 2 -->
+
+           <div class="row" id="loader" style="">
+               <div class="col-sm-offset-3 col-sm-4" style="height:600px;padding-top:234px;">
+               <img alt="Search gif" src="/static/images/stud_search.GIF" width="100" height="100"   align="left">'
+                </div>
+           </div>
+
+
+        <div class="col-sm-9"  id ="student_details" style="height:700px;display:none; background-color:white;" >
+
+            <div class="row">
+                <div class="col-sm-2" style="padding-top:10px;" >
+                   <img alt="img-thumbnail" class="img-responsive img-thumbnail" style="max-height:130px;"   src="/static/images/Ravi.jpg"  />
+                </div>
+                <div class="col-sm-5" style="padding-top:10px;">
+                   <label>Name :</label><p style="display:inline;padding-left:10px;">praneeth</p><br>
+                   <label>Dob :</label><p style="display:inline;">04-09-1991</p><br>
+                   <label>Grade :</label><p style="display:inline">6th</p><br>
+                   <label>Gender :</label><p style="display:inline">Male</p><br>
+                </div>
+
+                <div class="col-sm-5" style="padding-top:10px;">
+                   <label>center :</label><p style="display:inline">Koyritola - Hira</p><br>
+                   <label>School RollNo :</label><p style="display:inline">563</p><br>
+                   <label>Father's Occupation :</label><p style="display:inline;padding-left:10px;">Employee</p><br>
+                   <label>Mother's Occupation :</label><p style="display:inline;">Employee</p><br>
+                </div>
+
+            </div>
+
+           <div class="row" style="padding-top:20px;" >
+              <div class="col-sm-offset-1 col-sm-10">
+                  <ul class="nav nav-tabs" >
+                      <!-- <li role="presentation" class="active"><a href="#">Academic Details</a></li>
+                      <li role="presentation"><a href="#">Parental Status</a></li>
+                      <li role="presentation"><a href="#">Event</a></li>
+                      <li role="presentation"><a href="#">Story</a></li> -->
+                  </ul>
+              <div>
+
+           </div>
+
+
+        </div>
+    </div>
+
+</div>
+<script>
+
+function triggerLog(){
+	var logType = $("#log_type_id").val();
+	if (logType == '1'){
+		$("a.stud_att").trigger('click');
+	}else if (logType == '2'){
+		$("a.stud_schol").trigger('click');
+	}else if (logType == '3'){
+		$("a.stud_coschol").trigger('click');
+	}else if (logType == '4'){
+		$("a.stud_act").trigger('click');
+	}
+	
+}
+
+$("#menuClose").click(function(){
+	
+	$(".clos").click(function() {
+		parent.$.fn.colorbox.close()
+	});
+});
+</script>
+
+</body>
+</html>

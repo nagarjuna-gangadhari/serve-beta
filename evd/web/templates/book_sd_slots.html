@@ -1,0 +1,658 @@
+{% extends 'new_base_temp.html' %}
+<!DOCTYPE html>
+<html>
+   {% block head %}
+   <style>
+      @media only screen and (max-width: 480px) and (min-width: 0px) {
+      .cancel-align {
+      width: 42%;
+      margin-left: 30%;
+      }
+      .confirm-btn {
+      margin-right: 0%;
+      }
+      }
+      @media only screen and (max-width: 768px) and (min-width: 480px) {
+      .cancel-align {
+      width: 30%;
+      margin-left: 39%;
+      }
+      .confirm-btn {
+      margin-right: 31%;
+      }
+      }
+      @media only screen and (max-width: 1024px) and (min-width: 768px) {
+      .cancel-align {
+      width: 30%;
+      margin-left: 39%;
+      }
+      .confirm-btn {
+      margin-right: 31%;
+      }
+      }
+      body {
+      background: #f6f6f6 !important;
+      }
+      .alert {
+      border-radius: 0 !important;
+      }
+      .navbar-wrapper {
+      background: deepskyblue;
+      }
+      .select_month,
+      .select_date,
+      .select_slot {
+      height: 40px;
+      text-align: center;
+      padding-top: 5% !important;
+      }
+      .select_month.alert-danger,
+      .select_date.alert-danger,
+      .select_slot.alert-danger {
+      color: white;
+      background-color: #a24846;
+      }
+      .select_month.alert-success,
+      .select_date.alert-success,
+      .select_slot.alert-success {
+      color: white;
+      background-color: #3c763d;
+      border-color: #d6e9c6;
+      box-shadow: 5px 5px 3px #5b9a5c;
+      text-shadow: 2px 2px 1px black;
+      }
+      .select_month:hover,
+      .select_date:hover,
+      .select_slot:hover {
+      cursor: pointer;
+      }
+      .select_heading {
+      margin-left: 1.5%;
+      }
+      .main_heading {
+      margin-bottom: 4%;
+      text-align: center;
+      color: white;
+      text-transform: uppercase;
+      padding: 20px;
+      margin-top: 15px;
+      background: deepskyblue;
+      font-weight: bold;
+      }
+      .empty_msg {
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      }
+      div#evd-notification.hide {
+      display: none !important;
+      }
+      div#evd-notification {
+      position: fixed;
+      width: 380px;
+      margin-left: -190px;
+      left: 50%;
+      top: 50%;
+      margin-top: -64px;
+      padding: 0px;
+      border: 1px solid white;
+      background-image: url(/static/images/blackslate.png);
+      z-index: 2000;
+      height: 126px;
+      display: table !important;
+      }
+      div#evd-notification div {
+      position: relative;
+      width: 380px;
+      height: 126px;
+      }
+      div#evd-notification a.close {
+      right: 5px;
+      top: 2px;
+      color: #ddd;
+      position: absolute;
+      cursor: pointer;
+      }
+      div#evd-notification p {
+      font-weight: normal;
+      color: white;
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+      line-height: 28px;
+      width: 360px;
+      height: 126px;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      }
+      .role_select input {
+      width: inherit;
+      height: inherit;
+      }
+      .dropdown-menu.sub_logout {
+      left: 40px;
+      }
+      p {
+      margin-right: 27px !important;
+      }
+   </style>
+   {{ block.super }}
+   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+   {% endblock %} {% block content %}
+   <style>
+      .banner {
+      background: #04856d;
+      background-image: url('/static/images/diwalibag.gif');
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: right top;
+      }
+      .banner__content {
+      padding: 16px;
+      margin-left: 10px;
+      margin-right: 100px;
+      display: flex;
+      }
+      .banner__text {
+      flex-grow: 1;
+      line-height: 1.4;
+      font-family: "Zen Antique", sans-serif;
+      }
+      .banner__text p {
+      padding: 5px;
+      margin: 0;
+      line-height: normal;
+      }
+      .banner__close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      }
+      .banner__text,
+      .banner__close>span {
+      color: #ffffff;
+      font-size: x-large;
+      }
+   </style>
+   <div class="container" style="margin-top:85px">
+      <div class="row">
+         <div class="col-md-12">
+            <div class="alert alert-info" style="margin-top:1%;color: black; background:white;">
+               <h3 class="main_heading">Select Slot For Discussion </h3>
+               <!--choose month-->
+               <div class="row">
+                  <div class="{% if start_time %}hidden hide{% else %}col-md-12{% endif %}">
+                     <p class="role_select">
+                        <b>  Role : </b> 
+                     {% if request.user.is_superuser %}
+                     <p id='roles' style="display: none;">{{role}}</p>
+                     <form method='GET'>
+                        {%csrf_token%}
+                        <input name='slots_role' style="display:none" id='slots_role' value="Teacher">
+                        <button class='btn' id='button_1'>Teacher</button>
+                     </form>
+                     <form method='GET' style=" position: relative; left: 125px; top: -34px;">
+                        {%csrf_token%}
+                        <input name='slots_role' style="display:none" id='slots_role' value="Content Developer">
+                        <button class='btn' id='button_2'>Content Developer</button>
+                     </form>
+                     <form method='GET'>
+                        {%csrf_token%}
+                        <input name='slots_role' style="display:none" id='slots_role' value="Facilitator Teacher">
+                        <button id='button_3'>Facilitator Teacher</button>
+                     </form>
+                     {% else %}
+                     {% if is_teacher %}
+                     <p id='roles' style="display: none;">{{ role }}</p>
+                     <form method='GET'>
+                         {%csrf_token%}
+                         <input name='slots_role' style="display:none" id='slots_role' value="Teacher">
+                         <button id='button_1'>Teacher</button>
+                     </form>
+                     {% endif %}
+                     {% if is_content_developer %}
+                     <form method='GET' style=" position: relative; left: -125px; top: -34px;">
+                         {%csrf_token%}
+                         <input name='slots_role' style="display:none" id='slots_role' value="Content Developer">
+                         <button id='button_2' style="position: relative; left: 19%; top: 10px;">Content Developer</button>
+                     </form>
+                     {% endif %}
+                     {% if is_flt_teacher   %}
+                     <form method='GET' style=" position: relative; left: -105px; top: -60px;">
+                         {%csrf_token%}
+                         <input name='slots_role' style="display:none" id='slots_role' value="Facilitator Teacher">
+                         <button id='button_3' style="position: relative; left: 32%; top: 38px;">Facilitator Teacher</button>
+                     </form>
+                     {% endif %}
+                     {% endif %}
+                     </p>
+                  </div>
+               </div>
+               <div class="row">
+                  <h4 class="select_heading">Please choose a Month : </h4>
+                  <br/> {% for month in month_list %}
+                  <div class="col-md-2">
+                     <div class="alert alert-danger select_month">
+                        <h4 id='months'>{{month}}</h4>
+                     </div>
+                  </div>
+                  {% endfor %}
+               </div>
+               <!-- row -->
+               <!--end choose month -->
+               <hr>
+               <!-- choose date -->
+               <div class="row">
+                  <input type="hidden" value="{{performedOn_userId}} " id="performedOn_userId">
+                  <input type="hidden" value="{{taskId}} " id="taskId">
+                  <input type="hidden" value="{{tab}} " id="tab">
+                  <h4 class="select_heading">Please choose a Day : </h4>
+                  <br/>
+                  <div class="date_list">
+                     <div class="alert alert-info empty_msg">
+                        <p>Please choose a Month</p>
+                     </div>
+                  </div>
+               </div>
+               <!-- end choose date -->
+               <hr>
+               <!-- choose slot -->
+               <div class="row">
+                  <h4 class="select_heading">Please choose a Slot : <sup>*All time slots are in Indian Standard Time</sup></h4>
+                  <br/>
+                  <div class="slot_list">
+                     <div class="alert alert-info empty_msg">
+                        <p>Please choose a Day</p>
+                     </div>
+                  </div>
+               </div>
+               <!-- end choose slot -->
+               <hr>
+               <!-- book slot button -->
+               <div class="row">
+                  <!-- col -->
+                  <div class="{% if start_time %}col-md-4{% else%}col-md-4{% endif %}" style="text-align:center;">
+                     {% if start_time %}
+                     <h4 class="btn" style="background: darkcyan;color:white">Your Booked Slot is :<br> <strong>{{start_time}} to {{end_time}} </strong></h4>
+                     {% else %}
+                     <h4 class="current_selection btn btn-default hide"></h4>
+                     {% endif %}
+                  </div>
+                  <br> {% if request.user.is_superuser %}
+                  <div class="col-md-4" style="text-align:center;">
+                     <input type="number" class="date-picker" style="width:100px;" id="teacher_id" name="book_for_other" /><button type="button" class="btn btn-info" onclick="book_video_classes_others()">Book for other</button>
+                  </div>
+                  {%endif%}
+                  <div class="col-md-2 cancel-align">
+                     <p style="text-align:right"><button type="button" class="btn btn-danger back_to_previous_page" style="width: 80%;">
+                        Cancel
+                        </button>
+                     </p>
+                  </div>
+                  <div class="col-md-2 confirm-btn">
+                     {% if not request.user.is_superuser %} {% if TSD_status != 'Completed' %}
+                     <p style="text-align:right"><button type="button" class="btn btn-success confirm_booking {%if not start_time %}disabled book{%else %}release{%endif %}">
+                        {% if start_time %}Release Booking{% else %}Confirm Booking{% endif %}
+                        </button>
+                     </p>
+                     {% elif TSD_status == 'Completed' %}
+                     <p style="text-align:right"><button type="button" class="btn btn-success disabled" style='margin-left:-50px;'>
+                        Already Completed This Step 
+                        </button>
+                     </p>
+                     {% endif %} {% endif %}
+                  </div>
+               </div>
+            </div>
+            <!--alert-->
+         </div>
+         <!--col-->
+         <div id="evd-notification" class="save_success alert alert-warning hide" style="">
+            <div>
+               <a type="button" class="close reload_on_save">X</a>
+               <p class="msg-body book_slot_success_msg"></p>
+            </div>
+         </div>
+      </div>
+      <!--row-->
+   </div>
+   <!--container-->
+   {% endblock content %} {% block scripts %} {{ block.super }}
+   <script type="text/javascript" src="/static/js/underscore-min.js"></script>
+   <script id="publish_dates_tmpl" type="template">
+      {% include "publish_sd_dates.tmpl" %}
+   </script>
+   <script id="publish_slots_tmpl" type="template">
+      {% include "publish_sd_slots.tmpl" %}
+   </script>
+   <script>
+      function getCookieValue(a) {
+          var b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+          return b ? b.pop() : '';
+      }
+      
+      function book_video_classes_others() {
+      
+          var user_id = document.getElementById("teacher_id").value
+          console.log("id" + user_id)
+          if (user_id == "") {
+              alert("Please enter the Teacher id")
+      
+          } else {
+              var role = document.getElementById('roles').innerHTML
+              var post_data = {
+                  'csrfmiddlewaretoken': getCookieValue('csrftoken'),
+                  'teacher_id': user_id,
+                  'role': role
+              }
+              $.post("/v2/verify_teacher_csd_tsd/", post_data, function(resp) {
+                  if (resp.role == 'Teacher') {
+      
+                      if (resp.is_teacher == 0) {
+                          alert("Please enter valid Teacher user id")
+      
+                      } else {
+                          if (resp.is_booked == 1) {
+                              var choice = confirm("This user has booked the slots already Do you want to release");
+                              if (choice === true) {
+                                  var performedOn_userId = $('#performedOn_userId').val(),
+                                      role = document.getElementById('roles').innerHTML,
+                                      data = {
+                                          'type': 'release',
+                                          'role': role,
+                                          'performedOn_userId': performedOn_userId,
+                                          'user_id': user_id
+                                      }
+                                  $.get("/book_or_release_sd_slot/", data, function(resp) {
+                                      $(".book_slot_success_msg").html(resp);
+                                      if (resp === "Slot Released Successfully") {
+                                          $(".book_slot_success_msg").siblings('a').addClass("release");
+                                      }
+                                      $(".save_success").removeClass("hide");
+                                  });
+                              }
+                          } else {
+                              var month = window.previous_selection["month"].children().html(),
+                                  role = document.getElementById('roles').innerHTML,
+                                  day = window.previous_selection["date"].children().html(),
+                                  slot = window.previous_selection["slot"].children().html(),
+                                  id = window.previous_selection["id"];
+                              user_id = document.getElementById("teacher_id").value
+                              performedOn_userId = $('#performedOn_userId').val(),
+                                  data = {
+                                      'type': 'book',
+                                      'month': month,
+                                      'day': day,
+                                      'slot': slot,
+                                      'role': role,
+                                      'user_id': user_id,
+                                      'performedOn_userId': performedOn_userId,
+                                      'id': id
+                                  }
+                              console.log("EEEEEE", data)
+                              $.get("/book_or_release_sd_slot/", data, function(resp) {
+                                  alert("Slots Booked successfully ")
+                                      // window.location = "/v2/book_sd_slots/";
+                                  $(".save_success").removeClass("hide");
+                                  window.location = "/book_sd_slots/";
+                              });
+                          }
+      
+                      }
+                  } else if (resp.role = 'Content Developer') {
+                      if (resp.is_content_developer == 0) {
+                          alert("Please enter  valid Content Developer user id")
+      
+      
+                      } else {
+                          if (resp.is_booked == 1) {
+                              var choice = confirm("This user has booked the slots already Do you want to release");
+                              if (choice === true) {
+                                  var performedOn_userId = $('#performedOn_userId').val(),
+                                      role = document.getElementById('roles').innerHTML,
+                                      data = {
+                                          'type': 'release',
+                                          'role': role,
+                                          'performedOn_userId': performedOn_userId,
+                                          'user_id': user_id
+                                      }
+                                  $.get("/book_or_release_sd_slot/", data, function(resp) {
+                                      $(".book_slot_success_msg").html(resp);
+                                      if (resp === "Slot Released Successfully") {
+                                          $(".book_slot_success_msg").siblings('a').addClass("release");
+                                      }
+                                      $(".save_success").removeClass("hide");
+                                  });
+                              }
+                          } else {
+                              var month = window.previous_selection["month"].children().html(),
+                                  role = document.getElementById('roles').innerHTML,
+                                  day = window.previous_selection["date"].children().html(),
+                                  slot = window.previous_selection["slot"].children().html(),
+                                  id = window.previous_selection["id"];
+                              user_id = document.getElementById("teacher_id").value
+                              performedOn_userId = $('#performedOn_userId').val(),
+                                  data = {
+                                      'type': 'book',
+                                      'month': month,
+                                      'day': day,
+                                      'slot': slot,
+                                      'role': role,
+                                      'user_id': user_id,
+                                      'performedOn_userId': performedOn_userId,
+                                      'id': id
+                                  }
+                              console.log("EEEEEE", data)
+                              $.get("/book_or_release_sd_slot/", data, function(resp) {
+                                  alert("Slots Booked successfully ")
+                                      // window.location = "/v2/book_sd_slots/";
+                                  $(".save_success").removeClass("hide");
+                                  window.location = "/book_sd_slots/";
+                              });
+                          }
+      
+                      }
+                  }
+      
+      
+      
+              })
+          }
+      
+      }
+      console.log('----roles------', $('#roles').html())
+      $(document).ready(function() {
+          var selected_month;
+          window.previous_selection = {};
+          var sel_role = $('#roles').html();
+          console.log("ffffffffffffffffffffffffff", sel_role)
+          if (sel_role == 'Teacher') {
+              document.getElementById("button_1").style.background = '#00bfff	';
+          } else if (sel_role == 'Teacher')  {
+              document.getElementById("button_2").style.background = '#00bfff	';
+          }
+          //role selection
+          var role = window.location.hash.substr(1);
+          $("#" + role).prop("checked", true);
+          window.setTimeout(function() {
+              window.scrollTo(0, 0);
+              $('input').blur();
+          }, 0);
+      
+          //month, date, slot click
+          $("body").on("click", ".select_month, .select_date, .select_slot", function() {
+      
+              if ($(this).hasClass("alert-danger")) {
+                  $(this).removeClass("alert-danger");
+                  $(this).addClass("alert-success");
+                  if ($(this).hasClass("book")) {
+                      $(".confirm_booking").addClass("disabled");
+                  }
+                  if ($(this).hasClass("select_month")) {
+                      selected_month = $(this).children().html();
+      
+                      $(".current_selection").html("You have selected: " + selected_month).removeClass("hide");
+      
+                      //Remove previous selection:
+                      if (typeof window.previous_selection["month"] !== 'undefined') {
+                          window.previous_selection["month"].removeClass("alert-success").addClass("alert-danger");
+                      }
+                      window.previous_selection["month"] = $(this);
+                      // if ($('input.teacher').is(':checked'))  {
+                      //     var role = $('input[name=teacher]:checked').val();
+      
+                      // }
+      
+                      // if ($('input.content_developer').is(':checked'))  {
+                      //     var role =$('input[name=content_developer]:checked').val();
+                      // }
+                      var role = document.getElementById('roles').innerHTML
+                      console.log("ddddd", role)
+                          //Getting dates on selected month
+                      $.get("/get_sd_slot_details/", {
+                          'type': 'month',
+                          'data': selected_month,
+                          'role': role
+                      }, function(resp) {
+                          var publish_dates_tmpl = $("#publish_dates_tmpl").html();
+                          var compiledTemplate = _.template(publish_dates_tmpl);
+                          var templateResult = compiledTemplate({
+                              'resp': resp
+                          });
+                          var x = $(templateResult);
+                          $(".date_list").html(x);
+                          //reset slot section
+                          $(".slot_list").html('<div class="alert alert-success empty_msg">' +
+                              '<p>Please choose a Day</p>' +
+                              '</div>');
+      
+                      });
+                  } //month click end
+                  else if ($(this).hasClass("select_date")) {
+                      selected_day = $(this).children().html();
+                      $(".current_selection").html("You have selected: " + selected_day + " " + selected_month.substr(-4));
+                      //Remove previous selection:
+                      if (typeof window.previous_selection["date"] !== 'undefined') {
+                          window.previous_selection["date"].removeClass("alert-success").addClass("alert-danger");
+                      }
+                      window.previous_selection["date"] = $(this);
+                      var role = document.getElementById('roles').innerHTML
+                      console.log("ddddd", role)
+                          //Getting slots on selected date
+                      var month = window.previous_selection["month"].children().html();
+                      $.get("/get_sd_slot_details/", {
+                          'type': 'date',
+                          'data': selected_day,
+                          'role': role,
+                          'month': month
+                      }, function(resp) {
+                          var publish_slots_tmpl = $("#publish_slots_tmpl").html();
+                          // console.log("sssssssssss",publish_slots_tmpl)
+                          var compiledTemplate = _.template(publish_slots_tmpl);
+                          var templateResult = compiledTemplate({
+                              'resp': resp.slot_list
+                          });
+                          var x = $(templateResult);
+                          $(".slot_list").html(x)
+                              // $(".slot_list").html();
+                      });
+                  } //day click end
+                  else {
+                      $(".confirm_booking").removeClass("disabled");
+                      id = $(this).find('#slot_id').val();
+                      selected_slot = $(this).find('h4').html();
+                      $(".current_selection").html("You have selected: " + selected_day + " " + selected_month.substr(-4) + " " + selected_slot);
+      
+                      //Remove previous selection:
+                      if (typeof window.previous_selection["slot"] !== 'undefined') {
+                          window.previous_selection["slot"].removeClass("alert-success").addClass("alert-danger");
+                      }
+                      window.previous_selection["slot"] = $(this);
+                      window.previous_selection["id"] = id;
+                  }
+      
+              }
+          });
+      
+          //Confirm booking:
+          $('body').on("click", ".confirm_booking", function() {
+              var release = $(this).hasClass("release"),
+                  role = document.getElementById('roles').innerHTML,
+                  data = {}
+              if (release) {
+                  var performedOn_userId = $('#performedOn_userId').val(),
+                      data = {
+                          'type': 'release',
+                          'role': role,
+                          'performedOn_userId': performedOn_userId
+                      }
+              } else {
+                  var month = window.previous_selection["month"].children().html(),
+                      day = window.previous_selection["date"].children().html(),
+                      slot = window.previous_selection["slot"].children().html(),
+                      id = window.previous_selection["id"];
+                  performedOn_userId = $('#performedOn_userId').val(),
+                      data = {
+                          'type': 'book',
+                          'month': month,
+                          'day': day,
+                          'slot': slot,
+                          'role': role,
+                          'performedOn_userId': performedOn_userId,
+                          'id': id
+                      }
+              }
+              $.get("/book_or_release_sd_slot/", data, function(resp) {
+                  $(".book_slot_success_msg").html(resp);
+                  if (resp === "Slot Released Successfully") {
+                      $(".book_slot_success_msg").siblings('a').addClass("release");
+                  }
+                  $(".save_success").removeClass("hide");
+              });
+          });
+          //reload
+          $("body").on("click", ".reload_on_save", function() {
+              $(".save_success").addClass("hide");
+              if ($(this).hasClass("release")) {
+                  window.location.reload();
+              } else if ($('#performedOn_userId').val() != null && $('#performedOn_userId').val() != '' && $('#performedOn_userId').val() != 'undefined' &&
+                  $('#performedOn_userId').val() != 'None ' && $('#taskId').val() != null && $('#taskId').val() != '' &&
+                  $('#taskId').val() != 'undefined' && $('#taskId').val() != 'None ' && $('#tab').val() != null && $('#tab').val() != '' &&
+                  $('#tab').val() != 'undefined' && $('#tab').val() != 'None ') {
+                  console.log("hi3");
+                  window.location = '/edit_task/?id={{taskId}}&tab={{tab}}&flag=true';
+              } else {
+                  role = document.getElementById('roles').innerHTML
+                  if (role == 'Teacher') {
+                      role_sel = 'teacher'
+                      console.log('pankaj1')
+                      console.log(role)
+                  } else {
+                      role_sel = 'content_developer'
+                      console.log('pankaj2')
+                      console.log(role)
+                  }
+                  window.location = "/role_onboarding/" + role_sel.replace("_", "");
+      
+                  //window.history.back();
+              }
+          });
+          $("body").on("click", ".back_to_previous_page", function() {
+              if ($('#performedOn_userId').val() != null && $('#performedOn_userId').val() != '' && $('#performedOn_userId').val() != 'undefined' &&
+                  $('#performedOn_userId').val() != 'None ' && $('#taskId').val() != null && $('#taskId').val() != '' &&
+                  $('#taskId').val() != 'undefined' && $('#taskId').val() != 'None ' && $('#tab').val() != null && $('#tab').val() != '' &&
+                  $('#tab').val() != 'undefined' && $('#tab').val() != 'None ') {
+                  window.location = '/edit_task/?id={{taskId}}&tab={{tab}}';
+              } else {
+                  window.location = "/v2/vLounge/";
+                  //window.location = "/role_onboarding/" + $("input[name=role]:checked").val().replace("_","");
+                  //window.history.back();
+              }
+      
+          });
+      
+      });
+   </script>
+   {% endblock scripts %}
+</html>

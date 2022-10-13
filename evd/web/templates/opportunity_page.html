@@ -1,0 +1,69 @@
+{% extends 'new_ui.html' %}
+
+<style>
+
+    .inside_content {
+        font-size: 15px;
+        margin-top: -69%;
+        margin-left: 15%;
+        font-weight: bold;
+    }
+
+
+</style>
+{% block content %}
+
+<section class="mb-5 mt-5" style="background:white;margin:0px 8px 0px 17px;">
+<!--   <div class="container"> -->
+    <div class="row" style="box-shadow: 0px 1px 14px -3px;padding-bottom: 28px;margin:0px;border-radius:5px;">
+	  
+	  <div class="col-md-1 my-2" style="">
+          
+          <div class="col-md-6 mt-4">
+                <div class="btn-group-vertical"  role="group">
+                  <button type="button" class="btn btn-primary"><i class="fa fa-pencil mr-2" aria-hidden="true"></i> Profile</button>
+                  <button type="button" class="btn btn-primary"><i class="ti-settings mr-2"></i> Settings</button>
+                  <button type="button" class="btn btn-primary"><i class="fa fa-sign-out mr-2" aria-hidden="true"></i> Logout</button>
+                </div>
+          </div> <!-- END col-md-4-->
+          
+      </div>
+      
+       <div class="col-md-8 offset-md-1 text-center mt-4 " align="center"><p style="font-size:20px;font-weight:bold;">
+      	   		Your slot request is being processed. The following are the details of the slot <br>you needed:-</p>
+       </div>
+      
+	    
+              
+      <div class="row col-md-12">
+      <div class="col-md-4"></div>
+      	  <div class="div1 mt-2" >
+             <p style="color: red;font-weight: bold;font-size: 22px;"><br>
+                Monday<br>9 am to 10 am<br>
+             </p>
+              <i class="fa fa-pencil" style="font-size: 149px;margin-left: 195px;margin-top: -100%;" aria-hidden="true"></i>
+          </div>
+	  
+	  </div>
+	  
+     </div> <!-- END row-->
+<!--   </div> END container -->
+</section> <!-- END section-->
+<style>
+.circle {
+    background: #6495ed;
+    border-radius: 200px;
+    color: white;
+    height: 150px;
+    font-weight: bold;
+    width: 150px;
+    display: table;
+    margin: 20px auto;
+}
+.circle p {
+    vertical-align: middle;
+    text-align: center;
+    display: table-cell;
+}
+</style>
+{% endblock content %}

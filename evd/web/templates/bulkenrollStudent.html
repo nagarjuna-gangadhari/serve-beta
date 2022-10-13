@@ -1,0 +1,170 @@
+<html>
+<head>
+<style>
+.container-fluid {
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-attachment: fixed;
+	background-position: center;
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+.active_stud {
+	background-color: #FF7043;
+}
+
+#rollNumberId{
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.boxes {
+ height: 35%;
+ overflow: auto;
+ width: 102%;
+}
+</style>
+
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript"
+	src="/static/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link
+	href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+	rel="stylesheet">
+<link rel="stylesheet" href="/static/css/bootstrap-datepicker3.css"/>
+
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row" style="background-color: #27ae60; padding: 10px;">
+		<!-- Row 1 -->
+		<div class="col-sm-offset-5 col-sm-2"
+			style="color: white; text-align: center; font-weight: bold;font-size: x-large;width: 40%;margin-left: 29%;">
+			Bulk Enroll Student
+				<a href="#" onclick="window.parent.jQuery.colorbox.close();return false;" class="close" data-dismiss="alert"  style="font-size: x-large ;margin-right: -86%">&times;</a>
+		</div>
+	</div>
+
+	 <div style='height:100%;background-color:white;padding:20px'>
+		<div style="margin-top: 1%;">
+		  <p style='display:inline;margin-left: 33%;font-size: 20px;'>Download the template:</p>
+          <a href="/static/bulk_upload_sample.csv" download="{{file_name}}" style="float:right;color: white;"><button  class='btn btn-sml' style='display:inline; margin-left:-449%;margin-top: -3%;font-size:12px;width:80px;background-color: #27ae60;' id='get_temp'> Download</button></a><br><br>
+		  <p style="margin-left: 37%;font-size: small;"><strong>Mandatory Fields*:</strong> Name,Gender and Grade</p> 
+		  <p style="margin-left: 41%;font-size: small;"><strong>Date Format:</strong> YYYY-MM-DD</p>
+
+		</div>
+		  <hr><br>
+		<div>
+          <p style="margin-left: 39%;font-size: 20px;">Select File to Upload:</p>
+			<input id="csv" style="margin-left: 39%;margin-top: 2%;font-size: medium;" type="file">
+				<p id ="alert" style="display: none;"></p>
+			<output type="hidden" style="display: none;margin-left: 42%;margin-top: 1%;" id="out">null
+			</output>
+			<button id="bulk_upload" class='btn btn-sml' style="display:inline;margin-top: 2%;margin-left: 46%;background-color: #27ae60;color: white;">Upload</button>
+			<hr><br>
+		</div>
+		<diV style="align-items: center;" class="boxes">
+			<div style="text-align:left;margin-left: 37%;" id="error_list"></div>
+		</diV>
+
+</div>
+
+</div>
+
+
+	<script>
+		
+
+		function getCookieValue(a) {
+			var b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+			return b ? b.pop() : '';
+		}
+		var errorLineNumber = '';
+		var fileInput = document.getElementById("csv"),
+
+		readFile = function () {
+			var reader = new FileReader();
+			reader.onload = function () {
+				document.getElementById('out').innerHTML = reader.result;
+				var student_data_list = reader.result
+				var dataSet = student_data_list.split('\n')
+				document.getElementById('bulk_upload').innerHTML = 'Loading<i class="fa fa-spinner fa-spin"></i>'
+				$('#bulk_upload').attr('disabled','disables');
+				for(i=0;i<dataSet.length;i++){
+					if(dataSet[i].includes('"')){
+						errorLineNumber = dataSet[i].split(',')[0]
+						document.getElementById('bulk_upload').innerHTML = 'Upload'
+						$('#bulk_upload').removeAttr('disabled')
+						break;
+					}
+				}
+				var center_id = "{{centers}}"
+				
+				var post_data = {'csrfmiddlewaretoken': getCookieValue('csrftoken'), 'student_data_list': student_data_list,'center_id':center_id}
+				$.post("/v2/testing_data/", post_data, function(response) {
+					console.log("success")
+					document.getElementById('bulk_upload').innerHTML = 'Upload'
+					$('#bulk_upload').removeAttr('disabled')
+					document.getElementById('alert').innerHTML = response['message'];
+					var error_list = response['message']
+					if (error_list[0] != "Data is ready to upload"){
+						document.getElementById('error_list').innerHTML = ""
+						document.getElementById('error_list').innerHTML += '<h id="list_of_errors" style="font-size:large;margin-left: -1%;">List of Errors in the Uploaded File:</h><br><br>'
+						for (i=0;i<error_list.length;i++){
+						document.getElementById('error_list').innerHTML += '<p>' + error_list[i] + '<p>'
+					}
+					}
+					else {
+						alert(error_list[0])
+						document.getElementById('error_list').innerHTML = '<p>' + "" + '<p>'
+					}
+				})
+			};
+			
+			// start reading the file. When it is done, calls the onload event defined above.
+			reader.readAsBinaryString(fileInput.files[0]);
+			console.log(fileInput.files[0])
+		};
+
+		fileInput.addEventListener('change', readFile);
+
+
+		$("#bulk_upload").click(function(evt) {
+			var data = document.getElementById('out').innerHTML
+			var error = document.getElementById('alert').innerHTML
+			var center_id = "{{centers}}"
+			if (error == "Data is ready to upload") {
+
+			var post_data = {'csrfmiddlewaretoken': getCookieValue('csrftoken'), 'student_data_list': data,'center_id':center_id}
+
+				$.post("/v2/bulk_uplaod_student_enroll/", post_data, function(response) {
+					console.log("success2")
+					alert(response['message'])
+					location.reload();
+
+				})
+			}
+			else {
+				if(errorLineNumber == '')
+					alert("Please upload correct data")
+				else
+					alert("please upload correct data\nwrong entry at line number "+errorLineNumber)
+			}
+		})
+
+</script>
+</body>
+</html>

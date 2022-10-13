@@ -1,0 +1,479 @@
+{% extends "base.html" %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+
+    <style>
+        .mySchoolDiv {
+            background-color:#ffffff;
+            padding : 15px 20px 20px 30px;
+        }
+        .verification{
+            margin-top:15px;
+        }
+        table th {
+            font-weight:bold;
+        }
+        .col-sm-8 > h4 {
+            margin-top: 30px !important;
+        }
+
+        label {
+            font-family: sans-serif !important;
+        }
+        thead{
+            background-color: #27a3e2 !important;
+            color: white;
+            /*display: block;*/
+        }
+    </style>
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_container %}
+    {{ block.super }}
+    <!-- {% if is_pam == false   or  is_super == false %}
+<div class="col-md-1 col-lg-1">
+    {%include "navbar.html"%}
+</div>
+    {% endif %} -->
+{%if is_partner and not is_pam %}
+<div class="inner" style="height: 100%;">
+    <div class="col-md-2" style="height: 100%;">
+      {%include "navbar.html"%}
+    </div>
+    <div class="col-md-10"style="height: 100%; overflow-y: auto; right: -15px; padding-left: 3%">
+{%else%}
+<div class="admin_inner">
+     <div class="col-md-12">
+{%endif%}
+
+        <div class="mySchoolDiv" >
+            <div class="row" style="overflow-x:auto;">
+                <div class="col-sm-12" style="padding-left: 0px !important; padding-right: 0px !important;">
+                    <div class="col-sm-8" style="padding-left: 0px !important;">
+                        <h3>{{centerName}} &#x2192; {{subjectName}} Doubt</h3>
+                    </div>
+                    <div class="col-sm-4" style="margin-top: 30px !important; padding-right: 0px !important;">
+                            <span class="pull-right" style="margin:0px;">Go back to <a href="{{backPageUrl}}" style="vertical-align:middle;font-family: Arial, Helvetica, sans-serif;font-size: 13.5px;">List Doubts</a></span>
+                    </div>
+                </div>
+                <hr/>
+                <div>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th>Student Name</th>
+                                <td>{{doubtObj.student.name}}</td>
+                                <th>Status</th>
+                                <td>{{doubtStatusText}}</td>
+                            </tr>
+                             <tr>
+                                <th>Topic</th>
+                                <td>{{doubtObj.topic.title}}</td>
+                                <th>Subtopic</th>
+                                <td>{{doubtObj.subtopic.name}}</td>
+                            </tr>
+                            <tr>
+                                <th>Doubt</th>
+                                <td><a href="{{doubtObj.resource_url}}">View Image</a></td>
+                                <th>Asked Date</th>
+                                <td>{{doubtCreatedDate|date:"Y-m-d H:i:s"}}</td>
+                            </tr>
+                            <tr>
+                                <th>Assigned To</th>
+                                <td>{{doubtObj.assigned_to.first_name}} {{doubtObj.assigned_to.last_name}}</td>
+                                <th>Responded By</th>
+                                <td>{{doubtResponse.assigned_to.first_name}} {{doubtResponse.assigned_to.last_name}}</td>
+                            </tr>
+                            {% if hasResponded  %}
+                            <tr>
+                                <th>Response Text</th>
+                                <td>{{doubtResponse.text}}</td>
+                                <th>Responded On</th>
+                                <td>{{doubResponsetCreatedDate|date:"Y-m-d H:i:s"}}</td>
+                            </tr>
+                            <tr>
+                                <th>Attachment Type</th>
+                                <td>{{attachmentType}}</td>
+                                {% if doubtResponse.resource_type == '2'  %}
+                                     <th>Attachments </th>
+                                     <td><a target="_blank" href="{{doubtResponse.resource_url}}">View Image</a></td>
+                                {% else %}
+                                    <th>Url </th>
+                                     <td><a target="_blank" href="{{doubtResponse.resource_url}}">View Url</a></td>
+                                {% endif %}
+
+                            </tr>
+                             {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+             <div class="row">
+                    <div class="col-md-12 col-sm-12">
+
+                        <div class="col-md-12 col-sm-12">
+                            {% if hasResponded == 0 %}
+                            <a href="#respond-doubt-modal" data-toggle="modal" class="btn btn-success pull-right" title="Resolve Doubt"><b>Resolve Doubt</b></a>
+                            {% else %}
+                            <a href="#respond-doubt-modal" data-toggle="modal" class="btn btn-success pull-right" title="Edit Doubt Response"><b>Edit Doubt Response</b></a>
+                            {% endif %}
+                        </div>
+                    </div>
+             </div>
+        </div>
+</div>
+
+
+ <div class="col-md-12 col-sm-12 col-xm-12 col-lg-12" style = "top:15px;padding-left: 15px;" id="contentDetailTable" >
+        <div style="overflow-x:auto;">
+              <br/>
+            <table class="table table-bordered dataTable " id="myTable" role="grid" aria-describedby="myTable_info">
+                <div class="tableCaption"> <b> <i> Subtopic Videos/Worksheets/Activity</i> </b></div>
+                <br/>
+                <thead >
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>WorkStream Type</th>
+                        <th>Video/Documents</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contentRec in contentList %}
+                        <tr>
+                            <td> {{contentRec.id}} </td>
+                            <td> {{contentRec.name}}</td>
+                            <td> {{contentRec.description }} </td>
+                            <td>{{contentRec.workstreamType}}</td>
+                             <td>
+                                 <a target="_blank" class="btn btn-success" title="View Detail" style="text-align: center; line-height: initial;" id='dt_action'
+                                        href="{{contentRec.url}}">
+                                     View
+                                </a>
+                             </td>
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+<div id="respond-doubt-modal" class="modal hide">
+    <div>
+        <div class="header">
+            {% if hasResponded == 1 %}
+             <p>Edit Doubt Response</p>
+            {% else %}
+             <p>Respond to {{doubtObj.student.name}}'s Doubt</p>
+            {% endif %}
+        <a class="close close-btn hide" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+        <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+        </div>
+        <form method="POST" id="add_doubt_response_form" action="{{doubtModalActionUrl}}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <ul>
+                 <li><p>Response Text:</p>
+                     <div class="controls text">
+                        <textarea rows="3" cols="20" class="form-control" id="responseText" style="resize: none;"
+										name="responseText" placeholder="Add Response" maxlength="200"
+
+									>{{doubtResponse.text}}</textarea>
+                    </div>
+                 </li>
+                <li>
+                    {% if hasResponded == 1 %}
+                     <p>Update Attachment Type:</p>
+                    {% else %}
+                    <p>Attachment Type:</p>
+                    {% endif %}
+                    <select id="attachmentTypeResponse" onchange="attachmentTypeResponseChanged()"  name="attachmentType" style="float:left;padding-right:0px;">
+                        <option value="url">Url</option>
+                        <option value="image">Image</option>
+                    </select>
+                </li>
+                <br/>  <br/>
+               <li id="urlInputTag">
+                   <p>Url: </p>
+                     <div class="controls text" >
+                        <input type="text" class="text"  name="url" value="{{urlString}}" placeholder="Enter Url" />
+                    </div>
+               </li>
+                <li id="fileInputTag" class="hide">
+                    <p>Select Image(Only png, jpg): </p>
+                     <div class="controls text">
+                        <input type="file" class="file"  name="file" placeholder="Select  Image"/>
+                    </div>
+               </li>
+
+                <input name="doubtId" value="{{ doubtObj.id }}" type="hidden"/>
+                <input name="centerId" value="{{ centerId }}" type="hidden"/>
+                {% if hasResponded == 1 %}
+                <input name="doubtResponseId" value="{{doubtResponse.id}}" type="hidden"/>
+                {% endif %}
+
+            </ul>
+            <br/>  <br/>
+            <div style='float:right;'>
+                <input type="submit" class="btn"  value="Submit"style="width:120px;"  />
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block bottom_scripts %}
+    {{ block.super }}
+    <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+    <script type="text/javascript">
+
+        $('#statusUpdateModal').on('shown.bs.modal', function () {
+              $('#myInput').trigger('focus')
+        })
+     </script>
+
+    <script src="/static/js/select.min.js"></script>
+<script>
+$(document).ready(function() {
+    // $(".inner.clearfix").css("width","85%");
+    $("#myschool_verification").hide()
+
+	{% if tab == 'everification' %}
+		<!--$('.nav-tabs a[href="#evDiv"]').tab('show');-->
+		$("#myschool_verification").show();
+		getLocation();
+	{% endif %}
+
+	{% if tab == 'internet' %}
+		<!--$('.nav-tabs a[href="#internateAndGeoDiv"]').tab('show');-->
+		$("#myschool_verification").show();
+		getLocation();
+	{% endif %}
+
+	{% if tab == 'visual_verification' %}
+		<!--$('.nav-tabs a[href="#visualDiv"]').tab('show');-->
+		$("#myschool_verification").show()
+		getLocation();
+	{% endif %}
+
+
+});
+function myschoolVerifydiv(myobj){
+    $("#myschool_verification").show();
+    getLocation();
+}
+
+
+function validateNumber(e) {
+	if(!((e.keyCode > 95 && e.keyCode < 106) || (e.keyCode > 47 && e.keyCode < 58) || e.keyCode == 8 || e.keyCode == 9)) {
+        return false;
+      }
+}
+
+
+function validate(file) {
+    var id = file.id
+    var ext = file.value.split(".");
+    ext = ext[ext.length-1].toLowerCase();
+    var arrayExtensions = ["jpg" , "jpeg", "png", "bmp", "pdf"];
+
+    if (arrayExtensions.lastIndexOf(ext) == -1) {
+        alert("File Format Not Supported. Attach jpg, jpeg, png, pdf type Attachment.");
+        $("#"+id).val("");
+    }
+    var fileSize = file.files[0].size/1024/1024;
+    if (fileSize > 3) {
+        alert('Upload file which is less than 3 MB size');
+        $("#"+id).val("");
+        <!--$(file).val(''); //for clearing with Jquery-->
+    }
+}
+
+
+$(':input').keyup(function() {
+	if ($("#formId")[0].checkValidity()) {
+	$("#submitId")[0].disabled = false;
+	$("#submitId").css({'background':'rebeccapurple', 'color':'white'});
+	  } else {
+	  $("#submitId")[0].disabled = true;
+	  $("#submitId").css({'background':'whitesmoke', 'color':'#555'});
+	  }
+});
+
+var x = document.getElementById("demo");
+$(document).ready(function(){
+
+	$(function() {
+	    $('#submitId').attr('disabled', 'disabled');
+	});
+
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+	var min = today.getMinutes();
+	var hrs = today.getHours();
+	var sec = today.getSeconds();
+
+	if(min<10) {
+		min = '0'+min
+	}
+	if(hrs<10) {
+		hrs = '0'+hrs
+	}
+	if(dd<10) {
+	    dd = '0'+dd
+	}
+	if(mm<10) {
+	    mm = '0'+mm
+	}
+	$("#dateId").val(yyyy + '-' + mm + '-' + dd);
+	today = yyyy + '-' + mm + '-' + dd + ' ' + hrs + ':' + min + ':' + sec;
+	$('input[id="dateId1"]').val(today);
+	$(".mapClass").css('display','block');
+
+
+
+	$('#visualDiv_submit').click(function(){
+        <!--if($('#school_pic').val() == ''  || $('#class_pic').val() == ''  ||  $('#permission_letter').val() == '' ){-->
+        <!--alert_message('please upload file');-->
+        <!--}-->
+
+        if($('#school_pic').val() != ''  && $('#class_pic').val() != ''  &&  $('#permission_letter').val() != '' ){
+         alert_message1('File upload in progress!');
+        }
+
+	});
+		$('#evDiv_submit').click(function(){
+        if($('#noOfTeachers').val() == ''  || $('#noOfStudents').val() == ''  ||  $('#headMasterName').val() == '' ){
+        alert_message('please enter all the details');
+        }
+
+        if($('#noOfTeachers').val() != ''  && $('#noOfStudents').val() != ''  &&  $('#headMasterName').val() != '' ){
+         alert_message1('submitted successfully!');
+        }
+
+	});
+
+
+	function alert_message(msg){
+            var s = "<div class='alert alert-danger alert-dismissable'><button type = 'button' class = 'close' data-dismiss = 'alert' aria-hidden = 'true'>&times;</button><strong>Warning!  </strong>"+msg+"</div>";
+	       $("#message").html(s);
+            }
+
+    function alert_message1(msg){
+            var s = "<div class='alert alert-success alert-dismissable'><button type = 'button' class = 'close' data-dismiss = 'alert' aria-hidden = 'true'>&times;</button><strong>Success!  </strong>"+msg+"</div>";
+	       $("#message1").html(s);
+            }
+
+
+
+ });
+
+function attachmentTypeResponseChanged() {
+        value = $('#attachmentTypeResponse').val()
+        if (value == 'image') {
+            $('#urlInputTag').hide()
+            $('#fileInputTag').show()
+        }
+        else{
+            $('#fileInputTag').hide()
+            $('#urlInputTag').show()
+        }
+}
+
+function getLocation() {
+	var options = {
+	        enableHighAccuracy: true,
+	        maximumAge: 0
+	      };
+	$("#hideDiv").hide();
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError, options);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPosition(position) {
+	var latitude = position.coords.latitude;
+	var longitude = position.coords.longitude;
+
+	$(".mapClass").hide();
+    $("#latitude").val(latitude);
+    $("#longitude").val(longitude);
+    //getAddress(latitude, longitude);
+}
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            $("#errorMsg").css('display','block');
+            $("#errorMsg").text("Please enable the location to access the page");
+           // $("#errorMsg").append("<br><p onclick='reloadPage()'>click here</p>");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            $("#errorMsg").css('display','block');
+            $("#errorMsg").text("Location information unavailable");
+            break;
+        case error.TIMEOUT:
+        	$("#errorMsg").css('display','block');
+            $("#errorMsg").text("The request to get user location timed out");
+            break;
+        case error.UNKNOWN_ERROR:
+        	$("#errorMsg").css('display','block');
+        	$("#errorMsg").text("An unknown error occurred.");
+            break;
+    }
+}
+function reloadPage() {
+console.log('dsdsds');
+alert("dhfsdfkdsshfkjh");
+		window.location.reload(true);
+}
+function getAddress (latitude, longitude) {
+
+	return new Promise(function (resolve, reject) {
+        var request = new XMLHttpRequest();
+
+        var method = 'GET';
+        var gkey = 'AIzaSyADqJvBMuoeUfYoTP_9P-7LbVAqmGedKLs';
+        var url = 'https://maps.googleapis.com/maps/api/geocode/json?key=' + gkey + '&latlng=' + latitude + ',' + longitude + '&sensor=true';
+        console.log("getAddress url " + url);
+        var async = true;
+
+        request.open(method, url, async);
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                if (request.status == 200) {
+                    var data = JSON.parse(request.responseText);
+                    var address = data.results[0];
+                    var zip_address = address.address_components;
+                    var zipcode = zip_address[zip_address.length - 1].long_name;
+                    $("#locationName").val(address.formatted_address);
+                    $("#id_postal_code").val(zipcode);
+                    $("#locationName").prop('readonly',true);
+                    resolve(address);
+                }
+                else {
+                    reject(request.status);
+                }
+            }
+        };
+        request.send();
+    });
+};
+
+</script>
+
+{% endblock %}

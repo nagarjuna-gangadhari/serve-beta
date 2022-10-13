@@ -1,0 +1,1099 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block head_title %}eVidyaloka - Admin dashboard{% endblock %}
+
+{% block doc_ready %}
+    evd.after_save = function(){
+            $(this).hide();
+        }
+   window.evd.pre_add_course = function(){
+                    $("#add-course-modal select").each(function(){
+                        if($(this).children(":selected").val() == ""){
+                            $(this).attr({"rel":"tooltip", "data-placement":"right", "title":"select any one of these"}).tooltip("show");
+                            return false;
+                        }
+                    });
+
+                    var planned_topics = "",
+                        enroll_students = "",
+                        topics_len =  $("select#planned_topics").children(":selected").length,
+                        students_len = $("select#enroll_students").children(":selected").length;
+                    $("select#planned_topics").children(":selected").each(function(index, val){
+                        planned_topics += $(this).val() + (index < (topics_len - 1) ? ";" : "");
+                    });
+                    $("input[name='planned_topics']").val(planned_topics);
+                    $("select#enroll_students").children(":selected").each(function(index, val){
+                        enroll_students += $(this).val() + (index < (students_len - 1) ? ";" : "");
+                    });
+                    $("input[name='students']").val(enroll_students);
+                }
+                window.evd.after_add_course = function(){
+                    $("#add-course-modal").modal("hide");
+                    evd.show_msg("Added course successfully")
+                }
+
+    evd.assign_center = function(resp){
+        var $center = $(".sel_center_class"),
+        	$center_text = $("#sel_center_id").val(),
+            $admin = $(".sel_admin_class_val"),
+            $admin_text = $(".sel_admin_class").val(),
+            $assistant = $(".sel_assistant_class_val"),
+            $assistant_text = $(".sel_assistant_class").val(),
+            $field_coordinatator = $(".sel_fcd_class_val"),
+            $field_coordinatator_text = $(".sel_fcd_class").val(),
+            $delivery_coordinator = $(".sel_dc_class_val"),
+            $delivery_coordinator_text = $(".sel_dc_class").val(),
+            $partner = $(".sel_partner_class_val"),
+            $partner_text = $(".sel_partner_class").val(),
+            removed_center_admin_value = "";
+        if(resp == "added" || resp =="Both-added"){
+            $center.removeClass("no-admin");
+            $admin.removeClass("no-assigned").css({"color":"#333"});
+            evd.show_msg($center_text +" is assigned succesfully to "+ $admin_text);
+            $("#adminId").css('display','block');
+            $("#adminId").attr({"href": "/assign_center?flag=Admin&center_id="+$(".sel_center_class").val()+"&user_id=None"});
+            $("#adminId").children('span').text('Remove');
+            if(removed_center_admin_value == "")
+                center_admin_value = $admin.val();
+            else
+                center_admin_value = removed_center_admin_value;
+            if(resp =="Both-added"){
+            }
+        }
+        else if(resp == "removed" || resp =="Both-removed"){
+            $center.addClass("no-admin");
+            evd.show_msg("Center admin for "+ $center_text + " is removed");
+            $admin.val('');
+            $(".sel_admin_class").val('');
+            $("#adminId").css('display','none');
+            center_admin_value = "";
+        }
+        if(resp == "Assistant-added"){
+            $assistant.removeClass("no-assigned");
+            evd.show_msg($center_text +" is assigned succesfully to "+ $assistant_text +" as Assistant");
+            $("#assignId").css('display','block');
+            $("#assignId").attr({"href": "/assign_center?flag=Assistant&center_id="+$(".sel_center_class").val()+"&assistant_id=None"});
+            $("#assignId").children('span').text('Remove');
+        }else if(resp == "Assistant-removed"){
+            $assistant.addClass("no-assigned");
+            evd.show_msg("Center Assistant for "+ $center_text + " is Removed");
+            $assistant.val('');
+            $(".sel_assistant_class").val('');
+            $("#assignId").css('display','none');
+        }
+        if(resp == "FieldCoordinator-added"){
+            $field_coordinatator.removeClass("no-assigned");
+            evd.show_msg($center_text +" is assigned succesfully to "+ $field_coordinatator_text +" as FieldCoordinator");
+            $("#fcId").css('display','block');
+            $("#fcId").attr({"href": "/assign_center?flag=FieldCoordinator&center_id="+$(".sel_center_class").val()+"&fieldCoordinator_id=None"});
+            $("#fcId").children('span').text('Remove');
+        }else if(resp == "FieldCoordinator-removed"){
+            $field_coordinatator.addClass("no-assigned");
+            evd.show_msg("Center FieldCoordinator for "+ $center_text + " is Removed");
+            $field_coordinatator.val('');
+            $(".sel_fcd_class").val('');
+            $("#fcId").css('display','none');
+        }
+         if(resp == "DeliveryCoordinator-added"){
+            $delivery_coordinator.removeClass("no-assigned");
+            evd.show_msg($center_text +" is assigned succesfully to "+ $delivery_coordinator_text +" as DeliveryCoordinator");
+			$("#dcId").css('display','block');
+            $("#dcId").attr({"href": "/assign_center?flag=DeliveryCoordinator&center_id="+$(".sel_center_class").val()+"&deliveryCoordinator_id=None"});
+            $("#dcId").children('span').text('Remove');
+        }else if(resp == "DeliveryCoordinator-removed"){
+            $delivery_coordinator.addClass("no-assigned");
+            evd.show_msg("Center DeliveryCoordinator for "+ $center_text + " is Removed");
+            $delivery_coordinator.val('');
+            $(".sel_dc_class").val('');
+            $("#dcId").css('display','none');
+        }
+        if(resp == "PartnerAdmin-added"){
+            $partner.removeClass("no-assigned");
+            evd.show_msg($center_text +" is assigned succesfully to "+ $partner_text +" as Partner Admin");
+			$("#partnerId").css('display','block');
+            $("#partnerId").attr({"href": "/assign_center?flag=Partner&center_id="+$(".sel_center_class").val()+"&partner_id=None"});
+            $("#partnerId").children('span').text('Remove');
+        }else if(resp == "Partner-removed"){
+            $partner.addClass("no-assigned");
+            evd.show_msg("Center Partner for "+ $center_text + " is Removed");
+            $partner.val('');
+            $(".sel_partner_class").val('');
+            $("#partnerId").css('display','none');
+        }
+    }
+    window.evd.pre_students_save = function(){
+                    var strengths = "",
+                        weakness = "",
+                        observation = "",
+                        students_len = $("#mystudents form#students-form").find("input.strengths").length;
+                    $("#mystudents form#students-form").find("input.strengths").each(function(index, val){
+                        strengths += $(this).val() + (index < students_len-1 ? ";" : "");
+                    });
+                    $("#mystudents form#students-form").find("input.weakness").each(function(index, val){
+                        weakness += $(this).val() + (index < students_len-1 ? ";" : "");
+                    });
+                    $("##mystudents form#students-form").find("input.observation").each(function(index, val){
+                        observation += $(this).val() + (index < students_len-1 ? ";" : "");
+                    });
+                    $("#mystudents form#students-form input[name='strengths']").val(strengths);
+                    $("#mystudents form#students-form input[name='weakness']").val(weakness);
+                    $("#mystudents form#students-form input[name='observation']").val(observation);
+                }
+                window.evd.after_students_save = function(){
+                    $("#mystudents").modal("hide");
+                    evd.show_msg("Modified students successfully");
+                }
+    evd.pre_stu_filter = function(){
+                     $("#mystudents p.title").remove();
+                     $("#mystudents p.no-students").remove();
+                     $("#mystudents table").remove();
+                     $("#mystudents").find("a[rel='submit']").hide();
+                     $("#mystudents").append('<img style="display:block;margin:10px auto" src="/static/images/loader.gif" />');
+                }
+                evd.after_stu_filter = function(resp){
+                    var len = resp.length;
+                    $("#mystudents img").remove();
+                    if(len != 0) {
+                        var students = resp;
+                        $("<p class='title' style='padding:10px 0px 0px 10px;'>Students for the selected offering are:</p>").insertAfter($("#mystudents .select-box"));
+                        var student_html = '<table class="current_session_table">'+
+                                                '<thead>'+
+                                                    '<tr>'+
+                                                        '<th style="width:150px">Name</th>'+
+                                                        '<th>Strengths</th>'+
+                                                        '<th>Weakness</th>'+
+                                                        '<th>Observation</th>'+
+                                                    '<tr>'+
+                                                '</thead>'+
+                                                '<tbody>';
+                        var ids = "";
+                        for(var index in students){
+                            student = students[index];
+                            ids += student.id + (index < students.length-1 ? ";" : "");
+                            student_html += '<tr><td><div class="controls text"><p>' + student.name + '</p></div></td>'+
+                                                '<td><div class="controls text"><input type="text" class="strengths" value="' + student.strengths + '" /></div></td>'+
+                                                '<td><div class="controls text"><input type="text" class="weakness"  value="' + student.weakness + '"/></div></td>'+
+                                                '<td><div class="controls text"><input type="text" class="observation"  value="' + student.observation + '"/></div></td></tr>';
+                        }
+                        student_html += "</tbody></table>";
+                        $("#mystudents form#students-form").append(student_html);
+                        $("#mystudents form#students-form input[name='student_ids']").val(ids);
+                        $("#mystudents").find("a[rel='submit']").show();
+                    }
+else {
+                        $("<p style='padding:10px 0px 0px 10px;' class='no-students'>The selected offering has no students assigned</p>").insertAfter($("#mystudents .select-box"));
+                    }
+                }
+
+{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="/static/css/admindash.css" />
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+
+    {% if is_delivery %}
+    <style>
+        .contributions{
+            display : none !important;
+        }
+        .copyhover{
+            cursor:pointer;
+            color:green;
+        }
+    </style>
+    {% endif %}
+<style>
+  .inner{
+     width: 1040px;
+   }
+   .ui-autocomplete {
+   	 overflow-y: auto;
+   	 max-height:400px;
+   }
+   .ui-autocomplete-loading {
+   	 background:url('/static/img/facebook_loading.gif') no-repeat right center ;
+   }
+
+
+   @media only screen and (max-width: 480px) and (min-width: 0px)  {
+   .cont-align {
+       <!--position: absolute !important;-->
+    width: 93% !important;
+    overflow-x: visible !important;
+    }
+
+
+    .page-align{
+    margin-right: 10%;
+    }
+
+     .wid-align{
+     width: 104% !important;
+     margin-left: -2%;
+     }
+
+   }
+     @media only screen and (max-width: 480px) and (min-width: 380px)  {
+
+     }
+
+    @media only screen and (max-width: 768px) and (min-width: 480px)  {
+    .cont-align {
+       <!--position: absolute !important;-->
+    width: 93% !important;
+    overflow-x: visible !important;
+    }
+
+    .page-align{
+    margin-right: 10%;
+    }
+
+     .wid-align{
+     width: 104% !important;
+     margin-left: -2%;
+     }
+
+
+
+    }
+
+    @media only screen and (max-width: 1024px) and (min-width: 768px)  {
+
+
+    .wid-align{
+     width: 104% !important;
+     }
+
+     .container {
+    width: 100%;
+    }
+
+    }
+
+</style>
+
+<style>
+    .ec-checkbox.check-lg .ec-checkbox__control {
+        width: 28px;
+        height: 28px;
+    }
+    .ec-checkbox__control {
+        width: 24px;
+        height: 24px;
+        border: 1px solid #ccc;
+        position: relative;
+        margin-right: 10px;
+        border-radius: 2px;
+        -webkit-transition: .3s;
+        -o-transition: .3s;
+        transition: .3s;
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 auto;
+        flex: 0 0 auto;
+    }
+</style>
+
+    <style>
+       .myInput{
+            display: inline;
+            max-width: 70%;
+            margin-bottom:15px !important;
+       }
+       .myLabel {
+            min-width : 25% !important;
+            width:20px;
+            vertical-align:middle;
+            <!--text-align: end;-->
+       }
+       .myroleLabel{
+            font-size: 13px;
+            font-family: 'PlutoCondRegularItalic' !important;
+            padding-left: 40px  !important;
+            pointer-events: auto;
+       }
+
+ </style>
+{% endblock %}
+
+{% block body_container %}
+
+
+
+<section style="background-color:white;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mt-4">
+        <div style="border:1px solid #efefef;padding:16px;" >
+          <h4 class="mb-3">My Schools : {{ myschools_count }}</h4>
+          <p>
+            These are the list of Schools which were eligible and sponsored by you.
+          </p>
+          <a href="/partner/myschools/" class="btn btn-success" style="padding-top: 9px;">Go To Schools</a>
+        </div>
+      </div>
+      <div class="col-md-4 mt-4">
+        <div style="border:1px solid #efefef;padding:16px;" >
+          <h4 class="mb-3">My Centers : {{ mycenters_count }}</h4>
+          <p>
+            These are the list of Centers of Schools which were sponsored by you and Active.
+          </p>
+          <a href="/partner/centers/" class="btn btn-success"  style="padding-top: 9px;">Go To Centers</a>
+        </div>
+      </div>
+      <div class="col-md-4 mt-4">
+        <div style="border:1px solid #efefef;padding:16px;" >
+          <h4 class="mb-3">My Donations</h4>
+          <p>
+            How much Donations you contributed towards any School or Center or Student
+          </p>
+          <a href="/myevidyaloka/contributions/" class="btn btn-success"  style="padding-top: 9px;">Go To Donations</a>
+        </div>
+      </div>
+    </div> <!-- END row-->
+  </div> <!-- END container-->
+</section>
+
+
+{%if not is_partner_funding%}
+<div class="col-sm-12 col-md-12 col-lg-12" style="background-color:white;margin-top: 10px;padding-top: 15px;">
+    <div class="col-sm-6 col-md-6 col-lg-6">
+        <fieldset>
+            <lagend><h4><b>Update Center Incharges</b></h4></lagend>
+            <hr/>
+            <label class="errLabel" style="color:red;display:none;">Please select center</label>
+            <div style="display:block;">
+                <div class="col-md-1">
+                    <label>Center:</label>
+                </div>
+                <div class="col-md-3 page-align">
+                    <input id="sel_center_id" class="form-control" placeholder="Search Center" title="Search Center" onkeyup="hideErrorLabel();" />
+                    <input type="hidden" class="make-admin assign-center sel_center_class" type="text" value="" data-language="">
+                </div>
+
+                <div class="col-md-2" style="padding:0px;width: 125px;">
+                    <label>Admin:</label>
+                </div>
+                <div class="col-md-4 page-align">
+                    <input class="form-control sel_admin_class" type="text" value="" placeholder="Search Admin" title="Search Admin" onkeyup="checkCenter(this,'adminId')"/>
+                    <input type="hidden" value="" class="make-admin assign-admin sel_admin_class_val" type="text" value="" data-related="" data-language="">
+                </div>
+                <div class="col-md-1" align="left">
+                    <a href="#assign" id="adminId" rel="ajax-link" callback="assign_center" style="padding-top:10px;display:none">
+                        <span class="ajax-button-label" data-loading="processing">confirm</span>
+                    </a>
+                </div>
+                <div class="col-md-4"></div>
+                <div class="col-md-2" style="padding:0px;width: 125px;">
+                    <label>Assistant:</label>
+                </div>
+                <div class="col-md-4 page-align">
+                    <input class="form-control sel_assistant_class" type="text" value="" placeholder="Search Assistant" title="Search Assistant" onkeyup="checkCenter(this,'assignId')" />
+                    <input type="hidden" class="make-admin assign-assistant sel_assistant_class_val" value="" data-related="" data-language="" >
+                </div>
+                <div class="col-md-1" align="left">
+                <a href="#assign" id="assignId" rel="ajax-link" callback="assign_center" style="display:none;padding-top:10px">
+                        <span class="ajax-button-label" data-loading="processing">confirm</span>
+                    </a>
+                </div>
+                <div class="col-md-4"></div>
+                <div class="col-md-2" style="padding:0px;width: 125px;">
+                    <label>Field Coordinator:</label>
+                </div>
+                <div class="col-md-4 page-align">
+                    <input class="form-control sel_fcd_class" type="text" value="" placeholder="Search Field Coordinator" title="Search Field Coordinator" onkeyup="checkCenter(this,'fcId')"/>
+                    <input type="hidden" class="make-admin assign-field sel_fcd_class_val" value="" data-related="" data-language="">
+                </div>
+                <div class="col-md-1" align="left">
+                    <a href="#assign" id="fcId" rel="ajax-link" callback="assign_center" style="display:none;">
+                        <span class="ajax-button-label" data-loading="processing">confirm</span>
+                    </a>
+                </div>
+
+                <div class="col-md-4"></div>
+                <div class="col-md-2" style="padding:0px;width: 125px;">
+                    <label>Delivery Coordinator:</label>
+                </div>
+                <div class="col-md-4 page-align">
+                    <input class="form-control sel_dc_class" type="text" value="" placeholder="Search Delivery Coordinator" title="Search Delivery Coordinator" onkeyup="checkCenter(this,'dcId')"/>
+                    <input type="hidden" class="make-admin assign-delivery sel_dc_class_val" data-related="" data-language="" value="">
+                </div>
+                <div class="col-md-1" align="left">
+                     <a href="#assign" id="dcId" rel="ajax-link" callback="assign_center" style="display:none;">
+                        <span class="ajax-button-label" data-loading="processing">confirm</span>
+                    </a>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6">
+        <fieldset>
+            <lagend><h4><b>User Role Update</b></h4></lagend>
+            <hr/>
+            <div class="row">
+                <form method="post" action="/partner/user_save_roles/" id="id_assign_role_to_user">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <label for="id_search_user" class="myLabel">User</label>
+                            <input id="id_search_user" class="myInput form-control" type="text" name="search_user" value="" />
+
+                            <input type="hidden" class="sel_user_list_val" name="selected_user" type="text" value="" data-language="">
+                        </div>
+                        {% csrf_token %}
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            {% for role in roles %}
+                                <div>
+                                    <div class='row'>
+                                        <p class='role_ele'>
+                                            <input type="checkbox" id="{{ role.name|removespace }}" name='roles' value={{ role.id }} {% if role.id in pref_roles %} checked {% endif %} />
+                                            <label for="{{ role.name|removespace }}" class='myevd_label' style="font-size: 13px !important; font-family: 'Arial' !important; padding-left: 40px  !important">{{ role.name }}</label>
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="col-md-offset-5 col-sm-offset-5 col-sm-4 col-md-4">
+                            <button type="submit" class="btn btn-sm btn-success" name="assign_role_to_user" id="submit_assign_role_to_user" disabled="disabled" style="margin-bottom:16px;" >Update</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+    </div>
+</div>
+{%endif%}
+
+<div class="col-sm-12 col-md-12 col-lg-12" style="background-color:#fff;margin-top: 10px;padding-top: 15px;padding-left: 25px;">
+    <fieldset>
+        <lagend><h4><b>Organization Details</b></h4></lagend>
+        <hr/>
+        <div class="row">
+            <form id="id_org_details" method="post" action="/partner/partner_adminpage/">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_org_name" class="myLabel">Name of Organization</label>
+                        <input id="id_org_name" class="myInput form-control" type="text" name="org_name" value="{{partner.name_of_organization}}" />
+                    </div>
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_address" class="myLabel">Address</label>
+                        <input id="id_address" type="text" name="address" value="{{partner.address}}" class="myInput form-control" />
+                    </div>
+                </div>
+                {% csrf_token %}
+                {% if is_partner_delivery or is_partner_volunteer %}
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_website_address" class="myLabel">Website Address</label>
+                        <input id="id_website_address" type="text" name="website_address" value="{{partner.delivery_partnerobj.all.0.website_address}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_office_phone" class="myLabel">Office Phone</label>
+                        <input id="id_office_phone" type="text" name="office_phone" value="{{partner.delivery_partnerobj.all.0.office_phone}}" class="myInput form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_email" class="myLabel">Email</label>
+                        <input id="id_email" type="text" name="email" value="{{partner.email}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_org_type" class="myLabel">Type of Organization</label>
+                        <select id="id_org_type" name="org_type" class="myInput form-control" style="width:100%">
+                            {% if is_partner_volunteer %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "Corporate" %}<option value="Corporate" selected="selected">Corporate</option> {% else %} <option value="Corporate">Corporate</option> {% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "AcademicInstitution" %}<option value="Academic Institution" selected="selected">Academic Institution</option> {% else %} <option value="Academic Institution">Academic Institution</option> {% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "VolunteeringCommunity" %}<option value="Volunteering Community" selected="selected">Volunteering Community</option> {% else %} <option value="Volunteering Community">Volunteering Community</option> {% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "RegionalCommunity" %}<option value="Regional Community" selected="selected">Regional Community</option> {% else %} <option value="Regional Community">Regional Community</option> {% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "LinguisticCommunity" %}<option value="Linguistic Community" selected="selected">Linguistic Community</option> {% else %}<option value="Linguistic Community">{% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "SpecialInterestGroup" %}<option value="Special Interest Group" selected="selected">Special Interest Group</option>{% else %}<option value="Special Interest Group">Special Interest Group</option>{% endif %}
+                            {% elif is_partner_delivery %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "Trust" %} <option value="Trust"  selected="selected">Trust</option> {% else %} <option value="Trust">Trust</option> {% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "Society" %} <option value="Society" selected="selected">Society</option> {% else %} <option value="Society">Society</option> {% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "Section8" %} <option value="Section 8" selected="selected">Section 8</option> {% else %} <option value="Section 8">Section 8</option> {% endif %}
+                            {% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "Others" %}<option value="Others" selected="selected">Others</option> {% else %} <option value="Others">Others</option> {% endif %}
+                        </select>
+                    </div>
+                </div>
+
+                {% if is_partner_delivery %}
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_date_of_reg" class="myLabel">Date of Registration</label>
+                        <input id="id_date_of_reg" type="text" name="date_of_reg" value="{{partner.delivery_partnerobj.all.0.date_of_reg}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_org_reg_place" class="myLabel">Place of Registration</label>
+                        <input id="id_org_reg_place" type="text" name="org_reg_place" value="{{partner.delivery_partnerobj.all.0.place_of_reg}}" class="myInput form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_reg_number" class="myLabel">Registration Number</label>
+                        <input id="id_reg_number" type="text" name="reg_number" value="{{partner.delivery_partnerobj.all.0.reg_number}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_number" class="myLabel">12A/80G Number</label>
+                        <input id="id_number" type="text" name="number" value="{{partner.delivery_partnerobj.all.0.number}}" class="myInput form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_fcra_reg_number" class="myLabel">FCRA Regn. Number</label>
+                        <input id="id_fcra_reg_number" type="text" name="fcra_reg_number" value="{{partner.delivery_partnerobj.all.0.fcra_reg_number}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_fcra_acc_number" class="myLabel">FCRA Acc Number</label>
+                        <input id="id_fcra_acc_number" type="text" name="fcra_acc_number" value="{{partner.delivery_partnerobj.all.0.fcra_acc_number}}" class="myInput form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_bank_name" class="myLabel">Bank Name</label>
+                        <input id="id_bank_name" type="text" name="bank_name" value="{{partner.delivery_partnerobj.all.0.bank_name}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_ifsc_code" class="myLabel">IFSC Code</label>
+                        <input id="id_ifsc_code" type="text" name="ifsc_code" value="{{partner.delivery_partnerobj.all.0.ifsc_code}}" class="myInput form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_acc_name" class="myLabel">Account Holder Name</label>
+                        <input id="id_acc_name" type="text" name="acc_name" value="{{partner.delivery_partnerobj.all.0.acc_holder_name}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_acc_number" class="myLabel">Account Number</label>
+                        <input id="id_acc_number" type="text" name="acc_number" value="{{partner.delivery_partnerobj.all.0.acc_number}}" class="myInput form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                        <label for="id_acc_type" class="myLabel">Type Of Account</label>
+                        <input id="id_acc_type" type="text" name="acc_type" value="{{partner.delivery_partnerobj.all.0.type_of_acc}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-md-offset-5 col-sm-offset-5 col-sm-4 col-md-4">
+                        <button type="submit" class="btn btn-success" name="submit_ord_details" id="submit_ord_details" style="margin-bottom:16px;" >Update</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </fieldset>
+</div>
+
+<div class="col-sm-12 col-md-12 col-lg-12" style="background: #fff;padding: 15px 15px 15px 25px;margin-top: 10px;">
+    <fieldset>
+        <lagend><h4><b>Volunteer Resource Mobilization</b></h4></lagend>
+        <hr/>
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <p><button class="btn btn-sm" onclick='$("#id_vol_resource_mobil").show()' style="margin-bottom:7px" >Click here</button> to get URL</p>
+            <div id="id_vol_resource_mobil" class="col-sm-12 col-md-12 col-lg-12" style="border: 1px solid #a0b3b0;border-radius: 5px;">
+                <p style="padding: 5px 16px 0px 0px;text-align:center;"> <span id="id_url_text">https://www.evidyaloka.org/volunteer/p/{{partner.id}} </span><i class="fa fa-clipboard pull-right copyhover" onclick="copyurl()" title="Copy to Clipboard" aria-hidden="true"></i></p>
+            </div>
+        </div>
+        <div class="alert alert-success col-sm-12 col-md-12 col-lg-12" id="success-alert" style="margin-top: 7px;">
+          <strong>Success! </strong>
+          Link is copied to the Clipboard...!!!
+        </div>
+    </fieldset>
+</div>
+
+{% endblock %}
+
+{% block bottom_scripts %}
+    {{ block.super }}
+    <script type="text/javascript" src="/static/js/calendar/jquery-ui-1.8.17.custom.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.tmpl.min.js"></script>
+    <!--<script type="text/javascript" src="/static/js/admindash.js"></script>-->
+
+    <script type="text/javascript" src="/static/js_new/jquery-ui.min.js"></script>
+    <script>
+        function copyurl() {
+            var inp =document.createElement('input');
+            document.body.appendChild(inp)
+            var copyText = document.getElementById("id_url_text");
+            inp.value = copyText.textContent
+            inp.select();
+            document.execCommand('copy',false);
+            inp.remove();
+            $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+                $("#success-alert").slideUp(1000);
+            });
+        }
+    </script>
+    <script>
+
+    $(document).ready(function(){
+    $(".inner.clearfix").css("width","85%");
+    $("#success-alert").hide();
+    $("#id_vol_resource_mobil").hide()
+    	getUsersByRole(".sel_admin_class", "2", "normal", "#adminId", "user_id", "Admin");
+    	getUsersByRole(".sel_assistant_class", "6", "normal", "#assignId", "assistant_id", "Assistant");
+    	getUsersByRole(".sel_partner_class", "2", "partner", "#partnerId", "partner_id", "Partner");
+    	getUsersByRole(".sel_fcd_class", "11", "normal", "#fcId", "fieldCoordinator_id", "FieldCoordinator");
+    	getUsersByRole(".sel_dc_class", "12", "normal", "#dcId", "deliveryCoordinator_id", "DeliveryCoordinator");
+        callAutoComplete('sel_center_id');
+
+    });
+
+    function hideErrorLabel(){
+    	$(".errLabel").hide();
+    }
+
+    function getUsersByRole(class_name, role_id, type, btnId, var_param, flag_type){
+    	<!--var ajax_url = '/v2/ajax/getSelUsers?role_id=' + role_id + '&type=' + type;-->
+    	var ajax_url = '/partner/ajax/get_my_select_users?role_id=' + role_id;
+   		$(class_name).autocomplete({
+        	source: function(request, response){
+        		$.getJSON(ajax_url, { center_id: $(".sel_center_class").val(), term: $(class_name).val() }, response);
+        		<!--$.getJSON(ajax_url, response);-->
+        	},
+            minLength: 1,
+            select: function(event, ui) {
+            	hideCRButtons();
+            	$(class_name + '_val').val(ui.item.id);
+               	if ((ui.item.center_id).toString().indexOf($(".sel_center_class").val())>-1){
+                       $(btnId).children('span').text('Confirm');
+                       $(btnId).attr({"href": "/assign_center?flag="+flag_type+"&center_id="+$(".sel_center_class").val()+"&"+var_param+"="+$(class_name+'_val').val()+""});
+                       $(btnId).show();
+               	}else{
+                       $(btnId).children('span').text('Confirm');
+                       $(btnId).attr({"href": "/assign_center?flag="+flag_type+"&center_id="+$(".sel_center_class").val()+"&"+var_param+"="+$(class_name+'_val').val()+""});
+                       $(btnId).show();
+               	}
+
+	         },
+	         change: function(event, ui){
+	        	 if(ui.item){
+	        		 return;
+	        	 }else{
+	        		 $(this).val('');
+	        		 $(class_name + '_val').val('');
+	        		 hideCRButtons();
+	        	 }
+	         }
+         });
+    }
+
+    function checkCenter(value,Id) {
+    	$(".errLabel").hide();
+     	if($(".sel_center_class").val()=='' || $(".sel_center_class").val()==null || $(".sel_center_class").val()==undefined) {
+    		$(".errLabel").show();
+    		$(value).val('');
+
+    	}
+
+     	if($(value).val()=='' || $(value).val() == null || $(value).val() == undefined) {
+     		$("#"+Id).hide();
+     	}else{
+     		$("#"+Id).show();
+     	}
+
+    }
+
+
+
+    function clearInput(class_name) {
+    	$("."+class_name).val('');
+    }
+
+    function hideCRButtons(){
+    	if ($(".sel_admin_class_val").val()==null || $(".sel_admin_class_val").val()=='' || $(".sel_admin_class_val").val()==undefined){
+    		$("#adminId").hide();
+    	}if ($(".sel_assistant_class_val").val()==null || $(".sel_assistant_class_val").val()=='' || $(".sel_assistant_class_val").val()==undefined){
+    		$("#assignId").hide();
+    	}if ($(".sel_partner_class_val").val()==null || $(".sel_partner_class_val").val()=='' || $(".sel_partner_class_val").val()==undefined){
+    		$("#partnerId").hide();
+    	}if ($(".sel_fcd_class_val").val()==null || $(".sel_fcd_class_val").val()=='' || $(".sel_fcd_class_val").val()==undefined){
+    		$("#fcId").hide();
+    	}if ($(".sel_dc_class_val").val()==null || $(".sel_dc_class_val").val()=='' || $(".sel_dc_class_val").val()==undefined){
+    		$("#dcId").hide();
+    	}
+    }
+
+    function emptyUsers(){
+    	$(".sel_admin_class").val('');
+    	$(".sel_admin_class_val").val('');
+    	$(".sel_assistant_class").val('');
+    	$(".sel_assistant_class_val").val('');
+    	$(".sel_partner_class").val('');
+    	$(".sel_partner_class_val").val('');
+    	$(".sel_fcd_class").val('');
+    	$(".sel_fcd_class_val").val('');
+    	$(".sel_dc_class").val('');
+    	$(".sel_dc_class_val").val('');
+    }
+
+
+
+
+
+    function callAutoComplete(id){
+    	hideCRButtons();
+        $("#"+id).autocomplete({
+            source: "/v2/ajax/getSelCentersBaseOnUser",
+            minLength: 1,
+            select: function(event, ui){
+				$(".sel_center_class").val(ui.item.id);
+				$(".errLabel").hide();
+                if (ui.item.id!==undefined){
+                	$.ajax({
+                    	url : '/v2/ajax/getCenterUsers?center_id=' + ui.item.id,
+                        dataType : 'JSON',
+                        success : function(data){
+                        	$("#partnerId").hide();
+                        	$("#assignId").hide();
+                        	$("#adminId").hide();
+                        	$("#fcId").hide();
+                        	$("#dcId").hide();
+
+                            if (data!=null && data!='' && data!==undefined){
+                            	emptyUsers();
+                                for (i=0;i<data.length;i++){
+                                	if (data[i]['role']=='admin'){
+                                       $(".sel_admin_class").val(data[i]['label']);
+                                       $(".sel_admin_class_val").val(data[i]['value']);
+                                       $("#adminId").children('span').text('Remove');
+                                       $("#adminId").attr({"href": "/assign_center?flag=Admin&center_id="+$(".sel_center_class").val()+"&user_id=None"});
+                                       $("#adminId").show();
+                                    } else if (data[i]['role']=='assistant'){
+                                       $(".sel_assistant_class").val(data[i]['label']);
+                                       $(".sel_assistant_class_val").val(data[i]['value']);
+                                       $("#assignId").children('span').text('Remove');
+                                       $("#assignId").attr({"href": "/assign_center?flag=Assistant&center_id="+$(".sel_center_class").val()+"&assistant_id=None"});
+                                       $("#assignId").show();
+                                    }else if (data[i]['role']=='delivery_partner'){
+                                    	$(".sel_partner_class").val(data[i]['label']);
+                                    	$(".sel_partner_class_val").val(data[i]['value']);
+                                    	$("#partnerId").children('span').text('Remove');
+                                    	$("#partnerId").attr({"href": "/assign_center?flag=Partner&center_id="+$(".sel_center_class").val()+"&partner_id=None"});
+                                        $("#partnerId").show();
+                                    }else if (data[i]['role']=='field_coordinator'){
+                                       	$(".sel_fcd_class").val(data[i]['label']);
+                                       	$(".sel_fcd_class_val").val(data[i]['value']);
+                                       	$("#fcId").children('span').text('Remove');
+                                   		$("#fcId").attr({"href": "/assign_center?flag=FieldCoordinator&center_id="+$(".sel_center_class").val()+"&fieldCoordinator_id=None"});
+                                       	$("#fcId").show();
+                                    }else if (data[i]['role']=='delivery_coordinator'){
+                                       	$(".sel_dc_class").val(data[i]['label']);
+                                       	$(".sel_dc_class_val").val(data[i]['value']);
+                                       	$("#dcId").children('span').text('Remove');
+                                  		$("#dcId").attr({"href": "/assign_center?flag=DeliveryCoordinator&center_id="+$(".sel_center_class").val()+"&deliveryCoordinator_id=None"});
+                                     	$("#dcId").show();
+                                    }
+                               }
+                            }
+                        }
+                    });
+                }
+            },
+            change: function(event, ui){
+            	if (ui.item){
+            		return;
+            	}else{
+            		$(this).val('');
+            		$(".sel_center_class").val('');
+            		emptyUsers();
+            		hideCRButtons();
+
+            	}
+            }
+        });
+    }
+
+
+
+    var autocomplete_data = {
+        source : "/partner/ajax/get_my_users",
+        minLength : 1,
+        autoFocus : true,
+        select : function(event, ui) {
+               $(this).val(ui.item.value);
+               $('.sel_user_list_val').val(ui.item.id);
+               var rolenames = "{{roles|getnames|safe}}";
+               rolenames = rolenames.replace(/'/g, '"');
+               var myroles = JSON.parse(rolenames)
+               for(i=0; i<myroles.length;i++){
+                    $('#'+myroles[i]).removeAttr('checked');
+               }
+               if(ui.item.roles){
+                    var roles = ui.item.roles.split(',')
+                    for(r=0; r<roles.length;r++) {
+                        document.getElementById(roles[r].replace(/\s+/g,'').trim()).checked = true;
+                        <!--$('#'+roles[r].replace(/\s+/g,'').trim()).attr('checked','checked');-->
+                    }
+                }
+                $("#submit_assign_role_to_user").removeAttr('disabled');
+         },
+       change : function(event, ui) {
+             if (ui.item) {
+                    return;
+             }
+             else {
+                $(this).val('');
+                $('.sel_user_list_val').val('');
+                var rolenames = "{{roles|getnames|safe}}";
+                rolenames = rolenames.replace(/'/g, '"');
+                var myroles = JSON.parse(rolenames)
+                for(i=0; i<myroles.length;i++){
+                   $('#'+myroles[i]).removeAttr('checked');
+                }
+                $("#submit_assign_role_to_user").attr('disabled','disabled');
+             }
+          }
+    }
+
+    $('#id_search_user').click(function(){
+
+        $(this).autocomplete(autocomplete_data)
+     });
+
+    </script>
+
+<script>
+    $(document).ready(function(){
+        $("select.make-admin").change(function(){
+                    var $assign_center = $("select.assign-center option:selected"),
+                        $assign_teacher = $("select.assign-admin option:selected"),
+                        $assign_assistant = $("select.assign-assistant option:selected");
+                    	$assign_fieldCoordinator = $("select.assign-field option:selected");
+                    	$assign_deliveryCoordinator = $("select.assign-delivery option:selected");
+                    	$assign_partner = $("select.assign-partner option:selected");
+                    if($(this).val() != "None" && $(this).siblings().eq(0).val()!= "None")
+                    {
+
+                         $(this).siblings("[rel='ajax-link']").fadeIn("fast").attr({"href": "/assign_center?center_id="+$assign_center.val()+"&user_id="+$assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+                    }
+                    else{
+                        $(this).siblings("[rel='ajax-link']").hide();
+                    }
+                });
+
+                $("select.assign-center").change(function(){
+                    var $assign_center = $("select.assign-center option:selected");
+                    var selected_index = $(this).children(":selected").index(),
+                        selected = $(this).children(":selected"),
+                        selected_sibling = $(this).siblings().eq(0).children().eq(selected_index);
+                    $(this).siblings().eq(1).children().removeAttr("selected");
+                    if(center_map[selected.text()] == undefined ){
+                        $(this).siblings().eq(1).children("option[value='None']").attr({"selected": "selected"});
+                        $(this).siblings().eq(1).attr("title","Select Admin");
+                    }
+                    else{
+                        $(this).siblings().eq(1).children("[data-related='"+center_map[selected.text()]+"']").attr({"selected": "selected"});
+                        $(this).siblings().eq(1).attr("title",""+center_map[selected.text()]+"");
+                    }
+                    if(center_assistant_map[selected.text()] == undefined ){
+                        $("select.assign-assistant").children("option[value='None']").attr({"selected": "selected"});
+                        $('.assign-assistant').attr("title","Select Assistant");
+                    }
+                    else{
+                        $("select.assign-assistant").children("[data-related='"+center_assistant_map[selected.text()]+"']").attr({"selected": "selected"});
+                    	$('.assign-assistant').attr("title",""+center_assistant_map[selected.text()]+"");
+                    }
+                    if(center_partner_map[selected.text()] == undefined ){
+                        $("select.assign-partner").children("option[value='None']").attr({"selected": "selected"});
+                        $('.assign-partner').attr("title","Select Partner");
+                    }
+                    else{
+                        $("select.assign-partner").children("[data-related='"+center_partner_map[selected.text()]+"']").attr({"selected": "selected"});
+                        $('.assign-partner').attr("title",""+center_partner_map[selected.text()]+"");
+                    }
+                    if(center_fieldCoordinator_map[selected.text()] == undefined ){
+                        $("select.assign-field").children("option[value='None']").attr({"selected": "selected"});
+                        $('.assign-field').attr("title","Select Field Coordinator");
+                    }
+                    else{
+                        $("select.assign-field").children("[data-related='"+center_fieldCoordinator_map[selected.text()]+"']").attr({"selected": "selected"});
+                        $('.assign-field').attr("title",""+center_fieldCoordinator_map[selected.text()]+"");
+                    }
+                    if(center_deliveryCoordinator_map[selected.text()] == undefined ){
+                        $("select.assign-delivery").children("option[value='None']").attr({"selected": "selected"});
+                        $('.assign-delivery').attr("title","Select Delivery Coordinator");
+                    }
+                    else{
+                        $("select.assign-delivery").children("[data-related='"+center_deliveryCoordinator_map[selected.text()]+"']").attr({"selected": "selected"});
+                        $('.assign-delivery').attr("title",""+center_deliveryCoordinator_map[selected.text()]+"");
+                    }
+                    var $assign_teacher = $("select.assign-admin option:selected"),
+                        $assign_assistant = $("select.assign-assistant option:selected");
+                    	$assign_fieldCoordinator = $("select.assign-field option:selected");
+                    	$assign_deliveryCoordinator = $("select.assign-delivery option:selected");
+                    	$assign_partner = $("select.assign-partner option:selected");
+                    window.center_admin_value = $assign_teacher.val();
+                    window.center_assistant_value = $assign_assistant.val();
+                    window.center_fieldCoordinator_value = $assign_fieldCoordinator.val();
+                    window.deliveryCoordinator_value = $assign_deliveryCoordinator.val();
+                    window.partner_value = $assign_partner.val();
+                    if(!selected.hasClass("no-admin") || $(this).siblings().eq(1).val() == "None"){
+                        $(this).siblings("[rel='ajax-link']").hide();
+                    }
+                    else if(selected.hasClass("no-admin"))
+                        $(this).siblings("[rel='ajax-link']").hide();
+                    else {
+                            $(this).siblings("[rel='ajax-link']").children("span").text("confirm").fadeIn("fast").attr({"href": "/assign_center?center_id="+$assign_center.val()+"&user_id="+$assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+                    }
+                    var language = $assign_center.attr("data-language");
+                    $("select.assign-admin").children("option").each(function(){
+                        if($(this).attr("data-language") == language)
+                            $(this).css({"display":"block"});
+                        else
+                            $(this).css({"display":"none"});
+                    });
+                    $("select.assign-assistant").children("option").each(function(){
+                        if($(this).attr("data-language") == language)
+                            $(this).css({"display":"block"});
+                        else
+                            $(this).css({"display":"none"});
+                    });
+                    if($assign_center.val() == "None"){
+                        $("select.assign-admin").children("option").css({"display":"block"});
+                        $("select.assign-assistant").children("option").css({"display":"block"});
+                        $("select.assign-field option:selected").children("option").css({"display":"block"});
+                        $("select.assign-delivery option:selected").children("option").css({"display":"block"});
+                        $("select.assign-partner option:selected").children("option").css({"display":"block"});
+                    }
+                    $("select.assign-admin").children("option[value='None']").css({"display":"block"});
+                    $("select.assign-assistant").children("option[value='None']").css({"display":"block"});
+                    $("select.assign-field option:selected").children("option[value='None']").css({"display":"block"});
+                    $("select.assign-delivery option:selected").children("option[value='None']").css({"display":"block"});
+                    $("select.assign-partner option:selected").children("option[value='None']").css({"display":"block"});
+                    $assign_teacher.css({"display":"block"});
+                    $assign_assistant.css({"display":"block"});
+                    $assign_fieldCoordinator.css({"display":"block"});
+                    $assign_deliveryCoordinator.css({"display":"block"});
+                    $assign_partner.css({"display":"block"});
+                });
+                $("select.assign-admin").change(function(){
+                    var $assign_center = $("select.assign-center option:selected"),
+                        $assign_teacher = $("select.assign-admin option:selected"),
+                        $assign_assistant = $("select.assign-assistant option:selected");
+                    	$assign_fieldCoordinator = $("select.assign-field option:selected");
+                    	$assign_deliveryCoordinator = $("select.assign-delivery option:selected");
+                    	$assign_partner = $("select.assign-partner option:selected");
+                    if($assign_center.hasClass("no-admin") && $assign_teacher.val() == "None")
+                        $(this).siblings("[rel='ajax-link']").hide();
+                    else if($assign_teacher.val() == "None"){
+                        $(this).siblings("[rel='ajax-link']").fadeIn("fast").attr({"href": "/assign_center?center_id="+$assign_center.val()+"&user_id="+$assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+;
+                        $(this).siblings("[rel='ajax-link']").children("span").text("Remove");
+                    }else if($assign_teacher.val() == center_admin_value){
+                        $(this).siblings("[rel='ajax-link']").hide();
+                    }
+                    else
+                        $(this).siblings("[rel='ajax-link']").children("span").text("confirm").attr({"href": "/assign_center?center_id="+ $assign_center.val() +"&user_id="+ $assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+                    	$("#adminId").attr({"href": "/assign_center?flag=Admin&center_id="+ $assign_center.val() +"&user_id="+ $assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+                    	$("#confirmId").attr({"href": "/assign_center?flag=Admin&center_id="+ $assign_center.val() +"&user_id="+ $assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+                    	$("#dcId").hide();
+                    	$("#partnerId").hide();
+                    	$("#fcId").hide();
+                    	$("#assignId").hide();
+                    	$("#adminId").show();
+                });
+                $("select.assign-assistant").change(function(){
+                    var $assign_center = $("select.assign-center option:selected"),
+                        $assign_teacher = $("select.assign-admin option:selected"),
+                        $assign_assistant = $("select.assign-assistant option:selected");
+                    	$assign_fieldCoordinator = $("select.assign-field option:selected");
+                    	$assign_deliveryCoordinator = $("select.assign-delivery option:selected");
+                    	$assign_partner = $("select.assign-partner option:selected");
+                    if($assign_assistant.val() == "None"){
+                        $(this).siblings("[rel='ajax-link']").fadeIn("fast").attr({"href": "/assign_center?center_id="+$assign_center.val()+"&user_id="+$assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+;
+                        $(this).siblings("[rel='ajax-link']").children("span").text("Remove");
+                    }else if($assign_teacher.val() == center_assistant_value){
+                        $(this).siblings("[rel='ajax-link']").hide();
+                    }
+                    else
+                        $(this).siblings("[rel='ajax-link']").children("span").text("confirm").attr({"href": "/assign_center?center_id="+ $assign_center.val() +"&user_id="+ $assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+                		$("#assignId").attr({"href": "/assign_center?flag=Assistant&center_id="+ $assign_center.val() +"&user_id="+ $assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+                		$("#confirmId").attr({"href": "/assign_center?flag=Assistant&center_id="+ $assign_center.val() +"&user_id="+ $assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+                		$("#dcId").hide();
+                    	$("#partnerId").hide();
+                    	$("#fcId").hide();
+                    	$("#adminId").hide();
+                    	$("#assignId").show();
+                });
+
+                $("select.assign-field").change(function(){
+                    var $assign_center = $("select.assign-center option:selected"),
+                        $assign_teacher = $("select.assign-admin option:selected"),
+                        $assign_assistant = $("select.assign-assistant option:selected");
+                    	$assign_fieldCoordinator = $("select.assign-field option:selected");
+                    	$assign_deliveryCoordinator = $("select.assign-delivery option:selected");
+                    	$assign_partner = $("select.assign-partner option:selected");
+                    if($assign_fieldCoordinator.val() == "None"){
+                        $(this).siblings("[rel='ajax-link']").fadeIn("fast").attr({"href": "/assign_center?center_id="+$assign_center.val()+"&user_id="+$assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+;
+                        $(this).siblings("[rel='ajax-link']").children("span").text("Remove");
+                    }else if($assign_teacher.val() == center_fieldCoordinator_value){
+                        $(this).siblings("[rel='ajax-link']").hide();
+                    }
+                    else
+                        $(this).siblings("[rel='ajax-link']").children("span").text("confirm").attr({"href": "/assign_center?center_id="+ $assign_center.val() +"&user_id="+ $assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+            			$("#fcId").attr({"href": "/assign_center?flag=FieldCoordinator&center_id="+ $assign_center.val() +"&user_id="+ $assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+            			$("#dcId").hide();
+                    	$("#partnerId").hide();
+                    	$("#assignId").hide();
+                    	$("#adminId").hide();
+                    	$("#fcId").show();
+                });
+                $("select.assign-delivery").change(function(){
+                    var $assign_center = $("select.assign-center option:selected"),
+                        $assign_teacher = $("select.assign-admin option:selected"),
+                        $assign_assistant = $("select.assign-assistant option:selected");
+                    	$assign_fieldCoordinator = $("select.assign-field option:selected");
+                    	$assign_deliveryCoordinator = $("select.assign-delivery option:selected");
+                    	$assign_partner = $("select.assign-partner option:selected");
+                    if($assign_deliveryCoordinator.val() == "None"){
+                        $(this).siblings("[rel='ajax-link']").fadeIn("fast").attr({"href": "/assign_center?center_id="+$assign_center.val()+"&user_id="+$assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+                        $(this).siblings("[rel='ajax-link']").children("span").text("Remove");
+                    }else if($assign_teacher.val() == deliveryCoordinator_value){
+                        $(this).siblings("[rel='ajax-link']").hide();
+                    }
+                    else
+                        $(this).siblings("[rel='ajax-link']").children("span").text("confirm").attr({"href": "/assign_center?center_id="+ $assign_center.val() +"&user_id="+ $assign_teacher.val()+"&assistant_id="+$assign_assistant+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+        				$("#dcId").attr({"href": "/assign_center?flag=DeliveryCoordinator&center_id="+ $assign_center.val() +"&user_id="+ $assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+        				$("#partnerId").hide();
+                    	$("#assignId").hide();
+                    	$("#adminId").hide();
+                    	$("#fcId").hide();
+                    	$("#dcId").show();
+                });
+                $("select.assign-partner").change(function(){
+                	var $assign_center = $("select.assign-center option:selected"),
+                    $assign_teacher = $("select.assign-admin option:selected"),
+                    $assign_assistant = $("select.assign-assistant option:selected");
+                	$assign_fieldCoordinator = $("select.assign-field option:selected");
+                	$assign_deliveryCoordinator = $("select.assign-delivery option:selected");
+                	$assign_partner = $("select.assign-partner option:selected");
+                	if($assign_partner.val() == "None"){
+                		$(this).siblings("[rel='ajax-link']").fadeIn("fast").attr({"href": "/assign_center?center_id="+$assign_center.val()+"&user_id="+$assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+                		$(this).siblings("[rel='ajax-link']").children("span").text("Remove");
+                	}else if($assign_teacher.val() == partner_value){
+                        $(this).siblings("[rel='ajax-link']").hide();
+                    }
+                    else
+                        $(this).siblings("[rel='ajax-link']").children("span").text("confirm").attr({"href": "/assign_center?center_id="+ $assign_center.val() +"&user_id="+ $assign_teacher.val()+"&assistant_id="+$assign_assistant+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+    					$("#partnerId").attr({"href": "/assign_center?flag=Partner&center_id="+ $assign_center.val() +"&user_id="+ $assign_teacher.val()+"&assistant_id="+$assign_assistant.val()+"&fieldCoordinator_id="+$assign_fieldCoordinator.val()+"&deliveryCoordinator_id="+$assign_deliveryCoordinator.val()+"&partner_id="+$assign_partner.val()});
+    					$("#partnerId").hide();
+                		$("#assignId").hide();
+                		$("#adminId").hide();
+                		$("#fcId").hide();
+                		$("#dcId").hide();
+                		$("#partnerId").show();
+
+                });
+   });
+</script>
+
+{% endblock %}

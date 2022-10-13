@@ -1,0 +1,779 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+
+    <script>
+        (function () {
+
+        var evl = window.EVL = window.EVL || {};
+        evl.user_location_info =  {{user_location_info|safe}};
+      }());
+
+        $(function(){
+            $('[data-toggle="popover"]').popover();
+        });
+
+    </script>
+
+    <script src="/static/js/upload/location.js"></script>
+    <script src='/static/js_new/parsley.min.js' type='text/javascript' ></script>
+
+    <script defer src="/static/js/selectize.min.js"></script>
+
+{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+<link rel="stylesheet" type="text/css" href="/static/css/selectize.css" />
+<style>
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{
+	background-color: #22567d;
+	color: #f5f5f5;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+    background-color: #167ac6;
+}
+.nav-tabs > li > a{
+    color: #f5f5f5;
+    cursor: default;
+    background-color: #167ac6;
+    border: 1px solid #ddd;
+    border-bottom-color: #f5f5f5;
+    font-size: 15px;
+}
+[type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+    display: inline !important;
+    width: 10%;
+    position:static !important;
+}
+
+.inputClass{
+    height: 32px;
+    font-size: 12px;
+    color: black;
+    border: 1px solid #ccc;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.submit_profile{
+    margin-bottom: 22px;
+    width: 100px;
+    <!--position: relative;-->
+    top: 7px;
+    float: right;
+    left: -160px;
+}
+
+.ec-checkbox.check-xl .ec-checkbox__control {
+    width: 40px;
+    height: 34px;
+}
+
+/* slider css */
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 5px;
+    border-radius: 5px;
+    background: #2eb12e;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #f6f6f6;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #f6f6f6;
+    cursor: pointer;
+}
+
+/* slider css end  */
+
+.myreadiAvailability{
+    display: inline !important;
+    width: 3%;
+    margin:1% 2% 20px 0% !important;
+}
+
+
+</style>
+
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+{% endblock %}
+
+
+{% block body_container%}
+{{ block.super }}
+
+<div class="container-fluid" style="background-color:white;min-height: 450px !important;">
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			<div class="row">
+                <div class="col-sm-9">
+                    <h3 style="margin-left:3%;font-weight:bold;">User Info</h3>
+                </div>
+                <div class="col-sm-3">
+                    <!--<span class="pull-right" style="margin-top:20px">Go back</span>-->
+                </div>
+            </div>
+            <hr>
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                      <ul class="nav nav-tabs nav-stacked" style="margin-right: -4%; text-align:center">
+                            <li class="active"><a href="#profile" data-toggle="tab"
+                                aria-expanded="false" id='1'>Profile</a></li>
+                            <li><a href="#settings" data-toggle="tab"
+                                aria-expanded="true" id='2'>Settings</a></li>
+                            <li><a href="#preferences" data-toggle="tab"
+                                aria-expanded="true" id='3'>Preferences</a></li>
+                              <li></li>
+                      </ul>
+                </div>
+                <div class="col-lg-10 col-md-10 col-sm-10">
+                    <div class="tab-content">
+                        <div id="profile" class="tab-pane fade in active" style="padding-bottom:3%;">
+                            <div class="row" style="border:1px solid #e5e5e5;margin:5px 0px;">
+                                <div>
+                                    <h4 style="padding-left:3%; font-weight:bold;"> My Profile</h4>
+                                    <hr/>
+                                </div>
+                                <form action="/config/user/save_profile/" id="id_form_userprofile" method="POST" data-parsley-validate="">
+                                    {% csrf_token %}
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-3 col-sm-3" for="id_firstname">First Name <span style="color:red;">*</span></label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="text" name="firstname" id="id_firstname" value="{{ user_profile.user.first_name }}" placeholder="FirstName" required>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-offset-2 col-sm-offset-2 col-md-3 col-sm-3" for="id_lastname">Last Name <span style="color:red;">*</span></label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="text" name="lastname" id="id_lastname" value="{{ user_profile.user.last_name }}" placeholder="LastName" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-3 col-sm-3" for="id_gender">Gender <span style="color:red;">*</span></label>
+                                            <select class="inputClass col-md-6 col-sm-6" style="background-color: #fff; border-radius: 4px;" name="gender" id="id_gender" required>
+                                                <option value="">--Select Gender--</option>
+                                                {% if user_profile.gender == 'male' %}
+                                                    <option value="male" selected="selected">Male</option>
+                                                    <option value="female">Female</option>
+                                                {% elif user_profile.gender == 'female' %}
+                                                    <option value="male">Male</option>
+                                                    <option value="female" selected="selected">Female</option>
+                                                {% else %}
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-offset-2 col-sm-offset-2 col-md-3 col-sm-3" for="id_dob">Date of Birth <span style="color:red;">*</span></label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="date" name="dob" id="id_dob" value="{{ user_profile.dob|date:'Y-m-d' }}" placeholder="Date of Birth" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-3 col-sm-3" for="id_email">Email <span style="color:red;">*</span></label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="email" name="email" id="id_email" placeholder="Email" value="{{ user_profile.user.email }}" required>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-offset-2 col-sm-offset-2 col-md-3 col-sm-3" for="id_alt_email">Alternate Email</label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="email" name="alt_email" id="id_alt_email" value="{{ user_profile.secondary_email }}" placeholder="Alternate Email">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-3 col-sm-3" for="id_skypeid">Skype ID</label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="text" name="skype_id" id="id_skypeid" value="{{ user_profile.skype_id }}" placeholder="Skype ID">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-offset-2 col-sm-offset-2 col-md-3 col-sm-3" for="id_phone">Phone No</label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="text" name="phone" id="id_phone" value="{{ user_profile.phone }}" placeholder="Phone No" data-parsley-pattern="^(\+?(([0-9]){1,3})[-.\s])?((((([0-9]){2,3})[-.\s]){1,2}([0-9]{4,10}))|([0-9]{10}))$">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-3 col-sm-3" for="medium">Preferred Medium <span style="color:red;">*</span></label>
+                                            <select class="inputClass col-md-6 col-sm-6" style="background-color: #fff; border-radius: 4px;" name="prefered_medium" id="medium" required>
+                                                {% if user_profile.pref_medium %}
+                                                    <option value="{{ user_profile.pref_medium }}" selected="selected">{{ user_profile.pref_medium }}</option>
+                                                {% else %}
+                                                    <option value="" selected="selected">--Select Language--</option>
+                                                {% endif %}
+                                                <option value="Bengali">Bengali</option>
+                                                <option value="Gujarathi">Gujarathi</option>
+                                                <option value="Hindi">Hindi</option>
+                                                <option value="Kannada">Kannada</option>
+                                                <option value="Malayalam">Malayalam</option>
+                                                <option value="Marathi">Marathi</option>
+                                                <option value="Oriya">Oriya</option>
+                                                <option value="Punjabi">Punjabi</option>
+                                                <option value="Assamese">Assamese</option>
+                                                <option value="Tamil">Tamil</option>
+                                                <option value="Telugu">Telugu</option>
+                                                <option value="Urdu">Urdu</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-offset-2 col-sm-offset-2 col-md-3 col-sm-3" for="id_refer">Referrer </label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="text" name="refer" id="id_refer" value="{{ user_profile.referer }}" placeholder="Referrer">
+                                            <input type="hidden" id="refer_id" name="reference_id" value='{% if user_profile.referred_user %} user_profile.referred_user.id {% endif %}' >
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-3 col-sm-3" for="id_referrence_channel">Referrence Channel <span style="color:red;">*</span></label>
+                                            <select class="inputClass col-md-6 col-sm-6" style="background-color: #fff; border-radius: 4px;" name="referrence_channel" id="id_referrence_channel" required>
+                                                {% if referencechannel %}
+                                                    <option value="{{referencechannel.id}}" selected="selected">{{referencechannel.name}} </option>
+                                                {% else %}
+                                                    <option value="" selected="selected">--Select--</option>
+                                                {% endif %}
+                                                {% for ref_channel in ref_channels %}
+                                                   <option value="{{ref_channel.id}}">{{ref_channel.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-offset-2 col-sm-offset-2 col-md-3 col-sm-3" for="countryId">Country <span style="color:red;">*</span></label>
+                                            <select class="countries inputClass col-md-6 col-sm-6" name="country" style="background-color: #fff; border-radius: 4px;" id="countryId" required="">
+                                                <option value="">Select Country</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-3 col-sm-3" for="stateId">State <span style="color:red;">*</span></label>
+                                            <select class="states inputClass col-md-6 col-sm-6" name="state" style="background-color: #fff; border-radius: 4px;" id="stateId" required="">
+                                                <option value="">Select State</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-offset-2 col-sm-offset-2 col-md-3 col-sm-3" for="cityId">City <span style="color:red;">*</span></label>
+                                            <select class="cities inputClass col-md-6 col-sm-6" name="city" style="background-color: #fff; border-radius: 4px;" id="cityId" required="">
+                                                <option value="">Select City</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-3 col-sm-3" for="id_profession">Profession</label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="text" name="profession" id="id_profession" value="" placeholder="Profession">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-offset-2 col-sm-offset-2   col-md-3 col-sm-3" for="id_short_notes">Short Notes</label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="text" name="short_notes" id="id_short_notes" value="{{ user_profile.short_notes }}" placeholder="Brief Intro">
+                                        </div>
+                                    </div>
+                                    <div class='col-lg-12 col-md-12 col-sm-12'>
+                                        <input class='submit_profile btn btn-sm btn-success' type="submit" id='submit_profile' value="Save"/>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="settings" class="tab-pane fade" style="padding-bottom:3%;">
+                            {% for setting in settings %}
+                                <div id="{{setting.group}}" class="row">
+                                    <form  method="post">
+                                        {% csrf_token %}
+                                        <div class="col-lg-12 col-md-12 col-sm-12" style="border:1px solid #e5e5e5;margin:5px 0px;">
+                                            <div>
+                                                <fieldset>
+                                                    <legend>{{setting.group_title}}</legend>
+                                                    <div class="col-md-12 col-sm-12" style="padding-bottom:10px;">
+                                                        <div class="col-md-4 col-sm-4"><span>Apply Settings:</span></div>
+                                                        <input type="hidden" name="group_name" value="{{setting.group_name}}">
+                                                        <input type="hidden" name="group_id" value="{{setting.id}}">
+                                                        <div class="col-md-8 col-sm-8">
+                                                            {% if setting.group_name in user_settings.keys %}
+                                                                {% with groupname=setting.group_name %}
+                                                                    {% with testval=user_settings|getuservalue:groupname %}
+                                                                    <input class="checkradio" type="hidden" name="{{setting.group_name}}_radio" value="{{testval}}" style="bottom:1%;right:35%;">
+                                                                    <label class="radio-inline">
+                                                                        {% if testval == 'all' %}
+                                                                            <input type="radio" name="{{setting.group_name}}_allornone" value="all" checked onchange="radiochange(this);" style="bottom:1%;right:35%;">
+                                                                        {% else %}
+                                                                            <input type="radio" name="{{setting.group_name}}_allornone" value="all" onchange="radiochange(this);" style="bottom:1%;right:35%;">
+                                                                        {% endif %} All</label>
+                                                                    <label class="radio-inline">
+                                                                        {% if testval == 'none' %}
+                                                                            <input type="radio" name="{{setting.group_name}}_allornone" value="none" checked onchange="radiochange(this);" style="bottom:1%;right:39%;">
+                                                                        {% else %}
+                                                                            <input type="radio" name="{{setting.group_name}}_allornone" value="none" onchange="radiochange(this);" style="bottom:1%;right:39%;">
+                                                                        {% endif %} None</label>
+                                                                {% endwith %}
+                                                            {% endwith %}
+                                                            {% else %}
+                                                                <input class="checkradio" type="hidden" name="{{setting.group_name}}_radio" value="all" style="bottom:1%;right:35%;">
+                                                                <label class="radio-inline"><input type="radio" name="{{setting.group_name}}_allornone" value="all" checked onchange="radiochange(this);" style="bottom:1%;right:35%;"> All</label>
+                                                                <label class="radio-inline"><input type="radio" name="{{setting.group_name}}_allornone" value="none" onchange="radiochange(this);" style="bottom:1%;right:39%;"> None</label>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    {% if setting.settingsgroupitems_set.all %}
+                                                        <div class="col-md-12 col-sm-12" id="div_{{setting.group_name}}_all">
+
+                                                            {% if setting.group_name in user_settings.keys %}
+                                                                {% with groupname=setting.group_name %}
+                                                                    {% with settingval=user_settings|getuservalue:groupname %}
+                                                                        {% if settingval == 'all'  %}
+                                                                            {% with items=setting.settingsgroupitems_set.all %}
+                                                                                {% for item in items %}
+                                                                                    {% with usergrpitemval=request.user|useritemvalue:item %}
+                                                                                        {% if item.input_type|lower == "choices" %}
+                                                                                            <div class="col-md-12 col-sm-12">
+                                                                                                <label class="col-md-2 col-sm-2"> {{item.input_label}} </label>
+                                                                                                <select class="col-md-2 col-sm-2" name='{{item.input_name}}_-{{item.id}}'>
+                                                                                                    {% with item.input_values|split:"," as values %}
+                                                                                                        {% for value in values %}
+                                                                                                            {% if value in usergrpitemval %}
+                                                                                                                <option value="{{value}}" selected="selected">{{value}}</option>
+                                                                                                            {% else %}
+                                                                                                                <option value="{{value}}">{{value}}</option>
+                                                                                                            {% endif %}
+                                                                                                        {% endfor %}
+                                                                                                    {% endwith %}
+                                                                                                </select>
+                                                                                            </div>
+                                                                                        {% else %}
+                                                                                            <div class="col-md-12 col-sm-12">
+                                                                                                <label style="margin-left:4%;">
+                                                                                                    {% if item.input_label|lower == 'email' or item.input_label|lower == 'e-mail' and user_profile.role.all|length > 0 %}
+                                                                                                        <input style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}" readonly="readonly" checked="checked" onclick="return false;">
+                                                                                                    {% elif item.input_name in usergrpitemval %}
+                                                                                                        <input style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}" checked="checked">
+                                                                                                    {% else %}
+                                                                                                        <input style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}">
+                                                                                                    {% endif %} {{item.input_label}}
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        {% endif %}
+                                                                                    {% endwith %}
+                                                                                {% endfor %}
+                                                                            {% endwith %}
+                                                                        {% else %}
+                                                                            {% with items=setting.settingsgroupitems_set.all %}
+                                                                                {% for item in items %}
+                                                                                    {% if item.input_type|lower == "choices" %}
+                                                                                        <div class="col-md-12 col-sm-12">
+                                                                                            <label class="col-md-2 col-sm-2"> {{item.input_label}} </label>
+                                                                                            <select class="col-md-2 col-sm-2" name='{{item.input_name}}_-{{item.id}}'>
+                                                                                                {% with item.input_values|split:"," as values %}
+                                                                                                    {% for value in values %}
+                                                                                                        {% if item.default_value == value %}
+                                                                                                            <option value="{{value}}" selected="selected">{{value}}</option>
+                                                                                                        {% else %}
+                                                                                                            <option value="{{value}}">{{value}}</option>
+                                                                                                        {% endif %}
+                                                                                                    {% endfor %}
+                                                                                                {% endwith %}
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    {% else %}
+                                                                                        <div class="col-md-12 col-sm-12">
+                                                                                            <label style="margin-left:4%;">
+                                                                                                {% if item.input_label|lower == 'email' or item.input_label|lower == 'e-mail' and user_profile.role.all|length > 0 %}
+                                                                                                    <input style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}" readonly="readonly" checked="checked" onclick="return false;">
+                                                                                                {% else %}
+                                                                                                    <input style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}">
+                                                                                                {% endif %} {{item.input_label}}
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+                                                                            {% endwith %}
+                                                                        {% endif %}
+                                                                    {% endwith %}
+                                                                {% endwith %}
+                                                            {% else %}
+                                                                {% with items=setting.settingsgroupitems_set.all %}
+                                                                    {% for item in items %}
+                                                                        {% if item.input_type|lower == "choices" %}
+                                                                            <div class="col-md-12 col-sm-12">
+                                                                                <label class="col-md-2 col-sm-2"> {{item.input_label}} </label>
+                                                                                <select class="col-md-2 col-sm-2" name='{{item.input_name}}_-{{item.id}}'>
+                                                                                    {% with item.input_values|split:"," as values %}
+                                                                                        {% for value in values %}
+                                                                                            {% if item.default_value == value %}
+                                                                                                <option value="{{value}}" selected="selected">{{value}}</option>
+                                                                                            {% else %}
+                                                                                                <option value="{{value}}">{{value}}</option>
+                                                                                            {% endif %}
+                                                                                        {% endfor %}
+                                                                                    {% endwith %}
+                                                                                </select>
+                                                                            </div>
+                                                                        {% else %}
+                                                                            <div class="col-md-12 col-sm-12">
+                                                                                <label style="margin-left:4%;">
+                                                                                    {% if item.input_label|lower == 'email' or item.input_label|lower == 'e-mail' and user_profile.role.all|length > 0 %}
+                                                                                        <input style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}" readonly="readonly" checked="checked" onclick="return false;">
+                                                                                    {% else %}
+                                                                                        <input style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}">
+                                                                                    {% endif %} {{item.input_label}}
+                                                                                </label>
+                                                                            </div>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% endwith %}
+                                                            {% endif %}
+
+                                                            {% if setting.group_name|lower == 'privacy' or setting.group_name|lower == 'privacypolicy' %}
+                                                            <p style="font-size: 17px;font-weight:normal;">To view Privacy Policy <a href="/static/PrivacyPolicyREV1.pdf" TARGET="_blank" onMouseOver="this.style.color='green'" onMouseOut="this.style.color='#02cc26'" style="vertical-align:middle;color:#02cc26;font-weight:bold;" title="Privacy Policy">Click Here</a></p>
+                                                            <!--<p>To view Privacy Policy <a href="#" id="id_privacymodal" style="vertical-align:middle;" data-toggle="modal" data-target="#privacymodal" title="Edit Status">Click Here</a></p>-->
+                                                                <!--&lt;!&ndash; Modal &ndash;&gt;-->
+                                                                <!--<div id="privacymodal" class="modal modal-lg" tabindex="-1" role="dialog" aria-labelledby="privacymodal" aria-hidden="true" style="top:40%;width:650px;height:700px;">-->
+                                                                    <!--<div class="" role="document">-->
+                                                                        <!--&lt;!&ndash; Modal content&ndash;&gt;-->
+                                                                        <!--<div class="modal-content">-->
+                                                                            <!--<div class="modal-header">-->
+                                                                                <!--<button type="button" class="close col-sm-2" data-dismiss="modal" aria-label="Close">-->
+                                                                                   <!--<span aria-hidden="true">&times;</span>-->
+                                                                                <!--</button>-->
+                                                                            <!--</div>-->
+                                                                            <!--<div class="modal-body col-lg-12">-->
+                                                                                <!--<iframe src="/static/PrivacyPolicyREV1.pdf" seamless="" width="620" height="680"></iframe>-->
+                                                                                 <!--&lt;!&ndash;<object width="620" height="680" data="/static/PrivacyPolicyREV1.pdf"></object>&ndash;&gt;-->
+                                                                            <!--</div>-->
+                                                                        <!--</div>-->
+                                                                    <!--</div>-->
+                                                                <!--</div>-->
+                                                                <!--&lt;!&ndash;Modal end&ndash;&gt;-->
+                                                            {% endif %}
+
+                                                        </div>
+                                                    {% endif %}
+                                                    <div class="nonediv col-md-12 col-sm-12" id="div_{{setting.group_name}}_none">
+                                                        <p>You selected {{setting.group_title}} settings as None, So By default, Role Specific Settings will be applied.</p>
+                                                    </div>
+                                                    <button class='btn btn-success pull-right' style="margin:15px 0px 15px 0px;" id="evDiv_submit">Submit</button>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                        <div id="preferences" class="tab-pane fade">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <fieldset>
+                                        <legend class="col-md-12 col-sm-12" >Ways to contribute </legend>
+                                        <div class="col-md-12 col-sm-12" id='preferred_roles'>
+                                            {% for role in roles %}
+                                                {% if role.type != 'Internal' %}
+                                                    <div class='row'>
+                                                        <div class='col-md-10 col-sm-10'>
+                                                            <p class='role_ele'>
+                                                                <input type="checkbox" id="{{ role.name }}" style="position: absolute !important;left: -9999px !important;" name='roles' value={{ role.id }} {% if role.id = 6 or role.id = 7 %}disabled{% endif %}{% if role.id in pref_roles %} checked {% endif %} />
+                                                                <label for="{{ role.name }}" class='myevd_label'  {% if role.id = 8 or role.id = 9 or role.id = 10 %}style="visibility:hidden;"{% endif %}   >{{ role.name }}</label>
+                                                            </p>
+                                                        </div>
+                                                        <div class='col-sm-2 col-xs-2'>
+                                                            <a data-toggle="popover" data-trigger="hover" title={{role.name}} {% if role.id = 8 or role.id = 9 or role.id = 10 %}style="visibility:hidden;"{% endif %} data-placement="top" data-content="{{role.description}}">
+                                                                <img src='{% if role.id == 1 %}/static/img_new/teacher_role.png{% else %}/static/img_new/admin_role.png{% endif %}' {% if role.id = 8 or role.id = 9  or role.id = 10 %}style="visibility:hidden;"{% endif %}/>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <legend>Availability & Preferences</legend>
+                                        <div class="col-sm-12 col-md-12" id="Availability_and_Preferences">
+                                            <div class="col-sm-12 col-md-12">
+                                                <div class="col-md-12 col-sm-12 availability">{{availablity}}
+                                                        <span>Available: </span><span><input type="radio" class="myreadiAvailability" name="availability" id="id_available" value="available" {% if availability %}checked='checked'{% endif %}>&nbsp;&nbsp;&nbsp;</span>
+                                                    <span class="unavail-align">Unavailable : </span><span><input type="radio" class="myreadiAvailability" id="id_unvailable" name="availability" value="unavailable"{% if not availability %}checked='checked'{% endif %}></span>
+                                                </div>
+                                            </div>
+
+
+                                            <div class='col-sm-12 col-md-12 standard_rowi avail {% if not availability %}hidden{% endif %}'>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label for="from">Available From:</label>
+                                                    <input type="date" required="" name='from_date' value='{{ user_profile.from_date|date:"Y-m-d" }}' id="availableFrom">
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label for="to">Available To:</label>
+                                                    <input type="date" required="" data-parsley-daterangecheck='' name='to_date' value='{{ user_profile.to_date|date:"Y-m-d" }}' id="availableTo">
+                                                </div>
+                                            </div>
+                                            <div class='col-sm-12 col-md-12 standard_row avail {% if not availability %}hidden{% endif %}'>
+                                                <div class='col-sm-7 col-md-7'>
+                                                    {% time_slots "prefered_timings_slots" user_profile.pref_days user_profile.pref_slots "Preferred Days" %}
+                                                </div>
+                                                <div class='col-sm-3 col-md-3'>
+                                                    <label for="reason" style='margin-left:0'>Preferred Subject </label>
+                                                    <p>Maths<input type="checkbox" name="pref_sub[]" value="Maths" {% if "Maths" in pref_sub_list %}checked{% endif %}/></p>
+                                                    <p>English<input type="checkbox" name="pref_sub[]" value="English" {% if "English" in pref_sub_list %}checked{% endif %}/></p>
+                                                    <p>Science<input type="checkbox" name="pref_sub[]" value="Science" {% if "Science" in pref_sub_list %}checked{% endif %}/></p>
+                                                </div>
+                                            </div>
+                                            <!--unavailable reason-->
+                                            <div class='col-sm-12 col-md-12 standard_row unavail {% if availability %}hidden{% endif %}'>
+                                                <div class="col-sm-12 col-md-12">
+                                                    <label class="col-sm-3" for="reason" style='margin-left:0;padding-left:0;'>Unavailability Reason : </label>
+                                                    <select class="col-sm-6" name="reason">
+                                                      {% for reason in unavail_list %}
+                                                        <option value="{{reason}}" {% if reason == unavailable_reason_selected %}selected{% endif %}>{{reason}}</option>
+                                                      {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class='col-md-12 col-sm-12 follow_up {% if unavailable_reason_selected not in unavail_list_ %}hidden{% endif %}' style="margin-top:1%;">
+                                                    <label for="follow_up" class="col-sm-3" style="margin-left:0;padding-left:0">Follow Up Date: </label>
+                                                    <input type="date" class="col-sm-6" required="" name='follow_up' value='{{ follow_up_date|date:"Y-m-d" }}' id="follow_up">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-12 col-sm-12" align="center">
+                                    <button id="submit_id" class="btn btn-icon btn-info btn-xl mr-2 mb-3" style="background: #31b2de !important;margin-bottom:2%;" >
+                                            <span>Submit</span>
+                                    </button>
+                                </div>
+
+
+                        </div>
+                        <div  id="" class="tab-pane fade">
+                            <div class="row" style="margin-left:5%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block bottom_scripts %}
+ {{ block.super }}
+<script>
+$(document).ready(function() {
+
+    $(".inner.clearfix").css("width","85%");
+
+    $(".nonediv").hide();
+
+    var inputs = $(".checkradio");
+    for(var i=0;i<inputs.length;i++){
+        var name = $(inputs[i]).attr('name');
+        var divname = name.split('_')[0];
+        var div_all_id = "div_"+ divname + "_all";
+        var div_none_id = "div_"+ divname + "_none";
+        var value = $(inputs[i]).val();
+        if(value == 'all'){
+            $("#"+div_all_id).show();
+            $("#"+div_none_id).hide();
+         }
+         else{
+            $("#"+div_all_id).hide();
+            $("#"+div_none_id).show();
+         }
+    }
+
+
+});
+
+function radiochange(myradio){
+    var name = myradio.name;
+    var divname = name.split('_')[0];
+    var div_all_id = "div_"+ divname + "_all";
+    var div_none_id = "div_"+ divname + "_none";
+    if(myradio.value == 'all'){
+
+        $("#"+div_all_id).show();
+        $("#"+div_none_id).hide();
+     }
+     else{
+        $("#"+div_all_id).hide();
+        $("#"+div_none_id).show();
+     }
+
+     }
+
+ $('#privacymodal').on('shown.bs.modal', function () {
+              $('#myInput').trigger('focus')
+        })
+
+
+$(function(){
+    //availability
+        $("#Availability_and_Preferences").on("click", "input[type='radio'][name='availability']", function(){
+            var availability = $("input[name='availability']:checked").val();
+            if(availability === "unavailable"){
+                $(".avail").addClass("hidden");
+                $(".unavail").removeClass("hidden");
+                $("#from, #to").removeAttr("required");
+                $("#follow_up").prop("required", "true");
+            } else{
+                $(".unavail").addClass("hidden");
+                $(".avail").removeClass("hidden");
+                $("#follow_up").removeAttr("required");
+                $("#from, #to").prop("required", "true");
+            }
+
+        });
+
+      $('#availability_form').parsley().on('field:validated', function() {
+        $("#from, #to, #follow_up").removeAttr("min");
+        var ok = $('.parsley-error').length === 0;
+        $('.bs-callout-info1').toggleClass('hidden', !ok);
+        $('.bs-callout-warning1').toggleClass('hidden', ok);
+      })
+      .on('form:submit', function() {
+        var availability = $("input[name='availability']:checked").val();
+        if(availability === "available"){
+            var pref_times = pref_times_check();
+            if( pref_times == true){
+                evd.preferences_submit();
+                //window.location.reload();
+                window.history.pushState(null, null, "#");
+            }else{
+                $('.bs-callout-info1').toggleClass('hidden');
+                $('.bs-callout-warning1').toggleClass('hidden');
+            }
+        }
+        //unavilable
+        else{
+            evd.preferences_submit();
+            window.history.pushState(null, null, "#");
+        }
+        setTimeout(location.reload.bind(location), 1000);
+        return false;
+      });
+});
+
+$("#submit_id").click(function(){
+		<!--preferred_roles = $('#preferred_roles'),-->
+		availability = $('#Availability_and_Preferences');
+        let isAvailable = $("#id_available").prop('checked');
+        var availability_arr;
+
+        let details = [];
+
+        if(isAvailable){
+            let pdays = $('.timing-wrapper');
+		    console.log('oooo = ',pdays);
+		    let day;
+		    let fromTime;
+		    let toTime;
+		    let id;
+            let innerWrap = $('.timing-inner-wrapper');
+            day = $(".timing-inner-wrapper > .prefered_days").find(":selected").text();
+            var days_array = day.match(/.{1,3}/g);
+            <!--console.log(days_array);-->
+            let time = [];
+            fromTime = $(".timing-inner-wrapper > .span1").find(":selected").text();
+            $(".span1").each(function() {
+                time.push($(this).find(":selected").text());
+            });
+
+            var timeGroups = [];
+
+            for(var i = 0; i < time.length; i += 2)
+            {
+                timeGroups.push(time.slice(i, i + 2));
+            }
+
+            console.log('gggg',timeGroups);
+            var prefdays_array = [];
+            for(var i=0; i<days_array.length;i++){
+                prefdays_array.push({'day':days_array[i],'fromTime':timeGroups[i][0],'toTime':timeGroups[i][1]});
+            }
+
+            <!--console.log('prefdays_array = ',prefdays_array);-->
+
+
+            let availableFrom = $("#availableFrom").val();
+            let availableTo = $("#availableTo").val();
+		    $("#availableFrom").val();
+            $("#availableTo").val();
+            let pref_subjects = [];
+            $("input[name='pref_sub[]'").each( function () {
+                if(this.checked){
+                    pref_subjects.push($(this).val());
+                }
+            });
+            details = {'availableFrom':availableFrom,'availableTo':availableTo,'pref_subjects':pref_subjects,'pref_days':days_array,'pref_times':timeGroups};
+        }
+        else
+        {
+            var dd =$("#follow_up").val();
+            var reason = $("select[name='reason']").val();
+            details = {'unavailabilityReason':reason,'Follow_Up_Date':dd};
+        }
+        availability_arr = {'isAvailable':isAvailable,'details':details}
+
+        <!--console.log('details =',details);-->
+ 		/* alert("array1 "+array1.length);
+		alert("no_of_hrs "+no_of_hrs+" first_name "+first_name+" last_name "+last_name+" gender "+gender+" dob "+dob+" native_place "+native_place+" current_place "+current_place+" current_job "+current_job+"work_exp"+work_exp+" email "+email+" phone "+phone+" skype "+skype+" password "+password+" confirm_password "+confirm_password);
+	 	 */
+
+
+		var j=0;
+		var role_divs = $("#preferred_roles > div"),
+		roles_lengt = role_divs.length,
+		preferred_roles = [];
+		for(; j < roles_lengt; j++ ){
+			var some = $("#preferred_roles > div:eq("+j+")")[0];
+			selected = $("#preferred_roles > div:eq("+j+") > div > p > input ").prop("checked");
+			if(selected){
+				role_sel = $("#preferred_roles > div:eq("+j+") > div > p > input").val();
+
+				preferred_roles.push(role_sel);
+			}
+		}
+
+
+		details_json = { "preferred_roles": preferred_roles,'availability_details':availability_arr}
+		console.log('details_json = ',details_json);
+		var json = JSON.stringify(details_json);
+	$.ajax({
+		type: "POST",
+		url: '/config/user/save_preferences/',
+		data: {"json": json},
+		success: function(resp){
+			if(resp == 'Success'){ // if true (1)
+                setTimeout(function(){// wait for 5 secs(2)
+                   location.reload(); // then reload the page.(3)
+                }, 1000);
+            }
+            else{
+                alert('Something went wrong. Submit again with all information');
+            }
+		}
+
+	});
+
+});
+
+</script>
+{% endblock %}

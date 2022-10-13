@@ -1,0 +1,14 @@
+Dear {{user}},
+
+A New Task has been Assigned to You, On {{date}}-{{todayDay}}. Please find below details:
+
+Subject: {{subject|safe}}
+Comments: {{comment|safe}}
+
+
+Click here to view {{confirm_url}} 
+
+
+Thanks & Regards
+
+

@@ -1,0 +1,59 @@
+{% extends "footer_base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+        .right-content .top {
+            padding:34px 37px;
+        }
+        .subcontent {
+            background:none;
+        }
+        div.intro h2 {
+            padding-bottom:35px;
+        }
+        div.video {
+            padding:50px;
+        }
+    </style>
+{% endblock %}
+{% block leftnav_list %}
+
+    <li><a href="/about/" class="about-1 active"><span>About us</span></a></li>
+    <li><a href="/vision/" class="about-2"><span>Vision & Mission</span></a></li>
+    <li><a href="/operating_principles/" class="about-3"><span>Principles</span></a></li>
+    <li><a href="/conduct/" class="about-4"><span>Code of Conduct</span></a></li>
+    <li><a href="/who_we_are/" class="about-5"><span>Who We Are</a></li>
+    <li><a href="/careers/" class="about-6" ><span>Careers</span></a></li>
+    <li><a href="/news_events/" class="about-7" ><span>News & Events</span></a></li>
+    <li><a href="/governance/" class="about-8" ><span>Governance</span></a></li>
+    <li><a href="/partners/" class="about-9"><span>Partners</span></a></li>
+    <li><a href="/faq/" class="about-10"><span>FAQ</span></a></li>
+    <li><a href="/contact_us/" class="about-11"><span>Contact Us</span></a></li>
+        
+{% endblock %}
+{% block top_content %}
+
+    <!--<div class="top clearfix">
+        <div class="intro">
+            <h2>To Educate - Anywhere Anytime</h2>
+        </div>
+    </div>-->
+{% endblock %}
+{% block bottom_content %}
+    <div class="paper-bg-wrapper">
+        <div class="paper-bg">
+            <div class="subcontent">
+                 <p class="static-pages-text-color">
+                        eVidyaloka is a not for profit organization registered under the Trusts Act. It focuses on transforming the education landscape in the rural and remote regions of the India. We strive to achieve this by involving the <span class="inspire-volunteers"> local communities to own</span> the digital classrooms, <span class="inspire-volunteers">inspiring and empowering the volunteers</span> to contribute back, from wherever they are, and by providing standardized lesson plans and teaching aids for a consistent learning experience to the children.
+                </p>
+                <br/>
+                <p class="static-pages-text-color">
+                        Our focus is to improve the learning outcome of the children who participate through our Digital Classrooms, established in the remote locations and ensure that they "understand and apply the concepts of their respective standards in their regular curriculum subjects".
+                </p>
+
+            </div>
+        </div>
+    </div>
+ 
+{% endblock %}

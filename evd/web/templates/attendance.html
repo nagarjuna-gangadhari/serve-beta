@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block doc_ready %}
+    {{ block.super }}
+    window.evd.pre_submission = function(){
+        var q = "";
+        var stu_len = $("input.student").length;
+        $("input.student").each(function(index, val){
+            stu_name = $(this).attr("value");
+            q += stu_name + ((index < stu_len-1) ? ";" : "");
+        });
+        $("input[name='student']").val(q);
+        q="";
+        var attend_len = $("input.attend").filter(":checked").length;
+        $("input.attend").filter(":checked").each(function(index,val){
+            attend = $(this).attr("value");
+            q += attend + ((index < attend_len-1) ? ";" : "");
+        });
+        $("input[name='attend']").val(q);
+    }
+{% endblock %}
+{% block body_container %}
+    <h1> Attendance</h1>
+    <form method = "POST" action="/submit_attendance/" id="attendance_form">
+        {% csrf_token %}
+        <p><b>Please Select the session </b></p>
+        {% for session in sessions %}
+            <input type="radio" name="session" value="{{session.id}}" />{{session}}
+        {% endfor %}
+        <br />
+        <br />
+        <table border = "2">
+            <tr>
+                <th> Student </th>
+                <th> is_present </th>
+            </tr>
+                <input type="hidden" name="student" />
+                <input type="hidden" name="attend" />
+                {% for student  in students %}
+                <tr>
+                    <td>
+                        <input type="hidden" class="student" value={{student.id}} />{{ student }}
+                    </td>
+                    <td>
+                        <input class="attend" type="checkbox" value="yes"/>Yes<br />
+                        <input class="attend" type="checkbox" value="no"/> No <br />
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <!--input type="submit" value="Submit Attendance"/>-->
+            <a href="#attendance_form" class="btn" rel="submit" pre-call="pre_submission" style="width:200px; margin-top:10px;margin-bottom:20px;">
+                <span class="ajax-button-label" data-loading="please-wait">Submit Attendance</span>
+            </a>
+    </form>
+{% endblock %}

@@ -1,0 +1,13 @@
+
+<p>Dear {{author}},</p>
+
+<p>We regret to inform you that the chapter: {{topic}} in  {{grade }}  {{subject}}  in {{board}} could not be assigned to you.</p>
+
+<p>Request you to reach out to the Coordinator for further support. </p>
+
+
+<p>With Regards,</p>
+<p>eVidyaloka Team</p>
+<a href="/?home=true"> <img src="/static/images/evl_logo.png" style="border-radius: 100%;"width="55px" height="55px"></a>	
+<p>www.evidyaloka.org</p>
+<p>Skype: evidyaloka.helpdesk | Phone: 080 - 40903939 | Email: videoclass@evidyaloka.org</p>

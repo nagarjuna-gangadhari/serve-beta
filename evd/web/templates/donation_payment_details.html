@@ -1,0 +1,1009 @@
+{% extends "base.html" %}
+{% load filters %}
+{% load tags %}
+
+{% block head_title %}eVidyaloka - Payment Details{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+
+        div.tab-pane {
+
+            display: none;
+        }
+        div.tab-pane.active {
+
+            display: block;
+        }
+        textarea {
+
+            width: 100% !important;
+        }
+        #donate-form div.modal-body {
+
+            width: 100%;
+            margin: 0px auto;
+        }
+       
+        #donate-form div.modal-body b {
+
+            font-weight: bold !important;
+        }
+        .clearfix {
+
+        }
+        .pull-left {
+
+            float: left;
+        }
+        p.title-para {
+
+            margin-bottom: 10px;
+        }
+        #donate-button {
+
+            padding: 15px 25px;
+            margin: 0px auto;
+            display: block;
+        }
+        .control-group {
+
+            overflow: hidden;
+        }
+        .control-group > div.form-part {
+
+            width: 50%;
+            float: left;
+            padding: 5px 10px;
+            padding-left: 110px;
+            position:relative;
+        }
+        .control-group > div.form-part.full {
+
+            width: 100%;
+        }
+
+        .control-group > div.form-part.full > label {
+
+            right: 836px;
+        }
+
+        .control-group > div.form-part > label {
+
+            /* position: relative;; */
+            top: 12px;
+            right: 365px;
+        }
+
+        #donate-form * {
+
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -o-box-sizing: border-box;
+        }
+        #donate-form .text input, #donate-form .text textarea {
+
+            margin-bottom: 0px !important;
+        }
+        .control-group > div.form-part.required > label:after, .control-group > div.form-part.required > label::after {
+
+            content: "*";
+            display: inline;
+            color: red;
+        }
+        label.switch {
+
+            font-size: 0.8em;
+        }
+        #tabs div.tab-switch label {
+        
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .control-group .input.text  label.switch {
+
+            float: left;
+            margin: 5px 0px 0px 18px;
+            font-size: 13px;
+            font-weight: bold;
+            width: 348px !important;
+            display: block;
+            margin-left: 303pxs;
+            border: 1px solid #686868;
+            min-height: 30px;
+            border-radius: 5px;
+            padding: 5px;
+            font-size: 0.8em;
+        }
+        .control-group .input.text  label.switch.hide {
+
+            display: none;
+        }
+        select[name="res_status"] {
+
+            display: block;
+            float:left;
+        }
+        [type="submit"] {
+
+            cursor: pointer;
+        }
+        input[name="payment_type"] {
+
+            display:inline;
+            width:20px;
+            height:10px;
+        }
+        #bankModal{
+            padding: 0px !important;
+        }
+        @media (min-width: 1200px){
+            #upiModal{
+                width: 70%;
+                height: 95%;
+                top:35%;
+                left: 35%;
+                padding: 0px !important;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body_container %}
+
+<form action="#" id="donate-form">
+
+    <div class='modal-body' style="padding:0">
+        {% if is_loggedin %}
+        <div style="padding-top : 20px;padding-bottom: 10px;text-align: center;">
+        {% else %}
+        <div style="padding-top : 20px;padding-bottom: 10px;text-align: center; margin-top: 66px;">
+        {% endif %}
+            <h1 style="font-size:20px;color: orangered;"> Your donations will help us delivery Quality Education across Rural India. </h1>
+        </div>
+        <p class="title-para"><b style="margin-left: 9px;">Payment details</b></p>
+      
+        <!-- <div class="control-group">
+            <div class="form-part full">
+                <label>Residential Status</label>
+                <div class="input text clearfix">
+                    <select name='res_status'>
+                        <option value='Resident Indian'>Resident Indian</option>
+                        <option value='Non Resident Indian'>Non Resident Indian</option>
+                        <option value='Other Passport'>Other Passport</option>
+                    </select>
+                    <label class='right switch' id="ResidentIndian">Please Provide your PAN Number</label>
+                    <label class='right switch hide' id="NonResidentIndian">Please Provide your Passport number</label>
+                    <label class='right switch hide' id="OtherPassport">We Accept only from indian passport holders, please contact vidyadiya@evidyaloka.org</label>
+                </div>
+            </div>
+        </div>
+        {% csrf_token %}
+        <input type="hidden" name="donate" value="{% if from_ %}NAD{% else %}{{donation_type}}{% endif %}"/>
+        <input type="hidden" name="num_children" value="{{children}}"/>
+        <input type="hidden" name="num_classrooms" value="{{number}}"/>
+        <input type="hidden" name="num_centers" value="{{centres}}"/>
+        <input type="hidden" name="num_subjects" value="{{ num_subjects }}"/>
+        <input type="hidden" name="num_months" value="0"/>
+        <input type="hidden" name="area_of_donation" value="{% if from_ %}{{ donate_to }}{% else %} '' {% endif %}"/>
+        <input type="hidden" name="honorary_name" value="{% if from_ %}{{ honor_name }}{% else %}''{% endif %}"/> -->
+
+        <div class="control-group">
+            <div class="form-part required">
+                <label class='lable' style='font-family:sans-sarif !important;margin-left: -100px;';>First Name:</label>
+                <div class="input text">
+                    <input type="text" name="first_name" data-validate="true" style="margin-top: -26px;"
+                    data-title="First Name"
+                    data-field-type="not_empty" data-show-tooltip="true"
+                    rel="tooltip" data-placement="left" value='{%if f_name %}{{f_name}}{% else %} {{ user.first_name }} {% endif %}'/>
+                </div>
+            </div>
+            <div class="form-part required">
+                <label class='right' style='font-family:sans-sarif !important;margin-left: -100px;';>Last Name:</label>
+                <div class="input text">
+                    <input type="text" name="last_name" data-validate="true" style="margin-top: -26px;"
+                    data-title="Last Name"
+                    data-field-type="not_empty" data-show-tooltip="true"
+                    rel="tooltip" data-placement="left" value='{%if l_name %}{{l_name}}{% else %} {{ user.last_name }} {% endif %}'/>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="form-part required">
+                <label style='font-family:sans-sarif !important;margin-left: -100px;';>Email:</label>
+                <div class="input text">
+                    <input type="text" name="email" data-validate="true" style="margin-top: -26px;"
+                    data-title="Email"
+                    data-field-type="not_empty" data-show-tooltip="true"
+                    rel="tooltip" data-placement="left" value='{%if email %}{{email}}{% else %} {{ user.email }} {% endif %}'/>
+                </div>
+            </div>
+            <div class="form-part required">
+                <label class='right' style='font-family:sans-sarif !important;margin-left: -100px;';>Contact Number:</label>
+                <div class="input text">
+                    <input type="text" name="phone" data-validate="true" style="margin-top: -26px;"
+                    data-title="Contact Number"
+                    data-field-type="not_empty" data-show-tooltip="true"
+                    rel="tooltip" data-placement="left" value='{%if from_ %}''{% else %} {{ user.userprofile.phone }} {% endif %}'/>
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="form-part full">
+                <label style='font-family:sans-sarif !important;margin-left: -100px;';>Residential Status</label>
+                <div class="input text clearfix">
+                    <select name='res_status' id='res_status' onchange='get_passport()' style="margin-top: -26px;">
+                        <option value='Resident Indian'>Resident Indian</option>
+                        <option value='Non Resident Indian'>Non Resident Indian</option>
+                        <option value='Other Passport'>Other Passport</option>
+                    </select>
+                    <label class='right switch hide' id="OtherPassport" style='font-family:sans-sarif !important';>We Accept only from Indian passport holders, please write to donor-relations@evidyaloka.org for further assistance
+                    </label>
+                </div>
+            </div>
+        </div>
+        {% csrf_token %}
+        <input type="hidden" name="donate" value="{% if from_ == 'nad' %}NAD{% elif from_ == 'new_year' %}New Year{% else %}{{donation_type}}{% endif %}"/>
+        <input type="hidden" name="num_children" value="{{children}}"/>
+        <input type="hidden" name="num_classrooms" value="{{number}}"/>
+        <input type="hidden" name="num_centers" value="{{centres}}"/>
+        <input type="hidden" name="num_subjects" value="{{ num_subjects }}"/>
+        <input type="hidden" name="num_months" value="0"/>
+        <input type="hidden" name="area_of_donation" value="{% if from_ %}{{ donate_to }}{% else %} '' {% endif %}"/>
+        <input type="hidden" name="honorary_name" value="{% if from_ %}{{ honor_name }}{% else %}''{% endif %}"/>
+        <input type="hidden" name="donation_id" value=""/>
+        <div class="control-group">
+            <div class="form-part required" id = 'pan_no'>
+                <label style='font-family:sans-sarif !important;margin-left: -100px;';>PAN No:</label>
+                <div class="input text">
+                    <input type="text" name="pan" data-validate="true" style="margin-top: -26px;"
+                    data-title="Pan number"
+                    data-field-type="not_empty" data-show-tooltip="true"
+                    rel="tooltip" data-placement="left" value=''/>
+                </div>
+            </div>
+            <div class="form-part" id='passport'>
+                <label class='right' style='font-family:sans-sarif !important;margin-left: -100px;';>Indian Passport :</label>
+                <div class="input text">
+                    <input type="text" name="passport" style="margin-top: -26px;"
+                    data-field-type="not_empty" data-title="Passport"
+                    data-show-tooltip="true"
+                    rel="tooltip" data-placement="left" />
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="form-part ">
+                <label class='lable' style='font-family:sans-sarif !important;margin-left: -100px;';>Currency:
+                
+                </label>
+        <!-- <select style="margin-top: -26px;margin-left: 44px;">
+            <option style='font-size:10px;'>&#163;</option>
+            <option style='font-size:10px;'>&#36;</option>
+            <option style='font-size:10px;'>&#165;</option>
+            <option style='font-size:10px;'>&#128;</option>
+            <option style='font-size:10px;'selected>&#x20B9;</option>
+            <option style='font-size:10px;'>&#8356;</option>
+            <option style='font-size:10px;'>&#8371;</option>
+            </select> -->
+            <div class="input text">
+                <p type="text" name="currency" style="margin-top: -26px;">&#x20B9; (INR)</p>
+            </div>
+            </div>
+        
+            <div class="form-part required">
+                <label class='lable' style='font-family:sans-sarif !important;margin-left: -100px;';>Amount:
+                
+                </label>
+                
+                <div class="input text">
+                
+                    <input type='number' value='{{ amount}}' style="margin-top: -26px;"
+                           id = "amt"
+                           data-title="Amount"
+                           name='amount' style="margin-bottom: 0px"/>
+                </div>
+               
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="form-part full required">
+                <label style='font-family:sans-sarif !important;margin-left: -100px;';>Address Line:</label>
+                <div class="input text">
+                    <textarea type="textarea" name="address" style="margin-top: -26px;"
+                              data-validate="true"
+                              data-title="Address"
+                              data-field-type="not_empty"
+                              data-show-tooltip="true"
+                    rel="tooltip" data-placement="left"
+                    style="height: 67px"></textarea>
+                </div>
+            </div>
+        </div>
+            <!--
+            <div class="form-part">
+                <label class='right'>Address Line2:</label>
+                <div class="input text">
+                    <textarea type="textarea" name="address2"
+                    data-show-tooltip="true" rel="tooltip"
+                    data-placement="left" ></textarea>
+                </div>
+            </div>
+            -->
+            <div class="control-group">
+            <div class="form-part required">
+                <label style='font-family:sans-sarif !important;margin-left: -100px';>City:</label>
+                <div class="input text">
+                    <input type="text" name="city" data-validate="true" style="margin-top: -26px;"
+                    data-title="City"
+                    data-field-type="not_empty" data-show-tooltip="true"
+                    rel="tooltip" data-placement="left" value='{%if from_ %}''{% else %} {{ user.userprofile.city }} {% endif %}'/>
+                </div>
+            </div>
+            <div class="form-part required">
+                <label class='right' style='font-family:sans-sarif !important;margin-left: -100px';>Pincode:</label>
+                <div class="input text">
+                    <input type="text" name="pincode" data-validate="true" style="margin-top: -26px;"
+                    data-title="Pincode"
+                    data-field-type="not_empty" data-show-tooltip="true"
+                    rel="tooltip" data-placement="left"  value='{%if from_ %}''{% else %} {{ user.userprofile.pincode }} {% endif %}'/>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+
+            <div class="form-part">
+                <label class='right' style='font-family:sans-sarif !important;margin-left: -100px';>State:</label>
+                <div class="input text">
+                    <input type="text" name="state" style="margin-top: -26px;"
+                    data-title="State"
+                    data-show-tooltip="true"
+                    rel="tooltip" data-placement="left"
+                    value='{%if from_ %}''{% else %} {{ user.userprofile.state }} {% endif %}'/>
+                </div>
+            </div>
+            <div class="form-part required">
+                <label style='font-family:sans-sarif !important;margin-left: -100px';>Country:</label>
+                <div class="input text">
+                    <input type="text" name="country" data-validate="true" style="margin-top: -26px;"
+                    data-title="Country"
+                    data-field-type="not_empty" data-show-tooltip="true"
+                    rel="tooltip" data-placement="left" value='{%if from_ %}''{% else %} {{ user.userprofile.country }} {% endif %}'/>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+          
+
+            <div class="form-part">
+                <label style='font-family:sans-sarif !important;margin-left: -100px';>Channel:</label>
+                <div class="input text" style="margin-top: -26px;">
+                    <select name="channel" style="width: 220px;" id ='channel' onchange='get_channel()' > 
+                        {% if from_ == 'nad' %}
+                        <option value="NAD">NAD</option>
+                        {% elif from_ == 'new_year' %}
+                        <option value="New Year">New Year</option>
+                        {% else %}
+                        <option value="Back to eVidya School">Back to eVidya School</option>
+                        <!-- <option value="FlipKart">Charity event - by FlipKart</option> -->
+                        <option value="Bangalore 10K Run">Bangalore 10K Run</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="Email">Email</option>
+                        <!-- <option value="Corporate - HP">Corporate - HP</option> -->
+                        <!-- <option value="Corporate - Microsoft">Corporate - Microsoft</option> -->
+                        <!-- <option value="Corporate - FlipKart">Corporate - FlipKart</option> -->
+                        <!-- <option value="Corporate - Apeejay Group">Corporate - Apeejay Group</option> -->
+                        <option value="Word of Mouth">Word of Mouth</option>
+                        <!-- <option value="Corporate - Cognizant CH">Corporate - Cognizant CH</option> -->
+                        <option value="India Assoc - Nashville">India Assoc - Nashville</option>
+                        <!-- <option value="WealthRays">WealthRays</option> -->
+                        <option selected="selected" value="Daan Utsav">Daan Utsav</option>
+                        <option value="Corporate">Corporate</option>
+                        <option value="Others">Other</option>
+                        {% endif %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-part" id='text_box'>
+                <label style='font-family:sans-sarif !important;margin-left: -100px';>Reference:</label>
+                <div class="input text">
+                    <input type="text" id="refer" name="reference" style="margin-top: -26px;" rel="tooltip" data-placement="right" data-title="Name of person, through whom you came to know the details" data-original-title="">
+                      <input type="hidden" id="refer_id" name="reference_id" rel="tooltip" >
+                </div>
+            </div>
+            <div>
+                <button type="button" id="next-button" style="background-color: #F15A22; color: white;width: 20%;height: 35px;margin-top: 10px;margin-left: 75%;">
+                        <b>NEXT >></b>
+                </button>
+            </div>
+        </div>
+        <br>
+
+        <div class="control-group hide">
+                <label style="display:inline;float:left;padding-left:25px;padding-top:5px;font-family:sans-sarif !important;"> Donation Type: </label>
+            <div class="form-part" style="display:inline;padding-left:0px;font-family:sans-sarif !important;">
+                <div class="input " style="display:inline;font-family:sans-sarif !important;">
+
+          <label class="pull-left" style="padding-left:5px;font-family:sans-sarif !important;">  <input type="radio" id="onetim" name="recurr" value="onetime" checked='checked' style="float:left" />One Time Donation</label> 
+         <label class="pull-left" style="padding-left:5px;font-family:sans-sarif !important;">   <input type="radio" id="recur" name="recurr" value="recu" style="float:left;" />Recurring Donation</label> 
+                </div>
+            </div>
+        </div>
+        <div id="recur_div" style="height:40px;margin-left:110px;border-radius:10px; display:none; width:80%;background-color:white; ">
+         <label style="display:inline; margin-left:50px;font-family:sans-sarif !important;">Frequency : </label>  <select name="period" id='fre' style="margin:10px;">
+            <option value="monthly">Monthly</option>
+              <option value="quarterly">Quarterly</option>
+                <option value="halfyearly">Half Yearly</option>
+                  </select>
+
+        <label style="display:inline;margin-left:50px;font-family:sans-sarif !important;">No of Payments :  </label><input type="number" min=2 max=12 readonly  name="noofpay" value=12 style=" width:50px;" id="numpay">
+        <label style="display:inline; margin-left:50px;font-family:sans-sarif !important;"> Each Pay :  </label><input type="text"  readonly name="emi" style="font-weight:bold; background-color:#A1C1EE; width:90px;" id="emi">
+
+        </div>
+
+        <div style="text-align: center;">
+            <div style="background-color: #3CB371; font-family:sans-sarif !important; color:white; border-radius: 9px;margin-bottom: 10px;"><p style="font-weight: bold; font-size: 18px;">All donations made to eVidyaloka Trust are exempt from tax under Section 80G of the Income Tax Act.</p></div>
+        </div>
+              
+        <div class="pledge-container hide"
+             style="position: relative;
+                    margin-bottom: 50px;
+                    background-color: white;
+                    padding: 20px 10px">
+            <div id="tabs" style="padding-right: 150px">
+                <p class="title-para">Payment options</p>
+                <div style="margin-bottom: 5px;" class="tab-switch">
+                    <div class="clearfix">
+                        <label class="radio" style='margin-left:10px;font-family:sans-sarif !important';>
+                               <input name="payment_type" type="radio"
+                                      {% if from_ %}checked="checked"{% endif %}data-pane="tabs-3"
+                                      value="online"/>
+                                      Credit/debit card/net banking&nbsp;
+                        </label>
+                        <div id="tabs-3" class="tab-pane">
+                            <div class='online'>
+                                <label class="switch" style='font-family:sans-sarif !important';>
+                                <!-- <p>1. You can contribute Up to Rs. 53000 through Online option</br> -->
+                                Below are the Trasaction costs incurred to us :<br />
+                                - Netbanking - 2%,<br/> 
+                                - Debt Cards - 1%, <br />
+                                - Credit Cards - 1%</br>
+                                </p>
+                                </label>
+                            </div>
+                        </div>
+                        <label class="radio" style='margin-left:10px;font-family:sans-sarif !important';>
+                               <input name="payment_type" type="radio"
+                                      {% if not from_ %}checked="checked"{% endif %} data-pane="tabs-1"
+                                      value="Bank Transfer"/>
+                                      Bank transfer&nbsp;
+                        </label>
+                        <!-- <div id="tabs-1" class="tab-pane active">
+                            <div class='Bank Transfer'>
+                                <label class="switch" style='font-family:sans-sarif !important';>
+                                    <p style="font-size: 13px;">Write to donate@evidyaloka.org for further assistance</p>
+                                Payee Name: <b>eVidyaloka trust</b>, Current Account no: <b>31682441993</b>, Bank Name: <b>State Bank of India</b>, IFSC code: <b>SBIN0030495</b><br/>
+                                </label>
+                            </div>
+                        </div> -->
+                        <label class="radio" style='margin-left:10px;font-family:sans-sarif !important';>
+                               <input name="payment_type" type="radio"
+                                      data-pane="tabs-2"
+                                      value="upi"/>
+                            UPI
+                        </label>
+                        <!-- <div id="tabs-2" class="tab-pane">
+                            <div class='neft-details'>
+                                <label class="switch" style='font-family:sans-sarif !important';>
+                                    <p style="font-size: 13px;">Write to donate@evidyaloka.org for further assistance</p>
+                                </label>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <p class="footer-para" style='margin-left:40%;font-family:sans-sarif !important;font-size: medium;'><i>Write to <b>donate@evidyaloka.org</b> for further assistance</i></p>
+            </div>
+            <button id="donate-button" class="submit-btn"
+                    type="submit" href="#"
+                    style="background-color: #F15A22;
+                          position: absolute;
+                          top: 30px;
+                          right: 10px;
+                          color: white;">
+                <span class="ajax-button-label" data-loading="please wait">
+                    <b>Pay</b>
+                </span>
+            </button>
+        </div>
+    </div>
+</form>
+
+<form id="payment_request" action="/sponsor/onlinepayments/"
+      class="hide" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="amount" value="">
+    <input type="hidden" name="id" value="">
+</form>
+<div class="modal col-lg-12 col-xs-12" id="upiModal">
+    <input type="hidden" name="id" value="">
+    <div class="modal-header col-lg-12 col-xs-12" style="background-color: #f15a22;height: 55px;">
+        <p style="text-align: center;font-size: 16px;font-weight: bold; font-family: PlutoCondRegular;color:#FFFFFF;">UPI PAYMENT<button type="button" class="close" onclick="$('#upiModal').modal('hide');" style="float: right;background-color: #FFFF;font-size: 30px;">&times;</button></p>
+    </div>
+    <div class="modal-body col-lg-12 col-xs-12" id="upi_modal" style="min-height:390px;background-color: #ffffff; margin: auto;">
+        <div class="col-lg-6 col-xs-10  col-lg-offset-0 col-xs-offset-1" style="">
+            <img class="img-responsive center-block" src='/static/images/qr_code_evloka_new.jpg' style="margin: 2.5%;">
+        </div>
+        <div class="col-lg-6 col-xs-10 col-lg-offset-0 col-xs-offset-1" style="">
+            <div class="col-lg-12 col-xs-12" style="margin: 5%;">
+                <h3>Steps to make the payment :</h3>
+                <ol style="list-style-type: upper-roman; padding: 2%;">
+                    <li>Scan QR code by any UPI app to make payment.</li>
+                    <li>Note the transaction number of the payment.</li>
+                    <li>Enter the transaction number in the following form and click confirm.</li>
+                    <li>Upon confirmation of payment, we will share the 80G receipt with you within 14 days.</li>
+                </ol>
+            </div>
+            <div class="col-lg-12 col-xs-12">
+                <form style="margin: 5%; border-top: 1px solid #333;padding: 5%;">
+                    <label for="transaction_no">Transaction Number :</label><br>
+                    <input type="text" id="transaction_no" name="transaction_no"><br>
+                    <button class="btn btn-danger" type="button" onclick="$('#upiModal').modal('hide');" style="float: left;margin: 2.5%;">Back</button>
+                    <button class="btn btn-success" type="button" style="float: left;margin: 2.5%;" onclick="upiConfirm();">Confirm</button>
+                </form>
+                <h5 style="text-align: center;">Write to <b>donate@evidyaloka.org</b> for any further assistance</h5>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="modal-footer" id="upi_modal_footer" style="background-color: #ffffff;">
+    </div> -->
+</div>
+<div class="modal col-lg-12 col-xs-12" id="bankModal" style="padding-left: 0px !important;padding-right: 0px !important;">
+    <input type="hidden" name="id" value="">
+    <div class="modal-header col-lg-12 col-xs-12 text-center" style="background-color: #f15a22;height: 55px;">
+        <p style="text-align: center;font-size: 16px;font-weight: bold; font-family: PlutoCondRegular;color:#FFFFFF;">Bank transfer of donation to eVidyaloka Trust<button type="button" class="close" onclick="$('#bankModal').modal('hide');" style="float: right;background-color: #FFFF;font-size: 30px;">&times;</button></p>
+    </div>
+    <div class="modal-body col-lg-10 col-xs-8 col-lg-offset-1 col-xs-offset-2" id="bank_modal" style="min-height:390px;background-color: #ffffff;">
+        <div  style="font-weight: bold;background-color: #3CB371;border-radius: 10px;color: white;font-family: sans-serif !important;padding: 2.5% 1.5% 2.5% 1.5%;">
+            <h3 style="text-align: center;font-weight: bold;"><u>Account Details</u></h3>
+            <table style="border-spacing: 2.5px;font-size:medium;border-collapse: unset;">   
+                <tr>
+                    <td>Payee Name::</td>
+                    <td> eVidyaloka Trust</td>
+                </tr>
+                <tr>
+                    <td>Account Type::</td>
+                    <td> Current Account</td>
+                </tr>
+                <tr>
+                    <td>Account Number::</td>
+                    <td> 31682441993</td>
+                </tr>
+                <tr>
+                    <td>Bank::</td>
+                    <td> State Bank of India</td>
+                    </tr>
+                    <tr>
+                    <td>Branch::</td>
+                    <td> Sector-2, HSR Layout, Bangalore</td>
+                    </tr>
+                    <tr>
+                    <td>IFSC Code::</td>
+                    <td> SBIN0030495</td>
+                    </tr>
+                </table>
+        </div>
+        <div style="text-align: center;margin: auto;">
+            <h5>Upon confirmation of payment, we will share the 80G receipt to the registered email ID within 14 days.</h5>
+            <p><b>Please write to donate@evidyaloka.org for any further assistance.</b></p>
+        </div>
+        <div style="text-align: center;margin: auto;">
+            <button class="btn btn-danger" type="button" style="height: 40px;font-size: large;" onclick="window.location='https://www.evidyaloka.org'">Finish</button>
+        </div>
+    </div>
+    <!-- <div class="modal-footer" id="upi_modal_footer" style="background-color: #ffffff;">
+    </div> -->
+</div>
+</script> 
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js" type="text/javascript"></script>
+<script>
+       $(function(){ //To set the start month of recurring donation
+           var dat = new Date();
+           var month = dat.getMonth();
+           console.log(month);
+           var arrayOfOptions = $('#selmon option');
+           for(var i=0; i<arrayOfOptions.length;i++){
+              var opt= arrayOfOptions[i];
+              if( i==month  )
+               {  $(opt).attr("selected","selected");  }
+           }
+         });
+       $(function(){$('#fre').change(function(){if($(this).val()=='monthly'){$('#numpay').val(12);$('#numpay').trigger('change');}
+                     else if($(this).val()=='quarterly'){$('#numpay').val(4);$('#numpay').trigger('change');}
+                       else if($(this).val()=='halfyearly'){$('#numpay').val(2);$('#numpay').trigger('change');}
+                      else{$('#numpay').val(1);$('#numpay').trigger('change');}
+                    });});
+
+       $(function(){ //to change the val of EMI when changed to recurring donation
+           var rec = document.forms['donate-form'].elements['recurr'];
+           for (var i=0, len=rec.length; i<len; i++) {
+                    rec[i].onclick = function() {
+                                       if( this.value == "recu" ){
+                                       $("#recur_div").slideDown("slow");
+                                       console.log($(amt).val());
+                                       var vemi = parseFloat(parseInt($(amt).val())/parseInt($("#numpay").val()));
+                                       console.log(vemi);
+                                           $("#emi").val(parseFloat(vemi));
+                                       }
+                                       else{
+                                       $("#recur_div").slideUp("slow");
+
+                                       }
+                                       };
+                                 }
+                                 });
+
+       $(function(){ // To change Emi value when the numpay changes
+                      $('#numpay').change( function(){ if($('input[name=recurr]:checked').val() == 'recu' ){
+                                                          console.log($('#recur').val());
+                                                          var vemi = parseFloat(parseInt($(amt).val())/parseInt($("#numpay").val()));
+                                                             if(vemi % 1 ===0){
+                                                                  $("#emi").val(parseFloat(vemi));
+                                                                  $('#numpay').css("border-color","");
+                                                                               }
+                                                             else{ $("#emi").val(parseFloat(vemi)); }
+                                                        }
+                                                    else{
+                                                                 $("#emi").val($("#amt").val());
+                                                                 $("#numpay").val("1");
+                                                        }
+
+                                                   });
+                                                   });
+
+
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('#passport').hide();
+        $('#text_box').hide();
+        
+         $("#refer").autocomplete({
+             source: "/ajax/refer/",
+             minLength: 4,
+             select: function(event, ui) {
+                $("#refer_id").val(ui.item.id)
+            }
+           });
+
+
+        var $tabs = $("#tabs"),
+            $tabSwitch = $tabs.find(".tab-switch"),
+            $tabPanes = $tabs.find(".tab-pane");
+
+        $("input[data-type=date]").datepicker({
+            dateFormat: "mm-dd-yy"
+        });
+
+        $tabSwitch.on("change", "input[type=radio]", function () {
+
+            var pane = $(this).attr("data-pane");
+
+            $tabPanes.removeClass("active")
+                     .filter("[id='"+ pane +"']")
+                     .addClass("active");
+        });
+
+        var $res_status = $("select[name=res_status]"),
+            $donate_form = $("#donate-form");
+        var $payment_form = $("#payment_request");
+
+        $('#next-button').on('click', function(e){
+            if($('#next-button').text() == 'EDIT'){
+                var post_data = {"donation_id" : $donate_form.find("input[name=donation_id]").val(), "status" : "in progress"};
+
+                $.post("/v2/edit/pledge_details/", post_data, "json").done(function(resp){
+                        $("#next-button").removeClass('data-loading');
+                        $('.pledge-container').addClass('hide');
+                        $('#next-button').text('NEXT >>');
+                        $("#donate-form :input").prop("disabled", false);
+                        $('#next-button').prop('disabled', false);
+                    }).fail(function () {
+                        alert("Oops!, Something went wrong, please try again later!");
+                    }).always(function () {
+                        $("#next-button").removeClass('data-loading');
+                        $('.pledge-container').addClass('hide');
+                        $('#next-button').text('NEXT >>');
+                        $("#donate-form :input").prop("disabled", false);
+                        $('#next-button').prop('disabled', false);
+                    });
+            }
+            else{
+                e.preventDefault();
+                if($(this).hasClass("data-loading")) {
+
+                return;
+                }
+                
+                var res_status = $res_status.val();
+
+                if(res_status != "Resident Indian" && res_status != "Non Resident Indian") {
+
+                    evd.show_msg("We Accept only from indian passport holders, please contact vidyadiya@evidyaloka.org");
+                    return;
+                }
+
+                var isValid = true;
+
+                var $inputs = $donate_form.find("[data-validate='true']:visible");
+
+                $inputs.each(function () {
+
+                    var inputName = $(this).attr("name"),
+                        inputVal  = $(this).val().trim();
+
+                    if(inputVal.length === 0){
+
+                        isValid = false;
+                        evd.show_msg($(this).attr("data-title") + " can not be empty!");
+                        return false;
+                    }else {
+                        inputVal = inputVal.replace(/\s/g,"");
+                        $(this).val(inputVal);
+
+                        if (inputName == "passport" || inputName == "pan") {
+                            if(!inputVal.match(/^[A-Za-z0-9]{5,10}$/g)) {
+                            
+                                isValid = false;
+                                alert("Hey!, Please check the " + inputName.toUpperCase() + " Number");
+                                return false;
+                            }
+                        }else if (inputName == "email") {
+                        
+                            if(!inputVal.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+                            
+                                isValid = false;
+                                alert("Hey!, Please check the Email Address");
+                                return false
+                            }
+                        }
+                                
+                    }
+                });
+
+                if (!isValid) {
+                
+                    return;
+                }
+
+                var amount = parseInt($("input[name=amount]").val());
+
+                var $payment_type = $("input[name=payment_type]:checked");
+
+                if($.isNumeric(amount)) {
+                
+                    if(amount < 100){
+                    
+                        alert("Please enter amount greater than or equal to 100");
+                        return;
+                    } 
+                    // else if (amount > 65000 && $payment_type.val() == "online"){
+                    
+                    //     alert("For amount greater than 65,000, please pay "+
+                    //           " through NEFT or Cheque");
+                    //     return;
+                    // }
+                }else {
+                
+                    alert("Please enter a valid amount!");
+                }
+                var values = $donate_form.serializeArray();
+
+                var post_data = {};
+
+                $.each(values, function (i, value) {
+
+                    post_data[value.name] = value.value;
+                });
+                post_data.payment_type = "";
+                post_data.status = "in progress";
+                // console.log("POST DATA", post_data);
+
+                var $next_button = $(this);
+
+                $next_button.addClass("data-loading");
+                $next_button.text("Please wait...");
+                var donation_update =$donate_form.find("input[name=donation_id]").val()
+                if(donation_update){
+                    
+                    post_data['donation_id'] = donation_update;
+                    $.post("/v2/edit/pledge_details/", post_data, "json").done(function(resp){
+                        $payment_form.find("input[name=amount]").val(resp.amount);
+                        $payment_form.find("input[name=id]").val(resp.donation_id);
+                        $donate_form.find("input[name=donation_id]").val(resp.donation_id);
+                    }).fail(function(){
+                        alert("Oops!, something went wrong, please try again later!");
+                        $(this).removeClass('data-loading');
+                        $('#next-button').text('NEXT >>');
+                    }).always(function () {
+
+                    $('#next-button').text('EDIT');
+                    $('.pledge-container').removeClass('hide');
+                    $("#donate-form :input").prop("disabled", true);
+                    $('#next-button').prop('disabled', false);
+                    $('.pledge-container :input').prop('disabled', false);
+                    });
+                }
+                else{
+                    $.post("/pledge/", post_data, "json").done(function(resp){
+
+                    $payment_form.find("input[name=amount]").val(resp.amount);
+                    $payment_form.find("input[name=id]").val(resp.donation_id);
+                    $donate_form.find("input[name=donation_id]").val(resp.donation_id);
+
+                    }).fail(function () {
+
+                        alert("Oops!, Something went wrong, please try again later!");
+                    }).always(function () {
+
+                        $('#next-button').text('EDIT');
+                        $('.pledge-container').removeClass('hide');
+                        $("#donate-form :input").prop("disabled", true);
+                        $('#next-button').prop('disabled', false);
+                        $('.pledge-container :input').prop('disabled', false);
+                    });
+                }
+            }
+        });
+        $donate_form.on("submit", function (e) {
+
+            e.preventDefault();
+
+            if($(this).hasClass("data-loading")) {
+
+                return;
+            }
+            var vemi = parseFloat(parseInt($(amt).val())/parseInt($("#numpay").val()));
+
+            var values = $donate_form.serializeArray();
+
+            var post_data = {};
+
+            $.each(values, function (i, value) {
+
+                post_data[value.name] = value.value;
+            });
+
+            var donation_update =$donate_form.find("input[name=donation_id]").val()
+
+            post_data['donation_id'] = donation_update;
+
+            // if(post_data.payment_type == 'upi'){
+            //     post_data['send_mail'] = 'no'
+            // }
+            // else{
+            //     post_data['send_mail'] = 'yes'
+            // }
+            post_data.status = "pending";
+            // console.log(post_data);
+
+            var $form = $(this),
+                $donate = $form.find("button[type=submit]");
+
+            $form.addClass("data-loading");
+            $donate.text("Processing...");
+
+            $.post("/v2/edit/pledge_details/", post_data, "json").done(function(resp){
+                if(post_data.payment_type == 'upi'){
+                    $('#upiModal').modal('show');
+                    $('#upiModal').find("input[name=id]").val(post_data.donation_id);
+                }
+                else if(post_data.payment_type == 'Bank Transfer'){
+                    $("#bankModal").modal('show');
+                    $('#bankModal').find("input[name=id]").val(post_data.donation_id);
+                }
+                else{
+                    $payment_form.submit();
+                }
+            }).fail(function(resp){
+                // console.log(JSON.stringify(resp));
+                alert("Oops!, Something went wrong, please try again later!");
+                
+            }).always(function () {
+                $donate.text("Pay");
+                $form.removeClass("data-loading");
+            });
+        });
+
+        $res_status.change(function () {
+
+            var val = $(this).val();
+
+            $(this).nextAll("label.switch").addClass("hide");
+
+            $("#" + val.replace(/\s/g, "")).removeClass("hide");
+
+            switch (val) {
+
+                case "Resident Indian":
+                    $donate_form.find("input[name=pan]")
+                                .attr("data-validate", "true")
+                                .parents(".form-part")
+                                .addClass("required");
+                    $donate_form.find("input[name=passport]")
+                                .removeAttr("data-validate")
+                                .parents(".form-part")
+                                .removeClass("required");
+                    break;
+                case "Non Resident Indian":
+                    $donate_form.find("input[name=passport]")
+                                .attr("data-validate", "true")
+                                .parents(".form-part")
+                                .addClass("required");
+                    $donate_form.find("input[name=pan]")
+                                .removeAttr("data-validate")
+                                .parents(".form-part")
+                                .removeClass("required");
+                    break;
+                default:
+                    $donate_form.find("input[name=passport]")
+                                .removeAttr("data-validate")
+                                .parents(".form-part")
+                                .removeClass("required");
+                    $donate_form.find("input[name=pan]")
+                                .removeAttr("data-validate")
+                                .parents(".form-part")
+                                .removeClass("required");
+            }
+        });
+    });
+    function  get_channel(){
+        var ref_channel = document.getElementById("channel").value;
+        console.log("ref_channel",ref_channel)
+        if (ref_channel=="Others" || ref_channel=="Corporate"){
+            $('#text_box').show();
+
+        }
+        else{
+            $('#text_box').hide();
+        }
+
+    }
+    function get_passport() {
+
+  var res_status = document.getElementById("res_status").value;
+  if (res_status=="Non Resident Indian"){
+    $('#passport').show();
+    $('#pan_no').hide(); 
+  }
+  if (res_status=="Resident Indian"){
+    $('#pan_no').show(); 
+    $('#passport').hide();
+}
+if (res_status=="Other Passport"){
+    $('#pan_no').hide(); 
+    $('#passport').hide();
+}
+    }
+    function upiConfirm(){
+        var transaction_number = $("#transaction_no").val()
+        if(transaction_number){
+            var post_data = {'donation_id': $("#upiModal").find("input[name=id]").val(), "transaction_no": transaction_number};
+            $.post("/v2/edit/pledge_details/", post_data, "json").done(function(resp){
+                window.location="/sponsor/thankyou/";
+                }).fail(function () {
+                    alert("Oops!, Something went wrong, please try again later!");
+                });
+        }
+        else{
+            evd.show_msg("Please enter transaction number!"); 
+        }
+    }
+</script>
+{% endblock %}

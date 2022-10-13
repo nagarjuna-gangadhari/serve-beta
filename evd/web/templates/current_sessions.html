@@ -1,0 +1,142 @@
+{% load filters %}
+<div class="modify-sessions">
+<table class="current_session_table">
+    <thead>
+        <tr>
+            <th style="width:55px;">Day</th>
+            <th>Date</th>
+            <th>Start time</th>
+            <th>End time</th>
+            <th style="width:200px;">Planned topics</th>
+            <th>Teacher</th>
+            <th style="width:20px"></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for session in sessions %}
+        <tr>
+            <td>
+                {{ session.day }}
+            </td>
+            <td style="width:135px;">
+                <div class="controls text" style="width:125px;height:30px;">
+                    <input type="text" style="width:100px;padding:3px 9px;margin:5px; 0px 0px 0px;" class="input date-picker" value="{{ session.start_date.day }}-{{ session.start_date.month }}-{{ session.start_date.year }}" />
+                </div>
+            </td>
+            <td style="width:100px;">
+                <select name="start_timings_mor" class="prefered_timings_mor" style="margin-top:5px;">
+                        <option value="From" class="prefered_timings_mor">From</option>
+                        <option value="{{ session.start_time }}" selected="selected" class="prefered_timings_mor">{{ session.start_time }}</option><!--removed:00-->
+                    {% for i in 1234567891011|make_list %}
+                        <option value="{{ forloop.counter0 }}:00" class="prefered_timings_mor">{{ forloop.counter0 }}:00</option>
+                        <option value="{{ forloop.counter0 }}:15" class="prefered_timings_mor">{{ forloop.counter0 }}:15</option>
+                        <option value="{{ forloop.counter0 }}:30" class="prefered_timings_mor">{{ forloop.counter0 }}:30</option>
+                        <option value="{{ forloop.counter0 }}:45" class="prefered_timings_mor">{{ forloop.counter0 }}:45</option>
+                    {% endfor %}
+                    {% for i in 12345678910|make_list %}
+                        <option value="{{ forloop.counter|add_digits:12 }}:00" class="prefered_timings_mor">{{ forloop.counter|add_digits:12 }}:00</option>
+                        <option value="{{ forloop.counter|add_digits:12 }}:15" class="prefered_timings_mor">{{ forloop.counter|add_digits:12 }}:15</option>
+                        <option value="{{ forloop.counter|add_digits:12 }}:30" class="prefered_timings_mor">{{ forloop.counter|add_digits:12 }}:30</option>
+                        <option value="{{ forloop.counter|add_digits:12 }}:45" class="prefered_timings_mor">{{ forloop.counter|add_digits:12 }}:45</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td style="width:100px;">
+                <select name="end_timings_eve" class="prefered_timings_eve" style="margin-top:5px;">
+                        <option value="To" class="prefered_timings_eve">To</option>
+                        <option value="{{ session.end_time }}" selected="selected" class="prefered_timings_eve">{{ session.end_time }}</option>
+                    {% for i in 1234567891011|make_list %}
+                        <option value="{{ forloop.counter0 }}:00" class="prefered_timings_eve">{{ forloop.counter0 }}:00</option>
+                        <option value="{{ forloop.counter0 }}:15" class="prefered_timings_eve">{{ forloop.counter0 }}:15</option>
+                        <option value="{{ forloop.counter0 }}:30" class="prefered_timings_eve">{{ forloop.counter0 }}:30</option>
+                        <option value="{{ forloop.counter0 }}:45" class="prefered_timings_eve">{{ forloop.counter0 }}:45</option>
+                    {% endfor %}
+                    {% for i in 12345678910|make_list %}
+                        <option value="{{ forloop.counter|add_digits:12 }}:00" class="prefered_timings_eve">{{ forloop.counter|add_digits:12 }}:00</option>
+                        <option value="{{ forloop.counter|add_digits:12 }}:15" class="prefered_timings_eve">{{ forloop.counter|add_digits:12 }}:15</option>
+                        <option value="{{ forloop.counter|add_digits:12 }}:30" class="prefered_timings_eve">{{ forloop.counter|add_digits:12 }}:30</option>
+                        <option value="{{ forloop.counter|add_digits:12 }}:45" class="prefered_timings_eve">{{ forloop.counter|add_digits:12 }}:45</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <div class="controls text" style="height:18px;">
+                    <!--<input type="text" class="planned-topics" style="width:150px;padding:3px 9px;margin:5px; 0px 0px 0px;" value="{{ session.planned_topic }}" />-->
+                    <select style="width:190px;" class="planned-topics">
+                        {% for topic in topics %}
+                            <option{% if session.planned_topic == topic %} selected="selected"{% endif %}>{{ topic }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div class="controls text" style="height:18px;">
+                    <select class="teacher" style='width:200px;'>
+                        {% for user in users %}
+                            <option{% if session.teacher == user.name %} selected="selected"{% endif %} value="{{ user.id }}">{{ user.id}} :: {{ user.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </td>
+            <td>
+                <a class="btn add-timing" data-session="{{ session.session_id }}"><span style="display:block;font-size:16px">{% if forloop.last %}+{% else %}-{% endif %}</span></a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div style="overflow:hidden;">
+    <form method="POST" id="modify_session" action="/modify_session/" style="padding:0px;">
+        {% csrf_token %}
+        <input type="hidden" name="removed_sessions" />
+        <input type="hidden" name="start_time" />
+        <input type="hidden" name="end_time" />
+        <input type="hidden" name="sessions" />
+        <input type="hidden" name="dates" />
+        <input type="hidden" name="planned_topics" />
+        <input type="hidden" name="offering_id" value="{{ offering_id }}" />
+        <input type="hidden" name="new_sessions" />
+        <input type="hidden" name="new_start_time" />
+        <input type="hidden" name="new_end_time" />
+        <input type="hidden" name="new_dates" />
+        <input type="hidden" name="new_planned_topics" />
+        <input type="hidden" name="teacher_ids" />
+        <input type="hidden" name="new_teacher_ids" />
+        <a class="btn modify-btn" rel="submit" href="#modify_session" pre-call="pre_modify_session" callback="after_modify_session">
+            <span class="ajax-button-label" data-loading="please-wait">Save</span>
+        </a>
+    </form>
+</div>
+<script>
+    $(document).ready(function(){
+        var removed_sessions = "";
+        var new_sessions = 0;
+        $("input[name='new_sessions']").val(new_sessions);
+        $("a.add-timing").click(function(){
+            var $row = $(this).parents("tr");
+            if($(this).children("span").text() == "-"){
+                $row.remove();
+                removed_sessions += $(this).attr("data-session") + ";";
+            }
+            else{
+                $(this).children("span").text("-");
+                var $clone = $row.clone(true);
+                var datepicker_id = Number($clone.find("input.date-picker").attr("id").split("dp")[1]) + 1;
+                $clone.find("input.date-picker").attr({"id": "dp"+datepicker_id});
+                $clone.addClass("new-row");
+                $clone.find("a.add-timing").children("span").text("+");
+                $clone.find("a.add-timing").attr({"data-session": ""});
+                $row.parents("table").append($clone);
+                $clone.find('input.date-picker').attr("id", "").removeClass('hasDatepicker').removeData('datepicker').unbind().datepicker({dateFormat: "dd-mm-yy", timeFormat: "hh:mm"});
+                new_sessions = new_sessions + 1;
+            }
+            $("input[name='removed_sessions']").val(removed_sessions);
+            $("input[name='new_sessions']").val(new_sessions);
+        });
+        $(".date-picker").datepicker({
+            dateFormat: "dd-mm-yy",
+            timeFormat: "hh:mm"
+        });
+    });
+</script>
+</div>

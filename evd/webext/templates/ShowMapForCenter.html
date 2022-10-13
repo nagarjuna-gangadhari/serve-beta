@@ -1,0 +1,68 @@
+{% block head_title %}{% endblock %}
+{% block head %}
+{% block head_scripts %}
+
+{% endblock head_scripts %}
+{% endblock head %}
+
+{% block content %}
+<div class='row'>
+  <div class='col-md-2 col-sm-2'><center><b>{{centerName}} Center Location</b></center></div>
+  <div class='col-md-10 col-sm-10' style='padding:3% 3% 3% 3%;'>
+     <div id="googleMap" style="width:100%;height:90%;"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function myMap() {
+  var url=window.location.href;
+  var urlSplit=url.split('=');
+  var centerName=urlSplit[1].toString();
+  var geocoder = new google.maps.Geocoder();
+  var address=centerName.replace(/%20/g,"");
+  address=address.replace(/-/g,' ');
+  var latitude='';
+  var longitude=''
+  var map = new google.maps.Map(document.getElementById("googleMap"), {
+      center: { lat: 23.2787, lng: 80.8661 },
+      zoom: 5,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+  });
+  
+  if (geocoder) {
+       geocoder.geocode( { 'address': address}, function(results, status) {
+	        if (status == google.maps.GeocoderStatus.OK) {
+	             latitude = parseFloat(results[0].geometry.location.lat());
+	             longitude = parseFloat(results[0].geometry.location.lng());
+	              
+	             var marker = new google.maps.Marker({
+	    	          position: new google.maps.LatLng(latitude,longitude),
+	    	          map:map
+	    	      });
+	            map.setCenter(new google.maps.LatLng(latitude,longitude));
+	            map.setZoom(13);
+	          
+	            var infowindow = new google.maps.InfoWindow({
+	               content: address+"( lat: "+latitude+", lng: "+longitude+" )"
+	           });
+	           
+	          marker.addListener('click', function() {
+	             infowindow.open(map, marker);
+	          });
+	          
+	       } else{
+	    	   
+	    	  alert('Address is invalid');
+	      }
+	   }); 
+  }else{
+	  
+	  alert('geocode error');
+  }
+ 
+}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBMsHpoZLO9skdzyR5TSQUe4pVV8TlKyc&callback=myMap"></script>
+{% endblock scripts %}

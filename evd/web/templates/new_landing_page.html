@@ -1,0 +1,3244 @@
+{% extends 'new_ui.html' %}
+{% load tags %}
+<style>
+	.body{
+	font-family: "Work Sans", sans-serif !important;
+	}
+	.label {
+	font-family: "Work Sans", sans-serif !important;
+	font-size: 17px !important;
+	}
+	.font_csss {
+	font-family: "Work Sans", sans-serif !important;
+	}
+	.inside_content {
+	font-size: 15px;
+	margin-top: -69%;
+	margin-left: 15%;
+	font-weight: bold;
+	}
+	.sidebar {
+	height: 100% !important;
+	width: 190px !important;
+	position: fixed !important;
+	z-index: 1 !important;
+	top: 0 !important;
+	left: 0 !important;
+	background-color: #111 !important;
+	overflow-x: hidden !important;
+	padding-top: 16px !important;
+	}
+	.sidebar a {
+	padding: 6px 8px 6px 16px;
+	text-decoration: none;
+	font-size: 20px;
+	color: #818181;
+	display: block;
+	}
+	.sidebar a:hover {
+	color: #f1f1f1;
+	}
+	.sidebar1{
+	/*   position: -webkit-sticky !important; */
+	position: sticky !important;
+	top	  : 0;
+	height  : 60vh;
+	}
+	.wrapper {
+	display: inline-flex !important;
+	justify-content: space-between;
+	padding: 1.5% !important;
+	}
+	.sidebar1 {
+	position: -webkit-sticky !important;
+	width: 25% !important;
+	height: 100vh !important; 
+	display: inline-block !important;
+	width: 82% !important;
+	}
+	.main {
+	width: 60% !important;
+	height: 100vh !important;
+	display: inline-block !important;
+	background: white !important;
+	}
+	.hideAvailDiv {
+	display: none !important;
+	}
+</style>
+{% block doc_ready %}
+{{ block.super }}
+{% endblock %}
+{% block content %}
+<div class="wrapper disp_prop overflow-css">
+	<div class="sidebar1 col-md-2" style="overflow-y: scroll;padding: 0px;width: 86% ;height: 100vh !important;display: inline-block;position: sticky !important;top: 19.4% !important;">
+		<div class="container-fluid h-100" >
+			<div class="row h-100">
+				<aside class="col-12 col-md-12 p-0 bg-dark">
+					<ul class="pl-3 pt-3">
+						<div class="tab-content add_css_mob"></div>
+					</ul>
+					<hr class="mb-0">
+					<nav class="navbar navbar-expand navbar-dark bg-dark flex-md-column flex-row align-items-start py-2 hide_for_mob" style="overflow-x:hidden;">
+						<div class="collapse navbar-collapse">
+							<ul class="flex-md-column flex-row navbar-nav w-100 justify-content-between">
+								<li class="nav-item1 active_link profile" data-id="profile">
+									<a class="nav-link pl-0 text-nowrap"  href="#profile"><i class="fa fa-pencil"></i> <span class="font-weight-bold">Profile</span></a>
+								</li>
+								<li class="nav-item1 active_link myschools" data-id="myschools">
+									<a class="nav-link pl-0"  href="#schoolslist"><i class="fas fa-school"></i> <span class="d-none d-md-inline">My Schools</span></a>
+								</li>
+								<li class="nav-item1 active_link preferences" data-id="preferences">
+									<a class="nav-link pl-0"  href="#preferences"><i class="fa fa-bars"></i> <span class="d-none d-md-inline">Preferences</span></a>
+								</li>
+								<li class="nav-item1 active_link settings" data-id="settings">
+									<a class="nav-link pl-0"  href="#settings"><i class="ti-settings"></i> <span class="d-none d-md-inline">Settings</span></a>
+								</li>
+								
+							</ul>
+						</div>
+					</nav>
+				</aside>
+			</div>
+		</div>
+	</div>
+	<div class="main" style="background: white;">
+		<div class="row" style="box-shadow: 0px 1px 14px -3px;padding-left: 2%;padding-bottom: 28px;margin:0px;border-radius:5px;">
+			<!-- Onboarding steps -->
+			<div class="modal fade" id="orientation_video" tabindex="-1" role="dialog" aria-labelledby="Training" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Orientation</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<i class="ti-close font-size-14"></i>
+							</button>
+						</div>
+						<div class="modal-body py-4" id="yt_orientation_video">
+							<iframe class="frame_width" width="100%" height="415" src="https://www.youtube.com/embed/38cBaoH4TsI" frameborder="0" allowfullscreen></iframe>
+						</div>
+						<div class="modal-footer py-4">
+							<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+							<!--         <button type="button" class="btn btn-success">Save changes</button> -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="Training" tabindex="-1" role="dialog" aria-labelledby="Training" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Training</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<i class="ti-close font-size-14"></i>
+							</button>
+						</div>
+						<div class="modal-body py-4">
+							<iframe class="frame_width" width="100%" height="415" src="https://www.youtube.com/embed/Oi9MnA-2Tyw" frameborder="0" allowfullscreen></iframe>
+						</div>
+						<div class="modal-footer py-4">
+							<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+							<!--         <button type="button" class="btn btn-success">Save changes</button> -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="" data-onboard_id='{{ onboarding.id }}' data-step_name='Training' class="modal fade" role="dialog">
+				<!-- Modal content-->
+				<div class="modal-content model-chg" >
+					<div class="modal-header">
+						<button type="button" class="close content_admin_modal_close" data-dismiss="modal" style="font-size:30px">&times;</button>
+						<h4 class="modal-title">Training</h4>
+					</div>
+					<div class="modal-body">
+						<div class="embed-responsive embed-responsive-16by9">
+							<div id="player"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Modal default-->
+			<div class="modal fade" id="Readiness" tabindex="-1" role="dialog" aria-labelledby="modal__Default" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Readiness</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<i class="ti-close font-size-14"></i>
+							</button>
+						</div>
+						<div class="modal-body py-4 pl-5">
+							<p>
+								<a href="/curriculumreview/" target="_blank">Curriculum Review</a><br>
+								<a href="/mytrainings/" target="_blank">My Training {% if user_profile.trainings_complete %} -Completed {% endif %}</a>
+							</p>
+						</div>
+						<div class="modal-footer py-4">
+							<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+							<!--         <button type="button" class="btn btn-success">Save changes</button> -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Button trigger modal -->
+
+  
+				<!-- Modal -->
+				<div class="modal fade bd-example-modal-m" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-m" role="dialog">
+					<div class="modal-content">
+						<div class="modal-header" >
+						<h3 class="modal-title" id="exampleModalLabel" >Volunteer Consent</h3>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+							<p style="text-align:justify">I have agreed to be recorded during the live class over Skype with the eVidyaloka center and participate in the practical assessment of my teaching in the teaching quality audit.</p>
+						</div>
+						<div class="modal-footer">
+		
+							
+						<button type="button" id='accept' onclick="consentFunction(this)" class="btn btn-primary" data-dismiss="modal">Accept</button>
+						<button type="button" id='decline' onclick="consentFunction(this)" class="btn btn-secondary" data-dismiss="modal">Decline</button>
+						</div>
+					</div>
+					</div>
+				</div>
+			<!-- center admin and content developer self evalution modal -->
+			<div class="modal fade" id="Self_Evaluation_1" tabindex="-1" role="dialog" aria-labelledby="Self_Evaluation_1" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content" style="width:210%; left: -47%;">
+						<div class="modal-header">
+							<h5 class="modal-title">Self Evaluation</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<i class="ti-close font-size-14"></i>
+							</button>
+						</div>
+						<div class="modal-body py-4 pl-5">
+							<div class='row standard_row'>
+								<div class='col-sm-12'>
+									<div class="alert alert-error bs-callout bs-callout-warning hidden">
+										<h4>Oh snap!</h4>
+										<p>This form seems to be invalid :(</p>
+									</div>
+									<div class="alert alert-success bs-callout bs-callout-info hidden">
+										<h4>Yay!</h4>
+										<p>Everything seems to be ok :)</p>
+									</div>
+									<form id="form_id_1" data-parsley-validate="" data-onboarding_id={{ onboarding.id }}>
+										{% csrf_token %}
+										<fieldset class="form-group row">
+											<label class="col-form-legend col-sm-12 lang">1. Please tick the language from the list below that you can read and write : </label>
+											<div class="ans-group col-sm-10">
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="checkbox" required="" name="lang"  value="English" >
+													English
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="checkbox"  name="lang"  value="Hindi">
+													Hindi
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="checkbox"  name="lang"  value="Marathi">
+													Marathi
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="checkbox"  name="lang"  value="Tamil">
+													Tamil
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="checkbox"  name="lang"  value="Telugu">
+													Telugu
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="checkbox"  name="lang"  value="Kannada">
+													Kannada
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="checkbox"  name="lang"  value="Bengali">
+													Bengali
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="checkbox"  name="lang"  value="Odia">
+													Odia
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="checkbox"  name="lang"  value="Others">
+													Others
+													</label>
+												</div>
+											</div>
+											<label class="col-form-legend col-sm-12 trans_doc">2. Can you translate a given English document into one of the local languages for eV schools ? 
+											</label>
+											<div class="ans-group col-sm-10">
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="trans_doc"  value="yes" >
+													Yes
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio"  name="trans_doc"  value="no">
+													No
+													</label>
+												</div>
+											</div>
+											<label class="col-form-legend col-sm-12 subject">3. Please tick the subject for which you wish to prepare content : 
+											</label>
+											<div class="ans-group col-sm-10">
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="subject"  value="Maths" >
+													Maths
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio"  name="subject"  value="Science">
+													Science
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio"  name="subject"  value="English">
+													English
+													</label>
+												</div>
+											</div>
+											<label class="col-form-legend col-sm-12 search_net">4. Are you comfortable to search for videos, images on internet ? 
+											</label>
+											<div class="ans-group col-sm-10">
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="search_net"  value="VeryComfortable">
+													Very Comfortable
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio"  name="search_net"  value="CanManage">
+													Can Manage
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio"  name="search_net"  value="NeedGuidance">
+													Need Guidance
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio"  name="search_net"  value="Not Comfortable">
+													Not Comfortable
+													</label>
+												</div>
+											</div>
+											<label class="col-form-legend col-sm-12 prepare_ws">5. Are you comfortable to prepare worksheets and assessments based on textbook material ? 
+											</label>
+											<div class="ans-group col-sm-10">
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="prepare_ws"  value="Yes">
+													Yes
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="prepare_ws"  value="NeedAssistance">
+													Need Assistance
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="prepare_ws"  value="No">
+													No
+													</label>
+												</div>
+											</div>
+											<label class="col-form-legend col-sm-12 transliterate">6. Can you transliterate the list of important terms for the topics ? 
+											</label>
+											<div class="ans-group col-sm-10">
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="transliterate"  value="Yes">
+													Yes
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="transliterate"  value="NeedAssistance">
+													Need Assistance
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="transliterate"  value="No">
+													No
+													</label>
+												</div>
+											</div>
+											<label class="col-form-legend col-sm-12 hours">7. How many hours a week can you contribute towards contentresearch ? 
+											</label>
+											<div class="ans-group col-sm-10">
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="hours"  value="2-3_hours">
+													2-3 hours
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="hours"  value="5-6_hours">
+													5-6 hours
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="hours"  value="8-10_hours">
+													8-10 hours
+													</label>
+												</div>
+											</div>
+										</fieldset>
+										<div class="form-group row">
+											<div class="offset-sm-5 col-sm-7">
+												<button id='self_eval_submit' type='button' onClick="form_submit_1()"  class="btn btn-primary" 
+													>Submit</button>
+												<!--<button id='self_eval_submit' type='submit'  class="btn btn-primary" >Submit</button>-->
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End center admin and content developer self evalution modal -->
+			<!-- Teacher Self Evalution modal -->
+			<div class="modal fade" id="Self_Evaluation" tabindex="-1" role="dialog" aria-labelledby="modal__Default" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content" style="width:210%; left: -47%;">
+						<div class="modal-header">
+							<h5 class="modal-title">Self Evaluation</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<i class="ti-close font-size-14"></i>
+							</button>
+						</div>
+						<div class="modal-body py-4 pl-5">
+							<div class='row standard_row'>
+								<div class='col-sm-12'>
+									<div class="alert alert-error bs-callout bs-callout-warning hidden">
+										<h4>Oh snap!</h4>
+										<p>This form seems to be invalid :(</p>
+									</div>
+									<div class="alert alert-success bs-callout bs-callout-info hidden">
+										<h4>Yay!</h4>
+										<p>Everything seems to be ok :)</p>
+									</div>
+									<form id="form_id" data-parsley-validate="" data-onboarding_id="">
+										{% csrf_token %}
+										<fieldset class="form-group row">
+											<label class="col-form-legend col-sm-12 native_lang">1. Can you Read and Write fluently on the selected Native Language? *</label>
+											<div class="ans-group col-sm-10">
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="native_lang"  value="yes" >
+													Yes
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio"  name="native_lang"  value="no">
+													No
+													</label>
+												</div>
+											</div>
+										</fieldset>
+										<div class="form-group row">
+											<label for="lang_select" data-parsley-trigger="change" class="col-sm-12 col-form-label other_lang">2. Are you fluent to Speak, Read and Write in any other listed language? *</label>
+											<div class='ans-group col-sm-10'>
+												<select required="" class="form-control" name='other_lang' id='lang_select'>
+													<option ></option>
+													<option value='Hindi'>Hindi</option>
+													<option value='Telugu'>Telugu</option>
+													<option value='Kannada'>Kannada</option>
+													<option value='Tamil'>Tamil</option>
+													<option value='Bengali'>Bengali</option>
+													<option value='Odia'>Odia</option>
+													<option value='Marathi'>Marathi</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="motivation" class="col-sm-12 col-form-label motivation">3. What motivates you to come on a platform like this and contribute your time? *
+											</label>
+											<div class="ans-group col-sm-10">
+												<textarea class="form-control " name='motivation' required="" id="motivation" ></textarea>
+											</div>
+										</div>
+										<fieldset class="form-group row">
+											<label class="col-form-legend col-sm-12 slot_commit">4. Online classes happen during school hours. i.e 10am to 4pm IST. Mon to Friday. To Teach online, It is required to provide two 1-hr slots, which can be any two different days and any two slots in this window. Do you think you can commit for the same? *</label>
+											<div class="ans-group col-sm-10">
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="slot_commit" value="yes" >
+													Yes
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio"  name="slot_commit"  value="no">
+													No
+													</label>
+												</div>
+											</div>
+										</fieldset>
+										<fieldset class="form-group row">
+											<label class="col-form-legend col-sm-12">5. Please share your response for some classic teacher scenarios below:
+											</label>
+											<label class="col-form-legend col-sm-12 scenerio_1">Sushmita, a volunteer teacher, has taught Fractions to a class of 20 children from Grade 6 for the last 4 sessions. On the 5th day, except for Seetha and Ramu all the other 18 children were clueless about what she had taught so far.  What should be the next best course of action for Sushmita ?</label>
+											<div class="ans-group col-sm-10">
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="scenerio_1"  value="option1" >
+													Plan to spend 2 more sessions to teach again
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" name="scenerio_1"  value="option2">
+													Report this to coordinator and ask for help
+													</label>
+												</div>
+												<div class="form-check ">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" name="scenerio_1"  value="option3" >
+													Look for other approaches to teach the topic again
+													</label>
+												</div>
+												<div class="form-check ">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" name="scenerio_1"  value="option3" >
+													Ask Seetha and Ramu for their help to overcome the situation
+													</label>
+												</div>
+												<div class="form-check ">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" name="scenerio_1"  value="option3" >
+													Move on to next topic and park the topic to be revisted later
+													</label>
+												</div>
+											</div>
+										</fieldset>
+										<fieldset class="form-group row">
+											<label class="col-form-legend col-sm-12 scenerio_2">6. She is now fully prepared for her next class. However on the day of her session, came an unavoidable personal/professional commitment for her few hours prior to the class. *
+											What will you do if you were in her situation at that moment ?</label>
+											<div class="ans-group col-sm-10">
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="scenerio_2"  value="option1" >
+													Will make it a point to inform at end of the day to the Coordinator for the absence, with reasons
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" name="scenerio_2"  value="option2">
+													Pick up the phone/sms/watsapp to inform the Coordinator and ask for help
+													</label>
+												</div>
+												<div class="form-check ">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" name="scenerio_2"  value="option3" >
+													Will re-adjust your personal/professional commitment to make to the class, as children are already struggling
+													</label>
+												</div>
+												<div class="form-check ">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" name="scenerio_2"  value="option3" >
+													Will reason out to the Children in the next class and make up for the loss
+													</label>
+												</div>
+											</div>
+										</fieldset>
+										<fieldset class="form-group row">
+											<label class="col-form-legend col-sm-12 scenerio_3">7. As Sushmita comes for the next class, the children were trying to avoid and sought a break from the class requesting to cancel. *
+											Your choice of action would be ?</label>
+											<div class="ans-group col-sm-10">
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" required="" name="scenerio_3"  value="option1" >
+													Let the children go and have fun
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" name="scenerio_3" value="option2">
+													You will reason out, why it is important for them stay for the class and continue with the class
+													</label>
+												</div>
+												<div class="form-check ">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" name="scenerio_3"  value="option3" >
+													You will ask the interested children to stay on and let others go
+													</label>
+												</div>
+												<div class="form-check ">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" name="scenerio_3"  value="option3" >
+													You will try to do something that could motivate the children to stay on
+													</label>
+												</div>
+											</div>
+										</fieldset>
+										<div class="form-group row">
+											<label for="q4" class="col-sm-12 col-form-label scenerio_5">8. What will be your approach of delivering Fractions to the children now ? *
+											</label>
+											<div class="ans-group col-sm-10">
+												<textarea class="form-control" name='scenerio_5' required="" ></textarea>
+											</div>
+										</div>
+										<fieldset class="form-group row">
+											<label class="col-form-legend col-sm-12 scenerio_6">9. What is best option to Inspire the child to learn ? *</label>
+											<div class="ans-group col-sm-12">
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio" name="scenerio_6" required=""  value="option1" >
+													Offer goodies for consistently participating in the class
+													</label>
+												</div>
+												<div class="form-check">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio"  name="scenerio_6"  value="option2">
+													Challenge the child to do something, which he/she thought was not possible to do
+													</label>
+												</div>
+												<div class="form-check ">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio"  name="scenerio_6"  value="option3" >
+													Share motiviational stories of yours or others
+													</label>
+												</div>
+												<div class="form-check ">
+													<label class="form-check-label">
+													<input class="form-check-input" type="radio"  name="scenerio_6"  value="option3" >
+													Give periodic motivational talks
+													</label>
+												</div>
+											</div>
+										</fieldset>
+										<div class="form-group row">
+											<div class="offset-sm-5 col-sm-7">
+												<button id='self_eval_submit' type='submit' class="btn btn-primary" >Submit</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End Teacher Self evalution modal -->
+			<!-- skype id and phone number fill alert -->
+			<div class="modal fade" id="tsd_profile_fill_first" tabindex="-1" role="dialog" aria-labelledby="tsd_profile_fill_first" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title"></h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<i class="ti-close font-size-14"></i>
+							</button>
+						</div>
+						<div class="modal-body">
+							<h6>
+								Please fill the skype id and phone number to book a slot : 
+							</h6>
+							<form class="row col-md-12 col-lg-12 col-sm-12 m-0 pl-0" onsubmit="return my_submit_form()" action="/config/save_skype_phone/" id="save_skype_phone" method="POST">
+								{% csrf_token %}
+								<input type="hidden" value="" name='booking_url' id="store_url">
+								<div class="d-flex mb-3">
+									<div class="col-lg-6 col-md-6 col-sm-12 mt-3 pl-0">
+										<label class="col-md-12 col-sm-12 pl-1" for="id_skypeid1">Skype ID:</label>
+										<input class="form-control col-md-12 col-sm-12" onclick="hide_error_msg(this)" maxlength="30" type="text" name="skype_id" id="id_skypeid1" value="{{ user_profile.skype_id }}" placeholder="Skype ID*">
+										<span class="col-md-12 col-lg-12 error_msg" style="color:red;display:none">Please fill skype id</span>
+									</div>
+									<div class="col-lg-6 col-md-6 col-sm-12 mt-3 pr-0">
+										<label class="col-md-offset-2 col-sm-offset-2 col-md-12 col-lg-12 col-sm-12 pl-1"  for="id_phone1">Phone No:</label>
+										<input class="form-control col-md-12 col-sm-12" onclick="hide_error_msg(this)" type="text" name="phone" id="id_phone1" value="{{ user_profile.phone }}" onkeypress="return check_phone(event)" maxlength="16" placeholder="Phone No*">
+										<span class="error_msg col-md-12 col-lg-12 p-0" style="display:none;color:red">Please fill phone number</span>
+									</div>
+								</div>
+								<div class='col-md-5 col-md-offset-2 col-sm-12' style="margin-top:3%;margin-left:36%;">
+									<input style="cursor:pointer !important;width:60%;" class='btn btn-success mb-3' type="submit" id='submit_form' value="Save"/>
+								</div>
+								<span>Time to get a Skype account, so that we can talk" Don't have ? <a href="https://signup.live.com/signup" target="_blank" style="color: #02cc26">Create one here</a></span>
+							</form>
+						</div>
+						<div class="modal-footer py-4">
+							<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End skype id and phone number fill alert -->
+			<!-- End prefered days and time fill alert -->
+			<div class="modal fade" id="prefered_days" tabindex="-1" role="dialog" aria-labelledby="tsd_profile_fill_first" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title"></h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<i class="ti-close font-size-14"></i>
+							</button>
+						</div>
+						<div class="modal-body">
+							<h5>
+								Please fill the prefered days and prefered time in Availability section : 
+								<a href="javascript:void(0)" style="color: #02cc26" onclick="closeskypeModal('clone_divv')">Update Details</a>
+							</h5>
+						</div>
+						<div class="modal-footer py-4">
+							<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End prefered days and time fill alert -->
+			<div class="row panel" style="overflow-x: hidden;">
+				{% if referal_name %} 
+				<div class="col-md-10 mt-3" align="center">Thank you. You are here in reference from : {{ organization_name}}{{ referal_name }} !! 
+				</div>
+				<br>
+				{% endif %}
+				<ul class="nav tab-line tab-line tab-line--3x disp_prop mob_tab_disp mt-4" style="display:block;" role="tablist">
+					<li class="nav-item pr-5">
+						<!-- <label class="pt-2" role="tab" aria-selected="true">
+							To be a :
+							</label> -->
+					</li>
+					{% for role in roles %}
+					{% if role.type != 'Internal' and role.id in pref_roles %}
+					<li class="nav-item"style="border-radius: 10px; border: 0px double #cccccc;" data-roleId = "{{ role.id }}" style="border: 2px solid;margin-bottom: 2%;">
+						<a class="nav-link" style="border-top-right-radius: 13px;border-top-left-radius: 13px; border: 2px solid  #cccccc;position: relative; font-size: 20px;   left: -69px;" data-toggle="tab" href="#{{ role.id }}id" id="{{ role.id }}tabid" onclick="change_progrees_bar({{ role.id }})" role="tab" aria-selected="true">
+						{{ role.name }}
+						</a>
+					</li>
+					{% endif %}
+					{% endfor %}
+				</ul>
+				<hr class="my-2" style="border: 2px solid #02cc26!important; margin-left: -25px;">
+				<style>
+					.navigation_menu {
+					width: 100%;
+					}
+					.navigation_tabs {
+					counter-reset: step;
+					}
+					/* one item */
+					.navigation_tabs li:first-child:nth-last-child(1) {
+					width: 100%;
+					}
+					/* two items */
+					.navigation_tabs li:first-child:nth-last-child(2),
+					.navigation_tabs li:first-child:nth-last-child(2) ~ li {
+					width: 49%;
+					}
+					/* three items */
+					.navigation_tabs li:first-child:nth-last-child(3),
+					.navigation_tabs li:first-child:nth-last-child(3) ~ li {
+					width: 30.3333%;
+					}
+					/* four items */
+					.navigation_tabs li:first-child:nth-last-child(4),
+					.navigation_tabs li:first-child:nth-last-child(4) ~ li {
+					width: 24%;
+					}
+					/* five items */
+					.navigation_tabs li:first-child:nth-last-child(5),
+					.navigation_tabs li:first-child:nth-last-child(5) ~ li {
+					width: 19%;
+					}
+					/* six items */
+					.navigation_tabs li:first-child:nth-last-child(6),
+					.navigation_tabs li:first-child:nth-last-child(6) ~ li {
+					width: 16%;
+					}
+					.navigation_tabs li {
+					list-style: none;
+					display: inline-block;
+					position: relative;
+					text-align: center;
+					cursor: pointer;
+					}
+					a {
+					color: #000;
+					}
+					.navigation_tabs li a {
+					text-decoration: none;  
+					}
+					.navigation_tabs li:before {
+					content: counter(step);
+					counter-increment: step;
+					width: 30px;
+					height: 30px;
+					line-height : 30px;
+					border: 1px solid #ddd;
+					border-radius: 100%;
+					display: block;
+					text-align: center;
+					margin: 0 auto 10px auto;
+					background-color: #fff;
+					}
+					.navigation_tabs li:after {
+					content: "";
+					position: absolute;
+					width: 100%;
+					height: 5px;
+					background-color: #ddd;
+					top: 13px;
+					left: -50%;
+					z-index : -1;
+					}
+					.navigation_tabs li:first-child:after {
+					content: none;
+					}
+					.navigation_tabs li.tab_active,
+					.navigation_tabs li.tab_inactive,
+					.navigation_tabs li.tab_active a,
+					.navigation_tabs li.tab_inactive a{
+					color: green;
+					}
+					.navigation_tabs li.tab_active a:hover,
+					.navigation_tabs li.tab_inactive a:hover {
+					font-weight: bold;
+					}
+					.navigation_tabs li.tab_active:before {
+					border-color: green;
+					}
+					.navigation_tabs li.tab_inactive:before {
+					border-color: green;
+					background-color: green;
+					color: #fff;
+					content: "\2713";
+					}
+					.navigation_tabs li.tab_inactive + li:after {
+					background-color: green;
+					}
+				</style>
+				<body>
+					<div class="navigation_menu" id="navigation_menu">
+						<ul class="navigation_tabs"  id="navigation_tabs">
+							{% for key,value in steps.items %}
+							{% if key == 'Content Developer' %}
+							<section id='progress_3'>
+								{% if value %}
+								{% for value1 in value %}
+								{% if value1.step_name ==  "Self Evaluation" %}
+								<li class="tab_inactive" id ='progress_3'>
+									<a href="#">Step 1 
+									</a>
+									<hr id='form_submit_1' style="color:#c00;background-color:lightgrey;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_disabled">
+									<a href="#">Discussion Online</a>
+									<hr style="color:#c00;background-color:lightgrey;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_disabled"><a href="#">Select an Opportunity</a></li>
+								{% elif value1.step_name == "Content Selection Discussion" %} 
+								<li class="tab_inactive " id ='MyElement'>
+									<a href="#">Share Your Interest</a>
+									<hr style="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_inactive" id ='MyElement'>
+									<a href="#">Discussion Online</a>
+									<hr style="color:#c00;background-color:lightgrey;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_disabled">
+									<a href="#">Select an Opportunity</a>
+								</li>
+								{% elif value1.step_name == "Readiness" %} 
+								<li class="tab_inactive" id ='MyElement'>
+									<a href="#">Step 1 </a>
+									<hr style="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_inactive">
+									<a href="#">Discussion Online</a>
+									<hr style="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_active">
+									<a href="#">Select an Opportunity</a>
+								</li>
+								{% endif %}
+								{% endfor %}
+								{% endif %}
+							</section>
+							{% elif key == 'Teacher' %}
+							<section id='progress_1'>
+								{% if value %}
+								{% for value1 in value %}
+								{% if value1.step_name ==  "Self Evaluation" %}
+								<li class="tab_inactive">
+									<a href="#">Step 1</a>
+									<hr style="color:#c00;background-color:lightgrey;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_disabled">
+									<a href="#">Discussion Online</a>
+									<hr style="color:#c00;background-color:lightgrey;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_disabled">
+									<a href="#">Step 3</a>
+								</li>
+								{% elif value1.step_name == "Teacher Selection Discussion" %} 
+								<li class="tab_inactive" id ='MyElement'>
+									<a href="#">Step 1</a>
+									<hr style="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_inactive" id ='MyElement'>
+									<a href="#">Discussion Online</a>
+									<hr style="color:#c00;background-color:lightgrey;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_disabled">
+									<a href="#">Step 3</a>
+								</li>
+								{% elif value1.step_name == "Availability and Preferences" %} 
+								<li class="tab_inactive" id ='MyElement'>
+									<a href="#">Step 1</a>
+									<hr style="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_inactive">
+									<a href="#">Discussion Online</a>
+									<hr style="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_inactive">
+									<a href="#">Step 3</a>
+								</li>
+								{% elif value1.step_name == "Readiness" %}
+								<li class="tab_inactive" id ='MyElement'>
+									<a href="#">Share Your Interest</a>
+									<hr style="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_inactive">
+									<a href="#">Discussion Online</a>
+									<hr style="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_inactive">
+									<a href="#">Select an Opportunity</a>
+								</li>
+								{% endif %}
+								{% endfor %}
+								{% endif %}
+							</section>
+							{% elif key == 'Facilitator Teacher' %}
+							<section id='progress_5'>
+								{% if value %}
+								{% for value1 in value %}
+								{% if value1.step_name ==  "Self Evaluation" %}
+								<li class="tab_inactive">
+									<a href="#">Share Your Interest</a>
+									<hr style="color:#c00;background-color:lightgrey;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_disabled">
+									<a href="#">Discussion Online</a>
+									<hr style="color:#c00;background-color:lightgrey;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_disabled">
+									<a href="#">Step 3</a>
+								</li>
+								{% elif value1.step_name == "Facilitator Teacher Selection Discution" %} 
+								<li class="tab_inactive" id ='MyElement'>
+									<a href="#">Step 1</a>
+									<hr style="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_inactive" id ='MyElement'>
+									<a href="#">Discussion Online</a>
+									<hr style="color:#c00;background-color:lightgrey;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_disabled">
+									<a href="#">Select an Opportunity</a>
+								</li>
+								{% elif value1.step_name == "Availability and Preferences" %} 
+								<li class="tab_inactive" id ='MyElement'>
+									<a href="#">Share Your Interest</a>
+									<hr style="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_inactive">
+									<a href="#">Discussion Online</a>
+									<hr style="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_inactive">
+									<a href="#">Discussion Online</a>
+								</li>
+								{% elif value1.step_name == "Readiness" %}
+								<li class="tab_inactive" id ='MyElement'>
+									<a href="#">Share Your Interest</a>
+									<hr style="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_inactive">
+									<a href="#">Discussion Online</a>
+									<hr style="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_inactive">
+									<a href="#">Select an Opportunity</a>
+								</li>
+								{% endif %}
+								{% endfor %}
+								{% endif %}
+							</section>
+							{% elif key == 'Well Wisher' %}
+							<section id='progress_4'>
+								{% if value %}
+								{% for value1 in value %}
+								{% if value1.step_name ==  "Self Evaluation" %}
+								<li class="tab_inactive" id ='progress_4'>
+									<a href="#">Step 1 </a>
+								</li>
+								<li class="tab_disabled">
+									<a href="#">Step 2</a>
+								</li>
+								<li class="tab_disabled">
+									<a href="#">Step 3</a>
+								</li>
+								{% elif value1.step_name == "Content Selection Discussion" %} 
+								<li class="tab_inactive" id ='MyElement'>
+									<a href="#">Step 1 </a>
+								</li>
+								<li class="tab_inactive" id ='MyElement'>
+									<a href="#">Step 2</a>
+								</li>
+								<li class="tab_disabled">
+									<a href="#">Step 3</a>
+								</li>
+								{% elif value1.step_name == "Readiness" %} 
+								<li class="tab_inactive" id ='MyElement'>
+									<a href="#">Step 1</a>
+								</li>
+								<li class="tab_inactive">
+									<a href="#">Step 2</a>
+								</li>
+								<li class="tab_inactive">
+									<a href="#">Step 3</a>
+								</li>
+								{% endif %}
+								{% endfor %}
+								{% endif %}
+							</section>
+							{%elif key == 'Center Admin' %}
+							<section id='progress_2'>
+								{% if value %}
+								{% for value1 in value %}
+								{% if value1.step_name == "Admin Selection Discussion" %}
+								<li class="tab_inactive" id =''>
+									<a href="#">Step 1</a>
+									<hr style="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 52%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_disabled">
+									<a href="#">Step 2</a>
+								</li>
+								{% else %} 
+								<li class="tab_inactive" id ='MyElement'>
+									<a href="#">Step 1 </a>
+									<hr style="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;" align="left" width="20%" />
+								</li>
+								<li class="tab_inactive" id ='MyElement'>
+									<a href="#">Step 2</a>
+								</li>
+								{% endif %}
+								{% endfor %}
+								{% endif %}
+							</section>
+							{% endif %}
+							{% endfor %}
+						</ul>
+					</div>
+					<div class="tab-pane fade" id="1id" role="tabpanel">						<strong class="next_step"><span class="blink_text">Next steps:</span></strong>
+						<div class="col-md-12 justify-content-between rounded mb-4 p-0" style="vertical-align:top;display: inline-flex;">
+							<div class="col-md-12 media pl-0">
+								<div class="col-md-12 p-0 mb-2 mt-3">
+									<strong class="show_teacher" style="padding-top:2%;"> Please complete your profile!!!  </strong> 
+									{% for key,value in steps.items %}
+										{% if key == 'Teacher' %}
+											{% if value %}
+												{% for value1 in value %}
+													{% if value1.step_name == "Teacher Selection Discussion" %}
+														<a href="/v2/book-slots/" target="_blank" class="btn btn-success ml-12 m-2 chng_tmg1 col-md-5 col-lg-5 ml-3" style="display:none;font-size:15px;">Change Slot Timing</a>
+														<span id="bookHeading" class="mr_13 change_label1" style="padding-top:2%;"> Book your discussion slot :  
+															<a id="completeProfile"  class="btn btn-success mr-2 teacher col-md-10 col-lg-10 ml-3 mt-2" style="font-size:13px; margin: -14px;position: relative;left: 52%;top: -39px;">Complete Profile</a>
+														</span>
+														<a href="/myevidyaloka" target="_blank" class="myclassroom btn btn-success mt-3" style="display:none;font-size:15px;">Take me to Myclassroom</a>
+														<br><br>
+														<span id="browse_button3" class="">Browse opportunities :
+															<a class="btn btn-success mr-2 ml-3 mt-2 col-md-10 col-lg-10" style="font-size:15px;position: relative;left: 52%;top: -39px;" target="_blank" href="/v2/demand/">Browse</a>
+														</span>
+														<br><br>
+													{% else %}
+														<br><br>
+														<span class="">Browse opportunities :<a class="btn btn-success mr-2 ml-3 mt-2 col-md-10 col-lg-10" style="font-size:15px;position: relative;left: 52%;top: -39px;" target="_blank" href="/v2/demand/">Browse</a></span>
+														<br><br> 
+														<span class="">Take me to Myclassroom :<a class="btn btn-success mr-2 ml-3 mt-2 col-md-10 col-lg-10" style="font-size:15px;position: relative;left: 52%;top: -39px;" target="_blank" href="/myevidyaloka/">Take me to Myclassroom</a></span>
+													{% endif %}
+												{% endfor %}
+											{% endif %}  
+										{% endif %}  
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+						<br>
+						<br>
+						<strong class="">Role Status :</strong>{{teacher_status}}
+					</div>
+					<div class="tab-pane fade" id="2id" role="tabpanel">
+						<strong class="next_step1">Next steps:</strong>
+						<div class="col-md-12 justify-content-between align-items-center rounded mb-4 p-0" style="vertical-align:text-bottom;display: inline-flex;">
+							<div class="media align-items-center">
+								<div class="mb-4 mt-3">
+									<strong class="show_center_admin px-5" style="padding-top:2%;"> Well done you have completed Admin discussion !!! </strong> 
+									<span class="center_label" style="padding-top:2%;"> Book your discussion slot : 
+									<span class="c_slot_booking" style="padding-top:2%;display:none;"> </span>
+									<a href=""  class="btn btn-success mr-3 center_admin col-md-10 col-lg-9 mt-3 ml-3" style="position: relative;left: 74%;top: -47px;">Book</a>
+									<!--<a href="javascript:void(0)" class="btn btn-success shakeimg mob_width_82">Explore vLounge</a> -->
+								</div>
+							</div>
+						</div>
+						<strong class="">Role Status :</strong>{{centeradmin_status}} 
+					</div>
+					<div class="tab-pane fade" id="3id" role="tabpanel">
+						<strong class="next_step2">Next steps:</strong>
+						<div class="col-md-12 justify-content-between align-items-center rounded mb-4 p-0" style="vertical-align:text-bottom;display: inline-flex;">
+							<div class="media align-items-center">
+								<div class="text-center pr-4 mb-4 mt-3" style="">
+									<strong class="show_content_develop px-5" style="padding-top:2%;"> Well done you have completed all the steps !!! </strong> 
+									<!-- <a href=""  class="btn btn-success mr-3 center_admin col-md-10 col-lg-9 mt-3 ml-3">Book</a>  -->
+									<a  data-toggle="modal" id ='selfevaluation' class="btn btn-success mr-3 hide_content_develop content_develop text-white"></a> 
+									<a href="/v2/book-slots/" id='change_slot_time' style='display:none' ><button class="btn btn-success" id ='book_id'>Change Slot Timing</button></a> 
+									<span id='browse_oppurtinity' style='display:none'>Browse opportunities :
+									<a id="browse_button2" class="btn btn-success mr-2  ml-3 mt-2 col-md-10 col-lg-10" style="font-size:15px;position: relative;
+										left: 73%;
+										top: -41px;" target="_blank" href="/v2/demand/">Browse</a></span>
+									<span class="center_label"  id="book_slots_header" style="padding-top:2%;display: none;  margin-right: 65px;"> <b>Book your discussion slot
+									<a href="/v2/book-slots/"  class="c_slot_booking" id="book_sdslot" target="_blank" class="btn btn-success mr-2 chng_tmg col-md-10 col-lg-10 ml-3" style="font-size:15px;display: none;position: relative;left: 84%; top: -35px;">
+									<button  class="btn btn-success" id ='book_id'>Book</button></a></b> </span>  
+								</div>
+							</div>
+						</div>
+						<strong class="">Role Status :</strong>{{content_developer_status}}  
+					</div>
+					<div class="tab-pane fade" id="4id" role="tabpanel">
+						<strong class="next_step3">Next steps:</strong>
+						<div class="col-md-12 justify-content-between align-items-center rounded mb-4 p-0" style="vertical-align:text-bottom;">
+							<div class="media align-items-center">
+								<div class="col-12 text-center pr-4 mb-4 mt-3" style="">
+									<strong class="show_well_wisher px-5" style="padding-top:2%;"> Well done you have completed all the steps !!! </strong> 
+									<a href=""  class="col-12 btn btn-success mr-3 well_wisher hide_well_wisher"></a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="20id" role="tabpanel">
+						<strong class="next_step"><span class="blink_text">Next steps:</span></strong>
+						<div class="col-md-12 justify-content-between rounded mb-4 p-0" style="vertical-align:top;display: inline-flex;">
+							<div class="col-md-12 media pl-0">
+								<div class="col-md-12 p-0 mb-2 mt-3">
+									<strong class="show_flt" style="padding-top:2%;"> Please complete your profile!!!  </strong> 
+									{% for key,value in steps.items %}
+										{% if key == 'Facilitator Teacher' %}
+											{% if value %}
+												{% for value1 in value %}
+													{% if value1.step_name == "Facilitator Teacher Selection Discution" %}
+														<a href="/v2/book-slots/" target="_blank" class="btn btn-success ml-12 m-2 chng_tmg2 col-md-5 col-lg-5 ml-3" style="display:none;font-size:15px;">Change Slot Timing</a>
+														<span id="bookHeading" class="mr_13 change_label2" style="padding-top:2%;"> Book your discussion slot :
+															<a id="completeProfile"  class="btn btn-success mr-2 flt col-md-10 col-lg-10 ml-3 mt-2" style="font-size:13px; margin: -14px;position: relative;left: 52%;top: -39px;">Complete Profile</a>
+														</span>
+														<span id="browse_button3" class="">Browse_opportunities :
+															<a class="btn btn-success mr-2 ml-3 mt-2 col-md-10 col-lg-10" style="font-size:15px;position: relative;left: 52%;top: -39px;" target="_blank" href="/v2/demand/">Browse</a>
+														</span>
+														<br><br>
+													{% elif value1.step_name ==  "Availability and Preferences"%}
+														<br><br>
+														<span id="browse_button3" class="">Browse opportunities :<a class="btn btn-success mr-2 ml-3 mt-2 col-md-10 col-lg-10" style="font-size:15px;position: relative;left: 52%;top: -39px;" target="_blank" href="/v2/demand/">Browse</a></span>
+														<br><br>
+														<span class="">Take me to Myclassroom :<a class="myclassroom2 btn btn-success mr-2 ml-3 mt-2 col-md-10 col-lg-10" style="font-size:15px;position: relative;left: 52%;top: -39px;" target="_blank" href="/myevidyaloka/">Take me to Myclassroom</a></span>
+													{% endif %}  
+												{%endfor%}
+											{% endif %}  
+										{% endif %}  
+									{%endfor%}
+								</div>
+							</div>
+						</div>
+						<br>
+						<strong class="">Role Status :</strong>{{ft_teacher_status}}
+					</div>
+					<section class="mt-2 progress_4 pl-4 pr-2" style="width:96.1%;display:none;">
+						<div class="row">
+							<div class="col-12 px-2">
+								<ol class="breadcrumb breadcrumb-triangle breadcrumb-expand bg-transparent p-0 rounded-0">
+									<li class="breadcrumb-item add_green">
+										<a href="#" class="progres_bar_css"> Step 1 : Training</a>
+									</li>
+								</ol>
+							</div>
+						</div>
+					</section>
+					<section class="paddingBottom-50 col-md-12">
+						<div class="col-12 mt-2 p-0">
+							<div class="col-lg-12 d-flex p-0 pl-3 m_p_0">
+								<div class="col-lg-12 p-0">
+									<div class="container-fluid">
+										<div class="row justify-content-center">
+											<h1 class="headermessage" >Welcome to the vLounge</h1>
+										</div>
+										<div class="row justify-content-around">
+											<div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 col-xl-3" >
+												<div class="card">
+													<div class="card-body" >
+														<a href="#" target="_blank" title="Orientation Video" data-toggle="modal" data-target="#orientation_video">
+															<div class="image-block col-md-12" title="Orientation Video" style="background: url(/static/images/orientation_youtube.jpg) no-repeat center top;background-size:cover;">
+																<p class="text"> Take a tour with orientation to know about evidyaloka. </p>
+																<h5 class="card-header">Orientation Video</h5>
+															</div>
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 col-xl-3" >
+												<div class="card">
+													<div class="card-body" >
+														<a href="#" target="_blank" title="Self Evaluation" class="teacher_selfeval" data-toggle="modal" data-target="#Self_Evaluation">
+															<div class="image-block col-md-12" title="Self Evaluation" style="background: url(/static/images/evald.jpg) no-repeat center top;background-size:cover;">
+																<p class="text"> Evaluate yourself to know better you. </p>
+																<h5 class="card-header">Self Evaluation</h5>
+															</div>
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 col-xl-3" >
+												<div class="card">
+													<div class="card-body" >
+														{% if not is_content_developer %}
+														<a href="/v2/content_demand/" target="_blank" title="Browse opportunity">
+														{% else %}
+														<a href="/v2/content_demand/" target="_blank" title="Browse opportunity">
+															{% endif %}
+															<div class="image-block col-md-12" title="Browse Opportunity" style="background: url(/static/images/opportunityd.jpg) no-repeat center top;background-size:cover;">
+																{% if not is_content_developer %}
+																<p class="text"> Choose a teaching opportunity that suits you. </p>
+																{% else %}
+																<p class="text"> Choose a content development opportunity that suits you. </p>
+																{% endif %}
+																<h5 class="card-header">Browse Opportunity</h5>
+															</div>
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 col-xl-3" >
+												<div  style ="width: 236px;border: 1px solid black;margin-top: 48px;height: 177px; border-radius: 10px; padding: 9px;">
+													<a href="/v2/gallery/" >Check out the Gallery</a><br>
+													<a href="https://wikividya.evidyaloka.org/" >Change Content Repository </a><br>
+													<a href="/v2/centerNew" >Explore Evidyaloka Centers</a><br>
+													<a href="/engage" >Connect with Community</a><br>
+													<a href="/newsletter" >Newsletters & Blog</a><br>
+													<a href="#" target="_blank" title="Volunteer Helpline" data-toggle="modal" data-target="#modal__flat">Volunteer Helpline</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+			</div>
+			</section>
+		</div>
+		<!-- Modal flat-->
+		<div class="modal fade" id="modal__flat" tabindex="-1" role="dialog" aria-labelledby="modal__flat" aria-hidden="true">
+		<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+		<div class="modal-body py-4">
+		<p class="font-weight-semiBold"><i class="fas fa-check-circle text-success mr-2"></i> Helpline </p>
+		<p>
+		<i class="ti-headphone mr-2" style="color:#dd4b39"></i>:
+		<a href="tel:+91-80-46808983">&nbsp; +91-80-46808983</a>
+		</p>
+		<p>
+		<i class="fa fa-whatsapp mr-2" style="color:#04a941"></i>:
+		<a href="tel:+91 6361517776">&nbsp; +91 6361517776</a>
+		</p>
+		<p>
+		<i class="ti-skype mr-2" style="color: #44a7c7"></i>:
+		<a href="mailto:evidyaloka.helpdesk">evidyaloka.helpdesk</a>
+		</p>
+		<div class="mt-2 text-right">
+		<button class="btn btn-success btn-sm" data-dismiss="modal">Ok</button>
+		</div>
+		</div>
+		</div>
+		</div>
+		</div>
+		<div id="profile" class="col-md-12 col-lg-12 col-sm-12 row" style="margin-top:3%;">
+		<div class="col-md-12 col-lg-12 col-sm-12">
+		<h4 style="padding-left: 2%;padding-top:14px;">My Profile</h4>
+		<hr />
+		</div>
+		<form class="row col-md-12 col-lg-12 col-sm-12" action="/config/user/save_profile/" id="id_form_userprofile" method="POST">
+		{% csrf_token %}
+		<div class="col-lg-12 col-md-12 col-sm-12 disp_prop" style="">
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-md-5 col-lg-5 col-sm-3" for="id_firstname">First Name <span style="color:red;">*</span></label>
+		<input class="form-control col-md-6 col-sm-6" type="text" name="firstname" id="id_firstname" value="{{ user_profile.user.first_name }}" placeholder="FirstName" required>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-md-offset-2 col-sm-offset-2 col-md-5 col-lg-5 col-sm-3" for="id_lastname">Last Name <span style="color:red;">*</span></label>
+		<input class="form-control col-md-6 col-sm-6" type="text" name="lastname" id="id_lastname" value="{{ user_profile.user.last_name }}" placeholder="LastName" required>
+		</div>
+		</div>
+		<br><br><br><br>
+		<div class="col-lg-12 col-md-12 col-sm-12 disp_prop" style="">
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-md-3 col-sm-3" for="id_gender">Gender <span style="color:red;">*</span></label>
+		<select class="form-control col-md-6 col-sm-6" name="gender" id="id_gender" required>
+		<option value="">--Select Gender--</option>
+		{% if user_profile.gender == 'male' %}
+		<option value="male" selected="selected">Male</option>
+		<option value="female">Female</option>
+		{% elif user_profile.gender == 'female' %}
+		<option value="male">Male</option>
+		<option value="female" selected="selected">Female</option>
+		{% else %}
+		<option value="male">Male</option>
+		<option value="female">Female</option>
+		{% endif %}
+		</select>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-md-offset-2 col-sm-offset-2 col-md-5 col-lg-5 col-sm-3" for="id_dob">Year of Birth <span style="color:red;">*</span></label>
+		<select class="form-control col-md-6 col-sm-6" name="dob" placeholder="Year of birth*" id="id_dob" required>
+		</select>
+		</div>
+		</div>
+		<br><br><br><br>
+		<div class="col-lg-12 col-md-12 col-sm-12 disp_prop">
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-md-3 col-sm-3" for="id_email">Email <span style="color:red;">*</span></label>
+		<input class="form-control col-md-6 col-sm-6" type="email" name="email" id="id_email" placeholder="Email" value="{{ user_profile.user.email }}" required>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-md-offset-2 col-sm-offset-2 col-lg-5 col-md-5 col-sm-3" for="id_alt_email">Alternate Email</label>
+		<input class="form-control col-md-6 col-sm-6" type="email" name="alt_email" id="id_alt_email" value="{{ user_profile.secondary_email }}" placeholder="Alternate Email">
+		</div>
+		</div>
+		<br><br><br><br>
+		<div class="col-lg-12 col-md-12 col-sm-12 disp_prop" >
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-md-3 col-sm-3" for="id_skypeid">Skype ID</label>
+		<input class="form-control col-md-6 col-sm-6" type="text" name="skype_id" id="id_skypeid" value="{{ user_profile.skype_id }}" maxlength="30" placeholder="Skype ID">
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-md-offset-2 col-sm-offset-2 col-md-5 col-lg-5 col-sm-3" for="id_phone">Phone No</label>
+		<input class="form-control col-md-6 col-sm-6" type="text" name="phone" id="id_phone" value="{{ user_profile.phone }}" placeholder="Phone No" onkeypress="return check_phone(event)" maxlength="16" data-parsley-pattern="^(\+?(([0-9]){1,3})[-.\s])?((((([0-9]){2,3})[-.\s]){1,2}([0-9]{4,10}))|([0-9]{10}))$">
+		</div>
+		</div>
+		<br><br><br><br>
+		<div class="col-lg-12 col-md-12 col-sm-12 disp_prop">
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-md-5 col-lg-7 col-sm-3" for="medium">Preferred Medium <span style="color:red;">*</span></label>
+		<select class="form-control col-md-6 col-sm-6" style="background-color: #fff; border-radius: 4px;" name="prefered_medium" id="medium" required>
+		{% if user_profile.pref_medium %}
+		<option value="{{ user_profile.pref_medium }}" selected="selected">{{ user_profile.pref_medium }}</option>
+		{% else %}
+		<option value="" selected="selected">--Select Language--</option>
+		{% endif %}
+		<option value="Bengali">Bengali</option>
+		<option value="Gujarathi">Gujarathi</option>
+		<option value="Hindi">Hindi</option>
+		<option value="Kannada">Kannada</option>
+		<option value="Marathi">Marathi</option>
+		<option value="Oriya">Oriya</option>
+		<option value="Tamil">Tamil</option>
+		<option value="Telugu">Telugu</option>
+		</select>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-md-offset-2 col-sm-offset-2 col-md-3 col-sm-3" for="id_refer">Referrer </label>
+		<input class="form-control col-md-6 col-sm-6" type="text" name="refer" id="id_refer" value="{{ user_profile.referer }}" placeholder="Referrer">
+		<input type="hidden" id="refer_id" name="reference_id" value='{% if user_profile.referred_user %} user_profile.referred_user.id {% endif %}' >
+		</div>
+		</div>
+		<br><br><br><br>
+		<div class="col-lg-12 col-md-12 col-sm-12 disp_prop" style="">
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-lg-6 col-md-6 col-sm-3" for="id_referrence_channel">Referrence Channel <span style="color:red;">*</span></label>
+		<select class="form-control col-md-6 col-sm-6" style="background-color: #fff; border-radius: 4px;" name="referrence_channel" id="id_referrence_channel" required>
+		{% if referencechannel %}
+		<option value="{{referencechannel.id}}" selected="selected">{{referencechannel.name}} </option>
+		{% else %}
+		<option value="" selected="selected">--Select--</option>
+		{% endif %}
+		{% for ref_channel in ref_channels %}
+		<option value="{{ref_channel.id}}" {% if referencechannel %} disabled="disabled" {% endif %}>{{ref_channel.name}}</option>
+		{% endfor %}
+		</select>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-md-offset-2 col-sm-offset-2 col-md-5 col-lg-5 col-sm-3" for="countryId">Country <span style="color:red;">*</span></label>
+		<select class="countries form-control col-md-6 col-sm-6" name="country" style="background-color: #fff; border-radius: 4px;" id="countryId" required="">
+		<option value="">Select Country</option>
+		</select>
+		</div>
+		</div>
+		<br><br><br><br>
+		<div class="col-lg-12 col-md-12 col-sm-12 disp_prop" style="">
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-md-3 col-sm-3" for="stateId">State <span style="color:red;">*</span></label>
+		<select class="states form-control col-md-6 col-sm-6" name="state" style="background-color: #fff; border-radius: 4px;" id="stateId" required="">
+		<option value="">Select State</option>
+		</select>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-md-offset-2 col-sm-offset-2 col-md-3 col-sm-3" for="cityId">City <span style="color:red;">*</span></label>
+		<select class="cities form-control col-md-6 col-sm-6" name="city" style="background-color: #fff; border-radius: 4px;" id="cityId" required="">
+		<option value="">Select City</option>
+		</select>
+		</div>
+		</div>
+		<br><br><br><br>
+		<div class="col-lg-12 col-md-12 col-sm-12 disp_prop" style="">
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-md-3 col-sm-3" for="id_profession">Profession</label>
+		<!--<input class="form-control col-md-6 col-sm-6" type="text" name="profession" id="id_profession" value="{{ user_profile.profession }}" placeholder="Profession"> -->
+		<select class="form-control col-md-6 col-sm-6" type="text" name="profession" id="id_profession">
+		<option value="{{ user_profile.profession }}" selected>{{ user_profile.profession }}</option>
+		<option value="corporates">Corporates</option>
+		<option value="legal">Legal</option>
+		<option value="finance">Finance</option>
+		<option value="teacher_university">Teacher(University)</option>
+		<option value="teacher_school">Teacher(School)</option>
+		<option value="top_managemenet">Top Managemenet</option>
+		<option value="business/self_employed">Business/Self employed</option>
+		<option value="home_makers">Home makers</option>
+		<option value="retired_professional">Retired professional</option>
+		<option value="others">Others</option>
+		</select>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-6">
+		<label class="col-md-offset-2 col-sm-offset-2 col-md-5 col-lg-5 col-sm-3" for="id_short_notes">Short Notes</label>
+		<input class="form-control col-md-6 col-sm-6" type="text" name="short_notes" id="id_short_notes" value="{{ user_profile.short_notes }}" placeholder="Brief Intro">
+		</div>
+		</div>
+		<br><br><br><br>
+		<div class='col-md-9 col-md-offset-2 col-sm-12 mob-align' align="right" style="margin-top:3%;">
+		<input style="width:22%;cursor:pointer !important;" class='btn btn-success mb-3 mob_css1' type="submit" id='submit_profile' value="Save"/>
+		</div>
+		</form>
+		</div>
+		<h4 class="col-md-9 mt-3 ml-3">Preferences</h4>
+		<hr>
+		<!-- Preferences -->
+		<fieldset id="avail_preferences">
+		<!--             <legend><h4>Availability & Preferences</h4></legend> -->
+		<div class="col-sm-12 col-md-12" id="Availability_and_Preferences">
+		<div class="col-sm-12 col-md-12 mob-p-0">
+		<div class="col-md-12 col-sm-12 availability p-0 mob-p-0">{{availablity}}
+		<span style="font-size:17px;color:black;">Available: </span>
+		<label class="ec-radio radio-sm mb-3 mr-4 m-mob-0">
+		<input type="radio" class="myreadiAvailability" name="availability" id="id_available" value="available" checked='checked'>
+		<span class="ec-radio__control"></span>
+		</label>
+		<span class="unavail-align" style="font-size:17px;color:black;">Unavailable : </span>
+		<label class="ec-radio radio-sm mb-3 mr-4 m-mob-0">
+		<input type="radio" class="myreadiAvailability" id="id_unvailable" name="availability" value="unavailable"{% if not availability %}{% endif %}>
+		<span class="ec-radio__control"></span>
+		</label>
+		</div>
+		</div>
+		<br>
+		<div id="id_div_avail" class="row avail" >
+		<div class='col-md-12 col-sm-12 disp_prop standard_rowi mob-p-0' style="">
+		<div class="col-md-3 col-sm-6">
+		<label class="font_csss" for="availableFrom">Available From:</label>
+		<input class="form-control" type="date" required="" name='from_date' value='{{ user_profile.from_date|date:"Y-m-d" }}' id="availableFrom">
+		</div>
+		<div class="col-md-3 col-sm-6">
+		<label for="availableTo">Available To:</label>
+		<input class="form-control" type="date" required="" data-parsley-daterangecheck='' name='to_date' value='{{ user_profile.to_date|date:"Y-m-d" }}' id="availableTo">
+		</div>
+		</div><br><br><br><br>
+		<div class='col-sm-12 col-md-12 standard_row disp_prop' style="">
+		<div class='col-sm-7 col-md-7 mob-p-0'>
+		{% time_slots "prefered_timings_slots" user_profile.pref_days user_profile.pref_slots "Preferred Days" %}
+		<span class="from_cls" style="display:none;color:red" onchange="close_error_msg('from_cls')">Please fill From time</span><br>
+		<span class="to_cls" style="display:none;color:red" onchange="close_error_msg('to_cls')">Please fill To time</span>
+		</div>
+		<div class='col-sm-3 col-md-3 mob-p-0'>
+		<label for="reason" style='margin-left:0'>Preferred Subject </label>
+		<br>
+		<label class="ec-checkbox check-lg">
+		<input type="checkbox" name="pref_sub[]" value="Maths" {% if "Maths" in pref_sub_list %}checked{% endif %}>
+		<span class="ec-checkbox__control"></span>
+		<span class="ec-checkbox__lebel" style="font-family:Work Sans, sans-serif;color:black;font-size: 17px;">Maths</span>
+		</label>
+		<br>
+		<label class="ec-checkbox check-lg">
+		<input type="checkbox" name="pref_sub[]" value="English" {% if "English" in pref_sub_list %}checked{% endif %}>
+		<span class="ec-checkbox__control"></span>
+		<span class="ec-checkbox__lebel" style="font-family:Work Sans, sans-serif;color:black;font-size: 17px;">English</span>
+		</label>
+		<br>
+		<label class="ec-checkbox check-lg">
+		<input type="checkbox" name="pref_sub[]" value="Science" {% if "Science" in pref_sub_list %}checked{% endif %}>
+		<span class="ec-checkbox__control"></span>
+		<span class="ec-checkbox__lebel" style="font-family:Work Sans, sans-serif;color:black;font-size: 17px;">Science</span>
+		</label>
+		</div>
+		</div>
+		</div>
+		<!--unavailable reason-->
+		<div id="id_div_unavail" class='col-sm-12 col-md-12 standard_row unavail'>
+		<div  class="col-sm-12 col-md-12 disp_prop" style="">
+		<label class="col-sm-3" for="reason" style='margin-left:0;padding-left:0;'>Unavailability Reason : </label>
+		<select class="form-control col-sm-6" name="reason">
+		{% for reason in unavail_list %}
+		<option value="{{reason}}" {% if reason == user_profile.unavailability_reason %}selected{% endif %}>{{reason}}</option>
+		{% endfor %}
+		</select>
+		</div><br>
+		<div  class='disp_prop col-md-9 col-sm-12 follow_up {% if unavailable_reason_selected not in unavail_list_ %}hideAvailDiv{% endif %}' style="margin-top:1%;">
+		<label for="follow_up" class="col-sm-3" style="margin-left:0;padding-left:0">Follow Up Date: </label>
+		<input style="margin-left:9%;" onclick="hide_error_msg(this)" class="marg_0 form-control" type="date" class="col-sm-6" required="" name='follow_up' value='{{ follow_up_date|date:"Y-m-d" }}' id="follow_up">
+		</div>
+		<span class="follow_up_err_msg" style="color:red;padding-left:26.3%;">value is required</span>
+		</div>
+		</div>
+		</fieldset>
+		<hr>
+		<div id="preferences" class="col-lg-12 col-md-12 col-sm-12" style="margin-top:0%;">
+		<fieldset>
+		<legend class="col-md-12 col-sm-12" ><h4>Ways to contribute</h4></legend>
+		<div class="col-md-12 col-md-12 col-sm-12 col-xs-12" id='preferred_roles'>
+		{% for role in roles %}
+		{% if role.type != 'Internal' %}
+		<div class='col-lg-4 col-md-12 col-sm-12 col-xs-12 row mt-3 disp_mob_css' style="display:inline-flex">
+		<div class='col-md-10 col-sm-6'>
+		<p class='role_ele' style="margin-top: 7px;">
+		<label class="ec-checkbox check-lg">
+		<input type="checkbox" id="{{ role.name }}" style="" name='roles' value="{{ role.id }}" {% if role.id = 6 or role.id = 7 %}disabled{% endif %}{% if role.id in pref_roles %} checked {% endif %}>
+		<span class="ec-checkbox__control"></span>
+		<span class="ec-checkbox__lebel" style="font-family:Work Sans, sans-serif;color:black;font-size: 17px; {% if role.id = 8 or role.id = 9 or role.id = 10 %}visibility:hidden;{% endif %} ">{{ role.name }}</span>
+		</label>
+		</p>
+		</div>
+		<div class='col-md-2 col-sm-4 col-xs-4' style="margin-top: 5px;">
+		<a data-toggle="popover" data-trigger="hover" title="{{ role.name }}" {% if role.id = 8 or role.id = 9 or role.id = 10 %}style="visibility:hidden;"{% endif %} data-placement="top" data-content="{{role.description}}">
+		<img src='{% if role.id == 1 %}/static/img_new/teacher_role.png{% else %}/static/img_new/admin_role.png{% endif %}' {% if role.id = 8 or role.id = 9  or role.id = 10 %}style="visibility:hidden;"{% endif %}/>
+		</a>
+		</div>
+		</div>
+		{% endif %}
+		{% endfor %}
+		</div>
+		</fieldset>
+		<!-- <fieldset class="go_to_lang">
+			<legend class="mb-2"><h4>Time</h4></legend>
+			 <span style="padding-bottom:7px; color:#000000">
+			     (Typically, a volunteer contributes 2 hours per week)
+			 </span>
+			 <br>
+			</fieldset> -->
+		<hr>
+		<fieldset>
+		<legend class="col-md-12 col-lg-12 col-sm-12 p-0" ><h4>Language</h4></legend>
+		<div class="col-md-12 col-sm-12">
+		<div class="col-md-12 col-sm-12 disp_prop hide_for_mob" style="">
+		<div class="col-md-2">  </div>
+		<span class="col-md-1 col-sm-2" style="margin-left:11.5%;font-size:17px;color:black;font-weight:normal;">Speak</span>
+		<sapn class="col-md-1 col-sm-2" style="color:black;font-size:17px;font-weight:normal;">Write</sapn>
+		<span class="col-md-1 col-sm-2" style="color:black;font-size:17px;font-weight:normal;">Read</span>
+		</div>
+		<br>
+		<div class="row col-md-12 col-sm-12" id="clone_divv">
+		{% if user_profile.languages_known %}
+		{% for user_language in user_profile.languages_known %}
+		<div class="row col-md-12 col-sm-12 language" id="div_id_{{ forloop.counter }}" >
+		<div class="col-md-3 col-sm-3 my-1 select_div" style="width: 21%;">
+		<select class="form-control" tabindex="5">
+		<option value="">Language</option>
+		{% for lang in language_dropdown %}
+		{% if lang == user_language.lang %}
+		<option value="{{lang}}" selected="selected">{{lang}}</option>
+		{% else %}
+		<option value="{{lang}}">{{lang}}</option>
+		{% endif %}
+		{% endfor %}
+		</select>
+		</div>
+		<!-- Default checked -->
+		<div class="col-md-1 col-sm-2 mt-2 disp_mob marg_0" id="id_1" style="margin-left: 6%;">
+		<p class="col-md-1 col-sm-2 hide_for_portal" style="margin-left:8.5%;font-size:17px;color:black;font-weight:normal;">Speak</p>            
+		<label class="ec-checkbox check-xl mb-3 mr-4">
+		<input type="checkbox" name="checkbox" {% if user_language.speak %} checked="checked" {% endif %}>
+		<span class="ec-checkbox__control"></span>
+		</label>
+		</div>
+		<div class="col-md-1 col-sm-2 mt-2 disp_mob" id="id_2" style="margin-left:0.2%">
+		<p class="col-md-1 col-sm-2 hide_for_portal" style="margin-left:8.5%;font-size:17px;color:black;font-weight:normal;">Read</p>
+		<label class="ec-checkbox check-xl mb-3 mr-4">
+		<input type="checkbox" name="checkbox" {% if user_language.write %} checked="checked" {% endif %}>
+		<span class="ec-checkbox__control"></span>
+		</label>
+		</div>
+		<div class="col-md-1 col-sm-2 mt-2 disp_mob" id="id_3" style="margin-left:0.6%;">
+		<p class="col-md-1 col-sm-2 hide_for_portal" style="margin-left:8.5%;font-size:17px;color:black;font-weight:normal;">Write</p>
+		<label class="ec-checkbox check-xl mb-3 mr-4">
+		<input type="checkbox" name="checkbox" {% if user_language.read %} checked="checked" {% endif %}>
+		<span class="ec-checkbox__control"></span>
+		</label>
+		</div>
+		{% if not forloop.last %}
+		<span class="cls m-p-l-1" style="">
+		<i class="fa fa-minus-circle font-30" style="cursor:pointer;font-size:37px;color:#18b718" onclick="delete_lang(this)"></i>
+		</span>
+		<div class="col-md-3 col-lg-3 cls m-p-l-1 p-2" style="margin-top:-0.2%;">
+		<p style="font-size: 17px;font-weight:normal;color:black;display:inline;">Remove</p>
+		</div>
+		{% endif %}
+		{% if forloop.last %}
+		<span class="cls m-p-l-1" style="">
+		<i class="fa fa-plus-circle font-30" style="cursor:pointer;font-size:37px;color:#18b718" onclick="create_div(this)"></i>
+		</span>
+		<div class="col-md-3 col-lg-3 cls m-p-l-1 p-2 disp_contents" style="margin-top:-0.2%;">
+		<p class="padd_css1 mt-0" style="font-size: 17px;font-weight:normal;color:black;display:inline;">Add another language</p>
+		</div>
+		{% endif %}
+		<p class="hide_error_msg" style="color:red;margin-left:32.5%;font-size:15px;">Please specify Read/Write/Speak parameters</p>
+		<br><br><br>
+		</div>
+		{% endfor %}
+		{% else %}
+		<div class="row col-md-12 col-sm-12 language" id="div_id_{{ forloop.counter }}">
+		<div class="col-md-3 col-sm-3 my-1 select_div" style="width: 21%;">
+		<select class="form-control" tabindex="5">
+		<option value="">--Language--</option>
+		{% for lang in language_dropdown %}
+		<option value="{{lang}}">{{lang}}</option>
+		{% endfor %}
+		</select>
+		</div>
+		<!-- Default checked -->
+		<div class="col-md-1 col-sm-2 mt-2 disp_mob marg_0" id="id_1" style="margin-left: 6%;">
+		<p class="col-md-1 col-sm-2 hide_for_portal" style="margin-left:8.5%;font-size:17px;color:black;font-weight:normal;">Speak</p>
+		<label class="ec-checkbox check-xl mb-3 mr-4">
+		<input type="checkbox" name="checkbox" {% if user_language.speak %} checked="checked" {% endif %}>
+		<span class="ec-checkbox__control"></span>
+		</label>
+		</div>
+		<div class="col-md-1 col-sm-2 mt-2 disp_mob" id="id_2" style="margin-left:0.2%">
+		<p class="col-md-1 col-sm-2 hide_for_portal" style="margin-left:8.5%;font-size:17px;color:black;font-weight:normal;">Read</p>
+		<label class="ec-checkbox check-xl mb-3 mr-4">
+		<input type="checkbox" name="checkbox" {% if user_language.write %} checked="checked" {% endif %}>
+		<span class="ec-checkbox__control"></span>
+		</label>
+		</div>
+		<div class="col-md-1 col-sm-2 mt-2 disp_mob" id="id_3" style="margin-left:0.6%;">
+		<p class="col-md-1 col-sm-2 hide_for_portal" style="margin-left:8.5%;font-size:17px;color:black;font-weight:normal;">Write</p>
+		<label class="ec-checkbox check-xl mb-3 mr-4">
+		<input type="checkbox" name="checkbox" {% if user_language.read %} checked="checked" {% endif %}>
+		<span class="ec-checkbox__control"></span>
+		</label>
+		</div>
+		<span class="cls m-p-l-1" style="">
+		<i class="fa fa-plus-circle font-30" style="cursor:pointer;font-size:37px;color:#18b718" onclick="create_div(this)"></i>
+		</span>
+		<div class="col-md-4 col-lg-4 col-sm-4 cls m-p-l-1 p-2 disp_contents" style="margin-top:-0.2%;">
+		<p class="padd_css1" style="font-size: 17px;font-weight:normal;color:black;display:inline;">Add another language</p>
+		</div>
+		<br><br><br>
+		</div>
+		<p class="hide_error_msg" style="color:red;margin-left:32.5%;font-size:15px;">Please specify Read/Write/Speak parameters</p>
+		{% endif %}
+		</div>
+		</div>
+		</fieldset>
+		<hr>
+		</div>
+		<div class="col-md-12 col-sm-12" align="center" style="margin-top:2%;">
+		<button id="submit_id" class="btn btn-icon btn-success btn-lg mr-2 mb-3" style="background: #02cc26 !important;margin-bottom:2%;" >
+		<span>Submit</span>
+		</button>
+		</div>
+		<!-- Preferences end -->
+		<br><br><br>
+		<h4 class="col-md-9 mt-3 ml-2">Settings</h4>
+		<!-- settings -->
+		<div class="row col-md-12 p-m-5" id="settings">
+		{% for setting in settings %}
+		<div id="{{setting.group}}" class="col-md-12 row">
+		<form class="col-md-12 col-lg-12 mob-p-0"  action="/config/user/settings" method="post">
+		{% csrf_token %}
+		<div class="col-lg-12 col-md-12 col-sm-12 p-3 mob-p-0" style="border:1px solid #e5e5e5;margin:0px 0px 5px 0px;">
+		<div>
+		<fieldset>
+		<legend><h4>{{setting.group_title}}</h4></legend>
+		<hr style="margin-top:0px;">
+		<div class="col-md-12 col-sm-12" style="display:inline-flex;">
+		<div class="col-md-4 col-sm-4"><span>Would you like to Change <a data-toggle="popover" data-trigger="hover" data-placement="top" data-content="If you select ALL, you can update Settings on your Preference."><span>?</span></a></span></div>
+		<input type="hidden" name="group_name" value="{{setting.group_name}}">
+		<input type="hidden" name="group_id" value="{{setting.id}}">
+		<div class="col-md-8 col-sm-8">
+		{% if setting.group_name in user_settings.keys %}
+		{% with groupname=setting.group_name %}
+		{% with testval=user_settings|getuservalue:groupname %}
+		<input class="checkradio" type="hidden" name="{{setting.group_name}}_radio" value="{{testval}}" style="bottom:1%;right:35%;">
+		<label class="ec-radio radio-sm mb-3 mr-4">
+		{% if testval == 'all' %}
+		<input type="radio" name="{{setting.group_name}}_allornone" value="all" checked onchange="radiochange(this);" style="bottom:1%;right:35%;">
+		<span class="ec-radio__control"></span>
+		{% else %}
+		<input type="radio" name="{{setting.group_name}}_allornone" value="all" onchange="radiochange(this);" style="bottom:1%;right:35%;">
+		<span class="ec-radio__control"></span>
+		{% endif %} <span class="ec-radio__label">All</span></label>
+		<label class="ec-radio radio-sm mb-3 mr-4">
+		{% if testval == 'none' %}
+		<input type="radio" name="{{setting.group_name}}_allornone" value="none" checked onchange="radiochange(this);" style="bottom:1%;right:39%;">
+		<span class="ec-radio__control"></span>
+		{% else %}
+		<input type="radio" name="{{setting.group_name}}_allornone" value="none" onchange="radiochange(this);" style="bottom:1%;right:39%;">
+		<span class="ec-radio__control"></span>
+		{% endif %} <span class="ec-radio__label">None</span>
+		</label>
+		{% endwith %}
+		{% endwith %}
+		{% else %}
+		<input class="checkradio" type="hidden" name="{{setting.group_name}}_radio" value="all" style="bottom:1%;right:35%;">
+		<label class="ec-radio radio-sm mb-3 mr-4"><input type="radio" name="{{setting.group_name}}_allornone" value="all" checked onchange="radiochange(this);" style="bottom:1%;right:35%;"> 
+		<span class="ec-radio__control"></span>
+		<span class="ec-radio__label">All</span>
+		</label>
+		<label class="ec-radio radio-sm mb-3 mr-4"><input type="radio" name="{{setting.group_name}}_allornone" value="none" onchange="radiochange(this);" style="bottom:1%;right:39%;"> 
+		<span class="ec-radio__control"></span>
+		<span class="ec-radio__label">None</span>
+		</label>
+		{% endif %}
+		</div>
+		</div>
+		{% if setting.settingsgroupitems_set.all %}
+		<div class="col-md-12 col-sm-12" id="div_{{setting.group_name}}_all">
+		{% if setting.group_name in user_settings.keys %}
+		{% with groupname=setting.group_name %}
+		{% with settingval=user_settings|getuservalue:groupname %}
+		{% if settingval == 'all'  %}
+		{% with items=setting.settingsgroupitems_set.all %}
+		{% for item in items %}
+		{% with usergrpitemval=request.user|useritemvalue:item %}
+		{% if item.input_type|lower == "choices" %}
+		<div class="col-md-12 col-sm-12" style="display: inline-flex;">
+		<label class="col-md-2 col-sm-2"> {{item.input_label}} </label>
+		<select class="form-control col-md-2 col-sm-2" name='{{item.input_name}}_-{{item.id}}'>
+		{% with item.input_values|split:"," as values %}
+		{% for value in values %}
+		{% if value in usergrpitemval %}
+		<option value="{{value}}" selected="selected">{{value}}</option>
+		{% else %}
+		<option value="{{value}}">{{value}}</option>
+		{% endif %}
+		{% endfor %}
+		{% endwith %}
+		</select>
+		</div>
+		{% else %}
+		<div class="col-md-12 col-sm-12">
+		<label class="ec-checkbox check-lg">
+		{% if item.input_label|lower == 'email' or item.input_label|lower == 'e-mail' and user_profile.role.all|length > 0 %}
+		<input style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}" readonly="readonly" checked="checked" onclick="return false;">
+		{% elif item.input_name in usergrpitemval %}
+		<input style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}" checked="checked">
+		{% else %}
+		<input style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}">
+		{% endif %}
+		<span class="ec-checkbox__control"></span>
+		<span class="ec-checkbox__lebel" style="font-family:Work Sans, sans-serif;color:black;font-size: 17px;">{{item.input_label}}</span>
+		</label>
+		</div>
+		{% endif %}
+		{% endwith %}
+		{% endfor %}
+		{% endwith %}
+		{% else %}
+		{% with items=setting.settingsgroupitems_set.all %}
+		{% for item in items %}
+		{% if item.input_type|lower == "choices" %}
+		<div class="col-md-12 col-sm-12">
+		<label class="col-md-2 col-sm-2"> {{item.input_label}} </label>
+		<select class="form-control col-md-2 col-sm-2" name='{{item.input_name}}_-{{item.id}}'>
+		{% with item.input_values|split:"," as values %}
+		{% for value in values %}
+		{% if item.default_value == value %}
+		<option value="{{value}}" selected="selected">{{value}}</option>
+		{% else %}
+		<option value="{{value}}">{{value}}</option>
+		{% endif %}
+		{% endfor %}
+		{% endwith %}
+		</select>
+		</div>
+		{% else %}
+		<div class="col-md-12 col-sm-12">
+		<label class="ec-checkbox check-lg">
+		{% if item.input_label|lower == 'email' or item.input_label|lower == 'e-mail' and user_profile.role.all|length > 0 %}
+		<input style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}" readonly="readonly" checked="checked" onclick="return false;">
+		{% else %}
+		<input style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}">
+		{% endif %}
+		<span class="ec-checkbox__control"></span>
+		<span class="ec-checkbox__lebel" style="font-family:Work Sans, sans-serif;color:black;font-size: 17px;">{{item.input_label}}</span>
+		</label>
+		</div>
+		{% endif %}
+		{% endfor %}
+		{% endwith %}
+		{% endif %}
+		{% endwith %}
+		{% endwith %}
+		{% else %}
+		{% with items=setting.settingsgroupitems_set.all %}
+		{% for item in items %}
+		{% if item.input_type|lower == "choices" %}
+		<div class="col-md-12 col-sm-12" style="display: inline-flex;">
+		<label class="col-md-2 col-sm-2"> {{item.input_label}} </label>
+		<select class="form-control col-md-2 col-sm-2" name='{{item.input_name}}_-{{item.id}}'>
+		{% with item.input_values|split:"," as values %}
+		{% for value in values %}
+		{% if item.default_value == value %}
+		<option value="{{value}}" selected="selected">{{value}}</option>
+		{% else %}
+		<option value="{{value}}">{{value}}</option>
+		{% endif %}
+		{% endfor %}
+		{% endwith %}
+		</select>
+		</div><br><br>
+		{% else %}
+		<div class="col-md-12 col-sm-12">
+		<label class="ec-checkbox check-lg">
+		{% if item.input_label|lower == 'email' or item.input_label|lower == 'e-mail' and user_profile.role.all|length > 0 %}
+		<input style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}" readonly="readonly" checked="checked" onclick="return false;">
+		{% else %}
+		<input class="ec-checkbox check-xl mb-3 mr-4" style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}">
+		{% endif %}
+		<span class="ec-checkbox__control"></span>
+		<span class="ec-checkbox__lebel" style="font-family:Work Sans, sans-serif;color:black;font-size: 17px;">{{item.input_label}}</span>
+		</label>
+		</div>
+		{% endif %}
+		{% endfor %}
+		{% endwith %}
+		{% endif %}
+		{% if setting.group_name|lower == 'privacy' or setting.group_name|lower == 'privacypolicy' %}
+		
+		<p style="font-size: 17px;font-weight:normal;">To view Privacy Policy <a href="/static/PrivacyPolicyREV1.pdf" TARGET="_blank" onMouseOver="this.style.color='green'" onMouseOut="this.style.color='#02cc26'" style="vertical-align:middle;color:#02cc26;font-weight:bold;" title="Privacy Policy">Click Here</a></p>
+		{% endif %}
+		</div>
+		{% endif %}
+		<div class="nonediv col-md-12 col-sm-12" id="div_{{setting.group_name}}_none">
+		<h6 style="margin-left:1.6%;font-weight:400;">Note: You selected {{setting.group_title}} settings as None, So By default, Role Specific Settings will be applied.</h6>
+		</div>
+		<button class='btn btn-success pull-right' id="evDiv_submit">Submit</button>
+		</fieldset>
+		</div>
+		</div>
+		</form>
+		</div>
+		{% endfor %}
+		
+		</div>
+		<!-- settings end -->
+		<br><br><br>
+		{% if not is_content_developer %}
+		<h4 class="col-md-9 mt-3 ml-2" tabindex="1" id="schoolslist">My Schools</h4>
+		<!-- My Schools starts -->
+		<div class="row col-md-12 p-m-5" id="myschools">
+		{% include "list_myschools.html" %}
+		</div>
+		{% endif %}
+		<!-- My Schools ends -->
+	</div>
+</div>
+<!-- END row-->
+</div>
+<!--   </div> END container -->
+<!-- </div> END section -->
+<style>
+.headermessage {
+margin: 20px;
+color: black;
+font-family: 'Open Sans', sans-serif;
+text-align: center;
+font-size: 30px;
+font-weight: bold;
+}
+.blink_text {
+animation:1s blinker linear infinite;
+-webkit-animation:1s blinker linear infinite;
+-moz-animation:1s blinker linear infinite;
+color: white;
+}
+@-moz-keyframes blinker {  
+0% { opacity: 1.0; }
+50% { opacity: 0.0; }
+100% { opacity: 1.0; }
+}
+@-webkit-keyframes blinker {  
+0% { opacity: 1.0; }
+50% { opacity: 0.0; }
+100% { opacity: 1.0; }
+}
+@keyframes blinker {  
+0% { opacity: 1.0; }
+50% { opacity: 0.0; }
+100% { opacity: 1.0; }
+}
+.image-block {
+background-color: black;
+padding: 10px;    
+margin: 8px;
+height:180px;
+text-align: center;
+vertical-align: bottom;
+border:2px solid grey;
+border-radius: 10px 10px 10px 10px;
+}
+.image-block > p {
+width:100%;
+height: 100%; 
+margin-top: 0%;
+font-weight: normal;
+font-size: 15px;
+padding-top: 60px;
+background-color: rgba(3,3,3,0.0);
+color: rgba(6,6,6,0.0);
+/*border-radius: 10px 10px 10px 10px;*/
+}
+.card-body{
+padding: 3.975rem;
+position: relative;
+margin: -30px;
+padding-left: 30px;
+}
+.card-header{
+background: transparent;
+font-size: 18px;
+font-weight: bold;
+margin-bottom: -10px;
+}
+.image-block:hover > p {
+background-color: rgba(3,3,3,0.5);    
+color: white;    
+}
+.next_step, .next_step1, .next_step2, .next_step3 {
+font-size: 18px;
+}
+.add_green > a {
+background: #2fc12ff0 !important;
+color: white;
+}
+.gallery_css {
+cursor: pointer;
+position: absolute;
+left: 24.5%;
+top: 20.7%;
+height: 18%;
+width: 17.4%;
+opacity: 1;
+filter: contrast(0.9);
+}
+.tooltip-inner {
+font-weight:bold;
+cursor: pointer;
+}
+.follow_up_err_msg {
+display: none;
+}
+.hidden {
+display: none;
+}
+.tab-line .nav-link.active {
+/* border-bottom: none !important; */
+background: #00CB54;
+color: #fff;
+}
+.breadcrumb-item{
+cursor:pointer !important;
+}
+p {
+margin: 0 auto;
+max-width: 500px;
+width: 75%;
+margin-top: 25px;
+font: 18px/28px 'Open Sans',sans-serif;
+/* color: #eee; */
+}
+p em {
+display: block;
+font-size: 23px;
+font-weight: 700;
+font-style: normal;
+/* color: white; */
+}
+.p_css {
+font-size: 17px !important;
+color: black;
+padding-left: 5%;
+}
+.font_css {
+color: #e00707;
+}
+label{
+font-size: 17px !important;
+}
+.progress_bar_css {
+top: 34%;
+right: 0px;
+background: #02cc26!important;
+height: 7px;
+position: absolute;
+margin-right: -29%;
+}
+.progress_bar_css1 {
+top: 34%;
+right: 0px;
+background: #02cc26!important;
+height: 7px;
+position: absolute;
+margin-right: -29.1%;
+}
+.circle {
+background: #02cc26!important;
+border-radius: 200px;
+color: white;
+height: 130px;
+font-weight: bold;
+width: 130px;
+display: table;
+margin: 20px auto;
+}
+.step1 {
+font-weight: lighter;
+}
+.circle p {
+vertical-align: middle;
+text-align: center;
+display: table-cell;
+}
+</style>
+{% endblock content %}
+{% block scripts %}
+{{ block.super }}
+<!-- Event snippet for eVidyaloka conversion page -->
+<script>
+	$('#something').click(function() {
+	  $('#test').focus();
+	});
+	    gtag('event', 'conversion', {'send_to': 'AW-967708218/BvqsCPeUjmgQupy4zQM'});
+	  
+</script>
+<!-- End of Event snippet for eVidyaloka conversion page -->
+<script src='/static/js_new/parsley.min.js' type='text/javascript' ></script>
+
+
+	
+<script>
+	
+	function getCookie(name) {
+		let cookieValue = null;
+	
+		if (document.cookie && document.cookie !== '') {
+			const cookies = document.cookie.split(';');
+			for (let i = 0; i < cookies.length; i++) {
+				const cookie = cookies[i].trim();
+	
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) === (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+	
+					break;
+				}
+			}
+		}
+	
+		return cookieValue;
+	}
+	window.onload = function () {
+		{% if user_profile.consent == none %}
+		var consent_status=null;
+		{%endif%}
+		
+		if ( consent_status == null) 
+		{
+			$('#exampleModal').modal("show");
+		   
+		}
+	};
+	const csrftoken = getCookie('csrftoken');
+	function consentFunction(e) {
+        var consent=e.innerText;
+		alert('Thank You! You Selected : '+e.innerText);
+		
+		
+            $.ajax({
+                url: "/config/user/add_consent_profile/", // the endpoint
+                type: "POST", // http method
+				
+                data: {"consent_data":consent,"csrfmiddlewaretoken": getCookie('csrftoken')}, // data sent with the post request
+                dataType: "json",
+                ContentType: 'application/json; charset=utf-8',
+				
+                success: function(response) {
+                        console.log(data)  
+                },
+            })
+    }
+	
+	$('.hide_error_msg').css('display', 'none');
+	
+	var selected_country_id, selected_state_id, selected_city_id;
+	
+	$(document).ready(function() {
+		
+	console.log("role","{{role_list}}")
+	role_list = "{{role_list}}"
+	console.log("role1",role_list)
+	console.log("ggggg",role_list[0])
+	if(role_list == 3 ){
+	  $('#progress_1').css('display','none');
+	  $('#progress_4').css('display','none');
+	  $('#progress_3').css('display','block');
+	  $('#progress_2').css('display','none');
+	  $('#progress_5').css('display','none');
+	  $('#2id').css('display','none');
+	  $('#3id').css('display','block');
+	  $('#1id').css('display','none');
+	  $('#4id').css('display','none');
+	  $('#20id').css('display','none');
+	  
+	}else if (role_list == 2){
+	  $('#progress_2').css('display','block');
+	  $('#progress_1').css('display','none');
+	  $('#progress_4').css('display','none');
+	  $('#progress_3').css('display','none');
+	  $('#progress_5').css('display','none');
+	  $('#2id').css('display','block');
+	  $('#3id').css('display','none');
+	  $('#1id').css('display','none');
+	  $('#4id').css('display','none');
+	  $('#20id').css('display','none');
+	}else if (role_list == 1){
+	  console.log("ggggg",role_list)
+	  $('#progress_1').css('display','block');
+	  $('#progress_2').css('display','none');
+	  $('#progress_4').css('display','none');
+	  $('#progress_3').css('display','none');
+	  $('#progress_5').css('display','none');
+	  $('#2id').css('display','none');
+	  $('#3id').css('display','none');
+	  $('#1id').css('display','block');
+	  $('#4id').css('display','none');
+	  $('#20id').css('display','none');
+	}else if (role_list == 4){
+	  $('#progress_1').css('display','none');
+	  $('#progress_4').css('display','block');
+	  $('#progress_3').css('display','none');
+	  $('#progress_2').css('display','none');
+	  $('#progress_5').css('display','none');
+	  $('#2id').css('display','none');
+	  $('#3id').css('display','none');
+	  $('#1id').css('display','none');
+	  $('#4id').css('display','block');
+	  $('#20id').css('display','none');
+	}else if (role_list == 20){
+	  $('#progress_1').css('display','none');
+	  $('#progress_4').css('display','none');
+	  $('#progress_3').css('display','none');
+	  $('#progress_2').css('display','none');
+	  $('#progress_5').css('display','block');
+	  $('#2id').css('display','none');
+	  $('#3id').css('display','none');
+	  $('#1id').css('display','none');
+	  $('#4id').css('display','none');
+	  $('#20id').css('display','block');
+	}
+	
+	
+	    var focus_index = String(window.location).indexOf("#")
+	    if ( focus_index > 0 ) {
+	      var div_name = String(window.location).substring(focus_index, )
+	      $(div_name).focus(); 
+	    }
+	    
+		$('.tooltipid').tooltip('show');
+	
+		evd.se_submit = function(){
+		    var $seform = $('#Self_Evaluation').find('form');
+		    var form_elements = $seform.find('.form-check-input[name!=""],.form-control[name!=""]');
+		    var form_unique_ele=[], check_inputs=[], non_check_inputs=[];
+		    var form_data = [], post_data={};
+		    $.each(form_elements,function(){
+		            if(!~$.inArray(this.name,form_unique_ele)) form_unique_ele.push(this.name);
+		    });
+		    $.each(form_unique_ele, function(){
+		            var ele = $('[name='+this+']');
+		            var qtn = $('.'+this).text();
+		            var temp = {};
+		            if(ele.hasClass('form-check-input')){
+		                var checked_ele = $(ele).filter(':checked');
+		                if(checked_ele.length>1){
+		                    $.each(checked_ele,function(i){
+		                        if(i==0){
+		                            temp[qtn] = $(this).parent().text().trim();
+		                        }else{
+		                            temp[qtn] += ';'+$(this).parent().text().trim();
+		                        }
+		                    });
+		                }else{
+		                     temp[qtn] = $(ele).filter(':checked').parent().text().trim();
+		                }
+		             }else{
+		                     temp[qtn] = $(ele).val().trim();
+		             }
+		            form_data.push(temp);
+		    });
+		    //console.log(form_data);
+		    post_data['form_dump'] = JSON.stringify(form_data);
+		    post_data['role'] = 'teacher';
+		    post_data['onboard_id'] = $seform.data('onboarding_id')
+		    //console.log(post_data);
+		    evd.ajax_sub('/selfeval_response/',post_data,se_form_resp);
+		    return false;
+		}
+		
+		evd.se_submit1 = function(){
+		    var $seform = $('#Self_Evaluation_1').find('form');
+		    var form_elements = $seform.find('.form-check-input[name!=""],.form-control[name!=""]');
+		    var form_unique_ele=[], check_inputs=[], non_check_inputs=[];
+		    var form_data = [], post_data={};
+		    $.each(form_elements,function(){
+		            if(!~$.inArray(this.name,form_unique_ele)) form_unique_ele.push(this.name);
+		    });
+		    $.each(form_unique_ele, function(){
+		            var ele = $('[name='+this+']');
+		            var qtn = $('.'+this).text();
+		            var temp = {};
+		            if(ele.hasClass('form-check-input')){
+		                var checked_ele = $(ele).filter(':checked');
+		                if(checked_ele.length>1){
+		                    $.each(checked_ele,function(i){
+		                        if(i==0){
+		                            temp[qtn] = $(this).parent().text().trim();
+		                        }else{
+		                            temp[qtn] += ';'+$(this).parent().text().trim();
+		                        }
+		                    });
+		                }else{
+		                     temp[qtn] = $(ele).filter(':checked').parent().text().trim();
+		                }
+		             }else{
+		                     temp[qtn] = $(ele).val().trim();
+		             }
+		            form_data.push(temp);
+		    });
+		    //console.log(form_data);
+		    post_data['form_dump'] = JSON.stringify(form_data);
+		    post_data['role'] = 'teacher';
+		    post_data['onboard_id'] = $seform.data('onboarding_id')
+		    //console.log(post_data);
+		    evd.ajax_sub('/selfeval_response/',post_data,se_form_resp);
+		    return false;
+		}
+	
+		var se_form_resp = function(){
+		};
+		
+		evd.ajax_sub = function(url,post_data,callback){
+	        var csrftoken = getCookie('csrftoken');
+	        post_data['csrfmiddlewaretoken'] = csrftoken;
+	        $.post(url,post_data,function(resp){
+	            callback(resp);
+	        });
+	
+		};
+		
+		function getCookie(name) {
+		    var cookieValue = null;
+		    if (document.cookie && document.cookie !== '') {
+		        var cookies = document.cookie.split(';');
+		        for (var i = 0; i < cookies.length; i++) {
+		            var cookie = jQuery.trim(cookies[i]);
+		            // Does this cookie string begin with the name we want?
+		            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+		                break;
+		            }
+		        }
+		    }
+		    return cookieValue;
+		}
+	
+		{% for key,value in steps.items %}
+		  {% if key == 'Content Developer' %}
+	      {% if value %}
+	        $(".show_content_develop").css('display','none');
+	        {% for value1 in value %}
+	          $('.content_develop').text("{{ value1.step_name }}");
+	          if("{{ value1.step_name }}" === "Self Evaluation"){
+	            $('.content_develop').attr("data-target", "#Self_Evaluation_1");
+	            $('.content_develop').click(function(){
+	              $('#form_id_1').attr("data-onboarding_id", "{{ value1.onboarding_id }}");
+	            });
+	          }else if("{{ value1.step_name }}" === "Content Selection Discussion"){
+	            if("{{ value1.discussion_slot_booked }}" === "True"){
+	              $('#change_slot_time').css('display','block')
+	              $('.content_develop').css('display','none');
+	              $('.progress_3 > div > div > ol > .b_crum_2').addClass('add_green');
+	              $('.center_label').css('display','block').text('{{ "Discussion is scheduled on :" }} {{value1.slot_booked_time }}');
+	            }
+	            try {
+	              document.getElementById('book_sdslot').style.display = 'block';
+	              document.getElementById('book_slots_header').style.display = 'block';
+	              document.getElementById('selfevaluation').style.visibility = 'hidden';
+	            }catch(err) {}
+	          }else if("{{ value1.step_name }}" === "Readiness"){
+	            $('.progress_3 > div > div > ol > .b_crum_2').addClass('add_green');
+	            console.log('sjdcbhsdhcvdhcvds hcv dhc dhc')
+	            $('#browse_oppurtinity').css('display','block');
+	            $('.content_develop').css('display','none');
+	          }
+	        {% endfor %}
+	      {% else %}
+	        $('.progress_3 > div > div > ol > .b_crum_2').addClass('add_green');
+	        $(".hide_content_develop, .next_step2").css('display','none');
+	        $(".show_content_develop").css('display','block');
+	      {% endif %}
+	    {% elif key == 'Teacher' %}
+		    {% if value %}
+				$(".show_teacher").css('display','none');
+				{% for value1 in value %}
+					$('.teacher').text("{{ value1.step_name }}");
+					$('.teacher_selfeval').click(function(){
+						$('#form_id').attr("data-onboarding_id", "{{ value1.onboarding_id }}");
+					});
+					if("{{ value1.step_name }}" === "Self Evaluation"){
+						$('.teacher').attr({"data-target": "#Self_Evaluation", "data-toggle": "modal"});
+						$('.teacher').click(function(){
+						$('#form_id').attr("data-onboarding_id", "{{ value1.onboarding_id }}");
+						});
+					}else if("{{ value1.step_name }}" === "Teacher Selection Discussion"){
+						$('.teacher').text("Book");
+						$('#store_url').val('/v2/book-slots/');
+	              		$('.teacher').attr({
+						{% if user_profile.phone %} 
+							"href":"/v2/book-slots/", "target": "_blank", "data-role_preference": "{{value1.role_preference}}"
+						{% else %} 					
+							"data-toggle": "modal", "data-target": "#tsd_profile_fill_first"
+						{% endif %}
+	              	});
+					if("{{ value1.demand_booked }}" === "True"){
+						if("{{value1.slot_booked_time}}") {
+							$('.change_label1').text('Discussion is scheduled on');
+							$('.teacher').text('{{ value1.slot_booked_time }}').css({'padding-top':'2%'}).removeClass('btn btn-success col-md-10 col-lg-10').attr('href','javascript:void(0)');
+							$('.chng_tmg1').css('display','block').addClass('mt-3');
+							$('.progress_1 > div > div > ol > .b_crum_2').addClass('tab_inactive');
+						}
+						$('.change_browse_label').text('You have booked for :');
+						$('.demand_booked_new1').text('{{ demand_allocate.center }} {{ demand_allocate.grade }} {{ demand_allocate.subject }}').css('display','block');
+						$('.brow_opp').text("Change");
+						document.getElementById("MyElement").classList.add('MyClass');
+						}else if("{{ value1.discussion_slot_booked }}"=== "True"){
+							$('.progress_1 > div > div > ol > .b_crum_2').addClass('current');
+							$('.change_label1').text('Discussion is scheduled on: {{value1.slot_booked_time }}');
+							$('.teacher').text('{{ value1.slot_booked_time }}').css({'padding-top':'2%'}).removeClass('btn btn-success col-md-10 col-lg-10').attr('href','javascript:void(0)');
+							$('.chng_tmg1').css('display', 'block').addClass('mt-3');
+						}
+							
+					}else if("{{ value1.step_name }}" === "Availability and Preferences"){
+						$('.next_step').text('You can check');
+						$('.change_label1').css('display','none');
+						$('.teacher').attr("href", "#avail_preferences").removeClass('col-md-10 col-lg-10 ml-3').addClass('pr-2 pl-2 avail_mob');
+						$('.removeCls').removeClass('ml-3');
+						$('.progress_1 > div > div > ol > .b_crum_2').addClass('current');
+						if("{{ demand_allocate.subject }}"){
+							$('.brow_opp').text("Change");
+							$('.change_browse_label').text('You have booked for :');
+							$('.demand_booked_new1').text('{{ demand_allocate.center }} {{ demand_allocate.grade }} {{ demand_allocate.subject }}').css('display','block');
+							$('.b_crum_3').addClass('add_green');
+							$('.ml_9').css('padding-left','1.2%');
+							if("{{ demand_allocate.demand_allocated }}" == "True" && "{{ demand_allocate.offering_accepted }}" != "True"){
+								$('.accept_reject_1').css('display', 'block');
+								$('.brow_opp').css('display', 'none');
+							}else if ("{{ demand_allocate.offering_accepted }}" === "True"){
+								$('.myclassroom').css('display', 'block');
+								$('.change_text, .change_browse_label, .demand_booked_new1, .brow_opp').css('display','none');
+							}
+						}
+					}else {
+						$('.next_step').text('You can check');
+						$('.change_label1').css('display','none');
+						$('.teacher').attr({"data-toggle": "modal","data-target": "#Readiness"}).addClass('ml-3');
+						$('.progress_1 > div > div > ol > .b_crum_2').addClass('current');
+						if("{{ demand_allocate.subject }}"){
+							$('.brow_opp').text("Change");
+							$('.change_browse_label').text('You have booked for :');
+							$('.demand_booked_new1').text('{{ demand_allocate.center }} {{ demand_allocate.grade }} {{ demand_allocate.subject }}').css('display','block');
+							$('.b_crum_3').addClass('add_green');
+							$('.ml_9').css('padding-left','1.2%');
+							if("{{ demand_allocate.demand_allocated }}" == "True"  && "{{ demand_allocate.offering_accepted }}" != "True"){
+								$('.accept_reject_1').css('display', 'block');
+								$('.brow_opp').css('display', 'none');
+							}else if ("{{ demand_allocate.offering_accepted }}" === "True"){
+								$('.myclassroom').css('display', 'block');
+								$('.change_text, .change_browse_label, .demand_booked_new1, .brow_opp').css('display','none');
+							}
+						}
+					}
+			    {% endfor %}
+			{% else %}
+				$('.teacher, .next_step, .change_label').css('display','none');
+				$('.progress_1 > div > div > ol > .b_crum_2').addClass('current');
+				$('.b_crum_3').addClass('add_green');
+				$(".show_teacher").css('display','block');
+	        	if("{{ demand_allocate.subject }}"){
+					$('.brow_opp').text("Change");
+					$('.change_browse_label').text('You have booked for :');
+					$('.demand_booked_new1').text('{{ demand_allocate.center }} {{ demand_allocate.grade }} {{ demand_allocate.subject }}').css('display','block');
+					$('.ml_9').css('padding-left','1.2%');
+					if("{{ demand_allocate.demand_allocated }}" == "True"  && "{{ demand_allocate.offering_accepted }}" != "True"){
+						$('.accept_reject_1').css('display', 'block');
+						$('.brow_opp').css('display', 'none');
+					}else if ("{{ demand_allocate.offering_accepted }}" === "True"){
+						$('.myclassroom').css('display', 'block');
+						$('.change_text, .change_browse_label, .demand_booked_new1, .brow_opp').css('display','none');
+					}
+	        	}
+		    {% endif %}
+	    {% elif key == 'Facilitator Teacher' %}
+	       	{% if value %}
+	        	$(".show_flt").css('display','none');
+	        	{% for value1 in value %}
+	          		$('.flt').text("{{ value1.step_name }}");
+	          		$('.teacher_selfeval').click(function(){
+	            		$('#form_id').attr("data-onboarding_id", "{{ value1.onboarding_id }}");
+					});
+					if("{{ value1.step_name }}" === "Self Evaluation"){
+						$('.flt').attr({"data-target": "#Self_Evaluation", "data-toggle": "modal"});
+						$('.flt').click(function(){
+							$('#form_id').attr("data-onboarding_id", "{{ value1.onboarding_id }}");
+						});
+					} else if("{{ value1.step_name }}" === "Facilitator Teacher Selection Discution"){
+						$('.flt').text("Book");
+						$('#store_url').val('/v2/book-slots/');
+	            		$('.flt').attr({
+							{% if user_profile.phone %} 
+							"href":"/v2/book-slots/", "target": "_blank", "data-role_preference": "{{value1.role_preference}}"
+							{% else %} 					
+							"data-toggle": "modal", "data-target": "#tsd_profile_fill_first"
+							{% endif %}
+						});
+	            		if("{{ value1.demand_booked }}" === "True"){
+	              			if("{{value1.slot_booked_time}}") {
+								$('.change_label2').text('Discussion is scheduled on');
+								$('.flt').text('{{ value1.slot_booked_time }}').css({'padding-top':'2%'}).removeClass('btn btn-success col-md-10 col-lg-10').attr('href','javascript:void(0)');
+								$('.chng_tmg2').css('display','block').addClass('mt-3');
+								$('.progress_1 > div > div > ol > .b_crum_2').addClass('tab_inactive');
+	              			}
+							$('.change_browse_label').text('You have booked for :');
+							$('.demand_booked_new2').text('{{ demand_allocate.center }} {{ demand_allocate.grade }} {{ demand_allocate.subject }}').css('display','block');
+							$('.brow_opp').text("Change");
+							document.getElementById("MyElement").classList.add('MyClass');
+						} else if("{{ value1.discussion_slot_booked }}"=== "True"){
+							$('.progress_1 > div > div > ol > .b_crum_2').addClass('current');
+							$('.change_label2').text('Discussion is scheduled on: {{value1.slot_booked_time }}');
+							$('.flt').text('{{ value1.slot_booked_time }}').css({'padding-top':'2%'}).removeClass('btn btn-success col-md-10 col-lg-10').attr('href','javascript:void(0)');
+							$('.chng_tmg2').css('display', 'block').addClass('mt-3');
+						}
+	        
+					} else if("{{ value1.step_name }}" === "Availability and Preferences"){
+						$('.next_step').text('You can check');
+						$('.change_label2').css('display','none');
+						$('.flt').attr("href", "#avail_preferences").removeClass('col-md-10 col-lg-10 ml-3').addClass('pr-2 pl-2 avail_mob');
+						$('.removeCls').removeClass('ml-3');
+						$('.progress_1 > div > div > ol > .b_crum_2').addClass('current');
+						if("{{ demand_allocate.subject }}"){
+							$('.brow_opp').text("Change");
+							$('.change_browse_label').text('You have booked for :');
+							$('.demand_booked_new2').text('{{ demand_allocate.center }} {{ demand_allocate.grade }} {{ demand_allocate.subject }}').css('display','block');
+							$('.b_crum_3').addClass('add_green');
+							$('.ml_9').css('padding-left','1.2%');
+							if("{{ demand_allocate.demand_allocated }}" == "True" && "{{ demand_allocate.offering_accepted }}" != "True"){
+								$('.accept_reject_2').css('display', 'block');
+								$('.brow_opp').css('display', 'none');
+							}else if ("{{ demand_allocate.offering_accepted }}" === "True"){
+								$('.myclassroom2').css('display', 'block');
+								$('.change_text, .change_browse_label, .demand_booked_new2, .brow_opp').css('display','none');
+							}
+						}
+					} else {
+						$('.next_step').text('You can check');
+						$('.change_label2').css('display','none');
+						$('.flt').attr({"data-toggle": "modal","data-target": "#Readiness"}).addClass('ml-3');
+						$('.progress_1 > div > div > ol > .b_crum_2').addClass('current');
+						if("{{ demand_allocate.subject }}"){
+							$('.brow_opp').text("Change");
+							$('.change_browse_label').text('You have booked for :');
+							$('.demand_booked_new2').text('{{ demand_allocate.center }} {{ demand_allocate.grade }} {{ demand_allocate.subject }}').css('display','block');
+							$('.b_crum_3').addClass('add_green');
+							$('.ml_9').css('padding-left','1.2%');
+							if("{{ demand_allocate.demand_allocated }}" == "True"  && "{{ demand_allocate.offering_accepted }}" != "True"){
+								$('.accept_reject_2').css('display', 'block');
+								$('.brow_opp').css('display', 'none');
+							}else if ("{{ demand_allocate.offering_accepted }}" === "True"){
+								$('.myclassroom2').css('display', 'block');
+								$('.change_text, .change_browse_label, .demand_booked_new2, .brow_opp').css('display','none');
+							}
+						}
+					}
+	        	{% endfor %}
+	       	{% else %}
+	        $('.flt, .next_step, .change_label2').css('display','none');
+	        $('.progress_1 > div > div > ol > .b_crum_2').addClass('current');
+	        $('.b_crum_3').addClass('add_green');
+	        $(".show_flt").css('display','block');
+	        if("{{ demand_allocate.subject }}"){
+	          $('.brow_opp').text("Change");
+	          $('.change_browse_label').text('You have booked for :');
+	          $('.demand_booked_new2').text('{{ demand_allocate.center }} {{ demand_allocate.grade }} {{ demand_allocate.subject }}').css('display','block');
+	          $('.ml_9').css('padding-left','1.2%');
+	          if("{{ demand_allocate.demand_allocated }}" == "True"  && "{{ demand_allocate.offering_accepted }}" != "True"){
+	            $('.accept_reject_2').css('display', 'block');
+	            $('.brow_opp').css('display', 'none');
+	          }else if ("{{ demand_allocate.offering_accepted }}" === "True"){
+	            $('.myclassroom2').css('display', 'block');
+	            $('.change_text, .change_browse_label, .demand_booked_new2, .brow_opp').css('display','none');
+	          }
+	        }
+	      {% endif %}
+			  
+		  {% elif key == 'Well Wisher' %}
+		    {% if value %}
+					$(".show_well_wisher").css('display','none');
+			    {% for value1 in value %}
+	          $('.well_wisher').text("Training");
+	          $('.well_wisher').attr({"data-toggle": "modal","data-target": "#Training"});
+			    {% endfor %}
+			  {% else %}
+					$(".hide_well_wisher").css('display','none');
+					$(".show_well_wisher").css('display','block');
+		   	{% endif %}
+			  
+		  {% elif key == 'Center Admin' %}
+			  {% if value %}
+		 		  $(".show_center_admin").css('display','none');
+			    {% for value1 in value %}
+	          if("{{ value1.step_name }}" === "Admin Selection Discussion"){
+	            if("{{ value1.discussion_slot_booked }}" === "True"){
+	              $('.center_label').text("Discussion is scheduled on :");
+	              $('.progress_2 > div > div > ol > .b_crum_2').addClass('add_green');
+	              $('.c_slot_booking').css('display','block').text('{{ value1.slot_booked_time }}');
+	              $('.center_admin').text('Change');
+	            }
+	            $('.center_admin').attr({
+	            {% if user_profile.phone and user_profile.skype_id %}
+	                  "href":"/v2/book-slots/", "target": "_blank", "data-role_preference": "{{value1.role_preference}}"
+	            {% else %} 					
+	                  "data-toggle": "modal", "data-target": "#tsd_profile_fill_first"
+	            {% endif %}
+	            });
+	          } else{
+	            $('.center_label, .center_admin').css('display', 'none');
+	            $('.progress_2 > div > div > ol > .b_crum_2').addClass('add_green');
+	            $('.center_admin').text("{{ value1.step_name }}");
+	            $('.center_admin').attr({"data-toggle": "modal","data-target": "#Self_Evaluation_1"});
+	            $('.center_admin').click(function(){
+	              $('#form_id_1').attr("data-onboarding_id", "{{ value1.onboarding_id }}");
+	            });
+	          }
+			    {% endfor %}
+			  {% else %}
+			    $('.center_label, .center_admin, .next_step1').css('display', 'none');
+			    $('.progress_2 > div > div > ol > .b_crum_2').addClass('add_green');
+				  $(".show_center_admin").css('display','block');
+		   	{% endif %}
+	
+		  {% elif key == 'Content Admin' %}
+			  {% for value1 in value %}
+					$('.content_admin').text("{{ value1.step_name }}");
+			  {% endfor %}
+		  {% endif %}
+		{% endfor%}
+		
+		 $(".nav-item1").click(function(event) {
+		        event.preventDefault();
+		        $('.nav-item1').removeClass("active").removeClass("on");
+		        $(this).addClass("active").addClass("on");
+		        var active_id = $(this).attr('data-id');
+		        $('html, body').animate({
+		           scrollTop: $("#"+active_id).offset().top	-220
+		        }, 2000);
+		        $(active_id).window.location.href="#"+active_id 
+		        
+		    });
+		
+	    $(".inner.clearfix").css("width","85%");
+	
+	    $(".nonediv").hide();
+	
+	    var inputs = $(".checkradio");
+	    for(var i=0;i<inputs.length;i++){
+	        var name = $(inputs[i]).attr('name');
+	        var divname = name.split('_')[0];
+	        var div_all_id = "div_"+ divname + "_all";
+	        var div_none_id = "div_"+ divname + "_none";
+	        var value = $(inputs[i]).val();
+	        if(value == 'all'){
+	            $("#"+div_all_id).show();
+	            $("#"+div_none_id).hide();
+	         }
+	         else{
+	            $("#"+div_all_id).hide();
+	            $("#"+div_none_id).show();
+	         }
+	    }
+	
+	    var availability = "{{availability}}";
+	    if(availability === "False"){
+	        $("#id_div_unavail").hide()
+	        $("#id_div_avail").show()
+	        $("#from, #to").removeAttr("required");
+	        $("#follow_up").prop("required", "true");
+	    } else{
+	        $("#id_div_unavail").hide()
+	        $("#id_div_avail").show()
+	        $("#follow_up").removeAttr("required");
+	        $("#from, #to").prop("required", "true");
+	    }
+	
+	
+	    //code for pre-selecting active tabs
+	    var dataRoleId = $('.mob_tab_disp').find( "li:eq(1)").attr('data-roleId');
+	    $('.progress_'+dataRoleId ).css('display', 'block');
+	    $('#'+dataRoleId+'tabid').addClass('active');
+	    $('#'+dataRoleId+'id').addClass('show active');
+	  
+	    change_progrees_bar(dataRoleId);
+	    
+	    
+	    /* $('#orientation_video').on('hidden.bs.modal', function () {
+	        callPlayer('yt_orientation_video', 'stopVideo');
+	    }); */
+	    
+	    $('#orientation_video').on('hidden.bs.modal', function () {
+	        $("#orientation_video iframe").attr("src", $("#orientation_video iframe").attr("src"));
+	    });
+	    $('#Training').on('hidden.bs.modal', function () {
+	        $("#Training iframe").attr("src", $("#Training iframe").attr("src"));
+	    });
+	
+	    function get_states() {
+	
+	        $.get("/v2/get_country_state_city/?country=" + selected_country_id, function(response) {
+	            for ( var i = 0; i < response['data'].length; ++i ) {
+	                var option = $('<option />');
+	                option.attr('value', response['data'][i]['state_name']).text(response['data'][i]['state_name']);
+	                option.attr('stateid', response['data'][i]['custom_state_id']);
+	                if ( selected_state.toLowerCase() == response['data'][i]['state_name'].toLowerCase() ) {
+	                    selected_state_id = response['data'][i]['custom_state_id']
+	                    option.attr('selected', 'selected');
+	                }
+	                $('.states').append(option);
+	            }
+	
+	            $(".states").prop("disabled",false);
+	            if($('.states').children().length == 1){
+	                $('.states').append('<option val="others">Others</option>');
+	                $('.cities').append('<option val="others">Others</option>');
+	            }
+	        });
+	    }
+	
+	    function get_cities() {
+	        //console.log("/v2/get_country_state_city/?country=" + selected_country_id + "&state=" + selected_state_id);
+	        $.get("/v2/get_country_state_city/?country=" + selected_country_id + "&state=" + selected_state_id, function(response) {
+	            for ( var i = 0; i < response['data'].length; ++i ) {
+	                var option = $('<option />');
+	                option.attr('value', response['data'][i]['city_name']).text(response['data'][i]['city_name']);
+	                option.attr('cityid', response['data'][i]['custom_city_id']);
+	                if ( selected_city.toLowerCase() == response['data'][i]['city_name'].toLowerCase() ) {
+	                    //console.log("Selected city matched");
+	                    selected_city_id = response['data'][i]['custom_city_id']
+	                    option.attr('selected', 'selected');
+	                }
+	                $('.cities').append(option);
+	            }
+	            $(".cities").prop("disabled",false);
+	
+	            if($('.cities').children().length <= 1) {
+	                $('.cities').append('<option val="others">Others</option>');
+	            }
+	        });
+	    }
+	
+	    $.get("/v2/get_country_state_city", function(response) {
+			for ( var i = 0; i < response['data'].length; ++i ) {
+				var option = $('<option />');
+				option.attr('value', response['data'][i]['country_name']).text(response['data'][i]['country_name']);
+				option.attr('countryId', response['data'][i]['custom_country_id']);
+	
+	            if ( selected_country != undefined && selected_country.toLowerCase() == response['data'][i]['country_name'].toLowerCase() ) {
+	                selected_country_id = response['data'][i]['custom_country_id']
+	                option.attr('selected', 'selected');
+	            }
+				$('.countries').append(option);
+			}
+			//console.log("Selected Country " + selected_country_id)
+			$(".countries").prop("disabled",false);
+	
+			setTimeout(get_states, 500)
+	
+	        setTimeout(get_cities, 2000)
+		});
+	
+	    $(".countries").on("change", function(ev) {
+	        //console.log("Country Changed");
+			var countryId = $("option:selected", this).attr('countryId');
+			$(".states option:gt(0)").remove();
+			current_selected_country_id = -1;
+			if(countryId != '') {
+				current_selected_country_id = countryId;
+	            $(".cities option:gt(0)").remove();
+	            $.get("/v2/get_country_state_city/?country=" + countryId, function(response) {
+					for ( var i = 0; i < response['data'].length; ++i ) {
+						var option = $('<option />');
+						option.attr('value', response['data'][i]['state_name']).text(response['data'][i]['state_name']);
+						option.attr('stateid', response['data'][i]['custom_state_id']);
+						$('.states').append(option);
+					}
+					$(".states").prop("disabled",false);
+					$(".states").prop("selectedIndex", 0);
+	
+					if($('.states').children().length == 1){
+						$('.states').append('<option val="others">Others</option>');
+						$('.cities').append('<option val="others">Others</option>');
+					}
+	            });
+			}
+		});
+	
+		$(".states").on("change", function(ev) {
+		    //console.log("State Changed");
+			var stateId = $("option:selected", this).attr('stateid');
+			$(".cities option:gt(0)").remove();
+			current_selected_state_id = -1;
+			if ( stateId != '' ) {
+				current_selected_state_id = stateId;
+				$.get("/v2/get_country_state_city/?country=" + current_selected_country_id + "&state=" + stateId, function(response) {
+					for ( var i = 0; i < response['data'].length; ++i ) {
+						var option = $('<option />');
+						option.attr('value', response['data'][i]['city_name']).text(response['data'][i]['city_name']);
+						option.attr('cityid', response['data'][i]['custom_city_id']);
+						$('.cities').append(option);
+					}
+					$(".cities").prop("disabled",false);
+					$(".cities").prop("selectedIndex", 0);
+	
+					if($('.cities').children().length <= 1) {
+						$('.cities').append('<option val="others">Others</option>');
+					}
+	            });
+			}
+		});
+	});
+	
+	function check_phone(evt){
+		var charCode = (evt.which) ? evt.which : event.keyCode
+		if(evt.shiftKey && charCode == 43 || charCode == 45 || charCode == 32 || charCode == 46)
+			return true
+		if (charCode > 31 && (charCode < 48 || charCode > 57))
+			return false;
+	    return true;
+	}
+	
+	function my_submit_form(){
+		var skype_id = $('#id_skypeid1').val();
+		var phone = $('#id_phone1').val();
+		var phone_format = /^(\+?(([0-9]){1,3})[-.\s])?((((([0-9]){2,3})[-.\s]){1,2}([0-9]{4,10}))|([0-9]{10}))$/
+		// if(skype_id == null || skype_id == '' || skype_id == 'undefined'){
+		// 	$('#id_skypeid1').siblings('span').css('display','block');
+		// 	return false
+		// }
+	  if(phone == null || phone == '' || phone == 'undefined'){
+			$('#id_phone1').siblings('span').css('display','block');		
+			return false
+		} else if(!(phone.match(phone_format))){
+			$('#id_phone1').siblings('span').text('Please enter a valid phone number').css('display','block');		
+			return false
+		}else {
+			return true
+		}
+		
+	}
+	
+	
+	//code for hiding error msg
+	$(".span1").change(function(){
+		  $('.from_cls, .to_cls').css('display','none');
+	});
+	
+	//Append year to YOB
+	let present_year = new Date().getFullYear();
+	let limit_year = present_year-18;
+	
+	for (i = limit_year; i > 1950; i--)
+	{		if(i== "{{ user_profile.dob|date:'Y' }}"){
+				$('#id_dob').append($('<option selected/>').val(i).html(i));
+			}else{
+		    	$('#id_dob').append($('<option />').val(i).html(i));
+		}
+	} 
+	
+	//code for changing progress bar based on clicking roles
+	function change_progrees_bar(roleId){
+	  console.log("roleId",roleId)
+		// $('.hide_error_msg, .progress_1, .progress_2, .progress_3, .progress_4' ).css('display', 'none');
+		// $('#progress_'+roleId).css('display','block');
+		if(roleId == 3){
+	    $('#progress_1').css('display','none');
+	    $('#progress_4').css('display','none');
+	    $('#progress_3').css('display','block');
+	    $('#progress_2').css('display','none');
+	    $('#progress_5').css('display','none');
+	    $('#2id').css('display','none');
+	    $('#3id').css('display','block');
+	    $('#1id').css('display','none');
+	    $('#4id').css('display','none');
+	    $('#20id').css('display','none');
+			// $('.teacher_selfeval').attr('data-target', '#Self_Evaluation_1')
+		}  else if (roleId == 2){
+	    $('#progress_2').css('display','block');
+	    $('#progress_1').css('display','none');
+	    $('#progress_4').css('display','none');
+	    $('#progress_3').css('display','none');
+	    $('#progress_5').css('display','none');
+	    $('#2id').css('display','block');
+	    $('#3id').css('display','none');
+	    $('#1id').css('display','none');
+	    $('#4id').css('display','none');
+	    $('#20id').css('display','none');
+			// $('.teacher_selfeval').attr('data-target', '#Self_Evaluation')
+		}
+	  else if (roleId == 1){
+	    $('#progress_1').css('display','block');
+	    $('#progress_2').css('display','none');
+	    $('#progress_4').css('display','none');
+	    $('#progress_3').css('display','none');
+	    $('#progress_5').css('display','none');
+	    $('#2id').css('display','none');
+	    $('#3id').css('display','none');
+	    $('#1id').css('display','block');
+	    $('#4id').css('display','none');
+	    $('#20id').css('display','none');
+			// $('.teacher_selfeval').attr('data-target', '#Self_Evaluation')
+		}
+	  else if (roleId == 4){
+	    $('#progress_1').css('display','none');
+	    $('#progress_4').css('display','block');
+	    $('#progress_3').css('display','none');
+	    $('#progress_2').css('display','none');
+	    $('#progress_5').css('display','none');
+	    $('#2id').css('display','none');
+	    $('#3id').css('display','none');
+	    $('#1id').css('display','none');
+	    $('#20id').css('display','none');
+	    $('#4id').css('display','block');
+	  }else if (roleId == 20){
+	    $('#progress_1').css('display','none');
+	    $('#progress_4').css('display','none');
+	    $('#progress_3').css('display','none');
+	    $('#progress_2').css('display','none');
+	    $('#progress_5').css('display','block');
+	    $('#2id').css('display','none');
+	    $('#3id').css('display','none');
+	    $('#1id').css('display','none');
+	    $('#4id').css('display','none');
+	    $('#20id').css('display','block');
+	  }
+	}
+	function hide_error_msg(this_obj) {
+		$(".follow_up_err_msg").css('display','none');	
+		$(this_obj).siblings('span').css('display','none');
+	}
+	
+	 function change_active(active_link){
+		
+		window.location.href="#"+active_link;
+		$('.active_link').removeClass('active');
+		$('.'+active_link).addClass('active');
+	} 
+	
+	function radiochange(myradio){
+	    var name = myradio.name;
+	    var divname = name.split('_')[0];
+	    var div_all_id = "div_"+ divname + "_all";
+	    var div_none_id = "div_"+ divname + "_none";
+	    if(myradio.value == 'all'){
+	
+	        $("#"+div_all_id).show();
+	        $("#"+div_none_id).hide();
+	     }
+	     else{
+	        $("#"+div_all_id).hide();
+	        $("#"+div_none_id).show();
+	     }
+	
+	     }
+	
+	 $('#privacymodal').on('shown.bs.modal', function () {
+	              $('#myInput').trigger('focus');
+	        });
+	
+	
+	//var slider = document.getElementById("myRange");
+	//var output = document.getElementById("demo");
+	//output.innerHTML = slider.value; // Display the default slider value
+	
+	// Update the current slider value (each time you drag the slider handle)
+	/* slider.oninput = function() {
+	   output.value = this.value;
+	} */
+	
+	// #### adding language
+	  var dynamic_id = {{user_profile.languages_known|length}}+1;
+	function create_div(obj){
+		var clone_div = $("#div_id_");
+		var cloned = $(clone_div).clone();
+		$(cloned).attr('id','div_id_'+dynamic_id);
+	
+		var select_div = '<select class="chosen-select ec-select my_select_box" tabindex="5">'+
+	    '<div class="form-control"><option value="">--Language--</option>'+
+	    '<option value="Bengali">Bengali</option>'+
+	    '<option value="Gujarathi">Gujarathi</option>'+
+	    '<option value="Hindi">Hindi</option>'+
+	    '<option value="Kannada">Kannada</option>'+
+	    '<option value="Marathi">Marathi</option>'+
+	    '<option value="Oriya">Oriya</option>'+
+	    '<option value="Tamil">Tamil</option>'+
+	    '<option value="Telugu">Telugu</option>'+
+	'</select></div>';
+	
+		if(dynamic_id == 1){
+			var ele = $("#div_id_");
+			$(cloned).find(".select_div").html(select_div);
+			$(cloned).find(".select_div > select ").addClass('form-control');
+			$(ele).find('.fa-plus-circle').addClass('fa-minus-circle').removeAttr('onclick').attr('onClick','delete_lang(this)').parent().next().text('Remove language').css('color','black');
+			$(cloned).insertAfter(ele);
+		}else{
+			var id_value = dynamic_id-1;
+		    cloned = $("#div_id_"+id_value).clone();
+		    $(cloned).attr('id','div_id_'+dynamic_id)
+		    var ele = $("#div_id_"+id_value);
+			$(ele).find('.fa-plus-circle').addClass('fa-minus-circle').removeAttr('onclick').attr('onClick','delete_lang(this)').parent().next().text('Remove language').css('color','black');
+			$(cloned).insertAfter(ele);
+		}
+		dynamic_id++;
+	}
+	
+	function delete_lang(obj){
+		var del_lang = $(obj).parent().parent();
+		$(del_lang).remove();
+	}
+	
+	function closeskypeModal(id) {
+		$('#tsd_profile_fill_first, #prefered_days').modal('hide');
+		$('html, body').animate({scrollTop: $('#'+id).offset().top}, 1000);
+	}
+	$(function(){
+	    //availability
+	        $("#Availability_and_Preferences").on("click", "input[type='radio'][name='availability']", function(){
+	            var availability = $("input[name='availability']:checked").val();
+	            if(availability === "unavailable"){
+	                $("#id_div_unavail").show()
+	                $("#id_div_avail").hide()
+	                $("#from, #to").removeAttr("required");
+	                $("#follow_up").prop("required", "true");
+	            } else{
+	                $("#id_div_unavail").hide()
+	                $("#id_div_avail").show()
+	                $("#follow_up").removeAttr("required");
+	                $("#from, #to").prop("required", "true");
+	            }
+	
+	        });
+	});
+	
+	$("#submit_id").click(function(){
+		     //no_of_hrs = $("#demo").val(),
+		     var array1 = $('.language'),
+			<!--preferred_roles = $('#preferred_roles'),-->
+			availability = $('#Availability_and_Preferences');
+	        let isAvailable = $("#id_available").prop('checked');
+	        var availability_arr;
+	
+	        let details = [];
+	
+	        if(isAvailable){
+	            let pdays = $('.timing-wrapper');
+			    //console.log('oooo = ',pdays);
+			    let day;
+			    let fromTime;
+			    let toTime;
+			    let id;
+	            let innerWrap = $('.timing-inner-wrapper');
+	            day = $(".timing-inner-wrapper > .prefered_days").find(":selected").text();
+	            var days_array = day.match(/.{1,3}/g);
+	            //console.log(days_array);
+	            let time = [];
+	            fromTime = $(".timing-inner-wrapper > .span1").find(":selected").text();
+	            $(".span1").each(function() {
+	                time.push($(this).find(":selected").text());
+	            });
+	            
+	            var timeGroups = [];
+	
+	            for(var i = 0; i < time.length; i += 2)
+	            {
+	                timeGroups.push(time.slice(i, i + 2));
+	            }
+	            //console.log('gggg',timeGroups);
+	            var prefdays_array = [];
+	            for(var i=0; i<days_array.length;i++){
+	                prefdays_array.push({'day':days_array[i],'fromTime':timeGroups[i][0],'toTime':timeGroups[i][1]});
+	            }
+	
+	            //console.log('prefdays_array = ',prefdays_array);
+				for(i=0; i< timeGroups.length; i++){
+					if(timeGroups[i].indexOf('From') > -1){
+						$('.from_cls').css('display','block');
+						return false
+						break;
+					}
+				}
+				for(i=0; i< timeGroups.length; i++){
+					if(timeGroups[i].indexOf('To')  > -1){
+						$('.to_cls').css('display','block');
+						return false
+						break;
+					}
+				}
+	            let availableFrom = $("#availableFrom").val();
+	            let availableTo = $("#availableTo").val();
+			    $("#availableFrom").val();
+	            $("#availableTo").val();
+	            let pref_subjects = [];
+	            $("input[name='pref_sub[]'").each( function () {
+	                if(this.checked){
+	                    pref_subjects.push($(this).val());
+	                }
+	            });
+	            details = {'availableFrom':availableFrom,'availableTo':availableTo,'pref_subjects':pref_subjects,'pref_days':days_array,'pref_times':timeGroups};
+	        }
+	        else
+	        {
+	            var dd =$("#follow_up").val();
+	            var reason = $("select[name='reason']").val();
+	            details = {'unavailabilityReason':reason,'Follow_Up_Date':dd};
+	            if(dd == '' || dd == null || dd == 'undefined'){
+	    			$('.follow_up_err_msg').css('display','block');
+	    			return false
+	    		}
+	        }
+	        availability_arr = {'isAvailable':isAvailable,'details':details}
+	        //console.log('details =',details);
+	 		/* alert("array1 "+array1.length);
+			alert("no_of_hrs "+no_of_hrs+" first_name "+first_name+" last_name "+last_name+" gender "+gender+" dob "+dob+" native_place "+native_place+" current_place "+current_place+" current_job "+current_job+"work_exp"+work_exp+" email "+email+" phone "+phone+" skype "+skype+" password "+password+" confirm_password "+confirm_password);
+		 	 */
+	
+	
+			var j=0;
+			var role_divs = $("#preferred_roles > div"),
+			roles_lengt = role_divs.length,
+			preferred_roles = [];
+			for(; j < roles_lengt; j++ ){
+				var some = $("#preferred_roles > div:eq("+j+")")[0];
+				selected = $("#preferred_roles > div:eq("+j+") > div > p > label > input ").prop("checked");
+				if(selected){
+					role_sel = $("#preferred_roles > div:eq("+j+") > div > p > label > input").val();
+	
+					preferred_roles.push(role_sel);
+				}
+			}
+	
+			var i=0;
+			var return_var = 0;
+			var arr_length = array1.length;
+			var lang;
+			var lang_array = []
+			var lang_obj = {}
+			for(;i < arr_length; i++){
+				id_name = $(array1[i]).attr('id');
+				lang = $("#"+id_name+" > div > select").val();
+				speak = $("#"+id_name+" > div:eq(1) > label > input").is(":checked")*1;
+				write = $("#"+id_name+" > div:eq(2) > label > input").is(":checked")*1;
+				read = $("#"+id_name+" > div:eq(3) > label > input").is(":checked")*1;
+				lang_obj = {"lang": lang, "speak": speak,"write": write, "read": read}
+				lang_array.push(lang_obj);
+				if(!(speak) && !(write) && !(read)){
+					return_var++;
+					break;
+				}
+			}
+			if(return_var > 0){
+				$('.hide_error_msg').css('display', 'block');
+				$('html, body').animate({scrollTop: $('.go_to_lang').offset().top}, 1000);
+				return false;
+			}
+			details_json = {"lang_array": lang_array, "preferred_roles": preferred_roles,'availability_details':availability_arr}
+			//console.log('details_json = ',details_json);
+			var json = JSON.stringify(details_json);
+		$.ajax({
+			type: "POST",
+			url: '/config/user/save_preferences/',
+			data: {"json": json},
+			success: function(resp){
+				if(resp == 'Success'){ // if true (1)
+	                setTimeout(function(){// wait for 5 secs(2)
+	                   location.reload(); // then reload the page.(3)
+	                }, 1000);
+	            }
+	            else{
+	                alert('Something went wrong. Submit again with all information');
+	            }
+			}
+	
+		});
+	
+	});
+	function viewVideo(){
+		 activity_name="Viewed Orietation Video";
+		activity_type="Page Visit"
+		ajaxUrl = '/ajax/save_user_activity_by_ajax?activity_name='+activity_name+'&activity_type='+activity_type
+		$.ajax({
+		        url : ajaxUrl,
+		        success: function (jsonStr) {
+		        	//alert(jsonStr);
+		        },
+		        error: function() {
+		        alert("error");
+		          }
+		      }); 
+	}
+	
+</script>
+<!--     <script src='/static/js_new/profile.js' type='text/javascript' ></script> -->
+<script>
+	function form_submit_1(){
+	  var $form = $('#form_id_1'); 
+	  if ( $form.parsley().validate() ){
+	    evd.se_submit1();
+	    document.getElementById('book_sdslot').style.display = 'block';
+	    document.getElementById('book_slots_header').style.display = 'block';
+	    document.getElementById('selfevaluation').style.visibility = 'hidden';
+	    document.getElementById('form_submit_1').style.cssText ="color:#c00;background-color:green;height:11px; border:none;position: relative;top: -56px;left: 54%;margin:0;"
+	    $('.pageMenu .active').toggleClass('changed');
+	    $('#Self_Evaluation_1').modal('hide');
+	    return false;
+	  }
+	  else
+	    console.log ('invalid');
+	}
+	
+	$(function () {
+	$('#Self_Evaluation').find('form').parsley().on('field:validated', function() {
+	  var ok = $('.parsley-error').length === 0;
+	  $('.bs-callout-info').toggleClass('hidden', !ok);
+	  $('.bs-callout-warning').toggleClass('hidden', ok);
+	})
+	.on('form:submit', function() {
+	  evd.se_submit();
+	  setTimeout(location.reload.bind(location), 1000);
+	  return false;
+	});
+	
+	
+	$('#Self_Evaluation_1').find('form').parsley().on('field:validated', function() {
+	    var ok = $('.parsley-error').length === 0;
+	    $('.bs-callout-info').toggleClass('hidden', !ok);
+	    $('.bs-callout-warning').toggleClass('hidden', ok);
+	  })
+	  .on('form:submit', function() {
+	    evd.se_submit1();
+	    setTimeout(location.reload.bind(location), 1000);
+	    return false;
+	  }); 
+	});
+	
+	$("#completeProfile").click(function() {
+	  $('html, body').animate({
+	    scrollTop: $("#profile").offset().top
+	  }, 500);
+	});
+	
+	$(document).ready(function(){
+	  if(document.getElementById("completeProfile").innerHTML == "Complete Profile"){
+	    $('#browse_button').click(function () {
+	      // alert("Please complete your profile")
+	      return false;});
+	    $('#browseOp').click(function () {
+	      // alert("Please complete your profile")
+	      return false;});
+	    // alert("Please complete your profile")
+	    $("#bookHeading").hide()
+	  }
+	  else{
+	    $('#browse_button').unbind('click');
+	    $("#bookHeading").show()
+	  }
+	});
+	
+</script>
+<script>
+	var selected_country, selected_state, selected_city;
+	$(function () {
+	    var evl = window.EVL = window.EVL || {};
+	    evl.user_location_info =  {{user_location_info|safe}};
+	
+	    selected_country = evl.user_location_info['country'];
+	    selected_state = evl.user_location_info['state'];
+	    selected_city = evl.user_location_info['city'];
+	}());
+	
+	$(function(){
+	    $('[data-toggle="popover"]').popover();
+	});
+	
+</script>
+<!--<script src="/static/js/upload/location.js"></script>-->
+<!-- <script src='/static/js_new/parsley.min.js' type='text/javascript' ></script>
+	<script src='/static/js/underscore_1.5.2.min.js' type='text/javascript' ></script>
+	<script src='/static/js_new/profile.js' type='text/javascript' ></script> -->
+{% endblock scripts %}

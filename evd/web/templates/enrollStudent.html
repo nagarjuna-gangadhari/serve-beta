@@ -1,0 +1,703 @@
+<html>
+
+<head>
+    <style>
+        .container-fluid {
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            background-attachment: fixed;
+            background-position: center;
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+        
+        .active_stud {
+            background-color: #FF7043;
+        }
+        
+        #rollNumberId {
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/bootstrap-datepicker3.css" />
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row" style="background-color: #27ae60; padding: 10px;">
+            <!-- Row 1 -->
+            <div class="col-sm-offset-5 col-sm-2" style="color: white; text-align: center; font-weight: bold;">
+                {% if student.id %}Edit Student{% else%} Enroll Student {% endif %}
+                <a href="#" onclick="window.parent.jQuery.colorbox.close();return false;" class="close" data-dismiss="alert" style="font-size: x-large ;margin-right: -450px">&times;</a>
+            </div>
+        </div>
+        <div class="row" style="height:100%; overflow-y:scroll">
+            <div class="col-md-12">
+                <br/>
+                <form action="/v2/save_enrollStudent/" id="formId" method="post" enctype="multipart/form-data">
+                    {% csrf_token %} {% if message == "Student already exists!"%}
+                    <div class="row">
+                        <div class="alert alert-danger alert-dismissable" style="padding-top: 5px; padding-bottom: 5px; margin-right: 0px; margin-left: 0px;">
+                            <a href="#" data-dismiss="alert" class="close" style="position: inherit; top: -22px;">&times;</a> &nbsp;&nbsp;&nbsp;&nbsp;{{message}}
+                        </div>
+                    </div>
+                    <input type="hidden" value={{message}} name="message" /> {% endif %} {% if message == "Student Enrolled Successfully." %}
+                    <div class="row">
+                        <div class="alert alert-success alert-dismissable" style="padding-top: 5px; padding-bottom: 5px; margin-right: 0px; margin-left: 0px;">
+                            <a href="#" data-dismiss="alert" class="close" style="position: inherit; top: -22px;">&times;</a> &nbsp;&nbsp;&nbsp;&nbsp;{{message}}
+                        </div>
+                    </div>
+                    <input type="hidden" value={{message}} name="message" /> {% endif %}
+                    <input type="hidden" value="{{student.id}}" name="student_id" />
+                    <input type="hidden" value="{{page}}" name="page" />
+                    <input type="hidden" value="{{gradeId}}" name="gradeId" />
+                    <input type="hidden" value="{{genderId}}" name="genderId" />
+                    <input type="hidden" name="centerId" value="{{student.center_id}}" />
+                    <input type="hidden" name="center_id" value="{{centers}}" />
+                    <input type="hidden" name="save_flag" id="save_flag_id" />
+                    <input type="hidden" value="{{save_flag}}" id="save_flag_result" />
+                    <input type="hidden" value="{{edit_flag}}" id="edit_flag_id" />
+                    <input type="hidden" value="1" name="countId" id="count_id" />
+                    <input type="hidden" id="achievment_json_id" name="achievments_json" />
+                    <input type="hidden" value="{{studentlog.achievments}}" id="achievment_string_id" />
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-10">
+                                {% if stickers %}
+                                <span class='col-md-2'>Appreciation Count</span> {% for stic in stickers %}
+                                <span class='col-md-2' style='float:left;'><img title={{stic.sticker__sticker_name}} src="/{{stic.sticker__sticker_path}}" style='width: 25%;height: 4%;margin-left: 15%;margin-top: 0%;' />:<span>{{stic.countofreg}}</span></span>
+                                {% endfor %} {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-8">
+                                    <span id="nameCheckSpan" style="color: red; font-size: 12px; "></span>
+                                    <input type="text" id='studentNameId' name="studentName" class="form-control" placeholder="Enter student Name" minlength="3" value="{{student.name}}" autofocus autocomplete="off" onkeyup="return nameCheck();" required="required" onkeypress='return ((event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32))'
+                                        style="text-transform:capitalize;" />
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input type="text" id="dob_id" name="dob" placeholder="Select DOB" value="{{student.dob|date:'d/m/Y'}}" class="form-control" style="cursor: default !important; background-color: white; width: 100%" /> <label class="input-group-addon btn"
+                                            for="dob_id" style="cursor: default !important;"> <span
+											class="fa fa-calendar" style="cursor: default !important;"  ></span>
+										</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <select name="gender" class="form-control" required="required">
+										<option value="">Select Gender</option>
+										<option value="Boy" {% if student.gender == 'Boy' or student.gender == 'boy' or student.gender == 'Male' or student.gender == 'M' or student.gender == 'b' %}selected="selected"{% endif %}>Boy</option>
+										<option value="Girl" {% if student.gender == 'Girl' or student.gender == 'girl' or student.gender == 'Female' or student.gender == 'F' or student.gender == 'g' %}selected="selected"{% endif %}>Girl</option>
+									</select></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4">
+                                    <input type="text" id="rollNumberId" name="schoolRollNumber" placeholder="Enter Roll No" value="{{student.school_rollno}}" class="form-control" style="cursor: default !important; background-color: white; width: 100%" required="required" />
+                                </div>
+                                <div class="col-md-4">
+                                    <select name="grade" class="form-control" id="grade" required="required">
+										<option value="">Select Grade</option>
+										<option value="3" {% if student.grade == '3' %}selected="selected"{% endif %}>3</option>
+										<option value="4" {% if student.grade == '4' %}selected="selected"{% endif %}>4</option>
+										<option value="5" {% if student.grade == '5' %}selected="selected"{% endif %}>5</option>
+										<option value="6" {% if student.grade == '6' %}selected="selected"{% endif %}>6</option>
+										<option value="7" {% if student.grade == '7' %}selected="selected"{% endif %}>7</option>
+										<option value="8" {% if student.grade == '8' %}selected="selected"{% endif %}>8</option>
+										<option value="9" {% if student.grade == '9' %}selected="selected"{% endif %}>9</option>
+										<option value="10" {% if student.grade == '10' %}selected="selected"{% endif %}>10</option>
+										<option value="11" {% if student.grade == '11' %}selected="selected"{% endif %}>11</option>
+										<option value="12" {% if student.grade == '12' %}selected="selected"{% endif %}>12</option>
+									</select></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-8">
+                                    <span id="phone_no" style="color: red; font-size: 12px;"></span>
+                                    <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type="number" maxlength="13" id="phone_no" name="phone_no" class="form-control" value="{{student.phone}}" placeholder="Phone no " required="required"
+                                        onkeyup="return nameCheck();" />
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-5"></div>
+                                <div class="col-md-7">
+                                    <div id="kycdocnumdiv"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-3">
+                                    <select name="kycdoctype" id="kycdoctype" class="form-control">
+										<option {% if doc_type == '1' %}selected{% endif %} value="1" >Aadhar</option>
+										<option {% if doc_type == '2' %}selected{% endif %} value="2" >Passport</option>
+										<option {% if doc_type == '3' %}selected{% endif %} value="3" >Ration Card</option>
+										<option {% if doc_type == '4' %}selected{% endif %} value="4" >Others</option>
+									</select>
+                                </div>
+                                <div class="col-md-5">
+                                    <input type="text" id="kycdocnum" name="kycdocnum" class="form-control" minlength="3" value="{{kyc_number}}" placeholder="KYC Doc Number" />
+                                </div>
+                                <div class="col-md-2"></div>
+                            </div>
+                            <br>
+                            <!-- Guardian name and relationship -->
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-8">
+                                    <span id="gaurdianNameSpan" style="color: red; font-size: 12px;"></span>
+                                    <input type="text" id="guardianNameId" name="guardianName" class="form-control" value="" placeholder="Parent/Guardian Full name" />
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-8">
+                                    <!-- <span id="relationshipTypeSpan" style="color: red; font-size: 12px;"></span>
+											<input type="text" id="relationshipTypeId" name="relationshipType" class="form-control" minlength="3"
+												value="" placeholder="Relationship to student"  onkeyup="return nameCheck();" /> -->
+
+                                    <select name="relationshipType" class="form-control" id="relationshipTypeId">
+										<option value="">Select relationship type</option>
+										<option value="father">Father</option>
+										<option value="mother">Mother</option>
+										<option value="guardian">Guardian</option>
+									</select>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-8">
+                                    <span id="FatherOccupationSpan" style="color: red; font-size: 12px;"></span>
+                                    <input type="text" id="fatherOccupationId" name="fatherOccupation" class="form-control" minlength="3" value="{{student.father_occupation}}" placeholder="Father's Occupation " onkeyup="return nameCheck();" />
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-8">
+                                    <span id="MotherOccupationSpan" style="color: red; font-size: 12px; "></span>
+                                    <input type="text" id="motherOccupationId" name="motherOccupation" class="form-control" minlength="3" value="{{student.mother_occupation}}" placeholder="Mother's Occupation " onkeyup="return nameCheck();" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row col-md-offset-2" style="position:absolute">
+                                <input type="hidden" name="studentPhoto" {% if student.photo %} value="{{student.photo}}" {% endif %}/>
+                                <input type="hidden" value="{{student.photo}}" id="my_student_photo_id" />
+                                <img {% if student.photo %}src="/{{student.photo}}" {% else %}src="abc" {% endif %} style="width: 170px; height: 130px; margin-bottom: 5px;" id="photoId" /> <br>
+                                <button type="button" class="btn btn-warning btnCss" id="choose_image">Browse</button>
+                                <input type="file" name="photo" style="display: none" {% if student.photo %} value="/static/uploads/student/{{student.photo}}" {% endif %}accept="image/gif, image/jpeg, image/png, image/JPE, image/JPEG, image/JPG, image/PNG" id="id_photo" style="padding-right:5px">
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-4">
+                            <span id="strengthSpan" style="color: red; font-size: 12px;"></span>
+                            <textarea rows="5" cols="20" class="form-control" id="strengthId" style="resize: none;" name="strengths" placeholder="Add student's strengths" maxlength="201" onkeyup="return nameCheck();">{{student.strengths}}</textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <span id="weaknessSpan" style="color: red; font-size: 12px;"></span>
+                            <textarea rows="5" cols="20" class="form-control" id="weaknessId" style="resize: none;" name="weakness" placeholder="Add student's weakness" maxlength="201" onkeyup="return nameCheck();">{{student.weakness}}</textarea>
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+                    <br>
+
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-4">
+                            <span id="observationSpan" style="color: red; font-size: 12px;"></span>
+                            <textarea rows="5" cols="10" class="form-control" id="observationId" style="resize: none;" name="observation" placeholder=" Add Observation" maxlength="201" onkeyup="return nameCheck();">{{student.observation}}</textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <select name="status" id="alumniStatus" class="form-control" required="required">
+										<option value="">Select Status</option>
+										<option value="Active" selected {% if student.status == 'Active' %}selected="selected"{% endif %}>Active</option>
+										<option value="Alumni" {% if student.status == 'Alumni' %}selected="selected"{% endif %} >Alumni</option>
+									</select>
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+                    <br>
+                    <div class="row" id="student_log">
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-2">
+                                <h4><b>Student Log</b></h4>
+                            </div>
+                            <div class="col-md-4"></div>
+                            <div class="col-md-2"></div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-4">
+                                <span style="color: red; font-size: 12px;"></span>
+                                <input type="text" id="currentSchoolId" name="currentSchool" value="{{studentlog.current_school}}" class="form-control" placeholder="Current School " />
+                            </div>
+                            <div class="col-md-4">
+                                <select name="currentgrade" id="currentGradeId" class="form-control" required="required">
+										<option value="">Current Grade</option>
+										<option value="5" {% if studentlog.current_grade == '5' %}selected="selected"{% endif %}>5th</option>
+										<option value="6" {% if studentlog.current_grade == '6' %}selected="selected"{% endif %}>6th</option>
+										<option value="7" {% if studentlog.current_grade == '7' %}selected="selected"{% endif %}>7th</option>
+										<option value="8" {% if studentlog.current_grade == '8' %}selected="selected"{% endif %}>8th</option>
+										<option value="9" {% if studentlog.current_grade == '9' %}selected="selected"{% endif %}>9th</option>
+										<option value="10" {% if studentlog.current_grade == '10' %}selected="selected"{% endif %}>10th</option>
+										<option value="11" {% if studentlog.current_grade == '11' %}selected="selected"{% endif %}>11th</option>
+										<option value="12" {% if studentlog.current_grade  == '12' %}selected="selected"{% endif %}>12th</option>
+									</select></div>
+                            <div class="col-md-2"></div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-4">
+                                <input type="number" id="incomeId" name="familyIncome" value="{{studentlog.family_income}}" class="form-control" placeholder="Family Income(Yr.)" min="0" max="999999" />
+                            </div>
+                            <div class="col-md-4">
+                                <span style="color: red; font-size: 12px;"></span>
+                                <input type="text" id="eventNameId" name="eventName" value="{{studentlog.event_name}}" class="form-control" placeholder="Event Name" />
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-4">
+                                <span style="color: red; font-size: 12px;"></span>
+                                <textarea rows="5" cols="10" class="form-control" id="performanceId" style="resize: none;" name="performance" placeholder="Note On Performance" maxlength="100">{{studentlog.notes_onperformance}}</textarea>
+                            </div>
+                            <div class="col-md-4">
+                                <span style="color: red; font-size: 12px;"></span>
+                                <textarea rows="5" cols="20" class="form-control" id="descriptionId" style="resize: none;" name="description" placeholder="Event Description" maxlength="200">{{studentlog.event_description}}</textarea>
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+                        <br>
+                        <div class="row achievment_div" id='achievment_div_id1'>
+                            <div class="col-md-2"></div>
+                            <div class="col-md-4">
+                                <span style="color: red; font-size: 12px;"></span>
+                                <input type="text" id="achievmentId1" name="achievments" class="form-control" placeholder="Achievment" />
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-primary" style="vertical-align: top;" id="achievment_id"> + Achievment</button>
+                            </div>
+
+                            <div class="col-md-2"></div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6" style="text-align: center; padding: 9px;">
+                            <button type="submit" class="btn btn-success" style="vertical-align: top;" id="save_button_id" onclick="save_flag_for_save()">
+								{% if student.id %}Update{% else %}Save{% endif %}</button> {% if not student.id %}
+                            <button type="submit" class="btn btn-primary" style="vertical-align: top;" id="save_button" onclick="setSaveFlag(); save_flag_for_save();">Save & Add Another</button> {% endif %} {% if student.id %}
+                            <a href="javascript:history.go(-1)" class="btn btn-cancel" style="line-height: 18px; background-color: red; color: white;">Cancel</a> {% else %}<a href="#" onclick="window.parent.jQuery.colorbox.close();return false;" class="btn btn-cancel"
+                                style="line-height: 18px; background-color: red; color: white;">Cancel</a> {% endif %}
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                    <br><br><br>
+                    <!-- 					<div class="row" style="margin-top:-621px;margin-left:676px;position:absolute"> -->
+                    <!-- 					<input type="hidden" name="studentPhoto" {% if student.photo %} value="{{student.photo}}" {% endif %}/>  -->
+                    <!-- 					<img {% if student.photo %}src="/{{student.photo}}" {% else %}src="abc" {% endif %} style="width: 170px; height: 130px; margin-bottom: 5px;" id="photoId" /> <br> -->
+                    <!-- 					<button type="button" class="btn btn-warning btnCss" id="choose_image">Browse</button> -->
+                    <!-- 					<input type="file" name="photo" style="display: none" {% if student.photo %} value="/static/uploads/student/{{student.photo}}" {% endif %}accept="image/gif, image/jpeg, image/png, image/JPE, image/JPEG, image/JPG, image/PNG" id="id_photo" style="padding-right:5px"> -->
+                    <!-- 					</div> -->
+
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color: transparent">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Capture Image</h5>
+                                </div>
+                                <div class="modal-body" style="text-align: center">
+                                    <div id="my_camera" style="width: 170px; height: 130px; text-align: center; margin-left: 100px"></div>
+                                    <div id="my_result" style="margin-left: 10px"></div>
+                                    <button type="button" id="start_camera" class="btn btn-primary">Start</button>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" id="capture_image">Capture</button>
+                                    <button type="button" class="btn btn-primary" id="again_capture">Capture Again</button>
+                                    <button type="button" class="btn btn-danger" id="close_model">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            var date_input = $('input[id="dob_id"]');
+            var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+            var options = {
+                format: 'dd/mm/yyyy',
+                container: container,
+                todayHighlight: true,
+                autoclose: true,
+                endDate: '0d',
+            };
+            date_input.datepicker(options);
+        });
+    </script>
+    <script src="/static/js_new/webcam.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#student_log").hide();
+            var photo_path = $("#my_student_photo_id").val();
+            var edit_flag = $("#edit_flag_id").val();
+            if (photo_path != null && photo_path != '' && photo_path != 'undefiend' && edit_flag != null && edit_flag != '' && edit_flag != 'undefiend') {
+                if (photo_path.indexOf('static') == -1) {
+                    photo_path = '/static/uploads/student/' + photo_path;
+                } else {
+                    photo_path = '/' + photo_path;
+                }
+                $("#photoId").attr('src', photo_path);
+            }
+            // 		window.parent.jQuery.colorbox.resize({width : "auto",height : "850px"});
+
+            $("#dob_msg").empty();
+            $("#my_camera").show();
+            $("#again_capture").hide();
+            $("#capture_image").hide();
+            var save_flag_result = $("#save_flag_result").val();
+            if (save_flag_result == 'false') {
+                window.parent.jQuery.colorbox.close();
+                return false;
+            }
+            var edit_flag = $("#edit_flag_id").val();
+            /* if (edit_flag!=null && edit_flag=='True'){
+            	window.parent.jQuery.colorbox.resize({width : "73%",height : "1150px"});
+            } */
+        });
+    </script>
+    <script>
+        function setSaveFlag() {
+            if ($("#alumniStatus").val() != 'Alumni') {
+                $("#currentGradeId").removeAttr('required', 'required');
+            }
+            $("#save_flag_id").attr("value", "true");
+        }
+
+        function save_flag_for_save() {
+            if ($("#alumniStatus").val() != 'Alumni') {
+                $("#currentGradeId").removeAttr('required', 'required');
+            }
+            $("#save_flag_id").attr("value", "false");
+        }
+
+        function nameCheck() {
+            $("#nameCheckSpan").empty();
+            $("#FatherOccupationSpan").empty();
+            $("#MotherOccupationSpan").empty();
+            $("#strengthSpan").empty();
+            $("#weaknessSpan").empty();
+            $("#observationSpan").empty();
+            var studentName = $("#studentNameId").val();
+            var guardianName = $('#guardianNameId').val();
+            var relationshipType = $('#relationshipTypeId').val();
+            var fatherOccupation = $('#fatherOccupationId').val();
+            var motherOccupation = $('#motherOccupationId').val();
+            var strength = $('#strengthId').val();
+            var weakness = $('#weaknessId').val();
+            var observation = $('#observationId').val();
+            console.log('weakness' + weakness.length);
+            console.log('observation' + observation.length);
+            var exp = /^[^A-Za-z]/;
+            if (studentName.length > 30) {
+                $("#nameCheckSpan").append('&nbsp;&nbsp;&nbsp;&nbsp;Name should not be more than 30 characters');
+                return false;
+            } else if (studentName.length == 0) {
+                $("#nameCheckSpan").append('&nbsp;&nbsp;&nbsp;&nbsp;Name should not be empty ');
+                return false;
+            }
+            if (exp.test(studentName)) {
+                $("#nameCheckSpan").append('&nbsp;&nbsp;&nbsp;&nbsp;Name should not start with Number or special Character');
+                return false;
+            }
+            if (fatherOccupation.length > 50) {
+                $("#FatherOccupationSpan").append("&nbsp;&nbsp;&nbsp;&nbsp;Father's Occupation should not be more than 50 characters");
+                return false;
+            }
+            if (motherOccupation.length > 50) {
+                $("#MotherOccupationSpan").append("&nbsp;&nbsp;&nbsp;&nbsp;Mother's Occupation should not be more than 50 characters");
+                return false;
+            }
+            if (strength.length >= 201) {
+                $("#strengthSpan").append('&nbsp;&nbsp;&nbsp;&nbsp;Strength should not be more than 200 characters');
+                return false;
+            }
+            if (weakness.length >= 201) {
+                $("#weaknessSpan").append('&nbsp;&nbsp;&nbsp;&nbsp;Weakness should not be more than 200characters');
+                return false;
+            }
+            if (observation.length >= 201) {
+                $("#observationSpan").append('&nbsp;&nbsp;&nbsp;&nbsp;Observation should not be more than 200 characters');
+                return false;
+            }
+        }
+    </script>
+    <script language="JavaScript">
+        $("#choose_image").on('click', function() {
+            $("#id_photo").trigger('click');
+        });
+        $("#close_model").on('click', function() {
+            Webcam.reset();
+            $("#start_camera").show();
+            $("#capture_image").hide();
+            $("#my_result").hide();
+            $('#myModal').modal('hide');
+            $("#again_capture").hide();
+            $("#my_camera").show();
+        });
+        $("#again_capture").on('click', function() {
+            $("#my_camera").show();
+            $("#my_result").hide();
+            $('#photoId').attr('src', '');
+            Webcam.attach('#my_camera');
+            $("#again_capture").hide();
+            $("#capture_image").show();
+
+        });
+        $("#start_camera").on('click', function() {
+            $("#start_camera").hide();
+            Webcam.attach('#my_camera');
+            $("#capture_image").show();
+
+        });
+        $("#capture_image").on('click', function() {
+            Webcam.snap(function(data_uri) {
+                document.getElementById('my_result').innerHTML = '<img src="' + data_uri + '"/>';
+                $('#photoId').attr('src', data_uri);
+                var raw_image_data = data_uri.replace(/^data\:image\/\w+\;base64\,/, '');
+                document.getElementById('my_image_data').value = raw_image_data;
+                $("#my_camera").hide();
+                $("#capture_image").hide();
+                $("#again_capture").show();
+                $("#my_result").show();
+                Webcam.reset();
+            });
+
+        });
+    </script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#photoId').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#id_photo").change(function() {
+            $("#my_camera").show();
+            $("#photoId").show();
+            readURL(this);
+        });
+    </script>
+
+    <script>
+        for (var i = new Date().getFullYear(); i > 1970; i--) {
+            $('#yearpicker').append($('<option />').val(i).html(i));
+        }
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#student_log").hide();
+            if ($("#alumniStatus").val() == 'Alumni') {
+                $("#student_log").show();
+                // 		 window.parent.jQuery.colorbox.resize({width : "auto",height : "1600px"});
+            } else {
+                $("#currentGradeId").removeAttr('required', 'required');
+            }
+        });
+        $("#alumniStatus").change(function() {
+            if ($("#alumniStatus").val() == 'Alumni') {
+                $("#student_log").show();
+                // 		 window.parent.jQuery.colorbox.resize({width : "auto",height : "1250px"});
+            } else {
+                $("#student_log").hide();
+                $("#currentGradeId").removeAttr('required', 'required');
+                // 		 window.parent.jQuery.colorbox.resize({width : "auto",height : "850px"});
+            }
+        });
+        $("#achievment_id").click(function() {
+            var countId = $("#count_id").val();
+            countId++;
+            $("#count_id").val(countId);
+            var add_achievment = '';
+            add_achievment += '<div class="row achievment_div" id="achievment_div_id' + countId + '">';
+            add_achievment += '<br>';
+            add_achievment += '<div class="col-md-2"></div>';
+            add_achievment += '<div class="col-md-4">';
+            add_achievment += '<span style="color: red; font-size: 12px;"></span>';
+            add_achievment += '<input type="text" id="achievmentId' + countId + '" name="achievment" value="" class="form-control"';
+            add_achievment += ' placeholder="Achievment"  />';
+            add_achievment += '</div>';
+            add_achievment += '<div class="col-md-2">';
+            add_achievment += '<button type="button" id="exit_id' + countId + '"  >x</button>';
+            add_achievment += '</div>';
+            add_achievment += '</div>';
+            $('#achievment_div_id1').parent().append(add_achievment);
+            //      var windowHeight = $( window ).height();
+            if (countId >= 1) {
+                //     	 increaseHeight = windowHeight + 150;
+                // 	 window.parent.jQuery.colorbox.resize({height : ""+increaseHeight+"px"});
+            }
+            $("#exit_id" + countId + "").click(function() {
+                $("#achievment_div_id" + countId + "").remove();
+                /*  var height = $( window ).height();
+    	 if(countId  <= 20){
+        	 decreaseHeight = height - 30;
+    	 window.parent.jQuery.colorbox.resize({height : ""+decreaseHeight+"px"});
+         } */
+            });
+        });
+    </script>
+    <script>
+        $("form").submit(function(e) {
+            var validationFailed = false;
+            var dob_year = $("#dob_id").val();
+            var dd_year = new Date(document.getElementById('dob_id').value);
+            var year = dd_year.getFullYear();
+            var grade = $("#grade").val();
+            var currentTime = new Date();
+            var current_year = currentTime.getFullYear()
+            var difference = current_year - year
+            var age = (grade * 2) - 1
+
+            // if (difference < age) {
+            //    alert("Date of birth entered appears to be incorrect for the student of grade " + grade + ".\nPlease review the year of birth.")
+            //    e.preventDefault();
+            //    return false;
+            // }
+        });
+
+        function save_flag_for_save() {
+            var achievment_arr = []
+            $('#achievment_id').parent().parent().parent().each(function() {
+                $(this).find('.achievment_div').each(function() {
+                    var achievments = $('#' + ($(this).find(':nth-child(2)').children().next().attr('id'))).val();
+                    $(this).find(':nth-child(2)').children().next().attr('value', achievments);
+                    achievment_arr.push(achievments)
+                });
+            });
+            var json_arr = JSON.stringify(achievment_arr);
+            $('#achievment_json_id').val(json_arr);
+
+        }
+    </script>
+    <script>
+        $(document).ready(function() {
+            var achievment_json_data = $("#achievment_string_id").val();
+            if (achievment_json_data != null && achievment_json_data != '' && achievment_json_data != 'undefined') {
+                var jsonObjects = JSON.parse(achievment_json_data);
+                var achievment_arry = new Array();
+                $('#achievmentId1').val(jsonObjects[0]);
+                for (i = 0; i < jsonObjects.length; i++) {
+                    if (i != 0) {
+                        var obj = jsonObjects[i];
+                        var countId = $("#count_id").val();
+                        countId++;
+                        $("#count_id").val(countId);
+                        // 				var countHeight = $( window ).height();
+                        if (countId >= 1) {
+                            // 			    	 increaseHeight = countHeight + 160;
+                            // 				 window.parent.jQuery.colorbox.resize({height : ""+increaseHeight+"px"});
+                        }
+                        var add_achievment = '';
+                        add_achievment += '<div class="row achievment_div" id="achievment_div_id' + countId + '">';
+                        add_achievment += '<br>';
+                        add_achievment += '<div class="col-md-2"></div>';
+                        add_achievment += '<div class="col-md-4">';
+                        add_achievment += '<span style="color: red; font-size: 12px;"></span>';
+                        add_achievment += '<input type="text" id="achievmentId' + countId + '" name="achievment" value="' + obj + '" class="form-control "';
+                        add_achievment += ' placeholder="Achievment"  />';
+                        add_achievment += '</div>';
+                        add_achievment += '<div class="col-md-2 ">';
+                        add_achievment += '<button type="button"  id="exit_id' + countId + '" onclick="remove_box(this.id)">x</button>';
+                        add_achievment += '</div>';
+                        add_achievment += '</div>';
+                        achievment_arry.push(add_achievment);
+                    }
+                }
+                $('#achievment_div_id1').parent().append(achievment_arry);
+            }
+        });
+    </script>
+    <script>
+        function remove_box(exitId) {
+            $($("#" + exitId + "").parent().parent()).remove();
+        }
+
+        $('#kycdocnum').keyup(function() {
+            var kycdocnum = $('#kycdocnum').val();
+            var kycdoctype = document.getElementById("kycdoctype").value;
+            if (kycdocnum.length == 0) {
+                $('#kycdocnumdiv').html('');
+            } else {
+                $.ajax({
+                    type: "GET",
+                    url: "/v2/check-kyc-number/",
+                    data: {
+                        "docType": kycdoctype,
+                        "kycDocNum": kycdocnum
+                    },
+                    dataType: "JSON",
+                    success: function(result) {
+                        console.log(result);
+                        if (result['data']['isavialable'] == 1) {
+                            $('#kycdocnumdiv').html('<span style="color:green;">Available</span>');
+                        } else {
+                            $('#kycdocnumdiv').html('<span style="color:red;">Taken * Contact admin for any query</span>');
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+
+</html>

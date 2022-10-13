@@ -1,0 +1,8 @@
+Dear {{ first_name }} {{ last_name }},
+
+Thank you for your interests with eVidyaloka.
+
+The panel has conducted a detailed review of the current role requirements in the context of your experience & background, While the immediate fitment for the {{ role }} may not be fully aligned (due to multiple factors including non-suitability of timings, skills, interests, role requirements, etc), the panel would look forward to your ongoing support and look forward to remaining in touch for potential future opportunities.
+
+Regards,
+eVidyaloka On-boarding Team

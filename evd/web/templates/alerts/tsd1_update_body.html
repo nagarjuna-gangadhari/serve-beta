@@ -1,0 +1,15 @@
+<p style="font-size:14px;" >Dear {{first_name}} {{last_name}},</p>
+<p style="font-size:14px;" >Hurray!! We are really excited to see you on board. You are a step away to meet your students in class.</p>
+<p style="font-size:14px;" >Hence, book your slot for teacher selection discussion, it will be a 20 min discussion over skype with one of the member from evidyaloka to know more about each other.</p>
+<p><div><span><a style="padding: 7px; color: #fff; background-color: #49ba8e; font-size: 15px; border: none; text-decoration: none; border-radius: 15px;margin-left:188px;" href="{{host}}/book_sd_slots">Take me to Booking</a></span></div></p>
+{% if fb_user %}
+    <p style="font-size:14px;" >Facebook Login : <a href="{{host}}/?show_popup=true">Click here to Login.</a></p>
+{% else %}
+    <p style="font-size:14px;" >Your User Name is {{username}} : <a href="{{host}}/?show_popup=true">Click here to Login.</a></p>
+    <p style="font-size:14px;" >Forgot Password? No problem -<div><span><a style="padding: 7px; color: #fff; background-color: #49ba8e; font-size: 15px; border: none; text-decoration: none; border-radius: 15px;margin-left:188px;" href="{{host}}/accounts/password/reset/">Reset Password</a></span></div></p>
+{% endif %}
+<p style="font-size:14px;" >Any other issues, Just reach out to our Volunteer Helpline</p>
+
+<p><div><span><img style="height: 16px;width: 16px;"src="{{host}}/static/images/call_contact.png"/><span style="margin:10px;">+91-80-46808983</span></span><span style="margin:10px;"><img style="height: 16px;width:16px;"src="{{host}}/static/images/skype.png"/><a style="margin:10px;position: relative;bottom: 5px;" href="skype:evidyaloka.helpdesk?call">evidyaloka.helpdesk</a></span><span style="margin:10px;"><img style="height: 16px;width: 16px;" src="{{host}}/static/images/mail_contact.png"><a style="margin:10px;bottom: 5px;position: relative;"href="mailto:volunteer@evidyaloka.org">volunteer@evidyaloka.org</a></span></div></p>
+
+<br>

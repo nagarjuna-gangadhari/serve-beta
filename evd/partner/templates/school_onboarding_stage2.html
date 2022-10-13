@@ -1,0 +1,387 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% load filters %}
+{% block head_styles %}
+    {{ block.super }}
+        <link rel="stylesheet" type="text/css" href="/static/css/admindash.css" />
+        <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+        <meta charset="utf-8">
+<!--        <meta name="viewport" content="width=device-width, initial-scale=1">-->
+<!--        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">-->
+<!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
+<!--        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
+
+
+<style>
+    table, th, td {
+                    border: 1px solid black;
+                    border-collapse: collapse;
+                    padding-left: 15px;
+                    padding-right: 15px;
+                    /*display: block;*/
+                    }
+    th, td {
+              padding: 5px;
+              text-align:center;
+                /*display: block;*/
+    }
+    div.note-box ul {
+    width: 932px;
+}
+    .main {
+  width: 60% !important;
+  height: 63pt !important;
+  display: inline-block !important;
+  background: white !important;
+}
+    .step-progress {
+             counter-reset: step;
+        }
+  .step-progress li {
+      list-style-type: none;
+      width: 25%;
+      float: left;
+      font-size: 12px;
+      position: relative;
+      text-align: center;
+      text-transform: uppercase;
+      color: #7d7d7d;
+  }
+  .step-progress li:before {
+      width: 43px;
+      height: 41px;
+      content: counter(step);
+      counter-increment: step;
+      line-height: 35px;
+      border: 2px solid #7d7d7d;
+      display: block;
+      text-align: center;
+      margin: 0 auto 10px auto;
+      border-radius: 50%;
+      background:#e0e0e0;
+      border: 2px solid white;
+      box-shadow: 0px 0px 5px #ccc;
+  }
+  .step-progress li:after {
+      width: 81%;
+      height: 2px;
+      content: '';
+      position: absolute;
+      background-color: #7d7d7d;
+      top: 19px;
+      left: -40%;
+      z-index:1;
+  }
+  .step-progress li:first-child:after {
+      content: none;
+  }
+  .step-progress li.active {
+      color: black;
+
+  }
+   .step-progress li.step2 {
+      color: black;
+  }
+   .step-progress li.step3 {
+      color: black;
+  }
+     .step-progress li.step4 {
+      color: black;
+  }
+
+  .step-progress li.active:before {
+
+
+        background: #59dfe6;
+        box-shadow: 0px 0px 5px #327bb9;
+
+  }
+  .step-progress li.step2:before {
+        background:#f19934;
+        box-shadow : 0px 0px 5px #d8580d;
+  }
+  .step-progress li.step3:before {
+        background: #ea6398;
+        box-shadow: 0px 0px 5px #c451d2;
+
+  }
+   .step-progress li.step4:before {
+
+
+        background:#65cd66 ;
+       box-shadow: 0px 0px 5px #5fdb6a;
+  }
+  .step-progress li.active + li:after {
+      background-color: #5ccdfc;
+      width: 81%;
+  }
+    .step-progress li.step2 + li:after {
+        background-color: #f19934;
+        width: 81%;
+  }
+      .step-progress li.step3 + li:after {
+      background-color:#ea6398;
+      width: 81%;
+  }
+    .align{
+            width: 20%;
+            margin-bottom: 7pt;
+            margin-top: 2pt;
+    }
+
+    .margin{
+            margin-top: 9pt;
+            font-size: medium;
+            margin-left: -22pt;
+    }
+    .mySchoolDiv {
+            background-color:#ffffff;
+            padding : 15px 20px 20px 30px;
+        }
+    .tableCaption{
+            padding: 20px;
+            text-align: center;
+            font-size: 23px;
+            font-weight: bold;
+            /*background-color: #27A3E2;*/
+            color: Black;
+        }
+    thead{
+        background-color: #525A99 !important;
+        color: white;
+        /*display: block;*/
+    }
+    thead th{
+        border-bottom: 1px solid #111;
+        font-weight: bold !important;
+        /*display: block;*/
+    }
+    .scrollit {
+            overflow-y:scroll;
+            height:222px;
+        }
+    .y{
+            height:20px !important;
+            position:relative !important;
+            left: -25px !important;
+            width:19px !important;
+            margin-left: 34pt !important;
+            margin-top: 1pt !important;
+
+        }
+    .btn-submit {
+    color: white!important;
+    background: linear-gradient(to right, #4461ac, #00aeef)!important;
+    border-radius: 0!important;
+    text-transform: uppercase;
+    border: 1px solid #4461ac!important;
+
+}
+    tbody {
+    display:block;
+    height:99pt;
+    overflow:auto;
+}
+thead, tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed; even columns width , fix width of table too
+}
+.th1{
+    width:58pt;
+}
+.td2{
+        width: 254pt;
+}
+
+.table {
+    width: 92%;
+    max-width: 100%;
+    margin-bottom: 20px;
+    margin-left: 27pt;
+}
+.margin_col_1{
+    margin-left:64pt;
+    margin-right:-65pt;
+    margin-top: 11pt;"
+}
+    .margin_col_2{
+        margin-right:-60pt;
+        margin-top:11pt;
+    }
+    .margin_col_3{
+        margin-top:8pt;
+    }
+    .li_margin{
+        margin-bottom:8pt;
+        font-size: 13pt;
+    }
+    .li_fontSize{
+        font-size:13pt;
+    }
+    .li_margin_1{
+         margin-bottom:8pt;
+        font-size: 13pt;
+    }
+    .li_1_margin{
+       margin-bottom: 10pt;
+    margin-top: 17pt;
+    font-size: 13pt;
+    }
+    .image_width{
+        width:26px;
+    }
+ul {
+    margin-top: 8px;
+    margin-bottom: 10px;
+}
+
+
+</style>
+{% endblock %}
+
+{% block body_container %}
+{{ block.super }}
+
+<div class="container">
+    <div class="dashboard-notifications-container wid-align" style="width:1000px;float:left;padding-right:10px">
+        <div class="col-sm-12 col-md-12 col-lg-12 note-box noteWidth cont-align" style="background: white">
+           <div class="col-md-12 col-sm-12 col-lg-12 mySchoolDiv" >
+                <table class="table table-bordered" id="myTable">
+                    <caption class="tableCaption">My Schools List</caption>
+                    <thead>
+                        <tr>
+                            <th class="th1">Select</th>
+                            <th>School Name</th>
+                            <th class="th1">Status</th>
+                            <th>Stage</th>
+                        </tr>
+                    </thead>
+<!--                    <div class="scrollit">-->
+                        <tbody >
+                            <tr>
+                                <td class="th1"><input class='y' type="radio"></td>
+                                <td class="td2">qwerty</td>
+                                <td class="th1">Active</td>
+                                <td ><img src="/static/img/step1.png" style="width:93%;"></td>
+                            </tr>
+                            <tr>
+                                <td class="th1"><input class='y' type="radio"></td>
+                                <td class="td2">qwerty</td>
+                                <td class="th1">Active</td>
+                                <td><img src="/static/img/step2.png" style="width:93%;"></td>
+                            </tr>
+                            <tr>
+                                <td class="th1"><input class='y' type="radio"></td>
+                                <td class="td2">qwerty</td>
+                                <td class="th1">Active</td>
+                                <td><img src="/static/img/step3.png" style="width:93%;">  </td>
+                            </tr>
+                            <tr>
+                                <td class="th1"><input class='y' type="radio"></td>
+                                <td class="td2">qwerty</td>
+                                <td class="th1">Active</td>
+                                <td><img src="/static/img/step4.png" style="width:93%;"></td>
+                            </tr>
+                            <tr>
+                                <td class="th1"><input class='y' type="radio"></td>
+                                <td class="td2">qwerty</td>
+                                <td class="th1">Active</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+
+                </table>
+           </div>
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="main" align="center">
+                    <ul class="step-progress">
+                        <li class="active"> Identified</li>
+                        <li>Validate</li>
+                        <li>Verify</li>
+                        <li>Eligible</li>
+                    </ul>
+                </div><br>
+                <div class="main" align="center">
+                    <ul class="step-progress">
+                        <li class="active"> Identified</li>
+                        <li class="step2">Validated</li>
+                        <li>Verify</li>
+                        <li>Eligible</li>
+                    </ul>
+                </div>
+                <div class="main" align="center">
+                    <ul class="step-progress">
+                        <li class="active"> Identified</li>
+                        <li class="step2">Validated</li>
+                        <li class="step3">Verified</li>
+                        <li>Eligible</li>
+                    </ul>
+                </div>
+                <div class="main" align="center">
+                    <ul class="step-progress">
+                        <li class="active"> Identified</li>
+                        <li class="step2">Validated</li>
+                        <li class="step3">Verified</li>
+                        <li class="step4">Eligible</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-4 margin_col_1" >
+                    <ul>
+                        <li class="li_margin">Geo Cordinate</li>
+                        <li class="li_margin">Broadband</li>
+                        <li class="li_fontSize">Computer</li>
+                        <li class="li_1_margin">Screen</li>
+                        <li class="li_fontSize">Camera/Speaker</li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 margin_col_2">
+                    <ul>
+                        <li class="li_margin">12.971599, 77.594566</li>
+                        <li class="li_margin">Jio,4mbps</li>
+                        <li class="li_fontSize" >x86,win,4gb,skype</li><br>
+
+                        <li><input type="text" class="align" ></li>
+                        <li ><input type="text" class="align" ></li>
+                    </ul>
+                </div>
+                <div class="col-sm-3 margin_col_3" >
+                    <ul>
+                        <li class="li_margin_1"><img src="/static/img/tick.png" class="image_width">
+                            <img src="/static/img/cross.png" class="image_width"></li>
+                        <li class="li_margin_1"><img src="/static/img/tick.png" class="image_width">
+                            <img src="/static/img/cross.png" class="image_width"></li>
+                        <li><img src="/static/img/tick.png" class="image_width">
+                            <img src="/static/img/cross.png" class="image_width"></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                        <div class="col-sm-5 col-md-offset-2">
+                            <input type="button" name="Next" value="Next" class="btn-submit">
+                        </div>
+            </div>
+       </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block head_scripts %}
+    {{ block.super }}
+<script>
+     <script src="https://code.jquery.com/ui/1.9.1/jquery-ui.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+
+{% endblock head_scripts %}

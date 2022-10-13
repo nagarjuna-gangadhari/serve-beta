@@ -1,0 +1,484 @@
+{% extends "base.html" %} 
+{% load tags %} 
+{% load filters %} 
+{% block head_title %}eVidyaloka - Admin dashboard {% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+<style>
+.mapClass {
+    text-align: center;
+    color: black;
+	display: none;
+	position: fixed;
+	z-index: 1050 !important;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	vertical-align: middle;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+.nav-tabs li{
+   width: 33%;
+   }
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{
+	background-color: #22567d;
+	color: #f5f5f5;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+    background-color: #167ac6;
+}
+.nav-tabs > li > a{
+    color: #f5f5f5;
+    cursor: default;
+    background-color: #167ac6;
+    border: 1px solid #ddd;
+    border-bottom-color: #f5f5f5;
+    font-size: 15px;
+}
+</style>
+{% endblock %}
+
+{% block body_container%}
+<div class="container-fluid" style="background-color:white;margin-left:-7%;margin-right:-8%;">
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12">
+		{% if message %}
+				<div class="alert alert-success alert-dismissable" style="line-height: 0;margin-top:1%;">
+					 <a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>
+					  {{message}}
+				</div>
+		{% else %}
+			 <!-- <div class="alert alert-danger alert-dismissable" style="line-height: 0;margin-top:1%;">
+				 <a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top:-22px">&times;</a>
+				 {{message}}
+			  </div> -->
+		{% endif %}
+			<div><h3 style="margin-left:3%;font-weight:bold;">School Feasibility Test</h3></div>
+
+
+           <div id ="message"></div>
+            <div id ="message1"></div>
+
+			  <ul class="nav nav-tabs" style="margin-right: -4%;">
+                <li class="active"><a href="#internateAndGeoDiv" data-toggle="tab"
+                    aria-expanded="false" id='1'>Connectivity and GEO Verification</a></li>
+                <li><a href="#evDiv" data-toggle="tab"
+                    aria-expanded="true" id='2'>eV Verification</a></li>
+                <li><a href="#visualDiv" data-toggle="tab"
+                    aria-expanded="true" id='3'>Visual Verification</a></li>
+				  <li></li>
+            </ul>
+
+
+			<hr>
+			<!-- <h4 style="margin-left:6.7%;color:orange;">Please fill below details :</h4> -->
+			<br>
+			 <div class="tab-content">
+			 <div id="internateAndGeoDiv" class="tab-pane fade in active">
+			  <form action="/v2/saveStub" id="formId" method="get">
+			<div class="row" style="margin-left:5%;">
+				<div class="col-lg-3 col-md-6 col-sm-4">
+					<label><span style="color:red;">*&nbsp;</span>School Code</label>
+					<input class="form-control" type="text" name="schoolCode" value="" required="required" placeholder="School Code" title="Enter School Code"/>
+				</div>
+				<div class="col-lg-2 col-md-3 col-sm-3 "></div>
+				<div class="col-lg-3 col-md-6 col-sm-4">
+					<label><span style="color:red;">*&nbsp;</span>School Name</label>
+					<input class="form-control" type="text" name="schoolName" value="" required="required" placeholder="School Name" title="Enter School Name"/>
+				</div>
+			</div>
+			<div class="row" style="margin-left:5%;">
+				<div class="col-lg-3 col-md-6 col-sm-4">
+					<label><span style="color:red;">*&nbsp;</span>Village Name</label>
+					<input class="form-control" type="text" name="villageName" value="" required="required" placeholder="Village Name" title="Enter Village Name"/>
+				</div>
+				<div class="col-lg-2 col-md-3 col-sm-3 "></div>
+				<div class="col-lg-3 col-md-6 col-sm-4">
+					<label><span style="color:red;">*&nbsp;</span>District Name</label>
+					<input class="form-control" type="text" name="distirictName" value="" required="required" placeholder="District Name" title="Enter District Name"/>
+				</div>
+			</div>
+		<!-- 	<div class="row" style="margin-left:5%;"> -->
+				<!-- <div class="col-lg-3 col-md-6 col-sm-4">
+					<label>State</label>
+					<select class="form-control" name="state" style="border-radius:0px;">
+					<option value="Andhra Pradesh">Andhra Pradesh</option>
+					<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+					<option value="Assam">Assam</option>
+					<option value="Bihar">Bihar</option>
+					<option value="Chhattisgarh">Chhattisgarh</option>
+					<option value="Goa">Goa</option>
+					<option value="Gujarat">Gujarat</option>
+					<option value="Haryana">Haryana</option>
+					<option value="Himachal Pradesh">Himachal Pradesh</option>
+					<option value="Jammu & Kashmir">Jammu & Kashmir</option>
+					<option value="Jharkhand">Jharkhand</option>
+					<option value="Karnataka">Karnataka</option>
+					<option value="Kerala">Kerala</option>
+					<option value="Madhya Pradesh">Madhya Pradesh</option>
+					<option value="Maharashtra">Maharashtra</option>
+					<option value="Manipur">Manipur</option>
+					<option value="Meghalaya">Meghalaya</option>
+					<option value="Mizoram">Mizoram</option>
+					<option value="Nagaland">Nagaland</option>
+					<option value="Odisha">Odisha</option>
+					<option value="Punjab">Punjab</option>
+					<option value="Rajasthan">Rajasthan</option>
+					<option value="Sikkim">Sikkim</option>
+					<option value="Tamil Nadu">Tamil Nadu</option>
+					<option value="Telangana">Telangana</option>
+					<option value="Tripura">Tripura</option>
+					<option value="Uttarakhand">Uttarakhand</option>
+					<option value="Uttar Pradesh">Uttar Pradesh</option>
+					<option value="West Bengal">West Bengal</option>
+					<option value="" disabled></option>
+					<option value="" disabled style="font-weight:bold;color:black;">Union territories</option>
+					<option value="" disabled>_______________________________</option>
+					<option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+					<option value="Chandigarh">Chandigarh</option>
+					<option value="Delhi">Delhi</option>
+					<option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+					<option value="Daman and Diu">Daman and Diu</option>
+					<option value="Lakshadweep">Lakshadweep</option>
+					<option value="Puducherry">Puducherry</option>
+					</select>
+				</div> -->
+<!-- 				<div class="col-lg-2 col-md-3 col-sm-3 "></div> -->
+
+			<!-- </div> -->
+
+
+			<div class="row" style="margin-left:5%;">
+				<div class="col-lg-3">
+					<label><span style="color:red;">*&nbsp;</span>Broadband Service provider</label>
+					<input class="form-control" type="text" name="serviceProvider" value="" required="required" required="required" placeholder="Broadband Service provider" title="Enter Broadband Service provider"/>
+				</div>
+				<div class="col-lg-2 col-md-3 col-sm-3 "></div>
+				<div class="col-lg-3">
+					<label>Select wired or wireless</label>
+					<select class="form-control" name="connectionType" style="border-radius:0px;">
+						<option value="wired">Wired</option>
+						<option value="wireless">Wireless</option>
+					</select>
+				</div>
+			</div>
+			<div class="row">
+			<div class="row col-lg-3 col-md-4 col-sm-4 col-xs-4" style="margin-left:6.5%;" >
+
+					<label><span style="color:red;">*&nbsp;</span>Enter download speed</label>
+					<input class="form-control" type="text" name="downloadSpeed" required="required" style="border-radius:0px;width:99%:margin-left:0.5%;" placeholder="Enter Download Speed">
+			</div>
+
+			<div class="row col-lg-3 col-md-4 col-sm-4 col-xs-4" style="margin-left:18%;" >
+					<label><span style="color:red;">*&nbsp;</span>Enter upload speed</label>
+					<input class="form-control" type="text" name="uploadSpeed" required="required" style="border-radius:0px;width:99%:margin-left:0.5%;" placeholder="Enter Upload Speed">
+			</div>
+			<br><br><br><br>
+			<!-- <div class="col-lg-3" style="margin-left:6.5%;">
+					<label>Date of Entry</label>
+					<input class="form-control" id="dateId" required="required" type="text" value="" required="required" readonly placeholder="Date of Entry" title="Date of Entry"/>
+					<input class="form-control" id="dateId1" name="dateOfEntry" type="hidden" value=""/>
+			</div> -->
+			<div class="col-lg-2 col-md-3 col-sm-3 "></div>
+
+
+			</div>
+			<br>
+			<div class="row">
+			<div class="row col-lg-3 col-md-4 col-sm-4 col-xs-4" style="margin-left:6.5%;">
+			<button class="form-control" style="focus:focus;color:white;background:rebeccapurple;height:60px;text-align:left;border-radius:0px;" onclick="checkSpeed()">
+					Click here to check your upload & download speed&nbsp;&nbsp;&nbsp;<i class="fa fa-arrow-right" style="font-size:15px"></i></button>
+			</div>
+			<!-- <div class="col-lg-3" style="left:6.3%;">
+				 <label>Is there a Computer already available in the school ?</label>
+					<select class="form-control" name="systemAvailability" style="border-radius:0px;">
+						<option value="Yes">Yes</option>
+						<option value="No">No</option>
+					</select>
+			</div> -->
+			<div class="row col-lg-3 col-md-4 col-sm-4 col-xs-4" style="margin-left:18%;">
+			<label>Address</label>
+			<input class="form-control" id="locationName" type="text" value="">
+			</div>
+
+			</div>
+
+						<div class="row" style="margin-left: 30px;">
+							<div class="col-md-5"></div>
+
+							<div class="col-md-5"></div>
+							<div class="col-md-2">
+								<input id="latitude" name="latitude" type="hidden" value="">
+								<input id="longitude" name="longitude" type="hidden" value="">
+								<p id="demo"></p>
+								<input class="btn btn-success" id="update" type="submit"
+									value="Submit">
+							</div>
+						</div>
+
+						<!-- 	<br>
+			<div class="col-lg-12">
+			</div>
+			<div class="mapClass1">
+			<div id="hideDiv" style="cursor:pointer;font-size:17px;border-radius:10px;background:white;z-index: 3000;margin-left: 34%;height:auto;width: 33%;margin-top: 17%;padding: 2% 1% 1% 1% !important;">
+			<p>Please make sure that you allow the location access  in the next step to enter the evidyaloka page</p><hr>
+			<span style="margin-bottom:5%;"onclick="getLocation()">OK</span><br></div>
+			<p id="errorMsg" style="display:none;font-size:17px;background:white;z-index: 3000;margin-left: 34%;height:10%;width: 33%;margin-top: 17%;padding-top:1%;">
+
+			</p>
+			</div> -->
+			</form>
+			 </div>
+
+
+			  <div id="evDiv" class="tab-pane fade">
+			  <div class="row">
+				<div class="col-lg-4 col-md-4 col-sm-4">
+					<label><span style="color:red;">*&nbsp;</span>No. of Teachers teaching (Std 5 to 8)-th</label>
+					<input class="form-control" id="noOfTeachers" onkeydown="return validateNumber(event)" type="number" name="noOfTeacher" value="" min="0"required="required" placeholder="No. of Teachers teaching" title="Enter No. of Teachers teaching"/>
+				</div>
+
+				<div class="col-lg-4 col-md-4 col-sm-4">
+					<label><span style="color:red;">*&nbsp;</span>No. of Students Enrolled (Std 5 to 8)-th</label>
+					<input class="form-control" id="noOfStudents" onkeydown="return validateNumber(event)" type="number" name="noOfStudents" value="" min="0" required="required" placeholder="No. of Students Enrolled" title="Enter No. of students"/>
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-4">
+					<label><span style="color:red;">*&nbsp;</span>HeadMaster Name</label>
+					<input class="form-control" id="headMasterName" name="headMasterName" type="text" value="" required="required" placeholder="HeadMaster Name" title="Enter HeadMaster Name"/>
+				</div>
+                  </div>
+
+
+                   <div>
+				   <div class="col-lg-4 col-md-4 col-sm-4"></div>
+
+				  <div class="col-lg-3 col-md-3 col-sm-3" style="padding-top: 25px;margin-left:15%;">
+                    <button class='btn btn-success' id="evDiv_submit">Submit</button>
+                </div>
+				   <div class="col-lg-4 col-md-4 col-sm-4"></div>
+			   </div>
+
+
+
+
+			  </div>
+			   <div  id="visualDiv" class="tab-pane fade">
+			   <div class="row" >
+					<div class="col-lg-4 col-md-4 col-sm-4">
+						<label><span style="color:red;">*&nbsp;</span>School Picture</label>
+						<input class="form-control" id="school_pic"  type="file" name="school_pic" value="" required="required"  title="upload"/>
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-4">
+						<label><span style="color:red;">*&nbsp;</span>Classroom picture</label>
+						<input class="form-control" id="class_pic"  type="file" name="class_pic" value="" required="required"  title="upload"/>
+					</div>
+				   <div class="col-lg-4 col-md-4 col-sm-4">
+						<label><span style="color:red;">*&nbsp;</span>Permission Letter</label>
+						<input class="form-control" id="permission_letter"  type="file" name="permission_letter" value="" required="required"  title="upload"/>
+					</div>
+				   <!--<div class="col-lg-3 col-md-3 col-sm-3">
+						<label>upload2</label>
+						<input class="form-control" id="3"  type="file" name="3" value="" required="required"  title="upload"/>
+					</div>-->
+
+			   </div>
+
+			   <div>
+				   <div class="col-lg-4 col-md-4 col-sm-4"></div>
+
+				   <div class="col-lg-4 col-md-4 col-sm-4" style="padding-top: 25px;margin-left:15%;">
+							<button class='btn btn-success' id="visualDiv_submit">Update</button>
+				   </div>
+				   <div class="col-lg-4 col-md-4 col-sm-4"></div>
+			   </div>
+			   </div>
+
+				 <div  id="" class="tab-pane fade">
+			   <div class="row" style="margin-left:5%;">
+
+
+
+			   </div>
+			   </div>
+
+
+
+			  </div>
+
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block bottom_scripts %}
+<!-- {{ block.super }} -->
+<script type="text/javascript" src="/static/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/js/select.min.js"></script>
+<script>
+
+function validateNumber(e) {
+	if(!((e.keyCode > 95 && e.keyCode < 106) || (e.keyCode > 47 && e.keyCode < 58) || e.keyCode == 8 || e.keyCode == 9)) {
+        return false;
+      }
+}
+
+$(':input').keyup(function() {
+	if ($("#formId")[0].checkValidity()) {
+	$("#submitId")[0].disabled = false;
+	$("#submitId").css({'background':'rebeccapurple', 'color':'white'});
+	  } else {
+	  $("#submitId")[0].disabled = true;
+	  $("#submitId").css({'background':'whitesmoke', 'color':'#555'});
+	  }
+});
+
+var x = document.getElementById("demo");
+$(document).ready(function(){
+	  
+	$(function() {
+	    $('#submitId').attr('disabled', 'disabled');
+	});
+	
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+	var min = today.getMinutes();
+	var hrs = today.getHours();
+	var sec = today.getSeconds();
+	
+	if(min<10) {
+		min = '0'+min
+	}
+	if(hrs<10) {
+		hrs = '0'+hrs
+	}
+	if(dd<10) {
+	    dd = '0'+dd
+	} 
+	if(mm<10) {
+	    mm = '0'+mm
+	} 
+	$("#dateId").val(yyyy + '-' + mm + '-' + dd);
+	today = yyyy + '-' + mm + '-' + dd + ' ' + hrs + ':' + min + ':' + sec;
+	$('input[id="dateId1"]').val(today);
+	$(".mapClass").css('display','block');
+	//getLocation();
+
+
+	$('#visualDiv_submit').click(function(){
+        if($('#school_pic').val() == ''  || $('#class_pic').val() == ''  ||  $('#permission_letter').val() == '' ){
+        alert_message('please upload file');
+        }
+
+        if($('#school_pic').val() != ''  && $('#class_pic').val() != ''  &&  $('#permission_letter').val() != '' ){
+         alert_message1('uploaded successfully!');
+        }
+
+	});
+		$('#evDiv_submit').click(function(){
+        if($('#noOfTeachers').val() == ''  || $('#noOfStudents').val() == ''  ||  $('#headMasterName').val() == '' ){
+        alert_message('please enter all the details');
+        }
+
+        if($('#noOfTeachers').val() != ''  && $('#noOfStudents').val() != ''  &&  $('#headMasterName').val() != '' ){
+         alert_message1('submitted successfully!');
+        }
+
+	});
+
+
+	function alert_message(msg){
+            var s = "<div class='alert alert-danger alert-dismissable'><button type = 'button' class = 'close' data-dismiss = 'alert' aria-hidden = 'true'>&times;</button><strong>Warning!  </strong>"+msg+"</div>";
+	       $("#message").html(s);
+            }
+
+    function alert_message1(msg){
+            var s = "<div class='alert alert-success alert-dismissable'><button type = 'button' class = 'close' data-dismiss = 'alert' aria-hidden = 'true'>&times;</button><strong>Warning!  </strong>"+msg+"</div>";
+	       $("#message1").html(s);
+            }
+
+
+
+ });
+function checkSpeed() {
+	window.open("http://speedtest.net//");	
+}
+
+function getLocation() {
+	var options = {
+	        enableHighAccuracy: true,
+	        maximumAge: 0
+	      };
+	$("#hideDiv").hide();
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError, options);
+    } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPosition(position) {
+	var latitude = position.coords.latitude;
+	var longitude = position.coords.longitude;
+	$(".mapClass").hide();
+    $("#latitude").val(latitude);
+    $("#longitude").val(longitude);
+    getAddress(latitude, longitude);
+}
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            $("#errorMsg").css('display','block');
+            $("#errorMsg").text("Please enable the location to access the page");
+           // $("#errorMsg").append("<br><p onclick='reloadPage()'>click here</p>");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            $("#errorMsg").css('display','block');	
+            $("#errorMsg").text("Location information unavailable");
+            break;
+        case error.TIMEOUT:
+        	$("#errorMsg").css('display','block');
+            $("#errorMsg").text("The request to get user location timed out");
+            break;
+        case error.UNKNOWN_ERROR:
+        	$("#errorMsg").css('display','block');
+        	$("#errorMsg").text("An unknown error occurred.");
+            break;
+    }
+}
+function reloadPage() {alert("dhfsdfkdsshfkjh");
+		window.location.reload(true);
+}
+function getAddress (latitude, longitude) {
+
+	return new Promise(function (resolve, reject) {
+        var request = new XMLHttpRequest();
+
+        var method = 'GET';
+        var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude + '&sensor=true';
+        var async = true;
+
+        request.open(method, url, async);
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                if (request.status == 200) {
+                    var data = JSON.parse(request.responseText);
+                    var address = data.results[0];
+                    $("#locationName").val(address.formatted_address);
+                    $("#locationName").prop('readonly',true);
+                    resolve(address);
+                }
+                else {
+                    reject(request.status);
+                }
+            }
+        };
+        request.send();
+    });
+};
+
+</script>
+{% endblock %}

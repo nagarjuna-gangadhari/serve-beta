@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+<style>
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{
+	background-color: #22567d;
+	color: #f5f5f5;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+    background-color: #167ac6;
+}
+.nav-tabs > li > a{
+    color: #f5f5f5;
+    cursor: default;
+    background-color: #167ac6;
+    border: 1px solid #ddd;
+    border-bottom-color: #f5f5f5;
+    font-size: 15px;
+}
+[type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+    display: inline !important;
+    width: 10%;
+    position:static !important;
+}
+
+.inputClass{
+    height: 32px;
+    font-size: 12px;
+    color: black;
+    border: 1px solid #ccc;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.submit_profile{
+    margin-bottom: 22px;
+    width: 100px;
+    <!--position: relative;-->
+    top: 7px;
+    float: right;
+    left: -160px;
+}
+
+.ec-checkbox.check-xl .ec-checkbox__control {
+    width: 40px;
+    height: 34px;
+}
+
+
+
+</style>
+
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+{% endblock %}
+
+
+{% block body_container%}
+{{ block.super }}
+
+<div class="container-fluid" style="background-color:white;min-height: 450px !important;">
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			<div class="row">
+                <div class="col-sm-9">
+                    <h3 style="margin-left:3%;font-weight:bold;">Role Specific Settings for {{ role.name }} Role</h3>
+                </div>
+                <div class="col-sm-3">
+                    <!--<span class="pull-right" style="margin-top:20px">Go back</span>-->
+                </div>
+            </div>
+            <hr>
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="settings" style="padding-bottom:3%;">
+                            {% for setting in settings %}
+                                <div id="{{setting.group}}" class="row">
+                                    <form  method="post">
+                                        {% csrf_token %}
+                                        <div class="col-lg-12 col-md-12 col-sm-12" style="border:1px solid #e5e5e5;margin:5px 0px;">
+                                            <div>
+                                                <fieldset>
+                                                    <legend>{{setting.group_title}}</legend>
+                                                    <div class="col-md-12 col-sm-12" style="padding-bottom:10px;">
+                                                        <input type="hidden" name="group_name" value="{{setting.group_name}}">
+                                                        <input type="hidden" name="group_id" value="{{setting.id}}">
+                                                        <input type="hidden" id="id_role" name="role" value="{{role.id}}">
+
+                                                    </div>
+                                                    {% if setting.settingsgroupitems_set.all %}
+                                                        <div class="col-md-12 col-sm-12">
+                                                            {% with items=setting.settingsgroupitems_set.all %}
+                                                                {% for item in items %}
+                                                                    {% with rolegrpitemval=role|roleitemvalue:item %}
+                                                                        {% if item.input_type|lower == "choices" %}
+                                                                            <div class="col-md-12 col-sm-12">
+                                                                                <label class="col-md-2 col-sm-2"> {{item.input_label}} </label>
+                                                                                <select class="col-md-2 col-sm-2" name='{{item.input_name}}_-{{item.id}}'>
+                                                                                    {% with item.input_values|split:"," as values %}
+                                                                                        {% for value in values %}
+                                                                                            {% if value in rolegrpitemval %}
+                                                                                                <option value="{{value}}" selected="selected">{{value}}</option>
+                                                                                            {% else %}
+                                                                                                <option value="{{value}}">{{value}}</option>
+                                                                                            {% endif %}
+                                                                                        {% endfor %}
+                                                                                    {% endwith %}
+                                                                                </select>
+                                                                            </div>
+                                                                        {% else %}
+                                                                            <div class="col-md-12 col-sm-12">
+                                                                                <label style="margin-left:4%;">
+                                                                                    {% if item.input_name in rolegrpitemval %}
+                                                                                        <input style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}" checked="checked">
+                                                                                    {% else %}
+                                                                                        <input style="vertical-align: middle; height:16px; width:16px;" type="checkbox" name="{{item.input_name}}_-{{item.id}}" value="{{item.input_name}}">
+                                                                                    {% endif %} {{item.input_label}}
+                                                                                </label>
+                                                                            </div>
+                                                                        {% endif %}
+                                                                    {% endwith %}
+                                                                {% endfor %}
+                                                            {% endwith %}
+
+                                                            {% if setting.group_name|lower == 'privacy' or setting.group_name|lower == 'privacypolicy' %}
+                                                                <p>To view Privacy Policy <a href="#" id="id_privacymodal" style="vertical-align:middle;" data-toggle="modal" data-target="#privacymodal" title="Edit Status">Click Here</a></p>
+                                                                <!-- Modal -->
+                                                                <div id="privacymodal" class="modal modal-lg" tabindex="-1" role="dialog" aria-labelledby="privacymodal" aria-hidden="true" style="top:40%;width:650px;height:700px;">
+                                                                    <div class="" role="document">
+                                                                        <!-- Modal content-->
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <button type="button" class="close col-sm-2" data-dismiss="modal" aria-label="Close">
+                                                                                   <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body col-lg-12">
+                                                                                <iframe src="/static/PrivacyPolicyREV1.pdf" seamless="" width="620" height="680"></iframe>
+                                                                                 <!--<object width="620" height="680" data="/static/PrivacyPolicyREV1.pdf"></object>-->
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!--Modal end-->
+                                                            {% endif %}
+
+                                                        </div>
+                                                    {% endif %}
+                                                    <button class='btn btn-success pull-right' style="margin:15px 0px 15px 0px;" id="evDiv_submit">Submit</button>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+            </div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block bottom_scripts %}
+ {{ block.super }}
+<script>
+$(document).ready(function() {
+
+    $(".inner.clearfix").css("width","85%");
+
+
+});
+</script>
+{% endblock %}

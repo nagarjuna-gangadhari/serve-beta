@@ -1,0 +1,353 @@
+<ul id="login-badge" class="clearfix" style="margin-top: 6px;height: 50px !important;">
+  <li class="clearfix" style="width: 100px">
+    <!--<ul>
+      <li><a href="/myevidyaloka/">My eVidyaloka</a></li>
+      <li><a href="/user_profile">My Profile</a></li>
+      <li><a href="/accounts/logout" class="fb-logout-trigger logout">Log Out<span class="icon icon-power"></span></a></li>
+    </ul>-->
+    <div class="clearfix" id="profName">
+       <center><a href="/profile/">
+            {% if user.userprofile.picture %}
+                <img class="avatar profile_pic" src="{{ user.userprofile.picture }}" style="width:50%;height:45px;padding:1px; border-radius: 50%;">
+            {% else %}
+                <span class="face profile_pic">
+                    <i class="fg fa fa-user"></i>
+                </span>
+            {% endif %}
+        </a></center>
+    </div>
+    <div class="margin_right" style="text-align: center;">{% if request.user.first_name %}{{ request.user.first_name|title }}{%endif%}</div>
+  </li>
+  
+  			{% if user.is_superuser %}
+  			 <li class="dropdown-menu  sub_logout" style="border:none;margin-top:20px;left:-55px;" >
+  			   <a href="/v2/vLounge">PROFILE</a>
+  			   <a href="/setting">SETTING</a>
+               <a href="/v2/change_password/">CHANGE PASSWORD</a>
+<!--                <a href="/config/user/settings/">UserSettings</a> -->
+               <a href="JavaScript:Void(0);" onclick="logout_from_site();">LOG OUT</a>
+           </li>
+  			{% else %}
+  			 <li class="dropdown-menu  sub_logout" style="border:none;margin-top:20px;left:-55px;" >
+  			   <a href="/v2/vLounge">PROFILE</a>
+               <a href="/v2/change_password/">CHANGE PASSWORD</a>
+<!--                  <a href="/config/user/settings/">UserSettings</a> -->
+               <a href="JavaScript:Void(0);" onclick="logout_from_site();">LOG OUT</a>
+           </li>
+  			{% endif %}
+          
+<!--            <li class="dropdown-menu submenu sub_logout" style="min-width: 85px !important;margin-top: 0px !important; width: 85px !important;border:none;"> -->
+<!--               -->
+<!--            </li> -->
+       </ul>
+  <!--<a href="/myevidyaloka/" class="mp"><span class="icon icon-ribbon"></span></a>-->
+<!--<div class="dropdown">
+    <span class="caret clearfix dropdown-toggle lgout" type="button" data-toggle="dropdown"  id="login-badge" style="top:-60px;right:10px;color:white"></span>
+       <ul class="dropdown-menu submenu pull-right" style="text-align:center; margin-top:0px">
+           <li style="border:none;"><a href="/accounts/logout/">LOG OUT</a></li>
+       </ul>
+</div>-->
+
+<style>
+@media only screen and (max-width: 480px) and (min-width: 0px)  {
+
+.dropdown-menu.sub_logout {
+    display: block !important;
+   /* padding: 3px 20px; */
+    clear: both;
+    font-weight: normal;
+    line-height: 20px !important;
+    color: #333333;
+    white-space: nowrap;
+    margin-left: 10% !important;
+
+}
+
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+     min-width:0px !important;
+    /* padding: 5px 0; */
+    /* margin: 2px 0 0; */
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+}
+
+}
+
+
+@media (min-width: 375px)
+.dropdown-menu.sub_logout {
+    display: block !important;
+    /* padding: 3px 20px; */
+    lear: both;
+    font-weight: normal;
+    line-height: 20px !important;
+    color: #333333;
+    white-space: nowrap;
+    margin-left: 15%;
+}
+}
+
+
+@media only screen and (max-width: 760px) and (min-width: 461px)  {
+
+.dropdown-menu.sub_logout {
+    display: block !important;
+   /* padding: 3px 20px; */
+    clear: both;
+    font-weight: normal;
+    line-height: 20px !important;
+    color: #333333;
+    white-space: nowrap;
+}
+
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+     min-width:0px !important;
+    /* padding: 5px 0; */
+    /* margin: 2px 0 0; */
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+}
+
+}
+
+
+@media only screen and (max-width: 1024px) and (min-width: 0px)  {
+    #login-badge {
+        margin-right: 7% !important;
+    }
+}
+.lgout{
+    border-top:6px dashed;
+    border-right:6px solid transparent;
+    border-left:6px solid transparent;
+}
+.face {
+    display:block;
+    -moz-border-radius: 90%;
+    -webkit-border-radius: 90%;
+    border-radius: 90%;
+    margin: auto;
+    width: 40px;
+    height: 40px;
+    background-color:powderblue;
+    overflow:hidden;
+    text-align:center;
+}
+.face .fg {
+    font-size:150%;
+    position:relative;
+    top:8px;
+    color:royalblue;
+}
+#login-badge {
+    position: absolute;
+    right: 0px;
+    top: 0
+}
+.lt-ie9 #header #login-badge {
+    width: 143px
+}
+#login-badge .ribbon {
+    position: relative;
+    left: 0;
+    right: 0;
+    display: block;
+    margin: 0 4px 0 2px;
+    cursor: pointer
+}
+.badgeribbon {
+    position: relative;
+    clear: both;
+    float: right;
+    -moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.52);
+    -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.52);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.52)
+}
+.lt-ie8 .badgeribbon,
+.lt-ie8 #login-badge ul {
+    margin-right: 4px
+}
+.ribbon .avatar {
+    padding: 6px 17px 4px 6px;
+    border:1px solid #ea753b;
+    float: right;
+}
+.js-off .ribbon:hover .greet,
+.js-off .ribbon:hover ul {
+    display: block!important
+}
+#login-badge .ribbon .icon-whitearrow {
+    position: absolute;
+    top: 19px;
+    right: 4px
+}
+.icon-whitearrow {
+    background-position: -20px -44px;
+    width: 7px;
+    height: 7px
+}
+.open .icon-whitearrow,
+.js-off .ribbon:hover .icon-whitearrow {
+    background-position: -20px -51px;
+    width: 7px;
+    height: 7px
+}
+.icon-ribbon {
+    background: transparent url(/static/images/badge_ribbon2.png) no-repeat 0 0;
+    width: 63px;
+    height: 51px
+}
+#login-badge .icon-ribbon {
+    position: absolute;
+    right: 0;
+    bottom: -51px
+}
+#login-badge .greet {
+    float: left;
+    position: relative;
+    color: white;
+    text-shadow: none;
+    padding: 0 9px;
+    line-height: 36px
+}
+#login-badge ul {
+    width: 129px;
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.32);
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.32);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.32);
+    position: relative;
+    z-index: 10;
+    clear: both;
+    float: right
+}
+#login-badge .greet,
+#login-badge ul {
+    display: none
+}
+#login-badge ul li {
+    height: auto;
+    line-height: auto;
+    border-top: 1px solid #cd4400;
+    border-bottom: 1px solid #e75e1a;
+    float: none;
+    padding:4px 0px;
+}
+#login-badge ul li a {
+    font-size: 11px;
+    display: block;
+    padding: 4px 0px;
+    line-height: 6px;
+    height: 14px;
+    font-family:Montserrat;
+    text-shadow: none;
+    -moz-transition: background-color .2s ease-in-out;
+    -webkit-transition: background-color .2s ease-in-out;
+    -ms-transition: background-color .2s ease-in-out;
+    -o-transition: background-color .2s ease-in-out;
+    transition: background-color .2s ease-in-out
+}
+#login-badge ul li a:hover {
+    background-color: #f1f1f1;
+}
+#login-badge ul li a.logout {
+    position: relative;
+    padding-right: 33px
+}
+.icon-x {
+    width: 7px;
+    height: 7px;
+    position: absolute;
+    right: 15px;
+    top: 4px;
+    background-position: -20px -58px
+}
+.icon-power {
+    width: 11px;
+    height: 12px;
+    background-position: -25px -201px;
+    position: absolute;
+    right: 15px;
+    top: 5px
+}
+.avatar {
+    background-color: white
+}
+#checkout .avatar,
+td .avatar {
+    padding: 2px;
+    border: 1px solid #888786
+}
+#header a .avatar {
+    position: relative;
+    float: right;
+    border: 1px solid #ea753b
+}
+.dropdown-menu.sub_logout a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 20px !important;
+    color: #333333;
+    white-space: nowrap;
+}
+
+</style>
+<script>
+function logout_from_site(){
+	var activity_name = "Logged Out";
+	var ajaxUrl = '/ajax/save_user_activity_by_ajax/?activity_name='+activity_name+'&activity_type=Action';
+	   	  $.ajax({
+      url : ajaxUrl,
+      async: false,
+      success: function (data) {
+    	  window.location = "/accounts/logout/";
+        },
+        error: function() {
+        alert("error");
+        }
+	  });
+}
+
+function hide_logout(){
+	  if($('.navbar-collapse').css('display')=='none'){
+		  $('.sub_logout').css('z-index', -1);
+		 
+	  }else{
+		  $('.sub_logout').css('display', 'block');
+		  //$('.dropdown-menu').css('z-index', '1000');
+	  }
+}
+</script>

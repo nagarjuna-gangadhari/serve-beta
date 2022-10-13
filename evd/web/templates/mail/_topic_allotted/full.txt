@@ -1,0 +1,19 @@
+Greetings,
+
+You are assigned with the following Topic and the required content type that is to be developed:
+
+    Board, Subject, Grade: {{ Board }}, {{ Subject }}, {{ Grade }}
+    Topic: {{ Title }}
+    Content Type: {{ Type }}
+
+Please refer to the Content Development Guide here [ http://www.evidyaloka.org/static/downloads/eVidyaloka_Content_Volunteer_Handbook.pdf ], for links to Template download, Textbook and other required resources.
+
+Click below to accept the assignment : www.evidyaloka.org/myevidyaloka
+
+Please do update the Status, on completion in MyeVidyaloka – www.evidyaloka.org/myevidyaloka
+
+Thank you for volunteering your time towards Content Development.
+
+
+Regards,
+eVidyaloka Content Team

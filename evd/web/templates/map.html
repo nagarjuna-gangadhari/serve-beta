@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="/static/js/jquery-1.9.0.min.js"></script>
+    <script type="text/javascript">
+    // Load the Visualization API and the piechart package.
+    google.load('visualization', '1', {'packages':['corechart']});
+    google.load("visualization", "1", {packages:["map"]});      
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+    
+   
+    var jsonData1 = $.ajax({
+          url: "/active_map/",
+          dataType:"json",
+          async: false
+          }).responseText;
+    var ac_map = new google.visualization.DataTable(jsonData1);
+    var chart1 = new google.visualization.Map(document.getElementById('chart1'));
+    chart1.draw(ac_map,{showTip: true}, {width: 200, height: 513});
+    }
+
+    </script>
+  </head>
+
+  <body>
+    <div class='our-reach' style="text-align: center; color: #F69206 !important;">
+        <p>Our Reach</p>
+    </div>
+    <div style="height:513px;width:735px">
+    <div id="chart1">
+
+    </div>
+    </div>
+  </body>
+</html>

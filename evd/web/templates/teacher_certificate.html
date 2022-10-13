@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% load filters %}
+
+<!DOCTYPE html>
+{% block body_container %}
+{{ block.super }}
+<!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
+<link href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" rel="stylesheet">
+<style>
+div.alert{
+    text-align: center;
+}
+div.download_certificate{
+    text-shadow: none;
+    margin-top: 2%;
+    width: 180px;
+}
+ div.download_certificate a{
+    font: initial;
+    text-decoration: none;
+    color: white;
+}
+.btn.btn-success.download_certificate:nth-child(2) {
+    margin-left: 0;
+}
+.btn.btn-success.download_certificate{
+    margin-left: 2%;
+}
+</style>
+
+<div class="container" style="margin-top: 100px;">
+    <div class="row" style="margin: 0;">
+        <div class="alert alert-info">
+            <h4>Click button to download your certificate.</h4>
+            {% if is_teacher %}
+                <div data-role='teacher' class="btn btn-success download_certificate">Teacher Certificate</div>
+            {% endif %}
+            {% if is_centeradmin %}
+                <div data-role='center admin' class="btn btn-success download_certificate">Center Admin Certificate</div>
+            {% endif %}
+            {% if is_contentdev %}
+                <div data-role='content developer' class="btn btn-success download_certificate">Content Dev Certificate</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+<script type="text/javascript" src="/static/js/underscore-min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("div.clearfix").removeClass("inner");
+    //setTimeout(function(){$('.download_certificate').trigger('click');}, 0);
+    //on click download
+    $('body').on('click', '.download_certificate', function(){
+        var role = $(this).attr('data-role');
+        location.href = "/get_certificate/?role=" + role;
+        //setTimeout(function(){location.href = "/myevidyaloka/";}, 2000);
+    });//click
+
+    //scroll
+    $("html, body").animate({
+        scrollTop: $('.alert').offset().top-200
+    }, 10);
+
+});//ready
+</script>
+{% endblock head_scripts %}

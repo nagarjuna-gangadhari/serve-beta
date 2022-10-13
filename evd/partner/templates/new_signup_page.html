@@ -1,0 +1,129 @@
+ {% extends "intermediate_base.html" %} {% block body_container %}
+<div class="col-sm-12 col-md-12 col-lg-12" style="background-color:#ffffff;pading:15px; margin-bottom:34px;">
+    <h1 style="text-align: center;font-size: 24px;font-weight: bold;padding-top: 15px;">Welcome!</h1>
+    <hr> {% if errormsg %}
+    <div class="alert alert-info">
+        <strong>Info!</strong> {{errormsg}}
+    </div>
+    {% endif %} {% if successmsg %}
+    <div class="alert alert-success">
+        <strong>Success!</strong> {{successmsg}}
+    </div>
+    {% endif %}
+    <form method="post" action="/partner/new_signup/">
+        {% csrf_token %}
+        <h2 style="font-size: 16px;font-weight: bold;padding: 15px;">Organization Details</h2>
+        <div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom:7px;">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <label>
+                    Your Name <input name="name" class="form-control" placeholder = "Your name" type="text" required=""/>
+                </label>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <label>
+                    Organization Name <input name="name_of_organization" class="form-control" placeholder = "Organization Name" type="text" required=""/>
+                </label>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom:7px;">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <label>
+                    Organization Email <input type='email' class="form-control" name='email' placeholder="Organization Email" required=""/>
+                </label>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <label>
+                    Organization Phone <input type='phone' class="form-control" title="it should contain 10 digits only" pattern="[1-9]{1}[0-9]{9}"  name='phone' placeholder="Organization Phone" required=""/>
+                </label>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom:7px;">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <label for="id_org_address">
+                    Organization Address
+                </label>
+                <textarea id="id_org_address" class="form-control" name='org_address' placeholder="Organization Address" rows="2" required=""> </textarea>
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12" style="margin-bottom:15px;">
+            <h2 style="font-size: 16px;font-weight: bold;padding: 10px 0px 0px 0px;">Contact Person Details</h2>
+            <span style="font-size:12px;padding-left:15px;">(An user will be created based on the below details and assigned as default Partner Admin)</span>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom:7px;">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <label>
+                    First Name <input class="form-control" name='poc_fname' placeholder="First Name" type="text" required/>
+                </label>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <label>
+                    Last Name <input class="form-control" name='poc_lname' placeholder="Last Name" type="text" required=""/>
+                </label>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom:7px;">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <label>
+                    Email <input class="form-control" name='poc_email' placeholder="Email" type="email" required=""/>
+                </label>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <label>
+                    Phone <input type='phone' class="form-control" title="it should contain 10 digits only" pattern="[1-9]{1}[0-9]{9}"  name='poc_phone' placeholder="Phone" required=""/>
+                </label>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12" style="padding-top:16px; padding-bottom:16px;">
+            <button type="submit" class="btn btn-success pull-right">Sign Up</button>
+        </div>
+    </form>
+
+
+
+
+
+    <!--<div >-->
+    <!--<div class="form">-->
+    <!--<form id="partner-signup-trigger" align="center" style="padding:5px 20px 0px 33px; text-align:left;" >-->
+    <!--<span id="partnertype" class="hide">Volunteer Partner</span>-->
+    <!--<input type="hidden" name="next" value='/myevidyaloka/'/>-->
+
+    <!--<div id='ajax_loader'-->
+    <!--style="position: fixed; left: 48%; top: 48%; display: none; z-index: 999;">-->
+    <!--<img src="/static/img_new/ajax-loader.gif"/>-->
+    <!--</div>-->
+
+    <!--</form>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!-- Global site tag (gtag.js) - Google Ads: 967708218 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-967708218"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'AW-967708218');
+    </script>
+
+
+
+    <script>
+        var successredirect = '{{success}}'
+        if (successredirect) {
+            // Event snippet for DSP Registration conversion page
+            gtag('event', 'conversion', {
+                'send_to': 'AW-967708218/5Al6CMeZ8NUCELqcuM0D'
+            });
+            alert('{{alertmsg}}');
+            setTimeout(function() {
+                window.location = "/myevidyaloka/";
+            }, 2000);
+        }
+    </script>
+</div>
+{% endblock %}

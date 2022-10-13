@@ -1,0 +1,18 @@
+
+Dear {{username}},<br><br><br><br>
+
+
+Many students in the rural communities will benefit from the Assessment sheet that you create and share.<br><br><br>
+
+We are pleased to confirm that you have been assigned to create an Assessment Sheet with Answer keys based on {{topic_name}}, for  {{grade}} {{subject}} from {{board}} in {{language}}. <br><br>
+Please find below the textbook link, guidelines to follow, sample for your reference and template to create the content. Kindly submit the Assessment sheet and the Answer key as separate documents using the template provided below.<br><br>
+<br><br>
+Textbook link: Not Available<br>
+Guideline: https://docs.google.com/document/d/1KFSViQT1UjcoJqqKsZlwFOpHJ_5esOzfCqM3th7F3So/edit?usp=sharing<br>
+Template: Not Available<br>
+Sample: https://onedrive.live.com/edit.aspx?resid=B2056AF1AAD6E0AC!135604&ithint=file%2cdocx&authkey=!ADJY95XFO8rt2O8<br><br><br>
+
+Please login at www.evidyaloka.org/myevidyaloka to view the details of the booked chapter.<br><br><br>
+
+Please feel free to reach out to us for further queries.<br>
+Email id: <content.development@evidyaloka.org><br><br><br>

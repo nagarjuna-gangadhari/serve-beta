@@ -1,0 +1,43 @@
+<html lang="en">
+ <body>
+ <head>
+ <style>
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.button1 {background-color: rgba(3, 186, 0, 0.98);} /* Blue */
+</style>
+ </head>
+ <p>Dear {{ user }},</p>
+
+
+{%  if msg %}
+<p>You have been released slots in {{center_name}}.</p>
+{% else %}
+<p>It has been 3 days since you have booked slots to teach in {{center_name}}.</p>
+<p>We have not received response on the same, and hence are releasing the slots.</p>
+{% endif %}
+<p>Request you to visit Opportunities page (button below) and select another class that suits your
+preferences:</p>
+
+<a class="button button1"  href="http://www.evidyaloka.org/v2/demandList/">Select Your Class</a>
+
+<p>We look forward to your active participation and contributions.</p><br>
+
+<p>With Regards,</p>
+<p>eVidyaloka On-boarding Team</p>
+<p>www.evidyaloka.org</p>
+<p>Skype: evidyaloka.helpdesk | Phone: 080 - 40903939 |</p>
+<p>Email: volunteer@evidyaloka.org</p>
+ </body>
+ 

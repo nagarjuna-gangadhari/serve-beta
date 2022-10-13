@@ -1,0 +1,563 @@
+{% extends "base.html" %}
+
+{% block head_title %}eVidyaLoka - Userprofile{% endblock %}
+
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <script src="/static/js/jquery-ui.min.js"></script>
+{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+    <style>
+        .ui-widget-content .ui-icon {
+            background-image:url('/static/images/ui-icons_222222_256x240.png');
+        }
+    </style>
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+    window.evd.pre_profile_save = function(){
+        var q = "";
+        $("select[multiple='multiple']").each(function() {
+            var $that = $(this);
+            q = "";
+            $.each($(this).children(":selected"), function(index,val) {
+                    q += $(this).attr("value") + ( index < ($that.children(":selected").length - 1) ? ";" : "" );
+            });
+            $(this).prev().val(q);
+        });
+
+        q = "";
+        $(".weekday-checkbox:checked").each(function(index,val){
+            q += $(this).attr("value") + ( index < ($(".weekday-checkbox:checked").length - 1) ?";":"" );
+        });
+        $("input[name='prefered_days']").val(q);
+
+        q = "";
+
+        $.each($("div.timing-inner-wrapper"), function(index,val){
+            q += $(this).children().eq(0).val() + "-" + $(this).children().eq(1).val() + ( index < ($("div.timing-inner-wrapper").length - 1) ? ";" : "");
+            $("input[name='prefered_timings']").val(q);
+        });
+    }
+{% endblock %}
+
+
+{% block body_container %}
+    <div class="row">
+        <div class="span12 trans-block" style="min-height:500px;">
+            <form id="user_settings_form" class="form-horizontal" method="POST" action="/save_user_profile/" >
+                {% csrf_token %}
+                <div class="row">
+                    <div class="span12" style="padding-top:30px">
+                        <h2 style="padding-left:50px;float:left">Your basic information</h2>
+                    </div>
+                    <div class="span5 offset1" style="padding-top:20px;">
+                        <div class="control-group control">
+                            <label class="control-label" for="input01" style="text-align:left;">Skype Id</label>
+                            <div class="controls">
+                                <input type="hidden" class="input-xlarge" id="input01" name="username" value="{{ user.username }}">
+                                <input type="text" class="span2" id="input01" name="skype_id" value="{% if user_profile %}{{ user_profile.skype_id }}{% endif %}">
+                            </div>
+                        </div>
+                         <div class="control-group">
+                            <label class="control-label" for="input01" style="text-align:left;">Email</label>
+                            <div class="controls">
+                                <input type="text" class="span2" id="input01" name="primary_email" value="{{ user.email }}">
+
+                            </div>
+                        </div>
+                         <div class="control-group">
+                            <label class="control-label" for="input01" style="text-align:left;">Phone</label>
+                            <div class="controls">
+                                <input type="text" class="span2" id="input01" name="phone" value="{% if user_profile %}{{ user_profile.phone }}{% endif %}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5" style="padding-top:20px;">
+                        <div class="control-group">
+                            <label class="control-label" for="select01"  style="text-align:left;">Country</label>
+                                <div class="controls">
+                                    <select name="country" class="span2">
+                                        <!--<option value="xx">World wide</option>-->
+                                        <option value="af">Afghanistan</option>
+                                        <option value="dz">Algeria</option>
+                                        <option value="ar">Argentina</option>
+                                        <option value="au">Australia</option>
+                                        <option value="bd">Bangladesh</option>
+                                        <option value="br">Brazil</option>
+                                        <option value="cm">Cameroon</option>
+                                        <option value="ca">Canada</option>
+                                        <option value="co">Colombia</option>
+                                        <option value="dk">Denmark</option>
+                                        <option value="eg">Egypt</option>
+                                        <option value="et">Ethiopia</option>
+                                        <option value="fr">France</option>
+                                        <option value="de">Germany</option>
+                                        <option value="gh">Ghana</option>
+                                        <option value="gr">Greece</option>
+                                        <option value="in">India</option>
+                                        <option value="id">Indonesia</option>
+                                        <option value="iq">Iraq</option>
+                                        <option value="ie">Ireland</option>
+                                        <option value="il">Israel</option>
+                                        <option value="it">Italy</option>
+                                        <option value="jp">Japan</option>
+                                        <option value="ke">Kenya</option>
+                                        <option value="mg">Madagascar</option>
+                                        <option value="my">Malaysia</option>
+                                        <option value="mx">Mexico</option>
+                                        <option value="ma">Morocco</option>
+                                        <option value="mz">Mozambique</option>
+                                        <option value="np">Nepal</option>
+                                        <option value="nl">Netherlands</option>
+                                        <option value="nz">New Zealand</option>
+                                        <option value="ni">Nigeria</option>
+                                        <option value="pk">Pakistan</option>
+                                        <option value="pe">Peru</option>
+                                        <option value="ph">Philippines</option>
+                                        <option value="pl">Poland</option>
+                                        <option value="kr">Republic of Korea</option>
+                                        <option value="ro">Romania</option>
+                                        <option value="ru">Russia</option>
+                                        <option value="sa">Saudi Arabia</option>
+                                        <option value="sg">Singapore</option>
+                                        <option value="za">South Africa</option>
+                                        <option value="es">Spain</option>
+                                        <option value="lk">Sri Lanka</option>
+                                        <option value="se">Sweden</option>
+                                        <option value="ch">Switzerland</option>
+                                        <option value="tw">Taiwan</option>
+                                        <option value="tz">Tanzania</option>
+                                        <option value="th">Thailand</option>
+                                        <option value="tr">Turkey</option>
+                                        <option value="ug">Uganda</option>
+                                        <option value="ua">Ukraine</option>
+                                        <option value="gb">United Kingdom</option>
+                                        <option value="us">United States</option>
+                                        <option value="uz">Uzbekistan</option>
+                                        <option value="ve">Venezuela</option>
+                                        <option value="vn">Vietnam</option>
+                                        <option value="ye">Yemen</option>
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="select01"  style="text-align:left;">State</label>
+                                <div class="controls">
+                                    <input type="text" class="span2" name="state" value="{{ user_profile.state }}" />
+                                </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="select01"  style="text-align:left;">City</label>
+                                <div class="controls">
+                                    <input type="text" class="span2" name="city" value="{{ user_profile.city }}" />
+                                </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="select01"  style="text-align:left;">Time Zone</label>
+                                <div class="controls">
+                                   <select id="user_time_zone" name="time_zone" class="span2">
+                                      <option data-offset="-36000" value="Hawaii">(GMT-10:00) Hawaii</option>
+                                      <option data-offset="-32400" value="Alaska">(GMT-09:00) Alaska</option>
+                                      <option data-offset="-28800" value="Pacific Time (US &amp; Canada)">(GMT-08:00) Pacific Time (US &amp; Canada)</option>
+                                      <option data-offset="-25200" value="Arizona">(GMT-07:00) Arizona</option>
+                                      <option data-offset="-25200" value="Mountain Time (US &amp; Canada)">(GMT-07:00) Mountain Time (US &amp; Canada)</option>
+                                      <option data-offset="-21600" value="Central Time (US &amp; Canada)">(GMT-06:00) Central Time (US &amp; Canada)</option>
+                                      <option data-offset="-18000" value="Eastern Time (US &amp; Canada)">(GMT-05:00) Eastern Time (US &amp; Canada)</option>
+                                      <option data-offset="-18000" value="Indiana (East)">(GMT-05:00) Indiana (East)</option>
+                                      <option data-offset="" value="">-------------</option>
+                                      <option data-offset="-39600" value="International Date Line West">(GMT-11:00) International Date Line West</option>
+                                      <option data-offset="-39600" value="Midway Island">(GMT-11:00) Midway Island</option>
+                                      <option data-offset="-39600" value="Samoa">(GMT-11:00) Samoa</option>
+                                      <option data-offset="-28800" value="Tijuana">(GMT-08:00) Tijuana</option>
+                                      <option data-offset="-25200" value="Chihuahua">(GMT-07:00) Chihuahua</option>
+                                      <option data-offset="-25200" value="Mazatlan">(GMT-07:00) Mazatlan</option>
+                                      <option data-offset="-21600" value="Central America">(GMT-06:00) Central America</option>
+                                      <option data-offset="-21600" value="Guadalajara">(GMT-06:00) Guadalajara</option>
+                                      <option data-offset="-21600" value="Mexico City">(GMT-06:00) Mexico City</option>
+                                      <option data-offset="-21600" value="Monterrey">(GMT-06:00) Monterrey</option>
+                                      <option data-offset="-21600" value="Saskatchewan">(GMT-06:00) Saskatchewan</option>
+                                      <option data-offset="-18000" value="Bogota">(GMT-05:00) Bogota</option>
+                                      <option data-offset="-18000" value="Lima">(GMT-05:00) Lima</option>
+                                      <option data-offset="-18000" value="Quito">(GMT-05:00) Quito</option>
+                                      <option data-offset="-16200" value="Caracas">(GMT-04:30) Caracas</option>
+                                      <option data-offset="-14400" value="Atlantic Time (Canada)">(GMT-04:00) Atlantic Time (Canada)</option>
+                                      <option data-offset="-14400" value="La Paz">(GMT-04:00) La Paz</option>
+                                      <option data-offset="-14400" value="Santiago">(GMT-04:00) Santiago</option>
+                                      <option data-offset="-12600" value="Newfoundland">(GMT-03:30) Newfoundland</option>
+                                      <option data-offset="-10800" value="Brasilia">(GMT-03:00) Brasilia</option>
+                                      <option data-offset="-10800" value="Buenos Aires">(GMT-03:00) Buenos Aires</option>
+                                      <option data-offset="-10800" value="Georgetown">(GMT-03:00) Georgetown</option>
+                                      <option data-offset="-10800" value="Greenland">(GMT-03:00) Greenland</option>
+                                      <option data-offset="-7200" value="Mid-Atlantic">(GMT-02:00) Mid-Atlantic</option>
+                                      <option data-offset="-3600" value="Azores">(GMT-01:00) Azores</option>
+                                      <option data-offset="-3600" value="Cape Verde Is.">(GMT-01:00) Cape Verde Is.</option>
+                                      <option data-offset="0" value="Casablanca">(GMT) Casablanca</option>
+                                      <option data-offset="0" value="Dublin">(GMT) Dublin</option>
+                                      <option data-offset="0" value="Edinburgh">(GMT) Edinburgh</option>
+                                      <option data-offset="0" value="Lisbon">(GMT) Lisbon</option>
+                                      <option data-offset="0" value="London">(GMT) London</option>
+                                      <option data-offset="0" value="Monrovia">(GMT) Monrovia</option>
+                                      <option data-offset="3600" value="Amsterdam">(GMT+01:00) Amsterdam</option>
+                                      <option data-offset="3600" value="Belgrade">(GMT+01:00) Belgrade</option>
+                                      <option data-offset="3600" value="Berlin">(GMT+01:00) Berlin</option>
+                                      <option data-offset="3600" value="Bern">(GMT+01:00) Bern</option>
+                                      <option data-offset="3600" value="Bratislava">(GMT+01:00) Bratislava</option>
+                                      <option data-offset="3600" value="Brussels">(GMT+01:00) Brussels</option>
+                                      <option data-offset="3600" value="Budapest">(GMT+01:00) Budapest</option>
+                                      <option data-offset="3600" value="Copenhagen">(GMT+01:00) Copenhagen</option>
+                                      <option data-offset="3600" value="Ljubljana">(GMT+01:00) Ljubljana</option>
+                                      <option data-offset="3600" value="Madrid">(GMT+01:00) Madrid</option>
+                                      <option data-offset="3600" value="Paris">(GMT+01:00) Paris</option>
+                                      <option data-offset="3600" value="Prague">(GMT+01:00) Prague</option>
+                                      <option data-offset="3600" value="Rome">(GMT+01:00) Rome</option>
+                                      <option data-offset="3600" value="Sarajevo">(GMT+01:00) Sarajevo</option>
+                                      <option data-offset="3600" value="Skopje">(GMT+01:00) Skopje</option>
+                                      <option data-offset="3600" value="Stockholm">(GMT+01:00) Stockholm</option>
+                                      <option data-offset="3600" value="Vienna">(GMT+01:00) Vienna</option>
+                                      <option data-offset="3600" value="Warsaw">(GMT+01:00) Warsaw</option>
+                                      <option data-offset="3600" value="West Central Africa">(GMT+01:00) West Central Africa</option>
+                                      <option data-offset="3600" value="Zagreb">(GMT+01:00) Zagreb</option>
+                                      <option data-offset="7200" value="Athens">(GMT+02:00) Athens</option>
+                                      <option data-offset="7200" value="Bucharest">(GMT+02:00) Bucharest</option>
+                                      <option data-offset="7200" value="Cairo">(GMT+02:00) Cairo</option>
+                                      <option data-offset="7200" value="Harare">(GMT+02:00) Harare</option>
+                                      <option data-offset="7200" value="Helsinki">(GMT+02:00) Helsinki</option>
+                                      <option data-offset="7200" value="Istanbul">(GMT+02:00) Istanbul</option>
+                                      <option data-offset="7200" value="Jerusalem">(GMT+02:00) Jerusalem</option>
+                                      <option data-offset="7200" value="Kyiv">(GMT+02:00) Kyiv</option>
+                                      <option data-offset="7200" value="Pretoria">(GMT+02:00) Pretoria</option>
+                                      <option data-offset="7200" value="Riga">(GMT+02:00) Riga</option>
+                                      <option data-offset="7200" value="Sofia">(GMT+02:00) Sofia</option>
+                                      <option data-offset="7200" value="Tallinn">(GMT+02:00) Tallinn</option>
+                                      <option data-offset="7200" value="Vilnius">(GMT+02:00) Vilnius</option>
+                                      <option data-offset="10800" value="Baghdad">(GMT+03:00) Baghdad</option>
+                                      <option data-offset="10800" value="Kuwait">(GMT+03:00) Kuwait</option>
+                                      <option data-offset="10800" value="Minsk">(GMT+03:00) Minsk</option>
+                                      <option data-offset="10800" value="Nairobi">(GMT+03:00) Nairobi</option>
+                                      <option data-offset="10800" value="Riyadh">(GMT+03:00) Riyadh</option>
+                                      <option data-offset="12600" value="Tehran">(GMT+03:30) Tehran</option>
+                                      <option data-offset="14400" value="Abu Dhabi">(GMT+04:00) Abu Dhabi</option>
+                                      <option data-offset="14400" value="Baku">(GMT+04:00) Baku</option>
+                                      <option data-offset="14400" value="Moscow">(GMT+04:00) Moscow</option>
+                                      <option data-offset="14400" value="Muscat">(GMT+04:00) Muscat</option>
+                                      <option data-offset="14400" value="St. Petersburg">(GMT+04:00) St. Petersburg</option>
+                                      <option data-offset="14400" value="Tbilisi">(GMT+04:00) Tbilisi</option>
+                                      <option data-offset="14400" value="Volgograd">(GMT+04:00) Volgograd</option>
+                                      <option data-offset="14400" value="Yerevan">(GMT+04:00) Yerevan</option>
+                                      <option data-offset="16200" value="Kabul">(GMT+04:30) Kabul</option>
+                                      <option data-offset="18000" value="Islamabad">(GMT+05:00) Islamabad</option>
+                                      <option data-offset="18000" value="Karachi">(GMT+05:00) Karachi</option>
+                                      <option data-offset="18000" value="Tashkent">(GMT+05:00) Tashkent</option>
+                                      <option data-offset="19800" value="Chennai" selected="">(GMT+05:30) Chennai</option>
+                                      <option data-offset="19800" value="Kolkata">(GMT+05:30) Kolkata</option>
+                                      <option data-offset="19800" value="Mumbai">(GMT+05:30) Mumbai</option>
+                                      <option data-offset="19800" value="New Delhi">(GMT+05:30) New Delhi</option>
+                                      <option data-offset="20700" value="Kathmandu">(GMT+05:45) Kathmandu</option>
+                                      <option data-offset="21600" value="Almaty">(GMT+06:00) Almaty</option>
+                                      <option data-offset="21600" value="Astana">(GMT+06:00) Astana</option>
+                                      <option data-offset="21600" value="Dhaka">(GMT+06:00) Dhaka</option>
+                                      <option data-offset="21600" value="Ekaterinburg">(GMT+06:00) Ekaterinburg</option>
+                                      <option data-offset="21600" value="Sri Jayawardenepura">(GMT+06:00) Sri Jayawardenepura</option>
+                                      <option data-offset="23400" value="Rangoon">(GMT+06:30) Rangoon</option>
+                                      <option data-offset="25200" value="Bangkok">(GMT+07:00) Bangkok</option>
+                                      <option data-offset="25200" value="Hanoi">(GMT+07:00) Hanoi</option>
+                                      <option data-offset="25200" value="Jakarta">(GMT+07:00) Jakarta</option>
+                                      <option data-offset="25200" value="Novosibirsk">(GMT+07:00) Novosibirsk</option>
+                                      <option data-offset="28800" value="Beijing">(GMT+08:00) Beijing</option>
+                                      <option data-offset="28800" value="Chongqing">(GMT+08:00) Chongqing</option>
+                                      <option data-offset="28800" value="Hong Kong">(GMT+08:00) Hong Kong</option>
+                                      <option data-offset="28800" value="Krasnoyarsk">(GMT+08:00) Krasnoyarsk</option>
+                                      <option data-offset="28800" value="Kuala Lumpur">(GMT+08:00) Kuala Lumpur</option>
+                                      <option data-offset="28800" value="Perth">(GMT+08:00) Perth</option>
+                                      <option data-offset="28800" value="Singapore">(GMT+08:00) Singapore</option>
+                                      <option data-offset="28800" value="Taipei">(GMT+08:00) Taipei</option>
+                                      <option data-offset="28800" value="Ulaan Bataar">(GMT+08:00) Ulaan Bataar</option>
+                                      <option data-offset="28800" value="Urumqi">(GMT+08:00) Urumqi</option>
+                                      <option data-offset="32400" value="Irkutsk">(GMT+09:00) Irkutsk</option>
+                                      <option data-offset="32400" value="Osaka">(GMT+09:00) Osaka</option>
+                                      <option data-offset="32400" value="Sapporo">(GMT+09:00) Sapporo</option>
+                                      <option data-offset="32400" value="Seoul">(GMT+09:00) Seoul</option>
+                                      <option data-offset="32400" value="Tokyo">(GMT+09:00) Tokyo</option>
+                                      <option data-offset="34200" value="Adelaide">(GMT+09:30) Adelaide</option>
+                                      <option data-offset="34200" value="Darwin">(GMT+09:30) Darwin</option>
+                                      <option data-offset="36000" value="Brisbane">(GMT+10:00) Brisbane</option>
+                                      <option data-offset="36000" value="Canberra">(GMT+10:00) Canberra</option>
+                                      <option data-offset="36000" value="Guam">(GMT+10:00) Guam</option>
+                                      <option data-offset="36000" value="Hobart">(GMT+10:00) Hobart</option>
+                                      <option data-offset="36000" value="Melbourne">(GMT+10:00) Melbourne</option>
+                                      <option data-offset="36000" value="Port Moresby">(GMT+10:00) Port Moresby</option>
+                                      <option data-offset="36000" value="Sydney">(GMT+10:00) Sydney</option>
+                                      <option data-offset="36000" value="Yakutsk">(GMT+10:00) Yakutsk</option>
+                                      <option data-offset="39600" value="New Caledonia">(GMT+11:00) New Caledonia</option>
+                                      <option data-offset="39600" value="Solomon Is.">(GMT+11:00) Solomon Is.</option>
+                                      <option data-offset="39600" value="Vladivostok">(GMT+11:00) Vladivostok</option>
+                                      <option data-offset="43200" value="Auckland">(GMT+12:00) Auckland</option>
+                                      <option data-offset="43200" value="Fiji">(GMT+12:00) Fiji</option>
+                                      <option data-offset="43200" value="Kamchatka">(GMT+12:00) Kamchatka</option>
+                                      <option data-offset="43200" value="Magadan">(GMT+12:00) Magadan</option>
+                                      <option data-offset="43200" value="Marshall Is.">(GMT+12:00) Marshall Is.</option>
+                                      <option data-offset="43200" value="Wellington">(GMT+12:00) Wellington</option>
+                                      <option data-offset="46800" value="Nuku'alofa">(GMT+13:00) Nuku'alofa</option>
+                                  </select>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="span12">
+                        <h2 style="padding-left:50px;float:left">Preferences</h2>
+                    </div>
+                    <div class="span12 offset1" style="padding-top:20px">
+                        <div class="control-group">
+                            <label class="control-label" for="input01" style="text-align:left;width:100%">Select one of the Offerings</label>
+                            <div class="controls" style="margin-left:0px">
+                                <input type="hidden" name="prefered_offerings" />
+                                <select id="prefered_thisoffering" multiple="multiple" style="width:74.5%;">
+                                {% for offering in session_offering %}
+                                    <option value="{{ offering.offering.id }}">{{ offering.offering }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5 offset1" style="padding-top:30px">
+                        <div class="control-group">
+                            <label class="control-label" for="select01"  style="text-align:left;">Prefered days</label>
+                                <div id=prefered_days"" class="controls">
+                                    <div class="span1" style="margin-left:0px;">
+                                        <input type="hidden" name="prefered_days" />
+                                        <label class="checkbox">Mon
+                                            <input type="checkbox" class="weekday-checkbox" value="mon">
+                                        </label>
+                                        <label class="checkbox">Tue
+                                            <input type="checkbox" class="weekday-checkbox" value="tue">
+                                        </label>
+                                        <label class="checkbox">Wed
+                                            <input type="checkbox" class="weekday-checkbox" value="wed">
+                                        </label>
+                                    </div>
+                                    <div class="span1">
+                                        <label class="checkbox">Thur
+                                            <input type="checkbox" class="weekday-checkbox" value="thu">
+                                        </label>
+                                        <label class="checkbox">Fri
+                                            <input type="checkbox" class="weekday-checkbox" value="fri">
+                                        </label>
+                                        <label class="checkbox">Sat
+                                            <input type="checkbox" class="weekday-checkbox" value="sat">
+                                        </label>
+                                    </div>
+                                  <!--< select id="prefered_days" multiple="multiple" class="span2">
+                                        <option value="Mon">Mon</option>
+                                        <option value="Tue">Tue</option>
+                                        <option value="Wed">Wed</option>
+                                        <option value="Thu">Thu</option>
+                                        <option value="Fri">Fri</option>
+                                        <option value="Sat">Sat</option>
+                                        <option value="Sun">Sun</option>
+                                    </select> -->
+                                </div>
+                        </div>
+                        <div class="control-group">
+                                <label class="control-label" for="select01"  style="text-align:left;">Prefered timings</label>
+                                    <div class="timing-wrapper" style="width:144px;float:left">
+                                        <input type="hidden" name="prefered_timings" />
+                                        <div class="timing-inner-wrapper">
+                                            <select class="span1" style="margin-left:20px" name="prefered_timings_mor"  >
+                                                    <option>From</option>
+                                                {% for i in 1234567891011|make_list %}
+                                                    <option value="{{ forloop.counter0 }}">{{ forloop.counter0 }}:00</option>
+                                                {% endfor %}
+                                                {% for i in 12345678910|make_list %}
+                                                    <option value="{{ forloop.counter|add_digits:12 }}">{{ forloop.counter|add_digits:12 }}:00</option>
+                                                {% endfor %}
+                                            </select>
+                                            <select class="span1" name="prefered_timings_eve" >
+                                                    <option>To</option>
+                                                {% for i in 1234567891011|make_list %}
+                                                    <option value="{{ forloop.counter0 }}">{{ forloop.counter0 }}:00</option>
+                                                {% endfor %}
+                                                {% for i in 12345678910|make_list %}
+                                                    <option value="{{ forloop.counter|add_digits:12 }}">{{ forloop.counter|add_digits:12 }}:00</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <a href="#" id="add-timing" class="btn" style="float:left;margin-left:5px"><i class="icon-plus" style="background-position: -408px -96px;"></i></a>
+                                    <div style="clear:both"></div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="select01"  style="text-align:left;">Prefered Subjects</label>
+                                <div class="controls">
+                                    <input type="hidden" name="prefered_subjects" />
+                                    <select id="prefered_subjects" multiple="multiple" class="span2" >
+                                        {% for course in courses %}
+                                            <option value="{{ course.subject }}">{{ course.subject }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="span5" style="padding-top:30px;">
+                        <div class="control-group">
+                            <label class="control-label" for="select01"  style="text-align:left;">Role</label>
+                                <div class="controls">
+                                    <input type="hidden" name="prefered_roles" />
+                                    <select id="prefered_roles" multiple="multiple" class="span2" >
+                                        {% for role in roles %}
+                                            <option value="{{ role }}">{{ role }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="control-group">
+                                <label class="control-label" for="input01" style="text-align:left;">Medium</label>
+                                <div class="controls">
+                                    <input type="hidden" name="prefered_medium">
+                                    <select id="medium" multiple="multiple" class="span2">
+                                        <option>Telugu</option>
+                                        <option>English</option>
+                                        <option>Hindi </option>
+                                    </select>
+                                </div>
+                        </div>
+                        <!--
+                        <div class="control-group">
+                                <label class="control-label" for="input01" style="text-align:left;">Network</label>
+                                <div class="controls">
+                                    <input type="text" class="span2" id="input01" name="network"  value="{% if user_profile %}{{ user_profile.auth_network }}{% endif %}">
+                                </div>
+                        </div>
+                        -->
+                        <div class="control-group">
+                                <label class="control-label" for="input01" style="text-align:left;">Available from</label>
+                                <div class="controls">
+                                    <input type="text" class="span2" id="from-date" name="from_date" value="{% if user_profile.from_date %}{{ user_profile.from_date.year }}-{{ user_profile.from_date.month }}-{{ user_profile.from_date.day }}{% endif %}">
+                                </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="input01" style="text-align:left;">Available upto</label>
+                            <div class="controls">
+                                <input type="text" class="span2" id="to-date" name="to_date" value="{% if user_profile.to_date %}{{ user_profile.to_date.year }}-{{ user_profile.to_date.month }}-{{ user_profile.to_date.day }}{% endif %}">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <a rel="submit" href="#user_settings_form" class="btn btn-primary pull-right" pre-call="pre_profile_save" style="margin-right:80px;">
+                                    <span class="ajax-button-label" data-loading="Please Wait">Save</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock body_container %}
+
+{% block bottom_scripts %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function(){
+            var curr_date = new Date(),
+                curr_day = curr_date.getDate(),
+                curr_month = curr_date.getMonth() + 1,
+                curr_year = curr_date.getFullYear(),
+                min_date = curr_year +"-"+ curr_month +"-"+ curr_day;
+
+            var future_date = new Date(curr_date.setMonth(curr_date.getMonth()+1.5)),
+                future_day = future_date.getDate(),
+                future_month = future_date.getMonth() + 1,
+                future_year = future_date.getFullYear(),
+                max_date = future_year +"-"+ future_month +"-"+ future_day;
+
+            $("input[name='from_date']").datepicker({
+                dateFormat: "yy-mm-dd",
+                minDate: min_date,
+            });
+            $("input[name='to_date']").datepicker({
+                dateFormat: "yy-mm-dd",
+                minDate: max_date,
+            });
+            $("#add-timing").click(function(e) {
+                var $wrapper = $(this).prev("div.timing-wrapper");
+                var $clone = $wrapper.children("div.timing-inner-wrapper").slice(0,1).clone(false);
+                $wrapper.append($clone);
+                e.preventDefault();
+            });
+
+            var pref_days = "{{ user_profile.pref_days }}";
+            pref_days = pref_days.split(";");
+            for( var day in pref_days)
+            {
+                //$("#prefered_days").children("option[value='"+ pref_days[day] +"']").attr({"selected": "selected"});
+                $(".weekday-checkbox").each(function() {
+                    if($(this).attr("value") === pref_days[day]){
+                        $(this).attr({"checked" : "checked"});
+                    }
+                });
+            }
+
+            var pref_offerings = "{{ pref_offerings }}";
+            pref_subjects = pref_subjects.split(";");
+            for( var offer in pref_offerings )
+            {
+                sub = offer.course.subject
+                $("#prefered_subjects").children("option[value='" + pref_subjects[sub] + "']").attr({"selected":"selected"});
+            }
+
+            var pref_roles = "{{ user_profile.pref_roles}}";
+            pref_roles = pref_roles.split(";");
+            for( var role in pref_roles )
+            {
+                $("#prefered_roles").children("option[value='" + pref_roles[role] + "']").attr({"selected":"selected"});
+            }
+
+            var pref_offerings = "{{ user_profile.pref_offerings}}";
+            pref_offerings = pref_offerings.slice(0,-1).split(";");
+            for( var offering in pref_offerings )
+            {
+                $("#prefered_thisoffering").children("option[value='" + pref_offerings[offering] + "']").attr({"selected":"selected"});
+            }
+
+            var pref_medium = "{{ user_profile.pref_medium }}";
+            pref_medium = pref_medium.split(";");
+            for( var medium in pref_medium )
+            {
+                $("#medium").children("option[value='" + pref_medium[medium] + "']").attr({"selected":"selected"});
+            }
+
+            var pref_slots = "{{ user_profile.pref_slots }}";
+            pref_slots = pref_slots.split(";");
+            pref_slot1 = pref_slots[0].split("-");
+            $children1 = $("div.timing-inner-wrapper").children("select");
+            $children1.eq(0).children("option[value='"+ pref_slot1[0] +"']").attr({"selected": "selected"});
+            $children1.eq(1).children("option[value='"+ pref_slot1[1] +"']").attr({"selected": "selected"});
+
+            pref_slots = pref_slots.slice(1);
+
+            if(pref_slots.length > 0){
+                $.each(pref_slots,function(i,v){
+                    curr_pref_slot = pref_slots[i].split("-");
+                    $("#add-timing").trigger("click");
+                    $children = $("div.timing-inner-wrapper").eq(i).children("select");
+                    $children.eq(0).children("option[value='"+ curr_pref_slot[0] +"']").attr({"selected": "selected"});
+                    $children.eq(1).children("option[value='"+ curr_pref_slot[1] +"']").attr({"selected": "selected"});
+                });
+           }
+
+           var country = "{{ user_profile.country}}";
+           $("select[name='country']").children("option[value='"+ country +"']").attr({"selected": "selected"});
+
+           var time_zone = "{{user_profile.time_zone}}";
+           $("select[name='time_zone']").children("option[value='"+ time_zone + "']").attr({"selected" : "selected"});
+        });
+    </script>
+{% endblock %}

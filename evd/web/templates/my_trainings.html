@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+{% block head_styles %}
+{{ block.super }}
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="/static/css/mytrainings.css"/>
+{% endblock %}
+
+{% block doc_ready %}
+{{ block.super }}
+
+
+
+
+{% endblock %}
+{% block head_scripts %}
+{{ block.super }}
+<script>
+$(document).ready(function(){
+                $(".html").colorbox({iframe:true, fastIframe:false, width:"70%", height:"90%", transition:"fade", scrolling:true, onClosed:function(){  location.reload(true); }, onComplete: function(){
+                var attb = $(this).attr('data-id');
+                var stn = " data-idt="+attb+" ";
+                var titl = $(this).attr('data-name');
+                var scrpt2 = '$.colorbox.close();'
+                var scrpt = '$.post("/mark_complete/", {"training_id":$(this).attr("data-idt"),csrfmiddlewaretoken: document.getElementsByName("csrfmiddlewaretoken")[0].value }).done(function(){ if (confirm("Thank you!  Do you want to close this window?") == true) {$.colorbox.close() } }).error(function(){alert("Try again")});'
+
+                var buttn = "<a class='btn mark_complete' "+ stn +" style='cursor:pointer;width:163px;display:inline-block;float:right;margin-top:-3px;margin-right:47px;font-size:14px;background-color:#337AB7' onclick=' "+scrpt +" ' > Hey! I have Completed</a> ";
+                var buttn2 = "<a class='btn close1'  style='cursor:pointer;width:145px;display:inline-block;float:right;right:0;margin-top:-3px;margin-right:21px;background-color:#C9302C;font-size:14px;' onclick=' "+scrpt2 +" ' > Close</a> ";
+
+                $("iframe.cboxIframe").contents().find('.right-content').css('margin-left','70px');
+                $("iframe.cboxIframe").contents().find('#footer, #uvTab, .header_full, .left-nav, .dashboard-breadcrumb').remove();
+                $('#cboxLoadedContent').css('margin-bottom','0px');
+                $('#cboxLoadedContent').prepend("<div style='width:101%; height:48px;text-align:left;padding:10px;color:white;background-color:#27ae60'>"+ titl +buttn2+buttn+" </div>");
+                $('#cboxLoadedContent').css('overflow','hidden');
+                $('html').css({ overflow: 'hidden'});
+                } });
+
+
+                $(".video").colorbox({iframe:true, fastIframe:false, width:"70%", height:"90%", transition:"fade", scrolling:false,  onClosed:function(){  location.reload(true); }, onComplete: function(){
+                var attb = $(this).attr('data-id');
+                var stn = " data-idt="+attb+" ";
+                var titl = $(this).attr('data-name');
+                var scrpt2 = '$.colorbox.close();'
+                var scrpt = '$.post("/mark_complete/", {"training_id":$(this).attr("data-idt"),csrfmiddlewaretoken: document.getElementsByName("csrfmiddlewaretoken")[0].value }).done(function(){ if (confirm("Thank you!  Do you want to close this window?") == true) {$.colorbox.close() } }).error(function(){alert("Try again")});'
+
+                var buttn = "<a class='btn mark_complete' "+ stn +" style='cursor:pointer;width:163px;display:inline-block;float:right;margin-top:-3px;margin-right:47px;font-size:14px;background-color:#337AB7' onclick=' "+scrpt +" ' > Hey! I have Completed</a> ";
+                var buttn2 = "<a class='btn close1'  style='cursor:pointer;width:145px;display:inline-block;float:right;right:0;margin-top:-3px;margin-right:21px;background-color:#C9302C;font-size:14px;' onclick=' "+scrpt2 +" ' > Close</a> ";
+
+                $('#cboxLoadedContent').css('margin-bottom','0px');
+                $('#cboxLoadedContent').prepend("<div style='width:101%; height:48px;text-align:left;padding:10px;color:white;background-color:#27ae60;position:absolute'>"+ titl +buttn2+buttn+" </div>");
+                $('#cboxLoadedContent').css('overflow','hidden');
+                 $('html').css({ overflow: 'hidden'}); 
+
+
+                }
+                });
+                $(".pdf").colorbox({iframe:true, fastIframe:false, width:"83%", height:"90%", transition:"fade", scrolling:true, 
+               
+               onLoad:function(){ 
+                      $('#cboxClose').css('visibility','visible'); 
+                      alert('Some Browsers may download the file. Please read it and mark it as complete here!');
+                      var attb = $(this).attr('data-id');
+                      var stn = " data-idt="+attb+" ";
+                      var titl = $(this).attr('data-name');
+                      var scrpt2 = '$.colorbox.close();'
+                      var scrpt = '$.post("/mark_complete/", {"training_id":$(this).attr("data-idt"),csrfmiddlewaretoken: document.getElementsByName("csrfmiddlewaretoken")[0].value }).done(function(){ if (confirm("Thank you!  Do you want to close this window?") == true) {$.colorbox.close() } }).error(function(){alert("Try again")});'
+
+                      var buttn = "<a class='btn mark_complete' "+ stn +" style='cursor:pointer;width:163px;display:inline-block;float:right;margin-top:100px;margin-right:47px;font-size:14px;background-color:#337AB7' onclick=' "+scrpt +" ' >Hey! I have Completed</a> ";
+                      var buttn2 = "<a class='btn close1'  style='cursor:pointer;width:145px;display:inline-block;margin-top:-100px;float:right;;margin-top:100px;margin-right:400px;background-color:#C9302C;font-size:14px;' onclick=' "+scrpt2 +" ' > Close</a> ";
+                      var tex = " <p style='background-color:white;padding:20px;'> Some Browsers may download this file. Please find it in your Downloads and complete reading it.. After that please mark it as complete here!..</p> ";
+
+                      $('#cboxContent').html('<div id="err_msg" style="margin-top:-200px;background-color:#7276ea;border-radius:50px;position:relative;height:100%;width:100%;"> '+ tex +buttn2+buttn+ ' </div>') 
+
+                 },
+
+             onClosed:function(){  location.reload(true); }, 
+             onComplete: function(){
+                $('#cboxContent') .find('#err_msg').remove();
+                var attb = $(this).attr('data-id');
+                var stn = " data-idt="+attb+" ";
+                var titl = $(this).attr('data-name');
+                var scrpt2 = '$.colorbox.close();'
+                var scrpt = '$.post("/mark_complete/", {"training_id":$(this).attr("data-idt"),csrfmiddlewaretoken: document.getElementsByName("csrfmiddlewaretoken")[0].value }).done(function(){ if (confirm("Thank you!  Do you want to close this window?") == true) {$.colorbox.close() } }).error(function(){alert("Try again")});'
+
+                var buttn = "<a class='btn mark_complete' "+ stn +" style='cursor:pointer;width:163px;display:inline-block;float:right;margin-top:-3px;margin-right:47px;font-size:14px;background-color:#337AB7' onclick=' "+scrpt +" ' >Hey! I have Completed</a> ";
+                var buttn2 = "<a class='btn close1'  style='cursor:pointer;width:145px;display:inline-block;float:right;right:0;margin-top:-3px;margin-right:21px;background-color:#C9302C;font-size:14px;' onclick=' "+scrpt2 +" ' > Close</a> ";
+
+                $('#cboxLoadedContent').css('margin-bottom','0px');
+                $('#cboxLoadedContent').prepend("<div style='width:101%; height:48px;text-align:left;padding:10px;color:white;background-color:#27ae60'>"+ titl +buttn2+buttn+" </div>");
+                $('#cboxLoadedContent').css('overflow','hidden');
+                 $('html').css({ overflow: 'hidden'}); 
+                 $('#cboxClose').css('visibility','visible')
+
+                }
+
+                 });
+
+$(function(){
+$('.complete').click(function(event){
+    event.preventDefault();
+    alert("worked");
+    var trai_id = $(this).attr('data-id');
+    $.post('/mark_complete/', {'training_id':trai_id,csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value }).done(alert('success').error(alert(fail))); 
+    });
+});
+
+
+/*if(window.location.hash = "#contentdeveloper"){
+    $("html, body").animate({ scrollTop: $(document).height() }, 10);
+}*/
+$(".training_hdr").each(function(){
+    if($(this).children("h10").html().substring(1,3) === "L3"){
+        $(this).children("h10").addClass("contentdeveloper");
+    }
+});
+setTimeout(function(){
+if(window.location.hash = "#contentdeveloper"){
+        $("html, body").animate({
+            scrollTop: $('.contentdeveloper').offset().top-150
+        }, 10);
+}
+},0);
+
+
+
+                            });
+</script>
+{% endblock %}
+{% block body_container %}
+{{ block.super }}
+<div id="title">
+
+<h11>My Trainings  </h11>
+
+</div>
+
+<div id="main-content">
+    {% for  k,v  in trainings.iteritems %}
+    <div class="training_hdr">
+    <h10> {{ k }}   Trainings </h10>
+    </div>
+    {% for  ele in v %}
+
+       {% if ele.content_type == "Html" %}
+          <div class="thumb">
+          <img  src="/static/images/mytraining.jpg"/>
+          {% if ele.id in  completed %}
+          <img id="tag" src="/static/images/completed_y.gif"/>
+          {% endif %}
+          <div style="height:16px;">
+
+          <p  class="resize" >{{ ele.name }}</p>
+          </div>
+        <a  class="btn  html" data-name='{{ ele.name }}' data-id={{ ele.id }}  href='{{ ele.url }}'>Take</a>
+
+        </div>
+
+
+
+        {% elif  ele.content_type == "Youtube Video" %}
+          <div class="thumb">
+          <img src="/static/images/mytraining.jpg"/>
+          {% if ele.id in  completed %}
+          <img id="tag" src="/static/images/completed_y.gif"/>
+          {% endif %}
+
+          <div style="height:16px;">
+
+          <p  class="resize"     >{{ ele.name }}</p>
+          </div>
+        <a  class="btn  video" data-id='{{ ele.id }}' data-name='{{ ele.name }}'   href='{{ ele.url }}'>Take</a>
+
+        </div>
+
+
+        {% elif  ele.content_type == "Pdf" %}
+          <div class="thumb">
+          <img  src="/static/images/mytraining.jpg"/>
+          {% if ele.id in  completed %}
+          <img id="tag" src="/static/images/completed_y.gif"/>
+          {% endif %}
+
+          <div style="height:16px;">
+          <p  class="resize"       >{{ ele.name }}</p>
+          </div>
+        <a  class="btn  pdf" data-id='{{ ele.id }}' data-name='{{ ele.name  }}'   href='{{ ele.url }}'>Take </a>
+        </div>
+
+        {% endif %}
+    {% endfor %}
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block bottom_scripts %}
+{{ block.super }}
+{% endblock %}
+
+

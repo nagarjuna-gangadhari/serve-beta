@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+<ul class="dashboard-breadcrumb">
+    <li class="header">
+        <a href="/myevidyaloka/">My eVidyaloka</a>
+        <span class="divider">&gt;</span>
+    </li>
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="/user_profile/">My Profile<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a href="/user_profile/">Personal Info</a></li>
+            {% if is_teacher %}
+            <li><a href="/user_profile/#preferences">OnBoarding Info</a></li>
+            <li><a href="/user_profile/#readiness">Readiness</a></li>
+            {% endif %}
+        </ul>
+        <span class="divider">|</span>
+    </li>
+    {% if user_centers %}
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown">My Centers<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            {% for center in user_centers %}
+                <li><a href="/centeradmin/?center_id={{ center.id }}">{{ center }}</a></li>
+            {% endfor %}
+        </ul>
+        <span class="divider">|</span>
+    </li>
+    {% endif %}
+    <li>
+         <a href="#mystudents" data-toggle="modal">My Students</a>
+         <span class="divider">|</span>
+    </li>
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown">Courses<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="#add-course-modal" data-toggle="modal">Add Course</a>
+            </li>
+        </ul>
+        <span class="divider">|</span>
+    </li>
+    <li>
+        <a href="/teachers/?role=Teacher&medium={{ center.language }}">Find teachers</a>
+        {% if is_teacher %}
+        <span class="divider">|</span>
+        {% endif %}
+    </li>
+
+    {% if is_teacher %}
+    <li>
+        <a href="/teacherdash/">My Teacher dashboard</a>
+    </li>
+    {% endif %}
+</ul>

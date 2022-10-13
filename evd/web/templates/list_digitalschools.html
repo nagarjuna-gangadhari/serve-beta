@@ -1,0 +1,811 @@
+<style>
+    /* custom css for radio button */
+    .radio_margin {
+      display: block;
+      position: relative;
+      padding-left: 24px;
+      margin-bottom: -14px;
+      cursor: pointer;
+      font-size: 22px;
+    <!--  -webkit-user-select: none;-->
+    <!--  -moz-user-select: none;-->
+    <!--  -ms-user-select: none;-->
+    <!--  user-select: none;-->
+    <!--  left=12pt;-->
+    }
+    
+    /* Hide the browser's default radio button */
+    .radio_margin input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .paginate_button{
+        font-family: sans-serif !important;
+    }
+    
+    /* Create a custom radio button */
+    .checkmark {
+      position: absolute;
+      top: -19;
+      left: 79;
+      height: 27px;
+      width: 27px;
+      background-color: #eee;
+      border-radius: 50%;
+    }
+    
+    /* On mouse-over, add a grey background color */
+    .radio_margin:hover input ~ .checkmark {
+      background-color: #ccc;
+    }
+    
+    /* When the radio button is checked, add a blue background */
+    .radio_margin input:checked ~ .checkmark {
+      background-color: #2196F3;
+    }
+    
+    /* Create the indicator (the dot/circle - hidden when not checked) */
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+    
+    /* Show the indicator (dot/circle) when checked */
+    .radio_margin input:checked ~ .checkmark:after {
+      display: block;
+    }
+    
+    /* Style the indicator (dot/circle) */
+    .radio_margin .checkmark:after {
+         top: 10px;
+        left: 9px;
+        width: 9px;
+        height: 8px;
+        border-radius: 50%;
+        background: white;
+    }
+    
+           thead{
+            background-color: #27a3e2 !important;
+            color: white;
+            /*display: block;*/
+        }
+           .btn-submit {
+        color: white!important;
+        background: #47b3e1!important;
+        border-radius: 1!important;
+    
+    }
+       .btn-sm{
+       background:#ee9c39;
+       color: white!important;
+    
+        border-radius: 1!important;
+       }
+       tfoot {
+        display: table-header-group !important;
+    }
+    <!--{% if isExternal %}-->
+    <!-- tbody{-->
+    <!--       height:193px;-->
+    <!--       display:block !important;-->
+    <!--       overflow-y:scroll-->
+    <!--     }-->
+    <!--     thead  ,tbody tr {-->
+    <!--    display:table !important;-->
+    <!--    width:100%;-->
+    <!--    table-layout:fixed !important;-->
+    
+    <!--}-->
+    {% endif %}
+    <!-- .tableCaption{-->
+    <!--            padding: 20px;-->
+    <!--            text-align: center !important;-->
+    <!--            font-size: 23px;-->
+    <!--&lt;!&ndash;            font-weight: bold;&ndash;&gt;-->
+    <!--            /*background-color: #27A3E2;*/-->
+    <!--            color: Black;-->
+    <!--        }-->
+    
+    /* css for step-progress bar */
+        .step-progress {
+                 counter-reset: step;
+            }
+      .step-progress li {
+          list-style-type: none;
+          width: 25%;
+          float: left;
+          font-size: 12px;
+          position: relative;
+          text-align: center;
+          text-transform: uppercase;
+          color: #7d7d7d;
+      }
+      /* .row a{
+        line-height: 0px !important;
+      } */
+    
+      #test{
+          padding-top: 9%;
+          font-family: sans-serif;
+      }
+      .step-progress li:before {
+          width: 43px;
+          height: 41px;
+          content: counter(step);
+          counter-increment: step;
+          line-height: 35px;
+          border: 2px solid #7d7d7d;
+          display: block;
+          text-align: center;
+          margin: 0 auto 10px auto;
+          border-radius: 50%;
+          background:#e0e0e0;
+          border: 2px solid white;
+          box-shadow: 0px 0px 5px #ccc;
+      }
+      .step-progress li:after {
+          width: 84%;
+          height: 2px;
+          content: '';
+          position: absolute;
+          background-color: #7d7d7d;
+          top: 19px;
+          left: -42%;
+          z-index:1;
+      }
+      .step-progress li:first-child:after {
+          content: none;
+      }
+      .step-progress li.active {
+          color: black;
+    
+      }
+       .step-progress li.step2 {
+          color: black;
+      }
+       .step-progress li.step3 {
+          color: black;
+      }
+         .step-progress li.step4 {
+          color: black;
+      }
+    
+      .step-progress li.active:before {
+            background: #59dfe6;
+            box-shadow: 0px 0px 5px #327bb9;
+      }
+      .step-progress li.step2:before {
+            background:#f19934;
+            box-shadow : 0px 0px 5px #d8580d;
+      }
+      .step-progress li.step3:before {
+            background: #ea6398;
+            box-shadow: 0px 0px 5px #c451d2;
+    
+      }
+       .step-progress li.step4:before {
+    
+    
+            background:#65cd66 ;
+           box-shadow: 0px 0px 5px #5fdb6a;
+      }
+      .step-progress li.active + li:after {
+          background-color: #5ccdfc;
+          width: 84%;
+      }
+        .step-progress li.step2 + li:after {
+            background-color: #f19934;
+            width: 84%;
+      }
+          .step-progress li.step3 + li:after {
+          background-color:#ea6398;
+          width: 84%;
+      }
+      .search_margin {
+        font-size: 12px;
+        display: block;
+        width: 80%;
+        height: 100%;
+        padding: 5px 0px;
+        background: none;
+        background-image: none;
+        border: 1px solid #a0b3b0;
+        #color: #ffffff;
+        border-radius: 5px;
+        -webkit-transition: border-color .25s ease, box-shadow .25s ease;
+        transition: border-color .25s ease, box-shadow .25s ease;
+    }
+    .dataTables_filter{
+                margin-bottom: -38pt !important;
+                display: none !important;
+            }
+    #myTable_length{
+        display:none !important;
+    }
+    input{
+        font-weight: normal;
+    }
+    
+    </style>  
+    <div class="col-md-12 col-sm-12 col-xm-12 col-lg-12" style = "top:15px;padding-left: 0px;" >
+        <div style="overflow-x:auto;">
+            {% if   isExternal %}
+            <button class="btn btn-sm btn-submit float-right" style="font-family: sans-serif; font-size: 1.2em;margin-bottom: 5px;margin-right: 3px;" title="Add School" onclick="location.href='/school/search/'">Add School</button>
+            {% endif %}
+    
+            <table class="table table-bordered dataTable " id="myTable" role="grid" aria-describedby="myTable_info">
+                {% if   isExternal %}
+                {% else %}
+                    {% if is_school_admin %}
+                        <div class="tableCaption">School Admin School List</div>
+                    {% else %}
+                        <div class="tableCaption">Digital School List</div>
+                    {% endif %}
+                <br>
+                       <!-- <button class="btn btn-success pull-left" title="Add School" onclick="location.href='/school/search/'">Add School</button>
+                        <input id="searchInWholeTable" type="text" placeholder="Search" class="form-control" style="width: 120px; float: right"> -->
+    
+                        <br>
+                    </div>
+                    <br>
+    
+                {% endif %}
+                <thead>
+                    <tr>
+                        {% if isExternal %}
+                        <th></th>
+                        {% else %}
+                        <th>Organisation Name</th>
+                        {% endif %}
+                        <th>School Name</th>
+                        <th>Taluk Name</th>
+                        <th>Status</th>
+                        {% if not is_school_admin %}
+                            <th>
+                                
+                                    {% if isExternal %}
+                                    Stages
+                                    {% else %}
+                                        View & Update
+                                    {% endif %}
+                            </th>
+                         {% endif %}
+                         <th>State Name</th>
+                         <th>Added By</th>
+                         <th>Added On</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+    
+                        <th><input class='form-control' id="partnerName"  type="text" onkeyup="myPartnerFilter()"  placeholder="Search" value=""></th>
+                        <th><input class='form-control' id="schoolName"  type="text" onkeyup="mySchoolFilter()"  placeholder="Search" value=""></th>
+                        <th><input class='form-control' id="villageName"  type="text" onkeyup="myVillageFilter()"  placeholder="Search" value=""></th>
+                        <th><input class='form-control' id="myStatus"  type="text" onkeyup="myStatusFilter()" placeholder="Search"  value=""></th>
+                        {% if not is_school_admin %}
+                            <th></th>
+                        {% endif %}
+                        <th><input class='form-control' id="StateName"  type="text" onkeyup="stateFilter()" placeholder="Search"  value=""></th>
+                        <th><input class='form-control' id="addedby"  type="text" onkeyup="addedbyfilter()" placeholder="Search"  value=""></th>
+                        <th><input class='form-control' id="addedon"  type="text" onkeyup="addedonfilter()" placeholder="Search"  value=""></th>
+                        
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% for partner_school in partner_schools %}
+                        <tr>{% if   isExternal and False %}
+                            <td>  <a  title="View School"  id='test_{{partner_school.id}}'
+                                    href="#schoolslist" onclick="showdetail('{{partner_school.status}}','{{partner_school.id}}','{{partner_school.school_id}}')">
+                                    <label class="radio_margin ">
+                                          <input type="radio" checked="checked" name="radio">
+                                          <span class="checkmark"></span>
+                                    </label></a>
+                            </td>
+                            {% endif %}
+    
+                            {% if   isExternal %}
+                            {% else %}
+                            <td>
+                                {% if is_school_admin %}
+                                    {{partner_school.partner_owner.name_of_organization}}
+                                {% else %}
+                                    {{partner_school.partner_owner.name_of_organization}}
+                                {% endif %}
+                            </td>
+                            {% endif %}
+                            <td>
+                                {% if is_school_admin %}
+                                    {{partner_school.name}}
+                                {% else %}
+                                    {{partner_school.name}}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if is_school_admin %}
+                                    {{partner_school.taluk}}
+                                {% else %}
+                                    {{partner_school.taluk}}
+                                {% endif %}</td>
+                            <td>{{partner_school.status}}</td>
+                            {% if not is_school_admin %}
+                                <td>
+                                {% if   isExternal %}
+                                        {% if partner_school.status == "Pending" %}
+                                            <img src="/static/img/step1.png" style="width:93%;">
+                                        {% elif partner_school.status == "Verification in Progress" %}
+                                            <img src="/static/img/step2.png" style="width:93%;">
+                                        {% elif partner_school.status == "Active" %}
+                                            <img src="/static/img/step3.png" style="width:93%;">
+                                        {% else %}
+                                            <img src="/static/img/step4.png" style="width:93%;">
+                                        {% endif %}
+                                    {% else %}
+    
+                                    <a class="btn btn-success" title="View School" style="text-align: center; line-height: initial;" id='test'
+                                        href="/partner/digitalschool/{{partner_school.id}}/"
+                                    >View</a>
+                                {% endif %}</td>
+                            {% endif %}
+                            <td>
+                                {{partner_school.state}}
+                            </td>
+                            <td>{{partner_school.created_by.first_name}} {{partner_school.created_by.last_name}}</td>
+                            <td>{{partner_school.created_on|date:"Y-m-d"}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="statusDiv" class="col-sm-12 col-xm-12  col-md-12 col-lg-12 "  style="display:none" >
+        <div align="center">
+            <ul  class="step-progress">
+                <a href="#shoolslist">
+                <li id="identified" class="active"> Identified </li>
+    
+                    {% if partner_schools.status == "NEW" %}
+                        <li id="validate" onclick="getDeviceInfo()">Validate</li>
+                    {% else %}
+                         <li id="validate">Validated</li>
+                        {{ partner_school.school }}
+                    {% endif %}
+    
+                <li id="verify" onclick="getDeviceInfo()">Re-Verify </li>
+                <li id="eligible" >Eligible</li></a>
+            </ul>
+        </div>
+    </div>
+    <div id="validateDiv" class="col-sm-12 col-xm-12  col-md-12 col-lg-12 "  style="display:none; margin-top: 25pt;" >
+        <form method="POST" action="/v2/vLounge">
+            {% csrf_token %}
+            <input type="hidden" name="schoolId"  id="schoolId"  value=""  />
+            <input type="hidden" name="myschoolId"  id="mySchoolId"  value="" />
+            <div class="col-md-12 col-sm-12 col-xm-12 col-lg-12 " >
+                <div class="row">
+                    <div class="col-sm-12 col-xm-12 col-lg-4" >
+                        <span> Geo Cordinate:-</span><br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-xm-12  col-lg-3   " >
+                        <span style="color:red;">*&nbsp;</span>Latitude
+                    </div>
+                    <div class="col-sm-12  col-xm-12 col-lg-3 " >
+                        <input type="text" name="latitude"  id="latitude"  value="" readonly required/>
+                    </div>
+                     <div class=" col-sm-12 col-lg-2 " >
+                        <span style="color:red;">*&nbsp;</span>Longitude
+                    </div>
+                    <div class="col-sm-12 col-lg-3 " > 
+                        <input type="text" name="longitude"  id="longitude"  value="" readonly required/>
+                    </div>
+                    <div class="col-sm-12 col-xm-12  col-lg-2" >
+                        <i class="fas fa-tick mr-2"></i>
+                    </div>
+                </div>
+            </div><br/>
+            <div class="col-md-12 col-sm-12 col-lg-12 " >
+                <div class="row">
+                    <div class="col-sm-12 col-lg-3  " >
+                        <span style="color:red;">*&nbsp;</span>Broadband (in Mbps)
+                    </div>
+                    <div class="col-sm-12 col-lg-3  " >
+                        <input type="text" name="Speed in Mbps"  id="broadband"  value="" placeholder="Ex: 5" required/>
+                    </div>
+                    <div class="col-sm-12 col-lg-3 " >
+                        <i class="fas fa-tick mr-2"></i>
+                    </div>
+                </div>
+            </div><br/>
+            <div class="col-md-12 col-sm-12 col-lg-12 " >
+                <div class="row">
+                    <div class="col-sm-12 col-lg-3 " >
+                        <span style="color:red;">*&nbsp;</span>Computer
+                    </div>
+                    <div class="col-sm-12 col-lg-3" >
+                        <input type="text" name="computer"  id="computer"  value="" readonly />
+                    </div>
+                    <div class="col-sm-12 col-lg-3 " >
+                        <i class="fas fa-tick mr-2"></i>
+                    </div>
+                </div>
+            </div><br/>
+            <div class="col-md-12 col-sm-12 col-lg-12 " >
+                <div class="row">
+                    <div class="col-sm-12 col-lg-3 " >
+                        <span style="color:red;">*&nbsp;</span>Screen
+                    </div>
+                    <div class="col-sm-12 col-lg-3 " >
+                        <input type="text" name="screen"  id="screen"  value=""  />
+                    </div>
+                    <div class="col-sm-3 " >
+                         <i class="fas fa-tick mr-2"></i>
+                    </div>
+                </div>
+            </div><br/>
+            <div class="col-md-12 col-sm-12 col-lg-12 " >
+                <div class="row">
+                    <div class=" col-lg-3 col-sm-12 " >
+                        <span style="color:red;">*&nbsp;</span>Camera / Speaker
+                    </div>
+                    <div class=" col-lg-3 col-sm-12 " >
+                        <input type="text" name="camera"  id="camera"  value="HD"  />
+                    </div>
+                    <div class=" col-lg-3 col-sm-12 " >
+                         <i class="fas fa-tick mr-2"></i>
+                   </div>
+                </div>
+            </div><br/>
+    
+            <input  type="submit" name="Save" value="SAVE" class=" btn btn-success float-right">
+    
+        </form>
+    </div>
+    
+    {% block bottom_scripts %}
+        <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+        <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+        <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+    
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    
+        <script type="text/javascript">
+    
+            $(document).ready( function () {
+                // $(".inner.clearfix").css("width","85%");
+    
+                // Setup - add a text input to each footer cell
+                // $('#myTable tfoot th').each( function () {
+                // //     var title = $(this).text();
+                // //    $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+                // } );
+               
+                    // $("#myTable").DataTable({
+                    //         "bLengthChange": false,
+                    //         "pageLength": 10,
+                    // });
+    
+                        // Apply the search
+                        var table = $('#myTable').DataTable();
+                        $('#searchInWholeTable').on( 'keyup', function () {
+                            table.search( this.value ).draw();
+                        } );
+    
+                
+                // table.columns().every( function () {
+                //     var that = this;
+                //     $( 'input', this.footer() ).on( 'keyup', function () {
+                //         if ( that.search() !== this.value ) {
+                //             that
+                //                 .search( this.value )
+                //                 .draw();
+                //         }
+                //     } );
+                // } );
+            });
+    
+         function myPartnerFilter() {
+              var input, filter, table, tr, td, i;
+              input = document.getElementById("partnerName");
+              filter = input.value.toUpperCase();
+              table = document.getElementById("myTable");
+              tr = table.getElementsByTagName("tr");
+              for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0];
+                    if (td) {
+                      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                      } else {
+                        tr[i].style.display = "none";
+                      }
+                    }
+              }
+          }
+          var table = $('#myTable').DataTable();
+    
+                // Apply the search
+                var table = $('#myTable').DataTable();
+                $('#searchInWholeTable_centers').on( 'keyup', function () {
+                            table.search( this.value ).draw();
+                } );
+    
+                table.columns().every( function () {
+                    var that = this;
+                    $( 'input', this.footer() ).on( 'keyup change', function () {
+                        if ( that.search() !== this.value ) {
+                            that
+                                .search( this.value )
+                                .draw();
+                        }
+                    } );
+                } );
+    
+         function mySchoolFilter() {
+              var input, filter, table, tr, td, i;
+              input = document.getElementById("schoolName");
+              filter = input.value.toUpperCase();
+              table = document.getElementById("myTable");
+              tr = table.getElementsByTagName("tr");
+              for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1];
+                if (td) {
+                  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                  } else {
+                    tr[i].style.display = "none";
+                  }
+                }
+              }
+          }
+         
+         function myVillageFilter(){
+             var input, filter, table, tr, td, i;
+             input = document.getElementById("villageName");
+             filter = input.value.toUpperCase();
+             table = document.getElementById("myTable");
+             tr = table.getElementsByTagName("tr");
+             for (i = 0; i < tr.length; i++) {
+               td = tr[i].getElementsByTagName("td")[2];
+               if (td) {
+                 if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                   tr[i].style.display = "";
+                 } else {
+                   tr[i].style.display = "none";
+                 }
+               }
+             } 
+             
+         }
+         
+         
+          function myStatusFilter() {
+              var input, filter, table, tr, td, i;
+              input = document.getElementById("myStatus");
+              filter = input.value.toUpperCase();
+              table = document.getElementById("myTable");
+              tr = table.getElementsByTagName("tr");
+              for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[3];
+                if (td) {
+                  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                  } else {
+                    tr[i].style.display = "none";
+                  }
+                }
+              }
+          }
+          function addedbyfilter() {
+              var input, filter, table, tr, td, i;
+              input = document.getElementById("addedby");
+              filter = input.value.toUpperCase();
+              table = document.getElementById("myTable");
+              tr = table.getElementsByTagName("tr");
+              for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[6];
+                if (td) {
+                  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                  } else {
+                    tr[i].style.display = "none";
+                  }
+                }
+              }
+          }
+          function addedonfilter() {
+              var input, filter, table, tr, td, i;
+              input = document.getElementById("addedon");
+              filter = input.value.toUpperCase();
+              table = document.getElementById("myTable");
+              tr = table.getElementsByTagName("tr");
+              for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[7];
+                if (td) {
+                  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                  } else {
+                    tr[i].style.display = "none";
+                  }
+                }
+              }
+          }
+
+          function stateFilter(){
+            var input, filter, table, tr, td, i;
+              input = document.getElementById("role");
+              filter = input.value.toUpperCase();
+              table = document.getElementById("myTable");
+              tr = table.getElementsByTagName("tr");
+              for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[5];
+                if (td) {
+                  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                  } else {
+                    tr[i].style.display = "none";
+                  }
+                }
+              }
+          }
+        </script>
+    
+    {% endblock %}
+     {% if   isExternal %}
+     <script>
+     function showdetail(status,id,schoolId)
+     {
+        //  alert(status);
+         
+         var statusDiv = document.getElementById('statusDiv');
+         statusDiv.style.display = "block";
+         
+         var identified = document.getElementById('identified');
+         var validate = document.getElementById('validate');
+         var verify = document.getElementById('verify');
+         var eligible = document.getElementById('eligible');
+         var statusDiv = document.getElementById('validateDiv');
+         statusDiv.style.display = "none";
+         
+         if(status=='New')
+        {
+             identified.className='active'; 
+    
+             validate.innerHTML ='<a href="#schoolslist" onclick="startValidation('+id+ ','+ schoolId +')" >Validate</a>';
+    
+             validate.className=''; 
+             verify.className=''; 
+             eligible.className=''; 
+        }
+         else if(status=='Verification in Progress')
+        {
+             identified.className='active'; 
+             validate.className='step2';
+             verify.innerHTML ='<a href="#schoolslist" onclick="startValidation('+id+ ','+ schoolId +')" >Re-verify</a>'
+             verify.className='';
+             eligible.className=''; 
+        }
+         else if(status=='Verified')
+         {
+             identified.className='active'; 
+             validate.className='step2';
+             verify.innerHTML ='<a href="#schoolslist" onclick="startValidation('+id+ ','+ schoolId +')" >Re-verify</a>'
+             verify.className='step3'; 
+             eligible.className=''; 
+         }
+         else if(status=='Eligible')
+         {
+             identified.className='active'; 
+             validate.className='step2'; 
+             verify.className='step3'; 
+             eligible.className='step4'; 
+         }
+     }
+     function startValidation(id,schoolId)
+     {
+         var statusDiv = document.getElementById('validateDiv');
+         statusDiv.style.display = "block";
+         var mySchoolIdDiv = document.getElementById('mySchoolId');
+         mySchoolIdDiv.value=id;
+         var schoolIdDiv = document.getElementById('schoolId');
+         schoolIdDiv.value=schoolId;
+     }
+     </script>
+     {% endif %}
+    
+    <script>
+        function getDeviceInfo()
+        {
+        document.getElementById('broadband').value=navigator.connection.downlink +"Mbits per sec"
+        }
+        {
+    
+        document.getElementById('computer').value=navigator.appVersion;
+        }
+        {
+    
+          document.getElementById("screen").value = screen.pixelDepth;
+        }
+    
+    {
+    
+        var options = {
+                enableHighAccuracy: true,
+                maximumAge: 0
+              };
+        $("#hideDiv").hide();
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError, options);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+    function showPosition(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        $(".mapClass").hide();
+        $("#latitude").val(latitude);
+        $("#longitude").val(longitude);
+        getAddress(latitude, longitude);
+    }
+    function showError(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                $("#errorMsg").css('display','block');
+                $("#errorMsg").text("Please enable the location to access the page");
+               // $("#errorMsg").append("<br><p onclick='reloadPage()'>click here</p>");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                $("#errorMsg").css('display','block');
+                $("#errorMsg").text("Location information unavailable");
+                break;
+            case error.TIMEOUT:
+                $("#errorMsg").css('display','block');
+                $("#errorMsg").text("The request to get user location timed out");
+                break;
+            case error.UNKNOWN_ERROR:
+                $("#errorMsg").css('display','block');
+                $("#errorMsg").text("An unknown error occurred.");
+                break;
+        }
+    }
+    function reloadPage() {
+    console.log('dsdsds');
+    alert("dhfsdfkdsshfkjh");
+            window.location.reload(true);
+    }
+    function getAddress (latitude, longitude) {
+    
+        return new Promise(function (resolve, reject) {
+            var request = new XMLHttpRequest();
+    
+            var method = 'GET';
+            var gkey = 'AIzaSyADqJvBMuoeUfYoTP_9P-7LbVAqmGedKLs';
+            var url = 'https://maps.googleapis.com/maps/api/geocode/json?key=' + gkey + '&latlng=' + latitude + ',' + longitude + '&sensor=true';
+            var async = true;
+    
+            request.open(method, url, async);
+            request.onreadystatechange = function () {
+                if (request.readyState == 4) {
+                    if (request.status == 200) {
+                        var data = JSON.parse(request.responseText);
+                        var address = data.results[0];
+                        var zip_address = address.address_components;
+                        var zipcode = zip_address[zip_address.length - 1].long_name;
+                        $("#locationName").val(address.formatted_address);
+                        $("#id_postal_code").val(zipcode);
+                        $("#locationName").prop('readonly',true);
+                        resolve(address);
+                    }
+                    else {
+                        reject(request.status);
+                    }
+                }
+            };
+            request.send();
+        });
+    };
+    </script>
+    

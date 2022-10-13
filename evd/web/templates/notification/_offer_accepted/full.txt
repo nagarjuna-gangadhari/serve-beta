@@ -1,0 +1,7 @@
+User {{ user.first_name }} {{ user.last_name }} has accepted the offer
+email-id : {{ user.email }}
+{{ offer }}
+ ------
+ starting from: {{ offer.start_date }}
+ upto:  {{ offer.end_date }}
+

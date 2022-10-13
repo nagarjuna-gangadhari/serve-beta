@@ -1,0 +1,4 @@
+
+Please click on this link to set the password
+http://evd.cloudlibs.com:8092{% url django.contrib.auth.views.password_reset_confirm uidb36=uid, token=token %}
+User: {{ user.first_name }} {{ user.last_name }}

@@ -1,0 +1,415 @@
+
+
+{% extends "base_generic.html" %} 
+{% load tags %} 
+{% load filters %}
+
+{% block title %}Selection Discussion Slots{% endblock %} 
+
+{% block breadcrumb %}{% endblock %} 
+
+{% block head %}
+    <link rel="stylesheet" href="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css">
+    <link rel="stylesheet" href="/static/css/jquery.timepicker.css" />
+
+    <style>
+
+        .ms-parent{
+            background-color: rgb(255, 255, 255);
+            border: 1px solid rgb(31, 31, 31);
+            border-radius: 5px;
+
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        th {
+            min-width: 120px;
+        }
+
+        #ui-datepicker-div {
+            background-color: white;
+        }
+
+        .ui-datepicker-prev {
+            font-weight: bold;
+            margin-right: 50px;
+            cursor: pointer;
+        }
+
+        .ui-datepicker-next {
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .ui-datepicker-header {
+            text-align: center;
+        }
+
+        #gslotpub-form {
+            display: none;
+        }
+
+        [data-handler="selectDay"]:hover {
+            background-color: yellow;
+        }
+
+        input {
+            border: 1px solid black;
+            border-radius: 4px;
+        }
+
+	#from_date, #to_date, #time_from, #time_to {
+		width: 150px;
+	}
+ 
+
+
+    input.picker[type="date"] {
+        position: relative;
+      }
+      
+      input.picker[type="date"]::-webkit-calendar-picker-indicator {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        color: transparent;
+        background: transparent;
+      }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div id="body" class="w-full">
+        <div id="pubslots" class="w-full">
+            <div class="p-2 bg-blue-400 rounded text-white text-2xl text-center mx-20">Selection Discussion Slots</div>
+            <div class="w-full flex flex-col items-center justify-around my-8 p-10 border rounded-xl space-y-6 grid grid-cols-1 divide-y">
+                <div class="flex justify-around items-center space-x-20">
+                    <div class="flex space-x-2">
+                        <div class="font-bold">Days</div>
+                        <div id="days"></div>   
+                    </div>
+                    <div class="flex space-x-2">
+                        <div class="font-bold">Date</div>
+                        <input id="from_date" type="date" class="picker" required>
+                        <span><strong>To</strong></span>
+                        <input id="to_date" type="date" class="picker" autocomplete="off" required>
+                    </div>
+                    <div class="flex space-x-2">
+                        <div class="font-bold">Time</div>
+                        <input id="time_from" type="text" class="time ui-timepicker-input" autocomplete="off" required>
+                        <span><strong>To</strong></span>
+                        <input id="time_to" type="text" class="time ui-timepicker-input" autocomplete="off" required>
+                    </div>
+                    
+                </div>
+            <div class="flex justify-center items-center space-x-4 pt-6">
+                <div id="gslotpub-form" class="flex space-x-2">
+                    <label for="slots_per_day">Slots/day</label>
+                    <select name="" id="slots_per_day" class="w-36 rounded border">
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                
+                <div class="form-control">
+                    <label class="cursor-pointer label">
+                      <span class="label-text font-bold">Group</span>
+                      <input id="gs-checkbox" type="checkbox" class="checkbox checkbox-accent" onclick="gslotShowHide()" />
+                    </label>
+                  </div>
+                    
+                    <!--Show line break here using block element-->
+                <div class="conditional-lb"></div>
+                <div class="text-center">
+                    <button class="px-4 py-1 rounded bg-green-400 hover:scale-105" type="button" onclick="publishSlots()">Publish</button>
+                </div>
+            </div>
+        </div>
+
+           
+        </div>
+        <div class="py-2 bg-blue-400 rounded text-white text-2xl text-center mx-20">Published Slots</div>
+        <div class="box published-slots text-center justify-center items-center">
+            <div class="w-full flex flex-col justify-center items-center">
+                <table id="pubslots-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Day</th>
+                        <th>Slot</th>
+                        <th>Status</th>
+                        <th>Added By</th>
+                        <th>Role</th>
+                        <th class="flex space-x-2 items-center justify-center">
+                            <div>Select</div>
+                            <div><a href="javascript:void(0)" id="bdlink" class="delete-slot text-center" style="display: none" onclick="bulkDelete()"><i class="fa-solid fa-trash-can fa-1x text-red-400"></i></a></div>
+
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slot in publish_slots %}
+                    <!--Line 154 of publish_slots.tmpl in web/, !=17 => Teacher and otherwise Content Developer-->
+                    <tr id="tr-{{slot.id}}">
+                        <td>{{slot.id}}</td>
+                        <td>{{slot.start_date}}</td>
+                        <td>{{slot.start_time}} to {{slot.end_time}}</td>
+                        <td>{{slot.status}}</td>
+                        <td>{{slot.added_by}}</td>
+                        <td>{% if slot.role != "17" %}Teacher{% else %}Content Developer{% endif %}</td>
+                        <td class="space-x-1">
+                        {% if slot.status == "Booked" %}
+                        <i class="fa-solid fa-check text-green-400"></i>
+                        {% else %}
+                            <input id="bd-{{slot.id}}" type="checkbox" class="checkbox checkbox-secondary" onclick="markBulkDelete({{slot.id}})" />
+                            <a href="javascript:void(0)" class="inline delete-slot" onclick="markBulkDelete({{slot.id}})"></a>
+                        {%endif%}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    {% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/tablefilter@0.6.94/dist/tablefilter/tablefilter.min.js"></script>
+    <script src="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.js"></script>
+    <script src="//code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.timepicker.min.js"></script>
+    <script>
+        const weeksOrder = {
+	    "Sunday": "sunday",
+            "Monday": "monday",
+            "Tuesday": "tuesday",
+            "Wednesday": "wednesday",
+            "Thursday": "thursday",
+            "Friday": "friday",
+            "Saturday": "saturday",
+        }
+
+        let markedSlotIds = [];
+
+        function gslotShowHide() {
+            let gslotForm = document.querySelector("#gslotpub-form");
+            if (gslotForm.style.display == "none" || !gslotForm.style.display) {
+                gslotForm.style.display = "block";
+            } else {
+                gslotForm.style.display = "none";
+            }
+        }
+
+        function markBulkDelete(id) {
+            if (markedSlotIds.includes(id)) {
+                // Remove id
+                markedSlotIds = markedSlotIds.filter(x => x != id);
+                $(`#bd-${id}`).prop("checked", false)
+                document.querySelector(`#tr-${id}`).classList.remove("red")
+            } else {
+                markedSlotIds.push(id);
+                $(`#bd-${id}`).prop("checked", true)
+                document.querySelector(`#tr-${id}`).classList.add("red")
+            }
+            console.log(markedSlotIds);
+
+            if(markedSlotIds.length > 0) {
+                $("#bdlink").css("display", "initial");
+            } else {
+                $("#bdlink").attr("style","display: none!important");
+            }
+        }
+
+        function bulkDelete() {
+            let askUser = confirm(`Are you sure you wish to bulk delete slots ${markedSlotIds.join(', ')}!`);
+            if(!askUser) {
+		        return	
+	        }
+            deleteSlot(markedSlotIds);
+        }
+
+        async function publishSlots() {
+            let group = document.querySelector("#gs-checkbox").checked;
+            let numSlots = 1;
+            if(group) {
+                numSlots = parseInt(document.querySelector("#gslotpub-form select").value);
+                if(!numSlots || numSlots < 1) {
+                    alert("Please enter number of slots to be published per day", "danger");
+                    return;
+                }
+            }
+
+            let days = $("#mselect").multipleSelect("getSelects")
+
+            if(!days || days.length < 1) {
+                alert("Please select at least one day", "danger");
+                return;
+            }
+
+            let start_time = $("#time_from").val();
+            let end_time = $("#time_to").val(); 
+
+            if(!start_time || !end_time) {
+                alert("Please enter start and end time", "danger");
+                return;
+            }
+
+            let from_date = $("#from_date").val();
+            let to_date = $("#to_date").val();
+
+            if(!from_date || !to_date) {
+                alert("Please enter start and end date", "danger");
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '/v2/publish_booking_slots/',
+                data: JSON.stringify({
+                    'start_date': from_date,
+                    'end_date': to_date,
+                    'group_slots': group,
+                    'days': days,
+                    'slots_counts': numSlots,
+                    'start_time': start_time,
+                    'end_time': end_time
+                }),
+                success: function(data) {
+                    console.log(data)
+                    alert(`${data.added} slots published successfully with ${data.duplicate} duplicates found. Reloading in 10 seconds...`, "success")
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 10000);
+                    
+                },
+                error: function(xhr, errmsg, err) {
+                    alert('Publish failed', 'danger');
+                    console.log(xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+
+            
+        }
+
+        async function deleteSlot(slotIds) {
+            let slotString = slotIds.join(",");
+            $.ajax({
+                url: "/v2/publish_booking_slots?slots="+slotString, // the endpoint
+                type: "DELETE", // http method
+                dataType: 'json',
+                success: function(response) {
+                    alert('Deleted successfully', 'success')
+                    location.reload();
+    
+                },
+    
+                error: function(xhr, errmsg, err) {
+                    alert('Oops! We have encountered an error: ' + xhr.responseText['error']['message'], 'danger'); // provide a bit more info about the error to the console
+                    console.log(xhr.status + ": " + xhr.responseText, xhr.responseText['error']['message']); // provide a bit more info about the error to the console
+                }
+            });
+
+            window.location.reload()
+        }
+
+        // For week in weeksOrder
+        $("document").ready(() => {
+            let sm = `<select id="mselect" multiple="multiple" placeholder="Choose Days">`
+            for (let week in weeksOrder) {
+                sm += `<option value="${week}">${week}</option>`
+            }
+            sm += `</select>`
+
+            $("#days").append(sm)
+
+            $("#mselect").multipleSelect()
+
+            var tf = new TableFilter(document.querySelector('#pubslots-table'), {
+                base_path: 'https://cdn.jsdelivr.net/npm/tablefilter@0.6.94/dist/tablefilter/',
+                paging: {
+                    results_per_page: ['Records: ', [10, 20, 30]]
+                },
+                status_bar: true,
+                rows_counter: true,
+                btn_reset: true,
+                loader: true,
+                alternate_rows: true,
+                col_1: 'select',
+                col_3: 'select',
+                col_4: 'select',
+                no_results_message: true,
+                responsive: true,
+                auto_filter: {
+                    delay: 100 //milliseconds
+                },
+                custom_options: {
+                    cols: [3, 4],
+                    texts: [
+                        [
+                            'Booked', 'Not Booked',
+                        ],
+                        [
+                            'Teacher', 'Content Developer',
+                        ]
+                    ],
+                    values: [
+                        [
+                            'Booked', 'Not Booked',
+                        ],
+                        [
+                            'Teacher', 'Content Developer',
+                        ]
+                    ],
+                    sorts: [false]
+                },
+                extensions:[{
+                    name: 'sort'
+                }]
+            });
+
+            tf.init();
+
+            $("#time_from").timepicker({
+                'minTime': '6:00am',
+                'maxTime': '5:45am',
+                'step': 15,
+
+            });
+
+            $("#time_to").timepicker({
+                'minTime': '6:00am',
+                'maxTime': '5:45am',
+                'step': 15,
+
+            });
+
+            let searchPlace = () => {
+                let els = document.querySelectorAll("input.flt")
+                if(els.length == 0) {
+                    setTimeout(searchPlace, 100);
+                }
+
+                for(let el of els) {
+                    el.setAttribute("placeholder", "Search...")
+                }
+            }
+
+            setTimeout(searchPlace)
+        })
+    </script>
+{% endblock %}

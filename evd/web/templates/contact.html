@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block body_container %}
+   <!-- <div class="row">
+        <div class="span12 trans-block" style="min-height:500px;">
+            <div style="margin-left:20px;padding-top:20px">
+                <h1>eVidyaloka</h1>
+                <h3 class="offset1"style="padding-top:20px">from Guntur ZPH school</h3>
+                <div style="margin-left:20px;">
+                    <p style="padding-top:20px;font-size:15px;">Sankar is looking for learning physics</p>
+                    <p>50+ students of patna school wants to learn English</p>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <div class="row">
+        <div class="span12 trans-block" style="min-height:500px;">
+            <form class="form-horizontal">
+                <div class="row">
+                    <h2 style="padding-top:30px;padding-left:70px">Your basic information</h2>
+                    <div class="span5" style="padding-top:50px;padding-left:130px">
+                        <div class="control-group control">
+                            <label class="control-label" for="input01" style="text-align:left;margin-right:80px">Skype Id</label>
+                            <div class="controls">
+                                <input type="text" class="input-xlarge" id="input01;name="skype_id" ">
+                            </div>
+                        </div>
+                         <div class="control-group">
+                            <label class="control-label" for="input01" style="text-align:left;margin-right:80px">Primary Email</label>
+                            <div class="controls">
+                                <input type="text" class="input-xlarge" id="input01;name="primary_email" ">
+                            </div>
+                        </div>
+                         <div class="control-group">
+                            <label class="control-label" for="input01" style="text-align:left;margin-right:80px">Secondary Email</label>
+                            <div class="controls">
+                                <input type="text" class="input-xlarge" id="input01;name="secondary_email" ">
+                            </div>
+                        </div>
+                         <div class="control-group">
+                            <label class="control-label" for="input01" style="text-align:left;margin-right:80px">Primary Phone</label>
+                            <div class="controls">
+                                <input type="text" class="input-xlarge" id="input01;name="primary_phone" ">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="input01" style="text-align:left;margin-right:80px">Secondary Phone</label>
+                            <div class="controls">
+                                <input type="text" class="input-xlarge" id="input01;name="secondary_phone" ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5" style="padding-top:50px;padding-left:30px">
+                         <div class="control-group">
+                            <label class="control-label" for="select01"  style="text-align:left;">Time Zone</label>
+                                <div class="controls">
+                                    <select id="select01">
+                                        <option>something</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="select01"  style="text-align:left;">Country</label>
+                                <div class="controls">
+                                    <select id="select01">
+                                        <option>something</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="select01"  style="text-align:left;">State</label>
+                                <div class="controls">
+                                    <select id="select01">
+                                        <option>something</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="select01"  style="text-align:left;">City</label>
+                                <div class="controls">
+                                    <select id="select01">
+                                        <option>something</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div  class="span12 trans-block" style="min-height:500px;">
+            <form class="form-horizontal">
+                <div class="row">
+                    <h2 style="padding-left:70px">Your teaching preferences</h2>
+                    <div class="span5" style="padding-top:50px;padding-left:130px">
+                        <div class="control-group">
+                                <label class="control-label" for="input01" style="text-align:left;margin-right:-28px">Select one of the Offerings</label>
+                                <div class="controls" style="margin-left:0px;">
+                                    <select id="medium" multiple="multiple">
+                                        <option>Telugu</option>
+                                        <option>English</option>
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="control-group">
+                                <label class="control-label" for="input01" style="text-align:left;margin-right:-28px">Medium</label>
+                                <div class="controls" style="margin-left:0px;">
+                                    <select id="medium" multiple="multiple">
+                                        <option>Telugu</option>
+                                        <option>English</option>
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="control-group">
+                                <label class="control-label" for="input01" style="text-align:left;margin-right:50px">Network</label>
+                                <div class="controls">
+                                    <input type="text" class="input-xlarge" id="input01;name="network" ">
+                                </div>
+                        </div>
+                        <div class="control-group">
+                                <label class="control-label" for="input01" style="text-align:left;margin-right:50px">Available from</label>
+                                <div class="controls">
+                                    <input type="text" class="input-xlarge" id="input01;name="from_date" ">
+                                </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="input01" style="text-align:left;margin-right:50px">Available upto</label>
+                            <div class="controls">
+                                <input type="text" class="input-xlarge" id="input01;name="to_date" ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5" style="padding-top:50px;padding-left:30px">
+                        <div class="control-group">
+                            <label class="control-label" for="select01"  style="text-align:left;">Prefered days</label>
+                                <div class="controls">
+                                    <select id="select01">
+                                        <option>something</option>
+                                        <option>weekdays</option>
+                                        <option>weekends</option>
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="select01"  style="text-align:left;">Prefered timings</label>
+                                <select class="span1" style="margin-left:20px">
+                                    <option>Morning</option>
+                                    <option>9am</option>
+                                    <option>10am</option>
+                                    <option>11am</option>
+                                    <option>12am</option>
+                                </select>
+                                <select class="span1">
+                                    <option>Evening</option>
+                                    <option>5pm</option>
+                                    <option>6pm</option>
+                                    <option>7pm</option>
+                                    <option>8pm</option>
+                                </select>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="select01"  style="text-align:left;">Prefered Subjects</label>
+                                <div class="controls">
+                                    <select id="select01" multiple="multiple">
+                                        <option>Telugu</option>
+                                        <option>Hindi</option>
+                                        <option>English</option>
+                                        <option>Maths</option>
+                                        <option>Science</option>
+                                        <option>Social</option>
+                                    </select>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary pull-right" style="margin-right:130px;margin-top:20px" href="#">Save</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock body_container %}

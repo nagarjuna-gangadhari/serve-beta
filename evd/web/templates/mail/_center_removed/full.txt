@@ -1,0 +1,8 @@
+This is to inform you that, you are removed as a centeradmin
+
+CENTER DETAILS:
+--------------
+Name     : {{ center.name }}
+State    : {{ center.state }}
+District : {{ center.district }}
+

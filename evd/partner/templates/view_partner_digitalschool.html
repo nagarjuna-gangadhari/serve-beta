@@ -1,0 +1,553 @@
+{% extends "base.html" %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+
+    <style>
+        .mySchoolDiv {
+            background-color:#ffffff;
+            padding : 15px 20px 20px 30px;
+        }
+        .verification{
+            margin-top:15px;
+        }
+        table th {
+            font-weight:bold;
+        }
+        .col-sm-8 > h4 {
+            margin-top: 30px !important;
+        }
+
+        label {
+            font-family: sans-serif !important;
+        }
+        .btn-group {
+            background-color: #04AA6D;
+            border: 1px solid green; 
+            color: white;
+            padding: 5px 24px; 
+            cursor: pointer; 
+            float: right;
+            margin-right: 15px;
+        }
+        
+        .btn-group:hover {
+            background-color: #3e8e41;
+            }
+    </style>
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_container %}
+    {{ block.super }}
+    <!-- {% if is_pam == false   or  is_super == false %}
+<div class="col-md-1 col-lg-1">
+    {%include "navbar.html"%}
+</div>
+    {% endif %} -->
+{%if is_partner and not is_pam %}
+<div class="inner" style="height: 100%;">
+    <div class="col-md-2" style="height: 100%;">
+      {%include "navbar.html"%}
+    </div>
+    <div class="col-md-10"style="height: 100%; overflow-y: auto; right: -15px; padding-left: 3%">
+{%else%}
+<div class="admin_inner">
+     <div class="col-md-12">
+{%endif%}
+
+        <div class="mySchoolDiv"  id="schoolDiv">
+            <div class="row" style="overflow-x:auto;">
+                <div class="col-sm-12" style="padding-left: 0px !important; padding-right: 0px !important;">
+                    <div class="col-sm-8" style="padding-left: 0px !important;">
+                        <h3>{{myschool.name}}</h3>
+                    </div>
+                    <div class="col-sm-4" style="margin-top: 30px !important; padding-right: 0px !important;">
+                            <span class="pull-right" style="margin:0px;">Go back to <a href="/partner/digitalschools/" style="vertical-align:middle;font-family: Arial, Helvetica, sans-serif;font-size: 13.5px;">List Schools</a></span>
+                    </div>
+                </div>
+                <hr/>
+                <div>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th>School Name</th>
+                                <td>{{myschool.name}}</td>
+                                <th>Status</th>
+                                <td>{{myschool.status}}</td>
+                            </tr>
+                            <tr>
+                                <th>Partner Name</th>
+                                <td>{{myschool.partner_owner.name_of_organization}}</td>
+                                <th>Partner Contact</th>
+                                <td>{{myschool.partner_owner.email}}</td>
+                            </tr>
+                            <tr>
+                                <th>Taluk</th>
+                                <td>{{myschool.taluk}}</td>
+                                <th>District</th>
+                                <td>{{myschool.district}}</td>
+                            </tr>
+                            <tr>
+                                <th>State</th>
+                                <td>{{myschool.state}}</td>
+                                <th>Pincode</th>
+                                <td>{{myschool.pin_code}}</td>
+                            </tr>
+                            <tr>
+                                <th>Description</th>
+                                <td>{{myschool.description}}</td>
+                                <th>Logo</th>
+                                <td><a href="{{myschool.logo_url}}">View Image </a></td>
+                            </tr>
+                            <tr>
+                                <th>Purpose</th>
+                                <td>{{myschool.statement_of_purpose}}</td>
+                                <th>Banner</th>
+                                {% if myschool.banner_url  %}
+                                    <td><a href="{{myschool.banner_url}}">View Image </a></td>
+
+                                {% else %}
+                                    <td>Pending</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <th>Course Provider</th>
+                                <td>{{courseProvider.name}}</td>
+                                <th>Language</th>
+                                <td>{{courseProvider.language_code}}</td>
+                            </tr>
+                            <tr>
+                                <th>Created On</th>
+                                <td>{{myschool.created_on|date:"Y-m-d"}}</td>
+                                <th>Created By</th>
+                                <td>{{myschool.created_by.first_name}} {{myschool.created_by.last_name}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Last updated On</th>
+                                <td>{{myschool.updated_on|date:"Y-m-d"}}</td>
+                                <th>Center Allocated</th>
+                                <td>{{centerAllocationText}}</td>
+                            </tr>
+                            <tr>
+                                <th>Approved On</th>
+                                <td>{{myschool.approved_on|date:"Y-m-d"}}</td>
+                                <th>Approved By</th>
+                                <td>{{myschool.approved_by.first_name}} {{myschool.approved_by.last_name}}</td>
+                            </tr>
+                            <tr>
+                                <th>Center location</th>
+                                <td>{{center.centerLocation}}</td>
+                                <th>Program Type</th>
+                                <td>{{center.programType}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    {% if enableActivateButton %}
+                    <div class="btn-group"><a href="/partner/digitalschool/{{buttonUrlPath}}/{{myschool.id}}/" style="color: white;" title="{{buttonText}}"><b>{{buttonText}}</b></a></div>
+                    <div ><button class="btn-group" onclick="myStudEdit()">edit</button></div>
+                    {% endif %}
+                    <div class="">{% if is_status_pending %}<a href="/partner/digitalschool/approve/{{myschool.id}}/"  title="Approve School"><b>Approve School</b></a>{% endif %}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mySchoolDiv" id="schoolEditDiv" style="display: none;">
+            <form action="/partner/digitalschool/update/{{myschool.id}}" method="post" onSubmit="return confirm('Are you sure you want to save') ">
+                {% csrf_token %}
+            <div class="row" style="overflow-x:auto;">
+                <div class="col-sm-12" style="padding-left: 0px !important; padding-right: 0px !important;">
+                    <div class="col-sm-8" style="padding-left: 0px !important;">
+                        <h3>{{myschool.name}}</h3>
+                    </div>
+                    <div class="col-sm-4" style="margin-top: 30px !important; padding-right: 0px !important;">
+                            <span class="pull-right" style="margin:0px;">Go back to <a href="/partner/digitalschools/" style="vertical-align:middle;font-family: Arial, Helvetica, sans-serif;font-size: 13.5px;">List Schools</a></span>
+                    </div>
+                </div>
+                <hr/>
+                <div>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th>School Name</th>
+                                <td><input type="text" name="schoolName" value="{{myschool.name}}"></td>
+                                <th>Status</th>
+                                <td>
+                                    <select name="schoolStatus" class="form-control" id="statusId">
+                                        <option value="{{myschool.status}}">{{myschool.status}}</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                </td>
+                            </tr>
+                             <tr>
+                                <th>Partner Name</th>
+                                <td><input type="text" name="partnerName" value="{{myschool.partner_owner.name_of_organization}}"></td>
+                                <th>Partner Contact</th>
+                                <td><input type="text" name="partnerContact" value="{{myschool.partner_owner.email}} "></td>
+                            </tr>
+                            <tr>
+                                <th>Taluk</th>
+                                <td><input type="text" name="taluk" value="{{myschool.taluk}}"></td>
+                                <th>District</th>
+                                <td><input type="text" name="district" value="{{myschool.district}}"> </td>
+                            </tr>
+                            <tr>
+                                <th>State</th>
+                                <td>
+                                    <select id="state" name="state" data-placeholder="Your Favorite Football Team" class="states form-control" onchange="hide_error_msg(this)">
+                                        <option value="{{myschool.state}}">{{myschool.state}}</option>
+                                    </select>
+                                </td>
+                                <th>Pincode</th>
+                                <td><input type="text" name="pincode" value="{{myschool.pin_code}} "></td>
+                            </tr>
+                            <tr>
+                                <th>Description</th>
+                                <td><input type="text" name="description" value="{{myschool.description}}"></td>
+                                <th>Logo</th>
+                                <td><a href="{{myschool.logo_url}}">View Image </a></td>
+                            </tr>
+                            <tr>
+                                <th>Purpose</th>
+                                <td><input type="text" name="purpose" value="{{myschool.statement_of_purpose}}"></td>
+                                <th>Banner</th>
+                                {% if myschool.banner_url  %}
+                                    <td><a href="{{myschool.banner_url}}">View Image </a></td>
+
+                                {% else %}
+                                     <td>Pending</td>
+                                 {% endif %}
+                            </tr>
+                             <tr>
+                                <th>Course Provider</th>
+                                <td>{{courseProvider.name}}</td>
+                                <th>Language</th>
+                                <td>
+                                    <select id="language" name="language" class="form-control">
+                                        <option value="{{courseProvider.language_code}}">{{courseProvider.language_code}}</option>
+                                        {% for lan in language %}
+                                        <option value="{{lan}}">{{lan}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Created On</th>
+                                <td>{{myschool.created_on|date:"Y-m-d"}}</td>
+                                <th>Created By</th>
+                                <td>{{myschool.created_by.first_name}} {{myschool.created_by.last_name}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Last updated On</th>
+                                <td>{{myschool.updated_on|date:"Y-m-d"}}</td>
+                                <th>Center Allocated</th>
+                                <td>{{centerAllocationText}}</td>
+                            </tr>
+                             <tr>
+                                <th>Approved On</th>
+                                <td>{{myschool.approved_on|date:"Y-m-d"}}</td>
+                                <th>Approved By</th>
+                                <td>{{myschool.approved_by.first_name}} {{myschool.approved_by.last_name}}</td>
+                            </tr>
+                            <tr>
+                                <th>Center location</th>
+                                <td><input type="text" name="centerLocation" value="{{center.location_map}}"></td>
+                                <th>Program Type</th>
+                                <td>
+                                    <select id="programType" name="programType" class="form-control">
+                                        <option value="{{center.programCode}}">{{center.programType}}</option>
+                                        <option value="2">Digital School</option>
+                                        <option value="3">Sampoorna</option>
+                                        <option value="1">Digital Classroom</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+             <div class="row">
+                <div><input class="btn-group" style="width: auto;" type="submit" value="Save"></div>  
+             </div>
+            </form>
+        </div>
+
+        
+</div>
+
+{% endblock %}
+
+
+{% block bottom_scripts %}
+    {{ block.super }}
+    <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+    <script type="text/javascript">
+
+        $('#statusUpdateModal').on('shown.bs.modal', function () {
+              $('#myInput').trigger('focus')
+        })
+     </script>
+
+    <script src="/static/js/select.min.js"></script>
+<script>
+$(document).ready(function() {
+    // $(".inner.clearfix").css("width","85%");
+    $("#myschool_verification").hide()
+
+	{% if tab == 'everification' %}
+		<!--$('.nav-tabs a[href="#evDiv"]').tab('show');-->
+		$("#myschool_verification").show();
+		getLocation();
+	{% endif %}
+
+	{% if tab == 'internet' %}
+		<!--$('.nav-tabs a[href="#internateAndGeoDiv"]').tab('show');-->
+		$("#myschool_verification").show();
+		getLocation();
+	{% endif %}
+
+	{% if tab == 'visual_verification' %}
+		<!--$('.nav-tabs a[href="#visualDiv"]').tab('show');-->
+		$("#myschool_verification").show()
+		getLocation();
+	{% endif %}
+
+
+});
+function myschoolVerifydiv(myobj){
+    $("#myschool_verification").show();
+    getLocation();
+}
+
+
+function validateNumber(e) {
+	if(!((e.keyCode > 95 && e.keyCode < 106) || (e.keyCode > 47 && e.keyCode < 58) || e.keyCode == 8 || e.keyCode == 9)) {
+        return false;
+      }
+}
+
+
+function validate(file) {
+    var id = file.id
+    var ext = file.value.split(".");
+    ext = ext[ext.length-1].toLowerCase();
+    var arrayExtensions = ["jpg" , "jpeg", "png", "bmp", "pdf"];
+
+    if (arrayExtensions.lastIndexOf(ext) == -1) {
+        alert("File Format Not Supported. Attach jpg, jpeg, png, pdf type Attachment.");
+        $("#"+id).val("");
+    }
+    var fileSize = file.files[0].size/1024/1024;
+    if (fileSize > 3) {
+        alert('Upload file which is less than 3 MB size');
+        $("#"+id).val("");
+        <!--$(file).val(''); //for clearing with Jquery-->
+    }
+}
+
+
+$(':input').keyup(function() {
+	if ($("#formId")[0].checkValidity()) {
+	$("#submitId")[0].disabled = false;
+	$("#submitId").css({'background':'rebeccapurple', 'color':'white'});
+	  } else {
+	  $("#submitId")[0].disabled = true;
+	  $("#submitId").css({'background':'whitesmoke', 'color':'#555'});
+	  }
+});
+
+var x = document.getElementById("demo");
+$(document).ready(function(){
+
+	$(function() {
+	    $('#submitId').attr('disabled', 'disabled');
+	});
+
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+	var min = today.getMinutes();
+	var hrs = today.getHours();
+	var sec = today.getSeconds();
+
+	if(min<10) {
+		min = '0'+min
+	}
+	if(hrs<10) {
+		hrs = '0'+hrs
+	}
+	if(dd<10) {
+	    dd = '0'+dd
+	}
+	if(mm<10) {
+	    mm = '0'+mm
+	}
+	$("#dateId").val(yyyy + '-' + mm + '-' + dd);
+	today = yyyy + '-' + mm + '-' + dd + ' ' + hrs + ':' + min + ':' + sec;
+	$('input[id="dateId1"]').val(today);
+	$(".mapClass").css('display','block');
+
+
+
+	$('#visualDiv_submit').click(function(){
+        <!--if($('#school_pic').val() == ''  || $('#class_pic').val() == ''  ||  $('#permission_letter').val() == '' ){-->
+        <!--alert_message('please upload file');-->
+        <!--}-->
+
+        if($('#school_pic').val() != ''  && $('#class_pic').val() != ''  &&  $('#permission_letter').val() != '' ){
+         alert_message1('File upload in progress!');
+        }
+
+	});
+		$('#evDiv_submit').click(function(){
+        if($('#noOfTeachers').val() == ''  || $('#noOfStudents').val() == ''  ||  $('#headMasterName').val() == '' ){
+        alert_message('please enter all the details');
+        }
+
+        if($('#noOfTeachers').val() != ''  && $('#noOfStudents').val() != ''  &&  $('#headMasterName').val() != '' ){
+         alert_message1('submitted successfully!');
+        }
+
+	});
+
+
+	function alert_message(msg){
+            var s = "<div class='alert alert-danger alert-dismissable'><button type = 'button' class = 'close' data-dismiss = 'alert' aria-hidden = 'true'>&times;</button><strong>Warning!  </strong>"+msg+"</div>";
+	       $("#message").html(s);
+            }
+
+    function alert_message1(msg){
+            var s = "<div class='alert alert-success alert-dismissable'><button type = 'button' class = 'close' data-dismiss = 'alert' aria-hidden = 'true'>&times;</button><strong>Success!  </strong>"+msg+"</div>";
+	       $("#message1").html(s);
+            }
+
+
+
+ });
+
+function getLocation() {
+	var options = {
+	        enableHighAccuracy: true,
+	        maximumAge: 0
+	      };
+	$("#hideDiv").hide();
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError, options);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPosition(position) {
+	var latitude = position.coords.latitude;
+	var longitude = position.coords.longitude;
+
+	$(".mapClass").hide();
+    $("#latitude").val(latitude);
+    $("#longitude").val(longitude);
+    //getAddress(latitude, longitude);
+}
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            $("#errorMsg").css('display','block');
+            $("#errorMsg").text("Please enable the location to access the page");
+           // $("#errorMsg").append("<br><p onclick='reloadPage()'>click here</p>");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            $("#errorMsg").css('display','block');
+            $("#errorMsg").text("Location information unavailable");
+            break;
+        case error.TIMEOUT:
+        	$("#errorMsg").css('display','block');
+            $("#errorMsg").text("The request to get user location timed out");
+            break;
+        case error.UNKNOWN_ERROR:
+        	$("#errorMsg").css('display','block');
+        	$("#errorMsg").text("An unknown error occurred.");
+            break;
+    }
+}
+function reloadPage() {
+console.log('dsdsds');
+alert("dhfsdfkdsshfkjh");
+		window.location.reload(true);
+}
+function getAddress (latitude, longitude) {
+
+	return new Promise(function (resolve, reject) {
+        var request = new XMLHttpRequest();
+
+        var method = 'GET';
+        var gkey = 'AIzaSyADqJvBMuoeUfYoTP_9P-7LbVAqmGedKLs';
+        var url = 'https://maps.googleapis.com/maps/api/geocode/json?key=' + gkey + '&latlng=' + latitude + ',' + longitude + '&sensor=true';
+        console.log("getAddress url " + url);
+        var async = true;
+
+        request.open(method, url, async);
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                if (request.status == 200) {
+                    var data = JSON.parse(request.responseText);
+                    var address = data.results[0];
+                    var zip_address = address.address_components;
+                    var zipcode = zip_address[zip_address.length - 1].long_name;
+                    $("#locationName").val(address.formatted_address);
+                    $("#id_postal_code").val(zipcode);
+                    $("#locationName").prop('readonly',true);
+                    resolve(address);
+                }
+                else {
+                    reject(request.status);
+                }
+            }
+        };
+        request.send();
+    });
+};
+
+function myStudEdit() {
+    $('#schoolDiv').hide()
+    $('#schoolEditDiv').show()
+
+}
+
+$(document).ready(function() {
+    $.get("/v2/get_country_state_city/?country=101", function(response) {
+        for (var i = 0; i < response['data'].length; ++i) {
+            var option = $('<option />');
+            option.attr('value', response['data'][i]['state_name']).text(response['data'][i]['state_name']);
+            option.attr('current_state', response['data'][i]['custom_state_id']);
+            $('.states').append(option);
+        }
+        $(".states").prop("disabled", false);
+        $(".states").prop("selectedIndex", 0);
+
+        if ($('.states').children().length == 1) {
+            $('.states').append('<option val="others">Others</option>');
+            $('.cities').append('<option val="others">Others</option>');
+        }
+    });
+});
+
+</script>
+
+{% endblock %}

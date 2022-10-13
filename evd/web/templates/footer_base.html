@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block head_styles %}
+{{ block.super }}
+    <style>
+        /*.left-nav li a {
+            background:none;
+            padding-left:0px;
+        }*/
+         html{
+          background-color:white;
+          background-image: url(/static/images/ev_bg_white.png);
+          }
+          .about-container{
+            padding-top: 90px;
+          }
+    </style>
+{% endblock %}
+{% block body_container %}
+
+            {% block left_nav %}
+                <div class="left-nav">
+                    <ul class="clearfix">
+                        {% block leftnav_list %}
+                        {% endblock %}
+                    </ul>
+                </div>
+
+            {% endblock %}
+            <div class="right-content" style="width: 100%;">
+                {% block right_content %}
+
+                    {% block top_content %}
+                    {% endblock %}
+                    {% block bottom_content %}
+                    {% endblock %}
+                {% endblock %}
+            </div>
+{% endblock %}
+{% block bottom_scripts %}
+    {{ block.super }}
+    <script>
+        /*$(document).ready(function() {
+            $("div.left-nav ul li a").click(function() {
+                debugger;
+                $(this).addClass("active");
+            });
+        });*/
+    </script>
+
+{% endblock %}

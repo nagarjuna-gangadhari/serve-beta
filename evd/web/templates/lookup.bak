@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>Teacher Lookup</title>
+</head>
+<body>
+<h1><p> Teacher Lookup </h1></p>
+<p><b> Enter your choices </b><p>
+<form method= "POST" action="/lookup/" >
+{% csrf_token %}
+<select name="week">
+<option value="None"> Days</option>
+<option value="Mon">Monday</option>
+<option value="Tue">Tuesday</option>
+<option value="Wed">Wednesday</option>
+<option value="Thu">Thursday</option>
+<option value="Fri">Friday</option>
+<option value="Sat">Saturday</option>
+<option value="Sun"> Sunday</option>
+</select>
+<select name="subject">
+<option value="None">All subjects</option>
+<option value="Mathematics">Mathematics</option>
+<option value="Science">Science</option>
+<option value="SocialStudies">Social Studies</option>
+</select>
+<select name="medium">
+<option value="None">Medium</option>
+<option value="English">English</option>
+<option value="Hindi"> Hindi </option>
+<option value="Telegu"> Telugu </option>
+</select>
+<p> Available from</p>
+<input type="date" name="avail_from" value = "None" />
+<p> Format:- 2012-08-09 </p>
+<p> Available Upto</p>
+<input type="date" name="avail_upto" value = "None" />
+<p> Format:- 2012-08-10 </p>
+<input type = "submit" value="lookup" />
+</form>
+{% if users %}
+<br />
+<br />
+<p><b> Available Teachers </b></p>
+<table border = "2">
+<tr>
+<th> Name </th>
+<th>email</th>
+<th> contact </th>
+</tr>
+{% for user in users %}
+<tr>
+<td>{{user.user.first_name}}</td>
+<td>{{user.email}}</td>
+<td>{{user.phone}}</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+

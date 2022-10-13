@@ -1,0 +1,44 @@
+
+{% extends "base.html" %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+
+   
+
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+
+
+
+
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+   
+    <iframe style="width: 1300px;margin-left: -184px;" src="https://analytics.evidyaloka.org/kibana/app/kibana#/dashboard/2d58bcb0-864f-11ea-8386-fdeb838d2158?embed=true&_g=(filters:!())&_a=(description:'',filters:!(),fullScreenMode:!f,options:(hidePanelTitles:!f,useMargins:!t),panels:!((embeddableConfig:(),gridData:(h:5,i:'7a22fdaf-06a6-4942-b3a9-795a135db80d',w:48,x:0,y:0),id:'67cdce50-8481-11ea-8386-fdeb838d2158',panelIndex:'7a22fdaf-06a6-4942-b3a9-795a135db80d',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:7,i:'3dd00251-6b00-4069-abcf-df023e7f4ca5',w:13,x:13,y:5),id:d30ad2e0-9065-11ea-8386-fdeb838d2158,panelIndex:'3dd00251-6b00-4069-abcf-df023e7f4ca5',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:7,i:'4e84af86-84bc-4025-a649-8ab9dd28e7a6',w:12,x:26,y:5),id:'92e00920-9118-11ea-8386-fdeb838d2158',panelIndex:'4e84af86-84bc-4025-a649-8ab9dd28e7a6',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:7,i:'5b1b0227-7bf7-4c16-9f25-cea8070bc18d',w:10,x:38,y:5),id:d4e6ace0-9067-11ea-8386-fdeb838d2158,panelIndex:'5b1b0227-7bf7-4c16-9f25-cea8070bc18d',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:7,i:'8d527314-44c7-4d54-a257-e67689f0fef5',w:16,x:0,y:12),id:'98e4d920-9066-11ea-8386-fdeb838d2158',panelIndex:'8d527314-44c7-4d54-a257-e67689f0fef5',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:7,i:'22c5ee8a-f7e0-422d-bd4a-e690402f81fe',w:14,x:16,y:12),id:'0cbc6a80-9066-11ea-8386-fdeb838d2158',panelIndex:'22c5ee8a-f7e0-422d-bd4a-e690402f81fe',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:15,i:eca939b8-7cd8-4fae-866a-ed1b6e5d08f2,w:48,x:0,y:19),id:'04a62470-8487-11ea-8386-fdeb838d2158',panelIndex:eca939b8-7cd8-4fae-866a-ed1b6e5d08f2,type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:7,i:e017fd9d-35c4-4ff4-8ff7-c24f2099a8ff,w:13,x:0,y:5),id:b34fbd40-940b-11ea-8386-fdeb838d2158,panelIndex:e017fd9d-35c4-4ff4-8ff7-c24f2099a8ff,type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:15,i:'580d954b-a155-4bc6-857f-282de6a26f54',w:24,x:24,y:34),id:'92f07af0-8482-11ea-8386-fdeb838d2158',panelIndex:'580d954b-a155-4bc6-857f-282de6a26f54',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:15,i:beafec09-4a37-4332-a28b-16a91f3e229f,w:24,x:0,y:34),id:'3e4c8ac0-8482-11ea-8386-fdeb838d2158',panelIndex:beafec09-4a37-4332-a28b-16a91f3e229f,type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:12,i:'49ff355e-70c8-4469-a8b6-bf0b3a9d8652',w:16,x:0,y:49),id:edbbe370-8482-11ea-8386-fdeb838d2158,panelIndex:'49ff355e-70c8-4469-a8b6-bf0b3a9d8652',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:12,i:'5f545b33-df98-40e3-9412-1d8f9d330c27',w:32,x:16,y:49),id:'3baa9420-864d-11ea-8386-fdeb838d2158',panelIndex:'5f545b33-df98-40e3-9412-1d8f9d330c27',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:12,i:c5ad7be2-048b-4fe3-ba5f-e5c052398438,w:48,x:0,y:61),id:a52b1df0-8483-11ea-8386-fdeb838d2158,panelIndex:c5ad7be2-048b-4fe3-ba5f-e5c052398438,type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:14,i:'2d3f4df5-1129-47be-8612-d94f1cf2d646',w:48,x:0,y:73),id:'65e18930-8867-11ea-8386-fdeb838d2158',panelIndex:'2d3f4df5-1129-47be-8612-d94f1cf2d646',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:15,i:'5cbfd92a-9e97-49fc-86a0-75aea8f19a6c',w:48,x:0,y:87),id:'265ff2a0-8868-11ea-8386-fdeb838d2158',panelIndex:'5cbfd92a-9e97-49fc-86a0-75aea8f19a6c',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:15,i:'17aa6da2-2501-4645-b316-cc8e98e0891b',w:24,x:0,y:102),id:'116b26c0-8869-11ea-8386-fdeb838d2158',panelIndex:'17aa6da2-2501-4645-b316-cc8e98e0891b',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:15,i:adff9f75-35e6-49d5-991f-58c2bf52327e,w:24,x:24,y:102),id:'30dee8c0-8869-11ea-8386-fdeb838d2158',panelIndex:adff9f75-35e6-49d5-991f-58c2bf52327e,type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:15,i:'5f8eddf8-6605-417a-8e47-41e3b6373210',w:24,x:0,y:117),id:'946400c0-8485-11ea-8386-fdeb838d2158',panelIndex:'5f8eddf8-6605-417a-8e47-41e3b6373210',type:visualization,version:'7.5.0')),query:(language:kuery,query:''),timeRestore:!f,title:KPI04-Dashboard-Daily,viewMode:view)" height="600" width="800"></iframe>
+{% endblock %}
+
+
+{% block bottom_scripts %}
+    {{ block.super }}
+
+    <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+
+
+<!--    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"/>-->
+<!--    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"/>
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<!--    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
+
+
+
+
+
+
+{% endblock %}

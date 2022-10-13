@@ -1,0 +1,216 @@
+{% extends "intermediate_base.html" %}
+
+{% block head %}
+    {{ block.super }}
+	    <link href='/static/css_new/fb_feed/fb_feed.css' rel='stylesheet'></link>
+
+	    <style>
+		    .fbpost{
+		        padding : 25px 20px;
+		    }
+		    .fbpost:hover{
+		        box-shadow: 1px 1px 7px 1px #888;
+		    }
+		    .feed-container{
+		        padding : 10px 0px;
+		    }
+		    .fbpost a *{
+		        color : black;
+		        font-family : 'open sans' ;
+		    }
+		    .hide_btn {
+		        display:none;
+		    }
+		    .fbpost:hover .hide_btn {
+		        display:block;
+		    }
+		    .fbpost button{
+		        color:white;
+		        font-family:'sans-serif';
+		        text-shadow:none;
+		    }
+		    h4{
+		    	font-size: 18px !important;
+		    }
+		    .col-sm-9 > p {
+
+		    }
+		    .bt{
+		      background-color:#2e8dc7;
+		    } 
+		</style>
+		<style>
+@media screen and (max-width: 1298px) and (min-width: 0px) {
+	
+   .screenFix {
+		align: center;
+		width: 100%;
+		height: 100%;
+	}
+}
+</style>
+{% endblock head %}
+    
+{% block body_container %}
+    {{ block.super }}
+    	{% if not user.is_authenticated %}
+	        <p style='height:40px;visibility:hidden'></p>
+	    {% endif %}
+	    <div class='feed-container'>
+	        <div class='row standard_row'>
+	            <div class='col-sm-12'>
+	               <div class='render_feed'>
+	               <img class="thumb-img img-responsive" src="/static/uploads/images/WP Poster for Website.png" alt="..." style='width:100%'>
+					{% if fb_id %}
+		                <a href='http://evidyaloka.facebook.com' target='_blank'>
+		                    <button class="btn btn-success" style="position: absolute;right: 40%; top: 1%;font-size: 22px;line-height: 0.429;">Visit Community</button>
+		                </a>
+		            {% else %}
+		                <a href='#'>
+                         <button class="btn btn-success user_creation" id='user_creation' style="position: absolute;right: 40%; top: 1%;font-size: 22px;line-height: 0.429;">Join Community</button>
+		                </a>
+		            {% endif %}	               
+	               </div>
+	            </div>
+	        </div>
+	    </div>
+		<div id="contact_modal" class="modal fade" role="dialog" style="width: 560px !important; margin-top: 200px !important;"><!-- class="center-block" -->
+
+		    <!-- Modal content-->
+		    <div class="modal-content" >
+		        <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" style="font-size:30px">&times;</button>
+		            <h4 class="modal-title">Contact</h4">
+		        </div>
+		        <div class="modal-body">
+		            <div class='alert alert-warning'>
+		                <div class='row standard_row'>
+                            <p class='user_checking'></p>
+		                </div>
+
+		            </div>
+		        </div>
+		    </div>
+		</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    	<script src='/static/js/underscore_1.5.2.min.js' type='text/javascript' ></script>
+    	<script src='/static/js_new/fb_feed/fb_feed.min.js' type='text/javascript' ></script>
+
+    	<script>
+            /* var members_len ={{ mem_data|safe }};
+            $(document).ready(function(){
+                $('.render_feed').append('');
+                var template = $('#feed_div').html();
+                for (var i = 0; i<members_len.length; i++) {
+                    $('.render_feed').evdFacebook({
+                    id: members_len[i].fb_id,
+                    template : template,
+                    member_token : members_len[i].member_token
+                });
+                }
+            });  */
+
+		    /*$(document).ready(function(){
+		        var template = $('#feed_div').html();
+		        $('.render_feed').evdFacebook({
+		            id:'100011607874861',
+		            template : template,
+		            member_token : '{{ member_token }}'
+		        });
+		    });*/
+
+            $("body").on("click", '.user_creation', function(){
+                $('#preloader').show();
+                $.get('/workplace/create_user/').done(function(data) {
+                if (data.data == 'login_required') {
+                    window.location = "/?next=/engage/&show_popup=True";
+                }
+                else {
+                    $("#preloader").hide();
+                    $(".user_checking").html(data.data);
+                    $("#contact_modal").modal().show();
+                }
+            });
+        });
+
+		</script>
+		<script id='feed_div' type='javascript/template'>
+		    <% _.forEach(fb_glob.posts,function(u,i){  %>
+		       <div class='row standard_row fbpost' >
+				<div class="col-sm-8 col-xs-6">
+		            <div class='col-sm-2 col-xs-12' >
+		                <img src='<%= fb_glob.user.picture.data.url %>' class='img img-responsive img-circle' style='position:relative;height:40px;'>
+		            </div>
+		            <div class='col-sm-10 col-xs-12'>
+		                <h4 style='padding-left:0px;'><%= fb_glob.user.name %></h4>
+		                <p style='font-size:12px;color:#d1cfcf;'><%= u.created_time %>&nbsp <i class='fa fa-briefcase' aria-hidden='true'></i></p>
+		            </div>
+					</div>
+		            {% if fb_id %}
+		            <div class="col-sm-2 col-xs-2 hide_btn" style="margin-right:20px;">
+		                <a href='http://evidyaloka.facebook.com' target='_blank'>
+		                    <button class="btn bt btn-success">Visit Community</button>
+		                </a>
+		            </div>
+		            {% else %}
+		            <div class="col-sm-2 col-xs-2 hide_btn" style="margin-right:20px;">
+		                <a href='#' >
+                            <button class="btn bt btn-success user_creation" id='user_creation'>Join Community</button>
+		                </a>
+		            </div>
+		            {% endif %}
+		            <div class='col-sm-offset-1 col-xs-offset-1 <% if(u.picture) { %> col-sm-7 col-xs-7<% }else{ %> col-sm-11 col-xs-11 <% } %>' >
+		                <p style='font-size:14px;margin-top : 15px;'><%= u.message %></p>
+		            </div>
+		            <% if(u.picture){ %>
+		                <div class='col-sm-4 col-xs-4 col-centered'>
+		                     <img src='<%= u.picture %>' style='margin-left: auto; margin-right:auto;display:block;'  >
+		                </div>
+		            <% } %>
+		            <div class='row standard_row' style='width:80%;float:right;'>
+		                <p style='float:right;font-size:12px;color:#888'><%= u.story %>.</p>
+		            </div>
+		           <div class='row standard_row' style='text-align:center;margin-top:60px;height:20px;'>
+		                    <hr style='width:100%;margin: 0 2%;' >
+		           </div>
+		        </div>
+		    <% }) %>
+
+		</script>
+	
+<script>
+$(document).ready(function(){
+	
+    var screen=$(window);
+    if(screen.width()<=355){
+    	$(".hide_btn").removeClass("col-xs-2");
+		$(".hide_btn").addClass("col-xs-12");
+	}
+	else if(screen.width()>355){
+		$(".hide_btn").removeClass("col-xs-12");
+		$(".hide_btn").addClass("col-xs-2");
+	}
+    
+
+$(window).resize(function(){
+
+	var screen=$(window);
+	if(screen.width()<=355){
+		$(".hide_btn").removeClass("col-xs-2");
+		$(".hide_btn").addClass("col-xs-12");
+		
+	}
+	else if(screen.width()>355){
+		$(".hide_btn").removeClass("col-xs-12");
+		$(".hide_btn").addClass("col-xs-2");
+	}
+});
+
+
+
+});
+</script>
+{% endblock scripts %}

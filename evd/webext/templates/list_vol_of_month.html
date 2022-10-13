@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% load filters %}
+
+<!DOCTYPE html>
+{% block body_container %}
+{{ block.super }}
+
+<style>
+.navbar-wrapper{
+    background:deepskyblue;
+}
+/*css overridiing fix*/
+#featured1{
+    margin-top: 7% !important;
+}
+.profile-edit-2{
+    background: transparent !important;
+}
+
+[id^=tsd_modal_], [id^=user_modal_]{
+    margin: 0px;
+    background: transparent;
+    width: inherit;
+    left: 10% !important;
+    top: 25% !important;
+}
+.excel_btn{
+    position: absolute;
+    text-shadow: none;
+    font-size: 15px;
+    font: inherit;
+}
+
+#manage_booking_table_filter input{
+    margin-left: 30px;
+}
+#publish_slots_modal{
+    left: 50%;
+}
+.slot_days .checkbox label{
+    font-size:12px;
+}
+/*end override fix*/
+
+select.custom-select{
+    display: inline-block;
+    max-width: 100%;
+    padding: .375rem 1.75rem .375rem .75rem;
+    padding-right: .75rem\9;
+    color: #55595c;
+    vertical-align: middle;
+    background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='#333' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right .75rem center; 
+    background-image: none\9;
+    -webkit-background-size: 8px 10px;
+    background-size: 8px 10px;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: .25rem;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+/* .modal label{
+    margin-right:10%;
+    font-weight: 300;
+    font-size: 16px;
+} */
+.modal select{
+    width:40%;
+}
+#manage_booking_table td:first-child{
+    text-align: center;
+}
+.other_reason{
+    margin-bottom: 28px;
+}
+input#other_reason{
+    width: 40%;
+    background: white;
+    margin-left: 49%;
+    height: 30px;
+    border-radius: 0;
+    border-color: #d9d9d9;
+}
+
+.hide{
+                 display : none;
+             }
+</style>
+
+<!--
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+-->
+<link href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" rel="stylesheet">
+{% if succ_msg %}
+		<div id="msg_id2" class="col-md-12" style='display:block;background: #1ab188;color: white; 
+			 font-size:20px;margin:2% 0% 2% -5%;text-align: center;padding: 0.9%;width: 119%;'>
+			 {{ succ_msg }}
+		</div>
+{% endif %}
+<div class="col-md-12">
+<a href="/v2/add_vol_of_month" class="btn btn-info" style="margin-top: 7%;margin-left:99%;">ADD VOLUNTEER&nbsp;<i class="fa fa-plus"></i></a>
+<div class="container" style="margin: 0px auto 40px;">
+    <div class="row">
+       <div class="col-md-12 main_head" style="">
+            <h2 style="margin-right: 6%;margin-left: -7%;text-align: center;background: darkslateblue;color: white;padding:25px">Volunteers Of The Month</h2>
+        </div><!-- col -->
+    </div><!-- row -->
+    <div class="col-md-12 table-responsive" style="padding-left:0.2%;padding-right:1.6%;margin-right: 1%;margin-left: -7%;">
+        <table id="manage_booking_table" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Volunteer Name</th>
+                    <th>Center</th>
+                    <th>Language</th>
+                    <th>Month</th>
+                    <th>Year</th>
+                    <th>Added By</th>
+                    <th>Status</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+
+        <tfoot style="display: table-header-group;">
+            <tr>
+					<th>Volunteer Name</th>
+                    <th>Center</th>
+                    <th>Language</th>
+                    <th>Month</th>
+                    <th>Year</th>
+                    <th>Added By</th>
+                    <th>Status</th>
+                    <th>Edit</th>
+            </tr>
+        </tfoot>
+
+
+            <tbody>
+              {% for vol_of_month1 in vol_of_month %}
+                <tr>
+                    <td>{{ vol_of_month1.elected_user.first_name }} {{ vol_of_month1.elected_user.last_name }}</td>
+                    <td>{% for center_name in vol_of_month1.center_names %}
+                    		{{ center_name }} {% if not forloop.last %} , {% endif %}
+                    	{% endfor %}
+                    </td>
+                    <td>{{ vol_of_month1.elected_user.userprofile.pref_medium }}</td>
+                    <td>{{ vol_of_month1.month }}</td>
+                    <td>{{ vol_of_month1.year }}</td>
+                    <td>{{ vol_of_month1.added_by.first_name }} {{ vol_of_month1.added_by.last_name }}</td>
+                    <td>{{ vol_of_month1.status }}</td>
+                    <td align="center"><a href="/v2/edit_vol_of_month?user_id={{vol_of_month1.elected_user.id}}" >
+                     <i class="fa fa-pencil" title="Edit" aria-hidden="true"></i></a>
+                    </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+
+        </table><!-- table -->
+    </div><!-- table -->
+
+
+</div><!-- container -->
+</div>
+{% endblock %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+<script type="text/javascript" src="/static/js/underscore-min.js"></script>
+<!--
+
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+
+-->
+
+
+<!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>-->
+
+
+<link href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" rel="stylesheet"/>
+<link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet"/>
+
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+
+
+<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.bootstrap.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.print.js"></script>
+
+
+<script>
+$(document).ready(function(){
+	
+	$('#msg_id2').delay(2000).fadeOut();
+    // Setup - add a text input to each footer cell
+    $('#manage_booking_table tfoot th').each( function () {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    } );
+    var table = $("#manage_booking_table").DataTable({
+        "dom": "Bfrtip",
+        "buttons": [
+                {
+                    "extend": 'excel',
+                    "text": 'Download as Excel',
+                    "title": 'Manage_booking'
+                 },
+            ],
+    });
+    //default filer on date:
+   
+    //column based filter:
+    // Apply the search
+    table.columns().every( function () {
+        var that = this;
+
+        $( 'input', this.footer() ).on( 'keyup change', function () {
+            if ( that.search() !== this.value ) {
+                that
+                    .search( this.value, true, false, true)
+                    .draw();
+            }
+        });
+    });
+
+   
+    //other reason show / hide
+   
+    //tsd save details:
+    $(".success_msg").slideUp();
+    /* $("body").on("click", ".tsd_save", function(){
+        var tsd_member = $(this).parent().parent().children().children("#panel_member").find(":selected").val(),
+            tsd_outcome = $(this).parent().parent().children().children("#outcome").find(":selected").text(),
+            cancel_reason = $(this).parent().parent().children().children("#reason").val(),
+            slot_id = $(this).attr("data-slot_id"),
+            modal = $(this).parent().parent().parent().parent().parent();
+        if(cancel_reason === 'Others'){
+            cancel_reason += " : " + $(this).parent().parent().children().children("#other_reason").val();
+        }
+            $.get("/update_tsd/", {'tsd_member': tsd_member, 'tsd_outcome': tsd_outcome, 'slot_id': slot_id, 'cancel_reason': cancel_reason}, function(resp){
+                $(".success_msg").slideDown();
+                setTimeout(function(){
+                    modal.modal().hide();
+                    window.location.reload();
+                },1000);
+            });
+    }); */
+});
+
+
+function openmodal(id){
+	$("#user_id").val(id);
+	$("#edit_modal").modal('toggle');
+}
+
+</script>
+
+{% endblock head_scripts %}
+

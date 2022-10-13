@@ -1,0 +1,2855 @@
+{% extends 'new_base_temp.html' %} {% block content %}
+<!-- aboutus intro. Section
+    ================================================== -->
+
+<style>
+    .mobileView {}
+    
+    .about_p {
+        font-size: 1.2em;
+        font-weight: 500;
+        margin-top: -10px;
+    }
+    
+    .mobile_p2 {
+        font-size: 14px;
+        font-weight: 500;
+        margin-top: -2%;
+    }
+    
+    @media only screen and (max-width: 768px) {
+        .mobileView {
+            font-size: 10px;
+            margin-top: 50px;
+        }
+    }
+</style>
+
+<header class="site-header bg-dark sticky-top text-white-0_5" style="max-height:59px;position:sticky !important;top:0;background:#1e2022!important;z-index: 1500;">
+
+
+    <div class="container hide_for_mob">
+        <nav class="navbar navbar-inverse" style="margin-bottom: 0px;min-height: 30px;padding: 0.2em 0 0 0;">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                    <li style="display:inline-flex;"><i class="fa fa-skype" style="padding-top:9%;color: #44a7c7;font-size: 14px;"></i>
+                        <a class="" href="mailto:evidyaloka.helpdesk"> : evidyaloka.helpdesk</a>
+                    </li>
+                    <li style="display:inline-flex;"><i class="fa fa-headphones mr-2" style="padding-top:12%;color:#dd4b39"></i>
+                        <a href="tel:+91-80-46808983">: +91-80-46808983</a>
+                    </li>
+                    <li style="display:inline-flex;"><i class="fa fa-whatsapp mr-2" style="padding-top:12%;color:#04a941"></i>
+                        <a href="tel:+91 6361517776">: +91 6361517776</a>
+                    </li>
+
+
+                    {% if user.is_authenticated %}
+                    <!-- <li class="list-inline-item mr-3">
+           <div class="d-flex align-items-center">
+            <i class="far fa-hand-pointer mr-2" style="color: #a29626"></i>:
+            <a href="javascript:void(0);" onclick="makeRequest('Raise a request')">&nbsp;Raise a request</a>
+           </div>
+          </li> -->
+
+                    <li style="display:inline-flex;"><i class="fa fa-hand-pointer-o mr-2" style="padding-top:11%;color:#a29626"></i>
+                        <a href="javascript:void(0);" onclick="makeRequest('Raise a request')">: Raise a request</a>
+                    </li>
+
+                    <!--  <li class="list-inline-item mr-3">
+           <div class="d-flex align-items-center">
+            <i class="fas fa-exclamation-circle mr-2" style="color: #029688"></i>:
+            <a href="javascript:void(0);" onclick="makeRequest('Report an issue')">
+               &nbsp;Report an issue</a>
+           </div>
+          </li> -->
+
+                    <li style="display:inline-flex;"><i class="fa fa-exclamation-circle mr-2" style="padding-top:11%;color:#029688"></i>
+                        <a href="javascript:void(0);" onclick="makeRequest('Report an issue')">: Report an issue</a>
+                    </li>
+
+                    <!--   <li class="list-inline-item mr-3" style="font-size: 13px !important;">
+           <div class="d-flex align-items-center">
+            <i class="fa fa-comment mr-2" style="color: #206194"></i>:
+            <a href="javascript:void(0);" onclick="makeRequest('Share a feedback')">
+               &nbsp;Share a feedback</a>
+           </div>
+          </li> -->
+
+                    <li style="display:inline-flex;"><i class="fa fa-comment mr-2" style="padding-top:11%;color:#206194"></i>
+                        <a href="javascript:void(0);" onclick="makeRequest('Share a feedback')">: Share a feedback</a>
+                    </li>
+
+                    {% endif %}
+
+
+                    <!-- <li>
+<div class="navbar" style="cursor:pointer;margin-bottom:0px;border-left: 1px rgba(255, 255, 255, 0.1) solid;border-right: 1px rgba(255, 255, 255, 0.1) solid;padding:0px 12px 0px 12px;">
+  <div class="dropdown" style="color:#9d9d9d;font-size: 1.4rem;font-family: monospace;padding: 1.4rem 0rem 1.6rem 0rem;">
+    Volunteer Helpline <i class="fa fa-caret-down" style="font-size:17px"></i>
+    <div class="dropdown-content" style="border-top: 4px solid #02cc26">
+      <a class="dropdown-item" href="javascript:void(0);" onclick="makeRequest('Raise a request')">
+      <i class="ti-headphone mr-2"></i>
+          <span>&nbsp;(+91-80-46808983)</span>
+      </a>
+      <a class="dropdown-item" href="javascript:void(0);" onclick="makeRequest('Raise a request')">
+                   <i class=""><img src="/static/images/wats.png" width="20px" height="20px"/></i>
+                   <span> &nbsp;+91 6361517776</span>
+                  </a>
+                  <a class="dropdown-item" href="javascript:void(0);" onclick="makeRequest('Raise a request')">
+                   <i class="ti-email mr-2"></i>
+                   <span>&nbsp;volunteer@evidyaloka.org</span>
+                  </a>
+                  {% if user.is_authenticated %}
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="makeRequest('Raise a request')">
+                     <span>Raise a request</span>
+                    </a>
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="makeRequest('Report an issue')">
+                     <span>Report an issue</span>
+                    </a>
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="makeRequest('Share a feedback')">
+                     <span>Share a feedback</span>
+                    </a>
+                  {% endif %}  
+    </div>
+  </div> 
+</div>
+</li> -->
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+
+                    {% if user.is_authenticated %}
+                    <!--  <li class="list-inline-item mr-0 p-md-3 p-2 border-right border-left border-white-0_1">
+              <a href="/accounts/logout/">Login</a>
+            </li> -->
+                    {% else %}
+                    <li class="" style="border-left: 1px rgba(255, 255, 255, 0.1) solid;border-right: 1px rgba(255, 255, 255, 0.1) solid;padding-left: 12px;padding-right: 12px;">
+                        <a href="" data-toggle="modal" data-target="#login-modal" id="login-trigger">Login</a>
+                    </li>
+                    {% endif %} {% if not user.is_authenticated %}
+                    <li class="list-inline-item mr-0 p-md-3 p-2 border-white-0_1">
+                        <!--             <a href="">&nbsp;</a> -->
+                        <a data-toggle="modal" href="/volunteer/" id="signup-trigger" class="already" onclick="change_to_signup()" style="margin-left:5px;cursor:pointer">
+                      Register </a>
+                    </li>
+                    {% endif %}
+
+
+
+                    <!-- <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> -->
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    {% if user.is_authenticated %}
+    <ul class="log-in list-inline mb-0" style="margin-bottom: 0px;">
+        <li class="list-inline-item mr-0 p-md-3 p-2 border-white-0_1">
+            <a href="">&nbsp;</a>
+        </li>
+        <!--          {% if user.is_authenticated %} -->
+        {%include "new_login_badge_temp.html"%}
+        <!--          {% endif %} -->
+    </ul>
+    {% endif %}
+
+</header>
+<!-- END site header-->
+
+<div class="row top_cls" style="background:white;padding: 0.7em 0 0 0;z-index: 1020;height:91px;margin:0px;position:sticky !important;top:7.7% !important;">
+
+    <nav class="row ec-nav sticky-top bg-white" style="margin-left:0px;width:100%;">
+        <div class="container">
+            <div class="navbar p-0 navbar-expand-lg" style="padding:0px;margin-bottom: 0px;">
+
+
+                <!--      <div class="col-md-2 col-sm-3" style="display:inline-flex;"> -->
+                <div class="col-md-5 col-sm-3" style="display:flex;">
+                    <!--        <ul class="nav navbar-nav ec-nav__navbar " style="display:inline-flex;"> -->
+                    <!--        <li class="nav-item nav-item__has-megamenu megamenu-col-2"> -->
+                    <a style="padding-top:0.7rem" class="" href='/' style="padding-right:0px !important;">
+                        <img class="img_css" alt="" src="/static/images/evidyalogo.jpg" width="55px" height="50px" style="border-radius:100%;">
+                    </a>
+                    <!--          </li> -->
+                    <!--           <li class="nav-item nav-item__has-megamenu megamenu-col-2"> -->
+                    <a style="padding-top:0.4rem" class="" href='/' style="padding-left:0px !important;">
+                        <img class="img_css1" alt="" src="/static/images/evidyaban_1000x250.png" width="275px">
+                    </a>
+                    <!--           </li> -->
+                    <!--        </ul> -->
+
+                    <span aria-expanded="false" class="navbar-toggler ml-auto collapsed mt-2" data-target="#ec-nav__collapsible" data-toggle="collapse">
+             <div class="hamburger hamburger--spin js-hamburger">
+                 <div class="hamburger-box">
+                  <div class="hamburger-inner"></div>
+                 </div>
+               </div>
+           </span>
+                </div>
+
+
+
+
+
+
+
+                <div class="collapse navbar-collapse when-collapsed" id="ec-nav__collapsible">
+
+                    <ul class="nav navbar-nav ec-nav__navbar ">
+
+                        <!--  <li class="nav-item nav-item__has-megamenu megamenu-col-2">
+              <a  style="padding-top:1rem" class="nav-link" href='/about/'>
+                <img alt="" src="/static/images/evidyalogo.jpg" width="55px" height="50px" style="border-radius:100%;">
+              </a>
+         </li>
+         
+          <li class="nav-item nav-item__has-megamenu megamenu-col-2">
+              <a  style="padding-top:1rem" class="nav-link" href='/about/'>
+              <img alt="" src="/static/images/evidyaban_1000x250.png" width="275px" style="float:left;">
+              </a>
+          </li> -->
+
+                        <!-- <div class="navbar-brand">
+          <a class="logo-default" href="/?home=true">
+             <img alt="" src="/static/images/evidyalogo.jpg" width="55px" height="50px" style="border-radius:100%;display:inline;position:absolute">
+             <img alt="" src="/static/images/evidyaban_1000x250.png" width="275px" style="margin-left:50px;float:left;display:inline;position:absolute">
+          </a>
+        </div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <li class="nav-item nav-item__has-megamenu megamenu-col-12">
+                            <pre style="background:white;border:none;">&nbsp;                             &nbsp;</pre>
+                        </li>
+
+                        <li class="nav-item nav-item__has-megamenu megamenu-col-2">
+                            <a class="nav-link" href='/about/'>About</a>
+                        </li>
+
+                        <li class="nav-item nav-item__has-megamenu megamenu-col-2">
+                        </li>
+
+                        <li class="nav-item nav-item__has-megamenu megamenu-col-2">
+                            <a class="nav-link" href='/volunteer/'>Volunteer</a>
+                        </li>
+
+                        <li class="nav-item nav-item__has-megamenu megamenu-col-2">
+                            <a class="nav-link" href='/sponsor/'>Donate</a>
+                        </li>
+
+                        <!--  {% if user.is_authenticated %}
+             <li class="nav-item nav-item__has-dropdown" >
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Volunteer Helpline</a>
+                <div class="dropdown-menu">
+                <ul class="list-unstyled">
+                <div style="padding:25px;line-height: 25px;">
+                  <label style=" font-size: 14px">Phone :</label>
+                  <p>(+91-80-46808983)</p>
+                  <img src="/static/images/wats.png" width="20px" height="20px"/>
+                  <p style="margin-top: -25px; margin-left: 25px;">+91 6361517776 </p>
+                  <label style=" font-size: 14px">Skype HelpDesk (Chat Only) :</label>
+                  <p>evidyaloka.helpdesk</p>
+                  
+                      <p><a href="javascript:void(0);" onclick="makeRequest('Raise a request')" >Raise a request</a></p>
+                      <p><a href="javascript:void(0);" onclick="makeRequest('Report an issue')" >Report an issue</a></p>
+                      <p><a href="javascript:void(0);" onclick="makeRequest('Share a feedback')">Share a feedback</a></p>
+                       
+                </div>
+                </ul>
+                </div>
+            </li>
+            {% endif %}    -->
+
+
+
+
+
+                        <!--  <li class="nav-item nav-item__has-dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"> Partner </a>
+                <div class="dropdown-menu">
+                  <ul class="list-unstyled">
+                    <li>
+                      <a class="nav-link__list" href="/funding_parter/"> Funding Partner </a>
+                    </li>
+                    <li>
+                      <a class="nav-link__list" href="/request_for_proposal/"> Start in a School </a>
+                    </li>
+                    <li>
+                      <a class="nav-link__list" href="/volunteer_partner/"> Volunteer Partner </a>
+                    </li>
+                  </ul>
+                </div>
+              </li> -->
+
+
+                        <li>
+                            <a class="text_color" href="{% if user.is_authenticated %} / {% else %} /partner/become_partner/ {% endif %}">Partner</a>
+                            <!--<div class="navbar" style="padding:0px;margin-bottom:0px;">-->
+                            <!--<div class="dropdown" style="    padding: 2.4rem 0rem 3.7rem 2rem;cursor:pointer;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;color:black;">-->
+                            <!--Partner &lt;!&ndash; <i class="fa fa-caret-down" style="font-size:17px"></i> &ndash;&gt;-->
+                            <!--<div class="dropdown-content" style="border-top: 4px #02cc26 solid;margin-top:54%;min-width:220px;">-->
+                            <!--<a class="nav-link__list" href="/funding_parter/"> Funding Partner </a>-->
+                            <!--<a class="nav-link__list" href="/request_for_proposal/"> Start in a School </a>-->
+                            <!--<a class="nav-link__list" href="/volunteer_partner/"> Volunteer Partner </a>-->
+                            <!--</div>-->
+                            <!--</div> -->
+                            <!--</div>-->
+                        </li>
+
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- END container-->
+    </nav>
+    <!-- END ec-nav -->
+    <img src='/static/images/top-colored-bar.jpg' style='margin-top:-1%;width:100%;' />
+</div>
+<section id="featured1" class="dark with-bg_about">
+
+    <div class="container">
+        <div class="row" style="margin-top:-50px">
+            <div class="col-sm-12 overlay-text">
+                <div class="vertical-align">
+                    <p class="about_p mobileView">
+                        eVidyaloka is a not-for-profit organization that focuses on transforming the educational landscape of rural India. Registered under the Trusts Act, the organization creates digital classrooms for children in remote villages, with the support of local
+                        communities and Volunteer Teachers from across the globe. With standardized lesson plans and teaching aids for a consistent learning experience, the children from government schools receive e-quality education for a promising &
+                        rewarding future.
+                    </p>
+                    <p class="mobileView mobile_p2">
+                        History: eVidyaloka was founded in Jan, 2011, with co-founders Satish and Venkat, colleagues at Microsoft India, with the passion to bring volunteerism and technology together, to enable quality in education for most deserving children of remote and rural
+                        villages of India. After a pilot of the idea on the field for two years, the journey was set in motion with full time employees since May, 2013.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!--<span><p><a class="btn btn-lg btn-primary scroll history_btn" href="/under_construction/" role="button" style="background:rgba(129, 28, 210, 0.53);margin-top:-50px">Our History</a></p></span>-->
+    </div>
+
+    <div class="black"></div>
+
+</section>
+
+
+<!-- our team -->
+
+<!-- Portfolio
+    ================================================== -->
+<section class="section-content section-isotope" id="projects" style="margin-top:-30px">
+
+    <div class="text-center" style=" font: 5em sans-serif; color: #029688;">
+        <div>Our Team</div>
+    </div>
+    <div class="container">
+
+        <!-- Modal -->
+        <div id="detail" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content" style="background: -moz-linear-gradient(294deg, #f5cbcb 34%, #ebeca6 98%);background: -webkit-gradient(linear, 294deg, color-stop(34%, #f5cbcb), color-stop(98%, #ebeca6));background: -webkit-linear-gradient(294deg, #f5cbcb 34%, #ebeca6 98%);background: -o-linear-gradient(294deg, #f5cbcb 34%, #ebeca6 98%);background: -ms-linear-gradient(294deg, #f5cbcb 34%, #ebeca6 98%);filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5cbcb', endColorstr='#ebeca6', GradientType='1');background: linear-gradient(156deg, #f5cbcb 34%, #ebeca6 98%);">
+                    <div class="modal-header" style="margin-top: 50px">
+                        <button type="button" class="close" data-dismiss="modal" style="font-size:30px">&times;</button>
+                        <h4 class="modal-title text-center">eVidyaloka Team</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img id="detail_img" src="/static/images/teaching.jpg" style="max-width:140px">
+                            </div>
+                            <div class="col-md-offset-1 col-md-9" style="text-align:left">
+                                <h4 id="name"></h4>
+                                <h4 id="designation"></h4>
+                                <p id="detailed" style="font-weight:500"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <script src="/static/js_new/jquery-1.10.2.min.js"></script>
+        <link rel="stylesheet" href="/static/css_new/jquery-ui-minified.css">
+        <script src="/static/js_new/jquery-ui.js"></script>
+        <div id="tab" class="tabs-team button-group text-center">
+            <ul>
+                <li class="tab_style"><a class="active"><button data="trustee" class="active">Trustees & Leadership</button></a></li>
+                <li class="tab_style"><a class=""><button data="clas">Advisors</button></a></li>
+                <li class="tab_style"><a class=""><button data="exe">Execution Team</button></a></li>
+                <!--<li class="tab_style"><a class="" ><button data="clas">Class Administrators</button></a></li> -->
+
+            </ul>
+            <div id="trustees" class="tabs_ui">
+                <!-- carousel================================================== -->
+                <section id="testimonials" class="detail_modal">
+                    <div class="container">
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                <div class="carousel slide" data-ride="carousel" id="quote-carouse">
+                                    <!-- Bottom Carousel Indicators -->
+                                    <ol class="carousel-indicators" style="bottom:-40px">
+                                        <li data-target="#quote-carouse" data-slide-to="0" class="active"></li>
+                                    </ol>
+
+                                    <!-- Carousel Slides / Quotes -->
+                                    <div class="carousel-inner">
+
+                                        <!-- Quote 1 -->
+                                        <div class="item active">
+                                            <div class="row">
+                                                <div id="" class="grid cs-style-1">
+                                                    <div class="col-sm-5 col-md-2  portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-100px">
+                                                                <h3></h3>
+                                                                <a id="27" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Brinda<br>Chief Executive officer</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/brinda.png" alt="Venkat" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                </div>
+                                                <div id="" class="grid cs-style-1">
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-110px">
+                                                                <h3></h3>
+                                                                <a id="1" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Vishy Thiagarjan<br>Trustee</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/vishy2.jpg" alt="Vishy" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption>
+                                                                <!--<a href="/static/images/visshy.png" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview" style="left:42%"><i class="fa fa-plus"></i></a>
+                                        <a href="/under_construction/" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>-->
+                                                            </figcaption>
+                                                        </figure>
+                                                    </div>
+                                                </div>
+
+                                                <div id="" class="grid cs-style-1">
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-110px">
+                                                                <a id="2" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Ravichandran V<br>Trustee/Chairperson</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/Ravi.jpg" alt="Ravi" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption>
+                                                                <!--<a href="/static/images/Ravi.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview" style="left:42%"><i class="fa fa-plus"></i></a>
+                                        <a href="/under_construction/" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>-->
+                                                            </figcaption>
+                                                        </figure>
+                                                    </div>
+                                                </div>
+
+
+                                                <div id="" class="grid cs-style-1">
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-110px">
+                                                                <a id="3" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Venkat Sriraman<br>Co-Founder/ Trustee</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/venkats.png" alt="Venkat" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption>
+                                                                <!--<a href="/static/images/venkatsir.png" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview" style="left:42%"><i class="fa fa-plus"></i></a>
+                                        <a href="/under_construction/" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>-->
+                                                            </figcaption>
+                                                        </figure>
+                                                    </div>
+                                                </div>
+
+                                                <div id="" class="grid cs-style-1">
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-110px">
+                                                                <a id="4" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>V.Ramkumar<br>Trustee</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/ram_kumar_new.jpg" alt="Ram" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption>
+                                                                <!--<a href="/static/images/ram_kumar.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview" style="left:42%"><i class="fa fa-plus"></i></a>
+                                        <a href="/under_construction/" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>-->
+                                                            </figcaption>
+                                                        </figure>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--<div class="item">
+                </div>
+              </div>-->
+
+                                        <!-- Carousel Buttons Next/Prev -->
+                                        <a data-slide="prev" href="#quote-carouse" class="left carousel-control visible-md visible-lg"><i class="fa fa-chevron-left" style="line-height:7"></i></a>
+                                        <a data-slide="next" href="#quote-carouse" class="right carousel-control  visible-md visible-lg"><i class="fa fa-chevron-right" style="line-height:7"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+            <div id="execution" class="tabs_ui hidden">
+                <!-- carousel================================================== -->
+                <section id="testimonials" class="detail_modal">
+                    <div class="container margin_car">
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                <div class="carousel slide" data-ride="carousel" id="quote-carous">
+                                    <!-- Bottom Carousel Indicators -->
+                                    <ol class="carousel-indicators" style="left:50%;bottom:-30px">
+                                        <li data-target="#quote-carous" data-slide-to="0" class="active"></li>
+                                        <li data-target="#quote-carous" data-slide-to="1"></li>
+                                        <li data-target="#quote-carous" data-slide-to="2"></li>
+                                        <li data-target="#quote-carous" data-slide-to="3"></li>
+                                    </ol>
+
+                                    <!-- Carousel Slides / Quotes -->
+                                    <div class="carousel-inner" style="position: unset;">
+
+                                        <!-- Quote 1 -->
+                                        <div class="item active">
+                                            <div class="row">
+                                                <div id="" class="grid cs-style-1">
+                                                    <div class="col-sm-6 col-md-2  portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-134px">
+                                                                <a style="text-decoration:none"><span>Brinda<br>Chief Executive Officer</span></a>
+                                                                <br>
+                                                                <br>
+                                                                <a id="27" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Show Details</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/brinda.png" alt="Venkat" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-143px">
+                                                                <!--<a id="8" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Show Details</span></a>-->
+                                                                <a style="text-decoration:none"><span>Kripa Subramony<br>Operations Head</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/kripa.jpg" alt="Kripa" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+
+
+
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-153px">
+                                                                <a style="text-decoration:none"><span>Freya Devasia<br>Coordinator - Volunteer Management</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Freya_devasia.jpg" alt="Freya" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-134px">
+                                                                <a style="text-decoration:none"><span>Gayathri Ramesh<br>Manager, Class Delivery Operations</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/Gayathri.png" alt="Gayathri" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-149px">
+                                                                <a style="text-decoration:none"><span>Nikitha M<br>Program Manager, Growth Projects</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/nikitha1.jpg" alt="Nikitha" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-140px">
+                                                                <a style="text-decoration:none"><span>Aditi Naikude<br>Coordinator - Donor relations</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Aditi_naikude.jpg" alt="Aditi" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Quote 2 -->
+                                        <div class="item">
+                                            <div class="row">
+                                                <div id="" class="grid cs-style-1">
+                                                    <!-- <div class="col-sm-6 col-md-2 portfolio-item design">
+                                      <figure> -->
+                                                    <!-- Thumb Info -->
+                                                    <!-- <div class="info"style="bottom:-142px">
+                                                <a style="text-decoration:none"><span>Prasanna Oruganti,<br>Senior academics coordinator</span></a>
+                                          </div> -->
+                                                    <!-- Thumbnail -->
+                                                    <!-- <img src="/static/images/team/Prasanna Oruganti.jpg" alt="Prasanna" class="team_img"> -->
+                                                    <!-- Thumb links -->
+                                                    <!-- <figcaption></figcaption>
+                                      </figure>
+                                  </div> -->
+                                                    <!-- <div class="col-sm-6 col-md-2 portfolio-item design">
+                              <figure>
+                                  <div class="info"style="bottom:-142px">
+                                        <a style="text-decoration:none"><span>Ankita Srivastava,<br>Academics Coordinator</span></a>
+                                  </div>
+                                  <img src="/static/images/team/Ankita Srivastava.jpg" alt="Ankita"  class="team_img">
+                                  <figcaption></figcaption>
+                              </figure>
+                          </div> -->
+                                                    <!--  <div class="col-sm-6 col-md-2 portfolio-item design">Saswati Roy
+                              <figure>
+                                  Thumb Info
+                                  <div class="info"style="bottom:-130px">
+                                        <a style="text-decoration:none"><span>Deepika Begur<br>Assistant Manager, Class Delivery Operations</span></a>
+                                  </div>
+                                  Thumbnail
+                                  <img src="/static/images/deepika.jpg" alt="Deepika" class="team_img">
+                                  Thumb links
+                                  <figcaption></figcaption>
+                              </figure>
+                          </div> -->
+
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-142px">
+                                                                <a style="text-decoration:none"><span>Tejal Ranadive<br>Manager, Class Delivery Operations</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Tejal2.png" alt="tejal" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-145px">
+                                                                <a style="text-decoration:none"><span>Rini Jose<br>Assistant Manager, Human Resources</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/rini.jpg" alt="rini" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-134px">
+                                                                <a style="text-decoration:none"><span>Nagaraju DG<br>Assistant Manager, Administration</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/Nagaraju.jpg" alt="NagaRaju" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <div class="info" style="bottom:-134px">
+                                                                <a style="text-decoration:none"><span>Prashan K,<br>Coordinator - System Admin</span></a>
+                                                            </div>
+                                                            <img src="/static/images/team/Prashan K.jpg" alt="Prashan" class="team_img">
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <div class="info" style="bottom:-134px">
+                                                                <a style="text-decoration:none"><span>Avanthi Ashwini<br>Manager, Class Delivery Operations</span></a>
+                                                            </div>
+                                                            <img src="/static/images/ashwini.jpg" alt="Ashwini" class="team_img">
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <div class="info" style="bottom:-134px">
+                                                                <a style="text-decoration:none"><span>Anusree Nived<br>Asst Manager - Volunteer Management</span></a>
+                                                            </div>
+                                                            <img src="/static/images/team/anusree.jpg" alt="anusree" class="team_img">
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Quote 3-->
+                                        <div class="item">
+                                            <div class="row">
+                                                <div id="" class="grid cs-style-1">
+                                                    <div id="" class="grid cs-style-1">
+                                                        <!-- <div class="col-sm-6 col-md-2 portfolio-item design">
+                              <figure>
+                                  Thumb Info
+                                  <div class="info"style="bottom:-130px">
+                                        <a style="text-decoration:none"><span>Shweta Narayan<br>Manager, Donor Relations</span></a>
+                                  </div>
+                                  Thumbnail
+                                  <img src="/static/images/ShwetaNarayan.jpg" alt="Shweta Narayan"  class="team_img">
+                                  Thumb links
+                                  <figcaption></figcaption>
+                              </figure>
+                          </div> -->
+
+
+                                                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                            <figure>
+                                                                <!-- Thumb Info -->
+                                                                <div class="info" style="bottom:-134px">
+                                                                    <a style="text-decoration:none"><span>​Shruthi JN<br>Coordinator, KA Operations</span></a>
+                                                                </div>
+                                                                <!-- Thumbnail -->
+                                                                <img src="/static/images/team/Shruthi.jpg" alt="Shruthi" class="team_img">
+                                                                <!-- Thumb links -->
+                                                                <figcaption></figcaption>
+                                                            </figure>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                            <figure>
+                                                                <!-- Thumb Info -->
+                                                                <div class="info" style="bottom:-142px">
+                                                                    <a style="text-decoration:none"><span>Kavitha Joan<br>Program Manager - Academics and content</span></a>
+                                                                </div>
+                                                                <!-- Thumbnail -->
+                                                                <img src="/static/images/team/Kavitha_joan.jpeg" alt="Kavitha" class="team_img">
+                                                                <!-- Thumb links -->
+                                                                <figcaption></figcaption>
+                                                            </figure>
+                                                        </div>
+                                                        <!--div class="col-sm-6 col-md-2 portfolio-item design">
+                                                            <figure>
+                                                                //Thumb Info
+                                                                <div class="info" style="bottom:-142px">
+                                                                    <a style="text-decoration:none"><span>​Mira Sood,<br>Chief Content Officer</span></a>
+                                                                </div>
+                                                                //Thumbnail
+                                                                <img src="/static/images/team/Mira_sood.jpg" alt="Mira" class="team_img">
+                                                                //Thumb links
+                                                                <figcaption></figcaption>
+                                                            </figure>
+                                                        </div-->
+                                                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                            <figure>
+                                                                <!-- Thumb Info -->
+                                                                <div class="info" style="bottom:-134px">
+                                                                    <a style="text-decoration:none"><span>​Rinki Chowdhury,<br>Coordinator - Class Delivery Operations</span></a>
+                                                                </div>
+                                                                <!-- Thumbnail -->
+                                                                <img src="/static/images/team/Rinki Chowdhury.jpg" alt="Rinki" class="team_img">
+                                                                <!-- Thumb links -->
+                                                                <figcaption></figcaption>
+                                                            </figure>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                            <figure>
+                                                                <!-- Thumb Info -->
+                                                                <div class="info" style="bottom:-150px">
+                                                                    <a style="text-decoration:none"><span>Saswati Roy,<br>Coordinator - Volunteer Management</span></a>
+                                                                </div>
+                                                                <!-- Thumbnail -->
+                                                                <img src="/static/images/team/Saswati Roy.jpg" alt="Saswati" class="team_img">
+                                                                <!-- Thumb links -->
+                                                                <figcaption></figcaption>
+                                                            </figure>
+                                                        </div>
+
+
+                                                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                            <figure>
+                                                                <div class="info" style="bottom:-134px">
+                                                                    <a style="text-decoration:none"><span>Siva Shruthi K,<br>Coordinator - Class Delivery Operations
+                              </span></a>
+                                                                </div>
+                                                                <img src="/static/images/team/Siva Sruthi.jpg" alt="Siva Shruthi" class="team_img">
+                                                                <figcaption></figcaption>
+                                                            </figure>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Quote 4-->
+                                        <div class="item">
+                                            <div class="row">
+                                                <div id="" class="grid cs-style-1">
+
+
+
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-150px">
+                                                                <a style="text-decoration:none"><span>Madhavi Osta,<br>Coordinator - Vidyaganga</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Madhavi_osta.png" alt="Madhavi" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-150px">
+                                                                <a style="text-decoration:none"><span>Deepak Bhagat,<br>Coordinator, Class Delivery Operations</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Deepak Bhagat.JPG" alt="Saswati" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-150px">
+                                                                <a style="text-decoration:none"><span>Remoni Sen,<br>Impact Coordinator</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img style="motion-rotation: reverse;" src="/static/images/team/remoni.png" alt="Saswati" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-150px">
+                                                                <a style="text-decoration:none"><span>Mallikharjuna M,<br>Coordinator , Class Delivery Operations
+                                      </span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Mallikharjun.JPG" alt="Saswati" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-150px">
+                                                                <a style="text-decoration:none"><span>Subha Kannan,<br>Coordinator, Donor Relations</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Subha Kannan.JPG" alt="Saswati" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+
+
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <div class="info" style="bottom:-134px">
+                                                                <a style="text-decoration:none"><span>C K Kuppuswamy,<br>Program Manager
+                                      </span></a>
+                                                            </div>
+                                                            <img src="/static/images/team/Kuppuswamy.jpeg" alt="Siva Shruthi" class="team_img">
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--quote5-->
+                                        <div class="item">
+                                            <div class="row">
+                                                <div id="" class="grid cs-style-1">
+
+
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <div class="info" style="bottom:-134px">
+                                                                <a style="text-decoration:none"><span>Varija,<br>Head Academics
+
+
+                                </span></a>
+                                                            </div>
+                                                            <img src="/static/images/team/Varija_Head_Academics.jpg" alt="Siva Shruthi" class="team_img">
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-150px">
+                                                                <a style="text-decoration:none"><span> Poornima N,<br>Coordinator, Class Delivery Operations</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Poornima.jpg" alt="Saswati" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-150px">
+                                                                <a style="text-decoration:none"><span>Akshay patil,<br> Program Manager
+                                      </span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Akshay.jpg" alt="Saswati" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-150px">
+                                                                <a style="text-decoration:none"><span>Ananth G,<br>Coordinator , Academy</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Ananth.jpg" alt="Saswati" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-150px">
+                                                                <a style="text-decoration:none"><span>Mamathashree BV,<br> Coordinator - VM                                      </span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Mamathashree_BV_Coordinator_VM.jpeg" alt="Saswati" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+
+
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <div class="info" style="bottom:-134px">
+                                                                <a style="text-decoration:none"><span>Revathi Subramaniam,<br>Coordinator - Vidyaganga</span></a>
+                                                            </div>
+                                                            <img src="/static/images/team/Revathi_subramaniam.jpg" alt="Revathi_subramaniam" class="team_img">
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--quote5-->
+                                        <!-- ```````````````````````````````````````````````````````````````````````````````````````````````````` -->
+                                        <div class="item">
+                                            <div class="row">
+                                                <div id="" class="grid cs-style-1">
+
+
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-150px">
+                                                                <a style="text-decoration:none"><span>Soumya Lakshman,<br>Coordinator - Class Delivery operations</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Soumya_lakshman.jpg" alt="Soumya_lakshman" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-150px">
+                                                                <a style="text-decoration:none"><span> Rashmi C,<br>Coordinator - VM</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/rashmi.png" alt="Saswati" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-150px">
+                                                                <a style="text-decoration:none"><span>Smita Singh,<br> Coordinator - VM                                      </span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Smita_Singh_Coordinator_VM.jpg" alt="Saswati" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-150px">
+                                                                <a style="text-decoration:none"><span>Suhas,<br>Coordinator , Academics</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Suhas_Coordinator_Academics.jpg" alt="Saswati" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-150px">
+                                                                <a style="text-decoration:none"><span>Vandana,<br>Senior Program Manager</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Vandana_Senior_Program_Manager.jpg" alt="Saswati" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-150px">
+                                                                <a style="text-decoration:none"><span>Tahamul Hussain,<br>Coordinator - Class Delivery Operations</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/team/Tahamul_hussain.jpg" alt="Tahamul_hussain" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption></figcaption>
+                                                        </figure>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!--quote6-->
+                                        <!-- Carousel Buttons Next/Prev -->
+                                        <a data-slide="prev" href="#quote-carous" style="top:-40px;" class="left carousel-control visible-md visible-lg"><i class="fa fa-chevron-left" style="line-height:7;"></i></a>
+                                        <a data-slide="next" href="#quote-carous" style="top:-40px;" class="right carousel-control  visible-md visible-lg"><i class="fa fa-chevron-right" style="line-height:7;top:-40px;"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+
+                </section>
+                </div>
+                <div id="class_adm" class="tabs_ui hidden">
+                    <!-- carousel================================================== -->
+                    <section id="testimonials" class="detail_modal">
+                        <div class="container">
+                            <div class='row'>
+                                <div class='col-md-12'>
+                                    <div class="carousel slide" data-ride="carousel" id="quote-carouse">
+                                        <!-- Bottom Carousel Indicators -->
+                                        <ol class="carousel-indicators" style="bottom:-40px">
+                                            <li data-target="#quote-carouse" data-slide-to="0" class="active"></li>
+                                        </ol>
+
+                                        <!-- Carousel Slides / Quotes -->
+                                        <div class="carousel-inner">
+
+                                            <!-- Quote 1 -->
+                                            <div class="item active">
+                                                <div class="row">
+
+                                                    <div id="" class="grid cs-style-1">
+                                                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                            <figure>
+                                                                <!-- Thumb Info -->
+                                                                <div class="info" style="bottom:-110px;margin-left: 100px;">
+                                                                    <!-- <a id="5" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Show Details</span></a> -->
+                                                                </div>
+                                                                <!-- Thumbnail -->
+                                                                <!-- <img src="/static/images/Rizwan.jpg" alt="Rizwan"  class="team_img"> -->
+                                                                <!-- Thumb links -->
+                                                                <figcaption>
+                                                                    <!--<a href="/static/images/Rizwan.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview" style="left:42%"><i class="fa fa-plus"></i></a>
+                                <a href="/under_construction/" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>-->
+                                                                </figcaption>
+                                                            </figure>
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="" class="grid cs-style-1">
+                                                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                            <figure>
+                                                                <!-- Thumb Info -->
+                                                                <div class="info" style="bottom:-110px">
+                                                                    <!-- <a id="6" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Show Details</span></a> -->
+                                                                </div>
+                                                                <!-- Thumbnail -->
+                                                                <!-- <img src="/static/images/Vyjayanthi.jpg" alt="Vyjayanthi"  class="team_img"> -->
+                                                                <!-- Thumb links -->
+                                                                <figcaption>
+                                                                    <!--<a href="/static/images/Vyjayanthi.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview" style="left:42%"><i class="fa fa-plus"></i></a>
+                                <a href="/under_construction/" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>-->
+                                                                </figcaption>
+                                                            </figure>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div id="" class="grid cs-style-1">
+                                                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                            <figure>
+                                                                <!-- Thumb Info -->
+                                                                <div class="info" style="bottom:-110px;">
+                                                                    <a id="5" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Rizwan<br>Show Details</span></a>
+                                                                </div>
+                                                                <!-- Thumbnail -->
+                                                                <img src="/static/images/Rizwan.jpg" alt="Rizwan" class="team_img">
+                                                                <!-- Thumb links -->
+                                                                <figcaption>
+                                                                    <!--<a href="/static/images/Rizwan.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview" style="left:42%"><i class="fa fa-plus"></i></a>
+                              <a href="/under_construction/" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>-->
+                                                                </figcaption>
+                                                            </figure>
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="" class="grid cs-style-1">
+                                                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                                                            <figure>
+                                                                <!-- Thumb Info -->
+                                                                <div class="info" style="bottom:-110px">
+                                                                    <a id="6" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Vyjayanthi<br>Show Details</span></a>
+                                                                </div>
+                                                                <!-- Thumbnail -->
+                                                                <img src="/static/images/Vyjayanthi.jpg" alt="Vyjayanthi" class="team_img">
+                                                                <!-- Thumb links -->
+                                                                <figcaption>
+                                                                    <!--<a href="/static/images/Vyjayanthi.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview" style="left:42%"><i class="fa fa-plus"></i></a>
+                            <a href="/under_construction/" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>-->
+                                                                </figcaption>
+                                                            </figure>
+                                                        </div>
+                                                    </div>
+
+
+
+
+
+                                                </div>
+                                            </div>
+                                            <!--<div class="item">
+        </div>
+      </div>-->
+
+                                            <!-- Carousel Buttons Next/Prev -->
+                                            <a data-slide="prev" href="#quote-carouse" class="left carousel-control visible-md visible-lg"><i class="fa fa-chevron-left" style="line-height:7"></i></a>
+                                            <a data-slide="next" href="#quote-carouse" class="right carousel-control  visible-md visible-lg"><i class="fa fa-chevron-right" style="line-height:7"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+                </div>
+
+                <div class="page-header text-center" style="margin:0px; font: 4em sans-serif; color: #029688;">
+                    <div>Chief Patron</div>
+                </div>
+
+                <section id="testimonials" class="detail_modal">
+                    <div class="container">
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                <div class="carousel slide" data-ride="carousel" id="quote-carouse">
+                                    <!-- Bottom Carousel Indicators -->
+                                    <ol class="carousel-indicators" style="bottom:-40px">
+                                        <li data-target="#quote-carouse" data-slide-to="0" class="active"></li>
+                                    </ol>
+
+                                    <!-- Carousel Slides / Quotes -->
+                                    <div class="carousel-inner">
+                                        <!-- Quote 1 -->
+                                        <div class="item active">
+                                            <div class="d-flex justify-content-center">
+                                                <div id="" class="grid cs-style-1">
+                                                    <div class=" portfolio-item design">
+                                                        <figure>
+                                                            <!-- Thumb Info -->
+                                                            <div class="info" style="bottom:-110px;">
+                                                                <a id="28" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Prof V K<br>Chief Patron</span></a>
+                                                            </div>
+                                                            <!-- Thumbnail -->
+                                                            <img src="/static/images/Prof_V_K.jpg" alt="Prof. V K" class="team_img">
+                                                            <!-- Thumb links -->
+                                                            <figcaption>
+                                                                <!--<a href="/static/images/Rizwan.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview" style="left:42%"><i class="fa fa-plus"></i></a>
+                                                                <a href="/under_construction/" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>-->
+                                                            </figcaption>
+                                                        </figure>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+
+                <!--<div id="class_adm" class="tabs_ui hidden" style="margin-top: -30px;margin-left: 30px;">
+    <section id="testimonials" class="detail_modal">
+
+      <div class="container">
+
+        <div class='row'>
+          <div class='col-md-12'style="margin-left:250px">
+            <div class="carousel slide" data-ride="carousel" id="quote-carousel">
+              <ol class="carousel-indicators"style="left:280px;bottom:-30px">
+                <li data-target="#quote-carousel" data-slide-to="0" class="active"></li>
+                <li data-target="#quote-carousel" data-slide-to="1"></li>
+              </ol>
+
+              <div class="carousel-inner">
+
+                <div class="item active">
+                    <div class="row">
+                        <div id="" class="grid cs-style-1">
+                            <div class="col-sm-6 col-md-2 portfolio-item design">
+                                <figure>
+                                    <div class="info"style="bottom:-110px">
+                                         <a id="16" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Show Details</span></a>
+                                    </div>
+                                    <img src="/static/images/class1/ashwini.jpg" alt="name" class="team_img">
+                                    <figcaption>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                            <div class="col-sm-6 col-md-2 portfolio-item design">
+                                <figure>
+                                    <div class="info"style="bottom:-110px">
+                                         <a id="17" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Show Details</span></a>
+                                    </div>
+                                    <img src="/static/images/ram.jpg" alt="ram" class="team_img">
+                                    <figcaption>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                            <div class="col-sm-6 col-md-2 portfolio-item design">
+                                <figure>
+                                    <div class="info"style="bottom:-110px">
+                                         <a id="18" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Show Details</span></a>
+                                    </div>
+                                    <img src="/static/images/balan.jpg" alt="Balan" class="team_img">
+                                    <figcaption>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="row">
+
+                        <div id="" class="grid cs-style-1">
+
+
+                            <div class="col-sm-6 col-md-2 portfolio-item design">
+                                <figure>
+                                    <div class="info"style="bottom:-110px">
+                                         <a id="19" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Show Details</span></a>
+                                    </div>
+                                    <img src="/static/images/dhathri.jpg" alt="Dhathri" class="team_img">
+                                    <figcaption>
+                                    </figcaption>
+                                </figure>
+                            </div>
+
+                            <div class="col-sm-6 col-md-2 portfolio-item design">
+                                <figure>
+                                    <div class="info"style="bottom:-110px">
+                                         <a id="20" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>Show Details</span></a>
+                                    </div>
+                                    <img src="/static/images/class1/geetha.jpg" alt="Geetha" class="team_img">
+                                    <figcaption>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+    </section>
+    </div>-->
+
+
+
+                </div>
+            </div>
+</section>
+
+<!-- mission vision values -->
+
+<section class="section-content section-isotope" id="projects" style="background-color:#cecece;height:400px">
+
+    <div class="container">
+        <div id="filters" class="button-group text-center">
+            <button data-filter-value=".vision" class="active"><h4>Vision</h4></button>
+            <button data-filter-value=".mission"><h4>Mission</h4></button>
+            <button data-filter-value=".values"><h4>Values</h4></button>
+        </div>
+        <div class="row demo-3" style="height:100px">
+            <div id="portfolio" class="js-isotope grid cs-style-1" data-isotope-options='{ "columnWidth": 200, "itemSelector": ".portfolio-item" }'>
+                <div class="col-sm-12 col-md-12 portfolio-item mission hidden">
+                    <blockquote>
+                        <div class="row">
+                            <!--<div class="col-sm-3 text-center">
+                        <img class="img-circle" src="/static/images/mission.png"width="250px" height="250px">
+                      </div>-->
+                            <div class="col-sm-12">
+
+                                <p style="margin:0 0 10px;font-size:1.5em;font-weight:bold"> &#x25CF;&nbsp;&nbsp;&nbsp;&nbsp;Connecting passionate volunteers with children in remote villages of India, to provide quality education.</p>
+                                <p style="margin:0 0 10px;font-size:1.5em;font-weight:bold"> &#x25CF;&nbsp;&nbsp;&nbsp;&nbsp;In partnership with the Government and local communities.</p>
+                                <p style="margin:0 0 10px;font-size:1.5em;font-weight:bold"> &#x25CF;&nbsp;&nbsp;&nbsp;&nbsp;Leveraging technology to empower the learning ecosystem.</p>
+                            </div>
+                        </div>
+                    </blockquote>
+                </div>
+                <div class="col-sm-12 col-md-12 portfolio-item vision">
+                    <blockquote>
+                        <div class="row">
+                            <!--<div class="col-sm-3 text-center">
+                        <img class="img-circle" src="/static/images/vision.png"width="250px">
+                      </div>-->
+                            <div class="col-sm-12" align="center">
+                                <p style="font-weight:bold;font-size:1.5em">To create a knowledgeable & empowered rural India through quality education.</p>
+                            </div>
+                        </div>
+                    </blockquote>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12 portfolio-item values hidden">
+                <blockquote>
+                    <div class="row">
+                        <!--<div class="col-sm-3 text-center">
+                        <img class="img-circle" src="/static/images/values.png"width="250px">
+                      </div>-->
+                        <div class="col-sm-6 col-md-offset-3">
+                            <ul style="list-style-type:none;font-weight:bold; font-size:1.5em">
+                                <li style="margin:20px 0">Selflessness : Nothing is 'MINE'</li>
+                                <li style="margin:20px 0">Integrity : Non-negotiable</li>
+                                <li style="margin:20px 0">Passion : Giving time to educate</li>
+                                <li style="margin:20px 0">Execution : Committed to make things happen</li>
+                            </ul>
+                        </div>
+                    </div>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+</section>
+
+
+<!-- Our funders
+    ================================================== -->
+<section id="pricing" class="dark" style="background-color:#fff;margin-top:0px;margin-bottom:0px">
+
+    <div class="page-header text-center" style="margin-top:0px;margin-bottom:0px">
+        <h2 style="color:black">Funding Contributors</h2>
+    </div>
+
+    <div class="container">
+        <div class="row" style="padding-left:10px">
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                <img class="img_css_mob" src="/static/images/Expleo.png" style="width: 114px;height: 94px;margin-left: 29%;margin-top: -8px;">
+                </a>
+            </div>
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:67px">
+                <img src="/static/images/Broadridge.png" style="width:150px;height:50px">
+                </a>
+            </div>
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:67px">
+                <!-- <a target="_blank" href="https://www.camsonline.com"> -->
+                <img src="/static/images/HP.jpg" style="width:110px;height:50px;margin-left: 12%;">
+                </a>
+            </div>
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:67px">
+                <img src="/static/images/LTTS.jpg" style="width:192px;height:91px;margin-top: -12%;margin-left: -13%;">
+                </a>
+            </div>
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:67px">
+                <img src="/static/images/Marico.png" style="width:86px;height:50px;margin-left: 20%;">
+                </a>
+            </div>
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:47px">
+                <img src="/static/images/mr_cooper.png" style="width:190px">
+                </a>
+            </div>
+        </div>
+
+
+        <div class="row" style="padding-left:10px">
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                <img class="img_css_mob" src="/static/images/team/LTI_Lets_solve.png" style="width: 114px;height: 94px;margin-left: 20%;margin-top: -8px;">
+                </a>
+            </div>
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;">
+                <img src="/static/images/Infosys_BPM.jpg" style="width:150px;height:150px">
+                </a>
+            </div>
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                <img src="/static/images/cams_logo25.jpg" style="width:150px;height:50px">
+                </a>
+            </div>
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                <img src="/static/images/miebach.png" style="width:150px;height:50px">
+                </a>
+            </div>
+            <!-- <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                    <img src="/static/images/KPMG.png" style="width:150px;height:50px">
+                </a>
+        </div> -->
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                <img src="/static/images/fund/accel.png" style="width:180px;height:84px;margin-left: -13%;margin-top: -8%;">
+                </a>
+            </div>
+
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                <img src="/static/images/fund/headrun.png" style="width:190px">
+                </a>
+            </div>
+        </div>
+
+        <div class="row" style="padding-left:10px">
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                <img src="/static/images/fund/ANZ.png" style="width:150px;height:50px;margin-left: 5%;">
+                </a>
+            </div>
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                <!-- <a target="_blank" href="#"> -->
+                <img src="/static/images/fund/billion_lives.jpg" style="width:150px;height:50px">
+                </a>
+            </div>
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                <img src="/static/images/fund/Brillio.jpg" style="width:121px;height:43px;margin-left: 13%;margin-top: 4%;">
+                </a>
+            </div>
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                <img src="/static/images/fund/flat_pebble.png" style="width:150px;height:50px">
+                </a>
+            </div>
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                <!-- <a target="_blank" href="#"> -->
+                <img src="/static/images/fund/GE.jpg" style="width:150px;height:50px">
+                </a>
+            </div>
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                <!-- <a target="_blank" href="#"> -->
+                <img src="/static/images/fund/Mphasis.png" style="width:150px;height:50px">
+                </a>
+            </div>
+        </div>
+
+
+        <div class="row" style="padding-left:10px">
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                <img src="/static/images/fund/NSDL.png" style="width:183px;height:75px">
+                </a>
+            </div>
+            <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                <img src="/static/images/fund/williams_lea.jpg" style="width:160px;height:142px;margin-top: -24%;">
+                </a>
+            </div>
+            <!-- <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                        <img src="/static/images/fund/grant_thornton.png" style="width:170px;height:75px;margin-top: -4%;margin-left: -4%;">
+                    </a>
+            </div> -->
+            <!-- <div class="col-md-2 col-sm-6" style="padding-bottom: 50px;margin-top:50px">
+                        <img src="/static/images/fund/accel.png" style="width:180px;height:84px;margin-left: -13%;margin-top: -8%;">
+                    </a>
+            </div> -->
+            <div class="col-md-2 col-sm-6" style="">
+                <!-- <a target="_blank" href=""> -->
+                <img src="/static/images/croud.jpg" style="width:150px;height:150px;border-radius:100%">
+                </a>
+                <p style="margin-left:38px;font-weight:bold">Individuals</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- media mensiojpg>
+About Section
+    ================================================== -->
+<section id="about" class="content text-center" style="background:#32ca65">
+    <h2 style='font-weight:normal;color:#194961 !important;'>Media Coverage</h2>
+    <div class="container">
+
+        <div class="row">
+            <div id="tabs" class="tabs-centre">
+                <ul class="tab_hd" style="font-size: 65%;">
+                    <li class="tab_style">
+                        <a class="tab_img" href="#tabs-10">
+                            <h2 style="padding:0em 1em;font-size:3em;">2021</h2>
+                        </a>
+                    </li>
+                    <li class="tab_style">
+                        <a class="tab_img" href="#tabs-9">
+                            <h2 style="padding:0em 1em;font-size:3em;">2020</h2>
+                        </a>
+                    </li>
+                    <li class="tab_style">
+                        <a class="tab_img" href="#tabs-8">
+                            <h2 style="padding:0em 1em;font-size:3em;">2019</h2>
+                        </a>
+                    </li>
+                    <li class="tab_style">
+                        <a class="tab_img" href="#tabs-7">
+                            <h2 style="padding:0em 1em;font-size:3em;">2018</h2>
+                        </a>
+                    </li>
+                    <li class="tab_style">
+                        <a class="tab_img" href="#tabs-6">
+                            <h2 style="padding:0em 1em;font-size:3em;">2017</h2>
+                        </a>
+                    </li>
+                    <li class="tab_style">
+                        <a class="tab_img" href="#tabs-0">
+                            <h2 style="padding:0em 1em;font-size:3em;">2016</h2>
+                        </a>
+                    </li>
+                    <li class="tab_style">
+                        <a class="tab_img" href="#tabs-1">
+                            <h2 style="padding:0em 1em;font-size:3em;">2015</h2>
+                        </a>
+                    </li>
+                    <li class="tab_style">
+                        <a class="tab_img" href="#tabs-2">
+                            <h2 style="padding:0em 1em;font-size:3em;">2014</h2>
+                        </a>
+                    </li>
+                    <li class="tab_style">
+                        <a class="tab_img" href="#tabs-3">
+                            <h2 style="padding:0em 1em;font-size:3em;">2013</h2>
+                        </a>
+                    </li>
+                    <li class="tab_style">
+                        <a class="tab_img" href="#tabs-4">
+                            <h2 style="padding:0em 1em;font-size:3em;">2012</h2>
+                        </a>
+                    </li>
+                    <li class="tab_style">
+                        <a class="tab_img" href="#tabs-5">
+                            <h2 style="padding:0em 1em;font-size:3em;">2011</h2>
+                        </a>
+                    </li>
+                </ul>
+
+                <div id="tabs-0" class="tabs_ui">
+
+                    <div id="" class="grid cs-style-1">
+
+                        <div class="col-sm-6 col-md-2 offset_tab3 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info">
+                                    <h3 style="margin-bottom:-8px;font-size: 15px;">A CLASS APART - Pune Mirror</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/pune_mirror_2016.jpg" class="img-responsive" alt="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a href="/static/images/pune_mirror_2016.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a><a target="_blank" href="http://www.punemirror.in/others/sunday-read/A-CLASS-APART/articleshow/52377735.cms"
+                                        class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                        <div class="col-sm-6 col-md-2 offset_tab3 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info">
+                                    <h3 style="margin-bottom:-50px;font-size: 15px;">With the advent of ed-tech, anyone can become a teacher</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/media_2016_2.JPG" class="img-responsive" alt="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a href="/static/images/pune_mirror_2016.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a><a target="_blank" href="http://economictimes.indiatimes.com/small-biz/security-tech/technology/with-the-advent-of-ed-tech-anyone-can-become-a-teacher/articleshow/52100717.cms"
+                                        class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                        <div class="col-sm-6 col-md-2 offset_tab3 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info">
+                                    <h3 style="margin-bottom:-50px;font-size: 15px;">How these students from 49 remote village schools are learning</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/media_2016_1.JPG" class="img-responsive" alt="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a href="/static/images/pune_mirror_2016.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a><a target="_blank" href="https://yourstory.com/2016/09/evidyaloka/"
+                                        class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                        <div class="col-sm-6 col-md-2 offset_tab3 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info">
+                                    <h3 style="margin-bottom:-45px;font-size: 15px;">Efforts to attract children towards govt. schools</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images//media_2016_3.JPG" class="img-responsive" alt="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a href="/static/images/media_2016_3.JPG" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a><a target="_blank" href="http://www.thehindu.com/news/cities/Tiruchirapalli/efforts-to-attract-children-towards-govt-schools/article8424964.ece"
+                                        class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                        <div class="col-sm-6 col-md-2 offset_tab3 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info">
+                                    <h3 style="margin-bottom:-55px;font-size: 15px;">With eVidyaloka, NISHTHA SHARMA is helping to educate children</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/media_2016_4.JPG" class="img-responsive" alt="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a href="/static/images/pune_mirror_2016.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a><a target="_blank" href="http://www.indianlink.com.au/taking-the-e-nitiative/"
+                                        class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+                <div id="tabs-1" class="tabs_ui">
+
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-4 portfolio-item design" style="padding-bottom:50px">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;font-size: 10px;'>
+                                    <h3>Efforts to attract children towards govt. schools</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/Efforts_to_attract_children_towards_govt_2015.jpg" alt="" class="img-responsive">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a href="/static/images/Efforts_to_attract_children_towards_govt_2015.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a>
+                                    <a target="_blank" href="http://www.thehindu.com/news/cities/Tiruchirapalli/efforts-to-attract-children-towards-govt-schools/article8424964.ece" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;font-size: 10px'>
+                                    <h3>A Passion for Teaching</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/A_Passion_for_Teaching_2015.jpg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a href="/static/images/A_Passion_for_Teaching_2015.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a><a target="_blank" href="http://www.moneylife.in/article/a-passion-for-teaching-at-evidyaloka/44347.html"
+                                        class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;font-size: 10px'>
+                                    <h3>Bright ideas for a better future</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/Bright_ideas_for_a_better_future_2015.jpg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a href="/static/images/Bright_ideas_for_a_better_future_2015.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a><a target="_blank"
+                                        href="http://www.deccanherald.com/content/520034/bright-ideas-better-future.html" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div id="tabs-2" class="tabs_ui">
+
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-4 offset_tab2 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info">
+                                    <h3>The Hindu</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/hindu_17_feb_2014_big.jpg" class="img-responsive" alt="" height="300px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a href="/static/images/hindu_17_feb_2014_big.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a><a target="_blank" href="http://www.thehindu.com/todays-paper/tp-national/tp-tamilnadu/tribal-students-top-slip-and-technology-a-winning-combination/article5697524.ece"
+                                        class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div id="tabs-3" class="tabs_ui">
+
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-4 portfolio-item design" style="padding-bottom:50px">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info">
+                                    <h3>ESPN CricInfo</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/ESPN Cricinfo - 25th Sept 2013.jpg" alt="" class="img-responsive">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a href="/static/images/ESPN Cricinfo - 25th Sept 2013.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a><a target="_blank" href="http://www.eventfaqs.com/eventfaqs/wcms/en/home/news/ESPN-Cricinfo-and-Idea-come-to-1380055060027.html"
+                                        class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info">
+                                    <h3></h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/Khabar_Mantra_22nd_Oct_2013.jpg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a style="left:45%;" href="/static/images/Khabar_Mantra_22nd_Oct_2013.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info">
+                                    <h3></h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/Prabhat_22nd_Oct_2013.jpg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a style="left:45%;" href="/static/images/Prabhat_22nd_Oct_2013.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="tabs-4" class="tabs_ui">
+
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-4 portfolio-item design" style="padding-bottom:50px">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info">
+                                    <h3>CSIM - Conversation</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/CSIM_Conversations_Dec_2012.jpg" alt="" class="img-responsive" style="height: 330px !important;">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a href="/static/images/CSIM_Conversations_Dec_2012.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a><a target="_blank" href="http://csim.in/conversations/Conversations-December2012.pdf"
+                                        class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info">
+                                    <h3>The Hindu</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/The_Hindu_9th_July_2012.jpg" class="" alt="" height="330px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a href="/static/images/The_Hindu_9th_July_2012.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a><a target="_blank" href="http://www.thehindu.com/todays-paper/tp-national/tp-tamilnadu/village-kids-take-skype-route-to-education/article3618407.ece"
+                                        class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info">
+                                    <h3>The Telegraph</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/The Telegraph - 28th Jan 2012.png" alt="" class="img-responsive" style="height: 330px !important;">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a href="/static/images/The Telegraph - 28th Jan 2012.png" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a><a target="_blank" href="http://www.telegraphindia.com/1120128/jsp/jharkhand/story_15058696.jsp"
+                                        class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="tabs-5" class="tabs_ui">
+
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-4 offset_tab2 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info">
+                                    <h3></h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/The_Telegraph_26th_July_2011.jpg" alt="" class="img-responsive" style="height: 330px !important;">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a style="left:45%;" href="/static/images/The_Telegraph_26th_July_2011.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div id="tabs-6" class="tabs_ui">
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                            <figure>
+                                <div class="info" style="font-size: 11px">
+                                    <h3 style="margin-bottom: -75px;font-size: 10px;">Youth Ki Awaaz</h3>
+                                    <span></span>
+                                </div>
+                                <img src="/static/images/youth_ki_awaaz.png" class="img-responsive" alt="" style="height: 128px">
+                                <figcaption class="news">
+                                    <a target="_blank" href="https://www.youthkiawaaz.com/2017/12/two-hours-a-week/" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 38%"><i
+                class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                            <figure>
+                                <div class="info" style="font-size: 11px;font-size: 10px;">
+                                    <h3 style="margin-bottom: -75px;">Suddi TV</h3>
+                                    <span></span>
+                                </div>
+                                <img src="/static/images/suddi_tv_img.png" class="img-responsive" alt="" style="height: 128px">
+                                <figcaption class="news">
+                                    <a target="_blank" href="https://youtu.be/bE0tEh6JxOQ" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="Watch Video" style="left: 38%"><i
+                class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                            <figure>
+                                <div class="info" style="font-size: 11px;font-size: 10px;">
+                                    <h3 style="margin-bottom: -75px;font-size: 10px;">VIJAYAVANI: eVidyaloka achieves milestone with the launch of its 100th village center in rural India</h3>
+                                    <span></span>
+                                </div>
+                                <img src="/static/images/vijayavani100center.png" class="img-responsive" alt="" style="height: 128px">
+                                <figcaption class="news">
+                                    <a style="left: 38%; bottom: 10px" href="/static/images/vijayavani100center.png" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i
+                class="fa fa-plus"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                            <figure>
+                                <div class="info" style="font-size: 6px;">
+                                    <h3 style="margin-bottom: -75px">EENADU: eVidyaloka achieves milestone with the launch of its 100th village center in rural India</h3>
+                                    <span></span>
+                                </div>
+                                <img src="/static/images/ennadu100center.png" class="img-responsive" alt="" style="height: 128px">
+                                <figcaption class="news">
+                                    <a style="left: 40%; bottom: 10px" href="/static/images/ennadu100center.png" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i
+                class="fa fa-plus"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-2 portfolio-item design" style="padding-bottom: 50px">
+                            <figure>
+                                <div class="info" style="font-size: 6px;">
+                                    <h3 style="margin-bottom: -60px">DINAMANI: eVidyaloka achieves milestone with the launch of its 100th village center in rural India</h3>
+                                    <span></span>
+                                </div>
+                                <img src="/static/images/dinnamani100center.png" class="img-responsive" alt="" style="height: 128px">
+                                <figcaption class="news">
+                                    <a style="left: 40%;bottom: 10px" href="/static/images/dinnamani100center.png" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i
+                class="fa fa-plus"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                            <figure>
+                                <div class="info" style="font-size: 6px;">
+                                    <h3 style="margin-bottom: -60px">News article on eVidyaloka
+                                    </h3>
+                                    <span></span>
+                                </div>
+                                <img src="http://epaper.prajavani.net/pv_fs/012617/stories/pv_kb_all_gc26_pg04_Story_3.jpg" class="img-responsive" alt="" style="height: 128px">
+                                <figcaption class="news">
+                                    <a target="_blank" href="http://epaper.prajavani.net/pv_fs/012617/stories/pv_kb_all_gc26_pg04_Story_3.jpg" class="link tooltips" style="right: 42%" data-toggle="tooltip" data-placement="bottom" title="More Details"><i
+                class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-2 portfolio-item design" style="left: -977px;margin-bottom: 40px;padding-top: 0px;">
+                            <figure>
+                                <div class="info" style="font-size: 6px;">
+                                    <h3 style="margin-bottom: -60px">E-Vidya Loka Organisation Educates Rural Students Throw Online</h3>
+                                    <span></span>
+                                </div>
+                                <img src="/static/images/media_2017_1.JPG" class="img-responsive" alt="" style="height: 128px">
+                                <figcaption class="news">
+                                    <a target="_blank" href="https://youtu.be/jztqovEj-EA" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="Watch Video" style="left: 40%"><i
+                class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-2 portfolio-item design" style="margin-left: -975px;margin-bottom: 40px;padding-top: 0px;">
+                            <figure>
+                                <div class="info" style="font-size: 6px;">
+                                    <h3 style="margin-bottom: -50px">Ganashakti: Overseas Teachers take Online Classes in Purulia School</h3>
+                                    <span></span>
+                                </div>
+                                <img src="/static/images/Ganashakti_17.png" class="" alt="" style="height: 128px">
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/Ganashakti_17.png" class="link tooltips" style="right: 40%" data-toggle="tooltip" data-placement="bottom" title="More Details"><i
+                class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <!--<div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-3 portfolio-item design">
+                            <figure>
+                                <div class="info">
+                                    <h3>The Hindu</h3>
+                                    <span></span>
+                                </div>
+                                <img src="/static/images/hindu_17_feb_2014_big.jpg" class="img-responsive"  alt="" height="300px">
+                                <figcaption class="news">
+                                    <a href="/static/images/hindu_17_feb_2014_big.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a><a target="_blank" href="" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>-->
+                </div>
+
+                <div id="tabs-7" class="tabs_ui">
+
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-4 portfolio-item design" style="padding-bottom:50px">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Kozhipuliyur Students appreciated</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/Kozhipuliyur_Students_appreciated.jpeg" alt="" class="img-responsive">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/Kozhipuliyur_Students_appreciated.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i
+              class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>National Award for school student</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/National _Awardforschool _student.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/National _Awardforschool _student.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i
+              class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Semmambadi students victorious in NSIC</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/2018-img3.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/2018-img3.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i
+              class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div id="tabs-8" class="tabs_ui">
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                            <figure>
+                                <div class="info" style="font-size: 8px">
+                                    <h3 style="margin-bottom: -75px;">Prabhat - Khandake school inauguration </h3>
+                                    <span></span>
+                                </div>
+                                <img src="/static/images/2019-7.jpeg" class="img-responsive" alt="" style="height: 128px">
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/2019-7.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 38%;top: 67%;"><i
+        class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                            <figure>
+                                <div class="info" style="font-size: 8px">
+                                    <h3 style="margin-bottom: -75px;">Dinakaran - Govt school students win internet based contest</h3>
+                                    <span></span>
+                                </div>
+                                <img src="/static/images/2019-2.jpeg" class="img-responsive" alt="" style="height: 128px">
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/2019-2.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 38%;top: 67%"><i
+        class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                            <figure>
+                                <div class="info" style="font-size: 8px">
+                                    <h3 style="margin-bottom: -75px;">Dinakaran - Excellence of students through digital education</h3>
+                                    <span></span>
+                                </div>
+                                <img src="/static/images/2019-3.jpeg" class="img-responsive" alt="" style="height: 128px">
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/2019-3.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 38%;top: 67%"><i
+        class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                            <figure>
+                                <div class="info" style="font-size: 8px">
+                                    <h3 style="margin-bottom: -75px">Dinakaran - State level victory in internet based contest</h3>
+                                    <span></span>
+                                </div>
+                                <img src="/static/images/2019-4.jpeg" class="img-responsive" alt="" style="height: 128px">
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/2019-4.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 38%;top: 67%"><i
+        class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-2 portfolio-item design" style="padding-bottom: 50px">
+                            <figure>
+                                <div class="info" style="font-size: 8px">
+                                    <h3 style="margin-bottom: -60px">Kalam News TV </h3>
+                                    <span></span>
+                                </div>
+                                <img src="/static/images/2019-5.jpeg" class="img-responsive" alt="" style="height: 128px">
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/2019-5.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 38%;top: 67%"><i
+        class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-2 portfolio-item design">
+                            <figure>
+                                <div class="info" style="font-size: 8px">
+                                    <h3 style="margin-bottom: -60px">Media Coverage Khandake MH </h3>
+                                    <span></span>
+                                </div>
+                                <img src="/static/images/2019-6.jpeg" class="img-responsive" alt="" style="height: 128px">
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/2019-6.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 38%;top: 67%"><i
+        class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <!--<div id="" class="grid cs-style-1">
+                <div class="col-sm-6 col-md-3 portfolio-item design">
+                    <figure>
+                        <div class="info">
+                            <h3>The Hindu</h3>
+                            <span></span>
+                        </div>
+                        <img src="/static/images/hindu_17_feb_2014_big.jpg" class="img-responsive"  alt="" height="300px">
+                        <figcaption class="news">
+                            <a href="/static/images/hindu_17_feb_2014_big.jpg" class="preview tooltips popup-gallery" data-toggle="tooltip" data-placement="bottom" title="Preview"><i class="fa fa-plus"></i></a><a target="_blank" href="" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details"><i class="fa fa-external-link"></i></a>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>-->
+                </div>
+
+                <div id="tabs-9" class="tabs_ui">
+
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-4 portfolio-item design" style="padding-bottom:50px">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Dahigaon school </h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/2020-1.jpeg" alt="" class="img-responsive">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/2020-1.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i
+          class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Students win National Award</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/2020-2.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/2020-2.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i
+          class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>VT visit marewad KA1</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/2020-3.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/2020-3.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i
+          class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div id="tabs-10" class="tabs_ui">
+
+                    <div id="" class="grid cs-style-1">
+                        <div class="col-sm-6 col-md-4 portfolio-item design" style="padding-bottom:50px">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_1.jpeg" alt="" class="img-responsive">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_1.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_2.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_2.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_3.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_3.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_4.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_4.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3></h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_5.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_5.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_6.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_6.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3></h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_7.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_7.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_8.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_8.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_9.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_9.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_10.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_10.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design" style="padding-bottom:50px">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3></h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_11.jpeg" alt="" class="img-responsive">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_11.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_12.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_12.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_13.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_13.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_14.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_14.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_15.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_15.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_16.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_16.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_17.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_17.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_18.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_18.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_19.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_19.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_20.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_20.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_21.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_21.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_22.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_22.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 col-md-4 portfolio-item design">
+                            <figure>
+                                <!-- Thumb Info -->
+                                <div class="info" style='padding:5px;'>
+                                    <h3>Open News Coverage</h3>
+                                    <span></span>
+                                </div>
+                                <!-- Thumbnail -->
+                                <img src="/static/images/news_paper/2021_23.jpeg" alt="" class="" height="340px">
+                                <!-- Thumb links -->
+                                <figcaption class="news">
+                                    <a target="_blank" href="/static/images/news_paper/2021_23.jpeg" class="link tooltips" data-toggle="tooltip" data-placement="bottom" title="More Details" style="left: 44%"><i class="fa fa-external-link"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <style>
+                .grid figure img {
+                    height: 180px;
+                }
+                
+                #login-modal {
+                    z-index: 1600 !important;
+                }
+                
+                .dropdown-content {
+                    display: none;
+                    position: absolute;
+                    background-color: white;
+                    min-width: 160px;
+                    margin-top: 9%;
+                    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+                    z-index: 1;
+                }
+                
+                .dropdown-content a {
+                    float: none;
+                    color: black;
+                    padding: 12px 16px;
+                    text-decoration: none;
+                    display: block;
+                    text-align: left;
+                }
+                
+                .dropdown-content a:hover {
+                    background-color: white;
+                    color: #02cc26 !important;
+                }
+                
+                .dropdown:hover .dropdown-content {
+                    display: block;
+                }
+                
+                .tab_style.ui-state-focus,
+                .tab_style.ui-state-default,
+                .tab_style.ui-corner-top,
+                .tab_style.ui-state-hover,
+                .tab_style.ui-state-active,
+                .tab_style.ui-state-focus {
+                    border: none;
+                    //background:transparent;
+                }
+                
+                #div-txt-color>ul>li>div>a {
+                    color: rgba(255, 255, 255, 0.5)!important;
+                }
+                
+                .navbar-inverse .navbar-nav>li>a {
+                    font-size: 1.4rem;
+                    font-family: monospace;
+                }
+                
+                .cbp-af-header.cbp-af-header-shrink {
+                    display: none;
+                }
+                
+                .ec-nav__navbar>li>a {
+                    color: black !important;
+                    font-size: 15px;
+                    padding: 2.275rem 2rem 1.875rem 2rem !important;
+                }
+                
+                body {
+                    background: white;
+                }
+                
+                @media (min-width: 992px) {
+                    .offset_tab {
+                        margin-left: 16.66666667% !important;
+                        padding-bottom: 50px !important;
+                    }
+                    .offset_tab2 {
+                        margin-left: 33% !important;
+                        padding-bottom: 50px !important;
+                    }
+                    .offset_tab3 {
+                        padding-bottom: 50px !important;
+                        margin-left: 2% !important;
+                    }
+                    .offset_tab4 {
+                        margin-left: 25% !important;
+                    }
+                }
+                
+                a:focus {
+                    outline: none;
+                }
+                
+                .tab_img img {
+                    width: 100px !important;
+                    height: 50px;
+                    padding-top: 15px;
+                }
+                
+                .tabs-centre {
+                    background: #B5C6CF;
+                    border: none;
+                }
+                
+                .tabs-centre .ui-widget-header {
+                    background: #1A2930;
+                    border: none;
+                    border-bottom: 1px solid #c0c0c0;
+                    -moz-border-radius: 0px;
+                    -webkit-border-radius: 0px;
+                    border-radius: 0px;
+                }
+                
+                .tabs-centre .ui-tabs-nav .ui-state-default {
+                    background: transparent;
+                    border: none;
+                }
+                
+                .tabs-centre .ui-tabs-nav .ui-state-active {
+                    background: transparent url("/static/images/arrow2.png") no-repeat top center;
+                    border: none;
+                    background-size: 30px 15px;
+                }
+                
+                .tabs-centre .ui-tabs-nav .ui-state-default a {
+                    color: #c0c0c0;
+                }
+                
+                .tabs-centre .ui-tabs-nav .ui-state-active a {
+                    color: #194961;
+                }
+                
+                .tabs-centre .ui-tabs-nav {
+                    height: 5em;
+                    width: 100%;
+                    text-align: center;
+                    background: #26a15b;
+                }
+                
+                .tabs-centre .ui-tabs-nav li.ui-tabs-selected,
+                .tabs-centre .ui-tabs-nav li.ui-state-active {
+                    margin-top: 0em;
+                    font-size: 100%;
+                }
+                
+                .tabs-centre .ui-tabs-nav {
+                    text-align: center;
+                    position: absolute;
+                    //left: 0.25em; 
+                    right: 0.05em;
+                    bottom: 0px;
+                    padding: 0em 0.2em 0.2em;
+                }
+                
+                .tabs-team .ui-tabs-nav li {
+                    display: inline-block;
+                    float: none;
+                    background: transparent;
+                }
+                
+                .tabs-team .ui-widget-header {
+                    background: transparent;
+                    border: none;
+                    height: 5.5em;
+                }
+                
+                .tabs-centre .ui-tabs-nav li {
+                    display: inline-block;
+                    float: none;
+                    top: 0px;
+                    margin: 0em;
+                    padding-bottom: 0px;
+                    margin-top: -2px !important;
+                    font-size: 80%;
+                }
+                
+                .dropdown-menu.sub_logout {
+                    left: 40px;
+                }
+                
+                @media only screen and (max-width: 480px) and (min-width: 0px) {
+                    .hide_for_mob {
+                        display: none !important;
+                    }
+                    .img_css_mob {
+                        margin-left: 0% !important;
+                    }
+                    .top_cls {
+                        top: 4.7% !important;
+                    }
+                    .site-header {
+                        height: 50px !important;
+                        padding-top: 3%;
+                    }
+                    .log-in {
+                        text-align: right;
+                    }
+                    .hide_in_old_ui {
+                        margin-right: 4%;
+                    }
+                    #login-badge {
+                        margin-right: 3%;
+                        margin-top: 10px !important;
+                    }
+                    .grid figure img {
+                        width: 210px !important;
+                    }
+                }
+            </style>
+            <script>
+                $("#tabs").tabs();
+                $("#tab").tabs();
+                $("#tab").removeClass("ui-corner-all ui-widget ui-widget-content ui-tabs");
+                $("#tabs").removeClass("ui-corner-all ui-widget ui-widget-content ui-tabs");
+                $(".tabs_ui").removeClass("ui-tabs-panel ui-widget-content ui-corner-bottom");
+                $(".tab_hd").removeClass("ui-corner-all ui-widget-header");
+            </script>
+
+        </div>
+    </div>
+    <!--container-->
+</section>
+<style>
+    .history_btn:hover {
+        background: rgb(22, 9, 82) !important;
+    }
+</style>
+{% endblock content %}

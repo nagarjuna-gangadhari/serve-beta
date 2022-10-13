@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Primary Meta Tags -->
+    <title>Campaign | eVidyaloka</title>
+    <meta name="title" content="eVidyaloka | This festive season, gift a year of education to rural children">
+    <meta name="description" content="In 2021, eVidyaloka programs helped educate 25 lac rural students across 11 states of India. Your generous donations can give many more children a promising future in the coming year">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.evidyaloka.org/campaign/">
+    <meta property="og:title" content="eVidyaloka | This festive season, gift a year of education to rural children">
+    <meta property="og:description" content="In 2021, eVidyaloka programs helped educate 25 lac rural students across 11 states of India. Your generous donations can give many more children a promising future in the coming year">
+    <meta property="og:image" content="https://www.evidyaloka.org/static/images/campaign/2022_newyear/banner.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.evidyaloka.org/campaign/">
+    <meta property="twitter:title" content="eVidyaloka | This festive season, gift a year of education to rural children">
+    <meta property="twitter:description" content="In 2021, eVidyaloka programs helped educate 25 lac rural students across 11 states of India. Your generous donations can give many more children a promising future in the coming year">
+    <meta property="twitter:image" content="https://www.evidyaloka.org/static/images/campaign/2022_newyear/banner.png">
+
+    <title>NAD | eVidyaloka</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/static/images/favicon.ico" type="image/x-icon">
+
+    <!-- <link rel="stylesheet" href="/static/css/tailwind.min.css"> -->
+    <script src="/static/css/tailwindcss3.js"></script>
+    <script src="/static/css/fontawesome/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.3.5/dist/alpine.min.js" defer></script>
+
+
+    <style>
+        .banner1 {
+            height: 25rem;
+        }
+        
+        .banner2 {
+            height: 28rem;
+        }
+        
+        [x-cloak] {
+            display: none;
+        }
+        
+        .grid-indigo {
+            background-image: radial-gradient(#005e14 2px, transparent 2px);
+            background-size: 16px 16px;
+        }
+        
+        .berrys {
+            background: url('/static/images/campaign/2022_newyear/10.png') left center no-repeat, url('/static/images/campaign/2022_newyear/10.png') right center no-repeat;
+            background-size: contain;
+        }
+        
+        @font-face {
+            font-family: 'Glacial Indifference Italic';
+            src: url('/static/fonts/GlacialIndifference-Italic.otf');
+        }
+        
+        @font-face {
+            font-family: 'Glacial Indifference Bold';
+            src: url('/static/fonts/GlacialIndifference-Bold.otf');
+        }
+        
+        @media screen and (max-width: 660px) {
+            .banner1 {
+                height: 8rem;
+            }
+            .banner2 {
+                height: 12rem;
+            }
+            .berrys {
+                background: none;
+            }
+            .unhide {
+                display: none;
+            }
+        }
+    </style>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.css"> -->
+    <link rel="stylesheet" href="https://npmcdn.com/flickity@2/dist/flickity.css">
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.pkgd.js"></script> -->
+    <script src="https://npmcdn.com/flickity@2/dist/flickity.pkgd.js"></script>
+    <style>
+        /* external css: flickity.css */
+        
+        * {
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: sans-serif;
+        }
+        
+        .gallery-cell {
+            margin-right: 10px;
+            counter-increment: gallery-cell;
+        }
+        /* cell number */
+        
+        .gallery-cell:before {
+            display: block;
+            height: 250px;
+            text-align: center;
+            line-height: 200px;
+            font-size: 80px;
+        }
+        /* external css: flickity.css */
+        
+        .carousel-cell {
+            height: 200px;
+            margin-right: 10px;
+            transition: opacity 0.4s;
+            border-radius: 10px;
+            filter: blur(1px);
+            -webkit-filter: blur(1px);
+        }
+        /* cell number */
+        
+        .carousel-cell:before {
+            display: block;
+            filter: blur(8px);
+            -webkit-filter: blur(8px);
+            text-align: center;
+            line-height: 200px;
+        }
+        
+        .carousel-cell.is-selected {
+            filter: blur(0);
+            -webkit-filter: blur(0);
+            background-color: #005e14;
+        }
+    </style>
+
+</head>
+
+<body style="background-color: #f7efcc;">
+    <div class="w-full banner1 bg-cover bg-no-repeat" style="background-image: url('/static/images/campaign/2022_newyear/banner.png');">
+        <!-- <div class="absolute fixed top-0 laft-0 ml-4 md:ml-10 mt-10 md:mt-20 shadow-3xl bg-cover bg-center bg-no-repeat h-10 md:h-32 w-12 md:w-36 rounded-full" style="background-image: url('/static/images/vol_pics/daan_utsav.png');"></div> -->
+        <div class="w-full flex justify-start">
+            <div class="w-16 md:w-32 h-12 md:h-28 mt-1 bg-contain md:bg-center bg-no-repeat cursor-pointer" onclick="window.location='/';" style="background-image: url('/static/images/campaign/2022_newyear/white_eV_logo.png');"></div>
+            <!-- <a href="/" class="md:px-2 md:mr-2 unhide">
+                <img src="/static/images/eVidyaloka_logo_TM_2.png" alt="alt placeholder" class="w-48 h-16 -mt-1 inline mx-auto">
+            </a> -->
+        </div>
+    </div>
+    <div class="w-full flex flex-row px-2 md:px-0">
+        <div class="w-2/12 h-96 bg-contain bg-center bg-no-repeat unhide" style="background-image: url('/static/images/campaign/2022_newyear/hanging_ball_red.png');"></div>
+        <div class="w-full md:w-8/12 space-y-8 md:pt-14">
+            <p class="text-center text-sm md:text-2xl md:px-2" style="font-family: Glacial Indifference Italic;">In the current academic year, eVidyaloka programs helped educate 25 lac children in rural areas across 11 states of India with the support of our 4000 strong networks of volunteers. However, there are millions more across the country who are
+                at risk of dropping out of formal education due to the closure of schools and no access to online learning.</p>
+            <p class="text-center text-sm md:text-2xl md:px-1" style="font-family: Glacial Indifference Bold;">With your generous donations, eVidyaloka will be able to deliver quality education to more rural communities in the coming year and ensure a promising future for the nation’s children.</p>
+        </div>
+        <div class="w-2/12 h-96 bg-contain bg-center bg-no-repeat unhide" style="background-image: url('/static/images/campaign/2022_newyear/hanging_ball_red.png');"></div>
+
+    </div>
+    <div class="md:px-48 flex flex-row justify-center items-center mt-6 md:-mt-10">
+        <div class="w-2/12 h-48 bg-contain bg-center bg-no-repeat unhide" style="background-image: url('/static/images/campaign/2022_newyear/8.png');"></div>
+        <div class="w-full md:w-8/12 px-2 md:px-6  flex flex-col justify-center items-center space-y-1">
+            <div class="h-16 w-full md:w-96 bg-contain bg-center bg-no-repeat shadow-2xl transform hover:scale-105 rounded-lg drop-shadow-2xl cursor-pointer" onclick="window.location='https://fundraisers.giveindia.org/projects/sponsor-a-year-of-education-for-rural-children1';"
+                style="background-image: url('/static/images/campaign/2022_newyear/Donate_with_GiveIndia.png'); "></div>
+            <div class="text-center text-xs font-bold mb-8">* All domestic and International donations are accepted here</div>
+        </div>
+        <div class="w-2/12 h-48 bg-contain bg-center bg-no-repeat unhide" style="background-image: url('/static/images/campaign/2022_newyear/8.png');"></div>
+    </div>
+
+    <div class="w-full banner2 bg-contain md:bg-center  bg-center bg-no-repeat" style="background-image: url('/static/images/campaign/2022_newyear/info_area.png');"></div>
+
+    <!-- <form action="https://fundraisers.giveindia.org/api/donations" method="post" target="_blank">
+        <div class="mt-4 mb-1 flex justify-center">
+            <input type="hidden" name="project_id" value="6020c61e2af24b5bec34bc9e">
+            <input type="hidden" name="redirect_url" value="https://fundraisers.giveindia.org/projects/discover-the-joy-of-fulfilling-a-childs-dream">
+            <button class="h-16 mx-2 w-full md:w-96 shadow-2xl transform hover:scale-105  rounded-lg bg-contain bg-center bg-no-repeat" type="submit" style="background-image: url('/static/images/vol_pics/Donate_with_GiveIndia.png'); "></button>
+        </div>
+    </form> -->
+    <div class="md:px-20 flex flex-row justify-center items-center md:space-x-8 h-56 md:h-72">
+        <div class="w-3/12 h-48 bg-contain bg-center bg-no-repeat unhide" style="background-image: url('/static/images/campaign/2022_newyear/9.png');"></div>
+        <div class="w-full md:w-6/12 flex items-center justify-center">
+            <iframe class="w-full h-56 md:h-72" src="https://www.youtube.com/embed/MNa5a1J7Le8?rel=0&amp;controls=1&amp;showinfo=0&amp;autoplay=0&amp;cc_load_policy=1&amp;cc_lang_pref=en&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope;"
+                allowfullscreen></iframe>
+        </div>
+        <div class="w-3/12 h-48 bg-contain bg-center bg-no-repeat unhide" style="background-image: url('/static/images/campaign/2022_newyear/9.png');"></div>
+    </div>
+
+    <div class="py-10">
+        <div class="text-xl md:text-3xl text-center font-bold">Children in rural regions of India do not have access to quality education</div>
+        <div class="text-xl md:text-4xl text-center my-4 font-bold">Did you know?</div>
+        <div class="flex justify-center md:space-x-80 mt-6">
+            <div class="flex flex-col items-center justify-center">
+                <div class="text-5xl md:text-8xl text-red-700 font-bold">54%</div>
+                <div class="text-lg md:text-2xl text-center w-26 md:w-64">of Grade 5 children can't read Grade 2 text</div>
+            </div>
+            <div class="flex flex-col items-center justify-center">
+                <div class="text-5xl md:text-8xl text-red-700 font-bold">74%</div>
+                <div class="text-lg md:text-2xl text-center w-26 md:w-64">of Grade 5 students can't do division</div>
+            </div>
+        </div>
+    </div>
+    <div class="relative" style="background-color: #f7efcc;">
+        <div class=" flex flex-col md:flex-row items-center justify-center py-4 md:pt-10">
+            <div class="md:w-5/12 text-center py-4 font-bold text-3xl text-green-800 md:text-5xl">Our Solution</div>
+            <div class="md:w-7/12 px-2 space-y-6 flex flex-col md:pr-10">
+                <div class="flex flex-col">
+                    <div class="flex space-x-6"><i class="fas fa-podcast fa-2x"></i>
+                        <p class="font-bold">Make teaching accessible to the children via smartphones, television and laptops.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <div class="flex space-x-4"><i class="fas fa-users fa-2x"></i>
+                        <p class="font-bold">Have volunteers from around the globe teaching the children in their native language.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <div class="flex space-x-8"><i class="fas fa-child fa-2x"></i>
+                        <p class="font-bold"> Support children from Grade 5-8 in Maths, Science, English, and Life Skills.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w-full h-4 md:h-24 py-4 md:py-0 bg-cover md:bg-contain bg-center" style="background-image: url('/static/images/campaign/2022_newyear/flower_garland.png');"></div>
+        <!-- Flickity HTML init -->
+        <div class="gallery js-flickity md:py-4" data-flickity-options='{ "wrapAround": true, "autoPlay": true }'>
+            <div class="gallery-cell bg-cover md:bg-contain bg-center bg-no-repeat w-full md:w-1/2 h-60 md:h-96" style="background-image: url('/static/images/vol_pics/1.jpg');"></div>
+            <div class="gallery-cell bg-cover md:bg-contain bg-center bg-no-repeat w-full md:w-1/2 h-60 md:h-96" style="background-image: url('/static/images/vol_pics/2.jpg');"></div>
+            <div class="gallery-cell bg-cover md:bg-contain bg-center bg-no-repeat w-full md:w-1/2 h-60 md:h-96" style="background-image: url('/static/images/vol_pics/3.jpg');"></div>
+            <div class="gallery-cell bg-cover md:bg-contain bg-center bg-no-repeat w-full md:w-1/2 h-60 md:h-96" style="background-image: url('/static/images/vol_pics/4.png');"></div>
+            <!-- <div class="gallery-cell"></div> -->
+        </div>
+
+        <div class="md:px-32 flex flex-row justify-center items-center h-24 mt-10">
+            <div class="w-3/12 h-24 bg-contain bg-center bg-no-repeat" style="background-image: url('/static/images/campaign/2022_newyear/10.png');"></div>
+            <div class="text-xl md:text-4xl font-bold text-center font-sans">Program Impact</div>
+            <div class="w-3/12 h-24 bg-contain bg-center bg-no-repeat" style="background-image: url('/static/images/campaign/2022_newyear/10.png');"></div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-5 md:gap-16 py-10 md:px-24">
+            <div class="w-48 h-60">
+                <div class="w-32 md:w-48 h-32 bg-contain bg-center bg-no-repeat" style="background-image: url('/static/images/Icons-4_colour_options/2.png');"></div>
+                <div class="w-32 md:w-48 h-20 flex justify-center items-center ">
+                    <p class="text-center md:px-2">15,000+ students learning online</p>
+                </div>
+            </div>
+            <div class="w-48 h-60">
+                <div class="w-32 md:w-48 h-32 bg-contain bg-center bg-no-repeat" style="background-image: url('/static/images/Icons-4_colour_options/26.png');"></div>
+                <div class="w-32 md:w-48 h-20 flex justify-center items-center ">
+                    <p class="text-center md:px-2">25,00,000+ Students learning through television</p>
+                </div>
+            </div>
+            <div class="w-48 h-60">
+                <div class="w-32 md:w-48 h-32 bg-contain bg-center bg-no-repeat" style="background-image: url('/static/images/Icons-4_colour_options/7.png');"></div>
+                <div class="w-32 md:w-48 h-20 flex justify-center items-center ">
+                    <p class="text-center md:px-2">2,500+ Volunteers teaching & Creating content</p>
+                </div>
+            </div>
+            <div class="w-48 h-60">
+                <div class="w-32 md:w-48 h-32 bg-contain bg-center bg-no-repeat" style="background-image: url('/static/images/Icons-4_colour_options/11.png');"></div>
+                <div class="w-32 md:w-48 h-20 flex justify-center items-center ">
+                    <p class="text-center">11 States, 6 Languages</p>
+                </div>
+            </div>
+            <div class="w-48 h-60">
+                <div class="w-32 md:w-48 h-32 bg-contain bg-center bg-no-repeat" style="background-image: url('/static/images/Icons-4_colour_options/15.png');"></div>
+                <div class="w-32 md:w-48 h-20 flex justify-center items-center ">
+                    <p class="text-center px-2">245+ Villages
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="antialiased sans-serif text-gray-600 w-full">
+            <div class="my-10 md:my-20 container  flex flex-col md:flex-row shadow-sm overflow-hidden" x-data="{ testimonialActive: 2 }" x-cloak>
+                <div class="relative w-full py-2 md:py-24 bg-yellow-600 md:w-1/2 flex flex-col item-center justify-center">
+                    <div class="absolute top-0 left-0 z-10 grid-indigo w-16 h-16 md:w-40 md:h-40 md:ml-20 md:mt-24"></div>
+                    <div class="relative text-2xl md:text-5xl py-2 px-6 md:py-6 md:px-1 md:w-64 md:mx-auto text-indigo-100 font-semibold leading-tight tracking-tight mb-0 z-20">
+                        <span class="md:block">What Our</span>
+                        <span class="md-block">Donors</span>
+                        <span class="block">Are Saying!</span>
+                    </div>
+                    <div class="absolute right-0 bottom-0 mr-4 mb-4 hidden md:block">
+                        <button class="rounded-l-full border-r bg-gray-100 text-gray-500 focus:outline-none hover:text-indigo-500 font-bold w-12 h-10" x-on:click="testimonialActive = testimonialActive === 1 ? 3 : testimonialActive - 1">
+                            &#8592;
+                        </button><button class="rounded-r-full bg-gray-100 text-gray-500 focus:outline-none hover:text-indigo-500 font-bold w-12 h-10" x-on:click="testimonialActive = testimonialActive >= 3 ? 1 : testimonialActive + 1">
+                            &#8594;
+                          </button>
+                    </div>
+                </div>
+                <div class="bg-gray-100 md:w-1/2">
+                    <div class="flex flex-col h-full relative">
+
+                        <div class="absolute top-0 left-0 mt-3 ml-4 md:mt-5 md:ml-12">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="text-indigo-200 fill-current w-12 h-12 md:w-16 md:h-16" viewBox="0 0 24 24"><path d="M6.5 10c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35.208-.086.39-.16.539-.222.302-.125.474-.197.474-.197L9.758 4.03c0 0-.218.052-.597.144C8.97 4.222 8.737 4.278 8.472 4.345c-.271.05-.56.187-.882.312C7.272 4.799 6.904 4.895 6.562 5.123c-.344.218-.741.4-1.091.692C5.132 6.116 4.723 6.377 4.421 6.76c-.33.358-.656.734-.909 1.162C3.219 8.33 3.02 8.778 2.81 9.221c-.19.443-.343.896-.468 1.336-.237.882-.343 1.72-.384 2.437-.034.718-.014 1.315.028 1.747.015.204.043.402.063.539.017.109.025.168.025.168l.026-.006C2.535 17.474 4.338 19 6.5 19c2.485 0 4.5-2.015 4.5-4.5S8.985 10 6.5 10zM17.5 10c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35.208-.086.39-.16.539-.222.302-.125.474-.197.474-.197L20.758 4.03c0 0-.218.052-.597.144-.191.048-.424.104-.689.171-.271.05-.56.187-.882.312-.317.143-.686.238-1.028.467-.344.218-.741.4-1.091.692-.339.301-.748.562-1.05.944-.33.358-.656.734-.909 1.162C14.219 8.33 14.02 8.778 13.81 9.221c-.19.443-.343.896-.468 1.336-.237.882-.343 1.72-.384 2.437-.034.718-.014 1.315.028 1.747.015.204.043.402.063.539.017.109.025.168.025.168l.026-.006C13.535 17.474 15.338 19 17.5 19c2.485 0 4.5-2.015 4.5-4.5S19.985 10 17.5 10z"/></svg>
+                        </div>
+
+                        <div class="h-full relative z-10">
+                            <div x-show.immediate="testimonialActive === 1">
+                                <p class="text-gray-600 serif font-normal italic px-6 py-6 md:px-16 md:py-10 text-xl md:text-2xl" x-show.transition="testimonialActive == 1">
+                                    Education for kids has always been something which I strongly believe in. Teach them young and watch them grow into fine young adults !!. I have been doing a small bit for multiple years now and hope to be able to continue doing it in the coming times.
+                                </p>
+                            </div>
+
+                            <div x-show.immediate="testimonialActive === 2">
+                                <p class="text-gray-600 serif font-normal italic px-6 py-6 md:px-16 md:py-10 text-xl md:text-2xl" x-show.transition="testimonialActive == 2">
+                                    To educate students deprived of education is not an easy task. My best wishes to the team and their efforts.
+                                </p>
+                            </div>
+
+                            <div x-show.immediate="testimonialActive === 3">
+                                <p class="text-gray-600 serif font-normal italic px-6 py-6 md:px-16 md:py-10 text-xl md:text-2xl" x-show.transition="testimonialActive == 3">
+                                    Happy to be a small part of the change makers of today’s India. Great impact being done by eVidyaloka!
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex my-4 justify-center items-center">
+                            <button @click.prevent="testimonialActive = 1" class="text-center font-bold shadow-xs focus:outline-none focus:shadow-outline inline-block rounded-full md:mx-2" :class="{'h-12 w-12 opacity-25 bg-indigo-300 text-gray-600': testimonialActive != 1, 'h-32 w-32 rounded-full opacity-100 bg-indigo-600 text-white': testimonialActive == 1 }"><img src="/static/images/vol_pics/madhu.jpg" class="rounded-full" alt="" srcset=""></button>
+                            <button @click.prevent="testimonialActive = 2" class="text-center font-bold shadow-xs focus:outline-none focus:shadow-outline h-16 w-16 inline-block bg-indigo-600 rounded-full md:mx-2" :class="{'h-16 w-16 opacity-25 bg-indigo-300 text-gray-600': testimonialActive != 2, 'h-32 w-32 opacity-100 bg-indigo-600 text-white': testimonialActive == 2 }"><img src="/static/images/vol_pics/Testimonial - Sampa.jpg" class="rounded-full" alt="" srcset=""></button>
+                            <button @click.prevent="testimonialActive = 3" class="text-center font-bold shadow-xs focus:outline-none focus:shadow-outline h-12 w-12 inline-block bg-indigo-600 rounded-full md:mx-2" :class="{'h-12 w-12 opacity-25 bg-indigo-300 text-gray-600': testimonialActive != 3, 'h-32 w-32 opacity-100 bg-indigo-600 text-white': testimonialActive == 3 }"><img src="/static/images/vol_pics/Testimonial - Haresh.jpg" class="rounded-full" alt="" srcset=""></button>
+                        </div>
+
+                        <div class="flex justify-center px-6 pt-2 pb-6 md:py-6">
+                            <div class="text-center" x-show="testimonialActive == 1">
+                                <h2 class="text-sm md:text-base font-bold text-gray-700 leading-tight">Madhukar B.K</h2>
+                                <small class="text-gray-500 text-xs md:text-sm truncate">Individual Donor, Bangalore.</small>
+                            </div>
+
+                            <div class="text-center" x-show="testimonialActive == 2">
+                                <h2 class="text-sm md:text-base font-bold text-gray-700 leading-tight">Sampa Chatterjee</h2>
+                                <small class="text-gray-500 text-xs md:text-sm truncate">Individual Donor, Kolkata.</small>
+                            </div>
+
+                            <div class="text-center" x-show="testimonialActive == 3">
+                                <h2 class="text-sm md:text-base font-bold text-gray-700 leading-tight">Haresh Velusamy</h2>
+                                <small class="text-gray-500 text-xs md:text-sm truncate">Individual Donor, Bangalore.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flickity HTML init -->
+    <div class="carousel carousel-main" data-flickity='{ "autoPlay": true, "adaptiveHeight": true}'>
+        <div class="carousel-cell bg-contain bg-center bg-no-repeat w-full md:w-60" style="background-image: url('/static/images/vol_pics/awards/1.png');"></div>
+        <div class="carousel-cell bg-contain bg-center bg-no-repeat w-full md:w-60" style="background-image: url('/static/images/vol_pics/awards/2.png');"></div>
+        <div class="carousel-cell bg-contain bg-center bg-no-repeat w-full md:w-60" style="background-image: url('/static/images/vol_pics/awards/3.png');"></div>
+        <div class="carousel-cell bg-contain bg-center bg-no-repeat w-full md:w-60" style="background-image: url('/static/images/vol_pics/awards/4.png');"></div>
+        <div class="carousel-cell bg-contain bg-center bg-no-repeat w-full md:w-60" style="background-image: url('/static/images/vol_pics/awards/5.png');"></div>
+        <div class="carousel-cell bg-contain bg-center bg-no-repeat w-full md:w-60" style="background-image: url('/static/images/vol_pics/awards/6.png');"></div>
+        <div class="carousel-cell bg-contain bg-center bg-no-repeat w-full md:w-60" style="background-image: url('/static/images/vol_pics/awards/7.png');"></div>
+
+    </div>
+
+    <div class="carousel carousel-nav mt-20 h-20" data-flickity='{ "asNavFor": ".carousel-main", "contain": true, "pageDots": false, "prevNextButtons": false }'>
+        <div class="w-full text-center md:text-3xl">Social Impact Award 2021 - Kalam Awards</div>
+        <div class="w-full text-center md:text-3xl">NGO of the Year Award 2019 - CSR Summit</div>
+        <div class="w-full text-center md:text-3xl">Outstanding NGO Exemplar Award 2021 - Rotary Club of Bangalore</div>
+        <div class="w-full text-center md:text-3xl">Special Award for CSR Innovation in Education Technology 2020 - IPE Conference</div>
+        <div class="w-full text-center md:text-3xl">PoleStar Social Impact Award (Education) 2019 - PoleStar Foundation</div>
+        <div class="w-full text-center md:text-3xl">National Recognition for Excellence in CSR 2019 - NHRDN-BIMTECH CSR Summit</div>
+        <div class="w-full text-center md:text-3xl">Leader in Volunteer Engagement 2019 - iVolunteer Awards</div>
+
+
+    </div>
+
+    <!-- <form action="https://fundraisers.giveindia.org/api/donations" method="post" target="_blank" class="">
+        <div class="mt-6 mx-2 md:mx-20 mb-1 md:h-64 flex flex-col justify-center items-center diyas">
+            <input type="hidden" name="project_id" value="6020c61e2af24b5bec34bc9e">
+            <input type="hidden" name="redirect_url" value="https://fundraisers.giveindia.org/projects/discover-the-joy-of-fulfilling-a-childs-dream">
+            <button class="h-16 w-full md:w-96 shadow-2xl border-opacity-100 transform hover:scale-105 rounded-lg bg-contain bg-center bg-no-repeat" type="submit" style="background-image: url('/static/images/vol_pics/Donate_with_GiveIndia.png'); "></button>
+            <div class="text-center text-xs font-bold mb-6 mt-1">* All domestic and International donations are accepted here</div>
+        </div>
+    </form> -->
+    <div class="mt-6 px-2 md:mx-20 mb-1 md:h-64 flex flex-col justify-center items-center berrys">
+        <a class="h-16 w-full md:w-96 shadow-2xl border-opacity-100 transform hover:scale-105 rounded-lg bg-contain bg-center bg-no-repeat cursor-pointer" href="https://fundraisers.giveindia.org/projects/sponsor-a-year-of-education-for-rural-children1" style="background-image: url('/static/images/campaign/2022_newyear/Donate_with_GiveIndia.png'); "></a>
+        <div class="text-center text-xs font-bold mb-6 mt-1">* All domestic and International donations are accepted here</div>
+    </div>
+    <div class="flex justify-center pt-6 text-lg md:text-2xl text-center italic space-x-1 md:flex-row flex-col">
+        <p> Your donation to eVidyaloka is eligible for </p>
+        <p class="font-bold text-indigo-600">50% tax exemption </p>
+        <p>under the Income Tax Act of India.</p>
+    </div>
+    <div class="flex flex-col md:flex-row items-center justify-center space-x-1 my-4">
+        <p>Please write to us for any further assistance</p>
+        <a class="text-center underline" href="mailto:donate@evidyaloka.org">donate@evidyaloka.org </a>
+    </div>
+
+    <div class="bg-gray-100 mt-6 ">
+        <div class="container py-4 px-5
+         flex flex-wrap flex-col sm:flex-row ">
+            <p class="text-gray-500 text-sm text-center sm:text-left ">© 2021
+                <a href="/" class="text-gray-600 ml-1 " target="_blank ">eVidyaloka</a>
+            </p>
+            <span class="inline-flex sm:ml-auto sm:mt-0 mt-2 justify-center sm:justify-start ">
+                <a href="https://www.facebook.com/eVidyaloka/" class="text-gray-500 ">
+                  <i class="fab fa-facebook-f "></i>
+                </a>
+                <a href="https://twitter.com/evidyaloka" class="ml-3 text-gray-500 ">
+                  <i class="fab fa-twitter "></i>
+                </a>
+                <a href="https://in.linkedin.com/company/evidyaloka-trust" class="ml-3 text-gray-500 ">
+                  <i class="fab fa-linkedin-in "></i>
+                </a>
+                <a href="https://www.youtube.com/c/eVidyalokatv/featured" class="ml-3 text-gray-500 ">
+                  <i class="fab fa-youtube "></i>
+                </a>
+                <a href="https://www.instagram.com/evidyaloka/?hl=en" class="ml-3 text-gray-500 ">
+                  <i class="fab fa-instagram "></i>
+                </a>
+                <a href="/" class="ml-3 text-gray-500 ">
+                  <i class="fas fa-globe"></i>
+                </a>
+                
+              </span>
+        </div>
+    </div>
+
+</body>
+<!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js " integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin=" anonymous "></script> -->
+
+
+</html>

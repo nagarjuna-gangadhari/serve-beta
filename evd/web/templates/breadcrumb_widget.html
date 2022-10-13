@@ -1,0 +1,660 @@
+{% if is_centeradmin or is_superuser or is_classassistant %}
+<li class="dropdown">
+   <a class="dropdown-toggle" data-toggle="dropdown">My Centers<b class="caret"></b></a>
+   <ul class="dropdown-menu">
+       {% for center in user_centers|dictsort:"name" %}
+           <li><a href="/centeradmin/?center_id={{ center.id }}">{{ center }}</a></li>
+       {% endfor %}
+   </ul>
+   <span class="divider">|</span>
+</li>
+<li class="dropdown">
+   <a class="dropdown-toggle" data-toggle="dropdown">My Students<b class="caret"></b></a>
+   <ul class="dropdown-menu">
+  <li> <a href='#esis_msg' id='my_stud_admin' data-toggle="modal">My Students</a></li>
+ <li>  <a href='/lr_bulk_upload/'>Bulk Upload Assessments</a></li>
+ <li>  <a href='/static/downloads/Guidelines_to_develop_Assessment.pdf'>Guidelines to develop Assessment</a></li>
+   </ul>
+   <span class="divider">|</span>
+</li>
+{% endif %}
+{% if is_centeradmin or is_superuser or is_contentadmin or is_classassistant %}
+<li class="dropdown">
+   <a class="dropdown-toggle" data-toggle="dropdown">My Trainings<b class="caret"></b></a>
+   <ul class="dropdown-menu" style="display: none; ">
+       <!--<li>
+           <a href="/intro/">Intro to evidyaloka</a>
+       </li>
+       <li>
+           <a href="/code_conduct/">Volunteer Code of Conduct</a>
+       </li>-->
+      <!-- <li>
+           <a href="/selfpaced/">Self Paced Teacher Trainings</a>
+       </li>-->
+       <li>
+           <a href="/aidsntools/">Aids &amp; tools</a>
+       </li>
+       <li>
+           <a href="/mytrainings/">My Trainings</a>
+       </li>
+        <li>
+           <a  id="role_guide" data-toggle="modal" href="#role_guide_modal">Teacher Role Guide</a>
+       </li>
+        <li>
+           <a  data-toggle="modal" href="#admin_role_guide_modal">Admin Role Guide</a>
+       </li>
+
+         <li>
+          <a href="/curriculumreview/"> Curriculum Review</a>
+          </li>
+   <!--     <li><a href='/static/downloads/Using_My_eVidyaloka_2.0.pdf' target="_blank">How to use MyeVidyaloka</a></li>-->
+    </ul>
+   <span class="divider">|</span>
+</li>
+{% endif %}
+{% if is_centeradmin or is_superuser or is_contentadmin or is_contentdeveloper or is_classassistant %}
+<li class="dropdown">
+   <a class="dropdown-toggle" data-toggle="dropdown">My Book<b class="caret"></b></a>
+   <ul class="dropdown-menu" style="display: none; ">
+       <li>
+          <a href="http://wikividya.evidyaloka.org/" target="_blank">Wikividya</a>
+       </li>
+       
+       <li><a href='/static/downloads/eVidyaloka_Content_Volunteer_Handbook.pdf' target="_blank">eVidyaloka Content Volunteer Handbook</a></li>
+   </ul>
+   <span class="divider">|</span>
+</li>
+
+{% endif %}
+
+{% if is_centeradmin or is_superuser or is_classassistant%}
+{% if not is_classassistant%}
+<li class="dropdown">
+   <a class="dropdown-toggle" data-toggle="dropdown">Courses<b class="caret"></b></a>
+   <ul class="dropdown-menu">
+       <li>
+          <a id="add-course" href="#add-course-modal" data-toggle="modal">Add Course</a>
+       </li>
+       <li>
+          <a id="completed-course" href="#Completed-course-modal" data-toggle="modal">Completed Courses</a>
+       </li>
+   </ul>
+   <span class="divider">|</span>
+</li>
+{% endif %}
+<li>
+  <a href="/teachers/?role=Teacher&medium={{ center.language }}">Find teachers</a>
+</li>
+{% if  is_superuser %}
+<span class="divider">|</span>
+<li>
+   <a href="#reports"  data-toggle="modal"  class='report'  >Student Reports</a>
+</li>
+{% endif %}
+
+{% elif is_teacher %}
+<li class="dropdown">
+   <a class="dropdown-toggle" data-toggle="dropdown">My Students<b class="caret"></b></a>
+   <ul class="dropdown-menu">
+       <li><a class='esis' href="/my_students/" id='my_stud_teach' data-toggle="modal">My Students</a></li>
+       <li><a href='/lr_bulk_upload/'>Bulk Upload Assessments</a></li>
+       <li>  <a href='/static/downloads/Guidelines_to_develop_Assessment.pdf'>Guidelines to develop Assessment</a></li>
+   </ul>
+   <span class="divider">|</span>
+</li>
+<li class="dropdown">
+   <a class="dropdown-toggle" data-toggle="dropdown">My Trainings<b class="caret"></b></a>
+   <ul class="dropdown-menu" style="display: none; ">
+   <!--    <li>
+           <a href="/intro/">Intro to evidyaloka</a>
+       </li>
+       <li>
+           <a href="/code_conduct/">Code of Conduct</a>
+       </li>
+       <li>
+           <a href="/skype/">How to use Skype</a>
+       </li>
+       <li>
+           <a href="/mybook/">How to use My Book</a>
+       </li>-->
+       <li>
+           <a href="/aidsntools/">Aids &amp; tools</a>
+       </li>
+       <li>
+           <a href="/mytrainings/">My Trainings</a>
+       </li>
+
+        <li>
+           <a href="/curriculumreview/">Curriculum Review</a>
+       </li>
+        <li>
+           <a  id="role_guide" data-toggle="modal" href="#role_guide_modal">Teacher Role Guide</a>
+       </li>
+       <!--
+       <li><a href='/static/downloads/Using_My_eVidyaloka_2.0.pdf' target="_blank">How to use MyeVidyaloka</a></li>-->
+   </ul>
+   <span class="divider">|</span>
+</li>
+<li class="dropdown">
+   <a class="dropdown-toggle" data-toggle="dropdown">My Book<b class="caret"></b></a>
+   <ul class="dropdown-menu" style="display: none; ">
+       <li>
+          <a href="http://wikividya.evidyaloka.org/" target="_blank">Wikividya</a>
+       </li>
+       <li>
+           <a href="#mytopics" data-toggle="modal">My Topics</a>
+       </li>
+       <li><a href='/static/downloads/eVidyaloka_Content_Volunteer_Handbook.pdf' target="_blank">eVidyaloka Content Volunteer Handbook</a></li>
+       <li><a href='https://docs.google.com/forms/d/1V4OoT-R1AJBo1lked_rOjw9DbCQI5s-EGxCyWI2agd0/viewform' target="_blank">Submit Assesment Questions</a></li>
+   </ul>
+
+</li>
+{% endif %}
+
+
+{% if is_superuser %}
+
+<span class="divider">|</span>
+
+<li class="dropdown">
+
+   <a class="dropdown-toggle" data-toggle="dropdown">Manage Donations<b class="caret"></b></a>
+   <ul class="dropdown-menu" style="display: none; ">
+       <li>
+           <a href="/donate_dash/" >Donations Dashboard</a>
+       </li>
+       <li>
+           <a href="/bulk_donate/" target="_blank" >Bulk Donation</a>
+       </li>
+       <li>
+           <a href="/bulk_pledge/" >Receipt Generation</a>
+       </li>
+
+    </ul>
+   <span class="divider">|</span>
+</li>
+
+{% endif %}
+
+<li class="dropdown">
+
+   <a class="dropdown-toggle" data-toggle="dropdown">Dashboard<b class="caret"></b></a>
+   <ul class="dropdown-menu" style="display: none; ">
+       <li>
+           <a href="/stats/" >View Dashboard</a>
+       </li>
+    </ul>
+   <span class="divider">|</span>
+</li>
+
+
+
+
+
+</ul>
+{% if is_centeradmin or is_superuser or is_classassistant %}
+<div id="admin_role_guide_modal" class="modal hide" style='left:41% !important;width:800px !important;'>
+<div class="header ">
+<p>Admin Role Guide</p>
+<a class="close close-btn hide" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+<a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+</div>
+<div class='admin_role_guide_body' id='yt-player' >
+<iframe width="800" height="420" id='admin_vid_main' src="https://www.youtube.com/embed/5jmJeI8w_vI" frameborder="0" allowfullscreen></iframe>
+</div>
+</div>
+<div id="role_guide_modal" class="modal hide" style='left:41% !important;width:800px !important;'>
+<div class="header ">
+<p>Teacher Role Guide</p>
+<a class="close close-btn hide" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+<a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+</div>
+<div class='role_guide_body' id='yt-player' >
+<iframe width="800" height="420" id='vid_main' src="https://www.youtube.com/embed/videoseries?list=PLbdxk95Fm6YxpUvIugGyRjDWDPkfbhCUk" frameborder="0" allowfullscreen></iframe>
+</div>
+</div>
+
+<div id="reports" class="modal hide" style="overflow:visible;min-height:100px;width:800px !important;left:41% !important;">
+<div class="header">
+<p>Student Report Card Generation</p>
+<a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+</div>
+<div class="body" style='padding:40px 20px;'>
+<img src="/static/images/loader.gif" alt="spinner" style="display:block;margin:10px auto"/>
+<select id='center_list' >
+   <option value=''>-- Select Center --</option>
+</select>
+<select id='grade_list' >
+   <option value=''>-- Select grade --</option>
+</select>
+<select id='action_list'>
+   <option value=''>-- Select Action --</option>
+   <option value='generate'>Generate & Download</option>
+   <option value='download'>Download</option>
+</select>
+<button class='btn' id='generate_report' style='cursor:pointer;display:inline-block;font-size:15px;'>Submit</button>
+</div>
+</div>
+<div id="esis_msg" class="modal hide" style="overflow:visible;min-height:54px;">
+<div class="header">
+<p>Info</p>
+<a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+</div>
+<p style='padding:30px;text-align:center'>Please select a center to view your students..</p>
+</div>
+
+<div id="mystudents" class="modal hide" style="overflow:visible;min-height:54px;">
+<div class="header">
+<p>My Students</p>
+<a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+</div>
+<div>
+{% if center_courses %}
+  <div class="select-box select-pin" style="margin-left:10px">
+       <ul class="custom-select" style="position:relative;margin-top:10px;">
+           <li>
+               <span class="selected-item">Select a Course</span>
+               <span class="dropdown">
+                   {% for course in center_courses %}
+                       <a rel="ajax-link" href="/mystudents/?id={{ course.offering_id }}" pre-call="pre_stu_filter" callback="after_stu_filter" style="cursor:pointer;padding-bottom:5px;">
+                           {{ course.course }}, {{ course.center }} {% if course.start_date %}, {{ course.start_date }}{% endif %} {% if course.end_date %} to {{ course.end_date }}{% endif %}
+                       </a>
+                   {% endfor %}
+               </span>
+           </li>
+       </ul>
+   </div>
+{% else %}
+   <a class="close" data-dismiss="modal" style="padding:3px;cursor:pointer;position:absolute;top:0px;right:0px;">X</a>
+   <p style="text-align:center;padding:15px;background:wheat;margin:20px;">This center has no students assigned</p>
+{% endif %}
+</div>
+<div style="max-height:450px;overflow-y:auto;">
+<form method="POST" id="students-form" style="margin-top:15px;" action="save_students">
+   {% csrf_token %}
+   <input name="student_ids" type="hidden" />
+   <input name="strengths" type="hidden" />
+   <input name="weakness" type="hidden" />
+   <input name="observation" type="hidden" />
+</form>
+</div>
+<a class="hide btn modify-btn" rel="submit" href="#students-form" pre-call="pre_students_save" callback="after_students_save">
+<span class="ajax-button-label" data-loading="please-wait">Save</span>
+</a>
+</div>
+<div id="add-course-modal" class="modal hide">
+{% if is_superuser %}
+<a class="close close-btn" data-dismiss="modal" style="padding:3px;cursor:pointer">X</a>
+<img src="/static/images/loader.gif" alt="spinner" style="display:block;margin:10px auto"/>
+<div class="hide">
+{% else %}
+<div>
+{% endif %}
+<div class="header">
+<p>Add Course</p>
+<a class="close close-btn hide" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+<a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+</div>
+<form method="POST" id="add_course_form" action="/add_course/">
+   {% csrf_token %}
+   <ul>
+       <li><p>Course:</p>
+           <select name="course_id" style="float:left;padding-right:0px;">
+               <option value="">Select a Course</option>
+               {% for course in courses %}
+               <option value="{{ course.id }}">{{ course }}</option>
+               {% endfor %}
+           </select>
+           <a href="/admin/web/course/add/" target="_blank" class="btn" style="margin-left:5px;width:20px;height:20px;line-height:18px;float:left;">+</a>
+       </li>
+       <input name="center_id" value="{{ center_id }}" type="hidden"/>
+       <input name="language" value="{{ center.language }}" type="hidden" />
+       <li><p>Start date:</p>
+           <div class="controls text">
+               <input type="date" max="{{ current_ay.end_date|date:'Y-m-d' }}"  style="width:150px;" name="start_date"/>
+           </div>
+       </li>
+       <li><p>End date:</p>
+            <div class="controls text">
+               <input type="date" max="{{ current_ay.end_date|date:'Y-m-d' }}" style="width:150px;" name="end_date"/>
+           </div>
+       </li>
+       <li><p>Planned Topics:</p>
+           <select multiple="multiple" id="planned_topics" style="float:left">
+               {% for topic in all_topics %}
+                   <option value="{{ topic.id }}" data-course-id="{{ topic.course_id.id }}">{{ topic.title }}</option>
+               {% endfor %}
+           </select>
+           <a href="/admin/web/topic/add/" class="btn" target="_blank" style="margin-left:10px;width:20px;height:20px;line-height:18px;float:left;">+</a>
+       </li>
+       <li><p>Enrolled Students:</p>
+           <select multiple="multiple" id="enroll_students">
+               {% for student in students %}
+                   <option value="{{ student.id }}">{{ student.name }}</option>
+               {% endfor %}
+           </select>
+       </li>
+       <input type="hidden" name="students" />
+       <input type="hidden" name="planned_topics" />
+       <input type="hidden" name="center_id" value="{{ center_id }}"/>
+   </ul>
+   <div>
+       <a href="#add_course_form" class="btn" rel="submit" style="width:120px;" pre-call="pre_add_course" callback="after_add_course">
+           <span class="ajax-button-label" data-loading="Please wait">Save</span>
+       </a>
+   </div>
+</form>
+</div>
+</div>
+{% elif is_teacher %}
+<div id="mystudents" class="modal hide" style="overflow:visible;min-height:54px;">
+<div>
+{% if my_offering %}
+       <div class="header">
+           <p>My Students</p>
+           <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+       </div>
+
+       <div class="select-box select-pin" style="margin-left:10px"> 
+           <!-- <span class="icon"></span> -->
+           <ul class="custom-select" style="position:relative;margin-top:10px;">
+               <li>
+                   <span class="selected-item">Select a Course</span>
+                   <span class="dropdown">
+                       {% for offering in my_offering %}
+                           <a rel="ajax-link" href="/mystudents/?id={{ offering.id }}" pre-call="pre_stu_filter" callback="after_stu_filter" style="cursor:pointer;">{{ offering.grade }} {{ offering.subject }}, {{ offering.center }} - {{ offering.date }} {{ offering.start }}
+                           </a>
+                       {% endfor %}
+                   </span>
+               </li>
+           </ul>
+       </div>
+{% else %}
+   <a class="close" data-dismiss="modal" style="padding:3px;cursor:pointer;position:absolute;top:0px;right:0px;">X</a>
+   <p style="text-align:center;padding:15px;background:wheat;margin:20px;">You have no students assigned</p>
+{% endif %}
+</div>
+<div style="max-height:450px;overflow-y:auto;">
+<form method="POST" id="students-form" style="margin-top:15px;" action="save_students">
+{% csrf_token %}
+<input name="student_ids" type="hidden" />
+<input name="strengths" type="hidden" />
+<input name="weakness" type="hidden" />
+<input type="hidden" name="observation" />
+</form>
+</div>
+<a class="hide btn modify-btn" rel="submit" href="#students-form" pre-call="pre_students_save" callback="after_students_save">
+<span class="ajax-button-label" data-loading="please-wait">Save</span>
+</a>
+</div>
+<div id="role_guide_modal" class="modal hide" style='left:41% !important;width:800px !important;'>
+<div class="header ">
+<p>Teacher Role Guide</p>
+<a class="close close-btn hide" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+<a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+</div>
+<div class='role_guide_body' id='yt-player' >
+<iframe width="800" height="420" id='vid_main' src="https://www.youtube.com/embed/videoseries?list=PLbdxk95Fm6YxpUvIugGyRjDWDPkfbhCUk" frameborder="0" allowfullscreen></iframe>
+</div>
+</div>
+
+{% endif %}
+<div id="Completed-course-modal" class="modal hide" style="overflow-x:hidden;min-height:55px;">
+<a class="close close-btn" data-dismiss="modal" style="padding:3px;cursor:pointer">X</a>
+<div class="header hide">
+<p>Completed Courses</p>
+<a class="close close-btn hide" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+<a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+</div>
+<div class='not_center_admin'>
+<div id='select-center'>
+   <p style='padding:20px;background:wheat;'>Select a center to see the Completed Course</p>
+</div>
+</div>
+</div>
+{% if is_superuser or is_teacher or is_classassistant or is_centeradmin%}
+
+<div id="Comments-modal" class="modal hide" style="overflow-x:hidden;min-height:55px;">
+<div class="header">
+<p>Teacher Comments</p>
+<a class="close close-btn hide" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+<a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer">X</a>
+</div>
+<div class='coments-body'>
+<img src="/static/images/loader.gif" alt="spinner" style="display:block;margin:10px auto"/>
+<div class="empty-comments hide"style="text-align: center;line-height: 65px;">
+   <p>Teacher doesn't have any comments</p>
+</div>
+<div class='comments' style="line-height: 1.6em;margin:10px 0px 10px 10px;max-height: 450px;overflow-x: hidden;overflow-y: scroll;">
+
+</div>
+</div>
+</div>
+{% endif %}
+<div id="mytopics" class="modal hide">
+{% if topics %}
+<div class="header">
+   <p>My Topics:</p>
+   <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer;">X</a>
+</div>
+<div style="margin:10px;max-height:500px;overflow-y:auto;">
+{% for topic in topics %}
+   <p style="margin-bottom: 10px;">Course: {{ topic.grade }}th {{ topic.subject }}, {{ topic.board }} Board</p>
+   <ul id="mytopics-list">
+   {% for t in topic.my_topics %}
+       {% if t.url %}
+       <li><a href="{{ t.url }}" target="_blank">{{ t.title }}</a></li>
+       {% else %}
+       <li><a href="#">{{ t.title }}</a></li>
+       {% endif %}
+   {% endfor %}
+   </ul>
+{% endfor %}
+</div>
+{% else %}
+<a class="close" data-dismiss="modal" style="padding:3px;cursor:pointer;">X</a>
+<p style="text-align:center;padding: 15px;background: wheat;margin:20px;">There are no topics</p>
+{% endif %}
+</div>
+{% if is_contentdeveloper %}
+<div id="my-topic-Modal" class="modal hide">
+<div class="header">
+   <p>{{ user.username }}: My Published Topics</p>
+   <a class="close" data-dismiss="modal" style="padding:0px;cursor:pointer;">X</a>
+</div>
+<div style="margin:10px;max-height:500px;overflow-y:auto;" class='body'>
+   <table>
+       <thead>
+           <th width="30%">Topic</th>
+           <th width="25%">Work Stream</th>
+           <th width="20%">Board</th>
+          <th width="15%">Subject</th> 
+           <th width="10%">Grade</th>
+       </thead>
+       <tbody class='modal-body'>
+       </tbody>
+   </table>
+</div>
+</div>
+{% endif %}
+
+<script type="text/javascript">
+$('#role_guide_modal').find('a.close').click(function(){$('#role_guide_modal').hide();$('#vid_main').attr('src',$('#vid_main').attr('src'))});
+$('#admin_role_guide_modal').find('a.close').click(function(){$('#admin_role_guide_modal').hide();$('#admin_vid_main').attr('src',$('#admin_vid_main').attr('src'))});
+       </script>
+<script id="li-Template" type="text/x-jquery-tmpl">
+<li>${comment}</li><br/>
+</script>
+<script id="header-Template" type="text/x-jquery-tmpl">
+<h4 style='font-weight:bold;text-transform: capitalize;'>Teacher:&nbsp${teacher}</h4>
+<p><strong>Comments:</strong></p><br/>
+<ul style='margin-left:25px;list-style:circle !important;'></ul>
+</script>
+
+<script id="volunteer-topic" type="text/x-jquery-tmpl">
+<tr>
+<td><a href="${url}" target="_blank"><span class="topic">${topic}</span></a></td>
+<td>${workstream}</td>
+<td>${board}</td>
+<td>${subject}</td>
+<td>${grade}</td>
+</tr>
+</script>
+<script id="empty-Template" type="text/x-jquery-tmpl">
+<p>${teacher} doesnot have any comments</p>
+</script>
+<script>
+$(document).ready(function(){
+var center_id_dashboard = $("#edit-timings-modal").find("input[name='center_id']").attr('value');
+$("#add_course_form").find("input[name='center_id']").attr('value',center_id_dashboard);
+
+{% if is_superuser or is_centeradmin %}
+   var pathname = window.location.pathname;
+   $("#add-course").click(function(){
+       $.get("/get_students/?pathname="+pathname+"&center_id="+window.center_id, function(resp){
+           $("#add-course-modal #select-center").remove();
+           $("#add-course-modal img").hide();
+
+           if(resp == "Failed"){
+               $("#add-course-modal").children("div").hide();
+               $("#add-course-modal").append("<div id='select-center'><p style='padding:20px;background:wheat;'>Select a center to add Course</p></div>")
+           }
+           else {
+               $(".close-btn").hide();
+               $("#add-course-modal").children("div").show();
+               $("#add-course-modal #select-center").remove();
+               $("#enroll_students").children().remove();
+               for(var i in resp){
+                   var student = resp[i];
+                   $("#enroll_students").append("<option value='" + student.id +"'>" + student.name + "</option>");
+               }
+               $("input[name='center_id']").val(window.center_id);
+           }
+       });
+   });
+{% endif %}
+var center_id = window.location.search.split("=")[1] || '';
+if(center_id==''){
+   $('#my_stud_admin').removeClass('esis');
+}else{
+$('#my_stud_admin').addClass('esis').attr('href','/my_students/');
+  }
+
+$('.report').click(function(){
+   $('#reports').find('button').bind('click',gen_report).css('background-color','#FB6030');
+   $.post('/get_active_centers/',{},function(resp){
+           var center_list = '<option value="">-- Select Center --</option>';
+           $.each(resp.data,function(i,val){
+               center_list += '<option value='+val.center_id+'>'+val.center_name+'</option>'
+           });
+           $('#center_list').html(center_list);
+           $('#reports').find('.body').find('img').hide();
+           $('#center_list').change(function(){
+               console.log($(this).val());
+               var sel_ind = $('#center_list :selected').val();
+               var grades = resp.data[sel_ind].grade_list;
+               var grade_html = '<option value="">-- Select Grade --</option>';
+               $.each(grades,function(i,val){
+                   grade_html += '<option value='+val+' >'+val+' Grade</option>';
+               });
+               $('#grade_list').html(grade_html);
+           });
+   });
+});
+jQuery.download = function(url, data, method){
+   if( url && data ){
+       data = typeof data == 'string' ? data : jQuery.param(data);
+       var inputs = "";
+       jQuery.each(data.split("&"), function(){
+           var pair = this.split("=");
+           inputs+="<input type='hidden' name='"+ pair[0] +"' value='"+ pair[1] +"' />";
+       });
+       //send request
+       jQuery("<form action='"+ url +"' method='"+ (method||"post") +"'>{% csrf_token %}"+inputs+"</form>")
+       .appendTo('body').submit().remove();
+       setTimeout(function(){$('#reports').find('.body').find('img').hide();},2000);
+   };
+};
+var gen_report = function(){
+   var center =$('#center_list :selected').val();
+   var grade =$('#grade_list :selected').val();
+   var action =$('#action_list :selected').val();
+   if(center=='' || grade=='' || action==''){
+       evd.show_msg('All Fields are required!..');
+   }else{
+    $(this).unbind('click').css('background-color','grey');
+    $('#reports').find('.body').find('img').show();
+    var data = 'center_id='+center+'&grade='+grade+'&action='+action
+     $.download('/download_report_card/',data,'POST');
+   }
+};
+
+$("#completed-course").click(function(e){
+   e.preventDefault();
+       var flag = $('#content').find('#completed-course-modal .completed-offering');
+       if(flag.length > 0){
+           $("#Completed-course-modal > .not_center_admin").empty().append($("#completed-course-modal > .completed-offering")).show();
+           $("#Completed-course-modal > .header").removeClass('hide');
+           $("#Completed-course-modal > a.close").addClass('hide');
+       }
+       else {
+           $("#Completed-course-modal > .not_center_admin").show();
+       }
+   });
+$(".dashboard-inner-container").on('click','#comments',function(e){
+   e.preventDefault();
+   $("#Comments-modal").modal('show');
+   offering_id = $("#attendence-board").children("select[name='my_offerings']").val()
+   if(!(offering_id)){
+       $("#Comments-modal").find('img').hide();
+       var $empty_comments = $("#Comments-modal").find('.empty-comments');
+       $empty_comments.empty();
+       $("<p>You should have atleast one offering</p>").appendTo($empty_comments);
+       $empty_comments.removeClass('hide');
+       return;
+   }
+   $.get("/get_comments/?offering_id="+offering_id, function(resp){
+       $("#Comments-modal").find('img').hide();
+       if((resp['comments'].length) <= 0){
+           $("#Comments-modal").find('.comments').addClass('hide');
+           var $empty_comments = $("#Comments-modal").find('.empty-comments');
+           $empty_comments.empty();
+           if(resp['teacher'].length > 0){
+               $('#empty-Template').tmpl({'teacher':resp['teacher']}).appendTo($empty_comments );
+           }else{
+               $("<p>Teacher Doesnot have any comments</p>").appendTo($empty_comments );
+           }
+           $empty_comments.removeClass('hide');
+       }else{
+           $("#Comments-modal").find('.empty-comments').addClass('hide');
+           $("#Comments-modal").find('.comments').removeClass('hide').empty();
+           $("#header-Template").tmpl({'teacher':resp['teacher']}).appendTo($("#Comments-modal").find('.comments'));
+           $.each(resp['comments'],function(ind,comment){
+               $("#li-Template").tmpl({'comment':comment}).appendTo($("#Comments-modal").find('.comments > ul'));
+           });
+       }
+
+   });
+});
+
+$('.li-topic-Modal').click(function(e){
+   e.preventDefault();
+   $('#my-topic-Modal').modal('show');
+   var data_attr = $(this).attr('data-attr');
+   $("#my-topic-Modal").find('.modal-body').empty();
+   $("#my-topic-Modal").find('.body > table').css({"display":  "block"});
+   $("#my-topic-Modal").find('.body > p').remove();
+   $.post('/get_volunteers_topics/', {'filter': data_attr},function(resp){
+      if(resp && resp['topic_details'].length > 0){
+           $.each(resp['topic_details'], function(ind, obj){
+               $("#volunteer-topic").tmpl(obj).appendTo($("#my-topic-Modal").find('.modal-body'));
+           });
+       }else{
+           $("#my-topic-Modal").find('.body > table').css({"display": "none"});
+           $("<p> There is no topics </p>").appendTo($("#my-topic-Modal").find('.body'));
+       }
+   });
+});
+
+});
+</script>

@@ -1,0 +1,21 @@
+Greetings,
+
+Congratulations. Contents developed by you are published in Wikividya.
+
+Details:
+
+        Board, Subject, Grade: {{ Board }},{{ Subject }},{{ Grade }}
+
+        Topic:  {{ Title }}
+
+        Content Type: {{ Type }}
+
+        Published link : {{ Url  }}
+
+Login into My eVidyaloka - www.evidyaloka.org/myevidyaloka, to view all your published topics under My Book.
+
+Thank you for contributing your valuable time towards the cause of quality education to the Children in rural Villages through eVidyaloka!
+
+Regards,
+
+eVidyaloka Content Team

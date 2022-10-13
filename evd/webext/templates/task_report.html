@@ -1,0 +1,645 @@
+{% extends "base.html" %} {% block head_styles %} {{ block.super }}
+{% endblock %} {% block head_scripts %} {{ block.super }}
+
+<!-- <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+<script src="https://www.amcharts.com/lib/3/serial.js"></script>
+<script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+<link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+<script src="https://www.amcharts.com/lib/3/themes/light.js"></script> -->
+<script src="https://www.amcharts.com/lib/3/gauge.js"></script>
+
+<!-- Select2 -->
+<script src="/static/js/select.min.js"></script>
+<link href="/static/css/select2.min.css" rel="stylesheet">
+
+<!-- Custom Theme Style -->
+<link href="/static/css/custom.css" rel="stylesheet">
+<script type="text/javascript" src="/static/js/bootstrap-datepicker.min.js"></script>
+
+<style>
+.tile_count {
+	margin-bottom: 2px;
+	margin-top: 2px;
+}
+.divider {
+     border-bottom: 0px solid #ddd ! important;
+     margin: 0px ! important;
+}
+.chart {
+	width: 100%;
+	height: 290px;
+	border-radius: 4px;
+	margin-top: 10px;
+	padding: 20px;
+	position: relative;
+}
+
+.count {
+	font-size: 10px;
+}
+
+.count1 {
+	font-size: 14px;
+	margin-left: 0px;
+}
+
+.chartBoxCss {
+	height: 370px;
+}
+.rowCss {       
+    padding: 20px;      
+}
+.input-group-addon:hover {
+    background-color: #eee !important;
+}    
+.btnCss {       
+    margin-top: 23px;  
+}
+/* .container {
+  width: 100%;
+  padding: 0
+} */
+.inner {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+.rowCSS {
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+.navbar-default {
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+.tile_count {
+    margin-top: 0px !important;
+}
+a{
+color: #337ab7; !important;
+}
+a:hover{
+color: #23527c; !important;
+}
+
+.btn-primary:hover, .btn:focus, .btn.focus {
+    color: #333;
+    text-decoration: none;
+}
+.chartBoxCss {
+     height: 400px;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    padding-top: 3px;
+    height: 28px;
+}
+
+
+.btn-primary:active:hover{
+    color: #fff;
+    background-color: #204d74;
+    border-color: #122b40;
+}
+</style>
+<style>
+#overall_chart {
+	width		: 100%;
+	height		: 300px;
+	font-size	: 11px;
+}	
+</style>
+
+{% endblock %} {% block body_container %}
+
+<div class="container-fluid">
+<form action="/v2/task_reporting/" id="advancedFilterForm" method="get">
+<input type="hidden" value="True" name="flag">
+	<div class="row rowCSS">
+		<div class="col-xs-12 col-sm-12 col-md-12">
+			<div class="panel panel-default">
+					<div class="row " style="margin-left: 17px">
+						<div class="col-md-10 col-xs-10">
+							<div class="col-md-2 col-sm-2 col-xs-6"></div>
+							<div class="col-md-3 col-sm-6 col-xs-12">
+								<label>Select Username</label>
+								<div class="col-md-12 input-group">
+									<input type="hidden" name="prfm_id" id="prfm_id" /> 
+									 <!-- <input type="hidden" name="prfm_name" id="prfm_name_id" /> -->
+									  <input type="hidden" id="selected_user_id" value="{{ selected_user.id }}"/>
+									{% if selected_user %}
+										{% if selected_user.first_name != '' and selected_user.last_name != '' %}
+											<input
+												type="text" id="prfm_text" class="form-control"
+												title="Enter 4 or more character" style="cursor: auto;" value="{{selected_user.first_name}} {{selected_user.last_name}}-{{selected_user.id}}"
+												placeholder="Enter 4 or more character" />
+										{% else %}
+											<input
+												type="text" id="prfm_text" class="form-control"
+												title="Enter 4 or more character" style="cursor: auto;" value="{{selected_user.username}}-{{selected_user.id}}"
+												placeholder="Enter 4 or more character" />
+										{% endif %}
+									{% else %}
+										 <input
+										type="text" id="prfm_text" class="form-control"
+										title="Enter 4 or more character" style="cursor: auto;" 
+										placeholder="Enter 4 or more character" />
+									{% endif %}
+								</div>
+							</div>
+							<div class="col-md-3 col-sm-6 col-xs-12">
+								<label>Select Start Date</label>
+								<div class="col-md-12 input-group">
+									<input type="text" id="sdate" name="startDate"
+										class="form-control readonly" value="{{start_date}}"
+										required="required"> <label
+										class="input-group-addon btn" for="sdate"
+										title="Select Start Date" style="cursor: default !important;">
+										<span class="fa fa-calendar" title="Select Start Date"
+										style="cursor: default !important;"></span>
+									</label>
+								</div>
+							</div>
+							<div class="col-md-3 col-sm-6 col-xs-12">
+								<label>Select End Date</label>
+								<div class="col-md-12 input-group">
+									<input type="text" id="edate" name="endDate"
+										class="form-control readonly" value="{{end_date}}"
+										required="required"> <label
+										class="input-group-addon btn" for="edate"
+										title=" Select End Date" style="cursor: default !important;">
+										<span class="fa fa-calendar" title="Select End Date"
+										style="cursor: default !important;"></span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2 col-xs-2">
+							<div class="col-md-4 col-sm-6 col-xs-12 btnCss">
+								<button type="submit" class="btn btn-primary" style="background: #337ab7;float: right;">Generate</button>
+							</div>
+							<div class="col-md-4 col-sm-6 col-xs-12 btnCss">
+								<!-- <button class="btn btn-primary" title="Refresh"
+									onclick="refreshTask()"
+									style="margin-bottom: 10%; border-bottom-left-radius: 12%; border-top-left-radius: 12%; margin-left: 20%;">
+									<span class="fa fa-refresh"></span>
+								</button> -->
+								<a  href="/v2/task_reporting"><button type="button" class="btn btn-primary"  title="Refresh"><span class="fa fa-refresh"></span></button></a>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+		</div>
+	</div>
+</form>
+</div>
+<div class="container-fluid">
+	<div class="tile_count">
+		<div class="row rowCSS">
+			<div class="animated flipInY col-md-6 col-sm-6 col-xs-12">
+				<div class="tile-stats chartBoxCss">
+					<div class="col-md-8 col-xs-8">
+						<div class="count1">
+							<h3>Overall View </h3>
+						</div>
+					</div>
+					<div class="col-md-4 col-xs-4">
+						<div class="iconCss">
+							<i class="fa fa-pie-chart" aria-hidden="true"></i>
+						</div>
+					</div>
+					<div id="overall_chart" class="chart"></div>
+				</div>
+			</div>
+			<div class="animated flipInY col-md-6 col-sm-6 col-xs-12">
+				<div class="tile-stats chartBoxCss">
+					<div class="col-md-10 col-xs-10">
+						<div class="col-md-6">
+							<div class="count1">
+								<h3>Task Trends</h3>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2 col-xs-2">
+						<div class="iconCss">
+							<i class="fa fa-line-chart" aria-hidden="true"></i>
+						</div>
+					</div>
+					<div id="task_Trends_chart" class="chart"></div>
+				</div>
+
+			</div>
+		</div>
+
+		<!-- <div class="row rowCSS">
+			<div class="animated flipInY col-md-12 col-sm-12 col-xs-12">
+				<div class="tile-stats chartBoxCss">
+					<div class="col-md-10 col-xs-10">
+						<div class="col-md-6">
+							<div class="count1">
+								<h3>Task By Users</h3>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2 col-xs-2">
+						<div class="iconCss">
+							<i class="fa fa-bar-chart" aria-hidden="true"></i>
+						</div>
+					</div>
+					<div class="col-md-12 col-xs-12">
+							<div class="count">41%</div>
+						</div>
+					<div id="task_by_users_chart" class="chart"></div>
+				</div>
+			</div>
+		</div> -->
+		<input type="hidden" value="{{overall_view_data}}" id="overall_view_id" />
+		<!-- <input type="hidden" value="{{task_by_users_data}}" id="task_by_users_id" /> -->
+		<input type="hidden" value="{{task_trends_data}}" id="task_trends_id" />
+	</div>
+</div>
+<script>
+	$(document).ready(
+			function() {
+				var date_input = $('input[id="sdate"]');
+				var container = $('.bootstrap-iso form').length > 0 ? $(
+						'.bootstrap-iso form').parent() : "body";
+				var options = {
+					format : 'dd-mm-yyyy',
+					container : container,
+					todayHighlight : true,
+					autoclose : true,
+				};
+				date_input.datepicker(options).on('changeDate',
+						function(selected) {
+							var startDate = new Date(selected.date.valueOf());
+							$('#edate').datepicker('setStartDate', startDate);
+						}).on('clearDate', function(selected) {
+					$('#edate').datepicker('setStartDate', null);
+				});
+
+				var date_input = $('input[id="edate"]');
+				var container = $('.bootstrap-iso form').length > 0 ? $(
+						'.bootstrap-iso form').parent() : "body";
+				var options = {
+					format : 'dd-mm-yyyy',
+					container : container,
+					todayHighlight : true,
+					autoclose : true,
+				};
+				date_input.datepicker(options).on('changeDate',
+						function(selected) {
+							var endDate = new Date(selected.date.valueOf());
+						 /* $('#sdate').datepicker('setEndDate', endDate); */ 
+						}).on('clearDate', function(selected) {
+					$('#sdate').datepicker('setEndDate', null);
+				});
+				
+			});
+	$(".select2_multiple").select2({
+		maximumSelectionLength : 1000
+	});
+</script>
+<script>
+$(document).ready(function(){
+	if ($('#selected_user_id').val() != null & $('#selected_user_id').val() != '' &$('#selected_user_id').val() != 'undefined'){
+		$("#prfm_id").val($('#selected_user_id').val());
+	}
+	$("#prfm_text").autocomplete({
+	    source: "/v2/ajax/get_users?action=performed_on",
+	    minLength: 4,
+	    select: function(event, ui) {
+	        $("#prfm_id").val(ui.item.id);
+	        $("#prfm_name_id").val(ui.item.value);
+	    }
+	});	
+});
+</script>
+<script>
+$(document).ready(function(){
+	createOverallView_chart();
+	//createTaskByUsers_chart();
+	createTaskTrends_chart();
+});
+</script>
+<script>
+function createOverallView_chart(){
+	 var jsonDataOverallView = $("#overall_view_id").val();
+     var obj_overall_view = JSON.parse(jsonDataOverallView);
+	 if (obj_overall_view != null && obj_overall_view.length== 0){
+		 obj_overall_view = [{"title": "", "value": 0.0}];
+     } 
+	 var chart = AmCharts.makeChart( "overall_chart", {
+		  "type": "pie",
+		  "theme": "light",
+		  "legend": {
+		        "autoMargins": false,
+		        "borderAlpha": 0.2,
+		        "equalWidths": false,
+		        "horizontalGap": 3,
+		        "markerSize": 15,
+		        "valueAlign": "left",
+		        "periodValueText": " Total: [[value.sum]]",
+		        "valueWidth": 20
+		    },
+		  "dataProvider": [ {
+			    "title": "Open",
+			    "value": obj_overall_view[0]['open_task']
+			  }, {
+			    "title": "WIP",
+			    "value": obj_overall_view[0]['WIP_task']
+			  }, {
+			    "title": "Closed",
+				"value": obj_overall_view[0]['Closed_task']
+			  }, {
+				"title": "Resolved",
+			    "value": obj_overall_view[0]['Resolved_task']
+			  }],
+			  "graphs": [{
+			        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px;'><b>[[value]]</b> ([[percents]]%)</span>",
+			        "fillAlphas": 0.9,
+			        "fontSize": 11,
+			        "labelText": "[[percents]]%",
+			        "lineAlpha": 0.5,
+			        "title": "Open",
+			        "type": "column",
+			        "valueField": "Open"
+			    }, {
+			        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px;'>([[percents]]%)</span>",
+			        "fillAlphas": 0.9,
+			        "fontSize": 11,
+			        "labelText": "[[percents]]%",
+			        "lineAlpha": 0.5,
+			        "title": "WIP",
+			        "type": "column",
+			        "valueField": "WIP"
+			    }, {
+			        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px;'><b>([[percents]]%)</span>",
+			        "fillAlphas": 0.9,
+			        "fontSize": 11,
+			        "labelText": "[[percents]]%",
+			        "lineAlpha": 0.5,
+			        "title": "Closed",
+			        "type": "column",
+			        "valueField": "Closed"
+			    }, {
+			        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px;'><b>[[value]]</b> ([[percents]]%)</span>",
+			        "fillAlphas": 0.9,
+			        "fontSize": 11,
+			        "labelText": "[[percents]]%",
+			        "lineAlpha": 0.5,
+			        "title": "Resolved",
+			        "type": "column",
+			        "valueField": "Resolved"
+			    }],
+		  "titleField": "title",
+		  "valueField": "value",
+		  "labelRadius": 5,
+		  "radius": "42%",
+		  "innerRadius": "60%",
+		  "labelText": "[[title]]",
+		  "export": {
+		    "enabled": true
+		  }
+		} );
+
+	
+}
+</script>
+<script type="text/javascript">
+/* function createTaskByUsers_chart(){
+	var jsonDataTaskByUsers = $("#task_by_users_id").val();
+	var obj_task_by_users = JSON.parse(jsonDataTaskByUsers);
+	if (obj_task_by_users != null && obj_task_by_users.length== 0){
+		obj_task_by_users = [{"username": "", "Normal": 0.0,"High": 0.0,"Urgent": 0.0,"Immediate": 0.0}];
+	}
+	var chart = AmCharts.makeChart("task_by_users_chart", {
+		    "theme": "light",
+		    "type": "serial",
+		    "legend": {
+		        "autoMargins": false,
+		        "borderAlpha": 0.2,
+		        "equalWidths": false,
+		        "horizontalGap": 3,
+		        "markerSize": 10,
+		        "useGraphSettings": true,
+		        "valueAlign": "left",
+		        "periodValueText": " Total: [[value.sum]]",
+		        "valueWidth": 10
+		    },
+		    "dataProvider": obj_task_by_users,
+		    "valueAxes": [{
+		        "position": "left",
+		        "title": "Task",
+		    }],
+		    "startDuration": 1,
+		    "graphs": [{
+		        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px;'><b>[[value]]</b> ([[percents]]%)</span>",
+		        "fillAlphas": 0.9,
+		        "fontSize": 11,
+		       /*  "labelText": "[[percents]]%", */
+		        "lineAlpha": 0.5,
+		        "title": "Normal",
+		        "type": "column",
+		        "valueField": "Normal"
+		    }, {
+		        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px;'><b>[[value]]</b> ([[percents]]%)</span>",
+		        "fillAlphas": 0.9,
+		        "fontSize": 11,
+		        /* "labelText": "[[percents]]%", */
+		        "lineAlpha": 0.5,
+		        "title": "High",
+		        "type": "column",
+		        "valueField": "High"
+		    }, {
+		        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px;'><b>[[value]]</b> ([[percents]]%)</span>",
+		        "fillAlphas": 0.9,
+		        "fontSize": 11,
+		       /*  "labelText": "[[percents]]%", */
+		        "lineAlpha": 0.5,
+		        "title": "Urgent",
+		        "type": "column",
+		        "valueField": "Urgent"
+		    }, {
+		        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px;'><b>[[value]]</b> ([[percents]]%)</span>",
+		        "fillAlphas": 0.9,
+		        "fontSize": 11,
+		        /* "labelText": "[[percents]]%", */
+		        "lineAlpha": 0.5,
+		        "title": "Immediate",
+		        "type": "column",
+		        "valueField": "Immediate"
+		    }],
+		    "plotAreaFillAlphas": 0.1,
+		    "categoryField": "username",
+		    "categoryAxis": {
+		        "gridPosition": "start",
+		        "labelRotation": 45
+		    },
+		    "export": {
+		    	"enabled": true
+		     }
+
+		});
+	/*     "type": "serial",
+	    "theme": "light",
+	    "legend": {
+	        "autoMargins": false,
+	        "borderAlpha": 0.2,
+	        "equalWidths": false,
+	        "horizontalGap": 3,
+	        "markerSize": 10,
+	        "useGraphSettings": true,
+	        "valueAlign": "left",
+	        "periodValueText": " Total: [[value.sum]]",
+	        "valueWidth": 10
+	    },
+	    "dataProvider": obj_task_by_users,
+	    "valueAxes": [{
+	        "stackType": "regular",
+	        "gridAlpha": 0.07,
+	        "title": "Tasks",
+	        "labelsEnabled": true,
+	        "position": "left"
+	    }],
+	    "graphs": [{
+	        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px;'><b>[[value]]</b> ([[percents]]%)</span>",
+	        "fillAlphas": 0.9,
+	        "fontSize": 11,
+	        "labelText": "[[percents]]%",
+	        "lineAlpha": 0.5,
+	        "title": "Normal",
+	        "type": "column",
+	        "valueField": "Normal"
+	    }, {
+	        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px;'><b>[[value]]</b> ([[percents]]%)</span>",
+	        "fillAlphas": 0.9,
+	        "fontSize": 11,
+	        "labelText": "[[percents]]%",
+	        "lineAlpha": 0.5,
+	        "title": "High",
+	        "type": "column",
+	        "valueField": "High"
+	    }, {
+	        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px;'><b>[[value]]</b> ([[percents]]%)</span>",
+	        "fillAlphas": 0.9,
+	        "fontSize": 11,
+	        "labelText": "[[percents]]%",
+	        "lineAlpha": 0.5,
+	        "title": "Urgent",
+	        "type": "column",
+	        "valueField": "Urgent"
+	    }, {
+	        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px;'><b>[[value]]</b> ([[percents]]%)</span>",
+	        "fillAlphas": 0.9,
+	        "fontSize": 11,
+	        "labelText": "[[percents]]%",
+	        "lineAlpha": 0.5,
+	        "title": "Immediate",
+	        "type": "column",
+	        "valueField": "Immediate"
+	    }],
+	    "marginTop": 30,
+	    "marginRight": 0,
+	    "marginLeft": 0,
+	    "marginBottom": 40,
+	    "autoMargins": true,
+	    "categoryField": "username",
+	    "categoryAxis": {
+	        "gridPosition": "start",
+	        "axisAlpha": 1,
+	        "gridAlpha": 0,
+	        "labelRotation": 45
+	    },
+	    "export": {
+	    	"enabled": true
+	     }
+
+	});
+ */} */
+</script>
+<script>
+function createTaskTrends_chart(){
+	var jsonDataTaskTrends = $("#task_trends_id").val();
+	var obj_task_trends = JSON.parse(jsonDataTaskTrends);
+	if (obj_task_trends != null && obj_task_trends.length== 0){
+		obj_task_trends = [{"dueDate": "","Open": 0.0,"WIP": 0.0,"Resolved": 0.0,"Closed": 0.0}];
+	}
+	var chart = AmCharts.makeChart("task_Trends_chart", {
+	    "type": "serial",
+	    "theme": "light",
+	    "marginRight":60,
+	    "legend": {
+	    	"autoMargins": false,
+	        "borderAlpha": 0.2,
+	        "equalWidths": false,
+	        "horizontalGap": 3,
+	        "marginRight":10,
+	        "periodValueText": "Total: [[value.sum]]",
+	        "position": "bottom",
+	        "valueAlign": "left",
+	        "valueWidth": 10
+	    },
+	    "dataProvider": obj_task_trends,
+	    "valueAxes": [{
+	        "stackType": "regular",
+	        "gridAlpha": 0.07,
+	        "position": "left",
+	        "title": "Tasks",
+	        "labelsEnabled": true,
+	    }],
+	    "graphs": [{
+	        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px; color:#000000;'><b>[[value]]</b></span>",
+	        "fillAlphas": 0.6,
+	        "lineAlpha": 0.4,
+	        "title": "Open",
+	        "lineAlpha": 0.5,
+	        "valueField": "Open"
+	    }, {
+	        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px; color:#000000;'><b>[[value]]</b></span>",
+	        "fillAlphas": 0.6,
+	        "lineAlpha": 0.4,
+	        "title": "WIP",
+	        "lineAlpha": 0.5,
+	        "valueField": "WIP"
+	    }, {
+	        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px; color:#000000;'><b>[[value]]</b></span>",
+	        "fillAlphas": 0.6,
+	        "lineAlpha": 0.4,
+	        "title": "Closed",
+	        "lineAlpha": 0.5,
+	        "valueField": "Closed"
+	    }, {
+	        "balloonText": "[[title]], [[category]]<br><span style='font-size:14px; color:#000000;'><b>[[value]]</b></span>",
+	        "fillAlphas": 0.6,
+	        "lineAlpha": 0.4,
+	        "title": "Resolved",
+	        "lineAlpha": 0.5,
+	        "valueField": "Resolved"
+	    }],
+	    "plotAreaBorderAlpha": 0,
+	    "marginTop": 10,
+	    "marginLeft": 0,
+	    "marginBottom": 0,
+	    "autoMargins": true,
+	    "chartCursor": {
+	    	"cursorAlpha": 0,
+	    	 "categoryBalloonEnabled":false
+	    },
+	    "categoryField": "dueDate",
+	    "categoryAxis": {
+	    	"startOnAxis": true,
+	        "axisColor": "#DADADA",
+	        "axisAlpha": 1,
+	        "labelRotation": 45,
+	        "gridAlpha": 0.07
+	    },
+	    "export": {
+	    	"enabled": true
+	     }
+	});	
+}
+</script>
+
+{% endblock %} {% block scripts %} {% endblock %}

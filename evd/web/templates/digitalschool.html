@@ -1,0 +1,404 @@
+<!DOCTYPE html>{% load staticfiles%}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital School | eVidyaloka</title>
+    <!-- Global site tag (gtag.js) - Google Ads: 967708218 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-967708218"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'AW-967708218');
+    </script>
+    <!-- Global site tag (gtag.js) - Google Ads: UA-35920468-1 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-35920468-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-35920468-1');
+    </script>
+    <!-- End of GA tag -->
+
+    <link rel="stylesheet" href="{% static 'css/tailwind.min.css' %}">
+    <script src="{% static 'css/fontawesome/js/all.min.js' %}"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class=" md:p-4 w-full">
+
+        <div class="m-2 text-gray-900 bg-white rounded-lg shadow-lg font-medium capitalize">
+            <span class="px-2 mr-2 border-r border-gray-800"> <a href="/">
+                <img src="{% static 'images/digischool/evidyaloka_icon2.png' %}" alt="alt placeholder" class="w-40 h-30 -mt-1 inline mx-auto"> </a>
+            </span>
+            <span class="md:p-2 md:mx-2 mx-4 cursor-pointer hover:bg-gray-200 hover:text-gray-700 rounded md:mb-5">
+                <a href="/about/"><span class="mx-1 text-xs md:text-lg">About</span></a>
+            </span>
+            <span class="md:p-2 md:mx-2 mx-4 cursor-pointer hover:bg-gray-200 hover:text-gray-700 rounded d:mmb-5">
+                <a href="/blog/"><span class="mx-1 text-xs md:text-lg">Blog</span></a>
+            </span>
+            <span class="md:p-2 md:mx-2 mx-4 cursor-pointer hover:bg-gray-200 hover:text-gray-700 rounded d:mmb-5">
+                <a href="/tttinfo/"><span class="mx-1 text-xs md:text-lg">learn Through Television</span></a>
+            </span>
+            <span class="mx-4 md:p-2 md:mx-2 cursor-pointer bg-gray-200 hover:text-gray-700 rounded md:mb-5">
+                <span class="mx-1 text-xs md:text-lg"><a href="https://play.google.com/store/apps/details?id=org.evidyaloka" target="_blank">Download app <i class="fab fa-android"></i></a> </span>
+            </span>
+
+
+        </div>
+    </div>
+
+    <div class="object-cover hidden pl-4 h-32 w-full">
+        <img class="h-24" src="{% static 'images/digischool/evidyaloka_icon2.png' %}" alt="">
+    </div>
+
+    <h1 class="text-center font-black text-md md:text-4xl lg:text-5xl text-gray-900 p-4 antialiased font-serif">Bringing a school to every child's home.</h1>
+
+    <div class="p-4">
+        <section class="pt-8 px-4 bg-gray-100 rounded ">
+            <div class="flex flex-wrap -mx-4 justify-items-center">
+                <div class="w-1/3 px-4 mb-8"><img class="rounded shadow-md h-14 md:h-52" src="{% static 'images/digischool/2.jpg' %}" alt=""></div>
+                <div class=" w-1/3 px-4 mb-8"><img class="rounded shadow-md h-14 md:h-52" src="{% static 'images/digischool/3.jpg' %}" alt=""></div>
+                <div class=" w-1/3 px-4 mb-8"><img class="rounded shadow-md h-14 md:h-52" src="{% static 'images/digischool/8.jpg' %}" alt=""></div>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="p-8 px-12 text-justify text-xs md:text-base">
+        Run an eVidyaloka Digital School that benefits the children of rural India and has everything a child looks for in a school experience. Whether you are an enterprising individual wanting to make a difference in the lives of young children of rural India
+        or an NGO that works at the grassroots, eVidyaloka invites you to this mission of every child having a school in his/her pocket.
+    </div>
+
+    <div class="bg-green-50 p-8 rounded flex items-start text-green-600 my-4 shadow-lg  mx-auto">
+        <div class=" px-3">
+            <h3 class="text-green-800 font-semibold tracking-wider text-center text-lg md:text-4xl">
+                What is an eVidyaloka Digital School ?
+            </h3>
+            <p class="py-2 text-green-700 ">
+                An eVidyaloka Digital School is an outside-school learning opportunity and intervention. The highlight is the multi-mode approach: children learn from TV lesson broadcasts, interactive printed workbooks and worksheets, and an online app.
+            </p>
+            <div class="space-x-6">
+                <a href="/">
+                    <div class="text-green-900 font-semibold tracking-wider">Enrollment to the program is absolutely free.</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-4">
+        <section class="pt-8 px-4 bg-gray-100 rounded ">
+            <div class="flex flex-wrap -mx-2 justify-items-center">
+                <div class="w-1/4 px-2 mb-8"><img class="rounded shadow-md h-14 md:h-52" src="{% static 'images/digischool/11.jpeg' %}" alt=""></div>
+                <div class=" w-1/4 px- mb-8"><img class="rounded shadow-md h-14 md:h-52" src="{% static 'images/digischool/6.jpg' %}" alt=""></div>
+                <div class=" w-1/4 px-2 mb-8"><img class="rounded shadow-md h-14 md:h-52" src="{% static 'images/digischool/10.jpeg' %}" alt=""></div>
+                <div class=" w-1/4 px-2 mb-8"><img class="rounded shadow-md h-14 md:h-52" src="{% static 'images/digischool/4.jpg' %}" alt=""></div>
+            </div>
+        </section>
+    </div>
+
+    <div class="bg-red-50 p-8 rounded text-green-600 text-center my-4 shadow-lg">
+        <div class=" px-3">
+            <h3 class="text-green-800 font-semibold tracking-wider  text-lg md:text-4xl">
+                BE A RURAL EDUCATION CHAMPION.
+            </h3>
+            <p class="py-2 pt-4 text-green-700 ">
+                Become an eVidyaloka Digital School Partner (DSP) and run a Digital School for Grades 5-10 in your Block, Taluka or Mandal. Be a Rural Education Champion.
+            </p>
+        </div>
+        <div class="pt-8 flex flex-row items-center justify-center">
+            <a href="/partner/new_signup/" class="p-2 md:p-4"><button class="md:px-10 md:py-2.5 p-2 text-sm text-base flex justify-center  font-semibold rounded-md block  border-b border-red-300  bg-red-200 hover:bg-red-300 text-red-900">Register Now</button></a>
+            <a href="https://play.google.com/store/apps/details?id=org.evidyaloka" class=" p-2 md:p-4"><button class="md:px-7 md:py-2.5 p-2 text-sm text-base flex justify-center  font-semibold rounded-md block  border-b border-green-300  bg-green-200 hover:bg-green-300 text-green-900">Download app</button></a>
+        </div>
+    </div>
+
+
+    <div class="p-1  flex flex-wrap justify-center ">
+        <h3 class="text-yellow-500 p-4 py-8 font-semibold tracking-wider text-center text-base md:text-lg md:text-4xl">
+            What can students do in a eVidyaloka Digital School ?
+        </h3>
+
+        <div class="m-6 relative overflow-hidden rounded-lg md:max-w-xs ">
+            <div class="relative pt-10 px-10 flex items-center justify-center ">
+                <img class="relative w-20 h-20 md:w-40 md:h-40" src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/2.png' %}" alt=" ">
+            </div>
+            <div class="relative text-white px-6 pb-6 mt-6 ">
+                <div class="flex justify-between ">
+                    <span class="block font-normal text-sm md:text-lg text-black">Work on workbooks developed by experts</span>
+                </div>
+            </div>
+        </div>
+        <div class="m-6 relative overflow-hidden rounded-lg md:max-w-xs ">
+            <div class="relative pt-10 px-10 flex items-center justify-center ">
+                <img class="relative w-20 h-20 md:w-40 md:h-40" src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/1.png' %}" alt=" ">
+            </div>
+            <div class="relative text-white px-6 pb-6 mt-6 ">
+                <div class="flex justify-between ">
+                    <span class="block font-normal text-sm md:text-lg text-black">Access rich content (including video lessons) in their regional language as a TV broadcast and on the App</span>
+                </div>
+            </div>
+        </div>
+        <div class="m-6 relative overflow-hidden rounded-lg md:max-w-xs">
+            <div class="relative pt-10 px-10 flex items-center justify-center ">
+                <img class="relative w-20 h-20 md:w-40 md:h-40" src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/3.png' %}" alt=" ">
+            </div>
+            <div class="relative  px-6 pb-6 mt-6 ">
+                <div class="flex justify-between ">
+                    <span class="block font-normal text-sm md:text-lg text-black">Interact with classmates and teachers</span>
+                </div>
+            </div>
+        </div>
+        <div class="m-6 relative overflow-hidden rounded-lg md:max-w-xs">
+            <div class="relative pt-10 px-10 flex items-center justify-center ">
+                <img class="relative w-20 h-20 md:w-40 md:h-40" src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/4.png' %}" alt=" ">
+            </div>
+            <div class="relative  px-6 pb-6 mt-6 ">
+                <div class="flex justify-between ">
+                    <span class="block font-normal text-sm md:text-lg text-black">Have a friend circle</span>
+                </div>
+            </div>
+        </div>
+        <div class="m-6 relative overflow-hidden rounded-lg md:max-w-xs">
+            <div class="relative pt-10 px-10 flex items-center justify-center ">
+                <img class="relative w-20 h-20 md:w-40 md:h-40" src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/5.png' %}" alt=" ">
+            </div>
+            <div class="relative text-white px-6 pb-6 mt-6 ">
+                <div class="flex justify-between ">
+                    <span class="block font-normal text-sm md:text-lg text-black">Attend a wide range of co-curricular courses</span>
+                </div>
+            </div>
+        </div>
+        <div class="m-6 relative overflow-hidden rounded-lg md:max-w-xs">
+            <div class="relative pt-10 px-10 flex items-center justify-center ">
+                <img class="relative w-20 h-20 md:w-40 md:h-40" src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/6.png' %}" alt=" ">
+            </div>
+            <div class="relative text-white px-6 pb-6 mt-6 ">
+                <div class="flex justify-between ">
+                    <span class="block font-normal text-sm md:text-lg text-black">Submit assignments</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="py-8 bg-gradient-to-b from-white to-gray-100">
+        <h3 class="text-red-400 py-8 font-semibold tracking-wider text-center text-lg md:text-4xl">
+            Who can enrol in the school ?
+        </h3>
+
+        <div class="p-4 md:px-12 min-width-full flex justify-start items-center">
+            <!-- Start of component -->
+            <div class="max-w-6xl bg-blue-100 border-1 border-gray-300 p-5 rounded-md tracking-wide shadow-lg">
+                <div id="header" class="flex">
+                    <img class="w-20 h-20 " src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/7.png' %}" />
+                    <div id="body" class="flex flex-wrap content-center ml-5 items-center">
+                        <h4 id="name" class="text-xs md:text-base font-normal mb-2">Any student from Grade 5 to 8 belonging to the Karnataka State Board, Tamil Nadu State Board, Andhra Pradesh, Telangana State Boards, Maharashtra State Board and Hindi language based State Boards can enroll. Lessons based on respective
+                            state board syllabus will be available.</h4>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- End of component -->
+        </div>
+        <div class="p-4 md:px-12 flex justify-start items-center">
+            <!-- Start of component -->
+            <div class="max-w-6xl bg-gray-100 border-1 border-gray-300 p-5 md:96 rounded-md tracking-wide shadow-lg">
+                <div id="header" class="flex">
+                    <img class="w-20 h-20 " src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/8.png' %}" />
+                    <div id="body" class="flex ml-5 flex-wrap content-center md:pr-96">
+                        <h4 id="name" class="text-xs md:text-base font-normal mb-2">The students need not belong to any one physical/regular school.</h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- End of component -->
+        </div>
+        <div class="p-4 md:px-12 flex justify-start items-center">
+            <!-- Start of component -->
+            <div class="max-w-6xl bg-red-100 border-1 border-gray-300 p-5 rounded-md tracking-wide shadow-lg">
+                <div id="header" class="flex">
+                    <img class="w-20 h-20 " src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/9.png' %}" />
+                    <div id="body" class="flex flex-wrap content-center ml-5 ">
+                        <h4 id="name" class="text-xs md:text-base font-normal mb-2">Children who are not registered with any school can also enrol for the eVidyaloka Digital School. In fact, we encourage DSPs to get more such children into the eVidyaloka Digital School.</h4>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- End of component -->
+        </div>
+    </div>
+
+    <div class="bg-gray-100 py-4 md:py-8">
+        <h3 class="text-black py-8 font-semibold tracking-wider text-center text-lg md:text-4xl">
+            What is the role of a Digital School Partner (DSP) ?
+        </h3>
+        <div class="flex">
+            <div class="w-7/12">
+
+                <div class="p-4 md:px-12 flex justify-start">
+                    <!-- Start of component -->
+                    <div class="max-w-6xl  tracking-wide ">
+                        <div id="header" class="flex">
+                            <img class="w-10 h-10 " src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/10.png' %}" />
+                            <div id="body" class="flex flex-col ml-5">
+                                <h4 id="name" class="text-sm md:text-lg font-normal mb-2">Promote the program broadcast on TV and increase viewership and uptake.</h4>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- End of component -->
+                </div>
+                <div class="p-4 md:px-12 flex justify-start">
+                    <!-- Start of component -->
+                    <div class="max-w-6xl  tracking-wide ">
+                        <div id="header" class="flex">
+                            <img class="w-10 h-10 " src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/13.png' %}" />
+                            <div id="body" class="flex flex-col ml-5">
+                                <h4 id="name" class="text-sm md:text-lg font-normal mb-2">Track and monitor student enrollment and related impact.</h4>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- End of component -->
+                </div>
+                <div class="p-4 md:px-12 flex justify-start">
+                    <!-- Start of component -->
+                    <div class="max-w-6xl tracking-wide ">
+                        <div id="header" class="flex">
+                            <img class="w-10 h-10 " src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/1.png' %}" />
+                            <div id="body" class="flex flex-col ml-5">
+                                <h4 id="name" class="text-sm md:text-lg font-normal mb-2">Facilitate the uptake of workbooks and worksheets.</h4>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 md:px-12 flex justify-start">
+                    <!-- Start of component -->
+                    <div class="max-w-6xl tracking-wide">
+                        <div id="header" class="flex">
+                            <img class="w-10 h-10 " src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/11.png' %}" />
+                            <div id="body" class="flex flex-col ml-5">
+                                <h4 id="name" class="text-sm md:text-lg font-normal mb-2">Engage on the adoption of the app.</h4>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 md:px-12 flex justify-start">
+                    <!-- Start of component -->
+                    <div class="max-w-6xl tracking-wide">
+                        <div id="header" class="flex">
+                            <img class="w-10 h-10 " src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/12.png' %}" />
+                            <div id="body" class="flex flex-col ml-5">
+                                <h4 id="name" class="text-sm md:text-lg font-normal mb-2">Facilitate the add-on services.</h4>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-5/12  flex items-center justify-start ml-4 ">
+                <div class="pt-8 flex flex-col items-center justify-center">
+                    <a href="/partner/new_signup/"><button class="px-4 py-2 md:py-4 md:px-24 mb-4 text-xs md:text-2xl flex justify-center  font-semibold rounded-md block  border-b border-red-300  bg-red-200 hover:bg-red-300 text-red-900">Register Now</button></a>
+                    <a href="https://play.google.com/store/apps/details?id=org.evidyaloka"><button class="px-4 py-2 md:py-4 md:px-24 mt-4 text-xs md:text-2xl flex justify-center  font-semibold rounded-md block  border-b border-green-300  bg-green-200 hover:bg-green-300 text-green-900">Download app</button></a>
+                </div>
+            </div>
+
+        </div>
+        <p class="flex justify-center p-4 text-xs">* The DSP will receive a kit from eVidyaloka to help him/her reach more students.</p>
+    </div>
+
+    <div class="p-1  flex flex-wrap items-center justify-center ">
+        <h3 class="text-yellow-500 p-4 py-8 font-semibold tracking-wider text-center text-lg md:text-4xl">
+            Who can be a Digital School Partner ?
+        </h3>
+        <h5 class="px-12 p-2">The eVidyaloka Digital School can also serve as a livelihood opportunity. A DSP can be an organisation or individual. The eligibility criteria is as follows:</h5>
+
+        <div class="flex-shrink-0 m-3 py-7 relative overflow-hidden bg-orange-500 rounded-lg max-w-xs shadow-lg ">
+            <div class="relative pt-10 px-10 flex items-center justify-center ">
+                <img class="relative w-20 h-20 md:w-40 md:h-40" src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/14.png' %}" alt=" ">
+            </div>
+            <div class="relative px-6 pb-6 mt-6 ">
+                <div class="flex justify-center ">
+                    <ul class="pl-2 list-disc">
+                        <li>Local resident.</li>
+                        <li>At least 18 years of age.</li>
+                        <li>Graduate.</li>
+                        <li>Have a reach of at least two villages.</li>
+                        <li>Women preferred.</li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="flex-shrink-0 m-6 relative overflow-hidden bg-orange-500 rounded-lg max-w-xs shadow-lg ">
+            <div class="relative pt-10 px-10 flex items-center justify-center ">
+                <img class="relative w-20 h-20 md:w-40 md:h-40" src="{% static 'images/vidya_ganga/Icons for VidyaGanga webpage/Icons for VidyaGanga webpage/15.png' %}" alt=" ">
+            </div>
+            <div class="relative px-6 pb-6 mt-6 ">
+                <div class="flex justify-center ">
+                    <ul class="pl-2 list-disc">
+                        <li>NGO with a reach of one block, taluka or mandal, experience of community activity, and focus on education and related programs.</li>
+                        <li>Any organizations engaged in community support and service like cable TV operators, etc.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- footer -->
+    <div class="bg-red-500 py-3 md:py-4">
+
+
+        <div class="flex">
+            <div class="w-3/12 flex items-center justify-center ">
+                <h1 class="text-lg pl-1 md:pl-2 md:text-5xl">Contact us:</h1>
+            </div>
+
+            <div class="w-6/12">
+                <div class="flex flex-col items-center justify-center">
+                    <div class="text-2xl md:text-4xl">
+                        <i class="far fa-user"></i>
+                    </div>
+
+                    <h3 class="text-sm md:text-2xl">Akshay Patil</h3>
+                    <div class=" text-xs md:p-2 md:text-base"><i class="fas fa-at"></i> digitalschool@evidyaloka.org</div>
+                    <div class="md:p-2 text-xs md:text-base"><i class="fas fa-phone"></i> 080470-91716</div>
+                </div>
+
+            </div>
+            <div class="w-3/12 flex items-center justify-center ">
+                <div class="flex-col ">
+                    <a href="/partner/new_signup/"><button class="md:px-11 md:py-2.5 p-1 px-1.5 md:p-2 mb-2 text-xs md:text-base flex justify-center  font-semibold rounded-md block  border-b border-red-300  bg-red-200 hover:bg-red-300 text-red-900">Register Now.</button></a>
+                    <a href="https://play.google.com/store/apps/details?id=org.evidyaloka"><button class="md:px-11 md:py-2.5 p-1 md:p-2 md:mt-2 text-xs md:text-base flex justify-center  font-semibold rounded-md block  border-b border-green-300  bg-green-200 hover:bg-green-300 text-green-900">Download app</button></a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>

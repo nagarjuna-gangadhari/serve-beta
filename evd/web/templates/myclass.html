@@ -1,0 +1,2301 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/myclass.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        .modal-backdrop {
+            display: none;
+        }
+        
+        #ui-id-1 {
+            position: relative;
+            z-index: 5000;
+            width: 250px !important;
+        }
+        
+        .container-fluid {
+            background-image: url('/static/images/chalk.PNG');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        
+        @font-face {
+            font-family: "custom-font";
+            src: url('/static/fonts/Myfont.ttf');
+        }
+    
+        div.stars {
+            width: 200px;
+            display: inline-block;
+            align: "left";
+        }
+        
+        input.star {
+            display: none;
+        }
+        
+        label.star {
+            align: left;
+            float: right;
+            padding: 2px;
+            font-size: 26px;
+            color: white;
+            transition: all .2s;
+        }
+        
+        input.star:checked~label.star:before {
+            content: '\2605';
+            color: green;
+            transition: all .25s;
+        }
+        
+        label.star:hover {
+            transform: scale(1.2);
+        }
+        
+        label.star:before {
+            content: '\2605';
+        }
+        
+        .ui-widget-content {
+            background-image: none !important;
+        }
+        
+        
+        #joinClass {
+            width: 22%;
+        }
+        
+        .disabledbutton {
+            pointer-events: none;
+            opacity: 0.4;
+        }
+        
+        .shareIcon a img {
+            width: 9%;
+        }
+        
+        .sticker:hover {
+            -webkit-filter: drop-shadow(8px 8px 10px green);
+            filter: drop-shadow(8px 8px 10px green);
+            transform: scale(1.3);
+        }
+        
+        .stickerActive {
+            -webkit-filter: drop-shadow(8px 8px 10px green);
+            filter: drop-shadow(8px 8px 10px green);
+            transform: scale(1.3);
+        }
+        
+        .modal-content {
+            height: auto;
+            width: 586px;
+            top: 128px;
+            left: 236px;
+            display: block;
+        }
+        
+        .blurred {
+            filter: brightness(0.5)blur(2px);
+        }
+        
+        #assignmentTable td,
+        #assignmentTable th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        
+        #assignmentTable tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        #assignmentTable tr:hover {
+            background-color: #ddd;
+        }
+        
+        #assignmentTable {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        #assignmentTable th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #639b7a;
+            color: white;
+        }
+       
+        
+        
+        #assignmentTable td {
+            color: black;
+        }
+    </style>
+    <style>
+        
+        .calender-wraper {
+            text-align: center;
+            font-size: small;
+        }
+        
+        ul {
+            list-style-type: none;
+        }
+        /* Month header */
+        
+        .month {
+            box-sizing: border-box;
+            padding: 5px 20px 25px;
+            width: 100%;
+            /* background: #1abc9c; */
+            text-align: center;
+        }
+        /* Month list */
+        
+        .month ul {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .month ul li {
+            color: tomato;
+            font-size: 20px;
+            font-weight: bolder;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        /* Previous button inside month header */
+        
+        .month .prev {
+            float: left;
+            padding: 10px;
+        }
+        /* Next button */
+        
+        .month .next {
+            float: right;
+            padding: 10px;
+        }
+        /* Days (1-31) */
+        
+        .days {
+            padding: 10px 0;
+            /* background: #eee; */
+            margin: 0;
+        }
+        
+        .days li {
+            list-style-type: none;
+            display: inline-block;
+            width: 6%;
+            margin-left: 3%;
+            margin-right: 3%;
+            text-align: center;
+            margin-bottom: 2%;
+            font-size: 19px;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+        }
+        /* Highlight the "current" day */
+        
+        .days li.circle {
+            border: 1px solid;
+            border-radius: 50%;
+            position: relative;
+        }
+        
+        .days li.today {
+            border: 2px solid;
+            border-radius: 50%;
+            background-color: #d9534f;
+            position: relative;
+        }
+        
+        .days li div {
+            position: absolute;
+            top: -0.50rem;
+            right: -0.5rem;
+            width: 2.75rem;
+            height: 2.75rem;
+            font-size: 2rem;
+            color: black;
+            background-color: white;
+            border-radius: 50%;
+            display: none;
+        }
+        
+        .days li.active {
+            border: 3px solid;
+            border-color: #f15a22;
+        }
+        
+        .prev,
+        .next {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body style="background:none; color:white">
+    <input type="hidden" id="academic_year_ids" value="{{ay_id}}">
+    <input type='hidden' id='session_id_no' value=''>
+
+    <input type="hidden" id="sessionIdForRating" value="">
+    <div class="container-fluid" style=" height:720px;">
+        <div>
+            <a style="padding-left: 1000px; font-size:25px; margin-top: 100px;"><span class="glyphicon glyphicon-remove-circle clos" style="background-color:#ebf1ea1a; color:black;"></span></a>
+        </div>
+        <div class="row " style="border-radius:5px; height:30px; margin-top:15px; text-align:center">
+            <h3 id="cntr" style="font-weight:bold;"> My Classroom </h3>
+
+        </div>
+        <div class="row" style="padding-top:20px;">
+            <div class="col-sm-3" style=" height:30px; padding-left:60px; padding-right:5px;  margin:5px 10px 5px 5px; border-radius:5px; " id="sessstat"> </div>
+
+            <div class="col-sm-8" style="position:relative;left:170px;top:10px; height:50px;display: none; float: left; margin-left: 10px;" id='jitId'>
+                <input type="hidden" id="tsLinkId">
+                <button class="btn btn-danger" id="joinClass" onclick="opneNew();">Join The Classroom</button>
+                <button id="select_video" class="btn btn-danger" onclick="openSelectVideoModal(this.id);" style="display: none;">Add Video</button>
+                <button id="watch_video" class="btn btn-danger" style="display: none; opacity:0.5;" disabled=true formtarget="_blank">Watch Video</button>
+                <button id="add_assignment" class="btn btn-danger" style="width: 20%; display: none;">Add Assignment</button>
+                <button id="view_assignment" class="btn btn-danger" style="width: 20%; display: none;">View Assignments</button>
+            </div>
+        </div>
+        <div class="row" id="cls-today">
+            <p class="col-sm-3  " style="padding-left:65px; margin-top:30px">
+                <strong style="color:orange">Classes Today :</strong> </p>
+            <div class="col-sm-6 slider_class" style="height:20px;width:400px; margin-top: 30px;  border-radius:10px;" id="slider"></div>
+            <div class="col-sm-3">
+                <h5 id="datep" style="margin-right:-60px; float:right;"> Date: <input type="text" style="color:black; width:80px;" id="datepicker"></h5>
+                <input class="btn btn-danger btn-xs sub" style="display:none;" type="submit" value="submit" />
+            </div>
+        </div>
+
+        <div class="row" id="two-forms" style="margin-left:50px;margin-right:50px; border:1px solid white; ">
+            <i onclick="refresh()" class="material-icons" style="font-size: 33px;color: red;position: relative;left: 5%;top: 11px;">refresh</i>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Click here to refresh
+            <div class="col-sm-6 " style="">
+                <div class="" style=" height:390px; margin-top:20px; border-radius:5px; " id="sess"> </div>
+            </div>
+            <div class="col-sm-6" style="">
+                <div class="" style=" overflow-y:auto;padding-left:40px;margin-top:20px;  height:380px; border-radius:5px; " id="attendance"> </div>
+            </div>
+        </div>
+
+        <div class="reson  hide" style="float:left;font-size:14px;margin-bottom:10px" title="Cancel Reason">
+            <span>Reason It</span>
+            <select id="reasonList" name="reaso">
+                    <option value='' selected="selected">---Select Reason---</option>
+                    <option value="Internet Down School">Internet is Down in school</option>
+                    <option value="Power Cut School"> Power Cut in school</option>
+                    <option value="Unscheduled leave School"> Unscheduled Leave at school </option>
+                    <option value="Internet down Teacher"> Internet Down at teachers side </option>
+                    <option value="Power Cut Teacher"> Power cut at teacher side </option>
+                    <option value="Last Minute Dropout Teacher"> Last Minute Dropout Teacher </option>
+                    <option value="Communication Issue">Communication Issue</option>
+                    <option value="Teacher yet to be backfilled">Teacher yet to be backfilled</option>
+                    <option value="CA/ Local resource not available">CA/ Local resource not available</option>
+                    <option value="Infra issues">Infra issues</option>
+                    <option value="Prior information from Teacher">Prior information from Teacher</option>
+                    <option value="School event">School event</option>
+                    <option value="poor Attendance">Poor Attendance</option>
+            </select>
+            <input type="hidden" id="reason_of_cancell">
+        </div>
+        <div class="modal fade" id='classroomAppreciateModel'>
+            <div class="modal-content ">
+                <div class="modal-header" id="popupHead" style="background-color: #4CAF50;">
+                    <button type="button" id="appreciateModelClose" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">
+                        <span style="color: white;">Appreciate Volunteer</span>
+                    </h4>
+                </div>
+                <div class="modal-body" id="popupBody" style="color: #337ab7;">
+                    <div class='row'>
+                        <div class='col-md-6'>
+                            <label>Search Volunteer: <span style="color: red">*</span><span style="color: red;display: none;font-size: 9px;margin-top: -15px;margin-left: 106px;" class="validation_msg_srch">(Please Enter Volunteer)</span></label>
+                        </div>
+                        <div class='col-md-6'>
+                            <input class="form-control" autocomplete="on" id="search_data" placeholder="Search Volunteer" onclick="getExternalRoleVolunteer(search_data);" value="">
+                        </div>
+                    </div>
+                    <br>
+                    <div class='row'>
+                        <div class='col-md-6'>
+                            <label>Select the Reason : <span style="color: red">*</span><span style="color: red;display: none;font-size: 9px;margin-top: -15px;margin-left: 106px;" class="validation_msg_rsn">(Please Select Reason)</span></label>
+                        </div>
+                        <div class='col-md-6'>
+                            <select name="reason" id="appreciate_reason_id" class="form-control" tabindex="-1" aria-hidden="true">
+                            <option value="others"> Others</option>
+                        </select>
+                        </div>
+                    </div>
+                    <div class='row comment'>
+                        <br>
+                        <div class='col-md-6'>
+                            <label>Comment:</label>
+                        </div>
+                        <div class='col-md-6'>
+                            <input type="text" class="form-control" id='commentID' placeholder="Comment">
+                        </div>
+                    </div>
+
+                    <div class='row add_custom_reason' style="display: none;">
+                        <br>
+                        <div class='col-md-6'>
+                            <label>Add Custom Reason:<span style="color: red">*</span><span style="color: red;display: none;font-size: 9px;margin-top: -15px;margin-left: 118px;" class="validation_msg_crsn">(Please Enter Reason)</span></label>
+                        </div>
+                        <div class='col-md-6'>
+                            <input type="text" class="form-control" id='customReasonId' placeholder="Add Reason">
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                <div class="modal-footer" id="">
+                    <button class="save-appriciation" style="background-color: #4CAF50; /* Green */ border: none; color: white; padding: 10px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer;">Submit</button>
+                </div>
+            </div>
+        </div>
+        <!-- <div id="nosess" class="row" style="text-align:center; display:none; border:1px solid white;padding-bottom:30px; margin-left:60px;margin-right:60px;margin-bottom:60px;">
+            <h1 style=""> No classes scheduled for the selected day </h1>
+            </br>
+            <h4> You have Classes on the following days in this month.. </h4>
+            </br>
+            </br>
+            <div class="col-sm-2 col-sm-offset-1">
+                <div id="prev" style="color:black;margin-top:80px; " class="btn btn-warning">Prev </div>
+            </div>
+            <div class="past col-sm-6" style="  padding:20px;"> </div>
+            <div class="col-sm-2">
+                <div id="next" class="btn btn-warning" style="color:black;margin-top:80px; float:right; ">Next</div>
+            </div>
+        </div> -->
+        <div id="nosess" class="row" style="display:none;padding-bottom:20px; margin-left:60px;margin-right:60px;margin-bottom:40px;">
+
+            <div class="calender-wraper">
+                <h1 style="text-align: center;">Calendar</h1>
+                <div class="month">
+                    <ul>
+                        <li class="prev" onclick="selectPreviousMonth()">&#10094;</li>
+                        <li class="next" onclick="selectNextMonth()">&#10095;</li>
+                        <li id="current-month"></li>
+                    </ul>
+                </div>
+                <ul class="days" id="days"></ul>
+
+                <div class="countdown" id="countdown"></div>
+            </div>
+        </div>
+        <div class="row" style="margin-top:10px;" id="buttons_three">
+            <div class="col-sm-offset-2 col-sm-2 " style=" height:50px; ">
+                <div class="btn btn-danger" id="offline" style="background-color: #907fdd;color: black;border: none;">Offline</div>
+            </div>
+            <div class="col-sm-2 " style=" height:50px; ">
+                <div class="btn btn-danger" id="myclassroom_appreciate" style="background-color:#f8fa80 !important;color:black !important;border: none;">Appreciate</div>
+            </div>
+            <div class="col-sm-2 " style=" height:50px; ">
+                <div class="btn btn-success" id="complete">Completed</div>
+            </div>
+            <div class="col-sm-2" style=" height:50px;">
+                <div class="btn" style="background-color: orange;" id="cancel">Cancelled</div>
+            </div>
+            <div class="col-sm-2" style="">
+                <div class="btn btn-danger clos" style="">Exit</div>
+            </div>
+        </div>
+    </div>
+    <div align="left" id="star_rating_id" class="star_rating hide" title="Session Rating">
+        <br>
+        <div>1. How was the overall Infrastructure of the session?<span style="color:red">*</span></div>
+        <div align="left" class="stars">
+            <input class="star" id="star_5" type="radio" data-ques-no='1' name="How was the overall Infrastructure of the session?" data-score="5" value /> <label class="star" for="star_5"></label>
+            <input class="star" id="star_4" type="radio" data-ques-no='1' name="How was the overall Infrastructure of the session?" data-score="4" /> <label class="star" for="star_4"></label>
+            <input class="star" id="star_3" type="radio" data-ques-no='1' name="How was the overall Infrastructure of the session?" data-score="3" /> <label class="star" for="star_3"></label>
+            <input class="star" id="star_2" type="radio" data-ques-no='1' name="How was the overall Infrastructure of the session?" data-score="2" /> <label class="star" for="star_2"></label>
+            <input class="star" id="star_1" type="radio" data-ques-no='1' name="How was the overall Infrastructure of the session?" data-score="1" /> <label class="star" for="star_1"></label>
+        </div>
+        <div>2. How was the overall experience of session?<span style="color:red">*</span></div>
+        <div align="left" class="stars">
+            <input class="star" id="star5" type="radio" data-ques-no='2' name="How was the overall experience of session?" data-score="5" />
+            <label class="star" for="star5"></label>
+            <input class="star" id="star4" type="radio" data-ques-no='2' name="How was the overall experience of session?" data-score="4" />
+            <label class="star" for="star4"></label>
+            <input class="star" id="star3" type="radio" data-ques-no='2' name="How was the overall experience of session?" data-score="3" />
+            <label class="star" for="star3"></label>
+            <input class="star" id="star2" type="radio" data-ques-no='2' name="How was the overall experience of session?" data-score="2" />
+            <label class="star" for="star2"></label>
+            <input class="star" id="star1" type="radio" data-ques-no='2' name="How was the overall experience of session?" data-score="1" />
+            <label class="star" for="star1"></label>
+        </div>
+    </div>
+
+    <!-- Share widget modal  start-->
+    <div id="shareWidget" class="modal fade" data-backdrop="static" data-keyboard="false" style="width: 38%; margin-left: 29%; margin-top: 18%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title headerMSG" style='color:#052d3a!important;'></h4>
+            </div>
+            <div class="modal-body shareIcon">
+                <span style='color:#052d3a!important;'>Share this Opportunity&nbsp;&nbsp;</span>
+                <!-- Twitter -->
+                <a href="https://twitter.com/share?url=http://www.evidyaloka.org/v2/demandList//&amp;text=Support%20at%20&amp;hashtags=evidyaloka" target="_blank">
+                    <img src="/static/campaign/img/twitter.png" alt="Twitter" />
+                </a>
+                <!-- LinkedIn -->
+                <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.evidyaloka.org/v2/demandList//&amp;text=http://www.evidyaloka.org/volunteer/" target="_blank">
+                    <img src="/static/campaign/img/linkedin.png" alt="LinkedIn" />
+                </a>
+                <!-- Facebook -->
+                <a href="http://www.facebook.com/sharer.php?u=http://www.evidyaloka.org/v2/demandList//&amp;p=sdd" target="_blank">
+                    <img src="/static/campaign/img/facebook.png" alt="Facebook" />
+                </a>
+                <!-- Email -->
+                <a href="mailto:?Subject=eVidyaloka&amp;Body=http://www.evidyaloka.org/v2/demandList// ">
+                    <img src="/static/campaign/img/email.png" alt="Email" />
+                </a>
+                <br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="border-color:#d9534f; background-color:#d9534f;">Close</button>
+            </div>
+        </div>
+    </div>
+    <!-- end share widget modal -->
+    <div class="modal" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="width: 80%;height:75%; margin-left:10%; margin-top:10%;">
+        <div class="modal-header" style="background-color: #f15a22;height: 55px;">
+            <p style="text-align: left;font-size: 16px;font-weight: bold; font-family: PlutoCondRegular;color:#FFFFFF;">Select A Video <button type="button" class="close" onclick="$('#videoModal').modal('hide');" style="float: right;background-color: #FFFF;font-size: 30px;">&times;</button></p>
+        </div>
+        <div class="modal-body" id="video_modal" style="min-height:390px;background-color: #ffffff; padding-right: 25px;">
+        </div>
+        <div class="modal-footer" id="video_modal_footer" style="background-color: #ffffff;">
+        </div>
+    </div>
+    <div class="modal" id="videoConfirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="width: 40%;height:35%; margin-left:30%; margin-top:25%;">
+        <div class="modal-header" style="background-color: #035f46;height: 55px;">
+            <p style="text-align: left;font-size: 16px;font-weight: bold; font-family: PlutoCondRegular;color:#FFFFFF;">Please Confirm Your Selection <button type="button" class="close" onclick="$('#videoConfirm').modal('hide');$('#videoModal').removeClass('blurred');" style="float: right;background-color: #FFFF;font-size: 30px;">&times;</button></p>
+        </div>
+        <div class="modal-body" id="video_confirm" style="background-color: #ffffff; padding:20px 50px 20px 100px;">
+        </div>
+        <div class="modal-footer" id="video_confirm_footer" style="background-color: #ffffff;">
+        </div>
+    </div>
+    <div class="modal" id="videoOnlineOffline" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="width: 40%;height:35%; margin-left:30%; margin-top:25%;">
+        <div class="modal-header" style="background-color: #035f46;height: 55px;">
+            <p style="text-align: left;font-size: 16px;font-weight: bold; font-family: PlutoCondRegular;color:#FFFFFF;">Please Confirm Type of Viewing<button type="button" class="close" onclick="$('#videoOnlineOffline').modal('hide');$('#videoModal').removeClass('blurred');" style="float: right;background-color: #FFFF;font-size: 30px;">&times;</button></p>
+        </div>
+        <div class="modal-body" id="video_online_offline" style="background-color: #ffffff; padding: 20px 50px 20px 100px;">
+        </div>
+        <div class="modal-footer" id="video_online_offline_footer" style="background-color: #ffffff;">
+        </div>
+    </div>
+    <div class="modal" id="topicSelectReminder" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="width: 40%;height:35%; margin-left:30%; margin-top:25%;">
+        <div style="background-color: rgb(255, 102, 0);height: 55px;">
+            <p style="text-align: center;font-size: 30px;font-family: PlutoCondRegular;color:#FFFFFF;">Please Choose a Topic</p>
+        </div>
+        <div style="background-color: #FFFFFF; height: 75px;">
+            <button onclick="$('#topicSelectReminder').modal('hide');" style="width: 30%; background-color: #f15a22;color: white; padding: 14px 20px; margin-left: 35%;margin-top: 8px; border: none;border-radius: 4px; cursor: pointer;">Close</button>
+        </div>
+    </div>
+    <div class="modal" id="addAssignment" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="width: 60%;height:auto; margin-left:22%; margin-top:5%;">
+        <div class="modal-header" style="background-color: #f15a22;height: 55px;">
+            <p style="text-align: left;font-size: 20px;font-weight: bold; font-family: PlutoCondRegular;color:#FFFFFF;">Add Assignment<button type="button" class="close" onclick="$('#addAssignment').modal('hide');" style="float: right;background-color: #FFFF;font-size: 30px;">&times;</button></p>
+        </div>
+        <div class="modal-body" id="assignment_modal" style="height:580px;background-color: #ffffff; padding: 10px 25px 10px 25px;">
+            <div class="row">
+                <form id="addAssignmentForm" name="addAssignmentForm" method="post" onsubmit="return addAssignment();">
+                    {% csrf_token %}
+                    <label for="assignmentType" style="color: black;">Assignment Type:  </label>
+                    <select id="assignmentType" name="assignmentType" style="color: black;width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px;box-sizing: border-box;" required>
+                        <option value="" style="color: black;" disabled selected>Select assignment type...</option>
+                        <option value="Message" style="color: black;">Message</option>
+                        <option value="Worksheets" style="color: black;">Worksheets</option>
+                        <option value="Videos" style="color: black;">Videos</option>
+                    </select><br>
+                    <label id='assignmentDetailsLabel' for="assignmentDetails" style="color: black;">Assignment Details:</label>
+                    <textarea name="assignmentDetails" id="assignmentDetails" style="color: black;width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px;box-sizing: border-box;" placeholder="..." required></textarea><br>
+                    <label for="topicComment" style="color: black;">Comments :</label><br>
+                    <textarea name="topicComment" id="topicComment" style="color: black; color: black;width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px;box-sizing: border-box;" placeholder="..." required></textarea><br>
+                    <label for="lastSubmissionDate" style="color: black;">Last Submission Date : </label>
+                    <input type="date" id="lastSubmissionDate" name="lastSubmissionDate" style="color: black;width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px;box-sizing: border-box;" required><br>
+                    <input type="file" id="assignmentFile" name="assignmentFile" style="color: black;width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px;box-sizing: border-box;" required><br>
+                    <label for="assignmentFile" style="color: black;">Select a file {.pdf, .doc, .txt}:</label>
+                    <input type="submit" value="Submit" style="width: 100%; background-color: #f15a22;color: white; padding: 14px 20px; margin: 8px 0; border: none;border-radius: 4px; cursor: pointer;">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="viewAssignmentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="width: 100%;height:75%; margin-top:9%;">
+        <div class="modal-header" style="background-color: #f15a22;height: 55px;">
+            <p style="text-align: left;font-size: 16px;font-weight: bold; font-family: PlutoCondRegular;color:#FFFFFF;">Assignments<button type="button" class="close" onclick="$('#viewAssignmentModal').modal('hide');" style="float: right;background-color: #FFFF;font-size: 30px;">&times;</button></p>
+        </div>
+        <div class="modal-body" id="view_assignment_modal" style="min-height:390px;background-color: #ffffff; padding-right: 25px;overflow: auto;">
+        </div>
+        <div class="modal-footer" id="view_assignment_modal_footer" style="background-color: #f15a22;">
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+</body>
+
+<script>
+    var center_id = parent.window.center_id;
+    var myMonth = new Date().getMonth();
+    var myMonthSessions;
+
+    $('#add_assignment').on('click', function() {
+        var topic_id = $('#id_topic').val();
+        if (topic_id != undefined && topic_id != '') {
+            $('#addAssignment').modal('show');
+        } else {
+            $('#topicSelectReminder').modal('show');
+        }
+    })
+    $('#assignmentType').on('change', function() {
+        if ($('#assignmentType').val() == 'Message' || $('#assignmentType').val() == 'Videos' || $('#assignmentType').val() == '') {
+            $('#assignmentFile').prop('disabled', true);
+            if ($('#assignmentType').val() == 'Videos') {
+                $('#assignmentDetailsLabel').text('Video Link:');
+            } else {
+                $('#assignmentDetailsLabel').text('Assignment Details:');
+            }
+        } else {
+            $('#assignmentFile').prop('disabled', false);
+            $('#assignmentDetailsLabel').text('Assignment Details:');
+        }
+    });
+    $('#view_assignment').on('click', function() {
+        var session_id = $('#session_id_no').val();
+        // console.log(session_id);
+        var cell_html = "";
+
+        $.get('/api/save_session_assignment/?session_id=' + session_id, function(response) {
+            if ('results' in response && response['results'].length > 0) {
+                var responseAssign = groupResponseData(response['results']);
+                cell_html += "<table id='assignmentTable' style='overflow: scroll;'>";
+                cell_html += "<thead>";
+                cell_html += "<tr>";
+                cell_html += "<th>No.</th><th>Type</th><th>Assignment Details</th><th style='display:none;'>Comments</th><th>Last Submission Date</th><th>File</th><th>Edit<br><br>Update<br><br>Delete</th>";
+                cell_html += "</tr>";
+                cell_html += "</thead>";
+                cell_html += "<tbody id='viewAssignmentTable'>";
+                for (let index = 0; index < responseAssign.length; index++) {
+                    cell_html += "<tr id='" + 'row_' + responseAssign[index]['assignment_no'] + "'>";
+                    cell_html += "<td style='text-align:center;'>" + responseAssign[index]['assignment_no'] + "</td>";
+                    cell_html += "<td><select id='select_type_" + responseAssign[index]['assignment_no'] + "\' disabled><option value='Worksheets'>Worksheets</option><option value='Message'>Message</option><option value='Videos'>Videos</option></select></td>";
+                    cell_html += "<td id='details_" + responseAssign[index]['assignment_no'] + "\'><textarea style='color: black;width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px;box-sizing: border-box;' disabled>" + responseAssign[index]['assignment_details'] + "</textarea></td>";
+                    cell_html += "<td style='display:none;'>" + responseAssign[index]['topic_comment'] + "</td>";
+                    cell_html += "<td id='date_" + responseAssign[index]['assignment_no'] + "\'></td>";
+                    cell_html += "<td><input type='file' id='file_" + responseAssign[index]['assignment_no'] + "\' style='display:none;' disabled><p style='display:block;' id='file_name_" + responseAssign[index]['assignment_no'] + "\'>" + responseAssign[index]['file_name'] + "</p></td>";
+                    cell_html += "<td style='text-align:center;'><button class='btn btn-info btn-sm' style='width:40px;' onclick=editAssignment(\'" + responseAssign[index]['assignment_no'] + "\');><i class='glyphicon glyphicon-edit'></i></button><br><br><button class='btn btn-sm'  id='update_button_" + responseAssign[index]['assignment_no'] + "\' style='width:40px;opacity:0.5;background-color:grey;' onclick=updateAssignment(\'" + responseAssign[index]['assignment_no'] + "\',\'" + responseAssign[index]['session_id'] + "\',\'" + responseAssign[index]['topic_id'] + "\'); disabled><i class='glyphicon glyphicon-check'></i></button><br><br><button class='btn btn-danger btn-sm' style='width:40px;' onclick=deleteAssignment(\'" + responseAssign[index]['assignment_no'] + "\',\'" + 'row_' + responseAssign[index]['assignment_no'] + "\');><i class='glyphicon glyphicon-trash'></i></button></td>";
+                    cell_html += '</tr>';
+                }
+                cell_html += "</tbody>";
+                cell_html += "</table>";
+                $('#view_assignment_modal').html(cell_html);
+                $('#viewAssignmentModal').modal('show');
+                for (let index = 0; index < responseAssign.length; index++) {
+                    // Last submission date
+                    var last_submission_date_each = new Date(responseAssign[index]['last_submission_date']);
+                    last_submission_date_each = last_submission_date_each.getFullYear() + "-" + ("0" + (last_submission_date_each.getMonth() + 1)).slice(-2) + "-" + ("0" + last_submission_date_each.getDate()).slice(-2);
+                    $("<input  type='date'  />").appendTo("#date_" + responseAssign[index]['assignment_no']);
+                    $("#date_" + responseAssign[index]['assignment_no']).find('input').prop('disabled', true);
+                    $("#date_" + responseAssign[index]['assignment_no']).find('input').val(last_submission_date_each);
+
+                    // Assignment type
+                    $("#select_type_" + responseAssign[index]['assignment_no'] + " option[value=\'" + responseAssign[index]['assignment_type'] + "\']").attr('selected', 'selected')
+                    if (responseAssign[index]['assignment_type'] == 'Message' || responseAssign[index]['assignment_type'] == 'Videos') {
+                        $("#file_name_" + responseAssign[index]['assignment_no']).text('NA');
+                    }
+                }
+            } else {
+                cell_html += "<h3 style='text-align:center; color: #f15a22;'>Assignments Not Available ...</h3></div>"
+                $('#view_assignment_modal').html(cell_html);
+                $('#viewAssignmentModal').modal('show');
+            }
+        });
+    });
+
+    function editAssignment(id, is_update) {
+
+        if ($("#date_" + id).find('input').prop('disabled')) {
+            $("#date_" + id).find('input').prop('disabled', false);
+            // $("#date_"+id).find('input').datepicker();
+        } else {
+            $("#date_" + id).find('input').prop('disabled', true);
+        }
+        if ($("#details_" + id).find('textarea').prop('disabled')) {
+            $("#details_" + id).find('textarea').prop('disabled', false);
+        } else {
+            $("#details_" + id).find('textarea').prop('disabled', true);
+        }
+        if ($("#file_" + id).prop('disabled')) {
+            if ($("#select_type_" + id).val() == 'Message' || $("#select_type_" + id).val() == 'Videos') {
+                $("#file_" + id).css('display', 'none');
+                $("#file_name_" + id).text('NA');
+                $("#file_name_" + id).css('display', 'block');
+            } else {
+                $("#file_" + id).prop('disabled', false);
+                $("#file_" + id).css('display', 'block');
+                $("#file_name_" + id).css('display', 'none');
+            }
+        } else {
+            if ($("#select_type_" + id).val() == 'Message' || $("#select_type_" + id).val() == 'Videos') {
+                $("#file_" + id).css('display', 'none');
+                $("#file_name_" + id).text('NA');
+                $("#file_name_" + id).css('display', 'block');
+            } else {
+                $("#file_" + id).prop('disabled', true);
+                $("#file_" + id).css('display', 'none');
+                $("#file_name_" + id).css('display', 'block');
+            }
+        }
+        if ($("#update_button_" + id).prop('disabled')) {
+            $("#update_button_" + id).prop('disabled', false);
+            $("#update_button_" + id).attr('opacity', 1);
+            $("#update_button_" + id).css('background-color', '');
+            $("#update_button_" + id).addClass('btn-success');
+        } else {
+            $("#update_button_" + id).prop('disabled', true);
+            $("#update_button_" + id).removeClass('btn-success');
+            $("#update_button_" + id).css('background-color', 'grey');
+        }
+        if ($("#select_type_" + id).prop('disabled')) {
+            $("#select_type_" + id).prop('disabled', false);
+        } else {
+            $("#select_type_" + id).prop('disabled', true)
+        }
+        if (is_update == '1') {
+            if ($("#select_type_" + id).val() == 'Message' || $("#select_type_" + id).val() == 'Videos') {
+                $("#file_" + id).css('display', 'none');
+                $("#file_name_" + id).text('NA');
+                $("#file_name_" + id).css('display', 'block');
+            } else {
+                $("#file_" + id).prop('disabled', true);
+                $("#file_" + id).css('display', 'block');
+                $("#file_name_" + id).css('display', 'none');
+            }
+        }
+        $("#select_type_" + id).on('change', function() {
+            if ($("#select_type_" + id).val() == 'Message' || $("#select_type_" + id).val() == 'Videos') {
+                $("#file_" + id).css('display', 'none');
+                $("#file_name_" + id).text('NA');
+                $("#file_name_" + id).css('display', 'block');
+            } else {
+                $("#file_name_" + id).css('display', 'none');
+                $("#file_" + id).css('display', 'block');
+                $("#file_" + id).prop('disabled', false);
+            }
+        });
+    }
+
+    function deleteAssignment(assignment_no, id) {
+        var session_id = $('#session_id_no').val();
+        if (assignment_no) {
+            $.ajax({
+                url: '/api/save_session_assignment/?assignment_no=' + assignment_no + '&session_id=' + session_id,
+                type: 'DELETE',
+                success: function(response) {
+                    alert(response['data']['message']);
+                    $("#" + id).remove();
+                },
+                error: function(response) {
+                    alert('ERROR!!!');
+                }
+            });
+        } else {
+            alert("Error");
+        }
+    }
+
+    function updateAssignment(id, sess_id, top_id) {
+        var update_assignment_temp = {
+            "is_new": 0,
+            "session_id": parseInt(sess_id),
+            "topic_id": parseInt(top_id)
+        };
+        // console.log(sess_id, top_id)
+        // console.log(document.getElementById(id).getElementsByTagName("td")[2].innerText);
+        $("#row_" + id).find("td").each(function(row_no, td) {
+            if (row_no == 0) {
+                update_assignment_temp['assignment_no'] = parseInt($(td).text());
+            } else if (row_no == 1) {
+                update_assignment_temp['assignment_type'] = $(td).find($("#select_type_" + id)).children("option:selected").val();
+            } else if (row_no == 2) {
+                update_assignment_temp['assignment_details'] = $(td).find('textarea').val();
+            } else if (row_no == 3) {
+                update_assignment_temp['topic_comment'] = $(td).text();
+            } else if (row_no == 4) {
+                update_assignment_temp['last_submission_date'] = $(td).find('input').val();
+                var temp_date = new Date(update_assignment_temp['last_submission_date']);
+                temp_date = temp_date.getDate() + '/' + parseInt(temp_date.getMonth() + 1) + '/' + temp_date.getFullYear();
+                update_assignment_temp['last_submission_date'] = temp_date;
+            }
+        });
+
+        if (update_assignment_temp['assignment_type'] == 'Worksheets') {
+            update_assignment_temp['session_assignment'] = $('#file_' + id).prop('files')[0];
+        } else {
+            update_assignment_temp['session_assignment'] = "";
+        }
+        // console.log(JSON.stringify(update_assignment_temp));
+
+        if ('assignment_details' in update_assignment_temp && 'last_submission_date' in update_assignment_temp && ((update_assignment_temp['assignment_type'] == 'Worksheets' && 'session_assignment' in update_assignment_temp && update_assignment_temp['session_assignment']) || (update_assignment_temp['assignment_type'] == 'Message' || update_assignment_temp['assignment_type'] == 'Videos')) && update_assignment_temp['last_submission_date'] && update_assignment_temp['assignment_details']) {
+            var formData = new FormData();
+            formData.append('is_new', update_assignment_temp['is_new']);
+            formData.append('session_id', update_assignment_temp['session_id']);
+            formData.append('topic_id', update_assignment_temp['topic_id']);
+            formData.append('topic_comment', update_assignment_temp['topic_comment']);
+            formData.append('assignment_type', update_assignment_temp['assignment_type']);
+            formData.append('assignment_details', update_assignment_temp['assignment_details']);
+            formData.append('session_assignment', update_assignment_temp['session_assignment']);
+            formData.append('last_submission_date', update_assignment_temp['last_submission_date']);
+            formData.append('assignment_no', update_assignment_temp['assignment_no']);
+            $.ajax({
+                url: "/api/save_session_assignment/",
+                type: 'post',
+                data: formData,
+                dataType: 'json',
+                mimeType: 'multipart/form-data',
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(resp) {
+                    alert(resp['data']['message']);
+                    editAssignment(id, '1');
+                },
+                error: function(resp) {
+                    if ('status' in resp && (resp["status"] == 400 || resp['status'] == '400') && resp['responseJSON']['data']['message'] == 'Invalid file format.') {
+                        alert(resp['responseJSON']['data']['message'] + '. File format must be .doc, .docx, .txt, .pdf')
+                    } else {
+                        alert("Assignment was not submitted");
+                    }
+                }
+            });
+        } else {
+            if (!('assignment_details' in update_assignment_temp) || !(update_assignment_temp['assignment_details'])) {
+                alert("Please Enter assignment details!!!");
+            } else if (!('last_submission_date' in update_assignment_temp) || !(update_assignment_temp['last_submission_date'])) {
+                alert("Please Enter assignment last submission date!!!");
+            } else if (!('session_assignment' in update_assignment_temp) || !(update_assignment_temp['session_assignment'])) {
+                alert("Please Enter assignment file!!!");
+            } else {
+                alert("Please enter all details properly!!!");
+            }
+        }
+
+    }
+
+    function groupResponseData(resp) {
+        var assignmentNo = [];
+        var newResponse = [];
+        for (let index = 0; index < resp.length; index++) {
+            if ('assignment_no' in resp[index]) {
+                if (assignmentNo.includes(resp[index]['assignment_no']) === false) {
+                    assignmentNo.push(resp[index]['assignment_no']);
+                    newResponse.push(resp[index]);
+                }
+            }
+        }
+        return newResponse;
+    }
+
+    function addAssignment() {
+        var session_id = $('#session_id_no').val();
+        var topic_id = $('#id_topic').val();
+        var topic_comments = $('#topicComment').val();
+        var assignment_type = $('#assignmentType').val();
+        var assignment_details = $('#assignmentDetails').val();
+        var last_submission_date = new Date($('#lastSubmissionDate').val());
+        var assignment_file = $('#assignmentFile').get(0).files[0];
+        var formData = new FormData();
+
+        if (session_id != undefined && topic_id != undefined && topic_id != '' && session_id != '') {
+            if (topic_comments != '' && assignment_type != '' && assignment_details != '' && last_submission_date != '') {
+                last_submission_date = last_submission_date.getDate() + '/' + parseInt(last_submission_date.getMonth() + 1) + '/' + last_submission_date.getFullYear();
+                formData.append('is_new', 1);
+                formData.append('session_id', parseInt(session_id));
+                formData.append('topic_id', parseInt(topic_id));
+                formData.append('topic_comment', topic_comments);
+                formData.append('assignment_type', assignment_type);
+                formData.append('assignment_details', assignment_details);
+                formData.append('session_assignment', assignment_file);
+                formData.append('last_submission_date', last_submission_date);
+                $.ajax({
+                    url: '/api/save_session_assignment/',
+                    type: 'post',
+                    data: formData,
+                    dataType: "json",
+                    mimeType: 'multipart/form-data',
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function(resp) {
+                        // console.log('Inside AJAX');
+                        alert(resp['data']['message']);
+                        $('#addAssignment').modal('hide');
+
+                    },
+                    error: function(resp) {
+                        // console.log('ERROR', JSON.stringify(resp));
+                        // alert(JSON.stringify(resp))
+                        if ('status' in resp && (resp["status"] == 400 || resp['status'] == '400') && resp['responseJSON']['data']['message'] == 'Invalid file format.') {
+                            alert(resp['responseJSON']['data']['message'] + '. File format must be .doc, .docx, .txt, .pdf')
+                        } else {
+                            alert("Assignment was not submitted");
+                        }
+                        $('#addAssignment').modal('hide');
+                    },
+                });
+            } else {
+                alert("Please fill all details");
+            }
+        } else {
+            alert("Topic not selected");
+        }
+        return false;
+
+    }
+
+    function openConfirmVideoModel(id) {
+        $('#videoModal').addClass('blurred');
+        selected_video_url = $("input[name='video_val']:checked").val();
+        cell_html = "<div class='row'>"
+        if (selected_video_url != undefined) {
+            cell_html += "<input name='video_confirm_button' style='color:black; width: 5%;position: relative;top:5%;' type='radio' id='video_confirm_yes' value='video_confirm_yes'><label for='video_confirm_yes' style='color:black; width: 45%;position: relative;top:5%;left:5%;'>Yes</label>"
+            cell_html += "<input name='video_confirm_button' style='color:black; width: 5%;position: relative;top:10%;' type='radio' id='video_confirm_no' value='video_confirm_no'><label for='video_confirm_no' style='color:black; width: 45%;position: relative;top:10%;left:5%;'>No</label>"
+            let cell_html_footer = "<button class='btn' style='background-color:#035f46; color:#FFFFFF;' onclick=openVideoOnlineOffline(\'" + selected_video_url + "\')>Confirm</button>"
+            $('#video_confirm').html(cell_html);
+            $('#video_confirm_footer').html(cell_html_footer);
+            $('#videoConfirm').modal('show');
+        } else {
+            alert('Please select a video')
+        }
+
+    }
+
+    function openVideoOnlineOffline(video_url) {
+        video_confirm = $("input[name='video_confirm_button']:checked").val();
+        cell_html = "<div class='row'>"
+        if (video_confirm == 'video_confirm_no') {
+            $('#videoConfirm').modal('hide');
+            $('#videoModal').removeClass('blurred');
+        } else if (video_confirm == 'video_confirm_yes') {
+            $('#videoConfirm').modal('hide');
+            cell_html += "<input name='video_online_offline_button' style='color:black; width: 5%;position: relative;top:5%;' type='radio' id='online' value='online'><label for='video_online' style='color:black; width: 45%;position: relative;top:5%;left:5%;'>Online</label>"
+            cell_html += "<input name='video_online_offline_button' style='color:black; width: 5%;position: relative;top:10%;' type='radio' id='offline' value='offline'><label for='video_offline' style='color:black; width: 45%;position: relative;top:10%;left:5%;'>Offline</label>"
+            let cell_html_footer = "<button class='btn' style='background-color:#035f46; color:#FFFFFF;' onclick=closeVideoModal(\'" + video_url + "\')>Confirm</button>"
+            $('#video_online_offline').html(cell_html);
+            $('#video_online_offline_footer').html(cell_html_footer);
+            $('#videoOnlineOffline').modal('show');
+        } else {
+            alert("Please make a choice")
+        }
+    }
+
+    function openSelectVideoModal(id) {
+        var center_id = parent.window.center_id;
+        var offer_details = $('#id_offers').text()
+        topic_data = $('#id_topic').val()
+
+        if (topic_data == '') {
+            alert('Please select the topic')
+            return false;
+        }
+        topics = $('#id_topic').children("option:selected").text()
+
+        $.get('/v2/get_videos/?center_id=' + center_id + '&offer_details=' + (offer_details) + '&topics=' + topic_data + '&is_teacher_data=1', function(response) {
+            modal_html = "<div class='row'>"
+            if ('video_url' in response && response['video_url'].length > 0) {
+                for (let index = 0; index < response['video_url'].length; index++) {
+                    modal_html += "<div class='col-md-4 col-sm-4 col-xs-4 col-lg-4'>"
+                    modal_html += "<input style='width: 5%;position: absolute;top:0%;' type='radio' name='video_val' id='video_val_" + index + "\' name='video_val' value=\'" + response['video_url'][index] + "\'>"
+                    modal_html += "<a target='_blank' href=\'" + response['video_url'][index] + "\'><div style='position:absolute; z-index:500;height:100%;width:84%;margin-left:8%;'></div><iframe style='width: 95%;margin-left:8%;' src=\'" + response['video_url'][index] + "\'></iframe></a>"
+                    modal_html += "</div>"
+                    if (((index + 1) % 3) == 0) {
+                        modal_html += "<br><br>"
+                    }
+                }
+            } else {
+                modal_html += "<h3 style='text-align:center; color: #f15a22;'>Videos Not Available ...</h3></div>"
+            }
+            $('#video_modal').html(modal_html);
+            let footer = "<button class='btn' id=\'select_video_id_" + id + "\' style='background-color:#f15a22; color:#FFFFFF;' onclick='openConfirmVideoModel(this.id)'>Select</button>"
+            $('#video_modal_footer').html(footer);
+            $("#videoModal").modal('show');
+        });
+    }
+
+    function closeVideoModal(video_url) {
+        selected_video_mode = $("input[name='video_online_offline_button']:checked").val();
+        if (selected_video_mode != undefined) {
+            $('#videoModal').modal('hide');
+            $('#videoOnlineOffline').modal('hide');
+            $('#assign_video_modal').css('overflow-y', 'scroll')
+            updateVideo(selected_video_mode, video_url)
+            document.getElementById("select_video").disabled = true;
+            document.getElementById("select_video").style.opacity = "0.5";
+            document.getElementById("watch_video").setAttribute("onclick", "window.open(\'" + video_url + "\','_blank')")
+            document.getElementById("watch_video").disabled = false;
+            document.getElementById("watch_video").style.opacity = "1";
+            $('#videoModal').removeClass('blurred');
+        } else {
+            alert('Please make a choice')
+        }
+        // document.getElementById("select_video").textContent = "Assign";
+        // document.getElementById("select_video").setAttribute("onclick", "updateVideo(\'"+ selected_video_mode + "\',\'"+ video_url +"\')");
+    }
+    var check_for_rate = '';
+    $(document).ready(function() {
+        window.rating_close_status = '';
+        window.offline_status = '';
+        window.cancel_status = '';
+        $(".clos").click(function() {
+            parent.$.fn.colorbox.close()
+        });
+
+
+
+
+        $(function get_today() {
+            // var d = new Date();
+            //    var usertime = d.toLocaleString();
+            //    console.log("usertime",usertime.val());
+            //    date_time = usertime.split(',');
+            //    date = date_time[0];
+            //    time = date_time[1];
+            //    date_splted = date.split('/');
+            //    time_splited = time.split(':');
+            //    var date_today = date_splted[0]   + "/"+ (date_splted[1])  + "/" + date_splted[2];
+            //    $( "#datepicker" ).val(date_today);
+
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+            today = dd + '/' + mm + '/' + yyyy;
+            $("#datepicker").val(today);
+        });
+
+
+        get_data = function() {
+            $(function() {
+                $("#datepicker").datepicker({
+                    buttonText: "Choose",
+                    dateFormat: 'dd/mm/yy',
+                    width: '10px',
+                    onSelect: function() {
+                        get_classes();
+                    }
+                });
+
+            });
+        }
+
+
+        get_data();
+
+        function get_classes() {
+            $("#datep").find("#loading,#loaded").remove();
+            $("#datep").append("<p style='font-weight:bold;display:inline;color:yellow; ' id='loading'>&nbsp - &nbsp Loading...</p>");
+            var center_id = parent.window.center_id;
+            var currentDate = $("#datepicker").datepicker("getDate");
+            var today = new Date().toLocaleString("en-US", {
+                timeZone: "Asia/Kolkata"
+            });
+
+            $("#slider").find(".sli").remove();
+            var ay_id = $('#academic_year_ids').val();
+            $.post("/myclassevents/", {
+                "month": currentDate.getMonth(),
+                "year": currentDate.getFullYear(),
+                "day": currentDate.getDate(),
+                "center_id": center_id,
+                'ay_id': ay_id
+            }, function(resp) {
+                var user_sessions = resp[0].user_sessions,
+                    other_sessions = resp[0].other_sessions,
+                    today_sessions = [],
+                    future_sessions = [],
+                    past_sessions = [],
+                    total_sessions = [];
+                $("#nosess").find(".past").find(".pas").remove();
+                $("#myCarousel").find("#future").find(".fut").remove();
+
+                if (resp[0].rolle == 'teacher') {
+                    disp_sessions = resp[0].user_sessions;
+                } else if (resp[0].rolle == 'admin') {
+                    disp_sessions = resp[0].other_sessions
+                    
+                }
+
+                displaySlots(disp_sessions)
+                // catagorizing sessions
+                for (var i = 0; i < disp_sessions.length; i++) {
+                    var yearr = disp_sessions[i].yearr;
+                    var mont = disp_sessions[i].mont;
+                    var day_num = disp_sessions[i].day_num;
+                    var todate = new Date(mont + "/" + day_num + "/" + yearr);
+
+                    if (todate > currentDate) {
+                        future_sessions.push(disp_sessions[i]);
+                    } else if (todate < currentDate) {
+                        past_sessions.push(disp_sessions[i]);
+                    } else if ((currentDate.getFullYear().toString() == yearr) && ((currentDate.getMonth() + 1).toString() == parseInt(mont).toString()) && (currentDate.getDate().toString() == parseInt(day_num).toString())) {
+                        today_sessions.push(disp_sessions[i]);
+                    }
+                }
+                // end catagorizing
+                // total_sessions = past_sessions.concat(today_sessions, future_sessions);
+
+                // for (var i = 0; i < total_sessions.length; i++) {
+                //     var sess_date = total_sessions[i].day_num + "/" + total_sessions[i].mont + "/" + total_sessions[i].yearr;
+                //     $("#nosess").find(".past").append("<div class='pas nos' style='cursor:pointer; width:150px; margin:20px; display:inline-block' data-date=" + sess_date + "> " + total_sessions[i].datee + "<br> " + total_sessions[i].start + "</div>");
+
+                // }
+
+                // $(".past div").each(function(e) {
+                //     if (e != 0) {
+                //         $(this).hide();
+                //     }
+                // });
+
+                $("#nosess").find(".past").find(".pas").click(function() {
+                    $("#datepicker").val($(this).data("date"));
+                    $(".sub").click();
+                });
+
+
+                $("#myCarousel").find(".past").find(".pas").click(function() {
+                    $("#datepicker").val($(this).data("date"));
+                    $(".sub").click();
+                });
+
+                //checking for no sessions
+                var leng = today_sessions.length;
+                if (leng === 0) {
+                    $("#cancel,#offline,#complete ,#cls-today,  #two-forms").hide();
+                    $("#sessstat ").css("visibility", "hidden");
+                    $("#nosess").show();
+                    document.getElementById('jitId').style.display = "none";
+                } else {
+                    $("#cancel,#complete,#offline,#two-forms,#cls-today").show();
+                    $("#sessstat").css("visibility", "visible");
+                    $("#nosess").hide();
+                }
+                for (var i = 0; i < today_sessions.length; i++) {
+                    var topic = '';
+                    var topic_url = '#';
+                    if (today_sessions[i].topics[0] !== undefined) {
+                        topic = today_sessions[i].topics[0].title;
+                        topic_url = today_sessions[i].topics[0].url;
+                    }
+                    if (topic_url === "") {
+                        topic_url = "# ";
+                    }
+                    fmt_topic = topic.split(' ').join('+');
+                    $("#slider").append("<div class='sli btn btn-primary btn-sm'  style='cursor:pointer; font-weight:bold;display:inline;margin-left:5px;width:10px' data-sessid=" + today_sessions[i].id + " data-teacher=" + today_sessions[i].teacher + " data-topic=" + fmt_topic + " data-url=" + topic_url + "  " + " data-center=" + today_sessions[i].center + " data-grade=" + today_sessions[i].grade + " data-subject=" + today_sessions[i].subject + " data-software=" + today_sessions[i].software + " data-link=" + today_sessions[i].software_link + " >" + today_sessions[i].start + "</div>");
+                    console.log("session - - - - -", today_sessions[i].id)
+                }
+
+
+
+
+                //begin session corousal
+                $(".sli").click(function() {
+                   
+                    $("#cntr").children().remove();
+                    $(".sli").removeClass("active");
+                    $(this).addClass("active");
+                    var topic_plan = $(this).data("topic").split("+").join(' ');
+                    var topic_url = $(this).data("url");
+                    var session_id = $(this).data("sessid");
+                    $("#sessionIdForRating").val(session_id);
+                    $(".reson").find("select").val("");
+                    $("#sessstat").children().remove();
+                    
+                    document.getElementById('jitId').style.display = "block";
+                    $("#tsLinkId").val($(this).data("link"));
+                    $("#sessstat").append("<p><strong style='color:orange'>Teacher   : </strong>  " + $(this).data("teacher") + "</p>");
+                    $("#sessstat").append("<p><strong style='color:orange'>Course   :  </strong> <span id='id_offers'>" + $(this).data("grade") + "   " + $(this).data("subject") + "</span></p>");
+                    $.get('/get_active_centers/',{},function(resp){
+                        
+                        var data=resp['data'];
+                        
+                        for (let i = 0; i < data.length; i++){
+                            var dict=data[i];
+                            if (dict.center_id==center_id){
+                                console.log(dict);
+                                center_name=dict.center_name
+                            }
+                        }
+                        $("#cntr").val('My Classroom -'+center_name);
+                    });
+                    //get attendance form
+                    $('#session_id_no').val($(this).data("sessid"));
+                    $.get("/get_attendance?session=" + $('#session_id_no').val() + "&center_id=" + center_id, function(resp) {
+                        $.post("/v2/get_session_url/", {
+                            "session": $('#session_id_no').val(),
+                            'csrfmiddlewaretoken': getCookieValue('csrftoken')
+                        }, function(response) {
+                            if (response['session_url']) {
+                                video_url = response['session_url']
+                                if (video_url.length > 0) {
+                                    // document.getElementById("select_video").disabled = true;
+                                    // document.getElementById("select_video").style.opacity = "0.5"
+                                    document.getElementById("watch_video").setAttribute("onclick", "window.open(\'" + video_url + "\','_blank')")
+                                    document.getElementById("watch_video").disabled = false;
+                                    document.getElementById("watch_video").style.opacity = "1";
+                                    $('#videoModal').removeClass('blurred');
+                                } else {
+                                    document.getElementById("watch_video").disabled = true;
+                                    document.getElementById("watch_video").style.opacity = "0.5"
+                                }
+                            }
+                        })
+                        $("#attendance").children().remove();
+                        $("#attendance").append(resp);
+                        $("#attendance").find(".header,.btn").remove();
+                        $("#students-table tr:even").css("background-color", "#639b7a");
+                        $("#attendance").find("#attendance_form_" + session_id).submit(function(e) {
+                            e.preventDefault();
+                            var q = "";
+                            var $att_form = $("#attendance").find("form");
+                            var stu_len = $att_form.find("input.student").length;
+                            $att_form.find("input.student").each(function(index, val) {
+                                stu_name = $(this).attr("value");
+                                q += stu_name + ((index < stu_len - 1) ? ";" : "");
+                            });
+                            $att_form.find("input[name='student']").val(q);
+                            q = "";
+                            var attend_len = $att_form.find("input.attend").not(":checked").length;
+                            var is_flm_session = $att_form.find("input[name='is_flm']").is(':checked');
+                            if (attend_len == 0) {
+                                y = confirm("Are you sure of 100% student attendance ?");
+                                if (y == true) {} else {
+                                    return false;
+                                }
+                            }
+                            console.log(is_flm_session)
+                            var is_flm = 0
+                            if (is_flm_session) {
+                                is_flm = 1
+                            }
+                            $att_form.find("input.attend").not(":checked").each(function(index, val) {
+                                attend = parseInt($(this).val());
+                                q += attend + ((index < attend_len - 1) ? ";" : "");
+                            });
+                            $att_form.find("input[name='attend']").val(q);
+                            $.post("/submit_attendance/", {
+                                "student": $att_form.find("input[name='student']").val(),
+                                "attend": $att_form.find("input[name='attend']").val(),
+                                "session": session_id,
+                                "is_flm_session": is_flm,
+                                csrfmiddlewaretoken: $att_form.find("input[name=csrfmiddlewaretoken]").val()
+                            }).done(function() {
+                                $("#sess").find("form").submit();
+                            }).fail(function() {
+                                alert("error");
+                            });
+                        });
+
+                    }); //end get attendance form
+
+                    //get today and session date according to location
+                    /* $.get("/v2/getDifferentDate/",{"sessionId":$(this).data("sessid")},function(resp){
+                    	today=resp['todayDate'];
+                    	
+                        currentDate=resp['sessionDate'];
+                     }); */
+
+                    // get feedback form
+                    $.get("/get_feedback?session=" + $(this).data("sessid"), function(resp) {
+                        $("#sess").children().remove();
+                        $("#sess").append(resp);
+                        $("#sess").find(".status").find("span").append("   " + $("#sess").find("#status").val());
+                        $("#sess").find(".topics, textarea").css("color", "Black ");
+                        $("#sess").find(".plan_topics, textarea").css("color", "Black ");
+                        $("#sess").find(".sub_topics, textarea").css("color", "Black ");
+                        $("#sess").prepend("<p><strong style='color:orange;display:none;'> Planned Topic:<strong> <a style='color:yellow' href=" + topic_url + "  >" + topic_plan + "</a>" + " </p>");
+                        $("#sess").find("textarea").css("width", "100%");
+                        $("#sess").find("textarea").css("height", "172px");
+                        $("#sess").find("form").find(".reason-code").attr("title", "Cancel Reason");
+                        $("#sess").find("#status").css("visibility", "hidden");
+                        $("#sess").find(".chapters").css({
+                            "float": "left",
+                            "margin-bottom": "10px"
+                        });
+                        $("#sess").find(".header,.btn").remove();
+                        if (today < currentDate) {
+                            $("#cancel").addClass("disabledbutton");
+                            $("#complete").addClass("disabledbutton");
+                            $("#offline").addClass("disabledbutton");
+                        } else {
+                            $("#cancel").removeClass("disabledbutton");
+                            $("#complete").removeClass("disabledbutton");
+                            $("#offline").removeClass("disabledbutton");
+                        }
+
+                        $("#sess").find("#feedback_form_" + session_id).submit(function(e) {
+                            e.preventDefault();
+                            var $form = $("#feedback_form_" + session_id);
+                            var $topic_ids = $form.find("input[name='topic_ids']");
+                            var q = "";
+                            q = $(this).find("select.topics").children(":selected").attr("data-topic-id");
+                            $topic_ids.val(q);
+                            var comment = $form.find("textarea").val().trim();
+                            if (comment == "") {
+                                alert("Feedback cannot be empty");
+                                return false;
+                            }
+                            var stat = $(this).find('#status').val(),
+                                reasoncode = $('#reason_of_cancell').val();
+                            if (stat === 'Completed') {
+                                $(".reson").find('select').val("");
+                            }
+                            if (stat === 'Cancelled' || stat === 'Rescheduled') {
+                                if (!reasoncode) {
+                                    r = $(diag);
+                                    return false;
+                                }
+                            }
+                            var lesson_plan = '';
+                            if ($('.lesson_plan').is(":checked")) {
+                                lesson_plan = 'yes';
+                            } else {
+                                lesson_plan = 'no';
+                            }
+                            $.get("/save_offering/", {
+                                "topic_ids": $topic_ids.val(),
+                                "session_id": session_id,
+                                "status": $form.find("#status").val(),
+                                "reason": $(".reson").find("select").val(),
+                                "comment": $form.find("textarea").val().trim(),
+                                "sub_topic": $('.sub_topics').val(),
+                                'lesson_plan': lesson_plan
+                            }).done(function() {
+                                rating_close_status = true;
+                                get_rated();
+                                if ($form.find("#status").val() == "Cancelled" || $form.find("#status").val() == 'Offline') {
+                                    $('#reason_of_cancell').val('')
+                                    var r = confirm("Class details submitted successfully. Do you want to close this window? ");
+                                    if (r == true) {
+                                        parent.$.fn.colorbox.close();
+                                    }
+                                } else if ($form.find("#status").val() == "Completed" || $form.find("#status").val() == 'completed') {
+                                    if (check_for_rate) {
+                                        msg = "Class details submitted successfully.Please give Session Rating. "
+                                    } else {
+                                        msg = "Class details submitted successfully."
+                                    }
+                                    alert(msg);
+                                    confirm_rating();
+                                }
+
+
+
+
+                                /* if(r==true){
+                                   		rating_close_status = true;
+                                		parent.$.fn.colorbox.close(); 
+                                        if (offline_status==true){
+                                        	parent.$.fn.colorbox.close();
+                                        }else if (cancel_status==true){
+                                        	parent.$.fn.colorbox.close();
+                                        }
+                                	} 
+                                   	else if (r==false){rating_close_status=false;} */
+                            });
+                        });
+
+
+                    }); //end get feedback form
+
+
+                }); //end session corousal
+                $('#slider').find('.sli:first-of-type').click();
+            }).done(function() {
+                $("#datep").find("#loading").remove();
+                $("#datep").append("<p style='display:inline; color:yellow;font-weight:bold;' id='loaded'>&nbsp - &nbsp Loaded</p>")
+            }); //end get my class events
+        } //end click  datepicker
+
+
+        // $('.day').click(function() {
+        //     $("#datepicker").val($(this).data("date"));
+        //     console.log($(this).data("date"))
+        //     console.log($("#datepicker").val())
+        //     $(".sub").click();
+        // });
+
+        function diag() {
+            $(".reson").removeClass("hide");
+            $(".reson").dialog({
+                resizable: false,
+                width: 300,
+                height: 300,
+                modal: true,
+                buttons: {
+                    "Submit": function() {
+                        var res = $(this).find("select").val();
+                        if (res == '') {
+                            alert('Please select a reason');
+                            return false;
+                        }
+                        $('#reason_of_cancell').val(res);
+                        $(".reson").find("select").val(res);
+                        $("#sess").find("form").find("#status").val("Cancelled");
+                        $("#sess").find("form").submit();
+                        $(this).dialog("close");
+                    },
+                    Cancel: function() {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        }
+
+        $(get_classes);
+        $(".sub").click(get_classes);
+        //planned_topic = $('.topics').val();
+
+        $("#cancel").click(function() {
+            var cancelled_status = "";
+            planned_topic = $('.topics').val();
+            $.get("/v2/cancelled-sesssion-status?session=" + $('#session_id_no').val(), function(resp) {
+                cancelled_status = resp["cancelled_status"];
+                if (cancelled_status === "cancelled") {
+
+                    reasoncode = $('#reason_of_cancell').val();
+                    if (!reasoncode) {
+                        r = $(diag);
+                        return false;
+                    }
+                    var r = confirm("Class details submitted successfully. Do you want to close this window? ");
+                    if (r == true) {
+                        parent.$.fn.colorbox.close();
+                    }
+                    return false;
+                } else {
+                    $("#sess").find("form").find("#status").val("Cancelled");
+                    $("#sess").find("form").submit();
+                    cancel_status = true;
+                }
+                /* else{
+                    		alert("Please Select Topic.");
+                    		return false;
+                    	} */
+            });
+        });
+        $("#complete").click(function() {
+            planned_topic = $('.topics').val();
+            if (planned_topic != '') {
+                $("#sess").find("form").find("#status").val("Completed");
+                $("#attendance").find("form").submit();
+            } else {
+                alert("Please Select Topic.");
+            }
+
+
+        });
+        $("#offline").click(function() {
+            planned_topic = $('.topics').val();
+            if (planned_topic != '') {
+                $("#sess").find("form").find("#status").val("Offline");
+                $("#attendance").find("form").submit();
+                offline_status = true;
+            } else {
+                alert("Please Select Topic.");
+            }
+
+        });
+
+        $("#next").click(function() {
+            if ($(".past div:visible").next().length != 0)
+                $(".past div:visible").next().fadeIn("fast").prev().fadeOut("fast");
+            else {
+                alert("No more upcoming classes this month!");
+            }
+            return false;
+        });
+        $("#prev").click(function() {
+            if ($(".past div:visible").prev().length != 0)
+                $(".past div:visible").prevAll('.pas:first').fadeIn("fast").next().fadeOut("fast");
+
+            else {
+                alert("No more previous classes this month!");
+            }
+            return false;
+        });
+
+        //on change topic covered, change the wikividya link
+        $("body").on("change", "select.topics", function() {
+            //var topic = "http://wikividya.evidyaloka.org/index.php?title=" + encodeURIComponent($(this).children("option:selected").attr("data-topic-url"));
+            var topic = $(this).children("option:selected").attr("data-topic-url");
+            //topic = topic === "" ? "" : topic;
+            if (topic === "") {
+                $(this).next("a").removeAttr("target").removeAttr("href");
+            } else {
+                $(this).next("a").prop("href", "javascript:void(0);");
+                $(this).next("a").attr("onclick", "autoLoginInWikiVidya('" + topic + "')");
+                //         $(this).next("a").prop("href",topic).prop("target", "_blank");
+            }
+        });
+
+    }); // end document ready
+</script>
+<script>
+    function confirm_rating() {
+        $(".star_rating").removeClass("hide");
+        $("#star_rating_id").parentsUntil("div").css({
+            "color": "green !important"
+        });
+        if (check_for_rate) {
+            $("#star_rating_id").dialog({
+                resizable: false,
+                width: 500,
+                height: 300,
+                modal: true,
+                buttons: {
+                    "Rate": function() {
+                        saveRating();
+
+                    },
+                }
+            }).parent().find(".ui-dialog-titlebar-close").click(function() {
+                $('.star').removeAttr("checked", "checked");
+                /* if (rating_close_status==true){
+                	parent.$.fn.colorbox.close();
+                }
+                else if (rating_close_status==false){
+                	$( this ).dialog( "close" );
+                } */
+            });
+            $(".ui-dialog-titlebar-close").css('display', 'none')
+            $(".ui-dialog-buttonpane button:contains('Rate')")
+                .button(this.checked ? "enable" : "disable");
+            $(".star").click(function() {
+
+                rate_enable = $('#star1').is(":checked");
+                rate_enable1 = $('#star2').is(":checked");
+                rate_enable2 = $('#star3').is(":checked");
+                rate_enable3 = $('#star4').is(":checked");
+                rate_enable4 = $('#star5').is(":checked");
+                if (rate_enable || rate_enable1 || rate_enable2 || rate_enable3 || rate_enable4) {
+                    $(".ui-dialog-buttonpane button").button("enable");
+                }
+
+
+            });
+
+
+        } else {
+            $("#star_rating_id").dialog({
+                resizable: false,
+                width: 500,
+                height: 300,
+                modal: true,
+                buttons: {
+                    Cancel: function() {
+                        if (rating_close_status == true) {
+                            parent.$.fn.colorbox.close();
+                        } else if (rating_close_status == false) {
+                            $(this).dialog("close");
+                        }
+                    }
+                }
+            })
+        }
+
+    }
+
+    function saveRating() {
+        var $form = $("#feedback_form_" + $("#sessionIdForRating").val());
+        var $topic_ids = $form.find("input[name='topic_ids']");
+        var star_rating = [];
+        $(".reson").find('select').val("");
+        $('.stars input:checked').each(function() {
+            selected_star = {};
+            selected_star['ques_no'] = $(this).attr('data-ques-no');
+            selected_star['ques'] = $(this).attr('name');
+            selected_star['rating'] = $(this).attr('data-score');
+            star_rating.push(selected_star);
+
+
+        });
+
+        var ajaxUrl = '/v2/ajax/save_rating?session_id=' + $("#sessionIdForRating").val() + '&star_rating=' + JSON.stringify(star_rating);
+        $.ajax({
+            url: ajaxUrl,
+            dataType: "json",
+            success: function(data) {
+                //$("#star_rat").dialog( "close" );
+                $("#star_rating_id").dialog("close");
+                alert('session rate is done successfully ');
+                parent.$.fn.colorbox.close();
+                $('.headerMSG').html(data['msg']);
+                $("#shareWidget").show();
+                $('#shareWidget').on('hidden.bs.modal', function() {
+                    if (rating_close_status == true) {
+                        parent.$.fn.colorbox.close();
+                    } else {
+                        $("#star_rating_id").dialog("close");
+                    }
+                })
+            },
+            error: function() {
+                alert("error");
+            }
+        });
+    }
+
+    function get_rated() {
+        var $form = $("#feedback_form_" + $("#sessionIdForRating").val());
+        var session_ratings = $form.find("input[name='session_rate']");
+        newJsonData = document.getElementById("session_rating_id").value;
+        newJsonData = JSON.parse(newJsonData);
+        if (newJsonData != null && newJsonData != 'undefined' && newJsonData != '') {
+            check_for_rate = false;
+            $('.star').attr("disabled", "disabled");
+            $('.star').attr("style", "transform:  scale(1);cursor:not-allowed;");
+            for (i = 0; i < newJsonData.length; i++) {
+                var jsonObj = newJsonData[i];
+                if (jsonObj['ques_no'] == 1 && jsonObj['stars'] == 5) {
+                    $('#star_5').attr("checked", "checked");
+                } else if (jsonObj['ques_no'] == 1 && jsonObj['stars'] == 4) {
+                    $('#star_4').attr("checked", "checked");
+                } else if (jsonObj['ques_no'] == 1 && jsonObj['stars'] == 3) {
+                    $('#star_3').attr("checked", "checked");
+                } else if (jsonObj['ques_no'] == 1 && jsonObj['stars'] == 2) {
+                    $('#star_2').attr("checked", "checked");
+                } else if (jsonObj['ques_no'] == 1 && jsonObj['stars'] == 1) {
+                    $('#star_1').attr("checked", "checked");
+                } else if (jsonObj['ques_no'] == 2 && jsonObj['stars'] == 5) {
+                    $('#star5').attr("checked", "checked");
+                } else if (jsonObj['ques_no'] == 2 && jsonObj['stars'] == 4) {
+                    $('#star4').attr("checked", "checked");
+                } else if (jsonObj['ques_no'] == 2 && jsonObj['stars'] == 3) {
+                    $('#star3').attr("checked", "checked");
+                } else if (jsonObj['ques_no'] == 2 && jsonObj['stars'] == 2) {
+                    $('#star2').attr("checked", "checked");
+                } else if (jsonObj['ques_no'] == 2 && jsonObj['stars'] == 1) {
+                    $('#star1').attr("checked", "checked");
+                }
+            }
+        } else {
+            check_for_rate = true;
+            $('.star').removeAttr("disabled", "disabled");
+            $('.star').removeAttr("style", "transform:  scale(1);cursor:not-allowed;");
+        }
+    }
+
+    function opneNew() {
+        var tsLink = $("#tsLinkId").val();
+        window.open(
+            tsLink,
+            '_blank'
+        );
+    }
+
+    $('#myclassroom_appreciate').click(function() {
+        /*  $('#colorbox').one('hidden.bs.modal', function() {
+			$('.modal-to-open').modal('show'); }).modal('hide'); });  */
+        //parent.$.fn.colorbox.close();
+        //Window.showModalDialog("appreciation.html","chield","dialogWidth:300px;dialogHeight:300px");
+        //$('#classroomAppreciateModel').modal('show');
+        $(".appreciation").removeClass("hide");
+
+        $(".appreciation").dialog({
+            resizable: false,
+            width: 586,
+
+
+            modal: true,
+
+            buttons: {
+                "Submit": function() {
+                    alert("kkk");
+                },
+                Cancel: function() {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+        $('#classroomAppreciateModel').removeClass('ui-dialog-content');
+        $('#classroomAppreciateModel').removeClass('ui-widget-content');
+        $('.appreciation').parent().find(".ui-dialog-buttonset").parent().removeClass('ui-dialog-buttonpane ui-widget-content ui-helper-clearfix');
+        $('.appreciation').parent().children().first().css("display", "none");
+        $('.appreciation').parent().find(".ui-dialog-buttonset").css("display", "none");
+        $('#classroomAppreciateModel').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+        $.get("/v2/ajax/getStickerAndReason/", {
+            'reason_type': 'appreciation',
+            'for_whom': 'volunteer'
+        }, function(resp) {
+            var resonList = resp.reason;
+            var stickerList = resp.sticker;
+            var resonOptionList = '';
+            resonOptionList += '<option value="null" >--Select Reason--</option>';
+            for (i = 0; i < resonList.length; i++) {
+                resonOptionList += '<option value="' + resonList[i].id + '" >' + resonList[i].reason + '</option>';
+            }
+            resonOptionList += '<option value="others" >Others</option>';
+            $('#classroomAppreciateModel').find('#appreciate_reason_id').html(resonOptionList);
+            var sticker_row = '';
+            sticker_row += '<div class="row sticker_row" style="margin-left:5px"><div class="col-md-12" style="margin-left: -18px;"><label>Select Sticker:<span style="color: red">*</span><span style="color: red;display: none;font-size: 9px;margin-top: -15px;margin-left: 79px;" class="validation_msg_sticker">(Please Select Sticker)</span></label></div>';
+            for (i = 0; i < stickerList.length; i++) {
+                k = i + 1;
+
+                if (i % 4 == 0 || i == 0) {
+
+                    if (i == 0) {
+                        sticker_row += '<div class=" col-md-12 stickerRow" style="margin-left: 122px;">';
+                    } else {
+                        sticker_row += '<div class=" col-md-12 stickerRow" style="margin-left: 122px;margin-top: 15px;">';
+                    }
+
+                }
+
+                sticker_row += '<img style="display: inline-block; width: 75px;height: 75px;border-radius: 50%;MARGIN-LEFT: 20PX;" onclick="makeActive(' + stickerList[i].id + ')" id="' + stickerList[i].id + '" class="sticker" title="' + stickerList[i].sticker_name + '" src="/' + stickerList[i].path + '">';
+
+                if (k % 4 == 0) {
+                    sticker_row += '</div>';
+                }
+
+            }
+            sticker_row += '</div></div>';
+
+
+            $('#classroomAppreciateModel').find('.modal-body').append(sticker_row);
+
+        });
+
+
+    });
+    $('#appreciateModelClose').click(function() {
+        $('#classroomAppreciateModel').modal('hide');
+        $('#classroomAppreciateModel').find(".modal-body").find('.sticker_row').html("");
+    });
+    $('#classroomAppreciateModel').find('#appreciate_reason_id').on('change', function() {
+        if (this.value == 'others') {
+            $('#classroomAppreciateModel').find('.add_custom_reason').css('display', 'block');
+        } else {
+            $('#classroomAppreciateModel').find('.add_custom_reason').css('display', 'none');
+        }
+    });
+
+    function makeActive(id) {
+        $('#classroomAppreciateModel').find(".stickerRow").find('.stickerActive').removeClass('stickerActive');
+        $('#classroomAppreciateModel').find(".stickerRow").find("#" + id).toggleClass('stickerActive');
+    }
+
+    $('.save-appriciation').click(function() {
+        var validate = false;
+        var stickerId = $('#classroomAppreciateModel').find(".stickerRow").find('.stickerActive').attr('id');
+        var volunteerId = '';
+        var otherReason = '';
+        var volunteer = $('#classroomAppreciateModel').find('#search_data').val();
+        if (volunteer != null && volunteer != '') {
+            volunteerId = volunteer.split('::')[0];
+        }
+        appreciationId = $('#classroomAppreciateModel').find('#appreciate_reason_id').val();
+        if (appreciationId == 'others') {
+            otherReason = $('#classroomAppreciateModel').find('#customReasonId').val();
+        }
+        var comment = $('#classroomAppreciateModel').find('#commentID').val();
+        if (volunteer != '') {
+            if (appreciationId != 'null') {
+                if (appreciationId == 'others') {
+                    if (otherReason != '') {
+                        if (typeof stickerId != "undefined") {
+                            validate = true;
+                        } else {
+                            validate = false;
+                            $('#classroomAppreciateModel').find('.validation_msg_crsn').css('display', 'none');
+                            $('#classroomAppreciateModel').find('.validation_msg_sticker').css('display', 'block');
+                        }
+                    } else {
+                        validate = false;
+                        $('#classroomAppreciateModel').find('.validation_msg_rsn').css('display', 'none');
+                        $('#classroomAppreciateModel').find('.validation_msg_crsn').css('display', 'block');
+                    }
+
+                } else if (typeof stickerId != "undefined") {
+                    validate = true;
+                } else {
+                    validate = false;
+                    $('#classroomAppreciateModel').find('.validation_msg_rsn').css('display', 'none');
+                    $('#classroomAppreciateModel').find('.validation_msg_sticker').css('display', 'block');
+                }
+            } else {
+                validate = false;
+                $('#classroomAppreciateModel').find('.validation_msg_rsn').css('display', 'block');
+                $('#classroomAppreciateModel').find('.validation_msg_srch').css('display', 'none');
+            }
+        } else {
+            $('#classroomAppreciateModel').find('.validation_msg_srch').css('display', 'block');
+            validate = false;
+        }
+
+
+        if (validate) {
+            $.post("/v2/ajax/submittAppreciation/", {
+                'appreciationId': appreciationId,
+                'stickerId': stickerId,
+                'volunteerId': volunteerId,
+                'for_whom': 'volunteer',
+                'otherReason': otherReason,
+                'reason_type': 'appreciation',
+                'comment': comment
+            }, function(resp) {
+                alert(resp);
+                $('#classroomAppreciateModel').find('#appreciate_reason_id').val('null');
+                $('#classroomAppreciateModel').find('#customReasonId').val('');
+                $('#classroomAppreciateModel').find(".stickerRow").find('.stickerActive').removeClass('stickerActive');
+                $('#classroomAppreciateModel').find('#search_data').val('');
+                $('#classroomAppreciateModel').find('#commentID').val('');
+                $('#classroomAppreciateModel').modal('hide');
+                $('.ui-dialog-buttons ui-draggable').css('display', 'none');
+            });
+        }
+        /* $('#classroomAppreciateModel').modal('hide');
+	                $('#classroomAppreciateModel').find(".modal-body").find('.sticker_row').html("");  */
+    });
+
+    no_of_sticker = $('.appreciation_count').find('.sticker_row_count').length;
+    if (no_of_sticker > 0) {
+        $('.onboarding_step_buttons').css('margin-left', '289px');
+        if (no_of_sticker > 3) {
+            $('.activity_button').css('margin-left', '289px');
+        }
+    } else {
+        $('.appreciation_count').css('display', 'none');
+    }
+
+
+    function getExternalRoleVolunteer(search_results) {
+        $(search_results).autocomplete({
+            source: "/v2/ajax/getExternalRoleVolunteer?center_id="+center_id,
+            minLength: 1,
+            autoFocus: true,
+            select: function(event, ui) {
+
+                $(this).val(ui.item.value);
+            },
+
+            change: function(event, ui) {
+                if (ui.item) {
+                    return;
+                } else {
+                    $(this).val('');
+
+                }
+            }
+        });
+    }
+
+    function refresh() {
+        $("#datep").find("#loading,#loaded").remove();
+        $("#datep").append("<p style='font-weight:bold;display:inline;color:yellow; ' id='loading'>&nbsp - &nbsp Loading...</p>");
+        var center_id = parent.window.center_id;
+        var currentDate = $("#datepicker").datepicker("getDate");
+        var today = new Date().toLocaleString("en-US", {
+            timeZone: "Asia/Kolkata"
+        });
+
+        $("#slider").find(".sli").remove();
+        var ay_id = $('#academic_year_ids').val();
+        $.post("/myclassevents/", {
+            "month": currentDate.getMonth(),
+            "year": currentDate.getFullYear(),
+            "day": currentDate.getDate(),
+            "center_id": center_id,
+            'ay_id': ay_id
+        }, function(resp) {
+            var user_sessions = resp[0].user_sessions,
+                other_sessions = resp[0].other_sessions,
+                today_sessions = [],
+                future_sessions = [],
+                past_sessions = [],
+                total_sessions = [];
+            $("#nosess").find(".past").find(".pas").remove();
+            $("#myCarousel").find("#future").find(".fut").remove();
+
+            if (resp[0].rolle == 'teacher') {
+                disp_sessions = resp[0].user_sessions;
+            } else if (resp[0].rolle == 'admin') {
+                disp_sessions = resp[0].other_sessions
+            }
+            // catagorizing sessions
+            for (var i = 0; i < disp_sessions.length; i++) {
+                var yearr = disp_sessions[i].yearr;
+                var mont = disp_sessions[i].mont;
+                var day_num = disp_sessions[i].day_num;
+                var todate = new Date(mont + "/" + day_num + "/" + yearr);
+
+                if (todate > currentDate) {
+                    future_sessions.push(disp_sessions[i]);
+                }
+                if (todate < currentDate) {
+                    past_sessions.push(disp_sessions[i]);
+                }
+
+                if ((currentDate.getFullYear().toString() == yearr) && ((currentDate.getMonth() + 1).toString() == parseInt(mont).toString()) && (currentDate.getDate().toString() == parseInt(day_num).toString())) {
+                    today_sessions.push(disp_sessions[i]);
+                }
+            }
+            // end catagorizing
+            total_sessions = past_sessions.concat(today_sessions, future_sessions);
+
+            for (var i = 0; i < total_sessions.length; i++) {
+                var sess_date = total_sessions[i].day_num + "/" + total_sessions[i].mont + "/" + total_sessions[i].yearr;
+                $("#nosess").find(".past").append("<div class='pas nos' style='cursor:pointer; width:150px; margin:20px; display:inline-block' data-date=" + sess_date + "> " + total_sessions[i].datee + "<br> " + total_sessions[i].start + "</div>");
+
+            }
+
+            $(".past div").each(function(e) {
+                if (e != 0) {
+                    $(this).hide();
+                }
+            });
+
+
+
+            $("#nosess").find(".past").find(".pas").click(function() {
+                $("#datepicker").val($(this).data("date"));
+                $(".sub").click();
+
+
+            });
+
+            $("#myCarousel").find(".past").find(".pas").click(function() {
+                $("#datepicker").val($(this).data("date"));
+                $(".sub").click();
+
+
+            });
+
+            //checking for no sessions
+            var leng = today_sessions.length;
+            if (leng === 0) {
+                $("#cancel,#offline,#complete ,#cls-today,  #two-forms").hide();
+                $("#sessstat ").css("visibility", "hidden");
+                $("#nosess").show();
+            } else {
+                $("#cancel,#complete,#offline,#two-forms,#cls-today").show();
+                $("#sessstat").css("visibility", "visible");
+                $("#nosess").hide();
+            }
+            for (var i = 0; i < today_sessions.length; i++) {
+                var topic = '';
+                var topic_url = '#';
+                if (today_sessions[i].topics[0] !== undefined) {
+                    topic = today_sessions[i].topics[0].title;
+                    topic_url = today_sessions[i].topics[0].url;
+                }
+                if (topic_url === "") {
+                    topic_url = "# ";
+                }
+                fmt_topic = topic.split(' ').join('+');
+                $("#slider").append("<div class='sli btn btn-primary btn-sm'  style='cursor:pointer; font-weight:bold;display:inline;margin-left:5px;width:10px' data-sessid=" + today_sessions[i].id + " data-teacher=" + today_sessions[i].teacher + " data-topic=" + fmt_topic + " data-url=" + topic_url + "  " + " data-center=" + today_sessions[i].center + " data-grade=" + today_sessions[i].grade + " data-subject=" + today_sessions[i].subject + " data-software=" + today_sessions[i].software + " data-link=" + today_sessions[i].software_link + " >" + today_sessions[i].start + "</div>");
+            }
+            //begin session corousal
+            $(".sli").click(function() {
+                $("#cntr").children().remove();
+                $(".sli").removeClass("active");
+                $(this).addClass("active");
+                var topic_plan = $(this).data("topic").split("+").join(' ');
+                var topic_url = $(this).data("url");
+                var session_id = $(this).data("sessid");
+                $("#sessionIdForRating").val(session_id);
+                $(".reson").find("select").val("");
+                $("#sessstat").children().remove();
+                document.getElementById('jitId').style.display = "block";
+                $("#tsLinkId").val($(this).data("link"));
+                $("#sessstat").append("<p><strong style='color:orange'>Teacher   : </strong>  " + $(this).data("teacher") + "</p>");
+                $("#sessstat").append("<p><strong style='color:orange'>Course   :  </strong> <span id='id_offers'>" + $(this).data("grade") + "   " + $(this).data("subject") + "</span></p>");
+                $.get('/get_active_centers/',{},function(resp){
+                    console.log(resp);
+                    var data=resp['data'];
+                    for (let i = 0; i < data.length; i++){
+                        var dict=data[i];
+                        if (dict["center_id"]==center_id){
+                            console.log(dict);
+                            center_name=dict["center_name"]
+                        }
+                    }
+                    
+                    $("#cntr").append(center_name);
+                });
+                //get attendance form
+                $('#session_id_no').val($(this).data("sessid"));
+                $.get("/get_attendance?session=" + $('#session_id_no').val() + "&center_id=" + center_id, function(resp) {
+                    $.post("/v2/get_session_url/", {
+                        "session": $('#session_id_no').val(),
+                        'csrfmiddlewaretoken': getCookieValue('csrftoken')
+                    }, function(response) {
+                        if (response['session_url']) {
+                            video_url = response['session_url']
+                            if (video_url.length > 0) {
+                                console.log("1")
+                                    // document.getElementById("select_video").disabled = true;
+                                    // document.getElementById("select_video").style.opacity = "0.5"
+                                document.getElementById("watch_video").setAttribute("onclick", "window.open(\'" + video_url + "\','_blank')")
+                                document.getElementById("watch_video").disabled = false;
+                                document.getElementById("watch_video").style.opacity = "1";
+                                $('#videoModal').removeClass('blurred');
+                            } else {
+                                console.log("0")
+                                document.getElementById("watch_video").disabled = true;
+                                document.getElementById("watch_video").style.opacity = "0.5"
+                            }
+                        }
+                    })
+                    $("#attendance").children().remove();
+                    $("#attendance").append(resp);
+                    $("#attendance").find(".header,.btn").remove();
+                    $("#students-table tr:even").css("background-color", "#639b7a");
+                    $("#attendance").find("#attendance_form_" + session_id).submit(function(e) {
+                        e.preventDefault();
+                        var q = "";
+                        var $att_form = $("#attendance").find("form");
+                        var stu_len = $att_form.find("input.student").length;
+                        $att_form.find("input.student").each(function(index, val) {
+                            stu_name = $(this).attr("value");
+                            q += stu_name + ((index < stu_len - 1) ? ";" : "");
+                        });
+                        $att_form.find("input[name='student']").val(q);
+                        q = "";
+                        var attend_len = $att_form.find("input.attend").not(":checked").length;
+                        if (attend_len == 0) {
+                            y = confirm("Are you sure of 100% student attendance ?");
+                            if (y == true) {} else {
+                                return false;
+                            }
+                        }
+                        $att_form.find("input.attend").not(":checked").each(function(index, val) {
+                            attend = parseInt($(this).val());
+                            q += attend + ((index < attend_len - 1) ? ";" : "");
+                        });
+                        $att_form.find("input[name='attend']").val(q);
+                        $.post("/submit_attendance/", {
+                            "student": $att_form.find("input[name='student']").val(),
+                            "attend": $att_form.find("input[name='attend']").
+                            val(),
+                            "session": session_id,
+                            csrfmiddlewaretoken: $att_form.find("input[name=csrfmiddlewaretoken]").val()
+                        }).done(function() {
+                            $("#sess").find("form").submit();
+                        }).fail(function() {
+                            alert("error");
+                        });
+                    });
+
+                }); //end get attendance form
+
+                //get today and session date according to location
+                /* $.get("/v2/getDifferentDate/",{"sessionId":$(this).data("sessid")},function(resp){
+                	today=resp['todayDate'];
+                	
+                    currentDate=resp['sessionDate'];
+                 }); */
+
+                // get feedback form
+                $.get("/get_feedback?session=" + $(this).data("sessid"), function(resp) {
+                    $("#sess").children().remove();
+                    $("#sess").append(resp);
+                    $("#sess").find(".status").find("span").append("   " + $("#sess").find("#status").val());
+                    $("#sess").find(".topics, textarea").css("color", "Black ");
+                    $("#sess").find(".plan_topics, textarea").css("color", "Black ");
+                    $("#sess").find(".sub_topics, textarea").css("color", "Black ");
+                    $("#sess").prepend("<p><strong style='color:orange;display:none;'> Planned Topic:<strong> <a style='color:yellow' href=" + topic_url + "  >" + topic_plan + "</a>" + " </p>");
+                    $("#sess").find("textarea").css("width", "100%");
+                    $("#sess").find("textarea").css("height", "172px");
+                    $("#sess").find("form").find(".reason-code").attr("title", "Cancel Reason");
+                    $("#sess").find("#status").css("visibility", "hidden");
+                    $("#sess").find(".chapters").css({
+                        "float": "left",
+                        "margin-bottom": "10px"
+                    });
+                    $("#sess").find(".header,.btn").remove();
+                    if (today < currentDate) {
+                        $("#cancel").addClass("disabledbutton");
+                        $("#complete").addClass("disabledbutton");
+                        $("#offline").addClass("disabledbutton");
+                    } else {
+                        $("#cancel").removeClass("disabledbutton");
+                        $("#complete").removeClass("disabledbutton");
+                        $("#offline").removeClass("disabledbutton");
+                    }
+
+                    $("#sess").find("#feedback_form_" + session_id).submit(function(e) {
+                        e.preventDefault();
+                        var $form = $("#feedback_form_" + session_id);
+                        var $topic_ids = $form.find("input[name='topic_ids']");
+                        var q = "";
+                        q = $(this).find("select.topics").children(":selected").attr("data-topic-id");
+                        $topic_ids.val(q);
+                        var comment = $form.find("textarea").val().trim();
+                        if (comment == "") {
+                            alert("Feedback cannot be empty");
+                            return false;
+                        }
+                        var stat = $(this).find('#status').val(),
+                            reasoncode = $('#reason_of_cancell').val();
+                        if (stat === 'Completed') {
+                            $(".reson").find('select').val("");
+                        }
+                        if (stat === 'Cancelled' || stat === 'Rescheduled') {
+                            if (!reasoncode) {
+                                r = $(diag);
+                                return false;
+                            }
+                        }
+                        var lesson_plan = '';
+                        if ($('.lesson_plan').is(":checked")) {
+                            lesson_plan = 'yes';
+                        } else {
+                            lesson_plan = 'no';
+                        }
+                        $.get("/save_offering/", {
+                            "topic_ids": $topic_ids.val(),
+                            "session_id": session_id,
+                            "status": $form.find("#status").val(),
+                            "reason": $(".reson").find("select").val(),
+                            "comment": $form.find("textarea").val().trim(),
+                            "sub_topic": $('.sub_topics').val(),
+                            'lesson_plan': lesson_plan
+                        }).done(function() {
+                            rating_close_status = true;
+                            get_rated();
+                            if ($form.find("#status").val() == "Cancelled" || $form.find("#status").val() == 'Offline') {
+                                $('#reason_of_cancell').val('')
+                                var r = confirm("Class details submitted successfully. Do you want to close this window? ");
+                                if (r == true) {
+                                    parent.$.fn.colorbox.close();
+                                }
+                            } else if ($form.find("#status").val() == "Completed" || $form.find("#status").val() == 'completed') {
+                                if (check_for_rate) {
+                                    msg = "Class details submitted successfully.Please give Session Rating. "
+                                } else {
+                                    msg = "Class details submitted successfully."
+                                }
+                                alert(msg);
+                                confirm_rating();
+                            }
+
+
+
+
+                            /* if(r==true){
+                           		rating_close_status = true;
+//                          		parent.$.fn.colorbox.close(); 
+                                if (offline_status==true){
+                                	parent.$.fn.colorbox.close();
+                                }else if (cancel_status==true){
+                                	parent.$.fn.colorbox.close();
+                                }
+                        	} 
+                           	else if (r==false){rating_close_status=false;} */
+                        });
+                    });
+
+
+                }); //end get feedback form
+
+
+            }); //end session corousal
+            $("#slider").find(".sli:first-of-type").click();
+
+        }).done(function() {
+            $("#datep").find("#loading").remove();
+            $("#datep").append("<p style='display:inline; color:yellow;font-weight:bold;' id='loaded'>&nbsp - &nbsp Loaded</p>")
+        }); //end get my class events
+
+
+    }
+
+    function getCookieValue(a) {
+        var b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+        return b ? b.pop() : '';
+    }
+</script>
+<script>
+    // Made for clear use not efficiency
+    const daysEl = document.getElementById("days");
+    const currentMonthEl = document.getElementById("current-month");
+    const countdownEl = document.getElementById("countdown");
+
+    var currentDate = new Date();
+    var selectedDate = new Date();
+    var selectedElement = document.getElementsByClassName("selected")[0];
+
+    // get the number of days in a month
+    function getDaysInMonth(year, month) {
+        return new Date(year, month + 1, 0).getDate();
+    }
+
+    // add all days in month as list elements in daysEl
+    function addDays() {
+        const daysInMonth = getDaysInMonth(
+            selectedDate.getFullYear(),
+            selectedDate.getMonth()
+        );
+        const d = new Date();
+
+        for (let i = 1; i <= daysInMonth; i++) {
+
+            const date = String(i).padStart(2, '0') + "/" + String(selectedDate.getMonth() + 1).padStart(2, '0') + "/" + selectedDate.getFullYear();
+            var dayEl = '<li id="day' + i + '" class="day" data-date="' + date + '">' + i + '<div id="dayspan' + i + '"></div></li>'
+            if (i == d.getDate() & d.getMonth() == selectedDate.getMonth() & d.getFullYear() == selectedDate.getFullYear()) {
+                dayEl = '<li id="day' + i + '" class="day circle today font-bold bg-blue-400" data-date="' + date + '">' + i + '<div id="dayspan' + i + '">0</div></li>'
+            }
+            $('#days').append(dayEl)
+
+        }
+    }
+
+    function displaySlots(sessionData) {
+        console.log(sessionData)
+        if (sessionData.length > 0) {
+            if (selectedDate.getMonth() != parseInt(sessionData[0]['mont'])) {
+                for (let index = 0; index < sessionData.length; index++) {
+                    const element = sessionData[index];
+                    let day_num = parseInt(element['day_num']);
+                    $('#day' + day_num).removeClass("circle").addClass('circle');
+                    let classes = parseInt($('#dayspan' + day_num).text());
+                    // if (classes) {
+                    //     classes = classes + 1
+                    // } else {
+                    //     classes = 1
+                    // }
+                    $('#dayspan' + day_num).text('+')
+
+                }
+            }
+        }
+    }
+
+
+    // clear days
+    function clearDays() {
+        while (daysEl.firstChild) {
+            daysEl.removeChild(daysEl.firstChild);
+        }
+    }
+
+    // set current month and year in currentMonthEl
+    function addMonth() {
+        currentMonthEl.textContent = `${selectedDate.toLocaleString("default", {
+    month: "long"
+  })} ${selectedDate.getFullYear()}`;
+    }
+
+    // select previous month
+    function selectPreviousMonth() {
+        if (selectedDate.getMonth() === 0) {
+            selectedDate.setFullYear(selectedDate.getFullYear() - 1);
+            selectedDate.setMonth(11);
+        } else {
+            selectedDate.setMonth(selectedDate.getMonth() - 1);
+        }
+        addMonth();
+        clearDays();
+        addDays();
+        getDataByMonth();
+    }
+
+    // select next month
+    function selectNextMonth() {
+        if (selectedDate.getMonth() === 11) {
+            selectedDate.setFullYear(selectedDate.getFullYear() + 1);
+            selectedDate.setMonth(0);
+        } else {
+            selectedDate.setMonth(selectedDate.getMonth() + 1);
+        }
+        addMonth();
+        clearDays();
+        addDays();
+        getDataByMonth();
+    }
+
+    function getDataByMonth() {
+        var dd = '01';
+        var mm = String(selectedDate.getMonth() + 1).padStart(2, '0');
+        var yyyy = selectedDate.getFullYear();
+        var today = dd + '/' + mm + '/' + yyyy;
+        $("#datepicker").val(today);
+        $(".sub").click();
+        console.log('----get date by month----', selectedDate)
+
+    }
+
+    // add event listeners on daysEl
+    daysEl.addEventListener("click", function(e) {
+        if (e.target.tagName === "LI") {
+            selectedDate.setDate(e.target.textContent);
+            selectedElement = e.target;
+            selectDate();
+        }
+    });
+
+    // add active class to selected date
+    function selectDate(e) {
+        const days = document.getElementsByClassName("day");
+        for (let i = 0; i < days.length; i++) {
+            days[i].classList.remove("active");
+        }
+        if (selectedElement) {
+            selectedElement.classList.add("active");
+            let date = selectedElement.dataset.date;
+            $("#datepicker").val(date);
+            console.log($("#datepicker").val())
+            $(".sub").click();
+        }
+        setCountdown();
+    }
+
+    // add countdown from now to selected date in countdownEl
+    function addCountdown() {
+        currentDate = new Date();
+        const diff = selectedDate - currentDate;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    // set countdown to run every second and update countdownEl if selected date is in the future
+    function setCountdown() {
+        setInterval(function() {
+            if (selectedDate > currentDate) {
+                addCountdown();
+            } else {
+                countdownEl.textContent = "Date is in the past";
+            }
+        }, 1000);
+    }
+
+    addMonth();
+    addDays();
+</script>
+
+</html>

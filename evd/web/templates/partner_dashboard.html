@@ -1,0 +1,47 @@
+
+
+
+{% extends "base.html" %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+
+   
+
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+
+
+
+
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+   
+    <iframe  style="width: 1300px;margin-left: -184px;" src="https://analytics.evidyaloka.org/kibana/app/kibana#/dashboard/6c8fbac0-8553-11ea-8386-fdeb838d2158?embed=true&_g=()&_a=(description:'',filters:!(),fullScreenMode:!f,options:(hidePanelTitles:!f,useMargins:!t),panels:!((embeddableConfig:(),gridData:(h:5,i:'3b8401e0-4a98-44b8-aa67-2084f2c6c1b4',w:48,x:0,y:0),id:'5bfbf480-8553-11ea-8386-fdeb838d2158',panelIndex:'3b8401e0-4a98-44b8-aa67-2084f2c6c1b4',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:7,i:'8f83b38d-bc47-4456-baeb-f0766e676ac5',w:11,x:0,y:5),id:af9e64a0-9053-11ea-8386-fdeb838d2158,panelIndex:'8f83b38d-bc47-4456-baeb-f0766e676ac5',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:9,i:'322f2a8f-dfb5-4c30-928c-1d46f67e5b9e',w:48,x:0,y:12),id:'5c8f21e0-8555-11ea-8386-fdeb838d2158',panelIndex:'322f2a8f-dfb5-4c30-928c-1d46f67e5b9e',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:16,i:'8c12d0cd-3735-48cd-8415-879db10ca08b',w:48,x:0,y:21),id:'7dac0a90-8556-11ea-8386-fdeb838d2158',panelIndex:'8c12d0cd-3735-48cd-8415-879db10ca08b',type:visualization,version:'7.5.0')),query:(language:kuery,query:''),timeRestore:!f,title:KPI09-Dashboard,viewMode:view)" height="600" width="800"></iframe>
+		
+{% endblock %}
+
+
+{% block bottom_scripts %}
+    {{ block.super }}
+
+    <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+
+
+<!--    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"/>-->
+<!--    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"/>
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<!--    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
+
+
+
+
+
+
+{% endblock %}

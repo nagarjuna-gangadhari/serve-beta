@@ -1,0 +1,1101 @@
+{% extends "base_generic.html" %} {% load filters %} {% block title %}NSIC | eVidyaloka{% endblock %}
+
+
+{% block primary_meta %}
+<meta name="title" content="National Student Innovation Challenge - Season 6">
+<meta name="description"
+    content="NASIC is a online pan India contest, with aim to nurture the talent of the students of grades 6,7 & 8">
+{% endblock %}
+
+{% block og_meta %}
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.evidyaloka.org/nsic">
+<meta property="og:title" content="National Student Innovation Challenge - Season 6">
+<meta property="og:description"
+    content="NASIC is a online pan India contest, with aim to nurture the talent of the students of grades 6,7 & 8">
+<meta property="og:image" content="/static/images_rubaru/nsic/Process_2.jpg">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://www.evidyaloka.org/nsic">
+<meta property="twitter:title" content="National Student Innovation Challenge - Season 6">
+<meta property="twitter:description"
+    content="NASIC is a online pan India contest, with aim to nurture the talent of the students of grades 6,7 & 8">
+<meta property="twitter:image" content="/static/images_rubaru/nsic/Process_2.jpg">
+
+{% endblock %}
+
+{% block head %}
+
+<link rel="stylesheet" href="/static/css/owl_carousel/owl.carousel.css">
+<link rel="stylesheet" href="/static/css/owl_carousel/owl.theme.default.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Eczar&display=swap" rel="stylesheet">
+<style>
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    .dropdown:hover .dropdown-menu {
+        display: block;
+    }
+
+    .hide_on_mobile {
+        display: block;
+    }
+</style>
+<style>
+    @media screen and (max-width: 660px) {
+        .unhide {
+            display: none;
+        }
+
+        .hide_on_mobile {
+            display: none
+        }
+    }
+
+    .scroll-left {
+        height: 50px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .scroll-left p {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        line-height: 50px;
+        text-align: center;
+        /* Starting position */
+        -moz-transform: translateX(100%);
+        -webkit-transform: translateX(100%);
+        transform: translateX(100%);
+        /* Apply animation to this element */
+        -moz-animation: scroll-left 30s linear infinite;
+        -webkit-animation: scroll-left 30s linear infinite;
+        animation: scroll-left 20s linear infinite;
+    }
+
+    /* Move it (define the animation) */
+
+    @-moz-keyframes scroll-left {
+        0% {
+            -moz-transform: translateX(100%);
+        }
+
+        100% {
+            -moz-transform: translateX(-100%);
+        }
+    }
+
+    @-webkit-keyframes scroll-left {
+        0% {
+            -webkit-transform: translateX(100%);
+        }
+
+        100% {
+            -webkit-transform: translateX(-100%);
+        }
+    }
+
+    @keyframes scroll-left {
+        0% {
+            -moz-transform: translateX(100%);
+            /* Browser bug fix */
+            -webkit-transform: translateX(100%);
+            /* Browser bug fix */
+            transform: translateX(100%);
+        }
+
+        100% {
+            -moz-transform: translateX(-100%);
+            /* Browser bug fix */
+            -webkit-transform: translateX(-100%);
+            /* Browser bug fix */
+            transform: translateX(-100%);
+        }
+    }
+</style>
+
+{% endblock %}
+
+{% block body %}
+
+
+<nav id="header" class="w-full border-b-2 bg-gray-50 border-gray-300">
+    <div class="w-full mx-auto flex flex-wrap items-center justify-between md:justify-between">
+        <div class="w-full flex-grow p-2 lg:flex justify-center  lg:w-auto hidden lg:block mt-4 lg:mt-0 bg-gray-50  md:bg-transparent"
+            id="nav-content">
+            <ul class="list-reset lg:flex  flex-1 items-center justify-center space-3 space-y-2">
+                <li>
+                    <div class="container">
+                        <div class="dropdown relative inline-flex cursor-pointer">
+                            <div class="flex items-center space-x-1 px-4 rounded text-red-200  items-center">
+                                <p class="text-gray-800 font-bold">Mentors Orientation</p> <i
+                                    class="fas fa-sort-down"></i>
+                            </div>
+                            <div class="dropdown-menu flex flex-col hidden absolute top-6 left-10">
+                                <div
+                                    class="rounded flex flex-col flex-grow bg-red-200 divide-y divide-gray-800 border text-xs">
+                                    <div class="dropdown-item flex">
+                                        <a class="hover:border-b-2 hover:border-t-2 hover:border-yellow-300 hover:text-underline py-2 px-4 font-bold"
+                                            href="https://drive.google.com/file/d/1Nxg6FvR5uiHphCGUykmbX_5L0BA3bz9l/view"
+                                            target="_blank">eVidyaloka Mentors (Rural) <i
+                                                class="fas fa-external-link-alt"></i></a>
+                                    </div>
+                                    <div class="dropdown-item flex">
+                                        <a class="hover:border-b-2 hover:border-t-2 hover:border-yellow-300 hover:text-underline py-2 px-4 font-bold"
+                                            href="https://drive.google.com/file/d/1t8W_McUz8mIQPjwFgTPEdlI-Y_mLROfH/view"
+                                            target="_blank">Non eVidyaloka Mentors (Urban) <i
+                                                class="fas fa-external-link-alt"></i></a>
+                                    </div>
+                                    <div class="dropdown-item flex">
+                                        <a class="hover:border-b-2 hover:border-t-2 hover:border-yellow-300 hover:text-underline py-2 px-4 font-bold"
+                                            href="https://drive.google.com/file/d/137UYiqbJXByjcpFN0gf2IMdBfgk36rdo/view?usp=sharing"
+                                            target="_blank">Process of submission <i
+                                                class="fas fa-external-link-alt"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="container">
+                        <div class="dropdown relative inline-flex cursor-pointer">
+                            <div
+                                class="dropdown-text flex items-center space-x-1 px-4 rounded text-blue-200  items-center">
+                                <p class="text-gray-800 font-bold">Orientation for eV students</p> <i
+                                    class="fas fa-sort-down"></i>
+                            </div>
+                            <div class="dropdown-menu flex flex-col hidden absolute top-6 left-10">
+                                <div
+                                    class="rounded flex flex-col flex-grow bg-blue-200 divide-y divide-gray-800 border text-xs">
+                                    <div class="dropdown-item flex">
+                                        <a class="hover:border-b-2 hover:border-t-2 hover:border-yellow-300 hover:text-underline py-2 px-4 font-bold"
+                                            href="" target="_blank">Hindi <i class="fas fa-external-link-alt"></i></a>
+                                    </div>
+                                    <div class="dropdown-item flex">
+                                        <a class="hover:border-b-2 hover:border-t-2 hover:border-yellow-300 hover:text-underline py-2 px-4 font-bold"
+                                            href="https://drive.google.com/file/d/17GnR_ay-21sRqW05JQPWdIl8z5UfB6hq/view"
+                                            target="_blank">Tamil <i class="fas fa-external-link-alt"></i></a>
+                                    </div>
+                                    <div class="dropdown-item flex">
+                                        <a class="hover:border-b-2 hover:border-t-2 hover:border-yellow-300 hover:text-underline py-2 px-4 font-bold"
+                                            href="https://drive.google.com/file/d/1tdhbb8--GXz-5Au0onHiJZK8qAeIrq6c/view"
+                                            target="_blank">Kannada <i class="fas fa-external-link-alt"></i></a>
+                                    </div>
+                                    <div class="dropdown-item flex">
+                                        <a class="hover:border-b-2 hover:border-t-2 hover:border-yellow-300 hover:text-underline py-2 px-4 font-bold"
+                                            href="https://drive.google.com/file/d/1Di2VVeRJXXOdBU9jxLJRnRrh_fIF-Ks1/view?usp=sharing"
+                                            target="_blank">Telugu <i class="fas fa-external-link-alt"></i></a>
+                                    </div>
+                                    <div class="dropdown-item flex">
+                                        <a class="hover:border-b-2 hover:border-t-2 hover:border-yellow-300 hover:text-underline py-2 px-4 font-bold"
+                                            href="https://drive.google.com/file/d/198jP3XweG0KyHHgx1QdvZGy7vhzwDzWg/view"
+                                            target="_blank">Marathi <i class="fas fa-external-link-alt"></i></a>
+                                    </div>
+                                    <div class="dropdown-item flex">
+                                        <a class="hover:border-b-2 hover:border-t-2 hover:border-yellow-300 hover:text-underline py-2 px-4 font-bold"
+                                            href="" target="_blank">Bengali <i class="fas fa-external-link-alt"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="container">
+                        <div class="dropdown relative inline-flex cursor-pointer">
+                            <div
+                                class="dropdown-text flex items-center space-x-1 px-4 rounded text-red-200  items-center">
+                                <p class="text-gray-800 font-bold">Previous winners and runners projects</p> <i
+                                    class="fas fa-sort-down"></i>
+                            </div>
+                            <div class="dropdown-menu flex flex-col hidden absolute top-6 left-10">
+                                <div
+                                    class="rounded flex flex-col flex-grow bg-red-200 divide-y divide-gray-800 border text-xs">
+                                    <div class="dropdown-item flex">
+                                        <a class="hover:border-b-2 hover:border-t-2 hover:border-yellow-300 hover:text-underline py-2 px-4 font-bold"
+                                            href="https://drive.google.com/drive/folders/1-SG6tS5AVdNmbe5SA3w-AZ6NCExQX-Be?usp=sharing"
+                                            target="_blank">NSIC - 2020 <i class="fas fa-external-link-alt"></i></a>
+                                    </div>
+                                    <div class="dropdown-item flex">
+                                        <a class="hover:border-b-2 hover:border-t-2 hover:border-yellow-300 hover:text-underline py-2 px-4 font-bold"
+                                            href="https://drive.google.com/drive/folders/1n19Gp8eR96204sbVllppx3l6vQYGwOyl?usp=sharing"
+                                            target="_blank">NSIC - 2021 <i class="fas fa-external-link-alt"></i></a>
+                                    </div>
+                                    <div class="dropdown-item flex">
+                                        <a class="hover:border-b-2 hover:border-t-2 hover:border-yellow-300 hover:text-underline py-2 px-4 font-bold"
+                                            href="https://drive.google.com/drive/folders/1ZFgS9QwsGBZOW8RP8OsquR9f0-X1JkCL?usp=sharing"
+                                            target="_blank">NSIC - 2022 <i class="fas fa-external-link-alt"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<section class="w-full bg-gradient-to-b from-gray-100 to-gray-200">
+    <h2 class="text-2xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-pink-400 to-red-500 font-extrabold text-center md:py-10 py-4  leading-normal title-font"
+        style="font-family: 'Eczar', serif;">National Student Innovation Challenge - Season 6</h2>
+    <!-- component -->
+    <div class="md:flex">
+        <div class="w-full md:w-full h-full md:px-96">
+            <a href="https://forms.gle/4GenTxABALTTkyPT9" target="_blank"><img class="w-full h-full"
+                    src="/static/nsic_22/nsic_2022.png" alt="" srcset=""></a>
+        </div>
+        <!-- <div class="w-full md:w-1/2 h-full md:px-28 md:border-l-2 md:border-black">
+                <img class="w-full h-full" src="/static/nsic_21/flyer_1.png" alt="" srcset="">
+            </div> -->
+
+    </div>
+
+    <div class="flex flex-col md:px-20 py-4 md:pt-12">
+        <div class="scroll-left w-full h-14">
+            <p class="font-bold text-4xl text-red-500"><i class="fa-solid fa-plane rotate-180"></i>--[ Urban registrations for NSIC further extended until 30th September 2022. ]</p>
+        </div>
+
+        <div class="w-full md:h-32 md:px-48 flex flex-col md:flex-row justify-around items-center space-y-4">
+            <!--<a href="https://docs.google.com/presentation/d/1CBYrYT00amRAc8k29mzQsznUk71I6n75/edit?usp=sharing&ouid=113236422848431478182&rtpof=true&sd=true" title="drive link" class="tracking-wide font-bold rounded hover:text-white bg-yellow-500 shadow-md py-4 px-2 inline-flex items-center transition duration-500"
+                target="_blank">
+                <span class="mx-auto text-sm text-center">Click here to Know more about NSIC</span>
+            </a>
+            <a href="https://drive.google.com/file/d/137UYiqbJXByjcpFN0gf2IMdBfgk36rdo/view?usp=sharing" title="drive link" class="tracking-wide font-bold rounded hover:text-white bg-green-500 shadow-md py-4 px-2 inline-flex items-center transition duration-500"
+                target="_blank">
+                <span class="mx-auto text-sm text-center">Click here to know about the Process of Submission</span>
+            </a>
+            <a href="https://forms.gle/PfYDGt88wScWNWnn6" title="google form" class="tracking-wide font-bold rounded hover:text-white bg-red-500 shadow-md py-4 px-2 inline-flex items-center transition duration-500" target="_blank">
+                <span class="mx-auto text-sm text-center">Click here for final submission</span>
+            </a> -->
+
+
+
+            <!-- <a href="https://forms.gle/4GenTxABALTTkyPT9"
+                class="tracking-wide font-bold rounded hover:text-white bg-green-500 shadow-md py-4 px-2 inline-flex items-center transition duration-500"
+                target="_blank">
+                <span class="mx-auto text-sm text-center">eVidyaloka School Teams</span>
+            </a> -->
+            <a href="https://forms.gle/GZJ8SuF4EDDTv7mEA" title="google form"
+                class="tracking-wide font-bold rounded hover:text-white bg-violet-700 shadow-md py-4 px-12 inline-flex items-center transition duration-500"
+                target="_blank">
+                <span class="mx-auto text-sm text-center">Urban Schools</span>
+            </a>
+        </div>
+        <div class="flex flex-col items-center justify-center space-y-2 py-2">
+            <div class="font-bold text-2xl">Apply here to be an intern at NSIC-eVidyaloka</div>
+            <div class="pl-80">
+                <ul class="list-disc">
+                    <li>Eligibility: High School students.</li>
+                    <li>Opportunity to develop soft skills and an exposure to work in close association with the
+                        children in
+                        remote districts.</li>
+                </ul>
+            </div>
+            <a href="https://forms.gle/rEb87DmRLK4D8Vg7A" title="google form"
+                class="tracking-wide font-bold rounded text-white bg-pink-700 w-96 hover:bg-pink-800 shadow-md py-4 px-2 inline-flex items-center transition duration-500"
+                target="_blank">
+                <span class="mx-auto text-sm text-center">Register</span>
+            </a>
+        </div>
+
+        <!-- <div class="h-20 md:h-14 lg:h-2 mt-12 w-full md:my-4">
+            <p class="text-4xl text-red-500 font-bold text-center">Final Results</p>
+        </div> -->
+
+    </div>
+</section>
+<section class="bg-gray-200 md:p-2 xl:p-10">
+    <div class="text-center font-bold text-3xl pb-4 text-purple-500">Season 5 Winners</div>
+    <div id="finalteamBody" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+    </div>
+    <div class="text-center font-bold text-3xl py-4 text-purple-500">People's Choice Award</div>
+    <div class="grid grid-cols-1 lg:grid-cols-1 lg:px-64">
+        <div class="bg-gray-300 shadow-xl rounded-lg text-center space-y-1 py-4">
+            <div class="font-bold text-lg uppercase">GunaDhari GayaPriya6</div>
+            <div>Kasturba Gandhi Balika Vidyalaya, Bengabad - Jharkhand</div>
+            <div class="border-b lg:mx-10">Ms. Priyanka Kumari Singh and Ms. Gayatri Kumari Mandal</div>
+            <div>Nathamangudi - Tamil Nadu</div>
+            <div class="border-b lg:mx-10">R Gunasundari and Dharini M</div>
+            <div class="text-lg">Anjana Sharda and Suguna Mohan</div>
+        </div>
+    </div>
+
+    <div class="flex justify-center items-start space-x-2 md:space-x-20 py-10">
+        <div>
+            <div class="font-bold text-3xl text-green-600">Abdul Kalam Award</div>
+            <ul class="list-disc pl-6">
+                <li>S A Pradeep</li>
+                <li>M Deepak</li>
+                <li>Mallika Mahato</li>
+                <li>Subrata Mahato</li>
+            </ul>
+        </div>
+        <div>
+            <div class="font-bold text-3xl text-green-600">Best Intern Award</div>
+            <ul class="list-disc pl-6">
+                <li>Avnish Chate</li>
+                <li>Nandini Prakash</li>
+            </ul>
+        </div>
+    </div>
+</section>
+<!-- <section tabindex="-1" class="bg-gray-200 relative mx-auto px-4 focus:outline-none sm:px-3 md:px-5">
+    <div id="table_content" class="max-h-[23rem] overflow-hidden">
+        <div class="flex flex-col justify-center items-center w-full">
+            <div class="w-full text-center font-bold text-2xl text-green-600 py-4">Shortlisted Teams for NSIC Season 5 - Phase 1</div>
+            <div class="w-full lg:w-3/4  rounded-lg text-center">
+                <div class="border-b bg-gray-800 text-base font-bold text-white w-full flex">
+                    <div class="md:px-2 py-2 w-0 md:w-1/5 unhide">#</div>
+                    <div class="md:px-2 py-2 w-1/2 md:w-2/5">Team Name</div>
+                    <div class="md:px-2 py-2 w-1/2 md:w-2/5">Mentor</div>
+                </div>
+                <div id="teamTableBody" class="bg-gray-100 text-xs md:text-sm text-gray-900 font-medium w-full"></div>
+            </div>
+        </div>
+    </div>
+    <div id="table_btn_div" class="inset-x-0 bottom-0 flex justify-center bg-gradient-to-t from-gray-200 pt-32 pb-8 pointer-events-none dark:from-slate-900 absolute">
+        <button onclick="expandTleab()" type="button" class="relative bg-slate-900 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 text-sm text-white font-semibold h-12 px-6 rounded-lg flex items-center dark:bg-slate-700 dark:hover:bg-slate-600 pointer-events-auto">Show more...</button>
+    </div>
+</section> -->
+
+
+
+<!-- juri -->
+
+
+<div class="w-full bg-gradient-to-b from-gray-200 to-gray-400 px-10 pt-20">
+    <h2
+        class="text-center font-bold lg:font-extrabold text-2xl lg:text-4xl lg:leading-snug text-gray-900 dark:text-white lg:text-center 2xl:px-48 pb-6">
+        Jury Panel - NSIC Phase 1</h2>
+    <div class="container mx-auto">
+        <div role="list" aria-label="Behind the scenes People "
+            class="lg:flex md:flex sm:flex items-center xl:justify-between flex-wrap md:justify-around sm:justify-around lg:justify-around">
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Kalyansundar.jpeg" alt="Display Picture of Andres Berlin"
+                                role="img" class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Mr. Kalyansundar</h1>
+                        <p class="text-gray-800 text-sm text-center">ex. GM of Bank of India</p>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Jijil.jpeg" alt="Display Picture of Andres Berlin" role="img"
+                                class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Jijil</h1>
+                        <p class="text-gray-800 text-sm text-center">Leading faculty member , Princeton Review</p>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Chitra.jpeg" alt="Display Picture of Andres Berlin"
+                                role="img" class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Chitra Ravichandran</h1>
+                        <p class="text-gray-800 text-sm text-center">Teacher & Coordinator with Rehabilitation wing of
+                            Vidya Sagar</p>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Stella.jpeg" alt="Display Picture of Andres Berlin"
+                                role="img" class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Dr. Marie Stella</h1>
+                        <p class="text-gray-800 text-sm text-center">Founder and Director of Kalai Aalayam</p>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Siddharth.jpeg" alt="Display Picture of Andres Berlin"
+                                role="img" class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Siddharth</h1>
+                        <p class="text-gray-800 text-sm text-center">Undergrad Student at the University of Birmingham,
+                            United Kingdom</p>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-0 sm:mb-0 xl:max-w-sm lg:w-2/5">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="w-full bg-gradient-to-b from-gray-400 to-gray-600 px-10 pt-20">
+    <h2
+        class="text-center font-bold lg:font-extrabold text-2xl lg:text-4xl lg:leading-snug text-gray-900 dark:text-white lg:text-center 2xl:px-48 pb-6">
+        Jury Panel - NSIC Phase 2</h2>
+    <div class="container mx-auto">
+        <div role="list" aria-label="Behind the scenes People "
+            class="lg:flex md:flex sm:flex items-center xl:justify-between flex-wrap md:justify-around sm:justify-around lg:justify-around">
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Kirti_Johri.jpg" alt="Display Picture of Andres Berlin"
+                                role="img" class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Kirti Johri</h1>
+                        <p class="text-gray-800 text-sm text-center">Specialist - CSR & Sustainability, CSUS , LTI</p>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Komal_Machindar.jpeg" alt="Display Picture of Andres Berlin"
+                                role="img" class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Komal Machindar</h1>
+                        <p class="text-gray-800 text-sm text-center">Associate Vice President, GE, LTI</p>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Raghuram_Konanur.jpg" alt="Display Picture of Andres Berlin"
+                                role="img" class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Raghuram Konanur</h1>
+                        <p class="text-gray-800 text-sm text-center">Associate Vice President, CDDM, LTI</p>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Merin_Jose.jpg" alt="Display Picture of Andres Berlin"
+                                role="img" class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Merin Jose</h1>
+                        <p class="text-gray-800 text-sm text-center">Senior Specialist - Software Engineering, DN, LTI
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Chandra.jpg" alt="Display Picture of Andres Berlin"
+                                role="img" class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Chandra Srikrishnan</h1>
+                        <p class="text-gray-800 text-sm text-center">Senior Specialist - Program Management Office, C3,
+                            LTI</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/VijayAnand_Ramamoorthi.jpg"
+                                alt="Display Picture of Andres Berlin" role="img"
+                                class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">VijayAnand Ramamoorthi</h1>
+                        <p class="text-gray-800 text-sm text-center">Director - Projects, B1, LTI</p>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Mandar_Edlabadkar.jpg" alt="Display Picture of Andres Berlin"
+                                role="img" class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Mandar Edlabadkar</h1>
+                        <p class="text-gray-800 text-sm text-center">Associate Director - Projects, DN, LTI</p>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Sridharan_Krithivasan.jpg"
+                                alt="Display Picture of Andres Berlin" role="img"
+                                class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Sridharan Krithivasan</h1>
+                        <p class="text-gray-800 text-sm text-center">Principal Consultant, B1, LTI</p>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Sanjay_Dange.jpg" alt="Display Picture of Andres Berlin"
+                                role="img" class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Sanjay Dange</h1>
+                        <p class="text-gray-800 text-sm text-center">Associate Director - Projects, B1, LTI</p>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Sarika_Potnis.jpg" alt="Display Picture of Andres Berlin"
+                                role="img" class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Sarika Potnis</h1>
+                        <p class="text-gray-800 text-sm text-center">Senior Manager - Projects, B1, LTI</p>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Satinder_Juneja.jpg" alt="Display Picture of Andres Berlin"
+                                role="img" class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Satinder Juneja</h1>
+                        <p class="text-gray-800 text-sm text-center">Associate Vice President - Marketing, LTI</p>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
+                <div class="rounded overflow-hidden shadow-md bg-white">
+                    <div class="absolute -mt-20 w-full flex justify-center">
+                        <div class="h-32 w-32">
+                            <img src="/static/nsic_21/juri/Shivam_Shukla.jpg" alt="Display Picture of Andres Berlin"
+                                role="img" class="rounded-full object-cover h-full w-full shadow-md" />
+                        </div>
+                    </div>
+                    <div class="px-6 py-2 mt-16">
+                        <h1 class="font-bold text-3xl text-center mb-1">Shivam Shukla</h1>
+                        <p class="text-gray-800 text-sm text-center">Associate Director - Facilities & Administration,
+                            GA, LTI</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- faq -->
+<section class="bg-gradient-to-b from-gray-600 to-green-800">
+    <div class="container px-1 md:px-5 py-2 md:py-24 mx-auto justify-center">
+        <div class="text-center mb-20">
+            <h1 class="sm:text-3xl text-2xl font-medium text-center title-font text-white mb-4">
+                Frequently Asked Question
+            </h1>
+            <p class="text-base  text-white leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto">
+                The most common questions about how NSIC works and what can do for you.
+            </p>
+        </div>
+        <div class="flex justify-between lg:w-full flex-col md:flex-row  sm:mb-2">
+            <div class="w-full md:w-1/2 px-1 md:px-8 py-2">
+                <details class="mb-4">
+                    <summary class="font-semibold  bg-gray-200 rounded-md py-2 px-4 cursor-pointer">Who can register as
+                        participants ?</summary>
+                    <span class="text-white">Children from grades 6, 7, and 8 can register.</span>
+                </details>
+                <details class="mb-4">
+                    <summary class="font-semibold  bg-gray-200 rounded-md py-2 px-4 cursor-pointer">What is the
+                        eligibility ?</summary>
+                    <span class="text-white">Interest in community service, an aptitude to solve problems, with internet
+                        connectivity and a device to operate.</span>
+                </details>
+                <details class="mb-4">
+                    <summary class="font-semibold  bg-gray-200 rounded-md py-2 px-4 cursor-pointer">Who can be an intern
+                        ?</summary>
+                    <span class="text-white"> High school students of class 11 and 12 looking to develop leadership and
+                        management skills.
+                        They would get an internship certificate from evidyaloka after the successful completion of the
+                        program.
+                    </span>
+                </details>
+                <details class="mb-4">
+                    <summary class="font-semibold  bg-gray-200 rounded-md py-2 px-4 cursor-pointer">Who can be a mentor
+                        ?</summary>
+                    <span class="text-white"> An adult with a community development orientation and a passion to work
+                        with children for a cause.</span>
+                </details>
+                <details class="mb-4">
+                    <summary class="font-semibold  bg-gray-200 rounded-md py-2 px-4 cursor-pointer">What is the time
+                        duration of the program ?</summary>
+                    <span class="text-white">12 - 15 weeks</span>
+                </details>
+                <details class="mb-4">
+                    <summary class="font-semibold  bg-gray-200 rounded-md py-2 px-4 cursor-pointer">Is there a seperate
+                        registrations for the mentor ?</summary>
+                    <span class="text-white">No, the mentors would be approached by the participants. The details would
+                        be added in the registration form.</span>
+                </details>
+                <details class="mb-4">
+                    <summary class="font-semibold  bg-gray-200 rounded-md py-2 px-4 cursor-pointer">How should the final
+                        report be submitted ?</summary>
+                    <span class="text-white">The final report could be a simple document along with videos/audios,
+                        pictures of all your efforts. Could be presented as a combination of English and regional
+                        languages.</span>
+                </details>
+                <details class="mb-4">
+                    <summary class="font-semibold  bg-gray-200 rounded-md py-2 px-4 cursor-pointer">What would be the
+                        criteria for evaluation of the contest ?</summary>
+                    <span class="text-white">
+                        <ul>
+                            <li>A. Orginatlity of thoughts of the children, </li>
+                            <li>B. Creativity, correctness and depth of the details provided,</li>
+                            <li>C. Alignment to the problem statement,</li>
+                            <li>D. Participation level of the team as a whole and</li>
+                            <li>E. Adhering to the timeliness of submission.</li>
+                            <li>Publishing and sharing photos and videos of the team connect will add boost to the
+                                process.</li>
+                        </ul>
+                    </span>
+                </details>
+            </div>
+            <div class="w-full md:w-1/2 md:px-8 md:py-2">
+                <details class="mb-4">
+                    <summary class="font-semibold  bg-gray-200 rounded-md py-2 px-4 cursor-pointer">What is the team
+                        composition ?</summary>
+                    <span class="text-white">2 children + 1 mentor per team</span>
+                </details>
+                <details class="mb-4">
+                    <summary class="font-semibold  bg-gray-200 rounded-md py-2 px-4 cursor-pointer">What would be the
+                        topics to work on ?</summary>
+                    <span class="text-white">UN Sustainable Development Goals/ UN Millennium Development Goals. The
+                        problem statement would be provided by the core team at the beginning of the program.</span>
+                </details>
+                <details class="mb-4">
+                    <summary class="font-semibold  bg-gray-200 rounded-md py-2 px-4 cursor-pointer">
+                        How will the participants of the team communicate with each other ?
+                    </summary>
+
+                    <span class="text-white">Virtual Communication. Skype/Whatsapp/Google meet applications could be
+                        used.</span>
+                </details>
+                <details class="mb-4">
+                    <summary class="font-semibold  bg-gray-200 rounded-md py-2 px-4 cursor-pointer">
+                        What is the role of the mentor ?
+                    </summary>
+                    <span class="text-white">The role of the mentor is to guide and support the team towards achieving a
+                        solution to the socio economic problem. It is important to note that the ideas and creativity
+                        should be originating from the children, while the mentor should be only directing them towards
+                        the solution.</span>
+                </details>
+                <details class="mb-4">
+                    <summary class="font-semibold  bg-gray-200 rounded-md py-2 px-4 cursor-pointer">What is the role of
+                        the intern ?</summary>
+                    <span class="text-white">The intern would be coordinating with the mentors for the progress of the
+                        respective teams and help them bridge the gap between students and mentors , also fecilitate in
+                        the smooth conduction of the overall program.</span>
+                </details>
+                <details class="mb-4">
+                    <summary class="font-semibold  bg-gray-200 rounded-md py-2 px-4 cursor-pointer">What are the steps
+                        to the entire program ?</summary>
+                    <span class="text-white">
+                        <ul>
+                            <li>STEP 1. Register for the program using the respective links</li>
+                            <li>STEP 2. Await for the problem statements to be assigned to your team</li>
+                            <li>STEP 3. Start working on your solution through reading, collecting data and analysis.
+                            </li>
+                            <li>STEP 4. Create a final compact report, including vedios and photographs to explain your
+                                solution. </li>
+                            <li>STEP 5. Await further instructions from the core team for final vedio presentation
+                                details (size, time, etc)</li>
+                        </ul>
+                    </span>
+                </details>
+                <details class="mb-4">
+                    <summary class="font-semibold  bg-gray-200 rounded-md py-2 px-4 cursor-pointer">Can we seek the
+                        references and data from the internet and related web sites ?</summary>
+                    <span class="text-white">
+                        google and internet webistes are to be used only as references. Plagiarism will strictly not be
+                        entertained and such teams would be eliminated from the program.
+                    </span>
+                </details>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="py-8 bg-green-800">
+    <div class="bg-green-800 w-full md:h-screen">
+        <div class="text-center text-white text-3xl font-bold pb-12">NSIC Process</div>
+        <div class="w-full py-12 flex justify-center items-center" style="height: 30rem;">
+            <div class="cr owl-carousel owl-theme">
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Process_1.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Process_2.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Process_3.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Process_4.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Process_5.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Process_6.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Process_7.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Process_8.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Process_9.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Process_10.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Process_11.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Process_12.jpg)"></div>
+            </div>
+        </div>
+    </div>
+    <div class="bg-green-800 w-full md:h-screen">
+        <div class="text-center  text-white text-3xl font-bold py-12">NSIC Awards</div>
+        <div class="w-full py-12 flex justify-center items-center" style="height: 30rem;">
+            <div class="cr owl-carousel owl-theme">
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Awards_11.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Awards_10.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Awards_1.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Awards_2.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Awards_3.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Awards_4.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Awards_5.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Awards_6.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Awards_7.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Awards_8.jpg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/Awards_9.jpg)"></div>
+            </div>
+        </div>
+    </div>
+    <div class="bg-green-800 w-full md:h-screen">
+        <div class="text-center text-white text-3xl font-bold py-12">NSIC Recognition</div>
+        <div class="w-full py-12 flex justify-center items-center" style="height: 30rem;">
+            <div class="cr owl-carousel owl-theme">
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/recognition_2.jpeg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/recognition_3.jpeg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/recognition_4.jpeg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/recognition_5.jpeg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/recognition_6.jpeg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/recognition_7.jpeg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/recognition_8.jpeg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/recognition_9.jpeg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/recognition_10.jpeg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/recognition_11.jpeg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/recognition_13.jpeg)"></div>
+                <div class="item w-full bg-center bg-cover object-fill"
+                    style="height: 30rem; background-image: url(/static/images_rubaru/nsic/recognition_14.jpeg)"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="h-92 py-24 w-full bg-green-800">
+    <div class=" flex  flex-col  md:flex-row justify-around space-y-2">
+        <div class="">
+            <div
+                class="bg-white shadow-lg md:w-80  mx-auto border-b-4 border-indigo-500 rounded-2xl overflow-hidden  hover:shadow-2xl transition duration-500 transform hover:scale-105 cursor-pointer">
+                <div class="bg-indigo-500  flex h-10 justify-center items-center">
+                    <p class="text-white text-center">Powered by LTI</p>
+                </div>
+                <img class="w-full h-62" src="/static/nsic_21/lti_logo.png" alt="" srcset="">
+            </div>
+        </div>
+        <div class=" ">
+            <div
+                class="bg-white max-w-sm shadow-lg mx-auto border-b-4 border-indigo-500 rounded-2xl overflow-hidden hover:shadow-2xl transition duration-500 transform hover:scale-105 cursor-pointer ">
+                <div class="bg-indigo-500 flex h-10 justify-center items-center ">
+                    <p class="text-white text-center ">UNSDGs</p>
+                </div>
+                <img class="w-full h-62 " src="/static/nsic_21/sdgs2.png " alt=" " srcset=" ">
+            </div>
+        </div>
+        <!-- <div class="">
+            <div class="bg-white max-w-sm shadow-lg   mx-auto border-b-4 border-indigo-500 rounded-2xl overflow-hidden  hover:shadow-2xl transition duration-500 transform hover:scale-105 cursor-pointer">
+                <div class="bg-indigo-500  flex h-10 justify-center items-center">
+                    <p class="md:px-4 text-white text-center ">evidyaloka in partnership with 1Step</p>
+                </div>
+                <img class="w-full h-62 " src="/static/nsic_21/1step_logo.png " alt=" " srcset=" ">
+            </div>
+        </div> -->
+
+
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="/static/js/owl_carousel/owl.carousel.js"></script>
+<script>
+    function expandTleab() {
+        document.getElementById("table_content").classList.toggle("max-h-[23rem]");
+        document.getElementById("table_btn_div").classList.toggle("hidden");
+    }
+
+
+
+    var h = document.documentElement,
+        b = document.body,
+        st = 'scrollTop',
+        sh = 'scrollHeight',
+        progress = document.querySelector('#progress'),
+        scroll;
+    var scrollpos = window.scrollY;
+    var header = document.getElementById("header");
+    var navcontent = document.getElementById("nav-content");
+
+
+    $('.cr').owlCarousel({
+        loop: true,
+        margin: 10,
+        autoplay: true,
+        autoplayTimeout: 3000,
+        responsive: {
+            0: {
+                items: 1
+            },
+            600: {
+                items: 1
+            },
+            1000: {
+                items: 1
+            }
+        }
+    })
+</script>
+
+<script>
+    var finalTeam = [{
+        "Team Name": "Four Corners",
+        "Student 1": "NAZIYA HAMID SHAIKH",
+        "Student 2": "VAISHNAVI VILAS KAVDE",
+        "State": "Maharashtra",
+        "School 1": "Z P GHOSPURI SCHOOL, GHOSPURI, AHMEDNAGAR",
+        "Student 3": "Kavyashree Madiwalar",
+        "Student 4": "Pooja Hanamor",
+        "State__1": "Karnataka",
+        "School 2": "Mugad Vajra",
+        "Mentor 1": "Pawan Sarda",
+        "Mentor 2": "Sowmya P"
+    }, {
+        "Team Name": "GRAMIN TECHNO STARS",
+        "Student 1": "GOPAL MANE",
+        "Student 2": "SIMRAN SHAIKH",
+        "State": "Maharashtra",
+        "School 1": "BABURDI GHUMAT",
+        "Student 3": "Chhoti Kumari",
+        "Student 4": "Rohan Lakra",
+        "State__1": "Jharkhand",
+        "School 2": "Chachgura",
+        "Mentor 1": "Sameer Apte",
+        "Mentor 2": "Mariam Sultana"
+    }, {
+        "Team Name": "Dazzling Risers",
+        "Student 1": "Kanika Jeena",
+        "Student 2": "Payal Negi",
+        "State": "Uttarakhand",
+        "School 1": "Devdwar",
+        "Student 3": "V. Rajakumari",
+        "Student 4": "S Nivetha",
+        "State__1": "Tamil Nadu",
+        "School 2": "PUMS Konamangalam",
+        "Mentor 1": "Damanpreet",
+        "Mentor 2": "Anandhi"
+    }, {
+        "Team Name": "Smartphone Warriors and Team Samaanta",
+        "Student 1": "S A Pradeep",
+        "Student 2": "M Deepak",
+        "State": "Tamil Nadu",
+        "School 1": "Esanaikorai",
+        "Student 3": "Paras Kumar",
+        "Student 4": "Abhishek Kumar",
+        "State__1": "Jharkhand",
+        "School 2": "Shitalpur",
+        "Mentor 1": "Kumar Muthiah",
+        "Mentor 2": "Archana Porwal"
+    }, {
+        "Team Name": "Be Aware Be Simple",
+        "Student 1": "Sahana Swaminathan",
+        "Student 2": "Sanchitha Madhukar",
+        "State": "Karnataka",
+        "School 1": "BGS National Public School",
+        "Student 3": "Shivam Kumar",
+        "Student 4": "Nandalal Kumar",
+        "State__1": "Bihar",
+        "School 2": "U.M.S. Daulachak",
+        "Mentor 1": "Aparna Venkatraman",
+        "Mentor 2": "Santosh Kumar"
+    }, {
+        "Team Name": "Swachchatha warriors",
+        "Student 1": "P Jeeviththya",
+        "Student 2": "E Perarasi",
+        "State": "Tamil Nadu",
+        "School 1": "Semmambadi",
+        "Student 3": "Indrajit Paramanik",
+        "Student 4": "Subhajit Sahis",
+        "State__1": "West bengal",
+        "School 2": "Dumdumi",
+        "Mentor 1": "Sudarshan M",
+        "Mentor 2": "Madhumita Sarkar"
+    }, {
+        "Team Name": "The Discipline Champs and the Young Gurus",
+        "Student 1": "T .Kiruthick Roshan",
+        "Student 2": "P. Monika",
+        "State": "Tamil Nadu",
+        "School 1": "Thirumangalam",
+        "Student 3": "Adhvik Raghuwanshi",
+        "Student 4": "Aniketh Hariharan",
+        "State__1": "Karnataka",
+        "School 2": "National Centre For Excellence",
+        "Mentor 1": "T.Vijayashree",
+        "Mentor 2": "Kiruthika K"
+    }, {
+        "Team Name": "Yes2Life",
+        "Student 1": "Aadi Chatterjee",
+        "Student 2": "Priyanshu Mukherjee",
+        "State": "Karnataka",
+        "School 1": "Treamis World School , Dehli Public School",
+        "Student 3": "T Shrinidhi Nandini",
+        "Student 4": "Kinisha N",
+        "State__1": "Tamil Nadu",
+        "School 2": "Arasampattu",
+        "Mentor 1": "Purbasha",
+        "Mentor 2": "Jayashree B"
+    }, {
+        "Team Name": "OnWord",
+        "Student 1": "A.Siva Priya",
+        "Student 2": "G.Bhagya Sudha",
+        "State": "AndhraPradesh",
+        "School 1": "Babu Nagar",
+        "Student 3": "Nishreyas Pandey",
+        "Student 4": "Shaurya Ambasta",
+        "State__1": "Karnataka",
+        "School 2": "Treamis World School",
+        "Mentor 1": "Moulika",
+        "Mentor 2": "Mohan"
+    }, {
+        "Team Name": "The Green Gang",
+        "Student 1": "Rakshita R",
+        "Student 2": "Yubha Harish",
+        "State": "Karnataka",
+        "School 1": "Treamis World School",
+        "Student 3": "Sreedhar B K",
+        "Student 4": "Ravi Kumar M M",
+        "State__1": "Karnataka",
+        "School 2": "Nilogal GHPS",
+        "Mentor 1": "Isha Harish",
+        "Mentor 2": "Navaneeth S Rao"
+    }];
+
+    for (let index = 0; index < finalTeam.length; index++) {
+        const row = finalTeam[index];
+        $('#finalteamBody').append('<div class="bg-gray-300 shadow-xl rounded-lg text-center space-y-1 py-4">\
+            <div class="font-bold text-lg uppercase">' + row['Team Name'] + '</div>\
+            <div>' + row['School 1'] + ' - ' + row['State'] + '</div>\
+            <div class="border-b lg:mx-10">' + row['Student 1'] + ' and ' + row['Student 2'] + '</div>\
+            <div>' + row['School 2'] + ' - ' + row['State__1'] + '</div>\
+            <div class="border-b lg:mx-10">' + row['Student 3'] + ' and ' + row['Student 4'] + '</div>\
+            <div class="text-lg">' + row['Mentor 1'] + ' and ' + row['Mentor 2'] + '</div>\
+        </div>');
+    }
+</script>
+
+{% endblock %}

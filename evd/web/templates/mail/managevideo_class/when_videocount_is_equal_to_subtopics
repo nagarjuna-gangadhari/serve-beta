@@ -1,0 +1,31 @@
+
+
+<p>Dear {{volunteer_name}},</p>
+
+<p>Thank you for submitting {{subtopic_count}} video capsules for the Chapter {{topic_title}} of {{grade}} {{subject}} in {{board}}! </p>
+<p>While the video is being reviewed by our Review Council, we request you to book a new chapter for video capsule creation.</p> 
+<p>Please click the button and book a chapter. </p>
+
+<p><a class="button button1"  href="http://www.evidyaloka.org/v2/content_demand/">Book a Chapter</a></p>
+
+
+
+
+
+<p>Please feel free to reach out to your Coordinator {{dc_name}} for further queries.</p>
+<p>Email id: {{dc_email}}</p>
+
+
+<p>Thank you once again, and we look forward for further contribution for our children in rural India.</p>
+
+
+<p>With Regards,</p>
+<p>eVidyaloka Team</p>
+  	
+<p>www.evidyaloka.org</p>
+<p>Skype: evidyaloka.helpdesk | Phone: 080 - 40903939 | Email: videoclasses@evidyaloka.org<p/>
+
+
+
+
+

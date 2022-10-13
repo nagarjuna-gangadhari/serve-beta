@@ -1,0 +1,738 @@
+{% extends "base.html" %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+
+    <style>
+        .mySchoolDiv {
+            background-color:#ffffff;
+            padding : 15px 20px 20px 30px;
+        }
+        .verification{
+            margin-top:15px;
+        }
+        table th {
+            font-weight:bold;
+        }
+        .col-sm-8 > h4 {
+            margin-top: 30px !important;
+        }
+
+        label {
+            font-family: sans-serif !important;
+        }
+    </style>
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_container %}
+    {{ block.super }}
+    <!-- {% if is_pam == false   or  is_super == false %}
+<div class="col-md-1 col-lg-1">
+    {%include "navbar.html"%}
+</div>
+    {% endif %} -->
+{%if is_partner and not is_pam %}
+<div class="inner" style="height: 100%;">
+    <div class="col-md-2" style="height: 100%;">
+      {%include "navbar.html"%}
+    </div>
+    <div class="col-md-10"style="height: 100%; overflow-y: auto; right: -15px; padding-left: 3%">
+{%else%}
+<div class="admin_inner">
+     <div class="col-md-12">
+{%endif%}
+
+        <div class="mySchoolDiv" >
+            <div class="row" style="overflow-x:auto;">
+                <div class="col-sm-12" style="padding-left: 0px !important; padding-right: 0px !important;">
+                    <div class="col-sm-8" style="padding-left: 0px !important;">
+                        <h4>{{myschool.school.name}}, {{myschool.school.state}}</h4>
+                    </div>
+                    <div class="col-sm-4" style="margin-top: 30px !important; padding-right: 0px !important;">
+                        {% if is_partner or is_delivery_partner  %}
+                           
+                            <!--<a href="/partner/myschool_verification/{{myschool.id}}/" class="btn pull-right verification" title="School details can be verified">Verification</a>-->
+                            <button onclick="myschoolVerifydiv(this)" class="btn pull-right verification" title="School details can be verified">Verification</button>
+                            
+                        {% endif %}
+                            <span class="pull-right" style="margin:0px;">Go back to <a href="/partner/myschools/" style="vertical-align:middle;font-family: Arial, Helvetica, sans-serif;font-size: 13.5px;">List Schools</a></span>
+                    </div>
+                </div>
+                <hr/>
+                <div>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th>School Name</th>
+                                <td>{{myschool.school.name}}</td>
+                                <th>School Code</th>
+                                <td>{{myschool.school.school_code}}</td>
+                            </tr>
+                            <tr>
+                                <th>Village Name</th>
+                                <td>{{myschool.school.village}}</td>
+                                <th>Pincode</th>
+                                <td>{{myschool.school.pincode}}</td>
+                            </tr>
+                            <tr>
+                                <th>District Name</th>
+                                <td>{{myschool.school.district_details}}</td>
+                                <th>Status</th>
+                                <td>{{ myschool.status }} {% if is_super or is_pam %} {% if myschool.status == 'Verified' or myschool.status == 'Eligible' or myschool.status == 'Not Eligible' %}<button type="button" id="statusmodl" class="btn btn-info btn-sm" data-toggle="modal" data-target="#statusUpdateModal" title="Edit Status"><i class="fa fa-edit fa-lg"></i></button>{% endif %}{% endif %}</td>
+
+                            </tr>
+                            {% if myschool.remarks %}
+                                <tr>
+                                    <th>Remarks</th>
+                                    <td colspan="3">{{myschool.remarks}}</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="row" id="myschool_verification" style="margin-bottom:3%;">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                {% if message %}
+                        <div class="alert alert-success alert-dismissable" style="line-height: 0;margin-top:1%;">
+                             <a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>
+                              {{message}}
+                        </div>
+                {% else %}
+                {% endif %}
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <h3 style="margin-left:3%;font-weight:bold;">School Feasibility Test</h3>
+                        </div>
+                        <div class="col-sm-3">
+                            <!--<span class="pull-right" style="margin-top:20px">Go back to <a href="/partner/myschools/" style="vertical-align:middle;">List Schools</a></span>-->
+                        </div>
+                    </div>
+
+
+                   <div id ="message"></div>
+                    <div id ="message1"></div>
+
+                    <hr>
+                    <!-- <h4 style="margin-left:6.7%;color:orange;">Please fill below details :</h4> -->
+                    <br>
+                     <div id="internateAndGeoDiv" class="">
+
+                         {% if log %}
+                         <div class="row">
+                             <div class="col-sm-9"><p>Last Verified info:</p></div>
+                             <div class="col-sm-3">
+                                 <a href="/partner/view_myschool_verify_log/{{myschool.id}}/" class="btn btn-info pull-right" title="Verifications History Log">View LOG</a></div>
+                         </div>
+
+                         <table class="table table-striped  table-bordered" id="myTable" style="width:95%; margin-left:2% !important;">
+                             <thead>
+                                <tr>
+                                    <th nowrap>Status</th>
+                                    <th nowrap>Added by</th>
+                                    <th nowrap>Added on</th>
+                                    <th nowrap>Address</th>
+                                    <th nowrap>Latitude/Longitude</th>
+                                    <th nowrap>serviceProvider</th>
+                                    <th nowrap>Download Speed</th>
+                                    <th nowrap>Upload Speed</th>
+                                </tr>
+                            </thead>
+                             <tbody>
+                                <tr>
+                                    {% if log.other_info.status %}
+                                <td>{{log.other_info.status}}</td>
+                            {% else %}
+                                <td> -- </td>
+                            {% endif %}
+                                    <td>{{log.added_by}}</td>
+                            <td>{{log.added_on}}</td>
+                                    {% if log.other_info.address %}
+                                <td>{{log.other_info.address}}</td>
+                            {% else %}
+                                <td> -- </td>
+                            {% endif %}
+                                    {% if log.other_info.latitude or log.other_info.longitude %}
+                                <td>
+                                    {% if log.other_info.latitude %} {{log.other_info.latitude}} {% else %} - {% endif %} / {% if log.other_info.longitude %} {{log.other_info.longitude}} {% else %} - {% endif %}
+                                </td>
+                            {% else %}
+                                <td> -- </td>
+                            {% endif %}
+                            {% if log.other_info.serviceProvider %}
+                                <td>{{log.other_info.serviceProvider}}</td>
+                            {% else %}
+                                <td> -- </td>
+                            {% endif %}
+                                    {% if log.other_info.downloadSpeed %}
+                                <td>{{log.other_info.downloadSpeed}}</td>
+                            {% else %}
+                                <td> -- </td>
+                            {% endif %}
+                            {% if log.other_info.uploadSpeed %}
+                                <td>{{log.other_info.uploadSpeed}}</td>
+                            {% else %}
+                                <td> -- </td>
+                            {% endif %}
+                                </tr>
+                             </tbody>
+
+                         </table>
+                         {% endif %}
+                         <div><p><b>Connectivity and GEO Verification :</b></p></div>
+                      <form action="/partner/myschool_verification/{{myschool.id}}/internetandgeo/" id="forminternetgeo" method="POST">
+                          {% csrf_token %}
+                          {% if error_msg %}
+                                <div class="alert alert-warning">
+                                    <strong>Info!</strong> {{error_msg}}.
+                                </div>
+                            {% endif %}
+                          <input type="hidden" id="geo_schoolCode" name="geo_schoolCode" value="{{myschool.school.school_code}}"/>
+                          <input type="hidden" id="geo_schoolName" name="geo_schoolName" value="{{myschool.school.name}}" />
+                          <input type="hidden" name="villageName" value="{{myschool.school.village}}" />
+                          <input type="hidden" name="distirictName" value="{{myschool.school.district_details}}" />
+                          <input id="geo_myschoolid" name="geo_myschoolid" type="hidden" value="{{myschool.id}}">
+
+                          <div class="row" style="margin:0% 1%;">
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+
+                                        <label><span style="color:red;">*&nbsp;</span>Latitude</label>
+                                        <input class="form-control" id="latitude" type="text" name="latitude" required="required" readonly="readonly" style="border-radius:0px;width:99%:margin-left:0.5%;" placeholder="Enter Download Speed">
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                        <label><span style="color:red;">*&nbsp;</span>Longitude</label>
+                                        <input class="form-control" id="longitude" type="text" name="longitude" required="required" readonly="readonly" style="border-radius:0px;width:99%:margin-left:0.5%;" placeholder="Enter Upload Speed">
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                    <label>Address</label>
+                                    <input class="form-control" id="locationName" name="locationName" type="text" value="">
+                                    <input class="form-control" id="id_postal_code" name="postal_code" type="hidden" value="">
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                    <label><span style="color:red;">*&nbsp;</span>Broadband Service provider</label>
+                                    <input class="form-control" type="text" name="serviceProvider" value="" required="required" required="required" placeholder="BSNL, Airtel etc" title="Enter Broadband Service provider"/>
+                                </div>
+                            </div>
+                          <div class="row" style="margin:0% 1%;">
+
+
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                    <span style="width:100%;word-wrap:break-word;display:block;margin: 15px 0px 10px 0px;">Click <a href="http://speedtest.net/" target="_blank"  style="focus:focus;color:white;background:rebeccapurple;height:auto;text-align:left;border-radius:0px;margin-top:15px;padding:7px;">HERE</a> to check your upload & download speed</span>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+
+                                        <label><span style="color:red;">*&nbsp;</span>Enter download speed (in Mbps)</label>
+                                        <input class="form-control" type="text" name="downloadSpeed" required="required" style="border-radius:0px;width:99%:margin-left:0.5%;" placeholder="Ex: 5">
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                        <label><span style="color:red;">*&nbsp;</span>Enter upload speed (in Mbps)</label>
+                                        <input class="form-control" type="text" name="uploadSpeed" required="required" style="border-radius:0px;width:99%:margin-left:0.5%;" placeholder="Ex: 1">
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3" style="text-align: center;">
+
+                                    <button class='btn btn-success' style="margin:6.5% 0px 15px 13%;" id="update">Verify</button>
+                                </div>
+                            </div>
+
+                            <div class="mapClass1">
+                                <div id="hideDiv" style="cursor:pointer;font-size:17px;border-radius:10px;background:white;z-index: 3000;margin-left: 34%;height:auto;width: 33%;margin-top: 17%;padding: 2% 1% 1% 1% !important;">
+                                    <p>Please make sure that you allow the location access  in the next step to enter the evidyaloka page</p><hr>
+                                    <span style="margin-bottom:5%;"onclick="getLocation()">OK</span><br>
+                                </div>
+                                <p id="errorMsg" style="display:none;font-size:17px;background:white;z-index: 3000;margin-left: 34%;height:10%;width: 33%;margin-top: 17%;padding-top:1%;">
+
+                                </p>
+                            </div>
+                        </form>
+                     </div>
+
+
+                      <div id="evDiv" class="">
+                          <div><p><b>eVidyaloka Verification :</b></p></div>
+                          <form action="/partner/myschool_verification/{{myschool.id}}/everification/" id="evidverify" method="POST">
+                              {% csrf_token %}
+                              <input type="hidden" id="everify_schoolCode" name="everify_schoolCode" value="{{myschool.school.school_code}}" />
+                              <input type="hidden" id="everify_schoolName" name="everify_schoolName" value="{{myschool.school.name}}" />
+                              <input id="ev_myschoolid" name="myschoolid" type="hidden" value="{{myschool.id}}">
+                              <input type="hidden" id="ev_schoolCode" name="ev_schoolCode" value="{{myschool.school.school_code}}" />
+                              <input type="hidden" id="ev_schoolname" name="ev_schoolname" value="{{myschool.school.name}}" />
+                              <div class="row" style="margin:0% 3%;">
+                                    <div class="col-lg-3 col-md-3 col-sm-3">
+                                        <label><span style="color:red;">*&nbsp;</span>No. of Teachers teaching (Std 5 to 8)-th</label>
+                                        <input class="form-control" id="noOfTeachers" onkeydown="return validateNumber(event)" type="number" name="noOfTeachers" value="" min="0"required="required" placeholder="No. of Teachers teaching" title="Enter No. of Teachers teaching"/>
+                                    </div>
+
+                                    <div class="col-lg-3 col-md-3 col-sm-3">
+                                        <label><span style="color:red;">*&nbsp;</span>No. of Students Enrolled (Std 5 to 8)-th</label>
+                                        <input class="form-control" id="noOfStudents" onkeydown="return validateNumber(event)" type="number" name="noOfStudents" value="" min="0" required="required" placeholder="No. of Students Enrolled" title="Enter No. of students"/>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3">
+                                        <label><span style="color:red;">*&nbsp;</span>HeadMaster Name</label>
+                                        <input class="form-control" id="headMasterName" name="headMasterName" type="text" value="" required="required" placeholder="HeadMaster Name" title="Enter HeadMaster Name"/>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3" style="text-align: center;">
+                                        <button class='btn btn-success' style="margin:6.5% 0px 15px 0px;" id="evDiv_submit">Submit</button>
+                                  </div>
+                              </div>
+                          </form>
+                      </div>
+
+                       <div  id="visualDiv" class="">
+                           <div><p><b>Visual Verification :</b></p></div>
+                           <form action="/partner/myschool_verification/{{myschool.id}}/visualverification/" id="visualverify" method="POST" enctype="multipart/form-data">
+                               {% csrf_token %}
+                               <input type="hidden" id="visual_schoolCode" name="visual_schoolName" value="{{myschool.school.school_code}}" />
+                               <input type="hidden" id="visual_schoolName" name="visual_schoolName" value="{{myschool.school.name}}"/>
+                               <input id="vis_myschoolid" name="vis_myschoolid" type="hidden" value="{{myschool.id}}">
+                               <input type="hidden" id="vis_schoolCode" name="vis_schoolCode" value="{{myschool.school.school_code}}" />
+                               <input type="hidden" id="vis_schoolname" name="vis_schoolname" value="{{myschool.school.name}}" />
+                               <div class="row" style="margin:0% 3%;">
+                                    <div class="col-lg-3 col-md-3 col-sm-3">
+                                        <label>School Picture</label>
+                                        <input class="form-control" id="school_pic" accept="image/*" type="file" name="school_pic" value="" onChange="validate(this)"  title="upload"/>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3">
+                                        <label>Classroom picture</label>
+                                        <input class="form-control" id="class_pic" accept="image/*" type="file" name="class_pic" value="" onChange="validate(this)"  title="upload"/>
+                                    </div>
+                                   <div class="col-lg-3 col-md-3 col-sm-3">
+                                        <label>Permission Letter</label>
+                                        <input class="form-control" id="permission_letter"  type="file" name="permission_letter" value="" onChange="validate(this)"  title="upload"/>
+                                    </div>
+                                   <div class="col-lg-3 col-md-3 col-sm-3" style="text-align: center;">
+                                            <button class='btn btn-success' style="margin:6.5% 0px 15px 0px;" id="visualDiv_submit">Submit</button>
+                                   </div>
+                                   <!--<div class="col-lg-3 col-md-3 col-sm-3">
+                                        <label>upload2</label>
+                                        <input class="form-control" id="3"  type="file" name="3" value="" required="required"  title="upload"/>
+                                    </div>-->
+
+                               </div>
+                               <div>
+                                   <span><b><u>Note:</u></b> Attach File of type jpg, jpeg, png and pdf, should not be more than 3MB in size.</span>
+                               </div>
+                           </form>
+                       </div>
+                </div>
+            </div>
+
+
+
+            <!-- Modal -->
+            <div id="statusUpdateModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel" aria-hidden="true">
+                <div class="" role="document">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title col-sm-10" id="exampleModalLabel" style="font-weight:bold">Update Status</h4>
+                            <button type="button" class="close col-sm-2" data-dismiss="modal" aria-label="Close">
+                               <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body col-sm-12">
+                            <form action="/partner/update_myschool_status/{{myschool.id}}/" method="post" style="border:None;">
+                                {% csrf_token %}
+                                <label>Select Status</label>
+                                <select id='school_status' name="school_status" >
+                                    <option value='Eligible'>Eligible</option>
+                                    <option value='Not Eligible'>Not Eligible</option>
+                                </select><br/>
+                                <label>Remarks</label>
+                                <textarea id="school_update_remarks" name="school_update_remarks"></textarea>
+                                <button type="submit" class="btn btn-success">Update</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal end-->
+
+            <div class="row" style="overflow-x:auto;">
+                <div class="col-sm-12"  style="padding-left: 0px !important; padding-right: 0px !important;">
+                    <div class="col-sm-8"  style="padding-left: 0px !important; padding-right: 0px !important;">
+                        <h4>My School Verification Status Updates</h4>
+                    </div>
+                    <div class="col-sm-4"  style="padding-left: 0px !important; padding-right: 0px !important;">
+                        <a href="/partner/view_myschool_verify_log/{{myschool.id}}/" class="btn btn-info pull-right" title="Verifications History Log" style="font-family: Arial, Helvetica, sans-serif;">View Log</a>
+                    </div>
+                </div>
+                <div >
+                    {% if myschoolstatus.count > 0 %}
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Verification Type</th>
+                                    <th>Status</th>
+                                    <th>Added By</th>
+                                    <th>Added Date</th>
+                                    <!--<th>Other Info</th>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for msstatus in myschoolstatus %}
+                                    <tr>
+                                        <td nowrap>{{msstatus.verification_type}}</td>
+                                        {% if msstatus.status %}
+                                            <td>Success</td>
+                                        {% else %}
+                                            <td>Failure</td>
+                                        {% endif %}
+                                        <td nowrap>{{msstatus.added_by}}</td>
+                                        <td nowrap>{{msstatus.added_on}}</td>
+                                        <!--<td><button type="button" id="otherJsondata" class="btn btn-info btn-sm" data-toggle="modal" data-target="#statusUpdateModal">View</button></td>-->
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p style="margin-left:3%" >No Verification details found.</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div style="margin-left:-15px;overflow-x:auto;">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="col-md-8 col-sm-8"><h4>Centers associated</h4></div>
+                        <div class="col-md-4 col-sm-4">{% if is_super or is_pam%}<a href="/partner/{{myschool.id}}/addcenter/" class="btn btn-success pull-right" title="Add Center">Add Center</a>{% endif %}</div>
+                    </div>
+                </div>
+                {% if myschool.center_set.all %}
+                    <div class="panel-group" id="accordion">
+                        {% for center in myschool.center_set.all %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#{{center.name|cut:' '}}{{forloop.counter}}">{{center.name}}</a>
+                                        {% if is_deliver_partner or is_super or is_pam %}
+                                        <a href="/partner/updateCenter/{{center.id}}/{{center.partner_school.id}}/" class="pull-right">Update Center</a>
+                                        {% endif %}
+                                        {% with ay=center|getAYOfCenter %}
+                                             <a href="/centeradmin/?center_id={{center.id}}&ay_id={{ay}}" class="pull-right" style="padding-right:15px;">View Center</a>
+                                        {%  endwith %}
+                                    </h4>
+                                </div>
+                                <div id="{{center.name|cut:' '}}{{forloop.counter}}" class="panel-collapse collapse {% if forloop.first %} in {% endif %}">
+                                    <div class="panel-body">
+                                        <div class="col-lg-12 col-md-12 col-sm-12">
+                                            <table class="table table-bordered">
+                                                <tbody>
+                                                    <tr>
+                                                        <th nowrap>Center Name</th>
+                                                        <td>{{center.name}}</td>
+                                                        <th>Board</th>
+                                                        <td>{{center.board}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th nowrap>Center Admin</th>
+                                                        <td>{% if center.admin != 'NULL' %}{{center.admin.first_name}} {{center.admin.last_name}}{% else %} -- {% endif %}</td>
+                                                        <th>Assistant</th>
+                                                        <td>{% if center.assistant != 'NULL' %}{{ center.assistant.first_name }} {{ center.assistant.last_name }}{% else %} -- {% endif %}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th nowrap>Field Co-ordinator</th>
+                                                        <td>{% if center.field_coordinator %}{{center.field_coordinator.first_name}} {{center.field_coordinator.last_name}}{% else %} -- {% endif %}</td>
+                                                        <th>Delivery Co-ordinator</th>
+                                                        <td>{% if center.delivery_coordinator %}{{center.delivery_coordinator.first_name}} {{center.delivery_coordinator.last_name}}{% else %} -- {% endif %}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th nowrap>Working Days</th>
+                                                        <td>{{center.working_days}}</td>
+                                                        <th>Working Slots</th>
+                                                        <td>{{center.working_slots}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th nowrap>Skype ID</th>
+                                                        <td>{{center.skype_id}}</td>
+                                                        <th>Head Master </th>
+                                                        <td>{% if center.HM %}{{center.HM}}{% else %} -- {% endif %}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th nowrap>Grades</th>
+                                                        <td>{{center.grades}}</td>
+                                                        <th>Subjects Covered</th>
+                                                        <td>{{ center.subjectscovered }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th nowrap>No. of Children</th>
+                                                        <td>{{center.noofchildren}}</td>
+                                                        <th>Status</th>
+                                                        <td>{{center.status}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th nowrap>Donor Name</th>
+                                                        <td>{{center.donor_name}}</td>
+                                                        <th>Ops. Donor Name</th>
+                                                        <td>{{center.ops_donor_name}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th nowrap>Funding Partner</th>
+                                                        <td>{{center.funding_partner.name}}</td>
+                                                        <th>Delivery Partner</th>
+                                                        <td>{{center.delivery_partner.name}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Description</th>
+                                                        <td colspan="3">{{center.description}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No centers are associated with this School.</p>
+                {% endif %}
+            </div>
+        </div>
+</div>
+
+{% endblock %}
+
+
+{% block bottom_scripts %}
+    {{ block.super }}
+    <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+    <script type="text/javascript">
+
+        $('#statusUpdateModal').on('shown.bs.modal', function () {
+              $('#myInput').trigger('focus')
+        })
+     </script>
+
+    <script src="/static/js/select.min.js"></script>
+<script>
+$(document).ready(function() {
+    // $(".inner.clearfix").css("width","85%");
+    $("#myschool_verification").hide()
+
+	{% if tab == 'everification' %}
+		<!--$('.nav-tabs a[href="#evDiv"]').tab('show');-->
+		$("#myschool_verification").show();
+		getLocation();
+	{% endif %}
+
+	{% if tab == 'internet' %}
+		<!--$('.nav-tabs a[href="#internateAndGeoDiv"]').tab('show');-->
+		$("#myschool_verification").show();
+		getLocation();
+	{% endif %}
+
+	{% if tab == 'visual_verification' %}
+		<!--$('.nav-tabs a[href="#visualDiv"]').tab('show');-->
+		$("#myschool_verification").show()
+		getLocation();
+	{% endif %}
+
+
+});
+function myschoolVerifydiv(myobj){
+    $("#myschool_verification").show();
+    getLocation();
+}
+
+
+function validateNumber(e) {
+	if(!((e.keyCode > 95 && e.keyCode < 106) || (e.keyCode > 47 && e.keyCode < 58) || e.keyCode == 8 || e.keyCode == 9)) {
+        return false;
+      }
+}
+
+
+function validate(file) {
+    var id = file.id
+    var ext = file.value.split(".");
+    ext = ext[ext.length-1].toLowerCase();
+    var arrayExtensions = ["jpg" , "jpeg", "png", "bmp", "pdf"];
+
+    if (arrayExtensions.lastIndexOf(ext) == -1) {
+        alert("File Format Not Supported. Attach jpg, jpeg, png, pdf type Attachment.");
+        $("#"+id).val("");
+    }
+    var fileSize = file.files[0].size/1024/1024;
+    if (fileSize > 3) {
+        alert('Upload file which is less than 3 MB size');
+        $("#"+id).val("");
+        <!--$(file).val(''); //for clearing with Jquery-->
+    }
+}
+
+
+$(':input').keyup(function() {
+	if ($("#formId")[0].checkValidity()) {
+	$("#submitId")[0].disabled = false;
+	$("#submitId").css({'background':'rebeccapurple', 'color':'white'});
+	  } else {
+	  $("#submitId")[0].disabled = true;
+	  $("#submitId").css({'background':'whitesmoke', 'color':'#555'});
+	  }
+});
+
+var x = document.getElementById("demo");
+$(document).ready(function(){
+
+	$(function() {
+	    $('#submitId').attr('disabled', 'disabled');
+	});
+
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+	var min = today.getMinutes();
+	var hrs = today.getHours();
+	var sec = today.getSeconds();
+
+	if(min<10) {
+		min = '0'+min
+	}
+	if(hrs<10) {
+		hrs = '0'+hrs
+	}
+	if(dd<10) {
+	    dd = '0'+dd
+	}
+	if(mm<10) {
+	    mm = '0'+mm
+	}
+	$("#dateId").val(yyyy + '-' + mm + '-' + dd);
+	today = yyyy + '-' + mm + '-' + dd + ' ' + hrs + ':' + min + ':' + sec;
+	$('input[id="dateId1"]').val(today);
+	$(".mapClass").css('display','block');
+
+
+
+	$('#visualDiv_submit').click(function(){
+        <!--if($('#school_pic').val() == ''  || $('#class_pic').val() == ''  ||  $('#permission_letter').val() == '' ){-->
+        <!--alert_message('please upload file');-->
+        <!--}-->
+
+        if($('#school_pic').val() != ''  && $('#class_pic').val() != ''  &&  $('#permission_letter').val() != '' ){
+         alert_message1('File upload in progress!');
+        }
+
+	});
+		$('#evDiv_submit').click(function(){
+        if($('#noOfTeachers').val() == ''  || $('#noOfStudents').val() == ''  ||  $('#headMasterName').val() == '' ){
+        alert_message('please enter all the details');
+        }
+
+        if($('#noOfTeachers').val() != ''  && $('#noOfStudents').val() != ''  &&  $('#headMasterName').val() != '' ){
+         alert_message1('submitted successfully!');
+        }
+
+	});
+
+
+	function alert_message(msg){
+            var s = "<div class='alert alert-danger alert-dismissable'><button type = 'button' class = 'close' data-dismiss = 'alert' aria-hidden = 'true'>&times;</button><strong>Warning!  </strong>"+msg+"</div>";
+	       $("#message").html(s);
+            }
+
+    function alert_message1(msg){
+            var s = "<div class='alert alert-success alert-dismissable'><button type = 'button' class = 'close' data-dismiss = 'alert' aria-hidden = 'true'>&times;</button><strong>Success!  </strong>"+msg+"</div>";
+	       $("#message1").html(s);
+            }
+
+
+
+ });
+
+function getLocation() {
+	var options = {
+	        enableHighAccuracy: true,
+	        maximumAge: 0
+	      };
+	$("#hideDiv").hide();
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError, options);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPosition(position) {
+	var latitude = position.coords.latitude;
+	var longitude = position.coords.longitude;
+
+	$(".mapClass").hide();
+    $("#latitude").val(latitude);
+    $("#longitude").val(longitude);
+    //getAddress(latitude, longitude);
+}
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            $("#errorMsg").css('display','block');
+            $("#errorMsg").text("Please enable the location to access the page");
+           // $("#errorMsg").append("<br><p onclick='reloadPage()'>click here</p>");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            $("#errorMsg").css('display','block');
+            $("#errorMsg").text("Location information unavailable");
+            break;
+        case error.TIMEOUT:
+        	$("#errorMsg").css('display','block');
+            $("#errorMsg").text("The request to get user location timed out");
+            break;
+        case error.UNKNOWN_ERROR:
+        	$("#errorMsg").css('display','block');
+        	$("#errorMsg").text("An unknown error occurred.");
+            break;
+    }
+}
+function reloadPage() {
+console.log('dsdsds');
+alert("dhfsdfkdsshfkjh");
+		window.location.reload(true);
+}
+function getAddress (latitude, longitude) {
+
+	return new Promise(function (resolve, reject) {
+        var request = new XMLHttpRequest();
+
+        var method = 'GET';
+        var gkey = 'AIzaSyADqJvBMuoeUfYoTP_9P-7LbVAqmGedKLs';
+        var url = 'https://maps.googleapis.com/maps/api/geocode/json?key=' + gkey + '&latlng=' + latitude + ',' + longitude + '&sensor=true';
+        console.log("getAddress url " + url);
+        var async = true;
+
+        request.open(method, url, async);
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                if (request.status == 200) {
+                    var data = JSON.parse(request.responseText);
+                    var address = data.results[0];
+                    var zip_address = address.address_components;
+                    var zipcode = zip_address[zip_address.length - 1].long_name;
+                    $("#locationName").val(address.formatted_address);
+                    $("#id_postal_code").val(zipcode);
+                    $("#locationName").prop('readonly',true);
+                    resolve(address);
+                }
+                else {
+                    reject(request.status);
+                }
+            }
+        };
+        request.send();
+    });
+};
+
+</script>
+
+{% endblock %}

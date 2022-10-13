@@ -1,0 +1,17 @@
+<html lang="en">
+<body>
+<p> Dear {{ user.first_name }} {{ user.last_name }},</p>
+
+<p> Congratulations! Your allocation of the selected course is Confirmed.</p>
+
+<p> Selected Course : {{slots.0.offering.course.grade}} th {{slots.0.offering.course.subject}}</p>
+<p> Selected Center : {{slots.0.center.name}} </P>
+
+<p> Please login into www.evidyaloka.org and complete any unfinished steps - Trainings/Curriculum review
+   The center coordinator will be getting in touch with your shortly for further details</p>
+
+<p>We are glad to see you onboard as a volunteer teacher. Also, please do visit/join eVidyaloka Workplace, to get connected with other fellow volunteer teachers and interact.</p><br>
+
+<p>Regards,
+Team eVidyaloka.</p>
+</body>

@@ -1,0 +1,593 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+    <!-- <script defer src="https://www.youtube.com/iframe_api"></script>-->
+    <script defer src="https://rawgit.com/kimmobrunfeldt/progressbar.js/master/dist/progressbar.js"></script>
+    <script defer src="/static/js/selectize.min.js"></script>
+    <!-- <script src="/static/js/upload/location.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="/static/css/selectize.css" />
+    <script src='/static/js_new/parsley.min.js' type='text/javascript' ></script>
+    <script src='/static/js_new/partner_profile.js' type='text/javascript' ></script>
+
+    <script>
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+     
+      $(document).ready(function(){
+    	  $('#photo_image_after').hide();
+		});
+     
+
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: 'DhmVpNCEWOo',
+          controls : 0,
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      } 
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        //event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        if(event.data == 0 ){
+         evd.ajax_sub('/partner/save_profile/',{'step':'organisation'},function(){});
+        }
+        //if (event.data == YT.PlayerState.PLAYING && !done) {
+          //setTimeout(stopVideo, 6000);
+          //done = true;
+        //}
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
+      $(function(){
+        $('[data-toggle="popover"]').popover();
+        var profile_completion_status = $('.new_dash_container').attr('data-profile_completion_status');
+        if(profile_completion_status === 'True'){
+            $(".not_editable").removeClass("hide");
+            $(".editable").addClass("hide");
+        }
+        $("body").on("click", ".cancel_edit_profile", function(event){
+            event.preventDefault();
+            $(".not_editable").removeClass("hide");
+            $(".editable").addClass("hide");
+        });
+        $("body").on("click", ".edit_profile", function(){
+            $(".not_editable").addClass("hide");
+            $(".editable").removeClass("hide");
+        });
+        //redirect_to_onboard
+        $("body").on("click", ".redirect_to_onboard", function(){
+            window.location.pathname="/partner/home/";
+        });
+        //code of conduct checkbox:save enable/disable
+        $("#profile_sub").removeAttr("disabled");
+        $("body").on("change", "#code_conduct", function(){
+            if (document.getElementById('code_conduct').checked){
+                $("#profile_sub").removeAttr("disabled");
+            }
+            else{
+                $("#profile_sub").attr("disabled","disabled");
+            }
+        });
+      });
+      $(function() {
+        $(".btn-pref .btn").click(function (e) {
+            e.preventDefault();
+            $(".btn-pref .btn").removeClass("btn-warning").addClass("btn-default");
+            // $(".tab").addClass("active"); // instead of this do the below
+            $(this).removeClass("btn-default").addClass("btn-warning");
+        });
+        /*// store the currently selected tab in the hash value
+        $(".btn-group button").on("shown.bs.tab", function(e) {
+            var id = $(e.target).attr("href").substr(1);
+            window.location.hash = id;
+        });*/
+
+        // on load of the page: switch to the currently selected tab
+        var hash = window.location.hash;
+        window.setTimeout(function(){$('.nav-tabs a[href="' + hash + '"]').trigger('click');}, 1);
+
+        $('.nav-tabs a').click(function (e) {
+            $(this).tab('show');
+            var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+            window.location.hash = this.hash;
+            $('html,body').scrollTop(scrollmem);
+        });
+      });
+    </script>
+
+<script>
+function removeImage(){
+	
+    $('#img').remove();
+	  $('#close_button').remove();
+	 $('#img').html("No file chosen");
+	 $('#photo_image_after').show();
+	 
+
+    } 
+</script>
+
+    <style>
+        .contributions, .profile-edit-2, .role_change{
+            display : none !important;
+        }
+    </style>
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+    {% include "code_conduct_modal.html" %}
+    <style>
+    .tab-content > div:last-child {
+        display : block !important;
+    }
+        .btn-pref .btn {
+            -webkit-border-radius:0 !important;
+        }
+    .input-group{
+    position: relative;
+    display: block;
+    border-collapse: separate;
+    }
+    .input-group-addon{
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color:red;
+    display:block;
+    text-align:left;
+    border: none;
+    }
+    .nav-tabs {
+        margin-bottom: 15px;
+    }
+    .sign-with {
+        margin-top: 25px;
+        padding: 20px;
+    }
+    div#OR {
+        height: 30px;
+        width: 30px;
+        border: 1px solid #C2C2C2;
+        border-radius: 50%;
+        font-weight: bold;
+        line-height: 28px;
+        text-align: center;
+        font-size: 12px;
+        float: right;
+        position: absolute;
+        right: -16px;
+        top: 40%;
+        z-index: 1;
+        background: #DFDFDF;
+    }
+    </style>
+    <div class="container-fluid new_dash_container" data-profile_completion_status="{{user_profile.profile_completion_status}}">
+        <div class='row my_profile' style="position:relative">
+          <div class="col-lg-12 col-sm-12">
+            <ul class="nav nav-tabs">
+            {% if school_detail %}
+                <li class="active"><a data-toggle="tab"
+                    href="#profile" style="font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;color:black">Edit School</a></li>
+            {% else %}
+            <li class="active"><a data-toggle="tab"
+                    href="#profile" style="font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;color:black">Add School</a></li>
+           {% endif %}
+            </ul>
+            <div class="tab-content">
+                <div id="profile" class="tab-pane fade in active">
+                    <div class='basic_profile col-xs-12 col-sm-12 col-md-12' >
+                        <div class='section_title'>
+                         {% if school_detail %}
+                            <h5>Edit School</h5>
+                            {% else %}
+                             <h5>Add School</h5>
+                             {% endif %}
+                            <hr>
+                        </div>
+
+                        <div class="editable1">
+                            <form id='basic_form' method='post' enctype="multipart/form-data" data-parsley-validate="">
+                            {% csrf_token %}
+                                <input type='hidden' name='step' value='school_details' />
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="name">Name</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                        <div class="input-group">
+                                        {% if school_detail%}
+                                        {% for school in school_detail%}
+                                            <input type='text' class="form-control" name='name' placeholder="School Name"
+                                            required="" value={{school.name}}>
+                                            {% endfor %}
+                                            {% else %}
+                                            <input type='text' class="form-control" name='name' placeholder="School Name"
+                                            required="" value={{school.name}}>
+                                            {% endif %}
+                                            <span class="input-group-addon">*</span>
+                                        </div>
+                                        </div>
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:17px;">
+                                        <div class="col-md-6">
+                                            <label for="district_details">Village/Taluk/District</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                        <div class="input-group">
+                                        {% if school_detail%}
+                                        {% for school in school_detail%}
+                                            <input type='text' class="form-control" name='district_details' placeholder="Village/Taluk/District"
+                                            required="" value={{school.district_details}}>
+                                            {% endfor %}
+                                            {% else %}
+                                            <input type='text' class="form-control" name='district_details' placeholder="Village/Taluk/District"
+                                            required="">
+                                             {% endif %}
+                                            <span class="input-group-addon">*</span>
+                                            
+                                        </div>
+                                        </div>
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:33px;">
+                                        <div class="col-md-6">
+                                            <label for="typeofmgmt">Type Of Management</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                        {% if school_detail%}
+                                        {% for school in school_detail%}
+                                         <select name="typeofmgmt" class=' selects-up' required="">
+                                            <option value="{{school.typeofmgmt}}" selected="selected">{{school.typeofmgmt}}</option>
+                                            <option value="Dept of Edu">Dept of Edu</option>
+                                            <option value="KGBV">KGBV</option>
+                                            <option value="Other Govt. Dept">Other Govt. Dept</option>
+                                         </select>
+                                        {% endfor %}
+                                            {% else %}
+                                         <select name="typeofmgmt" class=' selects-up' required="">
+                                            <option value="" selected="selected">--Type of Mgmt--</option>
+                                            <option value="Dept of Edu">Dept of Edu</option>
+                                            <option value="KGBV">KGBV</option>
+                                            <option value="Other Govt. Dept">Other Govt. Dept</option>
+                                         </select>
+                                          {% endif %}
+                                        <span class="input-group-addon" style="border: none; top:0; background: none; position: absolute; right: 0;">*</span>
+                                    </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:27px;">
+                                        <div class="col-md-6">
+                                            <label for="headmaster_incharge">Headmaster Incharge</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                         {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                            <input type='text' class="form-control" name='headmaster_incharge' placeholder="Headmaster Name" value={{school.headmaster_incharge}}>
+                                           {% endfor %}
+                                         {% else %}  
+                                          <input type='text' class="form-control" name='headmaster_incharge' placeholder="Headmaster Name">
+                                          {% endif %}
+                                        </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:22px;">
+                                        <div class="col-md-6">
+                                            <label for="contact_details">Contact Details of HM</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                         {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                            <input type='text' class="form-control" name='contact_details' placeholder="Phone/email of HM" value={{school.contact_details}}>
+                                             {% endfor %}
+                                         {% else %} 
+                                         	 <input type='text' class="form-control" name='contact_details' placeholder="Phone/email of HM">
+                                      	 {% endif %}
+                                        </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:17px;">
+                                        <div class="col-md-6">
+                                            <label for="beo_name">BEO Name</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                        {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                            <input type='text' class="form-control" name='beo_name' placeholder="BEO Name" value={{school.beo_name}}>
+                                           	{% endfor %}
+                                         {% else %} 
+                                         	<input type='text' class="form-control" name='beo_name' placeholder="BEO Name">
+                                         {% endif %}
+                                        </div> <!--col-md-6 -->
+                                    </div> <!-- row  --> 
+                                </div> <!-- col-md-4-->
+
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="grades_inschool">Grades in School</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                        {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                            <input type='text' class="form-control" name='grades_inschool' placeholder="Grades in School" value={{school.grades_inschool}}>
+                                            {% endfor %}
+                                         {% else %} 
+                                         	<input type='text' class="form-control" name='grades_inschool' placeholder="Grades in School">
+                                         {% endif %}
+                                        </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:-4px;">
+                                        <div class="col-md-6">
+                                            <label for="noofchildren">No Of Children</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                        {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                            <input type='text' class="form-control" name='no_of_childern' placeholder="No Of Children" value={{school.noofchildren}}>
+                                            {% endfor %}
+                                         {% else %}
+                                         	<input type='text' class="form-control" name='no_of_childern' placeholder="No Of Children">
+                                         {% endif %}	
+                                        </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:-8px;">
+                                        <div class="col-md-6">
+                                            <label for="current_teacher">Current Teacher</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                        {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                            <input type='text' class="form-control" name='current_teacher' placeholder="Current Teacher" value={{school.current_teacher}}>
+                                            {% endfor %}
+                                         {% else %}
+                                         	 <input type='text' class="form-control" name='current_teacher' placeholder="Current Teacher">
+                                         {% endif %}
+                                        </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:-13px;">
+                                        <div class="col-md-6">
+                                            <label for="school_number">School Number</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                        {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                            <input type='text' class="form-control" name='school_number' placeholder="School Number" value={{school.school_number}}>
+                                            {% endfor %}
+                                         {% else %}
+                                         	<input type='text' class="form-control" name='school_number' placeholder="School Number">
+                                         {% endif %}
+                                        </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:-18px;">
+                                        <div class="col-md-6">
+                                            <label for="photo">Photo</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                        {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                           <!--  <input type='file' class="form-control" name='photo' placeholder="Choose File" value={{school.photo}}> -->
+                                           		{% if school.photo %}
+		                                           <img src="{{school.photo}}"  id='img'>
+		                                          	<button id="close_button" type="button" class="close" aria-label="Close" onclick="removeImage();">
+														 <span aria-hidden="true">&times;</span>
+													</button>
+													<input type='file' id="photo_image_after" class="form-control" name='photo' placeholder="Choose File">
+												{% else %}
+													<input type='file' id="" class="form-control" name='photo' placeholder="Choose File">
+												{% endif %}
+                                            {% endfor %}
+                                         {% else %}
+                                         	<input type='file' id="photo_image" class="form-control" name='photo' placeholder="Choose File">
+                                         {% endif %}
+                                        </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:-22px;">
+                                        <div class="col-md-6">
+                                            <label for="location_map">Location Map</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                        {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                            <input type='text' class="form-control" name='location_map' placeholder="Location Map" value={{school.location_map}}>
+                                            {% endfor %}
+                                         {% else %}
+                                         	<input type='text' class="form-control" name='location_map' placeholder="Location Map">
+                                         {% endif %}
+                                        </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                </div> <!-- col-md-4-->
+
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="ledtv_available">Is LED Tv Available</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                         {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                         <select name="ledtv_available" class=' selects-up'>
+                                            <option value="{{school.ledtv_available}}" selected="selected">{{school.ledtv_available}}</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                         </select>
+                                         	 {% endfor %}
+                                         {% else %}
+                                         	 <select name="ledtv_available" class=' selects-up'>
+                                            <option value="" selected="selected">-- Select --</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                         </select>
+                                         {% endif %}
+                                    </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:-4px;">
+                                        <div class="col-md-6">
+                                            <label for="cpu_and_others">Are Cpu, Keyboard, Mouse in place</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                         {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                         <select name="cpu_and_others" class=' selects-up'>
+                                            <option value="{{school.cpu_and_others}}" selected="selected">{{school.cpu_and_others}}</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                         </select>
+                                             {% endfor %}
+                                         {% else %}
+                                         <select name="cpu_and_others" class=' selects-up'>
+                                            <option value="" selected="selected">-- Select --</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                         </select>
+                                         {% endif %}
+                                        
+                                    </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:-8px;">
+                                        <div class="col-md-6">
+                                            <label for="speakers_available">Speakers Available</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                         {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                         <select name="speakers_available" class=' selects-up'>
+                                            <option value="{{school.speakers_available}}" selected="selected">{{school.speakers_available}}</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                         </select>
+                                          {% endfor %}
+                                         {% else %}
+                                          <select name="speakers_available" class=' selects-up'>
+                                            <option value="" selected="selected">-- Select --</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                         </select>
+                                         {% endif %}
+                                    </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:-13px;">
+                                        <div class="col-md-6">
+                                            <label for="web_camera">Is WebCamera Available</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                        {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                         <select name="web_camera" class=' selects-up'>
+                                            <option value="{{school.web_camera}}" selected="selected">{{school.web_camera}}</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                         </select>
+                                        	 {% endfor %}
+                                         {% else %}
+                                          <select name="web_camera" class=' selects-up'>
+                                            <option value="" selected="selected">-- Select --</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                         </select>
+                                         {% endif %}
+                                    </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:-18px;">
+                                        <div class="col-md-6">
+                                            <label for="ups_avail">UPS with 4Hours backup</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                        {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                         <select name="ups_avail" class=' selects-up'>
+                                            <option value="{{school.ups_avail}}" selected="selected">{{school.ups_avail}}</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                         </select>
+                                          	{% endfor %}
+                                         {% else %}
+                                         <select name="ups_avail" class=' selects-up'>
+                                            <option value="" selected="selected">-- Select --</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                         </select>
+                                          {% endif %}
+                                    </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:-22px;">
+                                        <div class="col-md-6">
+                                            <label for="modem_avail">Is Modem Available</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                        {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                         <select name="modem_avail" class=' selects-up'>
+                                            <option value="{{school.modem_avail}}" selected="selected">{{school.modem_avail}}</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                         </select>
+                                         	{% endfor %}
+                                         {% else %}
+                                         <select name="modem_avail" class=' selects-up'>
+                                            <option value="" selected="selected">-- Select --</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                         </select>
+                                         {% endif %}
+                                    </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                    <div class="row" style="top:-26px;">
+                                        <div class="col-md-6">
+                                            <label for="software_installed">Is Pre-requisite Software installed</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                         {% if school_detail%}
+                                        	{% for school in school_detail%}
+                                         <select name="software_installed" class=' selects-up'>
+                                            <option value="{{school.software_installed}}" selected="selected">{{school.software_installed}}</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                         </select>
+                                         	{% endfor %}
+                                         {% else %}
+                                         <select name="software_installed" class=' selects-up'>
+                                            <option value="" selected="selected">-- Select --</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                         </select>
+                                          {% endif %}
+                                    </div> <!--col-md-6 -->
+                                    </div> <!-- row  -->
+                                </div> <!-- col-md-4-->
+  
+                                <button id="profile_submit" class="btn btn-success" style="width:100px;position: relative;float: right;left: -70px;">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                </div> <!--Profile completes -->
+
+            </div>
+          </div>
+        </div>
+    </div>
+{% endblock %}

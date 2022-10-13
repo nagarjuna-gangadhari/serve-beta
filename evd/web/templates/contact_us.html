@@ -1,0 +1,140 @@
+{% extends "footer_base.html" %}
+
+{% block head_styles %}
+{{ block.super }}
+    <style>
+        .about-container {
+            margin-top: 80px;
+        }
+        .right-content .top {
+            padding:33px 37px;
+        }
+        .right-content .top .intro {
+            margin-top:9px;
+        }
+        .subcontent {
+            background:none;
+        }
+        div.founders h1 {
+            padding:10px 10px 5px 0px;
+        }
+        div.founders div {
+            padding:5px 0px 5px 0px;
+        }
+        div.founders div p {
+            padding-left:20px;
+        }
+        a {
+            cursor:pointer;
+        }
+        .blue {
+            color:#F15A22 !important;
+            /*text-shadow:0 -1px #0D94BA,0 1px white;*/
+        }
+        .workspace,.register {
+            width:40%;
+            float:left;
+        }
+        .map {
+            width:60%;
+            float:right;
+        }
+        .ph-number img {
+            height:16px;
+            width:16px;
+        }
+        .address,.ph-number {
+            width:50%;
+        }
+        .address {
+            float:left;
+        }
+        .ph-number {
+            float:right;
+        }
+    </style>
+{% endblock %}
+{% block leftnav_list %}
+
+    <li><a href="/about/" class="about-1"><span>About us</span></a></li>
+    <li><a href="/vision/" class="about-2"><span>Vision & Mission</span></a></li>
+    <li><a href="/operating_principles/" class="about-3"><span>Principles</span></a></li>
+    <li><a href="/conduct/" class="about-4"><span>Code of Conduct</span></a></li>
+    <li><a href="/who_we_are/" class="about-5"><span>Who We Are</a></li>
+    <li><a href="/careers/" class="about-6" ><span>Careers</span></a></li>
+    <li><a href="/news_events/" class="about-7" ><span>News & Events</span></a></li>
+    <li><a href="/governance/" class="about-8" ><span>Governance</span></a></li>
+    <li><a href="/partners/" class="about-9"><span>Partners</span></a></li>
+    <li><a href="/faq/" class="about-10"><span>FAQ</span></a></li>
+    <li><a href="/contact_us/" class="about-11 active"><span>Contact Us</span></a></li>
+        
+{% endblock %}
+{% block top_content %}
+
+<!--<div class="top clearfix">
+    <div class="intro">
+        <h2>Find out more about how we started and get to know our team &amp our partners. Still have questions?Contact us today.</h2>
+    </div>
+</div>-->
+{% endblock %}
+{% block bottom_content %}
+<div class="paper-bg-wrapper">
+    <div class="paper-bg">
+        <div class="subcontent clearfix">
+            <div class="founders">
+                <div class="work-space-map">
+                    <div class='workspace'>
+                        <h4 class="blue">Head Office:</h4>
+                        <p> eVidyaloka Trust</p>
+                        <p> 2020, South End 'E' Main Road, </p>
+                        <p> 9th Block, Jayanagar,</p>
+                        <p> Bengaluru - 560011</p>
+                        <p><img src="/static/images/call_contact.png" width=15px; height=15px;/><span>&nbsp;&nbsp;&nbsp;080-40903939</span></p>
+                        <p style="font-size:12px;">(9:00 AM to 6:00 PM)</p>
+                        <p><img src="/static/images/wats.png" width="20px" height="20px"/><span>&nbsp;&nbsp;&nbsp;+91 6361517776 </span></p>
+                    
+                    </div>
+                    <div class="map">
+                        <!--<iframe width="425" height="200" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed/v1/place?q=Evidyaloka%20Trust&key=AIzaSyA8uCkbIeYCTPZKpLPELBfJy75ZK_mY3Tk" ></iframe>-->
+                        <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.896966076208!2d77.6169901148214!3d12.914343290893468!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x92031a27d441bf54!2seVidyaloka+Trust!5e0!3m2!1sen!2s!4v1493963645858" width="425" height="200" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"  allowfullscreen></iframe> -->
+                    </div>
+                    <div style="clear:both" style="padding:0px"></div>
+                </div>
+
+                <div class="work-space-map">
+                    <div class='register'>
+                        <h4 class="blue">Registered Office:</h4>
+                        <p>eVidyaloka Trust,</p>
+                        <p>10 B, 1st A Main, MCHS Colony,</p>
+                        <p>5th Block, Sector 6,  HSR Layout,</p>
+                        <p> Bengaluru-560102 </p>
+                    </div>
+                    <div class="map">
+                        <iframe width="425" height="200" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d1944.4405773758815!2d77.6257066!3d12.9153592!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1427238005728"></iframe>
+                    </div>
+                    <div style="clear:both" style="padding:0px"></div>
+                </div>
+                <div>
+                    <!--<div class='address'>
+                        <h4 class="blue">Address for Communication:</h4>
+                        <p>eVidyaloka Trust,</p>
+                        <p>c/o Venkat Sriraman</p>
+                        <p> A 104, Nagarjuna Enclave, </p>
+                        <p>14th cross,1st phase,JP Nagar</p>
+                        <p>Bangalore - 560078</p>
+                    </div>-->
+                    <div class='address'>
+                        <h4 class="blue">Got Something?</h4>
+                        <p><img src="/static/images/mail_contact.png"/><span>&nbsp;&nbsp;&nbsp;<a href="mailto:talktosomeone@evidyaloka.org">talktosomeone@evidyaloka.org</a></span></p>
+                        <p><img src="/static/images/call_contact.png"/><span>&nbsp;&nbsp;&nbsp;080-40903939</span></p>
+                        <p><img src="/static/images/wats.png" width="30px" height="30px"/><span>&nbsp;&nbsp;&nbsp;+91 6361517776 </span></p>
+                        <p><img src="/static/images/skype.png"/><span>&nbsp;&nbsp;&nbsp;<a href="skype:evidyaloka.helpdesk?call">evidyaloka.helpdesk</a></span></p>
+                    </div>
+                    <div style="padding:0px;clear:both"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

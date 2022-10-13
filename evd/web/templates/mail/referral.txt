@@ -1,0 +1,11 @@
+<html lang="en">
+<body>
+
+<p> Dear {{referral_user}}</p>
+
+        <p> {{user_name}}, referred by you, has signed up to Volunteer at eVidyaloka.</p>
+        <p> You will receive another notification, when the volunteer completes the onboarding process and starts to teach.</p>
+        <p> Thank you for your efforts in getting one more volunteer, who potentially could help 20 more children from rural India in getting quality education.</p>
+        
+        
+ </body>

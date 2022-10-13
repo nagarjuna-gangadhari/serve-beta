@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+
+{% block head_title %}CenterAdmin{% endblock %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/calendar/jquery-ui-1.8.17.custom.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+                var date = new Date();
+                var d = date.getDate();
+                var m = date.getMonth();
+                var y = date.getFullYear();
+                var get_future_date = function(curr_date, offset_month){
+                    return new Date(curr_date.setMonth(curr_date.getMonth() + offset_month));
+                };
+
+                var event_title="";
+                var calendar = $("#calendar").fullCalendar({
+                        theme: true,
+                        header: {
+                                left: 'prev,next today',
+                                center: 'title',
+                                right: 'month,agendaWeek,agendaDay'
+                        },
+                        selectable: true,
+                        editable: true,
+                        dragOpacity: 0.2,
+                        columnFormat: {
+                                    month: 'ddd',    // Mon
+                                    week: 'ddd d/M', // Mon 9/7
+                                    day: 'dddd d/M'  // Monday 9/7
+                        },
+                        eventSources: [
+                            {
+                                events: [
+                                            {% for offering in assigned_offering %}
+                                            {
+                                                title: '{{ offering }}',
+                                                start: new Date("{{ offering.start_date.isoformat }}"),
+                                                end_date: new Date("{{ offering.end_date.isoformat }}"),
+                                                allDay: false,
+                                                teacher: "{{ offering.teacher }}",
+                                                color: "#46D150",
+                                                textColor: "black",
+                                            },
+                                            {% endfor %}
+                                            {% for offering in unassigned_offering %}
+                                            {% if not offering.start_date == None %}
+                                            {
+                                                title: '{{ offering }}',
+                                                start: new Date("{{ offering.start_date.isoformat }}"),
+                                                //end: new Date("{{ offering.end_date.isoformat }}"),
+                                                allDay: false,
+                                                className: "{{ offering.teacher }}",
+                                                color: "#E80531",
+                                                textColor: "black",
+                                            }{% if not forloop.last %},{% endif %}
+                                            {% endif %}
+                                            {% endfor %}
+                                        ],
+                            }
+                        ],
+                        eventMouseover: function(event, jsEvent, view) {
+                               if (view.name !== 'agendaDay') {
+                                    $(jsEvent.target).attr('title', event.title);
+                                }
+                        },
+                        dayClick: function(date, allDay, jsEvent, view) {
+                            if(view.name=="month") {
+                                var mon_year = $(".fc-header-title").text().split(" ");
+                                if( mon_year[0] == "july") { var month= 6};
+                                var day = $(this).find(".fc-day-number").text();
+                                $('#calendar').fullCalendar( 'changeView', 'agendaDay' );
+                                $("#calendar").fullCalendar( 'gotoDate', mon_year[1], month, day );
+                                console.log($(this));
+                            }
+                            else if(view.name=="agendaWeek"){
+                                var mon_year = $(".fc-header-title").text().split(" ");
+                                var month = mon_year[0];
+                                var year = mon_year[4];
+                                console.log($(this));
+                                var day = $(this).find(".fc-day-number").text();
+                                $('#calendar').fullCalendar( 'changeView', 'agendaDay' );
+                                $("#calendar").fullCalendar( 'gotoDate', year, month, day );
+                            }
+                        },
+                        eventClick: function( calEvent, jsEvent, view){
+                            event_title = calEvent.title;
+                            console.log(calEvent);
+                            $(".event-desc p.title").text(event_title);
+                            $(".event-desc p.title").append("<p>Start Date : " + calEvent.start + "</p>");
+                            $(".event-desc p.title").append("<p>End Date : " + calEvent.end_date + "</p>");
+                            if(calEvent.teacher != "None"){
+                                //$(".event-desc p.title").append("<p>Teacher : " + calEvent.teacher + "</p>");
+                            }
+                        }
+                });
+        });
+
+    </script>
+
+{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <link rel='stylesheet' type='text/css' href='/static/css/calendar/fullcalendar.1.5.3.min.css'/>
+    <link rel="stylesheet" type="text/css" href="/static/css/calendar/theme.css" />
+    <style type='text/css'>
+        #calendar {
+                width: 300px;
+                font-size: 10px;
+                float: right;
+                margin-right: 39px;
+                margin-top: 75px;
+            }
+        .fc-header-title h2 {
+                font-size: 13px;
+                margin-top: -8px;
+                white-space: normal !important;
+           }
+        .fc-view-month .fc-event, .fc-view-agendaWeek .fc-event {
+                font-size: 10px;
+                overflow: hidden;
+                height: 15px;
+           }
+        .fc-view-agendaWeek .fc-event-vert {
+                font-size: 10px;
+                overflow: hidden;
+                width: 25px !important;
+          }
+        .fc-agenda-axis {
+                width: 20px !important;
+                font-size: .7em;
+          }
+        .fc-button-content {
+                padding: 0;
+          }
+    </style>
+
+{% endblock %}
+
+{% block body_container %}
+<div class="row">
+    <div class="span12 trans-block" style="min-height:500px;">
+        <div class="dashboard pull-left">
+            <h1 class="offset4"> Center Admin </h1>
+            <div class="row">
+                <div class="span6">
+                    <h3> Center Details </h3>
+                    <table id="center-details">
+                        <tbody>
+                            <tr>
+                                <td><b>Name</b></td>
+                                <td style="width:10px;"> : </td>
+                                <td>{{ center }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>State</b></td>
+                                <td> : </td>
+                                <td>{{ center.state }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>District</b></td>
+                                <td> : </td>
+                                <td>{{ center.district }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                   <form method = "POST" action="/create_offering/" >
+                   {% csrf_token %}
+                    <input type = "hidden" name="center" value="{{center.id}}"/>
+                    <input type ="submit" value="Create Offering" align="right"/>
+                    </form>
+                    <a href="/lookup/" ><input type="button" value="lookup" /></a>
+                    <h3> Assigned Offering </h3>
+                    <div class="assigned-offering">
+                        {% for offer in assigned_offering %}
+                            <ul>
+                                <li><a href="/admin/web/offering/{{ offer.id }}">{{ offer }}</a></li>
+                                <form action="/attendance/" method = "POST" >
+                                {% csrf_token %}
+                                    <input type="hidden" value="{{offer.id}}" name="offering" />
+                                    <input type="submit" value="Attendance" />
+                                </form>
+                                <button name="comment" value="comment" />
+                            </ul>
+                        {% endfor %}
+                    </div>
+                    <h3>Unassigned Offering</h3>
+                    <div class="unassigned-offering">
+                        <ul>
+                            {% for offer in unassigned_offering %}
+                                <li style="cursor:pointer">{{ offer }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div id="recomendations">
+                        {% for map in html_reco %}
+                            <div class="recommendations hide">
+                                <h4 class="pull-left">Recommendations for &nbsp; </h4>
+                                <h4>{{ map.offer }}</h4>
+                                <ul>
+                                    <p><b> Best Recommendations </b></p>
+                                    {% for r in map.reco.reco1 %}
+                                        <li class="pull-left"> {{ r.teacher }} </li>
+                                       <form method = "POST" action = "/centerassign/" style="margin-bottom:0px;">
+                                            {% csrf_token %}
+                                            <input type = "hidden" name = "offering" value = "{{map.offer.id}}" />
+                                            <input type = "hidden" name = "user" value = "{{r.teacher}}" />
+                                            <input type = "hidden" name= "center_id" value = "{{ center.id }} " />
+                                            <button type="submit" class="btn ok-btn"><i class="icon-ok"></i></button>
+                                        </form>
+                                        <ul style="margin-bottom:10px;">
+                                            {% for offers in r.offerings %}
+                                               <li> {{ offers }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endfor %}
+                                    <p><b> Second Best Recommendations </b></p>
+                                    {% for  r in map.reco.reco2 %}
+                                        <li class="pull-left"> {{ r.teacher }} </li>
+                                        <form method = "POST" action = "/centerassign/" style="margin-bottom:0px;">
+                                            {% csrf_token %}
+                                            <input type = "hidden" name = "offering" value = "{{map.offer.id}}" />
+                                            <input type = "hidden" name = "user" value = "{{r.teacher}}" />
+                                            <input type = "hidden" name= "center_id" value = "{{ center.id }} " />
+                                            <button type="submit" class="btn ok-btn"><i class="icon-ok"></i></button>
+                                        </form>
+                                        <ul style="margin-bottom:10px;">
+                                            {% for offers in r.offerings %}
+                                                <li> {{ offers }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endfor %}
+                                    <p><b> Third Best Recommendations </b></p>
+                                    {% for  r in map.reco.reco3 %}
+                                        <ul>
+                                            <li style="margin-left:0px;" class="pull-left">{{ r.user }}</li>
+                                        </ul>
+                                        <form method = "POST" action = "/centerassign/" >
+                                        {% csrf_token %}
+                                        <input type = "hidden" name = "offering" value = "{{map.offer.id}}" />
+                                        <input type = "hidden" name = "user" value = "{{r.user}}" />
+                                        <input type = "hidden" name= "center_id" value = "{{ center.id }} " />
+                                        <button type="submit" class="btn ok-btn"><i class="icon-ok"></i></button>
+                                        </form>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="calendar"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="span12">
+            <div class="span6 event-desc pull-right" style="top: 445px;left: 836px;position: absolute;">
+                <p class="title"></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block bottom_scripts %}
+    <script>
+        $(document).ready(function(){
+            $(".unassigned-offering").children().children("li").each(function(){
+                $(".unassigned-offering").children().children("li").click(function(){
+                    var a = $(this).text();
+                    $("#recomendations").children().find("h4").each(function(){
+                        debugger;
+                        var b = $(this).text();
+                        if(a == b){
+                            //$("#recomendations").children("h3").show();
+                            $(".recommendations").hide();
+                            $(this).parents(".recommendations").show();
+                        }
+                    });
+                }
+                /*,function(){
+                    var a = $(this).text();
+                    $("#recomendations").children().find("h4").each(function(){
+                        var b = $(this).text();
+                        if(a == b){
+                            $(this).parents(".recommendations").hide();
+                        }
+                    });
+                }*/
+            );
+            });
+        });
+    </script>
+{% endblock %}

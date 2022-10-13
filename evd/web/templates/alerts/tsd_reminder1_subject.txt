@@ -1,0 +1,1 @@
+eVidyaloka - Teacher Selection Discussion Booking Reminder - User id: {{user_id}}

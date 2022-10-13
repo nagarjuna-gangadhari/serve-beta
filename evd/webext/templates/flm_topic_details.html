@@ -1,0 +1,982 @@
+{% extends "base.html" %}{% load staticfiles%} {% load filters %} {% block body_container2 %}
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+
+<script src="/static/css/tailwindcss3.js"></script>
+<script src="/static/css/fontawesome/js/all.min.js"></script>
+
+
+<style>
+    .toggle__dot {
+        top: -.25rem;
+        left: -.25rem;
+        transition: all 0.2s ease-in-out;
+    }
+    
+    input:checked~.toggle__dot {
+        transform: translateX(100%);
+        background-color: #03fc03;
+    }
+    
+    .no_scroll_bar::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .subtopic {}
+    
+    .active {
+        background-color: rgb(25, 173, 12);
+    }
+    
+    .parent:focus-within * {
+        /* rest all background when one element is focused */
+        background: none;
+    }
+    
+    .parent [tabindex]:focus {
+        /* set the background of only the focused one */
+        background-color: rgb(25, 173, 12);
+    }
+    
+    .button {
+        background-color: #a2a2a2;
+    }
+    
+    .topics_container {
+        height: 57rem;
+    }
+    
+    .subtopics_container {
+        height: 48rem;
+    }
+    
+    .mobile_hide {}
+    
+    .mobile_show {
+        display: none;
+    }
+</style>
+<style>
+    .dialog-ovelay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.50);
+        z-index: 999999
+    }
+    
+    .dialog-ovelay .dialog {
+        width: 400px;
+        margin: 500px auto 0;
+        background-color: #fff;
+        box-shadow: 0 0 20px rgba(0, 0, 0, .2);
+        border-radius: 3px;
+        overflow: hidden
+    }
+    
+    .dialog-ovelay .dialog header {
+        padding: 10px 8px;
+        background-color: #f6f7f9;
+        border-bottom: 1px solid #e5e5e5
+    }
+    
+    .dialog-ovelay .dialog header h3 {
+        font-size: 14px;
+        margin: 0;
+        color: #555;
+        display: inline-block
+    }
+    
+    .dialog-ovelay .dialog header .fa-times {
+        float: right;
+        color: #f89007;
+        cursor: pointer;
+        transition: all .5s ease;
+        padding: 0 2px;
+        border-radius: 1px
+    }
+    
+    .dialog-ovelay .dialog header .fa-times:hover {
+        color: #ff0000
+    }
+    
+    .dialog-ovelay .dialog header .fa-close:active {
+        box-shadow: 0 0 5px #673AB7;
+        color: #a2a2a2
+    }
+    
+    .dialog-ovelay .dialog .dialog-msg {
+        padding: 12px 10px
+    }
+    
+    .dialog-ovelay .dialog .dialog-msg p {
+        margin: 0;
+        font-size: 15px;
+        color: #333
+    }
+    
+    .dialog-ovelay .dialog footer {
+        border-top: 1px solid #e5e5e5;
+        padding: 8px 10px
+    }
+    
+    .dialog-ovelay .dialog footer .controls {
+        direction: rtl
+    }
+    
+    .dialog-ovelay .dialog footer .controls .button {
+        padding: 5px 15px;
+        border-radius: 3px
+    }
+    
+    .button {
+        cursor: pointer
+    }
+    
+    .button-default {
+        background-color: rgb(248, 248, 248);
+        border: 1px solid rgba(204, 204, 204, 0.5);
+        color: #5D5D5D;
+    }
+    
+    .button-danger {
+        background-color: #f44336;
+        border: 1px solid #d32f2f;
+        color: #f5f5f5
+    }
+    
+    .link {
+        padding: 5px 10px;
+        cursor: pointer
+    }
+    
+    .name_margin {
+        margin-left: 10px;
+    }
+    
+    @media only screen and (max-width: 600px) {
+        .topics_container {
+            height: 30rem
+        }
+        .mobile_hide {
+            display: none;
+        }
+        .mobile_show {
+            display: block;
+        }
+        .dialog-ovelay .dialog {
+            width: 100%;
+        }
+    }
+</style>
+
+<div {% if request.user.is_authenticated %}{% else %}class="mt-36" {% endif %}></div>
+<!-- alert popup -->
+<div id="confirmPopup1" class="min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" style="display: none;">
+    <div class="absolute bg-black opacity-80 inset-0 z-0"></div>
+    <div class="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
+        <!--content-->
+        <div class="">
+            <!--body-->
+            <div class="text-center p-5 flex-auto justify-center">
+                <div class="text-yellow-500"><i class="fas fa-exclamation-triangle fa-2x"></i></div>
+                <h2 class="text-xl font-bold py-4 ">Are you sure?</h3>
+                    <p class="text-xl text-gray-500 px-6">Do you really want to mark as completed ? This process cannot be undone.</p>
+            </div>
+            <!--footer-->
+            <div class="p-3  mt-2 text-center space-x-4 md:block">
+                <button class="cancelAction mb-2 md:mb-0 bg-white px-6 py-2 text-2xl shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100">No</button>
+                <button class="doAction mb-2 md:mb-0 bg-blue-500 border border-2blue-500 px-6 py-2 text-2xl shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-blue-600">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="w-full h-screen md:h-4/6 flex flex-col md:flex-row">
+    <div class="flex flex-row w-full pb-2 mobile_show">
+        <div class="md:w-3/5  mt-10 text-center font-bold text-3xl p-2 justify-self-center">{{subject}} {{grade}} grade – {{centerName}}</div>
+        <div class="md:w-2/5 mt-4 flex justify-self-end space-x-2">
+            {% if userType == 'teacher' %}
+            <div onclick="location.href='/myevidyaloka/'" class="mx-12 p-2 bg-blue-300 hover:bg-blue-400 cursor-pointer rounded-lg text-center font-bold flex items-center justify-around"> <i class="fas fa-long-arrow-alt-left fa-2x"></i> Back to Center</div>
+            {% if is_digital or is_sampoorna %}
+            <div onclick="modalHandler(true)" class="mx-12 px-2 py-4 bg-yellow-300 hover:bg-yellow-500 cursor-pointer rounded-lg text-center font-bold"></div>
+            {% else %}
+            <div onclick="location.href='/myevidyaloka/?mark_attendence=true'" class="mx-12 px-2 py-4 bg-yellow-300 hover:bg-yellow-500 cursor-pointer rounded-lg text-center font-bold">Mark Attendance</div>
+            {% endif %} {% else %}
+            <div onclick="location.href='/centeradmin/?center_id={{centerId}}&ay_id={{ayId}}' " class="mx-12 p-2 bg-blue-300 hover:bg-blue-400 cursor-pointer rounded-lg text-center font-bold flex items-center justify-around"> <i class="fas fa-long-arrow-alt-left fa-2x"></i> Back to Center</div>
+            {% if is_digital or is_sampoorna %}
+            <div onclick="modalHandler(true)" class="mx-12 px-2 py-4 bg-yellow-300 hover:bg-yellow-500 cursor-pointer rounded-lg text-center font-bold">Mark Attendance</div>
+            {% else %}
+            <div onclick="location.href='/centeradmin/?center_id={{centerId}}&ay_id={{ayId}}&mark_attendence=true' " class="mx-12 px-2 py-4 bg-yellow-300 hover:bg-yellow-500 cursor-pointer rounded-lg text-center font-bold">Mark Attendance</div>
+            {% endif %} {% endif %}
+        </div>
+    </div>
+    <div class="w-full md:w-1/5 md:h-full bg-gray-600 border-r-2 border-gray-400 ">
+        <div class="font-bold text-3xl pt-4 px-2 text-center text-white">Topics</div>
+        <div id="topics" class="mt-8 bg-white overflow-y-auto no_scroll_bar rounded-lg parent topics_container" tabindex="0"></div>
+    </div>
+    <div class="w-full md:w-4/5 h-full bg-gray-50 justify-center shadow-inner shadow-2xl">
+        <div class="flex mobile_hide">
+            <div class="w-full md:w-3/5 lg:w-4/5 mt-10 text-center font-bold text-3xl p-2 justify-self-center">{{subject}} {{grade}} grade – {{centerName}}</div>
+            <div class="w-full md:w-2/5 mt-4 justify-self-end space-y-4">
+                {% if userType == 'teacher' %}
+                <div onclick="location.href='/myevidyaloka/'" class="mx-12 p-2 bg-blue-300 hover:bg-blue-400 cursor-pointer rounded-lg text-center font-bold flex items-center justify-around"> <i class="fas fa-long-arrow-alt-left fa-2x"></i> Back to Center</div>
+                {% if is_digital or is_sampoorna %}
+                <div onclick="modalHandler(true)" class="mx-12 px-2 py-4 bg-yellow-300 hover:bg-yellow-500 cursor-pointer rounded-lg text-center font-bold">Mark Attendance</div>
+                {% else %}
+                <div onclick="location.href='/myevidyaloka/?mark_attendence=true'" class="mx-12 px-2 py-4 bg-yellow-300 hover:bg-yellow-500 cursor-pointer rounded-lg text-center font-bold">Mark Attendance</div>
+                {% endif %} {% else %}
+                <div onclick="location.href='/centeradmin/?center_id={{centerId}}&ay_id={{ayId}}' " class="mx-12 p-2 bg-blue-300 hover:bg-blue-400 cursor-pointer rounded-lg text-center font-bold flex items-center justify-around"> <i class="fas fa-long-arrow-alt-left fa-2x"></i> Back to Center</div>
+                {% if is_digital or is_sampoorna %}
+                <div onclick="modalHandler(true)" class="mx-12 px-2 py-4 bg-yellow-300 hover:bg-yellow-500 cursor-pointer rounded-lg text-center font-bold">Mark Attendance</div>
+                {% else %}
+                <div onclick="location.href='/centeradmin/?center_id={{centerId}}&ay_id={{ayId}}&mark_attendence=true' " class="mx-12 px-2 py-4 bg-yellow-300 hover:bg-yellow-500 cursor-pointer rounded-lg text-center font-bold">Mark Attendance</div>
+                {% endif %} {% endif %}
+            </div>
+        </div>
+
+        <h5 id="topic_name" class="text-left mx-24 p-4 font-bold text-xl mx-4 text-blue-600"></h5>
+        <div class="px-2 lg:px-24 overflow-y-auto border-t-2 border-blue-400 rounded-lg subtopics_container">
+            <table class="w-full table-fixed ">
+                <thead class="table-fixed">
+                    <tr class="w-full border-b-2 border-gray-400 bg-gray-200 rounded-lg">
+                        <th id="subtopics_length" class="w-1/12 font-bold text-lg text-center p-2 mobile_hide">count</th>
+                        <th class="w-8/12 font-bold text-lg p-2 text-center">SUBTOPICS</th>
+                        <th class="w-1/12"></th>
+                        <th class="w-2/12 font-bold text-lg text-center">STATUS</th>
+                    </tr>
+                </thead>
+
+                <tbody id="subtopics">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="py-12 backdrop-filter backdrop-blur transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0" id="att_pop" style="display: none;">
+    <div class="container relative w-full md:w-3/4 w-full md:h-3/5 md:mt-96 bg-white rounded border-4 border-green-700">
+        <div class="py-8 md:px-5">
+            <div class="flex justify-between">
+                <div class="w-11/12 text-2xl font-bold uppercase text-center">Mark Attendance - {{centerName}}</div>
+                <div class="w-1/12 text-2xl font-bold cursor-pointer flex justify-end hover:text-red-500" onclick="modalHandler(false)">
+                    <i class="fas fa-times fa-2x"></i>
+                </div>
+            </div>
+            <div id="att_pop_data" class="flex">
+                <div class="w-1/2 flex flex-col items-cener justify-between pt-4 font-bold text-xl">
+                    <div class="space-y-4">
+                        <div class="flex">
+                            <div>Teacher :</div>
+                            <div id="teacher_name" class="px-2 text-green-500"></div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <div>Course :</div>
+                            <div class="px-2 text-green-500">{{grade}}th - {{subject}} </div>
+                        </div>
+                    </div>
+                    <div class="w-full flex justify-end md:pr-20">
+                        <div id="present_count">0</div>/
+                        <div id="total_students_count"></div>
+                        <div class="mx-2">Present</div>
+                    </div>
+                    <table class="w-full">
+                        <thead class="border-b border-t border-gray-500 bg-gray-100">
+                            <tr class="flex items-center justify-center space-y-2 w-full">
+                                <th class="w-1/4 text-xl py-2 pl-2 font-bold">Student Id</th>
+                                <th class="w-2/4 text-xl py-2 text-center md:pr-20 font-bold">Student Name</th>
+                                <th class="w-1/4 text-xl font-bold flex space-x-1">
+                                    <div class="text-sm md:text-xl">All Present</div>
+                                    <div id="ktx" onclick="toggle_all()" class="border rounded-full border-grey-200 flex items-center cursor-pointer w-16 justify-start bg-red-600 ">
+                                        <div id="ytx" class="rounded-full border w-8 h-8 border-grey shadow-inner bg-white text-center shadow transform duration-300 text-sm font-bold"></div>
+                                        <input id="xtx" class="hidden" type="number" value="0">
+                                        <input id="ptx" class="hidden" type="number" value="0">
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="students" class="text-center w-full bg-grey-light flex flex-col overflow-y-scroll no_scroll_bar border-b-2 h-[58vh]">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="w-1/2 flex flex-col justify-center ml-10 space-y-4">
+                    <div class="items-center space-y-4">
+                        <div class="w-full flex items-center text-xl font-bold space-x-4">
+                            <div class="mr-4">Date:</div>
+                            <input onchange="get_students()" type="date" id="class_from_date" class="px-3 py-3 placeholder-blue-300 relative bg-white bg-white rounded text-xl border border-blueGray-300 outline-none focus:outline-none focus:ring w-full" />
+                        </div>
+                        <div class="w-full flex text-xl font-bold space-x-4 items-center">
+                            <div class="pr-4">From:</div>
+                            <input type="time" id="class_from_time" class="px-3 py-3 placeholder-blue-300 relative bg-white bg-white rounded text-xl border border-blueGray-300 outline-none focus:outline-none focus:ring w-full" />
+                            <div class="pr-4">To:</div>
+                            <input type="time" name="to_time" id="class_to_time" class="px-3 py-3 placeholder-blue-300 relative bg-white bg-white rounded text-xl border border-blueGray-300 outline-none focus:outline-none focus:ring w-full">
+                        </div>
+                        <div class="w-full flex items-center text-xl font-bold space-x-4">
+                            <div class="mr-4">Topic:</div>
+                            <select id="selectTopics"  class="px-3 py-3 placeholder-blue-300 relative bg-white bg-white rounded text-xl border border-blueGray-300 outline-none focus:outline-none focus:ring w-full">
+                                
+                            </select>
+                        </div>
+                        <div  class="w-full flex items-center text-xl font-bold space-x-4">
+                            <div class="mr-4">Subtopic:</div>
+                            <select id="selectSubtopics"  multiple="multiple" class="w-full  border-2 border-blueGray-300 focus:outline-none focus:ring">
+                                
+                            </select>
+                        </div>
+                        
+                    </div>
+                    <div class="w-full flex flex-col justify-around items-center space-y-4">
+                        <div id="err_msg" class="w-full text-center text-red-400 "></div>
+                        <div class="h-48 w-full flex justify-around items-center"><textarea class="p-2" id="flm_attendance_comment" name="flm_attendance_comment" maxlength="120" id="" cols="30" rows="10" placeholder="How is the class..." onkeyup="this.value = this.value.replace(/[$@_~|{*^}]/g, '')"></textarea></div>
+                        <div class="w-full flex items-center justify-around">
+                            <div class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 bg-red-500 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-red-600 border text-white rounded-full px-8 py-4 text-xl font-bold" onclick="modalHandler()">Cancel</div>
+                            <div id="updateButton" class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 bg-indigo-500 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-indigo-600 border text-white rounded-full px-8 py-4 text-xl font-bold" onclick="submit_attendance()">Submit</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- student select popup -->
+<div id="studentPopup" class="min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" style="display: none;">
+    <div class="absolute bg-black opacity-80 inset-0 z-0"></div>
+    <div class="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
+        <!--content-->
+        <div class="">
+            <!--body-->
+            <div role="button" x-data onclick="$('#studentPopup').hide();" class="absolute top-4 right-4 focus:outline-none hover:text-red-500 rounded-md cursor-pointer text-lg">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="text-center p-5 flex-auto justify-center">
+                <h2 class="text-2xl font-bold py-4 ">Select student</h3>
+                    <select id="selectStudent" placeholder="select student">
+                        <option>--select student--</option>
+                        {% for e in enrolledStudents %}
+                        <option value="{{ e.id }}">{{ e.name }}</option>
+                        {% endfor %}
+                    </select>
+            </div>
+            <!--footer-->
+            <div class="p-3  mt-2 text-center space-x-4 md:block">
+                <button class="mb-2 md:mb-0 bg-white px-6 py-2 text-2xl shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100" onclick="$('#studentPopup').hide();">Close</button>
+                <button class="mb-2 md:mb-0 bg-blue-500 border border-2blue-500 px-6 py-2 text-2xl shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-blue-600" onclick="startQuiz()">Start Quiz</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $(document).ready(function() {
+        var csrftoken = getCookie('csrftoken');
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+    });
+</script>
+
+{{ topics|json_script:"topic_details" }} {{ centerId|json_script:"centerID" }} {{ offeringId|json_script:"offeringID" }}{{ ayId|json_script:"ayID" }}{{btopicId|json_script:"btopicID"}}{{is_update|json_script:"is_update_bool"}}
+{{enrolledStudents|json_script:"enrolledStudents_data"}}
+
+<script>
+    var topics = JSON.parse(document.getElementById('topic_details').textContent);
+    var centerId = JSON.parse(document.getElementById('centerID').textContent);
+    var offeringId = JSON.parse(document.getElementById('offeringID').textContent);
+    var ayId = JSON.parse(document.getElementById('ayID').textContent);
+    var backtopicId = JSON.parse(document.getElementById('btopicID').textContent);
+
+    var is_update = JSON.parse(document.getElementById('is_update_bool').textContent);
+    var enrolledStudents = JSON.parse(document.getElementById('enrolledStudents_data').textContent);
+    console.log('centerid', centerId,)
+    console.log('---topic--------',topics, is_update)
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+
+        if (backtopicId) {
+            var btopid = document.getElementById('topicdiv_' + backtopicId);
+            btopid.click()
+            btopid.className += " active"
+
+
+        } else {
+            var deftopicdiv = document.getElementsByClassName('default_topic')[0]
+            deftopicdiv.click()
+            deftopicdiv.className += " active"
+        }
+
+
+    });
+
+    make_topics_table(topics)
+
+    function toggle(n) {
+        var k = document.getElementById('k' + n);
+        var x = document.getElementById('x' + n);
+        var y = document.getElementById('y' + n);
+
+        // if (confirm('Do you really want to mark as completed ? This process cannot be undone')) {
+
+        if (x.value === "0") {
+            y.classList.add('translate-x-full')
+            k.classList.remove('bg-red-600')
+            k.classList.add('bg-green-600')
+            k.classList.add('cursor-not-allowed')
+            k.setAttribute('onclick', '')
+            x.value = "1";
+            document.getElementById('s' + n).innerHTML = 'Completed'
+            update_status(n, 1)
+            $("#checkbutton" + n + " div").remove();
+            $("#checkbutton" + n).append('<div class="text-center text-green-400 p-2"><i class="far fa-check-circle fa-2x"></i></div>');
+
+        }
+        //     // else {
+        //     //     y.classList.remove('translate-x-full')
+        //     //     k.classList.remove('bg-green-600')
+        //     //     k.classList.add('bg-red-600')
+        //     //     x.value = "0";
+        //     //     update_status(n, 0)
+
+        //     //     console.log(0)
+        //     // }
+        // } else {
+        //     console.log('Thing was not saved to the database.');
+        // }
+    }
+
+    function subtopic(topicId) {
+
+        make_subtopics_table(topics, topicId)
+
+    }
+
+    function make_topics_table(topicss) {
+        $("#topics div").remove();
+        for (let index = 0; index < topicss.length; index++) {
+            const topic = topicss[index];
+            let id = 'topicdiv_' + topic["id"];
+            let active = '';
+            if (index == 0) {
+                active = 'default_topic'
+            }
+
+            $("#topics").append('<div id="' + id + '" tabindex="' + (index + 1) + '" onclick="subtopic(' + topic["id"] + ')" class="' + active + ' flex w-full cursor-pointer border-b-2 border-l-0 hover:border-l-2 border-gray-400 hover:bg-purple-300 font-bold">\
+                                    <div class="w-1/5 text-center text-xl p-4">' + (index + 1) + '</div>\
+                                    <div class="w-4/5 text-left text-cneter p-2">\
+                                    <p id="topic_' + topic["id"] + '">' + topic["name"] + '</p>\
+                                    </div></div>')
+
+        }
+    }
+
+    function make_subtopics_table(topics, topicId) {
+        $("#subtopics tr").remove();
+
+        for (let main_index = 0; main_index < topics.length; main_index++) {
+            const topic = topics[main_index];
+            if (topic["id"] == topicId) {
+                let subtopics = topic['subtopics']
+                document.getElementById('topic_name').innerHTML = topic["name"]
+                document.getElementById('subtopics_length').innerHTML = "(" + topic["subtopics"].length + ")"
+
+                for (let index = 0; index < subtopics.length; index++) {
+                    const subtopic = subtopics[index];
+                    let click = "location.href='/v2/subtopic/content-details/?subtopic_id=" + subtopic["id"] + "&topic_id=" + topic["id"] + "&offering_id=" + offeringId + "&center_id=" + centerId + "&ayfy_id=" + ayId + "'"
+                    let onclick = 'onclick="popup(' + subtopic["id"] + ')"'
+
+                    let checkButton = ''
+
+                    if (subtopic['hasViewed'] == 1) {
+                        onclick = ''
+                        checkButton = '<div class="text-center text-green-400 p-2"><i class="far fa-check-circle fa-2x"></i></div>'
+                    }
+
+                    let button = `<button class="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-2 md:px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onclick="${click}" >view content</button>`
+
+                    if (subtopic["type"].includes('2')){
+                        button = `<button class="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-2 md:px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onclick="student_confirm_pop(${topic["id"]})" >Take Quiz</button>`
+
+                    }
+
+
+                    $("#subtopics").append(`<tr id="" class="border-b-2 subtopic hover:bg-gray-100">
+                        <td class="text-center text-xl p-2 mobile_hide">${index + 1}</td>
+                        <td class="p-2 text-left">${subtopic["name"]}</td>
+                        <td class="">${button}</td>
+                        <td class="flex items-center justify-around pt-2 border-l">
+                            <div id="s${subtopic["id"]}" class="w-16 text-center text-base font-bold mobile_hide">Not Completed</div>
+                            <div id="checkbutton${subtopic["id"]}">${checkButton}<div>
+                        </td>
+                    </tr>`)
+                    if (subtopic['hasViewed'] == 1) {
+                        // document.getElementById('k' + subtopic["id"]).classList.remove('bg-red-600')
+                        // document.getElementById('y' + subtopic["id"]).classList.add('translate-x-full')
+                        // document.getElementById('k' + subtopic["id"]).classList.add('bg-green-600')
+                        // document.getElementById('k' + subtopic["id"]).classList.add('cursor-not-allowed')
+                        document.getElementById('s' + subtopic["id"]).innerHTML = 'Completed ' + subtopic['viewCount'] + ' times'
+                    }
+                }
+            }
+        }
+    }
+
+
+    function update_status(subtopic_id, status) {
+        $.ajax({
+            url: "/v2/sub-topics/update-status/", // the endpoint
+            type: "POST", // http method
+            data: {
+                "offering_id": offeringId,
+                "center_id": centerId,
+                "subtopic_id": parseInt(subtopic_id),
+                "has_viewed": parseInt(status)
+            },
+
+            success: function(response) {
+
+                console.log('response', response)
+            },
+
+            error: function(xhr, errmsg, err) {
+                toggle(subtopic_id)
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg + "></div>")
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    }
+
+    topicId = undefined
+    studentId = undefined
+    function student_confirm_pop(getTopic_id){
+        console.log('inside student confirm popup')
+        topicId = getTopic_id
+        console.log(topicId)
+        $('#studentPopup').show();
+        
+    }
+
+    function startQuiz() {
+      window.open('/partner/quizplayer/?center_id='+ centerId +'&offering_id='+offeringId+'&ayfy_id='+ ayId +'&topic_id='+topicId+'&student_id='+ studentId+'&offering_id='+offeringId, '_blank');
+    }
+
+    $(document).ready(function () {
+        $('#selectStudent').selectize({
+            sortField: 'text',
+        
+        onChange: function(val) {
+        var selectedStudent = this.options[val]; // <-- pull data-data from the original options
+        studentId = selectedStudent.value
+        console.log(selectedStudent.value); // stores the data-data as a json object
+        }
+      });
+    });
+
+
+</script>
+
+<script>
+    
+
+    let modal = document.getElementById("att_pop");
+
+    function modalHandler(val) {
+        
+        if (val) {
+            fadeIn(modal);
+        } else {
+            fadeOut(modal);
+        }
+        var current_time = Date.now() - (new Date()).getTimezoneOffset() * 60000;
+        var today = new Date();
+
+        let mhour = today.getHours().toString();
+        if (mhour.length < 2) {
+            mhour = '0' + mhour;
+        }
+        let mminutes = today.getMinutes().toString();
+        if (mminutes.length < 2) {
+            mminutes = '0' + mminutes;
+        }
+        let previous_hour = (today.getHours() - 1).toString();
+        if (previous_hour.length < 2) {
+            previous_hour = '0' + previous_hour;
+        }
+        //console.log(mhour, previous_hour, mminutes)
+        document.getElementById('class_from_date').value = today.toISOString().substring(0, 10);
+        document.getElementById('class_from_time').value = previous_hour + ':' + mminutes;
+        document.getElementById('class_to_time').value = mhour + ':' + mminutes;
+        document.getElementById('flm_attendance_comment').value = ''
+        document.getElementById('present_count').innerText = '0'
+        let k = document.getElementById('ktx');
+        let x = document.getElementById('xtx');
+        let y = document.getElementById('ytx');
+        y.classList.remove('translate-x-full')
+        k.classList.remove('bg-green-600')
+        k.classList.add('bg-red-600')
+        x.value = 0;
+
+    }
+
+    function fadeOut(el) {
+        el.style.opacity = 1;
+        (function fade() {
+            if ((el.style.opacity -= 0.1) < 0) {
+                el.style.display = "none";
+            } else {
+                requestAnimationFrame(fade);
+            }
+        })();
+    }
+
+    function fadeIn(el, display) {
+        get_students()
+        el.style.opacity = 0;
+        el.style.display = display || "flex";
+        (function fade() {
+            let val = parseFloat(el.style.opacity);
+            if (!((val += 0.2) > 1)) {
+                el.style.opacity = val;
+                requestAnimationFrame(fade);
+            }
+        })();
+    }
+
+    function attendance_toggle(n) {
+        let k = document.getElementById('kt' + n);
+        let x = document.getElementById('xt' + n);
+        let y = document.getElementById('yt' + n);
+
+        if (x.value === "0") {
+            y.classList.add('translate-x-full')
+            k.classList.remove('bg-red-600')
+            k.classList.add('bg-green-600')
+            x.value = 1;
+
+            
+        } else {
+            y.classList.remove('translate-x-full')
+            k.classList.remove('bg-green-600')
+            k.classList.add('bg-red-600')
+            x.value = 0;
+
+        }
+        check_is_all_toggled()
+    }
+
+    function check_is_all_toggled() {
+        
+        i = 0
+        for (let index = 0; index < enrolledStudents.length; index++) {
+            i = i + parseInt(document.getElementById('xt' + enrolledStudents[index]['id']).value);
+        }
+
+        document.getElementById('present_count').innerText = i
+        let k = document.getElementById('ktx');
+        let x = document.getElementById('xtx');
+        let y = document.getElementById('ytx');
+
+        if (enrolledStudents.length == i) {
+            y.classList.add('translate-x-full')
+            k.classList.remove('bg-red-600')
+            k.classList.add('bg-green-600')
+            x.value = 1;
+
+
+        } else {
+            y.classList.remove('translate-x-full')
+            k.classList.remove('bg-green-600')
+            k.classList.add('bg-red-600')
+            x.value = 0;
+
+        }
+    }
+
+    function get_students() {
+
+        if($('#class_from_date').val() == '') {
+            // Fix the case class_from_date is unset
+            var today = new Date();
+            document.getElementById('class_from_date').value = today.toISOString().substring(0, 10);
+        }
+        
+        var date = new Date($('#class_from_date').val())
+        console.log(date)
+        //date.setDate(date.getDate() + 1)
+        console.log(date)
+        let classFromDate = date.getTime() / 1000 //to gmt
+
+        $.ajax({
+            url: "/v2/flm-attendance/", // the endpoint
+            type: "GET", // http method
+            data: {
+                "offeringId": offeringId,
+                "centerId": centerId,
+                "ayfyId": ayId,
+                "classFromDate": classFromDate
+            },
+
+            success: function(response) {
+                console.log(response)
+                if (is_update){
+                    document.getElementById('updateButton').innerHTML = 'Update';
+                }
+                if (response['status'] == 'success') {
+                    enrolledStudents = response['data']['students']
+                    make_students_table(response)
+                } else if (response['status'] == 'error') {
+                    alert(response['data']['message'])
+                }
+
+            }
+        });
+    }
+
+    function make_students_table(data) {
+        $("#students tr").remove();
+        let students = data['data']['students']
+        let old_student_ids = data['data']['old_student_ids']
+        let old_subtopics = data['data']['old_subtopics']
+        document.getElementById('teacher_name').innerText = data['data']['teacherName']
+        document.getElementById('ptx').value = students.length;
+        document.getElementById('total_students_count').innerText = students.length;
+        for (let index = 0; index < students.length; index++) {
+            const student = students[index];
+            $("#students").append('<tr class="flex items-center justify-around w-full border-b border-gray-300 hover:bg-gray-100">\
+                            <td id="ut' + student["id"] + '" class="py-2 w-auto">' + student["id"] + '</td>\
+                            <td class="py-2 w-2/4 text-center">' + student["name"] + '</td>\
+                            <td class="p-2 w-1/4 flex justify-center"><div id="kt' + student["id"] + '" onclick="attendance_toggle(' + student["id"] + ')" class="border rounded-full border-grey-200 flex items-center cursor-pointer w-16 justify-start bg-red-600 ">\
+                                    <div id="yt' + student["id"] + '" class="rounded-full border w-8 h-8 border-grey shadow-inner bg-white text-center shadow transform duration-300 text-sm font-bold"></div>\
+                                        <input id="xt' + student["id"] + '" class="hidden" type="number" value="0">\
+                                    </div></td></tr>')
+        }
+
+        for (let index = 0; index < old_student_ids.length; index++){
+            attendance_toggle(old_student_ids[index].toString())
+        }
+
+        if (old_subtopics.length > 0){
+            $('#selectTopics option[value="'+old_subtopics[0]["topicId"]+'"]').prop('selected', true);
+        }
+
+        let old_subtopic_ids = []
+        for (let index = 0; index < old_subtopics.length; index++){
+            old_subtopic_ids.push(old_subtopics[index]["subtopicId"])
+        }
+
+        
+
+        $("#selectSubtopics option").remove();
+        for (let index = 0; index < topics.length; index++) {
+            const element = topics[index];
+            if (element['id'] == $('#selectTopics').val()) {
+                for (let index = 0; index < element['subtopics'].length; index++) {
+                    const element2 = element['subtopics'][index]
+                    $("#selectSubtopics").append('<option value="' + element2['id'] + '">' + element2['name'] + '</option>');
+                }
+            }
+        }
+
+        $('#selectSubtopics option').each(function() {
+            if (old_subtopic_ids.includes(parseInt($(this).val()))) {
+                $(this).prop('selected', true);
+            }
+        });
+
+        $('#flm_attendance_comment').val(data['data']['old_comment']);
+        
+    }
+
+    function display_message(message) {
+        $("#att_pop_data div").remove();
+        $("#att_pop_data").append('<div role="alert" class="w-full h-96 flex items-center justify-center">\
+                                        <div role="alert">\
+                                            <div class="bg-red-500 text-white font-bold rounded-t w-full px-4 py-2">Message</div>\
+                                            <div class="border border-t-0 border-red-400 rounded-b w-full bg-red-100 px-4 py-3 text-red-700">\
+                                                <p>' + message + '</p>\
+                                            </div></div></div>');
+    }
+
+    $('#class_from_date').change(function() {
+        let d = new Date($('#class_from_date').val()); //Class Start Date
+        let todayDate = new Date(); //Today Date
+        if (d > todayDate) {
+            document.getElementById('err_msg').innerText = '** Class Date is greater than today.';
+        } else {
+            document.getElementById('err_msg').innerText = '';
+        }
+    })
+
+
+    function toggle_all() {
+
+        let k = document.getElementById('ktx');
+        let x = document.getElementById('xtx');
+        let y = document.getElementById('ytx');
+        let p = document.getElementById('ptx').value;
+
+        if (x.value === "0") {
+            y.classList.add('translate-x-full')
+            k.classList.remove('bg-red-600')
+            k.classList.add('bg-green-600')
+            x.value = 1;
+        } else {
+            y.classList.remove('translate-x-full')
+            k.classList.remove('bg-green-600')
+            k.classList.add('bg-red-600')
+            x.value = 0;
+
+        }
+
+        var xtx = x.value;
+        for (let index = 0; index < enrolledStudents.length; index++) {
+
+            let k = document.getElementById('kt' + enrolledStudents[index]['id']);
+            let x = document.getElementById('xt' + enrolledStudents[index]['id']);
+            let y = document.getElementById('yt' + enrolledStudents[index]['id']);
+
+            if (xtx === "1") {
+                y.classList.add('translate-x-full')
+                k.classList.remove('bg-red-600')
+                k.classList.add('bg-green-600')
+                x.value = 1;
+                document.getElementById('present_count').innerText = p
+
+
+            } else {
+                y.classList.remove('translate-x-full')
+                k.classList.remove('bg-green-600')
+                k.classList.add('bg-red-600')
+                x.value = 0;
+                document.getElementById('present_count').innerText = 0
+
+            }
+        }
+    }
+
+    function submit_attendance() {
+        var d = new Date($('#class_from_date').val())
+        let classFromTime = parseInt(Math.round(new Date(new Date(d.toString().split(":")[0].slice(0, -2) + $('#class_from_time').val()).getTime() + d.getTimezoneOffset() * 60000) / 1000));
+        let classToTime = parseInt(Math.round(new Date(new Date(d.toString().split(":")[0].slice(0, -2) + $('#class_to_time').val()).getTime() + d.getTimezoneOffset() * 60000) / 1000));
+        let comment = document.getElementById('flm_attendance_comment').value;
+        let topicId = document.getElementById('selectTopics').value;
+        let subtopicIds = document.getElementById('selectSubtopics')
+        subtopicIds = [...subtopicIds.options].filter(option => option.selected).map(option => option.value)
+        let students_data = []
+        for (let index = 0; index < enrolledStudents.length; index++) {
+            let student = {}
+            student['id'] = parseInt(document.getElementById('ut' + enrolledStudents[index]['id']).innerText);
+            student['is_present'] = parseInt(document.getElementById('xt' + enrolledStudents[index]['id']).value);
+            students_data.push(student)
+        }
+
+        if (subtopicIds.length == 0 || students_data.length == 0) {
+            alert("Please select atleast one student/subtopic.")
+            return false;
+        }
+
+        let data = {
+            "offeringId": offeringId,
+            "centerId": centerId,
+            "ayfyId": ayId,
+            "classStart": classFromTime,
+            "students": students_data,
+            "classEnd": classToTime,
+            "comment": comment,
+            'topicId': topicId,
+            'subtopicIds': subtopicIds
+        }
+        let students_data_json = JSON.stringify(data)
+        console.log(data);
+        $.ajax({
+            url: "/v2/flm-attendance/", // the endpoint
+            type: "POST", // http method
+            data: students_data_json, // data sent with the post request
+            dataType: "json",
+            ContentType: 'application/json; charset=utf-8',
+
+            success: function(response) {
+                console.log(response)
+                if (response['status'] == 'success') {
+                    alert(response['data']['message'])
+                    modalHandler()
+                    location.reload();
+                } else if (response['status'] == 'error') {
+                    alert(response['error']['message'])
+                    modalHandler()
+                }
+
+            }
+        });
+
+    }
+
+    $(document).on('change','#selectTopics',function(){
+        $("#selectSubtopics option").remove();
+        for (let index = 0; index < topics.length; index++) {
+            const element = topics[index];
+            if (element['id'] == $(this).val()){
+                for (let index = 0; index < element['subtopics'].length; index++) {
+                    const element2 = element['subtopics'][index]
+                    $("#selectSubtopics").append('<option value="' + element2['id'] + '">' + element2['name'] + '</option>');
+                }
+            }
+        }
+    });
+
+    
+
+    
+    {% if is_digital or is_sampoorna %}
+    $(document).ready(function() { 
+        modalHandler(true); 
+        
+    });
+    
+    {% endif %}
+    $(document).ready(function() { 
+        for (let index = 0; index < topics.length; index++) {
+            const element = topics[index];
+            $("#selectTopics").append('<option value="' + element['id'] + '">' + element['name'] + '</option>');
+        }
+        $('#selectTopics select option:first-child').click();
+    });
+</script>
+
+
+
+{% endblock %}

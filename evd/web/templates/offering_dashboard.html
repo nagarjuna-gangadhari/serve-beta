@@ -1,0 +1,47 @@
+
+
+{% extends "base.html" %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+
+   
+
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+
+
+
+
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+   
+    
+    
+    <iframe style="width: 1300px;margin-left: -184px;" src="https://analytics.evidyaloka.org/kibana/app/kibana#/dashboard/0f8163f0-854f-11ea-8386-fdeb838d2158?embed=true&_g=(filters:!())&_a=(description:'',filters:!(('$state':(store:appState),meta:(alias:!n,controlledBy:'1587638193996',disabled:!f,index:'326e5a30-8149-11ea-8386-fdeb838d2158',key:'academic+year.keyword',negate:!f,params:(query:Ay-19-20),type:phrase),query:(match:('academic+year.keyword':(query:Ay-19-20,type:phrase))))),fullScreenMode:!f,options:(hidePanelTitles:!f,useMargins:!t),panels:!((embeddableConfig:(),gridData:(h:8,i:'29f6ba86-ad8c-4928-ad2f-810c00c181ce',w:48,x:0,y:0),id:e35e68e0-854e-11ea-8386-fdeb838d2158,panelIndex:'29f6ba86-ad8c-4928-ad2f-810c00c181ce',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:7,i:'34005574-2c38-49cf-9de6-400edc6c28ad',w:11,x:0,y:8),id:'98579d00-9055-11ea-8386-fdeb838d2158',panelIndex:'34005574-2c38-49cf-9de6-400edc6c28ad',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:7,i:'24a684e2-9b74-43bf-9c99-5bcd5e93f30c',w:15,x:11,y:8),id:cce6a930-9055-11ea-8386-fdeb838d2158,panelIndex:'24a684e2-9b74-43bf-9c99-5bcd5e93f30c',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:15,i:'1f08d354-dc72-4146-81f7-d369248a7c2d',w:48,x:0,y:15),id:ada69eb0-854f-11ea-8386-fdeb838d2158,panelIndex:'1f08d354-dc72-4146-81f7-d369248a7c2d',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:17,i:baba8167-a229-401c-96db-e9b2c37bb04a,w:48,x:0,y:30),id:'56798b40-8552-11ea-8386-fdeb838d2158',panelIndex:baba8167-a229-401c-96db-e9b2c37bb04a,type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:7,i:'06bd174a-c014-42d1-bf87-52c06be42b85',w:11,x:26,y:8),id:'574f90a0-911e-11ea-8386-fdeb838d2158',panelIndex:'06bd174a-c014-42d1-bf87-52c06be42b85',type:visualization,version:'7.5.0')),query:(language:kuery,query:''),timeRestore:!f,title:KPI08-Dashboard,viewMode:view)" height="600" width="800"></iframe>
+{% endblock %}
+
+
+{% block bottom_scripts %}
+    {{ block.super }}
+
+    <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+
+
+<!--    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"/>-->
+<!--    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"/>
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<!--    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
+
+
+
+
+
+
+{% endblock %}

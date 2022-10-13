@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta name="title" property="og:title" content="evSchool by eVidyaloka">
+        <meta name="description" property="og:description" content="Enable your school online &  teach your students wherever they are">
+        <meta name="image" property="og:image" content="https://www.evidyaloka.org/static/images/top_section_model_256.png">
+
+        <meta property="twitter:title" content="evSchool by eVidyaloka">
+        <meta property="twitter:description" content="Enable your school online &  teach your students wherever they are">
+        <meta property="twitter:image" content="https://www.evidyaloka.org/static/images/top_section_model_256.png">
+
+        <meta name="keywords" content="evidyaloka, evschool, eclasses, government schools, edtech, elearning, online school, disrupted, rural school, learn, social distancing, rural education, children education, teachers, volunteers, volunteers to teach, volunteer teachers, education, student education, online teaching, digital classrooms, virtual teaching, ngo, free education, remote village education, internet education, teaching channel, sponsor for education, sponsor for school, donate for school, donate for education"/>
+<!--        <meta name="image" content="https://www.evidyaloka.org/static/images/top_section_model_256.png">-->
+        <title>evSchool by eVidyaloka</title>
+
+
+        <!-- Bootstrap Core CSS -->
+        <link href="/static/campaign/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Dosis:400,300,600,700' rel='stylesheet' type='text/css'>
+        
+
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <style>
+            @media only screen and (min-width: 1024px)  {
+                #color_bar {
+                }
+            }
+            .iamintrested_button{
+                background-color: #32ccfe; 
+                border: none; 
+                top: 30px !important; 
+                font-family: 'Dosis'; 
+                font-weight: 600; 
+                border-radius: 300px; 
+                position: relative;
+                top: 50px;
+                font-size:x-large;
+            }
+
+            .download_button {
+                background-color: #32ccfe; 
+                border: none; 
+                font-family: 'Dosis'; 
+                font-weight: 600; 
+                border-radius: 300px; 
+                font-size:x-large;
+            }
+            .modal-body {
+                min-height:30%;
+            }
+        </style>
+
+    </head>
+
+    <body>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="margin-top: 11%;">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div id='select_radio' style='display: none;margin-right:5%;margin-left:5%;'></div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" style="text-align: center;">
+                            <input type="radio" id="school_user" name="user_type" value="school_user">
+                            <label for="school_user" style="padding-left: 10px;">I represent school</label>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" style="text-align: center;">
+                            <input type="radio" id="org_user" name="user_type" value="org_user">
+                            <label for="org_user" style="padding-left: 10px;">I represent organization</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background-color: coral;color:#FFFFFF;">Close</button>
+                <button type="button" onclick="schoolSeachPage()" class="btn btn-success">Next</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <section id="components_header" style='height: min-content;'>
+            <div class="container" align="center" style="padding-right: 0px; padding-left: 0px;">
+                <a href="/">
+                    <img class="logo_img_css" src="/static/images/evidyalogo.png" alt="logo" style="margin-top: 15px; max-width: 200px; height: 200px; float: left; margin-left: 5px"/>
+                </a>
+                <img  src="/static/images/eVschool from eVidyaloka.png" alt="evidyaloka" style="margin-top: 33px; width: 385px; height: 150px; padding-left: 80px;;"/>
+                <div style="float:right; margin-top: 37px; margin-right: 10px">
+                    <p style="font-size: 20px; font-family: 'Dosis'; font-weight: 400"><a href="mailto:evschool@evidyaloka.org">evschool@evidyaloka.org</a> / 080-47091716</p>
+                </div>
+            </div>
+            <div class="container" align="center" style="padding-right: 0px; padding-left: 0px; width: 100%;">
+                <img id="color_bar" class="logo_img_css" src="/static/images/top-colored-bar-mobile.png" alt="" style="width: inherit; height: 4px"/>
+            </div>
+
+            <div align="center">
+                <img class="logo_img_css" src="/static/images/Image 1.png" alt="" style="margin-top: 5px; width: 945.5px; height: 250px"/>
+            </div>
+            <div align="center">
+
+            </div>
+
+        </section>
+
+        <hr style="border-color: #F05F40 !important;border-width: 1px !important;width:100%;">
+
+        <section  id="components_how_it_works" style='height: min-content;'>
+            <br>
+            <div class="container" align="center" style="padding-right: 0px; padding-left: 0px;">
+                <h2 style="font-size: 27px; font-family: 'Dosis'; font-weight: 600; margin-top: 0px; margin-bottom: 20px; color: #fc9732">How it works</h2>
+            </div>
+            <div class="container" align="center" style="padding-right: 0px; padding-left: 0px;">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 text-center">
+                        <div class="service-box">
+                            <img alt="volunteer infographics" src="/static/campaign/img/Add_your_school.png" style='height: 80px; width: 86px;' >
+                            <h3 style="font-family: 'Dosis'; font-weight: 400;">Add your <strong>school</strong></h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 text-center">
+                        <div class="service-box">
+                            <img alt="volunteer infographics" src="/static/campaign/img/2. Plan your eClasses.png" style='height: 80px; width: 86px;' >
+                            <h3 style="font-family: 'Dosis'; font-weight: 400;">Plan your <strong>eclasses</strong></h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 text-center">
+                        <div class="service-box">
+                            <img alt="volunteer infographics" src="/static/campaign/img/3. Go Live with your students.png" style='height: 80px; width: 86px;' >
+                            <h3 style="font-family: 'Dosis'; font-weight: 400;">Go live with your <strong>students</strong></h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 text-center">
+                        <div class="service-box">
+                            <button id="open_signup_modal" class="btn btn-success iamintrested_button" data-toggle="modal" data-target="#myModal">SIGN UP</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </section>
+
+        <hr style="border-color: #F05F40 !important;border-width: 1px !important;width:100%;">
+
+        <section  id="components_continued" style='height: min-content;'>
+            <br>
+            <div class="container" align="center" style="padding-right: 0px; padding-left: 0px;">
+                <h2 style="font-size: 27px; font-family: 'Dosis'; font-weight: 600; margin-top: 0px; margin-bottom: 20px; color: #fc9732">Have the students back to eVSchool</h2>
+            </div>
+            <div class="container" align="center" style="padding-right: 0px; padding-left: 0px;">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 text-center">
+                        <div class="service-box">
+                            <img alt="volunteer infographics" src="/static/campaign/img/4. Stay connected with your students.png" style='height: 80px; width: 86px;' >
+                            <h3 style="font-family: 'Dosis'; font-weight: 400;">Stay connected with your <strong>students</strong></h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 text-center">
+                        <div class="service-box">
+                            <img alt="volunteer infographics" src="/static/campaign/img/5. Ensure continued learning.png" style='height: 80px; width: 86px;' >
+                            <h3 style="font-family: 'Dosis'; font-weight: 400;">Ensure continued <strong>learning</strong></h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 text-center">
+                        <div class="service-box">
+                            <img alt="volunteer infographics" src="/static/campaign/img/6. Monitor from Anywhere.png" style='height: 80px; width: 86px;' >
+                            <h3 style="font-family: 'Dosis'; font-weight: 400;">Monitor from <strong>anywhere</strong></h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 text-center">
+                        <div class="service-box">
+                            <img alt="volunteer infographics" src="/static/campaign/img/7. No Tech overheads.png" style='height: 80px; width: 86px;' >
+                            <h3 style="font-family: 'Dosis'; font-weight: 400;">No technology <strong>overheads</strong></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </section>
+
+        <hr style="border-color: #F05F40 !important;border-width: 1px !important;width:100%;">
+
+        <section  id="components_capability" style='height: min-content;'>
+            <br>
+            <div class="container" align="center" style="padding-right: 0px; padding-left: 0px;">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="service-box">
+                            <img src="/static/images/eschool_mobile_apps.jpg" style="max-width: 250px; max-height: 161px;"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="service-box">
+                            <img src="/static/images/eschool_manage.png" style="max-width: 250px; max-height: 161px;margin-top:3px;"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="service-box">
+                           <img src="/static/images/eschool_monitor.png" style="max-width: 250px; max-height: 161px;"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="service-box">
+                            <img src="/static/images/eschool_measure.png" style="max-width: 250px; max-height: 161px;"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </section>
+
+        <hr style="border-color: #F05F40 !important;border-width: 1px !important;width:100%;">
+
+        <section id="components_feedback" style='height: min-content'>
+
+            <div class="container" align="center" style="padding-right: 0px; padding-left: 0px;">
+                <h3 style="font-family: 'Dosis'; font-weight: 400;">"Lockdown is for classes and schools, not for learning. Thanks to <b>eVidyaloka</b>'s online platform, children are now learning from home"</h3>
+                <h4 style="font-family: 'Dosis'; font-weight: 400;">- Headmaster, Panchayat Union Middle School, Esanakorai, Tamil Nadu</h4>
+            </div>
+            <br>
+        </section>
+
+        <hr style="border-color: #F05F40 !important;border-width: 1px !important;width:100%;">
+
+        <section id="components_offer" style='height: min-content'>
+            <br>
+            <div class="container" align="center" style="padding-right: 0px; padding-left: 0px;">
+                <h2 style="font-size: 27px; font-family: 'Dosis'; font-weight: 600; margin-top: 0px; margin-bottom: 20px; color: #fc9732">How much does it cost?</h2>
+            </div>
+            <div class="container" align="center" style="padding-right: 0px; padding-left: 0px;">
+                <h3 style="font-family: 'Dosis'; font-weight: 400;">eVschool is free for adoption to all schools till 30th September, 2020. A nominal administrative cost will be applicable from 1st October, 2020.</h3>
+            </div>
+            <br>
+        </section>
+
+        <hr style="border-color: #F05F40 !important;border-width: 1px !important;width:100%;">
+
+        <section id="footer" style='height: min-content'>
+            <br>
+            <div class="container" align="center" style="padding-right: 0px; padding-left: 0px;">
+                <h2 style="font-size: 27px; font-family: 'Dosis'; font-weight: 600; margin-top: 0px; margin-bottom: 20px; color: #fc9732">Why learn with eVidyaloka?</h2>
+            </div>
+
+            <div class="container" align="center" style="padding-right: 0px; padding-left: 0px;">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 text-center">
+                        <div class="service-box">
+                            <img alt="volunteer infographics" src="/static/campaign/img/Since 2011.png" style='height: 80px; width: 86px;' >
+                            <h3 style="font-family: 'Dosis'; font-weight: 400;">Pioneer in eLearning since 2011</h3><br>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 text-center">
+                        <div class="service-box">
+                            <img alt="volunteer infographics" src="/static/campaign/img/2 Million Child Learning Hours.png" style='height: 80px; width: 86px;' >
+                            <h3 style="font-family: 'Dosis'; font-weight: 400;">2 million child learning hours delivered, online</h3><br>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 text-center">
+                        <div class="service-box">
+                            <img alt="volunteer infographics" src="/static/campaign/img/10 Indian States.png" style='height: 80px; width: 86px;' >
+                            <h3 style="font-family: 'Dosis'; font-weight: 400;">Trusted by govt.schools in 10 states</h3><br>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 text-center">
+                        <div class="service-box">
+                            <img alt="volunteer infographics" src="/static/campaign/img/Rural focus.png" style='height: 80px; width: 86px;' >
+                            <h3 style="font-family: 'Dosis'; font-weight: 400;">Rural focussed,Not-for-profit Edtech</h3><br>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <button id="open_signup_modal" class="btn btn-success iamintrested_button" data-toggle="modal" data-target="#myModal">SIGN UP</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <br><br>
+
+        <hr style="border-color: #F05F40 !important;border-width: 1px !important;width:100%;">
+
+        <section id="footer" style='height: min-content'>
+            <div class="col-md-12 text-center">
+                <!-- <iframe id="scroll-to" src="/static/downloads/eVschool_Promo.mp4" width="640" height="360" frameborder="0" allow="autoplay;muted; fullscreen" allowfullscreen></iframe> -->
+                <video id="scroll-to" width="640" height="360" controls autoplay muted>
+                    <source src="/static/downloads/eVschool_Promo.mp4" type="video/mp4">
+                    Your browser does not support this video.
+                  </video>
+            </div>
+            
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <br><br>
+                <div class="col-md-12 text-center">
+                    <a href="/static/downloads/eVschool.pdf" download>
+                        <button class="btn btn-success download_button" >
+                            <span class="glyphicon glyphicon-download"></span>
+                            eVschool Product Information
+                        </button>
+                    </a>
+                </div>
+                <br><br>
+                &nbsp;
+            </div>
+        </section>
+
+        <br><br>
+
+        <hr style="border-color: #F05F40 !important;border-width: 1px !important;width:100%;">
+
+        <div align="center">
+            <p style="font-size: 18px; font-family: 'Dosis'; font-weight: 400">Contact Us: <a href="mailto:evschool@evidyaloka.org">evschool@evidyaloka.org</a> / 080-47091716</p>
+        </div>
+        <br>
+
+        <script>
+            function changeAction() {
+              var x = document.getElementById("dice_code");
+              partner_signup_url = '/partner/new_signup'
+              school_admin_signup_url = '/v2/sign_up_school_admin'
+              if (x.value.length == 0){
+                document.getElementById('form_id').action = partner_signup_url
+              } else{
+                document.getElementById('form_id').action = school_admin_signup_url
+              }
+            }
+
+            function schoolSeachPage(){
+                checked_radio = $("input[name='user_type']:checked").val();
+                if(checked_radio == undefined) {
+                    $('#select_radio').html('<div class="alert alert-danger alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Please select the user type.</div>').show();
+                } else {
+                    $('#select_radio').hide()
+                    if(checked_radio == 'org_user') {
+                        window.location = '/partner/new_signup'
+                    } else {
+                        window.location = '/school/search?user_type='+checked_radio
+                    }
+                }
+            }
+
+            $(window).scroll(function() {
+                var hT = $('#scroll-to').offset().top,
+                    hH = $('#scroll-to').outerHeight(),
+                    wH = $(window).height(),
+                    wS = $(this).scrollTop();
+                if (wS > (hT+hH-wH)){
+                    // video_url = $('#scroll-to').attr('src' )
+                    // video_url += "?autoplay=1&loop=1&autopause=1&mute=0"
+                    // $('#scroll-to').attr('src', video_url);
+                    // var iframe = document.getElementById("scroll-to");
+                    // iframe.contentWindow.postMessage('{"method":"setVolume", "value":0}','*');
+
+                    var vid = document.getElementById("scroll-to");
+                    vid.autoplay = true;
+                    vid.load();
+                }
+            });
+            
+        </script>
+    </body>
+
+</html>

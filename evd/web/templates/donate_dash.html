@@ -1,0 +1,994 @@
+{% extends "base.html" %} {% load filters %} {% load tags %} {% block head_title %}eVidyaloka - Donations Dashboard{% endblock %} {% block head_styles %} {{ block.super }}
+<link rel="stylesheet" type="text/css" href="/static/css/filtergrid.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">
+
+<style>
+    td.addr {
+        min-width: 150px;
+        max-width: 150px;
+        overflow-x: auto;
+    }
+    
+    .exclude {
+        display: none;
+    }
+    
+    #donation-table_wrapper {
+        overflow-x: scroll;
+        width: 150%;
+        margin-left: -25%;
+        max-height: 750px;
+        overflow: auto;
+    }
+    
+    tfoot {
+        display: table-header-group !important;
+    }
+    
+    #donation-table thead tr th {
+        padding: 5px;
+        text-align: center;
+    }
+    
+    #donation-table tbody tr td {
+        padding: 5px;
+        text-align: center;
+    }
+    
+    #donation-table tbody tr.more-details {
+        cursor: default;
+        background-color: rgba(255, 255, 255, 0.49);
+    }
+    
+    #donation-table tbody tr {
+        /* cursor: pointer; */
+        background-color: white;
+        border: 1px solid #aaa;
+    }
+    
+    .control-group {
+        overflow: hidden;
+    }
+    
+    .control-group>div.form-part {
+        width: 50%;
+        float: left;
+        padding: 5px 10px;
+        padding-left: 110px;
+        position: relative;
+    }
+    
+    .control-group>div.form-part.full {
+        width: 1000px;
+        ;
+    }
+    
+    .control-group>div.form-part.full>label {
+        right: 836px;
+    }
+    
+    .control-group>div.form-part>label {
+        position: absolute;
+        top: 13px;
+        right: 560px;
+    }
+    
+    #donation-table * {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -o-box-sizing: border-box;
+    }
+    
+    #editTable tbody th {
+        font-weight: bold;
+    }
+    
+    #editTable tbody td input {
+        display: inline;
+        width: 100%;
+        font-size: 14px;
+        margin-bottom: unset;
+        padding: 5px;
+    }
+    
+    #editTable tbody tr {
+        height: 50px;
+        ;
+    }
+    
+    [type="submit"] {
+        cursor: pointer;
+    }
+    
+    a.no-receipt {
+        color: gray;
+    }
+</style>
+{% endblock %} {% block body_container %}
+<div style="width: 100%; box-shadow:10px 10px 5px #888888;margin-bottom:20px; height:40px;border:1px solid white;">
+    <p style="margin-bottom: 20px; text-align: center; font-size: 2em">
+        Donations Dashboard
+    </p>
+</div>
+<div style="float: left;">
+    <label for="fromDate">From : </label>
+    <input type="date" id="fromDate" name="fromDate" style="color: black;padding: 5px; margin-left: 10px;">
+</div>
+<div style="float: left;">
+    <label for="toDate">To : </label>
+    <input type="date" id="toDate" name="toDate" style="color: black;padding: 5px;margin-left: 10px;">
+</div>
+<div style="float: left;">
+    <button class="btn btn-success" id="dateFilter" style="margin-top:25px;float:left;border-radius: 4px;" onclick="refreshDate();">Submit</button>
+</div>
+<!-- <button class="btn" id="btnExport" style="width:100px;cursor:pointer; margin-bottom:5px;font-size:14px;float:right;border: 1px solid white;" onclick="ExportExcel('xlsx');" >Export  </button> -->
+<div class="btn" id="rows_count" style="width:100px; margin-bottom:5px;font-size:14px;float:right;border: 1px solid white;">Count: {{ donations|length }}</div>
+<button onclick="deleteDoantion()" style="position: relative;left: 44%;top: 2px;"><i class="fa fa-trash fa-2x" style="color: #ee0505;font-size: 1.5em;"></i></button>
+<table id="donation-table" class="table table-bordered" style="width: 100%;">
+    <thead>
+        <tr>
+            <th>Select</th>
+            <th>Transaction ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Donation Type</th>
+            <th>Donation Date</th>
+            <th>Amount</th>
+            <th>Payment Mode</th>
+            <th class="recpt">Online Status</th>
+            <th class="recpt">Receipt</th>
+            <th class="exclude">Email ID</th>
+            <th class="exclude">Pan No</th>
+            <th class="exclude"> Passport</th>
+            <th class="exclude">Phone</th>
+            <th class="exclude">Address</th>
+            <th class="exclude">City</th>
+            <th class="exclude"> Pincode</th>
+            <th class="exclude">Country</th>
+            <th>References</th>
+            <th>Channel</th>
+            <th class="exclude">Status</th>
+            <th>UPI Id</th>
+
+            {% if user.is_superuser %}
+            <th class='recpt'>Edit / Delete</th>
+            {% endif %}
+
+            <th class="exclude recpt">Receipt No</th>
+            <th class="exclude">State</th>
+            <th class="exclude">No of Students</th>
+            <th class="exclude">No of Classrooms</th>
+            <th class="exclude"> No of Full Centers</th>
+            <th class="exclude">No of Months</th>
+            <th class="exclude"> Resident Status</th>
+            <th class="exclude"> Cheque Number</th>
+            <th class="exclude">Cheque Date</th>
+            <th class="exclude"> Cheque Bank</th>
+            <th class="exclude"> Cheque Deposit Date</th>
+            <th class="exclude"> Cheque Credited Date</th>
+            <th class="exclude"> Neft Bank Name</th>
+            <th class="exclude">Neft TXN Id</th>
+            <th class="exclude">Neft TXN Date</th>
+            <th class="exclude"> Neft Credited Date</th>
+            <th class="exclude recpt">Batch number</th>
+
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th></th>
+            <th>Transaction ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Donation Type</th>
+            <th>Donation Date</th>
+            <th>Amount</th>
+            <th>Payment Mode</th>
+            <th class="recpt">Online Status</th>
+            <th class="recpt">Receipt</th>
+            <th class="exclude">Email ID</th>
+            <th class="exclude">Pan No</th>
+            <th class="exclude"> Passport</th>
+            <th class="exclude">Phone</th>
+            <th class="exclude">Address</th>
+            <th class="exclude">City</th>
+            <th class="exclude"> Pincode</th>
+            <th class="exclude">Country</th>
+            <th>References</th>
+            <th>Channel</th>
+            <th class="exclude">Status</th>
+            <th>UPI Id</th>
+
+            {% if user.is_superuser %}
+            <th class='recpt' style="display: none;">Edit / Delete</th>
+            {% endif %}
+
+            <th class="exclude recpt">Receipt No</th>
+            <th class="exclude">State</th>
+            <th class="exclude">No of Students</th>
+            <th class="exclude">No of Classrooms</th>
+            <th class="exclude"> No of Full Centers</th>
+            <th class="exclude">No of Months</th>
+            <th class="exclude"> Resident Status</th>
+            <th class="exclude"> Cheque Number</th>
+            <th class="exclude">Cheque Date</th>
+            <th class="exclude"> Cheque Bank</th>
+            <th class="exclude"> Cheque Deposit Date</th>
+            <th class="exclude"> Cheque Credited Date</th>
+            <th class="exclude"> Neft Bank Name</th>
+            <th class="exclude">Neft TXN Id</th>
+            <th class="exclude">Neft TXN Date</th>
+            <th class="exclude"> Neft Credited Date</th>
+            <th class="exclude recpt">Batch number</th>
+
+        </tr>
+    </tfoot>
+    <tbody>
+        <!-- <tr id="empty"> </tr> -->
+        {% for donation in donations %}
+        <tr id="row_{{ donation.id }}">
+            <td class="col-xs-1">
+                <input type="checkbox" class="delete_multiple" style="position:unset;height: unset;" value="{{ donation.id }}">
+            </td>
+            <td style='max-width:10px; cursor:pointer;' id="{{ donation.id }}" onclick="showDetails(this.id);"> {{ donation.id }} </td>
+            <td class="addr">{{ donation.name }}</td>
+            <td>{{ donation.last_name }} </td>
+            <td class="addr">{{ donation.donation_type }}</td>
+            <td class="addr"> {{ donation.donation_time }}</td>
+            <td> {{ donation.amount }} </td>
+            <td> {{ donation.payment_type }}</td>
+            <td class="recpt addr"> {{ donation.online_txn_status }} </td>
+            <td class="addr recpt">
+                {% if donation.receipt %}
+                <a target="_blank" href="/{{ donation.receipt.url }}">Download Receipt</a> {% else %} Not Available {% endif %}
+            </td>
+            <td class="exclude">{{ donation.email }} </td>
+            <td class="exclude">{{ donation.pan_number }}</td>
+            <td class="exclude">{{ donation.passport_number }}</td>
+            <td class="exclude">{{ donation.phone }}</td>
+            <td class="exclude">{{ donation.address }}</td>
+            <td class="exclude">{{ donation.city }}</td>
+            <td class="exclude">{{ donation.pincode }}</td>
+            <td class="exclude">{{ donation.country }}</td>
+            <td>{{ donation.reference }}</td>
+            <td>{{ donation.channel }}</td>
+            <td class="exclude">{{ donation.status }}</td>
+            <td>{{ donation.upi_transaction_no }}</td>
+
+            {% if user.is_superuser %}
+            <td class='recpt' nowrap="">
+                <button onclick="editDonation('row_{{ donation.id }}');"><i class="fa fa-edit fa-2x" style="color: #09ee3a;font-size: 1.5em;"></i></button>&nbsp; &nbsp; &nbsp;<button onclick="deleteDoantion('{{ donation.id }}');"><i class="fa fa-trash fa-2x" style="color: #ee0505;font-size: 1.5em;"></i></button>
+            </td>
+            {% endif %}
+
+            <td class="exclude recpt">{{ donation.receipt_no }}</td>
+            <td class="exclude">{{ donation.state }}</td>
+            <td class="exclude">{{ donation.num_students }}</td>
+            <td class="exclude">{{ donation.num_classrooms }}</td>
+            <td class="exclude">{{ donation.num_centers }}</td>
+            <td class="exclude">{{ donation.num_months }}</td>
+            <td class="exclude">{{ donation.resident }}</td>
+            <td class="exclude">{{ donation.chequenumber }}</td>
+            <td class="exclude">{{ donation.chequedate }}</td>
+            <td class="exclude">{{ donation.chequebank }}</td>
+            <td class="exclude">{{ donation.checkdeposite_date }}</td>
+            <td class="exclude">{{ donation.cheque_credited_date }}</td>
+            <td class="exclude">{{ donation.neft_bank_name }}</td>
+            <td class="exclude">{{ donation.neft_transaction_id }}</td>
+            <td class="exclude">{{ donation.neft_transaction_date }}</td>
+            <td class="exclude">{{ donation.neft_credited_date }}</td>
+            <td class="exclude recpt">{{ donation.batch_no }}</td>
+
+
+
+
+            <!-- <td class="recpt" style="display:none"><input type="checkbox" class="del" \> </td> -->
+        </tr>
+        <!-- <tr class="more-details hide">
+        <td colspan="12">
+            <div>
+                <form action="/update_pledge_admin/" method="POST">
+                    <input type="hidden" name="id"
+                            value="{{ donation.id }}"/>
+                    {% csrf_token %}
+                {% if donation.payment_type == "cheque" %}
+                    <div class="control-group">
+                        <div class="form-part required">
+                            <label>Cheque Number:</label>
+                            <div class='input text'>
+                                <input type='text'
+                                        data-validate="true"
+                                        data-title="Cheque Number"
+                                        value="{{ donation.chequenumber }}"
+                                        name='chequenumber'/>
+                            </div>
+                        </div>
+                        <div class="form-part required">
+                            <label>Bank Drawn:</label>
+                            <div class='input text'>
+                                <input type='text'
+                                        data-validate="true"
+                                        data-title="Bank Drawn"
+                                        value="{{ donation.chequebank }}"
+                                        name='chequebank'/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-part required">
+                            <label>Date On Cheque:</label>
+                            <div class='input text'>
+                                <input type='text'
+                                        data-type="date"
+                                        data-validate="true"
+                                        data-title="Date On Cheque"
+                                        value="{{ donation.chequedate }}"
+                                        name='chequedate'/>
+                            </div>
+                        </div>
+                        <div class="form-part required">
+                            <label>Deposit Date:</label>
+                            <div class='input text'>
+                                <input type='text'
+                                        data-type="date"
+                                        data-validate="true"
+                                        data-title="Deposit Date"
+                                        value="{{ donation.checkdeposite_date }}"
+                                        name='checkdeposite_date'/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group {% if not user.is_superuser %}hide{% endif %}">
+                        <div class="form-part required">
+                            <label>Credited Date:</label>
+                            <div class='input text'>
+                                <input type='text'
+                                        name='cheque_credited_date'
+                                        data-type="date"
+                                        data-validate="true"
+                                        value="{{ donation.cheque_credited_date }}"
+                                        data-title="Credited Date"/>
+                            </div>
+                        </div>
+                        <div class="form-part required">
+                            <label>eVidyaloka txn ref:</label>
+                            <div class='input text'>
+                                <input type='text'
+                                        name='transaction_key'
+                                        value="{{ donation.transaction_key }}"
+                                        data-validate="true"
+                                        data-title="Bank Name"/>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if donation.payment_type == "neft" %}
+                    <div class="control-group">
+                        <div class="form-part required">
+                            <label>Bank Name:</label>
+                            <div class='input text'>
+                                <input type='text'
+                                        name='neft_bank_name'
+                                        data-validate="true"
+                                        value="{{ donation.neft_bank_name }}"
+                                        data-title="Bank Name"/>
+                            </div>
+                        </div>
+                        <div class="form-part required">
+                            <label>Transaction Ref:</label>
+                            <div class='input text'>
+                                <input type='text'
+                                        data-validate="true"
+                                        data-title="Transaction ID"
+                                        value="{{ donation.neft_transaction_id }}"
+                                        name='neft_transaction_id'/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-part required">
+                            <label>Transaction Date:</label>
+                            <div class='input text'>
+                                <input type='text'
+                                        data-type="date"
+                                        data-validate="true"
+                                        value="{{ donation.neft_transaction_date }}"
+                                        data-title="Transaction Date"
+                                        name='neft_transaction_date'/>
+                            </div>
+                        </div>
+                        <div class="form-part required {% if not user.is_superuser %}hide{% endif %}">
+                            <label>Credited Date:</label>
+                            <div class='input text'>
+                                <input type='text'
+                                        data-type="date"
+                                        name='neft_credited_date'
+                                        value="{{ donation.neft_credited_date }}"
+                                        data-validate="true"
+                                        data-title="Credited Date"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group {% if not user.is_superuser %}hide{% endif %}">
+                        <div class="form-part required">
+                            <label>eVidyaloka txn ref:</label>
+                            <div class='input text'>
+                                <input type='text'
+                                        name='transaction_key'
+                                        value="{{ donation.transaction_key }}"
+                                        data-validate="true"
+                                        data-title="Bank Name"/>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if donation.payment_type == "online" %}
+                <div class="control-group {% if not user.is_superuser %}hide{% endif %}">
+                    <div class="form-part required full">
+                        <label>eVidyaloka txn ref:</label>
+                        <div class='input text'>
+                            <input type='text'
+                                    name='transaction_key'
+                                    value="{{ donation.transaction_key }}"
+                                    data-validate="true"
+                                    data-title="Bank Name"/>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                <br/>
+                <button class="{% if donation.payment_type == 'online' and not user.is_superuser %}hide{% endif %}"
+                        type="submit"
+                        style="background-color: #F15A22; padding: 10px;">Update</button>
+                </form>
+            </div>
+        </td>
+    </tr> -->
+
+        {% endfor %} {% if not donations %}
+        <tr>
+            <td colspan="12">
+                No contributions yet from you,<br/> Please make contributions here
+                <a href="http://www.evidyaloka.org/sponsor/">http://www.evidyaloka.org/sponsor/</a>
+            </td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
+<div class="modal" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="left: 45%;width: 650px; top: 45%;">
+    <div class="modal-header" style="background-color: #52ccfd;height: 55px;">
+        <p style="text-align: left;font-size: 16px;font-weight: bold; font-family: PlutoCondRegular;color:#FFFFFF;">Edit Pledge<button type="button" class="close" onclick="$('#editModal').modal('hide');" style="float: right;background-color: #FFFF;font-size: 30px;">&times;</button></p>
+    </div>
+    <div class="modal-body" id="edit_modal" style="min-height:390px;background-color: #ffffff;">
+    </div>
+</div>
+<!-- <script type="text/javascript" language="javascript" src="/static/js/tablefilter1.js"></script> -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.1/js/dataTables.buttons.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.1/js/buttons.html5.min.js" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+    function showDetails(id) {
+        var id = "row_" + id;
+        var edit_details = {};
+        // console.log($("#" + id).find("td"), "all td s");
+        $("#" + id).find("td").each(function(row_no, td) {
+            // console.log(row_no, "row number");
+            // console.log(td, "td from for loop");
+            if (row_no == 1) {
+                edit_details['donor_id'] = parseInt($(td).text());
+            } else if (row_no == 2) {
+                edit_details['first_name'] = $(td).text();
+            } else if (row_no == 3) {
+                edit_details['last_name'] = $(td).text();
+            } else if (row_no == 5) {
+                edit_details['donation_time'] = $(td).text();
+            } else if (row_no == 6) {
+                edit_details['amount'] = $(td).text();
+            } else if (row_no == 7) {
+                edit_details['payment_mode'] = $(td).text().trim();
+            } else if (row_no == 9) {
+                edit_details['receipt_link'] = $(td).find('a').attr('href');
+            } else if (row_no == 10) {
+                edit_details['email'] = $(td).text();
+            } else if (row_no == 11) {
+                edit_details['pan_no'] = $(td).text();
+            } else if (row_no == 12) {
+                edit_details['passport_no'] = $(td).text();
+            } else if (row_no == 13) {
+                edit_details['phone_no'] = $(td).text();
+            } else if (row_no == 14) {
+                edit_details['address'] = $(td).text();
+            } else if (row_no == 15) {
+                edit_details['city'] = $(td).text();
+            } else if (row_no == 16) {
+                edit_details['pin_code'] = $(td).text();
+            } else if (row_no == 17) {
+                edit_details['country'] = $(td).text();
+            } else if (row_no == 20) {
+                edit_details['status'] = $(td).text();
+            }
+        });
+        console.log(edit_details, "edit detailssssss");
+        var donor_status = ['completed', 'in progress', 'pending'];
+        var donor_payment_mode = ['online', 'neft', 'cheque'];
+        var cell_html = "<div>";
+        cell_html += "<table class='table table-bordered' id='editTable'>";
+        cell_html += "<tr><th>Transaction Id</th>" + "<td>" + edit_details['donor_id'] + "</td><th>Status</th><td><select disabled>";
+        $.each(donor_status, function(index, stat) {
+            if (stat == edit_details['status']) {
+                cell_html += "<option value=\'" + stat + "\' selected=selected>" + stat + "</option>"
+            } else {
+                cell_html += "<option value=\'" + stat + "\'>" + stat + "</option>"
+            }
+        });
+        cell_html += "</select></td></tr>";
+        cell_html += "<tr><th>First Name</th>" + "<td>" + edit_details['first_name'] + "</td><th>Last Name</th><td>" + edit_details['last_name'] + "</td></tr>";
+        cell_html += "<tr><th>Email</th>" + "<td>" + edit_details['email'] + "</td><th>Phone No</th><td>" + edit_details['phone_no'] + "</td></tr>";
+        cell_html += "<tr><th>Pan No.</th>" + "<td>" + edit_details['pan_no'] + "</td><th>Passport No.</th><td>" + edit_details['passport_no'] + "</td></tr>";
+        cell_html += "<tr><th>Address</th>" + "<td><textarea style='color: black;width: 100%;height:75px; padding: 2px; display: inline-block; border: 1px solid #ccc; border-radius: 2px;box-sizing: border-box; margin-bottom:unset;' disabled>" + edit_details['address'] + "</textarea></td>" + "<th>Pin Code</th>" + "<td>" + edit_details['pin_code'] + "</td></tr>";
+        cell_html += "<tr><th>Country</th>" + "<td>" + edit_details['country'] + "</td><th>City</th>" + "<td>" + edit_details['city'] + "</td></tr>";
+        cell_html += "<tr><th>Payment mode</th>" + "<td><select disabled>";
+        $.each(donor_payment_mode, function(index, payType) {
+            if (payType == edit_details['payment_mode']) {
+                cell_html += "<option value=\'" + payType + "\' selected=selected>" + payType + "</option>"
+            } else {
+                cell_html += "<option value=\'" + payType + "\'>" + payType + "</option>"
+            }
+        });
+        cell_html += "</select></td>";
+        if (edit_details['receipt_link']) {
+            cell_html += "<th>Receipt</th><td><a href=\'" + edit_details['receipt_link'] + "\' target='_blank'>Download Receipt</a></td>";
+        } else {
+            cell_html += "<th>Receipt</th><td>NOT AVAILABLE</td>";
+        }
+        cell_html += "</tr>";
+        cell_html += "<tr><th>Donation Date</th>" + "<td>" + edit_details['donation_time'] + "</td><th>Amount</th><td>" + edit_details['amount'] + "</td></tr>";
+        cell_html += "</table>";
+        cell_html += "</div>";
+        $('#edit_modal').html(cell_html);
+        $('#editModal').modal('show');
+    }
+
+    function refreshDate() {
+        var from_date = $('#fromDate').val();
+        var to_date = $('#toDate').val();
+
+        if (from_date != '' && to_date != '') {
+            window.location = '/donate_dash/?from_date=' + from_date + '&to_date=' + to_date;
+        } else {
+            window.location = '/donate_dash/'
+        }
+    }
+
+    function editDonation(id) {
+        var edit_details = {}
+            // console.log($("#" + id).find("td"))
+        $("#" + id).find("td").each(function(row_no, td) {
+            // console.log(row_no, "row number");
+            // console.log(td, "td from for loop");
+            if (row_no == 1) {
+                edit_details['donor_id'] = parseInt($(td).text());
+            } else if (row_no == 2) {
+                edit_details['first_name'] = $(td).text();
+            } else if (row_no == 3) {
+                edit_details['last_name'] = $(td).text();
+            } else if (row_no == 5) {
+                edit_details['donation_time'] = $(td).text();
+            } else if (row_no == 6) {
+                edit_details['amount'] = $(td).text();
+            } else if (row_no == 7) {
+                edit_details['payment_mode'] = $(td).text().trim();
+            } else if (row_no == 9) {
+                edit_details['receipt_link'] = $(td).find('a').attr('href');
+            } else if (row_no == 10) {
+                edit_details['email'] = $(td).text();
+            } else if (row_no == 11) {
+                edit_details['pan_no'] = $(td).text();
+            } else if (row_no == 12) {
+                edit_details['passport_no'] = $(td).text();
+            } else if (row_no == 13) {
+                edit_details['phone_no'] = $(td).text();
+            } else if (row_no == 14) {
+                edit_details['address'] = $(td).text();
+            } else if (row_no == 15) {
+                edit_details['city'] = $(td).text();
+            } else if (row_no == 16) {
+                edit_details['pin_code'] = $(td).text();
+            } else if (row_no == 17) {
+                edit_details['country'] = $(td).text();
+            } else if (row_no == 20) {
+                edit_details['status'] = $(td).text();
+            }
+        });
+        // console.log(edit_details, "user details");
+        var temp = edit_details['donation_time'].split(',');
+        var temp2 = new Date(temp[0] + ", " + temp[1]);
+        var day = temp2.getDate();
+        var month = temp2.getMonth() + 1;
+        var year = temp2.getFullYear();
+        if (day < 10) {
+            day = "0" + day;
+        }
+        if (month < 10) {
+            month = "0" + month;
+        }
+        var donation_date_new = year + "-" + month + "-" + day;
+        var donor_status = ['started', 'completed'];
+        var donor_payment_mode = ['online', 'neft', 'cheque'];
+        var cell_html = "<div>";
+        cell_html += "<table class='table table-bordered' id='editTable'>";
+        cell_html += "<tr><th>Transaction Id</th>" + "<td>" + edit_details['donor_id'] + "</td><th>Status</th><td><select>";
+        $.each(donor_status, function(index, stat) {
+            if (stat == edit_details['status']) {
+                cell_html += "<option value=\'" + stat + "\' selected=selected>" + stat + "</option>"
+            } else {
+                cell_html += "<option value=\'" + stat + "\'>" + stat + "</option>"
+            }
+        });
+        cell_html += "</select></td></tr>";
+        cell_html += "<tr><th>Donation Date</th>" + "<td><input type='date' value=\'" + donation_date_new + "\'/></td><th>Amount</th><td><input type='text' value=\'" + edit_details['amount'] + "\'/></td></tr>";
+        cell_html += "<tr><th>First Name</th>" + "<td><input type='text' value=\'" + edit_details['first_name'] + "\'/></td><th>Last Name</th><td><input type='text' value=\'" + edit_details['last_name'] + "\'/></td></tr>";
+        cell_html += "<tr><th>Email</th>" + "<td><input type='text' value=\'" + edit_details['email'] + "\'/></td><th>Phone No</th><td><input type='text' value=\'" + edit_details['phone_no'] + "\'/></td></tr>";
+        cell_html += "<tr><th>Pan No.</th>" + "<td><input type='text' value=\'" + edit_details['pan_no'] + "\'/></td><th>Passport No.</th><td><input type='text' value=\'" + edit_details['passport_no'] + "\'/></td></tr>";
+        cell_html += "<tr><th>Address</th>" + "<td><textarea style='color: black;width: 100%;height:75px; padding: 2px; display: inline-block; border: 1px solid #ccc; border-radius: 2px;box-sizing: border-box; margin-bottom:unset;'>" + edit_details['address'] + "</textarea></td>" + "<th>Pin Code</th>" + "<td><input style='width:auto;' type='text' value=\'" + edit_details['pin_code'] + "\'/></td></tr>";
+        cell_html += "<tr><th>Country</th>" + "<td><input type='text' value=\'" + edit_details['country'] + "\'/></td><th>City</th>" + "<td><input type='text' value=\'" + edit_details['city'] + "\'/></td></tr>";
+        cell_html += "<tr><th>Payment mode</th>" + "<td><select>";
+        $.each(donor_payment_mode, function(index, payType) {
+            if (payType == edit_details['payment_mode']) {
+                cell_html += "<option value=\'" + payType + "\' selected=selected>" + payType + "</option>"
+            } else {
+                cell_html += "<option value=\'" + payType + "\'>" + payType + "</option>"
+            }
+        });
+        cell_html += "</select></td><th>Receipt</th><td><input type='file' id=\'file_" + edit_details['donor_id'] + "\'></td></tr>";
+        cell_html += "</table>";
+        cell_html += "<button class='btn' style='background-color:#52ccfd; color:#FFFFFF; margin-left:45%;' onclick=updateDonation(\'editTable\')>Confirm</button>";
+        cell_html += "</div>";
+        $('#edit_modal').html(cell_html);
+        $('#editModal').modal('show');
+    }
+
+    function updateDonation(id) {
+        if (confirm("ARE YOU SURE?")) {
+            // var update_donation = {}
+            var donor_id = 0
+            var formData = new FormData();
+            $("#" + id).find("tr").each(function(row_no, tr) {
+                $(tr).find("td").each(function(col_no, td) {
+                    if (row_no == 0 && col_no == 0) {
+                        donor_id = $(td).text()
+                        formData.append('donor_id', $(td).text());
+                    } else if (row_no == 0 && col_no == 1) {
+                        formData.append('status', $(td).find('select').children("option:selected").val())
+                    } else if (row_no == 1 && col_no == 0) {
+                        formData.append('donation_time', $(td).find('input').val());
+                    } else if (row_no == 1 && col_no == 1) {
+                        amount_temp = $(td).find('input').val()
+                    } else if (row_no == 2 && col_no == 0) {
+                        formData.append('first_name', $(td).find('input').val());
+                    } else if (row_no == 2 && col_no == 1) {
+                        formData.append('last_name', $(td).find('input').val());
+                    } else if (row_no == 3 && col_no == 0) {
+                        formData.append('email', $(td).find('input').val());
+                    } else if (row_no == 3 && col_no == 1) {
+                        formData.append('phone_no', $(td).find('input').val());
+                    } else if (row_no == 4 && col_no == 0) {
+                        formData.append('pan_no', $(td).find('input').val());
+                    } else if (row_no == 4 && col_no == 1) {
+                        formData.append('passport_no', $(td).find('input').val());
+                    } else if (row_no == 5 && col_no == 0) {
+                        formData.append('address', $(td).find('textarea').val());
+                    } else if (row_no == 5 && col_no == 1) {
+                        formData.append('pin_code', $(td).find('input').val());
+                    } else if (row_no == 6 && col_no == 0) {
+                        formData.append('country', $(td).find('input').val());
+                    } else if (row_no == 6 && col_no == 1) {
+                        formData.append('city', $(td).find('input').val());
+                    } else if (row_no == 7 && col_no == 0) {
+                        formData.append('payment_mode', $(td).find('select').children("option:selected").val());
+                    }
+                });
+            });
+
+            if (amount_temp) {
+                formData.append('amount', amount_temp);
+            } else {
+                formData.append('amount', 0);
+            }
+            var file_name = $('#file_' + donor_id)[0].files[0]
+            formData.append('receipt', file_name);
+
+            $.ajax({
+                url: '/v2/update/pledge_details/',
+                type: 'post',
+                data: formData,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(resp) {
+                    alert("Details updated successfully");
+                    location.reload();
+                },
+                error: function(resp) {
+                    alert("Oops!, something went wrong!, please try again later");
+                }
+            });
+        }
+    }
+    // function ExportExcel(type, fn, dl) {
+    //           //getting values of current time for generating the file name
+    //          var dt = new Date();
+    //           var day = dt.getDate();
+    //           var month = dt.getMonth() + 1;
+    //           var year = dt.getFullYear();
+    //           var hour = dt.getHours();
+    //           var mins = dt.getMinutes();
+
+
+    //           var postfix = day + "." + month + "." + year + "_" + hour + "." + mins;
+    //          var elt = document.getElementById('donation-table');
+    //          var temp_elt = elt.cloneNode(true);
+    //         $(temp_elt).find('tfoot').remove();
+    //         $(temp_elt).find('.recpt').remove();
+
+    //          var wb = XLSX.utils.table_to_book(temp_elt, {sheet:"Export Donation Table"});
+    //          return dl ?
+    //             XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
+    //             XLSX.writeFile(wb, fn || ('exported_table_' + postfix + '.' + (type || 'xlsx')));
+    //       }
+
+    function deleteDoantion(id) {
+        var delete_multiple = "";
+        var inputElements = document.getElementsByClassName('delete_multiple');
+        for (var i = 0; inputElements[i]; ++i) {
+
+            if (inputElements[i].checked) {
+                delete_multiple = delete_multiple + (inputElements[i].value) + ",";
+            }
+        }
+        if (typeof id == 'undefined') {
+            id = delete_multiple
+        } else {
+            id = String(id) + ","
+        }
+        if (confirm("ARE YOU SURE?")) {
+            $.post("/v2/delete/pledge_details/", {
+                'donor_id': id,
+                'delete_multiple': delete_multiple
+            }).done(function() {
+                alert("Details deleted successfully");
+                location.reload();
+            }).fail(function(resp) {
+                alert(resp['message']);
+                alert("Oops!, something went wrong!, please try again later");
+            });
+        }
+    }
+    $(function() {
+
+        $("input[data-type=date]").datepicker({
+            dateFormat: "dd-mm-yy"
+        });
+
+        // $("#donation-table").on("click", "tbody tr:not('.more-details')", function () {
+
+        //     $(this).siblings("tr.more-details").addClass("hide");
+        //     $(this).next().removeClass("hide");
+        //     footer_adjust();
+        // });
+        $("tr.more-details").on("submit", "form", function(e) {
+
+            e.preventDefault();
+
+            var form_data = $(this).serializeArray(),
+                post_data = {};
+
+            $.each(form_data, function(i, data) {
+
+                post_data[data.name] = data.value;
+            });
+
+            var $submit = $(this).find("[type=submit]");
+
+            $submit.text("Processing...");
+
+            $.post("/update_pledge_admin/", post_data).done(function() {
+
+                alert("Details updated successfully");
+            }).fail(function() {
+
+                alert("Oops!, something went wrong!, please try again later");
+            }).always(function() {
+
+                $submit.text("Update");
+            });
+        });
+
+        $("a.no-receipt").click(function(e) {
+
+            e.preventDefault();
+            alert("Your receipt is not available for download at this moment!, we shall let you know once it is available for download.");
+        });
+    });
+</script>
+
+
+
+<script>
+    $(document).ready(function() {
+        $("#uvTab").remove();
+
+        // Setup - add a text input to each footer cell
+        $('#donation-table tfoot th').each(function() {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+        });
+
+
+        // DataTable
+        var table = $('#donation-table').DataTable({
+            order: [
+                [0, "desc"]
+            ],
+            dom: 'Blfrtip',
+            buttons: [{
+                text: 'Export To Excel',
+                extend: 'excelHtml5',
+                exportOptions: {
+                    modifier: {
+                        selected: true
+                    },
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 23, 24, 25, 26, 27.28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38],
+                    format: {
+                        header: function(data, columnIdx) {
+                            return data;
+                        }
+                    }
+                },
+                footer: false,
+                customize: function(xlsx) {
+                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                    //$('c[r=A1] t', sheet).text( 'Custom text' );
+                    //$('row c[r^="C"]', sheet).attr('s', '2');
+                }
+            }]
+        });
+
+        // Apply the search
+        table.columns().every(function() {
+            // console.log("ABC");
+            var that = this;
+            $('input', this.footer()).on('keyup change', function() {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+
+        // $(function(){
+        //                     var table3Filters = {
+        //                         col_0: "select",
+        //                         col_1: "select",
+        //                         col_2:  "select",
+        //                         col_3: "select",
+        //                         col_4: "select",
+        //                         col_5: "select",
+        //                         col_6: "select",
+        //                         col_7: "select",
+        //                         col_8: "select",
+        //                         col_9: "select",
+        //                         col_10: "none",
+        //                         col_11: "none",
+        //                         col_12: "none",
+        //                         col_13: "none",
+        //                         col_14: "none",
+        //                         col_15: "none",
+        //                         col_16: "none",
+        //                         col_17: "none",
+        //                         col_18: "none",
+        //                         col_19: "none",
+        //                         col_20: "none",
+        //                         col_21: "none",
+        //                         col_22: "none",
+        //                         col_23: "none",
+        //                         col_24: "none",
+        //                         col_25: "none",
+        //                         col_26: "select",
+        //                         col_27: "none",
+        //                         col_28: "none",
+        //                         col_29: "none",
+        //                         col_30: "none",
+        //                         col_31: "none",
+        //                         col_32: "none",
+        //                         col_33: "none",
+        //                         col_34: "none",
+        //                         col_35: "none",
+        //                         col_36: "select",
+
+
+        //                         display_all_text: "All",
+        //                         enable_empty_option: true,
+        //                         empty_text: "None",
+
+        //                                     }
+        //                     var tf03 = setFilterGrid("donation-table",table3Filters,0);
+        // });
+
+        //           jQuery.moveColumn = function (table, from, to) {
+        //           var rows = jQuery('tr', table);
+        //           var cols;
+        //           rows.each(function() {
+        //                     cols = jQuery(this).children('th, td');
+        //                             cols.eq(from).detach().insertBefore(cols.eq(to));
+        //                                 });
+        //                                 }
+
+
+        //  $("#btnExport").click(function(e) {
+        //       //getting values of current time for generating the file name
+        //      var dt = new Date();
+        //       var day = dt.getDate();
+        //       var month = dt.getMonth() + 1;
+        //       var year = dt.getFullYear();
+        //       var hour = dt.getHours();
+        //       var mins = dt.getMinutes();
+
+
+        //       var postfix = day + "." + month + "." + year + "_" + hour + "." + mins;
+        //       //creating a temporary HTML link element (they support setting file names)
+        //       var a = document.createElement('a');
+        //       //getting data from our div that contains the HTML table
+        //       var data_type = 'data:application/vnd.ms-excel';
+        //       var table_div_main = document.getElementById('donation-table');
+        //       var table_div = table_div_main.cloneNode(true);
+        //       $(table_div).find(".more-details").remove();
+        //       $(table_div).find(".recpt").remove();
+
+        //      $(table_div).find(".fltrow").remove();
+        //      $(table_div).find("#empty").remove();
+        //      var tbl = $('table_div');
+        //      console.log(tbl);
+        //     //  $.moveColumn(table_div, 7, 1);
+        //     //  $.moveColumn(table_div, 8, 3);
+        //     //  $.moveColumn(table_div, 9, 4);
+        //     //  $.moveColumn(table_div, 10, 6);
+        //     //  $.moveColumn(table_div, 11, 7);
+        //     //  $.moveColumn(table_div, 12, 8);
+        //     //  $.moveColumn(table_div, 13, 9);
+        //     //  $.moveColumn(table_div, 14, 11);
+        //     //  $.moveColumn(table_div, 15, 12);
+        //     //  $.moveColumn(table_div, 16, 13);
+        //     //  $.moveColumn(table_div, 17, 14);
+        //     //  $.moveColumn(table_div, 18, 15);
+        //     //  $.moveColumn(table_div, 16, 25);
+        //     //  $.moveColumn(table_div, 16, 25);
+        //     //  $.moveColumn(table_div, 17, 35);
+        //     //  $.moveColumn(table_div, 17, 35);
+
+
+        //       var table_html = table_div.outerHTML.replace(/ /g, '%20');
+        //       a.href = data_type + ', ' + table_html;
+        //       //setting the file name
+        //       a.download = 'exported_table_' + postfix + '.xls';
+        //        //triggering the function
+        //      a.click();
+        //       //just in case, prevent default behaviour
+        //       e.preventDefault();
+        //   });
+
+    });
+</script>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,38 @@
+
+<html lang="en">
+ <head>
+ <style>
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.button1 {background-color: rgba(3, 186, 0, 0.98);} /* Blue */
+.button2 {background-color: #f44336;} /* Red */ 
+</style>
+ </head>
+ <body>
+ <p>Dear {{ user }},</p>
+<a class="button button1"  href="{{accept_url}}">Accept</a>
+<a class="button button2" href="{{decline_url}}" target="_blank">Decline</a>
+<p>You have Confirmed {{slots}} {{subject}}::{{grade}} in {{center_name}},</p>
+     
+
+
+<p>We look forward to you completing the above step and becoming a part of eVidyaloka, with active
+participation & contribution.</p>
+
+<p>With Regards,</p>
+<p>eVidyaloka On boarding Team</p>
+  	
+<p>talktosomeone@evidyaloka.org | +91 80 4090 3939</p>
+ </body>
+ 

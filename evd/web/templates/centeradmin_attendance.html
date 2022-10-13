@@ -1,0 +1,57 @@
+<div class="header">
+    <p style="float:left;">Attendance</p>
+    <a class="close" data-dismiss="modal" style="float:right;cursor:pointer;">X</a>
+</div>
+    <form method="POST" action="/submit_attendance/" id="attendance_form_{{session}}" class="attendance_form">
+       {% csrf_token %}
+       {% if center.digital_school %}
+       <p style="color:orange; font-weight: 800;">Is FLM Session <input type="checkbox" name="is_flm" id="flm_check" style="margin-left: 1rem;"></p>
+       {% endif %}
+       <input type="hidden" name="session" value="{{ session }}" />
+       <table id="students-table" style='width:100%'>
+           <thead>
+               <tr>
+                     <th style="color:orange" width='100px' >ID</th>
+                     <th style="color:orange" width='150px'>My Student</th>
+                    {% if all_yes == 1 %}
+                   <th width="100px" style="color:orange; text-align:center;">Is present<INPUT style="margin-left: 3px;"type="checkbox" onchange="checkAll(this)" name="chk[]" checked/></th>
+                   {% else %}
+                   <th width="100px" style="color:orange; text-align:center;">Is present<INPUT style="margin-left: 3px;"type="checkbox" onchange="checkAll(this)" name="chk[]"/></th>
+                    {% endif %}
+                </tr>
+           </thead>
+           <tbody>
+                {% for att in session_attendance %}
+                <tr>
+                    <td>{{ att.id }}</td>
+                    <td>{{ att.name }}<input type="hidden" value="{{ att.id }}" class="student"/></td>
+                    <td style="text-align:center;"><input id="Attend" type="checkbox" class="attend" value="{{ att.id }}" {% if att.is_present == "yes"%}checked="checked"{% endif %}/></td>
+                </tr>
+                {% endfor %}
+           </tbody>
+       </table>
+       <input type="hidden" name="student" />
+       <input type="hidden" name="attend" />
+    <a id="submit-attendance" href="#attendance_form_{{ session }}" class="btn request-sent-btn" rel="submit" pre-call="pre_submission" callback="closemodal">
+        <span class="ajax-button-label" data-loading="please-wait">Submit Attendance</span>
+    </a>
+    </form>
+    <script>
+        function checkAll(ele) {
+            var checkboxes = document.getElementsByTagName('input');
+            if (ele.checked) {
+                for (var i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].type == 'checkbox'  && String(checkboxes[i].id) == 'Attend') {
+                        checkboxes[i].checked = true;
+                    }
+                }
+            } else {
+                for (var i = 0; i < checkboxes.length; i++) {
+                    console.log(i)
+                    if (checkboxes[i].type == 'checkbox' && String(checkboxes[i].id) == 'Attend') {
+                        checkboxes[i].checked = false;
+                    }
+                }
+            }
+        }
+    </script>

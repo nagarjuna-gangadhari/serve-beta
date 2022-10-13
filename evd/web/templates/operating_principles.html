@@ -1,0 +1,77 @@
+{% extends "footer_base.html" %}
+
+{% block head_styles %}
+{{ block.super }}
+    <style>
+        .about-container{
+            padding-top: 83px !important;
+        }
+        .right-content .top {
+            padding:34px 37px;
+        }
+        .subcontent {
+            background:none;
+        }
+        div.intro h2 {
+            padding-bottom:35px;
+        }
+        div.subcontent h1 {
+            padding-bottom:15px;
+        }
+        ul.operating-principles {
+            line-height:35px;
+            padding-top:10px;
+        }
+        ul.operating-principles li {
+            list-style:initial;
+        }
+        .blue {
+            color:#11BEEE;
+            text-shadow:0 -1px #0D94BA,0 1px white;
+        }
+    </style>
+{% endblock %}
+{% block leftnav_list %}
+
+    <li><a href="/about/" class="about-1"><span>About us</span></a></li>
+    <li><a href="/vision/" class="about-2"><span>Vision & Mission</span></a></li>
+    <li><a href="/operating_principles/" class="about-3 active"><span>Principles</span></a></li>
+    <li><a href="/conduct/" class="about-4"><span>Code of Conduct</span></a></li>
+    <li><a href="/who_we_are/" class="about-5"><span>Who We Are</a></li>
+    <li><a href="/careers/" class="about-6" ><span>Careers</span></a></li>
+    <li><a href="/news_events/" class="about-7" ><span>News & Events</span></a></li>
+    <li><a href="/governance/" class="about-8" ><span>Governance</span></a></li>
+    <li><a href="/partners/" class="about-9"><span>Partners</span></a></li>
+    <li><a href="/faq/" class="about-10"><span>FAQ</span></a></li>
+    <li><a href="/contact_us/" class="about-11"><span>Contact Us</span></a></li>
+    
+
+{% endblock %}
+{% block top_content %}
+
+    <!--<div class="top clearfix">
+        <div class="intro">
+            <h2>Read about our operating principles</h2>
+        </div>
+    </div>-->
+{% endblock %}
+{% block bottom_content %}
+    <div class="paper-bg-wrapper">
+        <div class="paper-bg">
+            <div class="subcontent">
+                <h1 class="blue">Operating Principles</h1>
+                <ul class="operating-principles">
+                    <li>We care about the outcome and less about credits</li>
+                    <li>We will have a strong focus on Children and Academics</li>
+                    <li>We work towards creating an impact in every  Volunteer-Student  interaction</li>
+                    <li>We seek to work in genuine partnership with local communities, NGOs and other organizations aiming at sustainable development, responding to local educational needs</li>
+                    <li>We leverage technology to simplify and be efficient</li>
+                    <li>We are cost conscious</li>
+                    <li>We are committed to openness and transparency in our Financial operations</li>
+                    <li>We work towards continuous improvement in our operations</li>
+                    <li>We believe in empowering people and having a collective ownership</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

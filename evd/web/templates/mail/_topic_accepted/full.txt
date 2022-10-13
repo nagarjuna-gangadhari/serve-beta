@@ -1,0 +1,12 @@
+Dear Admin, 
+
+{{ author }} has Accepted :                                     Date : {{ Date }} 
+
+Details:
+
+       Board, Subject, Grade: {{ Board }}, {{ Subject }}, {{ Grade  }}
+       Topic: {{ Topic  }}
+       Content Type:  {{ Type }}
+
+Regards,
+eVidyaloka Content Team

@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+    <style>
+    a.se_resp_col:hover{
+        text-decoration:underline;
+        cursor:pointer;
+    }
+    </style>
+    <div class="container-fluid new_dash_container" style="margin-left:-15%;width:130%">
+
+    <div class="table-responsive">
+      <h3>Self Evaluation Responses</h3>
+      <table class="table table-bordered table-striped se_table">
+        <thead class="search">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Email</th>
+            <th>Date Submitted</th>
+          </tr>
+        </thead>
+
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Email</th>
+            <th>Date Submitted</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for key, val in SeDetails.iteritems %}
+          <tr class="se_row" data-se="{{val.se_form}}">
+            <td><a class="se_resp_col">{{val.userid}}</a></td>
+            <td>{{val.name}}</td>
+            <td>{{val.role}}</td>
+            <td>{{val.email}}</td>
+            <td>{{val.date_submitted}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      </div>
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog" style="left:30%;top:10%;margin:0">
+  <div class="">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Self Evaluation Responses</h4>
+      </div>
+      <div class="modal-body se_content" style="overflow-y:scroll;max-height:450px">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+    </div>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function(){
+
+
+        // Setup - add a text input to each footer cell
+        var count = 1;
+        $('.se_table > thead.search th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+        });
+        var table = $(".se_table").DataTable();
+        $(".dataTables_filter").css('display','none')
+
+        table.columns().every( function () {
+            var that = this;
+ 
+            $( 'input', this.header() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that
+                        .search( this.value )
+                        .draw();
+                }
+            });
+        });
+
+
+        $('body').on('click','.se_resp_col',function(){
+
+            var se_form = $.parseJSON($(this).closest(".se_row").attr('data-se')),
+                content = "";
+            for (var key in se_form){
+                for(var qstn in se_form[key]){
+                    content += "<p>" + count + " - " + qstn + "</p>" + 
+                                "<div class='well'><p>" + se_form[key][qstn] +
+                                "</p></div>";
+                    count ++;
+                }
+            }
+            $(".se_content").html(content);
+            $("#myModal").modal("show");
+        });
+    });
+</script>
+{% endblock %}
+
+
+

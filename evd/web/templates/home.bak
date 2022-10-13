@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block body_container %}
+
+    <div class="row">
+        <div class="span12" style="min-height:500px;">
+            <div class="row">
+                <div class="span12 trans-block" style="height:500px">
+                    <div style="height: 440px;padding: 10px; font-size:1.4em">
+                        <div style="width:500px;margin-left:20px">
+                        <p style="font-size:23px;line-height:35px;color:#384E66">{{student1}} from {{center1}} Center wants to learn {{sub_stu1}} </p>
+                        <p style="font-size:23px;line-height:35px;color:#661E3B">{{num1}}+ Students of {{center2}} Center wants to learn {{sub_stu2}}</p>
+                       <p style="font-size:23px;line-height:35px;color:#B8442F">{{count}} Schools in {{center1}} are lacking {{sub_stu1}} teachers</p>
+                        <p style="font-size:23px;line-height:35px;color:#E87F2C">{{student2}} from {{center2}} Center wants to learn {{sub_stu2}}</p>
+                        <p style="font-size:23px;line-height:35px;color:#C4B44D">{{num2}}+ Students of {{center1}} center wants to learn {{sub_stu1}}</p>
+                        </div>
+                    </div>
+                    <a data-toggle="modal" class="span2 btn btn-success pull-left" style="padding:3px" href="#login">Login as Teacher</a> 
+                    <a class="btn btn-warning pull-left" style="padding: 3px;margin-left:50px" href="/about_us/">Learn More</a>
+                    <a href="https://plus.google.com/hangouts/_?gid=709048477087" style="text-decoration:none;float:left;margin-left:50px">
+                      <img src="https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-24x100-normal.png"
+                          alt="Start a Hangout"
+                              style="border:0;width:100px;height:24px;"/>
+                              </a>
+                    <!--<a data-toggle="modal" class="span2 btn btn-success" style="float:left" href="{% url socialauth_begin 'facebook' %}">Login Through Facebook</a>
+                    <a data-toggle="modal" class="span2 btn btn-success" style="float:left" href="{% url socialauth_begin 'google' %}">Login Through Google</a> -->
+                </div>
+                <!--
+                <div class="span4 trans-block" style="height:500px">
+                    <div style="height: 460px">
+                        <h3 class="trans-block-header">Learn more</h3>
+                        <div style="padding:20px; text-align:center; position:relative;">
+                           <img src="/static/images/play.png" style="position:absolute;left:160px;top:80px;"/>
+                           <img src="/static/images/evd.png" height="100px;dropshadow: 0px 0px 5px #aaa"/>
+                        </div>
+                    </div>
+                    <a class="span1 btn btn-warning pull-right" href="">Learn More</a>
+                </div>
+                -->
+            </div>
+        </div>
+    </div>
+
+
+    <!-- login and signup code -->
+    <div id="signup" class="modal hide fade account" style="width:620px;  border-radius:0px;">
+        <a class="close" data-dismiss="modal" style="font-size:15px; padding-top:0px;">X</a>
+        <div class="pull-left">
+            <h3 style="padding:0px;">New User? Sign Up</h3>
+            <form class="form-horizontal" action="/accounts/register/" method="POST">
+               {% csrf_token %} 
+                    <div class="control-group">
+                          <label class="control-label" for="input01" style="text-align:left;margin-top: 10px;">Username</label>
+                          <div class="controls">
+                             <input type="text" class="span3 no-border-radius" id="input01" name="username" style="margin-left:-85px;">
+                          </div>
+                    </div>
+                    <div class="control-group">
+                          <label class="control-label" for="input01" style="text-align:left;margin-top: 10px;">Email</label>
+                          <div class="controls">
+                             <input type="text" class="span3 no-border-radius" id="input01" name="email" style="margin-left:-85px;">
+                          </div>
+                    </div>
+                    <div class="control-group">
+                          <label class="control-label" for="input01"style="text-align:left;margin-top: 10px;">Password</label>
+                          <div class="controls">
+                             <input type="password" class="span3 no-border-radius" id="input01" name="password1" style="margin-left:-85px;">
+                          </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="input01"style="text-align:left;margin-top: 10px;">Repeat</label>
+                        <div class="controls">
+                            <input type="password" class="span3 no-border-radius" id="input01" name="password2" style="margin-left:-85px;">
+                        </div>
+                   </div>
+                   <button class="btn btn-success" style="margin-left:85px;" href="#">Sign Up Now!</button>
+             </form>
+            <div class="new">
+                <p style="padding-left:0px;margin-top:-16px">Already have an account?<a class="login" data-toggle="modal" href="#login" >Login!</a></p>
+            </div>
+        </div>
+        <div class="divider-or" style="margin-top: -175px;"></div>
+        <div class="social-media pull-right">
+           <p style="padding-left:0px;margin-top:-237px"><b>Sign in with</b></p>
+            <a href="{% url socialauth_begin 'facebook' %}">
+                <div style="background-image:url(/static/images/hf-icons-sprite-53864.png);height:31px;width:141px;background-position:0px 62px"></div>
+            </a>
+            <a href="{% url socialauth_begin 'google' %}">
+                <div style="background-image:url(/static/images/hf-icons-sprite-53864.png);height:32px;width:141px;background-position:0px 32px;margin-top:-10px"></div>
+            </a>
+        </div>
+        <div class="footer-signup">
+            <a href="#" class="btn btn-mini" data-dismiss="modal">Close window X</a>
+        </div>
+    </div>
+    <div id="login" class="modal hide fade account" style="width:620px;  border-radius:0px;">
+        <a class="close" data-dismiss="modal" style="font-size:15px; padding-top:0px">X</a>
+        <div class="pull-left">
+            <h4>Login</h4>
+            <form class="form-horizontal" action="/accounts/login/" method="POST">
+            {% csrf_token %}
+                <div class="control-group">
+                    <label class="control-label" for="input01" style="text-align:left;margin-top: 10px;">Username</label>
+                      <div class="controls">
+                         <input type="text" class="span3 no-border-radius" id="input01" name="username" style="margin-left:-85px;">
+                      </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="input01"style="text-align:left;margin-top: 10px;">password</label>
+                      <div class="controls">
+                         <input type="password" class="span3 no-border-radius" id="input01" name="password" style="margin-left:-85px;">
+                      </div>
+                </div>
+                <button class="btn btn-primary" style="margin-left:85px" href="#">Login</button>
+                <a href="#">Forgot your password?</a>
+            </form>
+            <div class="create-new">
+                <p style="padding-left:0px">Don't have an account?<a class="create" data-toggle="modal" href="#signup">Create One!</a></p>
+            </div>
+        </div>
+        <div class="divider-or"></div>
+        <div class="social-media pull-right">
+            <p style="padding-left:0px;margin-top:-197px"><b>Sign in with</b></p>
+            <a href="{% url socialauth_begin 'facebook' %}">
+                <div style="background-image:url(/static/images/hf-icons-sprite-53864.png);height:31px;width:141px;background-position:0px 62px"></div>
+            </a>
+            <a href="{% url socialauth_begin 'google' %}">
+                <div style="background-image:url(/static/images/hf-icons-sprite-53864.png);height:32px;width:141px;background-position:0px 32px;margin-top:-10px"></div>
+            </a>
+            <a class="span2 btn btn-primary" style="margin-left:0px;margin-top:-10px;width:115px;font-size:12px;" href="/login/twitter/">Login Through Twitter</a>
+        </div>
+        <div class="footer-login">
+            <a href="#" class="btn btn-mini" data-dismiss="modal">Close window X</a>
+        </div>
+    </div>
+    <!-- end login and signup code -->
+
+
+    <script>
+        $(document).ready(function() {
+            $(".create").click(function() {
+                $("#login").modal('hide');
+            });
+            $(".login").click(function(){
+                $("#signup").modal('hide');
+            });
+        });
+    </script>
+
+{% endblock body_container %}

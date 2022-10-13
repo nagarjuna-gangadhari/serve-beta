@@ -1,0 +1,560 @@
+{% extends "base.html" %}{% load tags %}{% load filters %} {% block head_title %}Content Volunteer Dashboard | eVidyaloka{% endblock %} {% block head_styles %} {{ block.super }}
+<!-- <link rel="stylesheet" href="/static/css/tailwind.min.css"> -->
+<script src="/static/css/tailwindcss3.js"></script>
+<script src="/static/css/fontawesome/js/all.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+<style>
+    .noScrollBar::-webkit-scrollbar {
+        display: none;
+    }
+    /* width */
+    
+     ::-webkit-scrollbar {
+        width: 2px;
+    }
+    /* Track */
+    
+     ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    /* Handle */
+    
+     ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+    /* Handle on hover */
+    
+     ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+</style>
+<style>
+    .container {
+        width: 100%;
+    }
+    
+    .progressbar {
+        counter-reset: step;
+    }
+    
+    .progressbar li {
+        list-style: none;
+        display: inline-block;
+        width: 20%;
+        position: relative;
+        text-align: center;
+        cursor: pointer;
+        z-index: 10;
+    }
+    
+    .progressbar li:before {
+        content: counter(step);
+        counter-increment: step;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        border: 1px solid #ddd;
+        border-radius: 100%;
+        display: block;
+        text-align: center;
+        margin: 0 auto 10px auto;
+        background-color: #fff;
+        z-index: 10;
+    }
+    
+    .progressbar li:after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        background-color: #ddd;
+        top: 15px;
+        left: -50%;
+        z-index: 0;
+    }
+    
+    .progressbar li:first-child:after {
+        content: none;
+    }
+    
+    .progressbar li.active {
+        color: green;
+    }
+    
+    .progressbar li.active:before {
+        border-color: green;
+    }
+    
+    .progressbar li.active+li:after {
+        background-color: green;
+    }
+</style>
+{% endblock %} {% block body_container2 %}
+<link rel="stylesheet" href="//cdn.datatables.net/1.12.0/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
+<div class="w-full bg-gray-50 pb-20" x-data="{ modelOpen1: false, modelOpen2: false }">
+    <div class="w-full flex">
+        <div class="w-3/4  px-10 space-y-20">
+            <div class="container hidden">
+                <ul class="progressbar">
+                    <li class="active">Step 1</li>
+                    <li class="active">Step 2</li>
+                    <li>Step 3</li>
+                    <li>Step 4</li>
+                </ul>
+            </div>
+
+            <div class="flex justify-around">
+                <div class="flex items-center space-x-3 cursor-pointer py-2" x-data="{ show:{{assistance|lower}} }" >
+                    <div @click="show =!show; book_for_me()" class="relative w-14 h-7 transition duration-200 ease-linear rounded-full" :class="[show ? 'bg-green-500' : 'bg-red-400']">
+                        <label for="show"  class="absolute left-0 w-7 h-7 mb-2 transition duration-100 ease-linear transform bg-white border-2 rounded-full cursor-pointer" :class="[show ? 'translate-x-full border-green-500' : 'translate-x-0 border-red-400']"></label>
+                        <input type="checkbox" name="checklist" x-model="show" id="book_for_me_input"  class="checks hidden w-full h-full rounded-full appearance-none active:outline-none focus:outline-none" />
+                    </div>
+                    <div>let someone book for me</div>
+                </div>
+                <div><a class="text-xl text-white font-bold p-2 bg-blue-400 rounded-full no-underline" href="/v2/demand/">Browse content demand</a></div>
+            </div>
+
+            <div class="border border-red-600 rounded-t-xl">
+                <h1 class="text-center bg-indigo-500 text-white font-bold py-4 rounded-t-xl">My Content Bookings</h1>
+                <!-- component -->
+                <table class="border-collapse w-full">
+                    <thead>
+                        <tr class="font-bold uppercase bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-500 text-lg text-white ">
+                            <th class="border-r border-t border-gray-300 text-center p-2 lg:table-cell">id</th>
+                            <th class="border-r border-t border-gray-300 text-center p-2 lg:table-cell">Language</th>
+                            <th class="border-r border-t border-gray-300 text-center p-2 lg:table-cell">Board</th>
+                            <th class="border-r border-t border-gray-300 text-center p-2 lg:table-cell">Subject</th>
+                            <th class="border-r border-t border-gray-300 text-center p-2 lg:table-cell">Topic</th>
+                            <th class="border-r border-t border-gray-300 text-center p-2 lg:table-cell">Subtopic</th>
+                            <th class="border-r border-t border-gray-300 text-center p-2 lg:table-cell">Work Stream</th>
+                            <th class="border-r border-t border-gray-300 text-center p-2 lg:table-cell">Status</th>
+                            <th class="border-r border-t border-gray-300 text-center p-2 lg:table-cell">Due Date</th>
+                            <th class="border-l border-t border-gray-300 text-center p-2 lg:table-cell max-w-min">Comment</th>
+                            <th class="border-l border-t border-gray-300 text-center p-2 lg:table-cell max-w-min">URL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previous_booking_wraper" class="text-lg"></tbody>
+                </table>
+            </div>
+            <div class="border border-green-600 rounded-t-xl">
+                <h1 class="text-center font-bold py-4 bg-green-500 mb-2 text-white rounded-t-xl">My Content Submissions</h1>
+                <table id="example2" class="w-full">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Language</th>
+                            <th>Board</th>
+                            <th>Subject</th>
+                            <th>Topic</th>
+                            <th>Subtopic</th>
+                            <th>WorkStream</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="w-1/4 h-screen overflow-y-auto pt-20 pr-2 space-y-4">
+
+            <div class="rounded-xl border border-green-600">
+                <h1 class="text-center text-2xl font-bold py-4 bg-gray-400 text-white">Instructions</h1>
+                <div id="accordion">
+                    <h3 class="text-center font-bold">Lesson Plans</h3>
+                    <ul class="list-disc">
+                        <li class="text-lg">A lesson plan gives a detailed description of the course of instruction for an ulidual lesson.</li>
+                        <li class="text-lg">It can be referred to understand the flow of the lesson; also called a chapter, and the focus required on the concepts in the chapter.</li>
+                        <li class="text-lg">The detail of the plan will vary depending on the preference of the teacher, subject being covered, and the need and/or curiosity of children. The lesson plan prepared would have all the components that will provide a holistic learning experience to the students.</li>
+                        <li class="text-lg">It will also provide the step by step progress of the chapter, suggest various teaching aids, methods and related supporting activities.</li>
+                        <div class="flex flex-row space-x-2 pt-2">
+                            <a class="text-green-400" href="https://docs.google.com/document/d/1DlSWk708QJONFxoGSEiEuewPsMgxxXoK/edit" target="_blank">Guidelines Doc <i class="fa-solid fa-up-right-from-square"></i></a>
+                            <a class="text-green-400" href="https://docs.google.com/document/d/1Br7gBZmNXoTLfVWTv6VDbTftKVDG1-VN/edit" target="_blank">Sample Doc</a>
+                        </div>
+                    </ul>
+                    
+                    <h3 class="text-center font-bold">Worksheets</h3>
+                    <div>
+                        <p class="text-lg">Worksheets are used to assess, reinforce and enhance the understanding of a certain concept after it is taught to the students. It can be either shared by the teacher on screen or print outs can be provided to the students. The questions can be creative, including crosswords, puzzles, games etc.  </p>
+                        <ul>
+                            <li><a href="https://docs.google.com/document/d/1KFSViQT1UjcoJqqKsZlwFOpHJ_5esOzfCqM3th7F3So/edit?usp=sharing" target="_blank">Guidelines Doc</a></li>
+                            <li><a href="https://onedrive.live.com/edit.aspx?resid=B2056AF1AAD6E0AC!135604&ithint=file%2cdocx&authkey=!ADJY95XFO8rt2O8" target="_blank">Sample Doc</a></li>
+                        </ul>
+                    </div>
+                    <h3 class="text-center font-bold">Assessment sheets</h3>
+                    <div>
+                        <p class="text-lg">First step is to read the chapter thoroughly.</p>
+                        <p class="text-lg">The next step would be to capture the essence of what has been read and frame questions in a way that when attempted, the answers will immediately convey to the student how well he/she has understood and grasped the content. </p>
+                        <ul>
+                            <li><a href="https://docs.google.com/document/d/1KFSViQT1UjcoJqqKsZlwFOpHJ_5esOzfCqM3th7F3So/edit?usp=sharing" target="_blank">Guidelines Doc</a></li>
+                            <li><a href="https://onedrive.live.com/edit.aspx?resid=B2056AF1AAD6E0AC!135604&ithint=file%2cdocx&authkey=!ADJY95XFO8rt2O8" target="_blank">Sample Doc</a></li>
+                        </ul>
+                    </div>
+                    <h3 class="text-center font-bold">Exemplar activities</h3>
+                    <div>
+                        <p class="text-lg">The core element of Kinesthetic learning is based on doing hands-on experiments and activities, the idea of activity-based learning is rooted in the notion that children are more active learners rather than passive listeners. In our eV learning platform,  we enable learning through video lessons, practice sheets, assessment sheets and activity sheets, also something which is known as hands on learning through which students get an experiential learning experience. So, to begin your assignment, your first slide should comprise of basic information, such as your name, followed by the subject, grade, state board and language.
+                            Your next slide should detail the chapter number, chapter name and the sub-topics contained in the chapter.
+                            Following on from there, create activities on all important concepts covered in the chapter.</p>
+                        <ul>
+                            <li><a href="https://docs.google.com/document/d/1FNkAH1_ls-hyXSjK8LDp2IezauI5vA8B/edit" target="_blank">Guidelines Doc</a></li>
+                            <li><a href="https://onedrive.live.com/edit.aspx?resid=B2056AF1AAD6E0AC!135604&ithint=file%2cdocx&authkey=!ADJY95XFO8rt2O8" target="_blank">Sample Doc</a></li>
+                        </ul>
+                    </div>
+                    <h3 class="text-center font-bold">Images</h3>
+                    <div>
+                        <p class="text-lg">Images are powerful communication devices. They are useful for conveying concepts and information, and they can help improve comprehension by reinforcing information provided in text. 
+                            Images  attract and engage students’ attention, it’s important to be purposeful in their use so they do not detract from the purpose of the page.</p>
+                        <ul><li class="text-center font-bold p-2">Guidelines</li>
+                            <li class="text-lg">All the information about chapter should be mentioned on the first slide</li>
+                            <li class="text-lg">All the significant concept/keywords should be picturised through images</li>
+                            <li class="text-lg">The images should be added in the slides chronologically</li>
+                            <li class="text-lg">A particular image should be retained throughout the deck to connect all the concepts/keywords</li>
+                            <li class="text-lg">Every slide should have minimum 2 images pertaining to respective concept/keyword</li>
+                            <li class="text-lg">Do not take any image/s from any textbook/s</li>
+                        </ul>
+                        <a href="https://docs.google.com/presentation/d/1tDI_s5DQ7A_QEetXSoc0TKP4AU-_8duGfPMs_ok1Nqk/edit?usp=sharing" target="_blank">Sample Doc</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal  -->
+    <div>
+
+        <div x-show="modelOpen1" class="fixed inset-10 top-30 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display:none">
+            <div class="flex items-end justify-center min-h-screen px-4 text-center md:items-center sm:block sm:p-0">
+                <div x-cloak @click="modelOpen1 = false" x-show="modelOpen1" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200 transform"
+                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-40" aria-hidden="true"></div>
+
+                <div x-cloak x-show="modelOpen1" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="transition ease-in duration-200 transform"
+                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block w-full max-w-xl p-8 my-20 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl 2xl:max-w-2xl">
+                    <div class="flex items-center justify-between space-x-4">
+                        <h1 class="text-2xl font-medium text-gray-800 ">Submit Content</h1>
+
+                        <button @click="modelOpen1 = false" class="text-gray-600 focus:outline-none hover:text-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <form class="mt-5">
+                        <div>
+                            <input type="text" id="content_details_id" class="hidden">
+                            <label for="content_details_link" class="block text-xl text-gray-700 capitalize dark:text-gray-200">Content Link</label>
+                            <input id="content_details_link" placeholder="content link ..." type="text" class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                        </div>
+
+
+
+                        <div class="flex justify-end mt-6">
+                            <button @click="modelOpen1 = false; submit_content()" type="button" class="px-3 py-2 text-xl tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:bg-indigo-700 hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
+                                Submit  </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        <div x-show="modelOpen2" class="fixed inset-0 top-20 z-20" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
+            <div class="flex items-end justify-center min-h-screen px-4 text-center md:items-center sm:block sm:p-0">
+                <div x-cloak @click="modelOpen2 = false" x-show="modelOpen2" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200 transform"
+                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-40" aria-hidden="true"></div>
+
+                <div x-cloak x-show="modelOpen2" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="transition ease-in duration-200 transform"
+                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block w-full max-w-7xl  p-8 my-20 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl">
+                    <div class="flex items-center justify-between space-x-4">
+                        <h1 class="text-2xl font-bold w-full text-center text-gray-800 ">Content Review </h1>
+
+                        <button @click="modelOpen2 = false" class="text-red-600 focus:outline-none hover:text-red-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <form class="mt-5">
+                        <div class="mt-4 space-y-10">
+
+                            <div id="checks" class="mt-4 space-y-5 h-[24rem] overflow-y-auto">
+                                
+                            </div>
+                            <div class="space-y-2 mr-10">
+                                <label for="sbd_comment font-bold">Comments On Content</label>
+                                <textarea class="w-full h-36 p-2 border" disabled name="sbd_comment" id="sbd_comment" cols="30" rows="10"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    {{booked_demad|json_script:"booked_demad_data"}} {{published_demand|json_script:"published_demand_data"}}
+
+    <script>
+        $(function() {
+            $("#accordion").accordion();
+        });
+
+        const booked_demad = JSON.parse(JSON.parse(document.getElementById('booked_demad_data').textContent))
+        const published_demand = JSON.parse(JSON.parse(document.getElementById('published_demand_data').textContent))
+
+        if (booked_demad.length == 0) {
+            $('#booked_demad').show()
+        }
+
+        const choicess = {
+            1: 'Not Started',
+            2: 'Booked',
+            3: 'Assigned',
+            4: 'Submitted',
+            5: 'In Review',
+            6: 'Approved',
+            7: 'Resubmit',
+            8: 'Published',
+            9: 'Inactive'
+        }
+
+        console.log(booked_demad);
+        console.log(published_demand);
+        var dataSet = [];
+
+        for (let index = 0; index < published_demand.length; ++index) {
+            const element = published_demand[index];
+            console.log(element);
+            dataSet.push([
+                element.id,
+                element.topic__course_id__language__name,
+                element.topic__course_id__board_name,
+                element.topic__course_id__grade + 'th ' + element.topic__course_id__subject,
+                element.topic__title,
+                element.subtopic__name,
+                element.workstream__name,
+                choicess[element.status]
+            ]);
+        }
+
+        console.log(dataSet);
+
+        $(document).ready(function() {
+
+            for (i in booked_demad) {
+                let demand = booked_demad[i];
+                console.log(demand)
+                let url = `<div  @click="modelOpen1 =!modelOpen1" class="p-2 bg-green-400 m-2 rounded cursor-pointer hover:bg-green-500 ${demand['status'] == 2 ? 'hidden':''}" onclick="$('#content_details_id').val(${demand.id})" >Submit Content</div>`
+                if ((demand['status'] == 4) || (demand['status'] == 5) || (demand['status'] == 7)) {
+                    url = `<div class="flex space-y-1 space-x-2">
+                                <div  @click="modelOpen1 =!modelOpen1" class="p-2 bg-green-400 m-2 rounded cursor-pointer hover:bg-green-500 ${demand['status'] >= 4 ? '':'hidden'}" onclick="$('#content_details_id').val(${demand.id}); $('#content_details_link').val('${demand['url']}')" >Edit Link</div>
+                                <div  @click="modelOpen2 =!modelOpen2" class="p-2 bg-green-400 m-2 rounded cursor-pointer hover:bg-green-500 ${demand['status'] == 7 ? '':'hidden'}" onclick="get_content_checklist(${demand.id}, ${demand.workstream_id})" >Rejects reasons</div>
+                                <a class="p-2 bg-green-400 rounded" target="_blank" href="//${demand['url']}">Open Link</a>
+                            </div>`
+                } else if (demand['status'] == 6) {
+                    url = `<div class="flex space-y-1"> 
+                                <div class="p-2 bg-green-400 rounded"><a target="_blank" href="//${demand['url']}">View link</a></div> 
+                            </div>`
+                }else if (demand['status'] == 7) {
+                    url = `<div class="flex space-y-1">  <div  @click="modelOpen1 =!modelOpen1" class="p-2 bg-green-400 m-2 rounded cursor-pointer hover:bg-green-500" onclick="$('#content_details_id').val(${demand.id})">Submit Content</div> 
+                                <div class="p-2 bg-red-400 rounded"><a target="_blank" href="//${demand['url']}">Old link</a></div> 
+                            </div>`
+                }
+
+
+                let duedate = demand['due_date'] ? demand['due_date'].split(' ')[0] : ''
+
+                $('#previous_booking_wraper').append(`<tr class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
+                                <td class="lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['id']}</td>
+                                <td class="lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['topic__course_id__language__name']}</td>
+                                <td class="lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['topic__course_id__board_name']}</td>
+                                <td class="lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['topic__course_id__grade']}th - ${demand['topic__course_id__subject']}</td>
+                                <td class="lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['topic__title']}</td>
+                                <td class="lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['subtopic__name']}</td>
+                                <td class="lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${demand['workstream__name']}</td>
+                                <td class="lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${choicess[demand['status']]}</td>
+                                <td class="lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">${duedate}</td>
+                                <td class="lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static max-w-min">${demand['comment']}</td>
+                                <td class="lg:w-auto py-1 text-gray-800 text-center border border-b block lg:table-cell relative lg:static max-w-min">${url}</td>
+                            </tr>`);
+            }
+
+        });
+    </script>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $(document).ready(function() {
+            var csrftoken = getCookie('csrftoken');
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+        });
+
+        function submit_content() {
+
+            let id = $('#content_details_id').val();
+            let link = $('#content_details_link').val();
+
+            if (link.length < 3) {
+                alert('Please enter a valid link');
+                return;
+            }
+
+            console.log(id, link);
+            $.ajax({
+                type: "POST",
+                url: '/content/volunteer/',
+                data: JSON.stringify({
+                    'id': id,
+                    'link': link
+                }), // serializes the form's elements.
+                success: function(data) {
+                    console.log(data)
+                    alert('Content Submitted Successfully');
+                    window.location.reload();
+                },
+                error: function(xhr, errmsg, err) {
+                    alert('Error');
+                    alert('Login failed', 'danger');
+                    console.log(xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+        }
+
+        function dropdownFunction(element) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            let list = element.parentElement.parentElement.getElementsByClassName("dropdown-content")[0];
+            list.classList.add("target");
+            for (i = 0; i < dropdowns.length; i++) {
+                if (!dropdowns[i].classList.contains("target")) {
+                    dropdowns[i].classList.add("hidden");
+                }
+            }
+            list.classList.toggle("hidden");
+        }
+
+        $(document).ready(function() {
+
+            $('#example2').DataTable({
+                data: dataSet,
+                columns: [{
+                    title: 'Id'
+                }, {
+                    title: 'Language'
+                }, {
+                    title: 'Board'
+                }, {
+                    title: 'Subject'
+                }, {
+                    title: 'Topic'
+                }, {
+                    title: 'Subtopic'
+                }, {
+                    title: 'WorkStream'
+                }, {
+                    title: 'Status'
+                }, ],
+            });
+        });
+
+
+        function book_for_me(){
+            let input = $('#book_for_me_input').is(":checked");
+            console.log(input)
+
+            $.ajax({
+                type: "PUT",
+                url: '/v2/assistance/',
+                data: JSON.stringify({'assistance': !input}), // serializes the form's elements.
+                success: function(data) {
+                    console.log(data)
+                    alert('updated Successfully');
+                },
+                error: function(xhr, errmsg, err) {
+                    alert('Error');
+                    console.log(xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+
+        }
+
+
+
+        function get_content_checklist(content_demand_id, workstream_id) {
+            $.ajax({
+                url: '/v2/content_review_check_list/',
+                type: 'GET',
+                data: {
+                    'content_demand_id': content_demand_id,
+                    'workstream_id': workstream_id
+                },
+                success: function(response) {
+                    console.log(response);
+                    make_checks(response)
+    
+                },
+                error: function(response) {
+                    console.log(response);
+                    alert('Something went wrong');
+                }
+            });
+        }
+
+
+        function make_checks(data) {
+            $('#checks').empty();
+            is_checklist_given = data.exist;
+            content_demand_id = data.content_demand_id;
+            let checks = data.checks;
+            for (let index = 0; index < checks.length; ++index) {
+                const element = checks[index];
+                $('#checks').append(`<div class="flex items-center space-x-3 cursor-pointer border-b py-2" x-data="{ show: ${element['answers']==0 ? false:true } }" >
+                    <div class="relative w-14 h-7 transition duration-200 ease-linear rounded-full" :class="[show ? 'bg-green-500' : 'bg-red-400']">
+                        <label for="show"  class="absolute left-0 w-7 h-7 mb-2 transition duration-100 ease-linear transform bg-white border-2 rounded-full cursor-pointer" :class="[show ? 'translate-x-full border-green-500' : 'translate-x-0 border-red-400']"></label>
+                        <input type="checkbox" name="checklist" x-model="show" data-id="${element['id']}" data-checklist_id="${element['checklist_id']}"  class="checks hidden w-full h-full rounded-full appearance-none active:outline-none focus:outline-none" />
+                    </div>
+                    <div class="flex flex-col space-y-1">
+                        <div><p class="text-xl text-gray-500">${element['checklist']}</p></div>
+                        <div class="flex space-x-2"><p class="text-xl text-gray-500 font-bold">Note: </p><input disabled type="text" id="note_${element['checklist_id']}" class="w-96 h-10 p-2 rounded text-lg" value="${element['check_comment']}"></div>
+                    </div>
+                    
+                </div>`);
+            }
+            $('#sbd_comment').val(data.comment);
+    
+        }
+
+
+
+    </script>
+
+    {% endblock %}

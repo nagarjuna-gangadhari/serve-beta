@@ -1,0 +1,10 @@
+Dear {{ first_name }} {{ last_name }},
+
+Congratulations! We are pleased to confirm that you have been recommended for {{role}} volunteering.
+
+Please do login at www.evidyaloka.org to complete the on-boarding and start contributing.
+
+We take the opportunity to welcome you on-board, and join us in this beautiful cause of nation-building. We look forward to your active participation & contributions.
+
+Regards,
+eVidyaloka On-boarding Team

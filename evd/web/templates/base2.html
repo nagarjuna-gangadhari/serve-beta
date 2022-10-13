@@ -1,0 +1,1141 @@
+{% extends "generic/base.html" %}
+{% load tags %}
+{% block head_title %}eVidyaloka{% endblock %}
+
+{% block head_styles %}
+  <!-- meta yet to be updated from evidyaloka -->
+  <meta name="description" content="eVidyaloka is a non-profit organization that focuses on transforming the educational landscape of rural India. eVidyaloka creates digital classrooms for children in remote villages, with support of local communities and Volunteer Teachers across globe with standardized lesson plans and teaching aids">
+  <meta name="keywords" content="evidyaloka, children, rural school, learn, rural education, children education, teachers, volunteers, volunteers to teach, volunteer teachers, education, student education, online teaching, digital classrooms, virtual teaching, ngo, free education, remote village education, internet education, teaching channel, sponsor for education, sponsor for school, donate for school, donate for education"/>
+  <meta charset="utf-8">
+  <link href="/static/images/favicon.ico" type="image/x-icon" rel="icon" />
+  <link href="/static/images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
+
+  <!-- facebook share meta -->
+  <meta property="og:title" content=""/>
+  <meta property="og:description" content="" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="" />
+  <meta property="og:image" content="" />
+  <!-- end facebook  meta -->
+
+  <link rel="stylesheet" type="text/css" href="/static/css/main.min.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/evl.css" />
+  <link rel="stylesheet" href="/static/css/colorbox.css"/>
+  <link rel="stylesheet" href="/static/css/breadcrumb.css"/>
+
+
+   <!--[if IE 9]>
+   <style>
+        select.planned-topics {
+            margin-top: 5px;
+        }
+   </style>
+   <![endif]-->
+  <!--[if lte IE 8]>
+    <link rel="stylesheet" type="text/css" href="/static/css/evl_ie.css" />
+  <![endif]-->
+  <!--[if IE 7]>
+    <style>
+        .teachers {
+            width: 250px !important;
+        }
+        #add-session-modal {
+            width: 720px !important;
+        }
+        div.right-content{
+            z-index: -1;
+        }
+        #profile-picture div.caption {
+            display: block !important;
+            margin-top: 120px !important;
+            left: 0px;
+        }
+        div.dashboard-container div.note-box {
+            z-index: -1;
+        }
+        h1#logo > a, h1#logo > a:hover {
+            background-image: url(/static/images/evl_text_logo.png) !important;
+            background-repeat: no-repeat !important;
+            background-position: 5px 3px !important;
+            width: 174px;
+            height: 37px;
+            text-indent: none;
+        }
+        #homepage-sidebar > div > p{
+            margin-top: 20px;
+        }
+
+    </style>
+  <![endif]-->
+  <style>
+/*     a#login.show-login.btn.active {color: green; }
+     a#sign-up.show-signup.btn.active {color: green;  }*/
+
+
+    #bottom a {
+        color: white;
+        margin-left: 18px !important;
+    }
+    .by-kettle {
+        background: transparent !important;
+        text-indent: 0em !important;
+    }
+    .by-kettle span {
+        right: 20px !important;
+    }
+    {% if request.user.is_superuser %}
+    .avatar {
+        background: white !important;
+    }
+    {% endif %}
+    #header ul#main-nav li a {
+        text-shadow: none;
+    }
+    #header ul#main-nav li.main-nav-1 a {
+        font-family: 'PlutoCondRegular';
+    }
+    h1#logo {
+        margin-top:10px;
+    }
+    h1#logo > a {
+      background: none;
+      font-size: 36px;
+      margin-top: 2px;
+      font-style: italic;
+      text-indent: 0px;
+    }
+    h1#logo > a:hover {
+      color: #F15A22;
+    }
+    #footer {
+        position: relative;
+        width:100%;
+    }
+    #footer .inner > p{
+        display:block;
+    }
+    #footer .inner > a{
+        float:right;
+    }
+
+    #footer-centers-list li {
+      background: transparent url('/static/images/location.png') top left no-repeat;
+      width:175px;
+    }
+    #footer-centers-list {
+        width:350px;
+    }
+    #footer-subjects-list {
+        width:350px;
+    }
+    #footer-subjects-list li {
+        width:175px;
+        float:left;
+    }
+    #login.active, #sign-up.active {
+        color:#FF7800;
+    }
+    .close-modal {
+        width: 18px;
+        height: 18px;
+        text-indent: -9999em;
+        display: block;
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        background: transparent url(/static/images/wishbone_sprite.png) no-repeat -39px -185px;
+    }
+    #current-form-desc.error {
+        color:red;
+    }
+    #current-form-desc.success {
+        color:green;
+    }
+    #bottom {
+        background: transparent !important;
+    }
+  </style>
+  <style>
+    .modal-backdrop, .modal-backdrop.fade.in {
+        opacity: 0.8;
+        filter: alpha(opacity=80);
+    }
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1040;
+        background-color: black
+    }
+    .modal-layer {
+        z-index: 1041;
+    }
+    .modal.fade.in {
+        top: 50%;
+    }
+    .modal.fade {
+        top: -25%;
+        -webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
+        -moz-transition: opacity 0.3s linear, top 0.3s ease-out;
+        -ms-transition: opacity 0.3s linear, top 0.3s ease-out;
+        -o-transition: opacity 0.3s linear, top 0.3s ease-out;
+        transition: opacity 0.3s linear, top 0.3s ease-out;
+    }
+    .modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        z-index: 1050;
+        width: 560px;
+        margin: -250px 0 0 -280px;
+        background-color: white;
+        border: 1px solid #999;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        -webkit-border-radius: 6px;
+        -moz-border-radius: 6px;
+        border-radius: 6px;
+        -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+        -webkit-background-clip: padding-box;
+        -moz-background-clip: padding-box;
+        background-clip: padding-box;
+    }
+    .modal-content {
+        width: 262px;
+        margin-left: 358px;
+        min-height:393px;
+    }
+    #login-modal {
+        width: 700px !important;
+        margin: 0px 0 0 -350px !important;
+    }
+    #login-modal small{
+        display: none;
+    } 
+    #form-error {
+        padding: 10px 0px;
+        text-align: center;
+    }
+    #form-success {
+        padding: 10px 0px;
+        text-align: center;
+        color:green;
+    }
+    span.login-signup-label:hover {
+        color: white;
+    }
+    .callout {
+        padding: 10px !important;
+        width: 100% !important;
+        margin: 0px !important;
+    }
+    .callout h5 {
+        margin: 0px 0px 5px 0px !important;
+    }
+    .modal-left {
+        width: 330px;
+        height: 393px;
+        position: absolute;
+        border-right: 1px solid #666;
+    }
+    div.modal-left > div {
+        height:85px;
+    }
+    div.modal-left p {
+        margin-left: 50px;
+        position: relative;
+        float: left;
+        margin-right:28px;
+    }
+    div.modal-left img {
+        height: 40px;
+        width: 40px;
+        position: absolute;
+        display: block;
+    }
+    div.vol-option {
+        height:40px !important;
+    }
+    div.vol-option p {
+        margin-left: 0px;
+        margin-top:5px;
+        font-size: 18px;
+        font-weight:bold;
+    }
+    #header {
+        background:transparent !important;
+        padding-bottom:0px !important;
+    }
+    #header .inner {
+        height:71px;
+        background:#FFFFFF;
+        position:relative;
+        padding-right:200px;
+    }
+    div.header_full {
+        height:71px;
+        width:auto;
+        background-color:white;
+        border-bottom:2px solid #909d71;
+    }
+    div.footer_full {
+        height: 60px;
+        width: auto;
+        background-color: #545453;
+        border-top: 1px solid #242423;
+        margin-bottom:-10px;
+    }
+    .nav_left {
+        width:272px;
+        height:71px;
+        margin:0px 0px 0px 0px;
+        display:inline;
+        float:left;
+        clear:both;
+
+    }
+    .nav_left img {
+        width:55px;
+        height:55px;
+        float:left;
+        padding:5px 5px 5px 5px;
+    }
+    .nav_left > h1 {
+        position:relative;
+        float:left;
+        display:inline;
+    }
+    h1#logo > a {
+        font-size:22px;
+    }
+    .nav_left > a {
+        float:left;
+        display:inline;
+    }
+    .nav_left > h3 {
+        float:left;
+        position:absolute;
+        font-size:12px;
+        top:40px;
+        left:75px;
+        color:#004f00;
+    }
+    .nav_right {
+        position: absolute;
+        right:0px;
+        float:left;
+        height:71px;
+        }
+    li.main-nav-list > a {
+        color:#F15A22 !important;
+    }
+    li.main-nav-list > a:hover {
+        color:#909D71 !important;
+    }
+    .nav-menu {
+        position:relative;
+        height:71px;
+        width:166px;
+        float:left;
+        border-left:1px solid #909D71;
+    }
+    div.nav-menu > ul.nav_main {
+        padding-top:0px;
+    }
+    #header ul#main-nav li a {
+        background:none;
+    }
+    .log-in {
+        right: 0px;
+        top: 35px;
+    }
+    .submenu li a {
+        padding: 0px 13px !important;
+    }
+    #header #login-badge ul li a {
+        text-align:center;
+    }
+  </style>
+{% endblock %}
+
+{% block head_scripts %}
+ <script>
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=499969136679992";
+            fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
+  <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/static/js/bootstrap-modal.min.js"></script>
+  <script type="text/javascript" src="/static/js/application.js"></script>
+  <script type="text/javascript" src="/static/js/jquery.watermark.min.js"></script>
+  <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+
+
+
+
+  <script>
+    $(document).ready(function(){
+       $(".esis").colorbox({iframe:true, fastIframe:false, width:"1100px", height:"760px", gtransition:"fade", scrolling : false, fixed:false });
+
+        var $caption = $("#current-form-desc"),
+            $login_signup_form = $("#login-signup-form"),
+            $modal = $("#login-modal");
+        $("#signup-trigger").click(function(e){
+           var is_authenticated = "{{ user.is_authenticated }}";
+
+           if(is_authenticated == "True"){
+                window.location = "/myevidyaloka/";
+                return;
+           }
+           show_signup_form($login_signup_form);
+           $modal.modal({backdrop:true, keyboard:true});
+           /*$modal.find(".close").click(function(e){
+               $(href).modal("hide");
+               e.stopImmediatePropagation();
+               e.preventDefault();
+           });*/
+           e.preventDefault();
+        });
+        $("#login-trigger").click(function(e){
+            var is_authenticated = "{{ user.is_authenticated }}";
+
+            if(is_authenticated == "True"){
+                window.location = "/myevidyaloka/";
+                return;
+            }
+
+            show_login_form($login_signup_form);
+            $modal.modal({backdrop:true, keyboard:true});
+            /*$modal.find(".close").click(function(e){
+               $(href).modal("hide");
+               e.stopImmediatePropagation();
+               e.preventDefault();
+            });*/
+            e.stopPropagation();
+            e.preventDefault();
+        });
+        window.form_status = "signup";
+        var show_login_form = function($form){
+                $caption.removeClass("success error");
+                $(".show-signup").removeClass("active");
+                $(".show-login").addClass("active");
+                if(form_status != "login"){
+                    if(form_status == "error" || form_status == "success"){
+                        $("#form-error,#form-success").fadeOut("fast",function(){
+                            $form.fadeIn("fast");
+                        });
+                    }
+                    $form.attr({"action": "/accounts/login/"});
+                    if($.support.transition){
+                        $form.children().not(".show-on-login").slideUp("fast",function(){
+                            var $inputs = $form.find(".show-on-login").slideDown().show().removeClass("hide").children("input").attr({"data-field-type": "not_empty"});
+                            $inputs.each(function(){
+                                $(this).tooltip("destroy");
+                            });
+                            $("div.tooltip").remove();
+                        }).hide().addClass("hide");
+                    }
+                    else{
+                        $form.children().not(".show-on-login").hide().addClass("hide");
+                        var $inputs = $form.find(".show-on-login").show().removeClass("hide").children("input").attr({"data-field-type": "not_empty"});
+                        $inputs.each(function(){
+                            $(this).tooltip("destroy");
+                        });
+                        $("div.tooltip").remove();
+                    }
+                    $("#submit .ajax-button-label").text("Login");
+                    form_status = "login";
+                }
+            },
+            show_signup_form = function($form){
+                $(".show-login").removeClass("active");
+                $(".show-signup").addClass("active");
+                $caption.removeClass("success error");
+                if(form_status != "signup"){
+                    $caption.text("");
+                    if(form_status == "error" || form_status == "success"){
+                        $("#form-error,#form-success").fadeOut("fast",function(){
+                            $form.fadeIn("fast");
+                        });
+                    }
+                    $("div.tooltip").remove();
+                    $form.attr({"action": "/accounts/register/"});
+                    if($.support.transition){
+                        $form.children().not(".show-on-signup").slideUp("fast",function(){
+                            var $inputs = $form.find(".show-on-signup").not("small").slideDown().show().removeClass("hide").children("input");
+                            $inputs.filter("[name=username]").attr({"data-field-type": "username;not_empty"}).tooltip("destroy");
+                            $inputs.filter("[name=password]").attr({"data-field-type": "password;not_empty"}).tooltip("destroy");
+                        }).hide().addClass("hide");
+                    }
+                    else{
+                        $form.children().not(".show-on-signup").hide().addClass("hide");
+                        var $inputs = $form.find(".show-on-signup").not("small").show().removeClass("hide").children("input");
+                        $inputs.filter("[name=username]").attr({"data-field-type": "username;not_empty"}).tooltip("destroy");
+                        $inputs.filter("[name=password]").attr({"data-field-type": "password;not_empty"}).tooltip("destroy");
+
+                    }
+                    $("#submit .ajax-button-label").text("Create");
+                    form_status = "signup";
+                }
+            },
+            show_fp_form = function($form){
+                $caption.removeClass("success error");
+                $caption.text("Enter your email id, with which you are registered");
+                $form.attr({"action": "/accounts/password/reset/"});
+                $("div.tooltip").remove();
+                if($.support.transition){
+                    $form.children().not(".show-on-fp").slideUp("fast",function(){
+                        $form.find(".show-on-fp").slideDown().show().removeClass("hide").children("input").tooltip("destroy");
+                    }).hide().addClass("hide");
+                }else{
+                    $form.children().not(".show-on-fp").hide().addClass("hide");
+                    $form.find(".show-on-fp").show().removeClass("hide").children("input").tooltip("destroy");
+                }
+                $("#submit .ajax-button-label").text("Submit");
+                form_status = "fp";
+            };
+        $("#login").click(function(){
+            $(this).addClass("active");
+            $(this).parent().hide();
+            $("#p_sign").show();
+            $("#sign-up").removeClass("active");
+            show_login_form($("#login-signup-form"));
+        });
+        $("#sign-up").click(function(){
+            $(this).addClass("active");
+            $(this).parent().hide();
+            $("#p_login").show();
+            $("#login").removeClass("active");
+            show_signup_form($("#login-signup-form"));
+        });
+        $("#fp").click(function(e){
+           $("#sign-up,#login").removeClass("active");
+           show_fp_form($("#login-signup-form"));
+           e.preventDefault();
+        });
+        {% if show_popup.show_popup %}
+           {% if show_popup.type == "Sign_up" %}
+             $("#sign-up").trigger("click");
+             $("#login-modal").modal("show");
+            {% else %}
+            $("#login").trigger("click");
+            $("#login-modal").modal("show");
+            {% endif %}
+        {% endif %}
+       $.each($("[rel='submit']"),function(){
+            var $form = $($(this).attr("href"));
+            $form.keyup(function(e){
+                if(e.which == 13){
+                    $(this).submit();
+                }
+            });
+        });
+    });
+  </script>
+    <script>
+
+    $(document).ready(function(){
+        if($("#footer").position()){
+            if($(window).height() > ($("#footer").position().top + $("#footer").height())){
+                $("#footer").css({"position": "fixed","bottom": "0px", "width": "100%"});
+           }
+        }
+    });
+
+    window.footer_adjust = function(){
+        if($("#footer").position()){
+            if($(window).height() > ($("#footer").position().top + $("#footer").height())){
+                $("#footer").css({"position": "fixed","bottom": "0px", "width": "100%"});
+           }
+            if($('#footer').position().top < ($('#content').height()+$('.header_full').height())){
+                $("#footer").css({"position": "relative","width": "100%"});
+           }
+        }
+    };
+
+    $(document).ready(function(){
+        $("div.log-in").on('mouseover','#login-badge',function(e){
+              $("#login-badge ul").css("display","block");
+        })
+        $("div.log-in").on('mouseout','#login-badge',function(){
+              $("#login-badge ul").css("display","none");
+        })
+    });
+
+
+    </script>
+  <script>
+         $(document).ready(function(){
+            {% block pre_evd_init %}{% endblock %}
+            window.evd = window.evd.init();
+            evd.pre_submit = function(){
+                var $form = $(this).parents("form");
+                var $children = $form.children(":visible"),
+                    valid = true;
+                $("input[name=username]").val($("input[name=username]").val().toLowerCase());
+                /*if( form_status == "signup" && !$("input[name='accept']").is(":checked")) {
+                    evd.show_msg("accept the Code of Conduct");
+                    valid = false;
+                }*/
+                if(form_status && ($children.find("input[name=password1]").val() != $children.find("input[name=password2]").val()))
+                {
+                    evd.show_msg("passwords didnt match!");
+                    valid = false;
+                }
+                else if(!evd.validate_form($form.children(":visible"))){
+                    valid = false;
+                }
+                return valid;
+            };
+            evd.after_submit = function(resp){
+                var $caption = $("#current-form-desc");
+                resp = resp[0];
+                var pre_form_status = form_status;
+                if(resp.status == "error"){
+                   $("#sign-up,#login").removeClass("active");
+                   $caption.removeClass("success error").addClass("error").text(resp.message);
+                }
+                else{
+                   $("#sign-up,#login").removeClass("active");
+                       /*$("#login-signup-form").fadeOut("fast",function(){
+                           var $success_msg = $("#form-success");
+                           if(pre_form_status == "signup")
+                                $success_msg.text("An activation link has been sent to your mail").fadeIn("slow");
+                           else if(pre_form_status == "fp")
+                                $success_msg.text("An activation link has been sent to your mail").fadeIn("slow");
+                           if(resp.redirect_url){
+                              $success_msg.text("redirecting...");
+                              window.setTimeout(function(){
+                                  window.location = resp.redirect_url;
+                              },500);
+                           }
+                       });*/
+                       $caption.removeClass("success error").addClass("success");
+                       //During signup
+                       //During login
+                       if(resp.redirect_url){
+                              $caption.removeClass("success error");
+                              //$success_msg.text("redirecting...");
+                              $(this).children("span.ajax-button-label").attr({"data-after-success": "redirecting..."});
+                              window.setTimeout(function(){
+                                  window.location = resp.redirect_url;
+                              },500);
+                       }
+                       else{
+                           if(pre_form_status == "signup"){
+                                $caption.text("An activation link has been sent to your mail. Also please check your spam folder ");
+                                                          }
+                           //During forgot password
+                           else if(pre_form_status == "fp")
+                                $caption.text("Password reset link has been sent to your mail");
+
+                           evd.clear_form($("#login-signup-form")[0]);
+                       }
+                }
+            };
+            /*$("#login-badge").toggle(function(){
+                $(this).addClass("open");
+                $(this).children("li.ribbon").children("ul").stop().slideDown();
+            },function(){
+                $(this).removeClass("open");
+                $(this).children("li.ribbon").children("ul").stop().slideUp();
+            });
+            $("#login-badge").children("li.ribbon").children("ul").click(function(e){
+                e.stopPropagation();
+            });
+            $(".icon-ribbon").click(function(e){
+                e.stopPropagation();
+            });*/
+            {% block doc_ready %}
+                window.evd.pre_add_course = function(){
+                    $("#add-course-modal select").each(function(){
+                        if($(this).children(":selected").val() == ""){
+                            $(this).attr({"rel":"tooltip", "data-placement":"right", "title":"select any one of these"}).tooltip("show");
+                            return false;
+                        }
+                    });
+
+                    var planned_topics = "",
+                        enroll_students = "",
+                        topics_len =  $("select#planned_topics").children(":selected").length,
+                        students_len = $("select#enroll_students").children(":selected").length;
+                    $("select#planned_topics").children(":selected").each(function(index, val){
+                        planned_topics += $(this).val() + (index < (topics_len - 1) ? ";" : "");
+                    });
+                    $("input[name='planned_topics']").val(planned_topics);
+                    $("select#enroll_students").children(":selected").each(function(index, val){
+                        enroll_students += $(this).val() + (index < (students_len - 1) ? ";" : "");
+                    });
+                    $("input[name='students']").val(enroll_students);
+                }
+                window.evd.after_add_course = function(){
+                    $("#add-course-modal").hide();
+                    window.location = window.location.pathname + window.location.search;
+                }
+                evd.pre_stu_filter = function(){
+                     $("#mystudents p.title").remove();
+                     $("#mystudents p.no-students").remove();
+                     $("#mystudents table").remove();
+                     $("#mystudents").find("a[rel='submit']").hide();
+                     $("#mystudents").append('<img style="display:block;margin:10px auto" src="/static/images/loader.gif" />');
+                }
+                evd.after_stu_filter = function(resp){
+                    var len = resp.length;
+                    $("#mystudents img").remove();
+                    if(len != 0) {
+                        var students = resp;
+                        //$("#mystudents").append("<ul id='students_list' style='max-height:400px;margin-right:20px;overflow-x:hidden;overflow-y:auto'></ul>");
+                        $("<p class='title' style='padding:10px 0px 0px 10px;'>Students for the selected offering are:</p>").insertAfter($(".select-box"));
+                        //$.template("student_template",student_html);
+                        var student_html = '<table class="current_session_table">'+
+                                                '<thead>'+
+                                                    '<tr>'+
+                                                        '<th style="width:150px">Name</th>'+
+                                                        '<th>Strengths</th>'+
+                                                        '<th>Weakness</th>'+
+                                                        '<th>Observation</th>'+
+                                                    '<tr>'+
+                                                '</thead>'+
+                                                '<tbody>';
+                        var ids = "";
+                        for(var index in students){
+                            student = students[index];
+                            ids += student.id + (index < students.length-1 ? ";" : "");
+                            student_html += '<tr><td><div class="controls text"><p>' + student.name + '</p></div></td>'+
+                                                '<td><div class="controls text"><input type="text" class="strengths" value="' + student.strengths + '" /></div></td>'+
+                                                '<td><div class="controls text"><input type="text" class="weakness"  value="' + student.weakness + '"/></div></td>'+
+                                                '<td><div class="controls text"><input type="text" class="observation"  value="' + student.observation + '"/></div></td></tr>';
+                        }
+                        student_html += "</tbody></table>";
+                        $("#mystudents form#students-form").append(student_html);
+                        $("#mystudents form#students-form input[name='student_ids']").val(ids);
+                        $("#mystudents").find("a[rel='submit']").show();
+                    }
+                    else {
+                        $("<p style='padding:10px 0px 0px 10px;' class='no-students'>The selected offering has no students assigned</p>").insertAfter($(".select-box"));
+                    }
+                }
+                window.evd.pre_students_save = function(){
+                    var strengths = "",
+                        weakness = "",
+                        observation = "",
+                        students_len = $("#mystudents form#students-form").find("input.strengths").length;
+                    $("#mystudents form#students-form").find("input.strengths").each(function(index, val){
+                        strengths += $(this).val() + (index < students_len-1 ? ";" : "");
+                    });
+                    $("#mystudents form#students-form").find("input.weakness").each(function(index, val){
+                        weakness += $(this).val() + (index < students_len-1 ? ";" : "");
+                    });
+                    $("##mystudents form#students-form").find("input.observation").each(function(index, val){
+                        observation += $(this).val() + (index < students_len-1 ? ";" : "");
+                    });
+                    $("#mystudents form#students-form input[name='strengths']").val(strengths);
+                    $("#mystudents form#students-form input[name='weakness']").val(weakness);
+                    $("#mystudents form#students-form input[name='observation']").val(observation);
+                }
+                window.evd.after_students_save = function(){
+                    $("#mystudents").modal("hide");
+                    evd.show_msg("Modified students successfully");
+                }
+            {% endblock %}
+         });
+  </script>
+
+{% endblock %}
+
+
+{% block body %}
+<script type="text/javascript">
+  var uvOptions = {};
+  (function() {
+    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/rMaOeL6OvtQJPrCDouBQ.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+  })();
+</script>
+<div id="container">
+    <div id="login-modal" class="modal-layer modal hide">
+      <div class="modal-layer-inner" style="width: 620px;">
+        <a href="#" class="close" data-dismiss="modal" style="margin:-23px -30px 0px 0px;padding:0px;float:right">X</a>
+        <div class="modal-left">
+            <div class="vol-option">
+                <p>Educate - Anywhere Anytime</p>
+            </div>
+            <div>
+                <img src="/static/images/GLOBE.png">
+                <p>Teach online</p>
+                <p style="font-size:12px;line-height:1.4em;color:#777;">Primary activity where one connect with village through Skype and teach the children. 2 hrs in a week.</p>
+            </div>
+            <div>
+                <img src="/static/images/SHARE.png">
+                <p>Contribute to contents (offline)</p>
+                <p style="font-size:12px;line-height:1.4em;color:#777;">Develop lesson plans, search videos, pictures, activities, for a given topic, that will be used by the Teachers. Work offline at your pace.</p>
+            </div>
+            <div>
+                <img src="/static/images/ICON-5.png">
+                <p>Class Administrator (Remote)</p>
+                <p style="font-size:12px;line-height:1.4em;color:#777;">Coordinates with Teachers, Centre and makes sure, class happens on time, conduct review meetings over skype. 3-4 hrs in a week, over phone,email & Skype.</p>
+            </div>
+            <div style="margin-top:10px;">
+                <img src="/static/images/ICON-4.png">
+                <p>Be a well wisher</p>
+                <p style="font-size:12px;line-height:1.4em;color:#777;">You believe in the cause, model and help Spread the word, give feedback and follow eVidyaloka</p>
+            </div>
+            <div style="margin-left: 152px;margin-top: -10px;">
+                <p><a href="/volunteer/">Know more...</a></p>
+            </div>
+        </div>
+        <div class="modal-content">
+          <div id="login_modal_container">
+            <div class="top">
+              <p>Skip forms, use your Facebook account</p><a href="{% url socialauth_begin 'facebook' %}" id="" class=
+              "fb-connect-trigger login-fb">Login with Facebook</a>
+              <!--<a href="{% url socialauth_begin 'google' %}" id=""
+              class="fb-connect-trigger login-fb" style=
+              "background:transparent url('/static/images/g+login.png') top left no-repeat">Login with
+              Google</a>-->
+              <span class="divide">Or</span> 
+              <div style="">
+              <div id="p_sign" >Dont have an Account? <a  id="sign-up" href="#" style="height:30px;background-color:#2ecc71;width:60px;padding-left:5px;padding-right:5px;" class="show-signup btn">Sign up</a> </div><br>
+              <div id="p_login" style="display:none" > Already registered? &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a id="login" href="#" style="background-color:#2ecc71;height:30px;width:60px;padding-left:5px;padding-right:5px;" class="show-login btn">Login</a></div>
+              </div>
+              <span id="current-form-desc" style="font-size:18px;" class="show-on-login show-on-fp"></span>
+
+            </div>
+
+            <div class="form hide-temp" id="login-form" style="">
+              <form action="/accounts/register/" id="login-signup-form" method="POST" accept-charset="utf-8">
+
+                {% csrf_token %}
+                <input type="hidden" name="next" value='/myevidyaloka/'/>
+                <div class="input text show-on-login show-on-signup" style="">
+                  <label for="username">Your User Name</label> <input name="username" type="text" data-validate="true" data-field-type="username" data-show-tooltip="true" data-placement="right" placeholder="Your username" maxlength="80" id="username" />
+                </div>
+                <small class="show-on-signup">username should contain [a-z][0-9]<br/> ex: jhon, mike, amy</small>
+                <div class="input text required show-on-fp show-on-signup" style="">
+                  <label for="username">Email</label> <input name="email" type="text" data-validate="true" data-field-type="email" data-show-tooltip="true" data-placement="right"  placeholder="Your Email" maxlength="80" id="email" />
+                </div>
+                <small class="show-on-signup">ex: you@yourdomain.com</small>
+                <div class="input password required hide show-on-login" style="">
+                  <label for="password">Password</label> <input type="password" data-validate="true" data-field-type="password" data-show-tooltip="true" name="password" placeholder="Password" data-placement="right" id="password" />
+                </div>
+
+                <div class="input password required show-on-signup" style="">
+                  <label for="password">Password</label> <input type="password" data-validate="true" data-field-type="password" data-show-tooltip="true"  name="password1" placeholder="Password" data-placement="right" id="password" />
+                </div>
+                <small class="show-on-signup">atleast 5 characters</small>
+                <div class="input password required show-on-signup">
+                  <label for="password2">Password( again )</label> <input type="password" data-validate="true" data-field-type="password" data-show-tooltip="true" name="password2" placeholder="Password again" data-placement="right" id="password2" />
+                </div>
+                <small class="show-on-signup" style="margin-bottom:10px">repeat the same password</small>
+                <!--
+                <div class="input checkbox show-on-signup" style="overflow:hidden;">
+                    <label for="accept" style="margin:0px;color:#777;display:inline"><input type="checkbox" name="accept" value="1" id="accept" />&nbsp;<a href="/conduct/">I accept to Code of Conduct</a></label>
+                </div>
+                -->
+                <div class="clearfix row show-on-login" style="display:none">
+                  <div class="input checkbox row-left clearfix">
+                    <input type="checkbox" name="remember_me" value="1" id="UserRememberMe" checked /> <label for="UserRememberMe">Remember me</label>
+                  </div>
+
+                  <div class="row-right show-on-login" style="display:none">
+                    <a id="fp" href="#">Forgot your password?</a>
+                  </div>
+                </div>
+                <div id="submit" class="submit show-on-fp show-on-login show-on-signup" style="margin-top:10px">
+                    <a rel="submit" href="#login-signup-form" pre-call="pre_submit" callback="after_submit" class="btn">
+                        <span class="ajax-button-label">Sign up</span>
+                    </a>
+                </div>
+              </form>
+              <p id="form-error" style="font-style:italic;color:red;display:none"></p>
+              <p id="form-success" style="font-style:italic;display:none"></p>
+            </div>
+
+            <div id="fb-root">
+              <script async="" src="http://connect.facebook.net/en_US/all.js" type="text/javascript"></script>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</div>
+{% block top_bar %}
+<div class="header_full">
+    <div id="header">
+        <div class="inner clearfix">
+            <div class="nav_left">
+                <a href="/homepage"><img src="/static/images/evidyalogo.png"/></a>
+                <h1 id="logo"><a href="/homepage">eVidyaloka</a></h1>
+                <h3>To Educate-Anywhere Anytime</h3>
+            </div>
+            <div class="nav_right">
+                <div class="nav-menu">
+                    <ul id="main-nav" class="nav_main" class="clearfix">
+                        <li class="main-nav-2 main-nav-list" style="margin-left:48px">
+                            <a href="/homepage"style="cursor:pointer;">Home</a>
+                            <ul class="dropdown-menu submenu" style="display: none;margin-left:-46px">
+                                <li><a href="/about/">About Us</a></li>
+                                <li><a href="/vision/">Vision and Mission</a></li>
+                                <li><a href="/operating_principles/">Operating Principles</a></li>
+                                <li><a href="/conduct/">Code of Conduct</a></li>
+                                <li><a href="/who_we_are/">Who We Are</a></li>
+                                <li><a href="/careers/">Careers</a></li>
+                                <li><a href="/news_events/">News & Events</a></li>
+                                <li><a href="/governance/">Governance</a></li>
+                                <li><a href="/partners/">Partners</a></li>
+                                <li><a href="/faq/">FAQ</a></li>
+                                <li><a href="/contact_us/">Contact Us</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!--<div style="border:2px solid #909d71;position: absolute;bottom: 0;width: 98%;"></div>-->
+                </div>
+                <div class="nav-menu">
+                    <ul id="main-nav" class="nav_main">
+                        <li class="main-nav-3 main-nav-list">
+                            <a style="cursor:pointer;padding-left:0px;margin-left:50px">Discover</a>
+                            <ul class="dropdown-menu submenu" style="display: none;margin-left:14px;">
+                                <li><a href="/volunteer/">Spend some Time</a></li>
+                                <li><a href="/spread/">Spread the Word</a></li>
+                                <li><a href="/sponsor/">Share the Joy</a></li>
+                                <li><a href="/donors/">Know the Donors</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-menu">
+                    <ul id="main-nav" class="nav_main">
+                        <li class="main-nav-1 main-nav-list" style="margin-left:6px">
+                            <a style="cursor:pointer;">Education in India</a>
+                            <ul class="dropdown-menu submenu" style="display: none;margin-left:-5px">
+                              <li><a href="http://www.mhrd.gov.in/school-education" target="_blank">Ministry of HRD</a></li>
+                              <li><a href="http://www.mhrd.gov.in/rte" target="_blank">Right to Education</a></li>
+                              <li><a href="http://en.wikipedia.org/wiki/Education_in_India" target="_blank">Education in India</a></li>
+                              <li><a href="http://www.educationforallinindia.com/" target="_blank">Educational Statistics</a></li>
+                              <li><a href="http://www.asercentre.org/Keywords/p/205.html" target="_blank">ASER Reports</a></li>
+
+                            </ul>
+                        </li>
+                    </ul>
+               </div>
+               <div class="nav-menu">
+                    <ul id="main-nav" class="nav_main">
+                    <li class="main-nav-3 main-nav-list"style="padding-left:50px">
+                          <a style="cursor:pointer" href="/forums/" >Forums</a>
+                    </li>
+                    </ul>
+               </div>
+
+               <div class="nav-menu" style="padding-left:20px;text-align:center;">
+               <a href="/sponsor/" class="btn"  id="hdr_donate"  style="padding-left:5px;font-size:14px;padding-right:5px;{% if user.is_authenticated %}margin-top:21px;{% endif %} width:70%;height:40%;margin-left:3px;margin-right:3px;margin-bottom:3px;">Donate Now</a>
+            {% if not user.is_authenticated %}
+               <a href="/?show_popup=true&type=Login" class="btn"  id="hdr_login"  style="padding-left:5px;padding-right:5px;font-size:14px;width:70%;height:40%;margin:3px;">Signup/Login</a>
+            {% endif %}
+               </div>
+
+
+
+            </div>
+        </div>
+
+        <div class="log-in">
+            {% if user.is_authenticated %}
+                {% login_badge user %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+<div id="content" class="clearfix">
+    <div class="about-container">
+        <div class="clearfix ">
+        {% if request.user.is_authenticated %}
+        {% block breadcrumb %}
+            <ul class="dashboard-breadcrumb">
+                <li class="header">
+                    <a href="/myevidyaloka/">My eVidyaloka</a>
+                    <span class="divider">&gt;</span>
+                </li>
+                {% block userprofile %}
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="/user_profile/">My Profile<b class="caret"></b></a>
+                    <ul class="dropdown-menu" style="display: none; ">
+                        <li><a href="/user_profile/">Personal Info</a></li>
+                        <li><a href="/user_profile/?preferences">OnBoarding</a></li>
+                        <li><a href="/user_profile/?readiness">Readiness</a></li>
+                    </ul>
+                    <span class="divider">|</span>
+                </li>
+                {% endblock %}
+                <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="/myevidyaloka/contributions/">My Contributions  <b class="caret"></b></a>
+                         <ul class="dropdown-menu" style="display: none; ">
+                        <li><a href="/myevidyaloka/contributions/">Donations</a></li>
+                            <li><a href="/donorupdate/">Donor Update</a></li>
+                     </ul>  
+                    <span class="divider">|</span>
+                </li>
+            {% block breadcrumb_extras %}
+
+            {% endblock %}
+            {% breadcrumb request.user center.id %}
+        {% endblock %}
+        {% endif %}
+        {% block body_container %}
+        {% endblock %}
+        </div>
+    </div>
+</div>
+<div id="evd-notification" class="alert alert-warning hide">
+    <div>
+        <a type="button" class="close">X</a>
+        <p class="msg-body"></p>
+    </div>
+</div>
+
+{% block footer %}
+        <div id="footer" style="min-height:139px;padding:0px;">
+          <div class="inner clearfix">
+            <div class="nav-container clearfix">
+              <div id="footer">
+                <div class="inner clearfix">
+                  <div class="content-left">
+                    <div class="share-footer clearfix">
+                      <div class="follow-us clearfix">
+                        <p>Follow Us On:</p>
+
+                        <div class="fb-share">
+                          <div class="fb-like" data-href=
+                          "https://www.facebook.com/evidyaloka" data-send="false"
+                          data-layout="button_count" data-width="105" data-show-faces=
+                          "false" data-colorscheme="dark"></div>
+                        </div>
+
+                        <div class="tw-share">
+                          <a href="https://twitter.com/evidyaloka" class=
+                          "twitter-follow-button" data-show-count="false"
+                          data-show-screen-name="false">Follow @evidyaloka</a>
+                          <script type="text/javascript">
+//<![CDATA[
+                          !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+                          //]]>
+                          </script>
+                        </div>
+
+                       <div class="g-share">
+                           <!-- Place this tag where you want the +1 button to render -->
+                           <g:plusone size="medium" href="http://evidyaloka.org"></g:plusone>
+                       </div>
+                       <a href="https://plus.google.com/110437733223423859176" rel="publisher">Google+</a>
+                       <a href="//www.youtube.com/subscription_center?add_user_id=Owv8EUnb3rzI_9VSrOYP-Q&feature=creators_cornier-//s.ytimg.com/yt/img/creators_corner/Subscribe_to_my_videos/YT_Subscribe_130x36_red.png"><img src="//s.ytimg.com/yt/img/creators_corner/Subscribe_to_my_videos/YT_Subscribe_130x36_red.png" alt="Subscribe to me on YouTube"/></a><img src="//www.youtube-nocookie.com/gen_204?feature=creators_cornier-//s.ytimg.com/yt/img/creators_corner/Subscribe_to_my_videos/YT_Subscribe_130x36_red.png" style="display: none"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="bottom">
+                <div class="inner clearfix">
+                  <p>eVidyaloka.org is a registered Trust under Indian Trusts Act <a href=
+                  "/about/">About us</a> <a href=
+                  "/vision">Vision &amp; Mission</a> <a href=
+                  "/operating_principles">Operating Principles</a><a href=
+                  "/faq">FAQ</a><a href=
+                  "/contact_us">Contact US</a></p>
+                  <a href="http://www.headrun.com/" target="_blank" class="by-kettle" style="width:120px;">Powered by Headrun<span>come say hi!</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div id="center-modal" class="modal hide" style="width:860px;left:37% !important;">
+            <a class="close" data-dismiss="modal" style="float:right;cursor:pointer;">X</a>
+            <img src="/static/images/loader.gif" style="float:none;margin:20px auto;display:block;" />
+        </div>
+
+{% endblock %}
+{% block outside_container %}
+{% endblock %}
+{% block bottom_scripts %}
+    <script>
+        $(document).ready(function(){
+            $("li.main-nav-list a").mouseenter(function(){
+                $(this).css({"color":"#f15a22"});
+                $(this).next("ul").show();
+            });
+            $("li.main-nav-list a").mouseleave(function(){
+                $(this).css({"color":"#505050"});
+                $(this).next("ul").hide();
+            });
+            $("li.main-nav-list").children("ul").mouseenter(function(){
+                $(this).show();
+                $(this).prev("a").css({"color":"#f15a22"});
+            });
+            $("li.main-nav-list").children("ul").mouseleave(function(){
+                $(this).hide();
+                $(this).prev("a").css({"color":"#505050"});
+            });
+
+            $("li.dropdown, ul.dropdown-menu").mouseenter(function(){
+                $(this).children("ul.dropdown-menu").show();
+            });
+            $("li.dropdown, ul.dropdown-menu").mouseleave(function(){
+                $(this).children("ul.dropdown-menu").hide();
+            });
+            $("ul.custom-select li").toggle(function(){
+            $("ul.custom-select > li.focus-f").not($(this)).trigger("click");
+                $(this).addClass("focus-f");
+            },function(){
+                $(this).removeClass("focus-f");
+            });
+            $("html").click(function(){
+                $("ul.custom-select li.focus-f").trigger("click");
+            });
+            $("ul.custom-select li span.dropdown a").click(function(){
+                $(this).parent("span.dropdown").prev().text($(this).text());
+            });
+/*            $("select[name='course_id']").change(function(){
+                var course_id = $(this).children(":selected").val();
+                $.get("/get_planned_topics/?course_id="+course_id,function(resp){
+                    $li =  $("select#planned_topics").parent("li");
+                    $("select#planned_topics option").remove();
+                    $("select#planned_topics").show();
+                    $li.children("p.no-topics").remove();
+                    if(resp.length > 0) {
+                        for(var index in resp){
+                            topic = resp[index]
+                            $("select#planned_topics").append("<option value=" + topic.topic_id + ">" + topic.title + "</option>");
+                        }
+                    }
+                    else {
+                        $("select#planned_topics").hide();
+                        $("<p class='no-topics' style='padding:0px;'>This course has no planned topics yet</p>").insertAfter($li.children("select#planned_topics"));
+                    }
+                });
+            });
+            $("#add-course-modal select").each(function(){
+                $(this).change(function(){
+                    $(this).tooltip("destroy");
+                });
+            });
+            $(".date-picker").datepicker({
+                dateFormat: "dd-mm-yy",
+                timeFormat: "hh:mm"
+            });*/
+        });
+        </script>
+{% endblock %}
+
+{% endblock %}

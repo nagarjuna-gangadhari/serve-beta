@@ -1,0 +1,1117 @@
+{% extends "base.html" %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+
+<link href="multiselect.css" rel="stylesheet">
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/themes/dot-luv/jquery-ui.css">
+<link rel="stylesheet" href="/static/css/demandpage.css">
+
+
+<style>
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    height: auto;
+}
+.mySchoolDiv {
+    background-color:#ffffff;
+    padding : 15px 20px 20px 30px;
+    height:auto;
+}
+.right-content .top{
+    padding:34px 37px;
+}
+.subcontent{
+    background:none;
+}
+div.intro h3{
+    padding-bottom:35px;
+}
+.btn-primary{
+    background-color: #337ab7;
+}
+.table .thead-dark th {
+    /* color: #fff; */
+    background-color: #52ccfd;
+    /* border-color: #66669a; */
+}
+.table {
+    width: 102%;
+    margin-bottom: 20px;
+}
+.inner {
+     width: 100%;
+     margin: 0;
+}
+.get-btn{
+    background: #52ccfd;
+    color:#000;
+}
+.modal-body {
+    height: 612px;
+    overflow-y: scroll;
+}
+.modal {
+    width: 65%;
+    position: fixed;
+    left: 40%;
+}
+
+.page_content {
+        width: 20cm;
+        padding: 45px;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        text-align: justify;
+    }
+.right-align {
+    float: right;
+    font-weight: 600;
+}
+@media print {
+    .pagebreak { page-break-before: always; } /* page-break-after works, as well */
+}
+
+
+.dashboard-breadcrumb :hover .dropdown-menu {display: block;
+    display:block!important;}
+
+</style>
+
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_container %}
+    {{ block.super }}
+    {% if is_eligible %}
+<div class="container">
+<div class="row" style="min-height: 450px !important;">
+    <div class="col-sm-12 col-md-12 col-lg-12" style="background-color: #52ccfd;height: 61px; text-align: center;">
+        <h3 style="color: white;"><b>Assessment Builder</b></h3>
+        <hr />
+    </div>
+    <div class="col-md-12 col-sm-12 mySchoolDiv">
+    <!---Form started here---->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="state">Board:<span style="color:red;">*&nbsp;</span></label>
+                    <select class="form-control" id='state_id' name="state">
+                        <option value="">Select Board</option>
+                        <!-- <option value="">All</option> -->
+                        {% for board in board_list %}
+                        <option value="{{board}}">{{board}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="state">Center:<span style="color:red;">*&nbsp;</span></label>
+                    <select class="form-control" id="center_id" name="center">
+                        <option value="">Select Center</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="offering">Offering:<span style="color:red;">*&nbsp;</span></label>
+                    <select class="form-control" id="offering_id">
+                        <option value="">Select Offering</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div id="output"></div>
+                    <label for="topic">Topic: <span style="color:red;">*&nbsp;</span></label>
+                    <select class="form-control demand2_label demand_label" onchange="getSubTopics()" id="topic_id" multiple>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div id="output"></div>
+                    <label for="subtopic">Sub Topic:</label>
+                    <select class="form-control demand2_label demand_label" id="sub_topic_id" multiple>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <br>
+                <button type="button" class="btn btn-info get-btn btn-lg" onclick="getQuestionList()">Get Questions</button>
+            </div>
+        </div>
+    <!---End of Form---->
+    <br><br>
+    <!---Table---->
+    <div class="row" id="countPaginationId" align="right" style="padding:10px 0px;"></div>
+    <div class="row">
+        <div id="alert_placeholder"></div>
+        <div class="col-md-12">
+            <table class="table table-striped table-bordered" id="table_id" style="background-color:#c5e9f7;width:102%;overflow: scroll;">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Topic</th>
+                        <th scope="col">Sub Topic</th>
+                        <th scope="col">Question</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Level</th>
+                        <th scope="col">Marks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-2 pull-right">
+            <button type="button" class="btn btn-info get-btn btn-lg" onclick="openQuestionModal_preview()">Preview</button>
+        </div>
+        <div class="col-md-2 pull-right">
+            <button type="button" class="btn btn-info get-btn btn-lg"  onclick="generatePdfQuestion()">Download Questions</button>
+        </div>
+        <div class="col-md-2 pull-right">
+            <button type="button" class="btn btn-info get-btn btn-lg" onclick="generatePdfAnswer()">Download Answers</button>
+        </div>
+    </div>
+    <div class="row" id="pagination_data" style="text-align:center"></div>
+    <!---End of Table---->
+    </div>
+</div>
+
+<!-- question modal -->
+<div class="modal fade bd-example-modal-lg" id="question_modal">
+        <button type="button" class="btn btn-default pull-right" data-dismiss="modal">X</button>
+        <!-- Modal body -->
+        <div class="modal-body">
+            <div id="page_content">
+
+            </div>
+        </div>
+  </div>
+  <div class="modal fade bd-example-modal-lg" id="answer_modal">
+    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">X</button>
+    <div class="modal-body">
+        <div id="page_content_answer">
+
+        </div>
+    </div>
+</div>
+<div class="modal fade bd-example-modal-lg" id="question_modal_pdf">
+    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">X</button>
+    <div class="modal-body">
+        <div id="page_content_pdf">
+
+        </div>
+    </div>
+</div>
+<div class="modal fade bd-example-modal-lg" id="preview_modal">
+    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">X</button>
+    <h1><a class="navbar-brand scroll" href="/?home=true">
+        <img class="logo_img_css" src="/static/images/evidyalogo.jpg" alt="evidyaloka logo" width="55px" height="51px" style="margin-top:-14px;border-radius:100%;display:inline;position:absolute"/>
+        <img class="logo_img_css1" src="/static/images/evidyaban_1000x250.png" alt="evidyaloka banner" height="75px" class="banner_large" width="275px" style="margin-left:50px;margin-top:-25px;float:left;display:inline;position:absolute">
+    </a></h1>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="modal-body">
+        <div id="page_content_preview">
+
+        </div>
+    </div>
+</div>
+{% endif %}
+{% if not is_eligible %}
+<div align="center" >
+        <div align="center" style="line-height: 50px;background:white;text-align: center;  font-size:18px">You don't have access to Assessment Builder since you are not teaching any of the offerings</div>
+        </div>
+</div>
+{% endif %}
+
+
+</div>
+
+{% endblock %}
+
+
+{% block bottom_scripts %}
+    {{ block.super }}
+
+    <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/jspdf.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>
+    questions_and_marks = []
+    $('#state_id').on('change', function () {
+    $.get("/questions/get_centers_by_state/?", {'state':$("#state_id").val()}, function (data) {
+        var add_center_html ='<option value=" ">Select Center</option>';
+        $.map(data.center_json, function(value, index) {
+        add_center_html+='<option value="' + index + '">' + value + '</option>';
+    });
+    $('#center_id').empty();
+    $('#center_id').append(add_center_html);
+    });
+
+ });
+
+
+    $('#center_id').on('change', function () {
+    $.get("/questions/get_offering_by_center/?", {'center':$("#center_id").val()}, function (data) {
+        var add_offering_html ='<option value=" ">Select Offerings</option>';
+        $.map(data.offering_json, function(value, index) {
+            add_offering_html+='<option value="' + value[1] + '">' + value[0] + '</option>';
+        });
+    $('#offering_id').empty();
+    $('#offering_id').append(add_offering_html);
+    });
+
+});
+
+
+        document.getElementById('output').innerHTML = location.search;
+        $(".chosen-select").chosen();
+
+        $('#offering_id').on('change', function () {
+        $.get("/questions/get_topic_and_sub_topic/?", {'course_id':$("#offering_id").val()}, function (data) {
+            var add_topic_html ='<option value="">Select All</option>';
+            $.each(data, function (i, resp) {
+                add_topic_html+='<option value="' + resp[0] + '">' + resp[1] + '</option>';
+            });
+            $("#topic_id").empty();
+            $('#topic_id').append(add_topic_html);
+
+        });
+    });
+
+    function getSubTopics() {
+        $.get("/questions/get_topic_and_sub_topic/?", {'topic_id':JSON.stringify($("#topic_id").val())}, function (data) {
+        var add_sub_topic_html ='<option value="">Select All</option>';
+        $.each(data, function (i, resp) {
+            add_sub_topic_html+='<option value="' + resp[0] + '">' + resp[1] + '</option>';
+        });
+        $('#sub_topic_id').empty();
+        $('#sub_topic_id').append(add_sub_topic_html);
+        });
+    }
+    var subjectName;
+    var gradeName;
+    function getQuestionList(){
+        var topicId = $('#topic_id').val();
+        var subTopicId = $('#sub_topic_id').val();
+        var courseId = $("#offering_id").val();
+        var state = $("#state_id").val();
+        var page_id = $("#page_id").val();
+        $.get("/questions/get_question_list/?", {'topic_id':topicId,'sub_topic_id':subTopicId,'state':state,'course_id':courseId}, function (data) {
+            var table='';
+	        if (data !=null && data !='' && data!='undefined'){
+                // console.log(data)
+	        		var thead = '';
+	   				var tab1 = '';
+	   				thead += '<thead >';
+	                thead +='<tr style="width:250px;background-color: #52ccfd;color: #fff;"><th><input type="checkbox" onchange="checkAll(this)" name="chk[]" style="height: 15px!important;position: absolute !important;top: 10px;left: -411px!important;"></th><th><b>Topic</b></th><th width="250px"><b>Sub Topic</b></th><th width="250px"><b>Question</b></th><th width="250px"><b>Type</b></th><th width="250px"><b>Level</b></th><th width="250px"><b>Marks</b></th>';
+	                thead +='</thead>';
+                    tab1 = '<tbody>';
+                    var current_page = data.current;
+                    var prev_page = data.prev;
+                    var next_page = data.next;
+                    var total_page = data.total;
+                    var count=data.count;
+                    var count_id = 0
+                    $.each(data.questionlist, function (i, resp) {
+                        let question_id_name = 'question_'
+                        let mark_id_name = 'marks_'
+                        let choices_id_name = 'choices_'
+                        let answer_id_name = 'answer_'
+                        let img_id_name = 'img_'
+                        question_id_name = question_id_name + count_id
+                        mark_id_name = mark_id_name + count_id
+                        choices_id_name = choices_id_name + count_id
+                        answer_id_name = answer_id_name +count_id
+                        img_id_name = img_id_name +count_id
+                        //add_sub_topic_html+='<option value="'+resp[0]+'">'+resp[1]+'</option>';
+                        tab1 += '<tr>';
+	   					//var name = '<a href="/userActivity?user_id='+jsonObj['user_id']+'">'+jsonObj['name']+'</a>';
+	   					tab1+='<td style="width:4%">'+'<input type="checkbox" style="height: 15px!important;position: absolute !important;left: -387px!important;" id="'+ count_id +'" onclick="select_invisual_checkbox('+ count_id +')"></td>';
+                        tab1 += '<td style="width:20%">' + resp.topic + '</td>';
+	   			   		tab1 += '<td style="width:12%">' + resp.sub_topic +'</td>';
+                        tab1 += '<td style="width:10%" id=' + question_id_name + '>' + resp.question +'</td>';
+                        tab1 += '<td style="width:7%">' + resp.type + '</td>';
+	   			   		tab1 += '<td style="width:7%">' + resp.level +'</td>';
+	   			   		tab1 += '<td style="width:7%" id=' + mark_id_name + '>' + resp.marks +'</td>';
+                        tab1 += '<td style="display:none" id=' + choices_id_name + '>' + resp.choices +'</td>';
+                        tab1 += '<td style="display:none" id=' + answer_id_name + '>' + resp.correctAnswer +'</td>';
+                        tab1 += '<td style="display:none" id=' + img_id_name + '>' + resp.image +'</td>';
+                        tab1 += '</tr>';
+                        count_id = count_id + 1;
+                        subjectName = resp.subject;
+                        gradeName = resp.grade;
+                    });
+
+	   				tab1 += '</tbody>';
+	   				tableData = thead+tab1;
+                    $("#table_id").html(tableData);
+                    // var pagination_template = '';
+	  				// 		if (tableData != null && tableData != ' ' && tableData != 'undefined' && tableData.length > '0') {
+	   				// 			pagination_template += "<ul class='pagination' style='padding-left: 210px;padding-right: 187px;'>";
+	   				// 			if(total_page >=1){
+	   				// 				if(current_page >1){
+	   				// 		    		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+prev_page+")'"+prev_page+"' ><i class='fa fa-chevron-left'></i></a></li> ";
+	   				// 		   	 	}else{
+	   				// 		    		pagination_template += "<li><a class='page' href='javascript:void(0);'><i class='fa fa-chevron-left'></i></a></li> ";
+	   				// 		    	}
+	   				// 		   		 if(current_page !=1){
+	   				// 		    		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(1)'>1</a></li> ";
+	   				// 		     	}
+	   				// 		    	 if(current_page > 4 && current_page <= 10){
+	   				// 		        	pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-1)+")'"+(current_page-1)+"' >...</a></li> ";
+	   				// 		     	}
+	   				// 		     	if((current_page-50)>0){
+	   				// 		        	pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-50)+")'"+(current_page-50)+"' >...</a></li> ";
+	   				// 		     	}
+	   				// 		     	if((current_page-11) > 0 && (current_page-11) != 1){
+	   				// 		        	pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-11)+")'"+(current_page-11)+"' >"+(current_page-11)+"</a></li> ";
+	   				// 		     	}
+	   				// 		     	if((current_page-10)>0){
+	   				// 		         	pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-10)+")'"+(current_page-10)+"' >...</a></li> ";
+	   				// 		     	}
+	   				// 		     	if((current_page-2) > 0 && (current_page-2) != 1){
+	   				// 		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-2)+")'"+(current_page-2)+"' >"+(current_page-2)+"</a></li> ";
+	   				// 		     	}
+	   				// 		     	if((current_page-1) > 0 && (current_page-1) != 1){
+	   				// 		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page-1)+")'"+(current_page-1)+"' >"+(current_page-1)+"</a></li> ";
+	   				// 		     	}
+	   				// 		     		pagination_template += "<li  class='active'><a class='page' href='javascript:void(0);' onclick='loadPagination("+current_page+")'"+current_page+"' >"+current_page+"</a></li> ";
+	   				// 		     	if((current_page+1) <= total_page){
+	   				// 		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+1)+")'"+(current_page+1)+"' >"+(current_page+1)+"</a></li> ";
+	   				// 		     	}
+	   				// 		     	if((current_page+2) <= total_page){
+	   				// 		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+2)+")'"+(current_page+2)+"' >"+(current_page+2)+"</a></li> ";
+	   				// 		     	}
+	   				// 		     	if((current_page+10) < total_page){
+	   				// 		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+10)+")'"+(current_page+10)+"' >...</a></li> ";
+	   				// 		     	}
+	   				// 		     	if((current_page+11) < total_page){
+	   				// 		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+11)+")'"+(current_page+11)+"' >"+(current_page+11)+"</a></li> ";
+	   				// 		     	}
+	   				// 		     	if((current_page+50) < total_page){
+	   				// 		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+50)+")'"+(current_page+50)+"' >...</a></li> ";
+	   				// 		     	}
+	   				// 		     	if((current_page >= (total_page-10)) && (current_page < (total_page-3))){
+	   				// 		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+(current_page+1)+")'"+(current_page+1)+"' >...</a></li> ";
+	   				// 		     	}
+	   				// 		     	if((current_page+3) <= total_page){
+	   				// 		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+total_page+")'"+total_page+"' >"+total_page+"</a></li> ";
+	   				// 		     	}
+	   				// 		     	if(current_page < total_page){
+	   				// 		     		pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination("+next_page+")'"+next_page+"' ><i class='fa fa-chevron-right'></i></a></li> ";
+	   				// 		     	}else{
+	   				// 		     	pagination_template += "<li><a class='page' href='javascript:void(0);'><i class='fa fa-chevron-right'></i></a></li> ";
+	   				// 		     	}
+	   				// 		 	}
+	   				// 			pagination_template += "</ul>";
+	   				// 		}
+
+
+	 	                  var span='';
+	 	                  span='<span class="col-sm" style="text-align :right;" >';
+	 	                 var curent_count_end='';
+	 	                  var curent_count='';
+	                       if(total_page>0){
+	                    	   curent_count=(current_page*50)-49;
+	                         if (current_page<total_page){
+	                        		  span +='Showing '+curent_count+' to '+current_page*50+' Activity of '+count+' Activity';
+	                        	  } else{
+	                        		  span +='Showing '+curent_count+' to '+count+' Activity of '+count +' Activity';
+	                        	  }
+	                          }
+	                         span +='</span>';
+	                        $("#countPaginationId").html(span);
+		   				  	$("#table_id").html(tableData);
+		   					$('#pagination_data').html(pagination_template);
+
+            }
+        });
+
+    }
+
+    </script>
+
+<script>
+     function checkAll(ele) {
+        questions_and_marks = [];
+        var checkboxes = $(":checkbox");
+        if (ele.checked) {
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].type == 'checkbox') {
+                    checkboxes[i].checked = true;
+                }
+                if(questions_and_marks.length){
+                    for(let index = 0; index < questions_and_marks.length; index++) {
+                        let question =  document.getElementById('question_' + i).innerHTML
+                        let mark = document.getElementById('marks_' + i).innerHTML
+                        let mcqChoices = document.getElementById('choices_' + i).innerHTML
+                        let correctans = document.getElementById('answer_' + i).innerHTML
+                        let correctans4 = document.getElementById('img_' + i).innerHTML
+                        if(question != questions_and_marks[index]['question'] || mark != questions_and_marks[index]['marks'] || mcqChoices != questions_and_marks[index]['choices'] || correctans != questions_and_marks[index]['answer']|| correctans4 != questions_and_marks[index]['img']) {
+                            if(index == questions_and_marks.length-1){
+                                questions_and_marks.push({"question":question, "marks": mark, "choices": mcqChoices, "answer": correctans, "img": correctans4})
+                            }
+                        }
+                    }
+                } else {
+                    let question =  document.getElementById('question_' + i).innerHTML
+                    let mark = document.getElementById('marks_' + i).innerHTML
+                    let mcqChoices = document.getElementById('choices_' + i).innerHTML
+                    let correctans = document.getElementById('answer_' + i).innerHTML
+                    let correctans4 = document.getElementById('img_' + i).innerHTML
+                    questions_and_marks.push({"question":question, "marks": mark, "choices": mcqChoices, "answer": correctans, "img": correctans4})
+                }
+            }
+        } else {
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].type == 'checkbox') {
+                    checkboxes[i].checked = false;
+                }
+                questions_and_marks.splice(i, 1);
+            }
+        }
+
+    }
+
+    function select_invisual_checkbox(id) {
+        if(document.getElementById(id).checked) {
+            let question =  document.getElementById('question_' + id).innerHTML
+            let mark = document.getElementById('marks_' + id).innerHTML
+            let mcqChoices = document.getElementById('choices_' + id).innerHTML
+            let correctans = document.getElementById('answer_'+id).innerHTML
+            let correctans4 = document.getElementById('img_'+id).innerHTML
+            questions_and_marks.push({"question":question, "marks": mark, "choices":mcqChoices, "answer":correctans, "img":correctans4})
+        } else {
+            let question =  document.getElementById('question_' + id).innerHTML
+            let mark = document.getElementById('marks_' + id).innerHTML
+            let mcqChoices = document.getElementById('choices_' + id).innerHTML
+            let correctans = document.getElementById('answer_'+id).innerHTML
+            let correctans4 = document.getElementById('img_'+id).innerHTML
+            for(let index =0; index < questions_and_marks.length; index++) {
+                if(questions_and_marks[index]['question'] == question && questions_and_marks[index]['marks'] == mark && questions_and_marks[index]['choices'] == mcqChoices && questions_and_marks[index]['answer'] == correctans && questions_and_marks[index]['img'] == correctans4) {
+                    questions_and_marks.splice(index, 1);
+                }
+            }
+        }
+    }
+
+    function makeQuestionModal() {
+            var total_marks = 0;
+            for(let index=0;index<questions_and_marks.length; index++){
+                total_marks = total_marks + Number(questions_and_marks[index]['marks'])
+            }
+
+            modal_content = ""
+            modal_content = '<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+
+            '<span class="right-align"><p class="western" style="color:white">-------------------------------------------------------------------------------------------------------------<span class="western" style="color:black">Total Marks :<span id="total_marks"></span></span><br><hr>'
+            // '<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'+'<br>'
+            // '<span class="left-align">Student Name:</span>'+'<span class="right-align">Grade :'+gradeName +'</span>'+'<br><span class="left-align">Date:</span> '+'<span class="right-align">State :'+gradeName+'</span><br>'+"<h5 class='right-align' style='font-weight:700;'>Subject: "+ subjectName +"</h5><br><hr size='40'>"
+            count = 0
+            line_count = 8
+            for(let index = 0; index < questions_and_marks.length; index++) {
+                count += 1;
+                console.log(index)
+                if(count > 1) {
+                    modal_content += "<p></p>"
+                }
+                if(line_count > 46) {
+                    var next = 50 - line_count;
+                    for(let line = 0; line < next; line++) {
+                        modal_content += "<span style='color:white;'>New Page:</span><br>"
+                    }
+
+                    line_count = 0;
+                }
+
+                modal_content += "<p class='western' style='font-weight:bold'><span>Q" + count + ". " + questions_and_marks[index]['question'] + "</span></p>" +
+                                    "<p class='western' style='color:white':''><span style='color:black;text-align:right;'>[ " + questions_and_marks[index]['marks'] + " marks]</span></p><br>"
+                // total_marks += Number(questions_and_marks[index]['marks'])
+                var len = questions_and_marks[index]['question'].length;
+                if(len >= 92)
+                {
+                var no_of_lines =  Math.ceil(len/92)
+                line_count+= no_of_lines
+                // console.log(lines.length)
+                }
+                else {
+                    line_count+= 2   
+                }
+
+                if(questions_and_marks[index]['choices']=="[u'True', u'False']"){
+                    line_count += 1
+                    modal_content += "<p>"+"&nbsp;&nbsp;&nbsp;"+ "True/False"+ "</p><br>"
+                }
+                else if(questions_and_marks[index]['choices']!=""){
+                    var mcqString = String(questions_and_marks[index]['choices']);
+                    const re = /'(.*?)'/g;
+                    const choicesArray = []
+                    let match = null;
+                    do {
+                        match = re.exec(mcqString);
+                        if(match) {
+                            match[0]=match[0].slice(1,match[0].length-1)
+                            choicesArray.push(match[0]);
+                        }
+                    } while (match);
+                    for(let i=0;i<choicesArray.length;i++)
+                    if(choicesArray[i]!=""){
+                        if((i+1)%2 != 0) {
+                        line_count+=2;
+                        modal_content += "<span>"+"&nbsp;&nbsp;&nbsp;"+(i+1)+".&nbsp;"+ choicesArray[i] +"</span>"
+                        }
+                        else{
+                            // var choice_lenth = 40 - (choicesArray[i-1].length)
+                            // for(let choice =0;choice<choice_lenth;choice++){
+                            //     modal_content += '<span>1</span>'
+                            // }
+                        
+                        modal_content += "<span style='color:black;text-align:40;'>"+"&nbsp;&nbsp;&nbsp;"+(i+1)+".&nbsp;"+ choicesArray[i] +"</span>"
+                        modal_content += '<p></p>'
+                        modal_content += '<p></p>'
+                        }
+                    }
+                }
+                else{
+                    line_count+=1;
+                    modal_content += "<br>"
+                }
+            }
+            modal_content += "</div>"
+            document.getElementById('page_content').innerHTML = modal_content;
+            // document.getElementById('total_marks').innerHTML = String(total_marks)
+    }
+
+    function openQuestionModal(){
+        if(questions_and_marks.length){
+            makeQuestionModal();
+            $('#question_modal').modal('show');
+        }
+        else{
+            message = 'Please select one or more questions to preview'
+            $('#alert_placeholder').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>')
+        }
+    }
+
+
+
+    function makeQuestionModal_preview() {
+            var total_marks = 0;
+            for(let index=0;index<questions_and_marks.length; index++){
+                total_marks = total_marks + Number(questions_and_marks[index]['marks'])
+            }
+            modal_content = ""
+            modal_content = '<span class="left-align">Student Name:</span>'+'<span class="right-align">Assessment_Term: ' +'</span></br>'+'<span class="left-align">Date:</span>'+'<span class="right-align">Subject: '+subjectName +'</span>'+'<br><span class="left-align"></span> '+'<span class="right-align">Grade :'+gradeName+'</span><br>'+'<span class="right-align">Total Marks :<span id="total_marks">'+total_marks+'</span></span><br><hr>'
+            count = 0
+            for(let index = 0; index < questions_and_marks.length; index++) {
+                count += 1;
+                if(count > 1) {
+                    modal_content += "<p></p>"
+                }
+                modal_content += "<p class='western' style='font-weight:bold'><span>Q" + count + ". " + questions_and_marks[index]['question'] + "</span>" +
+                                    "<span class='right-align'>[ " + questions_and_marks[index]['marks'] + " marks]</span></p>"
+                var image = questions_and_marks[index]['img']
+                if (image != "") {
+                modal_content+=   "<span><img src='/static/questionbank/question/images/"+image+"'"+" width='600' heght='400'></span>"
+                modal_content += "<br>"
+                }
+                if(questions_and_marks[index]['choices']=="[u'True', u'False']"){
+                    modal_content += "<p>"+"&nbsp;&nbsp;&nbsp;"+ "True/False"+ "</p><br>"
+                }
+                else if(questions_and_marks[index]['choices']!=""){
+                    var mcqString = String(questions_and_marks[index]['choices']);
+                    const re = /'(.*?)'/g;
+                    const choicesArray = []
+                    let match = null;
+                    do {
+                        match = re.exec(mcqString);
+                        if(match) {
+                            match[0]=match[0].slice(1,match[0].length-1)
+                            choicesArray.push(match[0]);
+                        }
+                    } while (match);
+                    for(let i=0;i<choicesArray.length;i++)
+                    if(choicesArray[i]!=""){
+                        value4 = JSON.parse('"' + (choicesArray[i]) + '"');
+                        modal_content += "<p>"+"&nbsp;&nbsp;&nbsp;"+(i+1)+".&nbsp;"+ value4 +"</p><br>"
+                    }
+                }
+                else{
+                    modal_content += "<br>"
+                }
+                modal_content += "<span>Ans:.................."
+                    modal_content += "<br>"
+                    modal_content += "<br>"
+                    modal_content += "<br>"
+                    modal_content += "<br>"
+            }
+            modal_content += "</div>"
+            document.getElementById('page_content_preview').innerHTML = modal_content;
+    }
+
+    function openQuestionModal_preview(){
+        if(questions_and_marks.length){
+            makeQuestionModal_preview();
+            $('#preview_modal').modal('show');
+        }
+        else{
+            message = 'Please select one or more questions to preview'
+            $('#alert_placeholder').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>')
+        }
+    }
+
+    function generatePdfQuestion(){
+        var doc = new jsPDF('p', 'pt', 'a4');
+        var offering = document.getElementById('offering_id')
+            offering = offering.options[offering.selectedIndex].innerHTML
+        var board = document.getElementById('state_id')
+        board = board.options[board.selectedIndex].innerHTML
+        var grade = offering.split(" ", 1);
+        var subject = offering.split(" ", 2);
+        var subject4 = subject[1];
+        // var gradevalue = grade.replace(/th/g, '')
+        doc.setFontSize(11);
+        doc.text(10, 100, 'Student Name:');
+        doc.text(10, 125, 'Date:');
+        doc.text(200, 100, 'Assessment Term: ')
+        doc.text(200, 125, 'Grade: '+ gradeName)
+        doc.text(350, 100, 'Board: '+ board)
+        doc.text(350, 125, 'Subject: '+ subject4)
+        var total_marks = 0;
+        for(let index=0;index<questions_and_marks.length; index++){
+            total_marks = total_marks + Number(questions_and_marks[index]['marks'])
+        }
+        doc.text(450,150, 'Total Marks: ' +total_marks)
+        // var img = new Image();
+        // img.src = '/static/images/evidyaloka_assmnt.png'
+        // doc.addImage(img, 'jpeg', 5, 5);
+
+        // doc.text(10,150, 'Questions: ')
+        
+        var img = new Image();
+        img.addEventListener('load', function() {
+            console.log("**** Image loaded")
+            console.log("***** " + this.width + "***** " + this.height)
+            console.log(gradeName)
+            //this.width = 170;
+            //this.height = 30;
+            doc.addImage(img, 'jpeg', 5, 5);
+
+            //this.height = 30;
+        count = 0
+        line_height = 200;
+            for(let index = 0; index < questions_and_marks.length; index++) {
+                count += 1;
+                if (line_height >= 700 || (line_height>500 & questions_and_marks[index]['img']!=""))
+                    {
+                    doc.addPage();
+                    line_height = 50 // Restart height position
+                    }
+                doc.text(questions_and_marks[index]['marks'] + "marks",450,line_height)
+                // doc.setFont("en");
+                var strArr = doc.splitTextToSize(count+": "+questions_and_marks[index]['question'], 400)
+                question = questions_and_marks[index]['question']
+                var inputtxt = ""
+                numbers = [1,2,3,4,5,6,7,8,9,0,'?']
+                for (i=0; i < question.length; i++){
+                    if ((question[i] == " ") || (question[i] in numbers) || (question[i] == "`") || (question[i] == "~") || (question[i] == "!")
+                    || (question[i] == "@") || (question[i] == "#") || (question[i] == "$") || (question[i] == "%") || (question[i] == '^') || (question[i] == "&")
+                    || (question[i] == "*") || (question[i] == "(") || (question[i] == ")") || (question[i] == "_") || (question[i] == '-') || (question[i] == "=")
+                    || (question[i] == "+") || (question[i] == "{") || (question[i] == "[") || (question[i] == "}") || (question[i] == ']') || (question[i] == ";")
+                    || (question[i] == ":") || (question[i] == "'") || (question[i] == '"') || (question[i] == "<") || (question[i] == ',') || (question[i] == ">")
+                    || (question[i] == ".") || (question[i] == "/") || (question[i] == "?") || (question[i] == "'") || (question[i] == '"') || (question[i] == "’")
+                    )
+                    continue
+                inputtxt = inputtxt + question[i]
+
+                }
+                // var inputtxt2 = question[2]
+                // var inputtxt3 = question[4]
+                // var inputtxt4 = question[5]
+                // var inputtxt5 = question[9]
+                // var inputtxt6 = question[11]
+                // var inputtxt7 = question[15]
+                console.log("@@@@@@@@@@@@@@@@@@@"+ inputtxt)
+                var error =""
+                var letters = /^[A-Za-z]+$/;
+                if(inputtxt.match(letters))
+                    {
+                        error =""
+                    }
+                else
+                    {
+                        // if (board = "DSERT"){lan = "kannada"}
+                        lan = board
+                        doc.addFont(lan+".ttf", lan, "normal");
+                        doc.setFont(lan);
+                        var strArr = doc.splitTextToSize("Q"+count+": "+questions_and_marks[index]['question'], 400)
+
+                    }   
+                console.log("##############"+ error)             
+                doc.text(strArr, 14, line_height);
+
+                if (questions_and_marks[index]['img'] != "") {
+                image = questions_and_marks[index]['img']
+                console.log("image"+image)
+                var img1 = new Image();
+                img1.src = '/static/questionbank/question/images/'+image
+                var width = 400;
+                var height = 300;
+                if (img1.width < width) {
+                    width = img1.width
+                }
+                else {
+                    width = 400;
+                }
+                if (img1.height < height) {
+                    height = img1.height
+                }
+                else {
+                    height = 300;
+                }
+                doc.addImage(img1,'png', 40,line_height+25,width,height)
+                line_height += height + 50;
+                }
+
+                var len_question = strArr.length
+                if(len_question>1){
+                    line_height += (25*len_question/2) + 15;
+                }
+                else{
+                    line_height +=25
+                }
+                if(questions_and_marks[index]['choices']!="" & questions_and_marks[index]['choices']!="[u'True', u'False']"){
+                    var mcqString = String(questions_and_marks[index]['choices']);
+                    const re = /'(.*?)'/g;
+                    const choicesArray = []
+                    let match = null;
+                    do {
+                        match = re.exec(mcqString);
+                        if(match) {
+                            match[0]=match[0].slice(1,match[0].length-1)
+                            choicesArray.push(match[0]);
+                        }
+                    } while (match);
+                    for(let i=0;i<choicesArray.length;i++)
+                    if(choicesArray[i]!=""){
+                        
+
+                        if((i+1)%2 !=0){
+                            value4 = JSON.parse('"' + (choicesArray[i]) + '"');
+                            doc.text((i+1) + "." + value4,40,line_height)
+                            line_height += 25;
+                        }
+                        else{
+                            value4 = JSON.parse('"' + (choicesArray[i]) + '"');
+                            doc.text((i+1) + "." + value4,250,line_height-25)
+                        }
+                    }
+                }
+                else if(questions_and_marks[index]['choices']=="[u'True', u'False']"){
+                    doc.addFont("en");
+                    doc.setFont("en");
+                    doc.text("1.True",40,line_height)
+                    doc.text("2.False",200,line_height)
+                    line_height += 25;
+                }
+                doc.setFont("en");
+                doc.text("Ans:........................",14,line_height)
+                if(questions_and_marks[index]['choices']=="") {
+                    line_height += 25;
+                }
+
+                line_height += 50 //After question ends
+        }
+
+            var specialElementHandlers = {
+                '#editor': function (element, renderer) {
+                    return true;
+                }
+                
+            };
+            var centerName = document.getElementById('center_id')
+            centerName = centerName.options[centerName.selectedIndex].innerHTML
+            if(questions_and_marks.length){
+                makeQuestionModal();
+                doc.fromHTML($('#page_content_pdf').html(), 15, 15, {
+                    'width': 550,
+                    'elementHandlers': specialElementHandlers
+                });
+                doc.save(`Question_Paper_${centerName}_${grade}_${subject4}.pdf`);
+            }
+
+
+            // doc.save('Question_Paper.pdf');
+        });
+        img.src = '/static/images/evidyaloka_assmnt.png';
+    }
+
+    // function generatePdfAnswer(){
+    //       var docAnswer = new jsPDF();
+    //       var specialElementHandlersAnswer = {
+    //           '#editorAnswer': function (element, renderer) {
+    //               return true;
+    //           }
+    //   };
+    //     if(questions_and_marks.length){
+    //         var centerName = document.getElementById('center_id')
+    //         centerName = centerName.options[centerName.selectedIndex].innerHTML
+    //         var offering = document.getElementById('offering_id')
+    //         offering = offering.options[offering.selectedIndex].innerHTML
+
+    //         modal_content_answer = ""
+    //         modal_content_answer = "<div class='page_content'><h5 style='font-weight:700;'>Subject: "+ subjectName +"</h5><h5 style='font-weight:700;'>Grade: "+ gradeName +"</h5><hr><br>"
+    //         count = 0
+    //         for(let index = 0; index < questions_and_marks.length; index++) {
+    //             count += 1;
+    //             if(count > 1) {
+    //                 modal_content_answer += "<p></p>"
+    //             }
+    //             modal_content_answer += "<p class='western' style='font-weight:bold'><span>Q" + count + ". " + questions_and_marks[index]['question'] + "</span></br>" +
+    //                 "<p style='color:green;text-align:right;''>[ " + questions_and_marks[index]['marks'] + " marks]</p>"
+    //             modal_content_answer += "<p>Correct Answer:&nbsp;&nbsp;" + questions_and_marks[index]['answer'] + "</p><br>"
+    //         }
+    //         modal_content_answer += "</div>"
+    //         document.getElementById('page_content_answer').innerHTML = modal_content_answer;
+    //         // $('#answer_modal').modal('show');
+    //         docAnswer.fromHTML($('#page_content_answer').html(), 15, 15, {
+    //             'width': 800,
+    //             'elementHandlers': specialElementHandlersAnswer
+    //         });
+    //         docAnswer.save(`Answer-sheet_${centerName}_${offering}.pdf`);
+    //     }
+    //     else{
+    //         message = 'For downloading answers. First of all select some question from checkbox.'
+    //         $('#alert_placeholder').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>')
+    //     }
+    // }
+
+    function generatePdfAnswer(){
+        var doc = new jsPDF('p', 'pt', 'a4');
+        var offering = document.getElementById('offering_id')
+            offering = offering.options[offering.selectedIndex].innerHTML
+        var board = document.getElementById('state_id')
+        board = board.options[board.selectedIndex].innerHTML
+        var grade = offering.split(" ", 1);
+        var subject = offering.split(" ", 2);
+        var subject4 = subject[1];
+        // var gradevalue = grade.replace(/th/g, '')
+        doc.setFontSize(11);
+        // doc.text(10, 100, 'Student Name:');
+        // doc.text(10, 125, 'Date:');
+        doc.text(10, 100, 'Subject: '+subject4)
+        doc.text(10, 125, 'Grade: '+ gradeName)
+        var total_marks = 0;
+        for(let index=0;index<questions_and_marks.length; index++){
+            total_marks = total_marks + Number(questions_and_marks[index]['marks'])
+        }
+        doc.text(450,150, 'Total Marks: ' +total_marks)
+        // doc.text(10,150, 'Questions: ')
+        var img = new Image();
+        img.addEventListener('load', function() {
+            console.log("**** Image loaded")
+            console.log("***** " + this.width + "***** " + this.height)
+            console.log(gradeName)
+            //this.width = 170;
+            //this.height = 30;
+            doc.addImage(img, 'jpeg', 5, 5);
+
+            //this.height = 30;
+            doc.addImage(img, 'jpeg', 5, 5);
+
+        count = 0
+        line_height = 200;
+            for(let index = 0; index < questions_and_marks.length; index++) {
+                count += 1;
+                if (line_height >= 700)
+                    {
+                    doc.addPage();
+                    line_height = 50 // Restart height position
+                    }
+                    doc.addFont("en");
+                    doc.setFont("en");
+
+                doc.text(questions_and_marks[index]['marks'] + "marks",450,line_height)
+                var strArr = doc.splitTextToSize(count+": "+questions_and_marks[index]['question'], 400)
+                var ansArr = doc.splitTextToSize(questions_and_marks[index]['answer'],350)
+                var len_ans = ansArr.length
+                console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+ ansArr)
+                question = questions_and_marks[index]['question']
+                var inputtxt = ""
+                numbers = [1,2,3,4,5,6,7,8,9,0,'?']
+                for (i=0; i < question.length; i++){
+                    if ((question[i] == " ") || (question[i] in numbers) || (question[i] == "`") || (question[i] == "~") || (question[i] == "!")
+                    || (question[i] == "@") || (question[i] == "#") || (question[i] == "$") || (question[i] == "%") || (question[i] == '^') || (question[i] == "&")
+                    || (question[i] == "*") || (question[i] == "(") || (question[i] == ")") || (question[i] == "_") || (question[i] == '-') || (question[i] == "=")
+                    || (question[i] == "+") || (question[i] == "{") || (question[i] == "[") || (question[i] == "}") || (question[i] == ']') || (question[i] == ";")
+                    || (question[i] == ":") || (question[i] == "'") || (question[i] == '"') || (question[i] == "<") || (question[i] == ',') || (question[i] == ">")
+                    || (question[i] == ".") || (question[i] == "/") || (question[i] == "?") || (question[i] == "'") || (question[i] == '"') || (question[i] == "’")
+                    )
+                    continue
+                inputtxt = inputtxt + question[i]
+
+                }
+                // var inputtxt2 = question[2]
+                // var inputtxt3 = question[4]
+                // var inputtxt4 = question[5]
+                // var inputtxt5 = question[9]
+                // var inputtxt6 = question[11]
+                // var inputtxt7 = question[15]
+                console.log("@@@@@@@@@@@@@@@@@@@"+ inputtxt)
+                var error =""
+                var letters = /^[A-Za-z]+$/;
+                if(inputtxt.match(letters))
+                    {
+                        error =""
+                    }
+                else
+                    {
+                        // if (board = "DSERT"){lan = "kannada"}
+                        lan = board
+                        doc.addFont(lan+".ttf", lan, "normal");
+                        doc.setFont(lan);
+                        var strArr = doc.splitTextToSize("Q"+count+": "+questions_and_marks[index]['question'], 400)
+
+                    }   
+                doc.text(strArr, 14, line_height);
+                var len_question = strArr.length
+                if(len_question>1){
+                    line_height += (25*len_question/2) + 15;
+                }
+                else{
+                    line_height +=25
+                }
+                // doc.text(ansArr, 29, line_height);
+                if (questions_and_marks[index]['choices']=="[u'True', u'False']" & !(inputtxt.match(letters)))
+                {
+                    doc.addFont("en");
+                    doc.setFont("en");
+                    doc.text((questions_and_marks[index]['answer']),36,line_height)
+                    doc.addFont(lan+".ttf", lan, "normal");
+                    doc.setFont(lan);
+
+                }
+                else if (questions_and_marks[index]['choices']=="[u'True', u'False']")
+                {
+                    doc.addFont("en");
+                    doc.setFont("en");
+                    doc.text((questions_and_marks[index]['answer']),36,line_height)
+                }
+                  // var answerArr = doc.splitTextToSize(questions_and_marks[index]['answer'], 400)
+                    height = line_height
+                    if(questions_and_marks[index]['choices']!="" & questions_and_marks[index]['choices']!="[u'True', u'False']"){
+                    var mcqString = questions_and_marks[index]['answer']
+                    const re = /'(.*?)'/g;
+                    const choicesArray = []
+                    let match = null;
+                    do {
+                        match = re.exec(mcqString);
+                        if(match) {
+                            match[0]=match[0].slice(1,match[0].length-1)
+                            choicesArray.push(match[0]);
+                        }
+                    } while (match);
+
+                    ansArr = JSON.parse('"' + choicesArray[0] + '"'); 
+                    doc.text(ansArr, 36, line_height)
+                    }
+                    if(questions_and_marks[index]['choices']==""){
+                    doc.text(ansArr, 36, line_height)
+                    var len_ans = ansArr.length
+                    console.log("*******************************"+len_ans)
+                if(len_ans>1){
+                    line_height += (25*len_ans/2) ;
+                }
+                else{
+                    line_height +=25
+                }
+                    }
+                doc.addFont("en");
+                doc.setFont("en");
+                doc.text("Ans:",14,height)
+                    
+                line_height += 50 //After question ends
+        }
+
+            var specialElementHandlers = {
+                '#editorAnswer': function (element, renderer) {
+                    return true;
+                }
+                
+            };
+            var centerName = document.getElementById('center_id')
+            centerName = centerName.options[centerName.selectedIndex].innerHTML
+            if(questions_and_marks.length){
+                makeQuestionModal();
+                doc.fromHTML($('#page_content_answer').html(), 15, 15, {
+                    'width': 550,
+                    'elementHandlers': specialElementHandlers
+                });
+                doc.save(`Answer_Paper_${centerName}_${grade}_${subject4}.pdf`);
+            }
+
+
+        });
+        img.src = '/static/images/evidyaloka_assmnt.png';
+    }
+    
+       
+        function createPDF() {
+  const doc = new jsPDF({
+    unit: "pt",
+    orientation: "p",
+    lineHeight: 1.2
+  });
+
+  doc.addFont("malayalam.ttf", "malayalam", "normal");
+  doc.addFont("kannada.ttf", "kannada", "normal");
+  doc.setFont("kannada");
+  doc.setFontType("normal");
+  doc.setFontSize(28);
+
+  doc.text("ಅವರ", 100, 100);
+
+  doc.setFontType("bold");
+
+
+  doc.save("customFonts.pdf");
+}
+
+</script>
+
+    <script src="/static/js_new/jquery-1.10.2.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.9.1/jquery-ui.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+    <script src="multiselect.min.js"></script>
+    <script type="text/javascript" src="/static/js/demandViewAll.js"></script>
+    <script src="https://cdn.rawgit.com/yWorks/jsPDF/e2a73c5b/dist/jspdf.min.js"></script>
+    <script src="https://cdn.rawgit.com/sphilee/jsPDF-CustomFonts-support/bcc544cd/dist/jspdf.customfonts.min.js"></script>
+    <script type="text/javascript" src="/static/js/default_vfs.js"></script>
+
+
+{% endblock %}

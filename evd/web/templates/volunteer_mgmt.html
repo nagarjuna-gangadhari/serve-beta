@@ -1,0 +1,1499 @@
+{% extends 'base.html' %}
+{% block head_scripts %}
+        {{ block.super }}
+         <script src="/static/js/underscore-min.js"></script>
+         <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+         <script src='/static/js_new/parsley.min.js' type='text/javascript' ></script>
+         <script defer src="/static/js/selectize.min.js"></script>
+         <script src='/static/js_new/profile.js' type='text/javascript' ></script>
+<script type="text/javascript" src="https://cdn.datatables.net/s/dt/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.10,b-1.1.0,b-colvis-1.1.0,b-flash-1.1.0,b-html5-1.1.0,b-print-1.1.0,cr-1.3.0,fc-3.2.0,fh-3.1.0,kt-2.1.0,sc-1.4.0,se-1.1.0/datatables.min.js"></script>
+
+<!-- availability form tempate -->
+<script type='template' id = "availability_tmpl">
+        <div>
+            <div id='avail_div' class='row hide' style="margin: 0 auto; border: 2px solid grey;">
+                <div class="alert alert-error bs-callout bs-callout-warning1 hidden">
+                  <h4>Oh snap!</h4>
+                  <p>Please correct the below error fields..</p>
+                </div>
+
+                <div class="alert alert-success bs-callout bs-callout-info1 hidden">
+                  <h4>Yay!</h4>
+                  <p>Everything seems to be ok :)</p>
+                </div>
+                <form id='availability_form' data-onboarding_id='{{ onboarding.id }}' data-parsley-validate="" style = "margin:0 auto">
+
+                    <div class="row margin_zero">
+                        <div class="form-group col-sm-12 availability padding_zero">
+                            <p class="col-xs-3 available_css padding_zero">Available: </p><p class="col-xs-2 radio_btn_css padding_zero"><input type="radio" name="availability" value="available" <% if (resp.availability_data.availability === true){ %>
+                            checked='checked' <% } %>>&nbsp;&nbsp;&nbsp;</p>
+                            <p class="col-xs-3 padding_zero unavailable_css">Unavailable : </p><p class="col-xs-1 radio_btn_css1 padding_zero"><input type="radio" name="availability" value="unavailable"<% if (resp.availability_data.availability === false){ %>
+                            checked='checked' <% } %>></p>
+                        </div>
+                    </div>
+
+
+                    <div class='row standard_rowi avail <% if (resp.availability_data.availability === false){ %> hidden <% } %>'>
+                        <div class="form-group col-sm-6">
+                            <label class="margin_left_zero" for="from" style="font-family:'Open Sans'; font-size:13px; margin-left:0px; font-weight:normal;margin-bottom:3px;">Available From:</label>
+                            <input type="date" class="form-control" required="" name='from_date' value='<%= resp.from_date %>' id="from">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label class="margin_left_zero" for="to" style="font-family:'Open Sans'; font-size:13px;margin-left:0px; font-weight:normal;margin-bottom:3px;">Available To:</label>
+                            <input type="date" class="form-control" required="" data-parsley-daterangecheck='' name='to_date' value='<%= resp.to_date %>' id="to">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label class="margin_left_zero" for="to" style="font-family:'Open Sans'; font-size:13px;; margin-left:0px; font-weight:normal;margin-bottom:3px;">Preferred Slots:</label>
+                            <input type="text" class="form-control" required="" data-parsley-daterangecheck='' name='slots' value='<%= resp.availability_data.preferred_slots %>' id="slots">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label class="margin_left_zero" for="to" style="font-family:'Open Sans'; font-size:13px;; margin-left:0px; font-weight:normal;margin-bottom:3px;">Preferred Days:</label>
+                            <input type="text" class="form-control" required="" data-parsley-daterangecheck='' name='days' value='<%= resp.pref_days %>' id="days">
+                        </div>
+                    </div>
+                    <div class=' row standard_row avail <% if (resp.availability_data.availability === false){ %> hidden <% } %>'>
+                        <div class='col-sm-12'>
+                            <div class="row pref_sub" style="z-index: 100">
+                                <label for="reason" style="font-family:'Open Sans'; font-size:13px;; margin-left:0px; font-weight:normal;margin-bottom:3px;">Preferred Subject </label><br/>
+                                <div class="col-md-offset-2 col-md-3 col-xs-offset-1" style="margin-left:6.6%">Maths
+                                    <input type="checkbox" name="pref_sub" value="Maths" <% if(_.contains(resp.availability_data.pref_sub_list, "Maths") === true){ %>
+                                    checked <% } %>/>
+                                </div>
+                                <div class="col-md-3 col-xs-offset-1">English
+                                    <input type="checkbox" name="pref_sub" value="English" <% if(_.contains(resp.availability_data.pref_sub_list, "English") === true){ %>
+                                    checked <% } %> />
+                                </div>
+                                <div class="col-md-3 col-xs-offset-1">Science
+                                    <input type="checkbox" name="pref_sub" value="Science" <% if(_.contains(resp.availability_data.pref_sub_list, "Science") === true){ %>
+                                    checked <% } %> />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br class="hideForPortal">
+                    <!--unavailable reason-->
+                    <div class=' row standard_row unavail <% if (resp.availability_data.availability === true){ %> hidden <% } %>'>
+                        <div class="form-group col-sm-12">
+                            <label for="reason" style="font-family:'Open Sans'; font-size:13px;; margin-left:0px; font-weight:normal;margin-bottom:3px;">Unavailability Reason : </label>
+                            <select name="reason" class="col-xs-12">
+                              <% _.each(resp.availability_data.unavilable_reasons_list, function(reason) { %>
+                                <option value="<%= reason %>" <% if(reason === resp.unavailability_reason){ %> selected <% } %>><%= reason %></option>
+                              <% }); %>
+                            </select>
+                        </div>
+                        <br class="hideForPortal">
+                        <div class='form-group col-sm-6 follow_up <% if (_.contains(resp.availability_data.unavail_list_, resp.unavailability_reason) === false){ %> hidden <%}%>'>
+                            <label for="follow_up" style="margin-left:0">Follow Up Date: </label>
+                            <input type="date" class="form-control" required="" name='follow_up' value='<%= resp.availability_data.follow_up_date %>' id="follow_up">
+                        </div>
+                    </div>
+                    <div class=' row standard_row'>
+                        <div class='col-sm-offset-9 col-sm-3 col-xs-offset-5'>
+                            <input class='btn btn-primary' type='submit' value='Save' style='float:right' \>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+</script>
+
+<!-- end template -->
+
+         <script>
+             $(document).ready( function () {
+                //$(".clearfix").removeClass("inner");
+                // $(".inner.clearfix").css("width","85%");
+                //$("#db_table_wrapper").css("width","950px");
+    // Setup - add a text input to each footer cell
+    $('#db_table thead tr#filterrow th').each( function () {
+        var title = $('#db_table thead th').eq( $(this).index() ).text();
+        $(this).html( '<input type="text"  style="height:25px;background-color:#EEEEEE;border-radius:5px;font-size:16px;"  placeholder="Search '+title+'" />' );
+
+});
+
+        //According to role option change, display other fields:
+
+        function change_fields(resp){
+
+            var current_role = $( "#role option:selected" ).val();
+            for (var role in resp.roles){
+                if(current_role === role){
+                    $('#role_status option[value="' + resp.roles[role].status + '"]').prop('selected', true);
+                    $('#o_come option[value="' + resp.roles[role].outcome + '"]').prop('selected', true);
+                    $('#vpo_come option[value="' + resp.roles[role].vp_outcome + '"]').prop('selected', true);
+                    $("#remarks").val(resp.roles[role].remarks);
+                    $(".progress-bar").attr("aria-valuenow",resp.roles[role].onboard_stat);
+                    $(".progress-bar").html(resp.roles[role].onboard_stat + " % ");
+                    $(".progress-bar").css("width",resp.roles[role].onboard_stat + "%");
+                }
+            }
+            var device_status = (resp.computer == true)?'YES':'NO';
+            $('#computer option[value="' + device_status + '"]').prop('selected', true);
+
+            device_status = (resp.webcam == true)?'YES':'NO';
+            $('#Webcam option[value="' + device_status + '"]').prop('selected', true);
+
+            device_status = (resp.headset == true)?'YES':'NO';
+            $('#Headset option[value="' + device_status + '"]').prop('selected', true);
+
+            device_status = (resp.internet_connection == true)?'YES':'NO';
+            $('#Internet option[value="' + device_status + '"]').prop('selected', true);
+        }
+
+        $("body").on("change", "#role", function(){
+            change_fields(resp);
+        });
+
+        $('#db_table tbody ').on('click','tr td:first-child a',function(e){
+                  e.stopPropagation();
+                  var target = $(e.target);
+                  var vol_id = target.text();
+                  
+                  $.post('/get_vol_details/',{'id':vol_id},function(resp){
+                      if (resp=='ID does not Exist'){
+                    	  $('#details').modal('hide');
+                    	  $('.volDetailsId').html("User not filled up the profile.");
+                       	  $('.volDetails').removeClass('hide');
+                       	
+                    	  var delay = 2000;
+                          setTimeout(function(){ window.location.pathname = '/volunteer_db/'; }, delay);
+                       	
+                      }else{
+                    	$('#details').modal().show();
+                      }
+                            
+                            resp = window.resp = resp;
+
+                            var role_options = "";
+                            for (var role in resp.roles){
+                                role_options += "<option value='";
+                                role_options += role;
+                                role_options += "'>";
+                                role_options += role;
+                                role_options += "</option>";
+                            }
+                            var resp_html = "<div style='width:100%;background-color:white;'> \
+                                <div style='text-align:center;background-color:#27A3E2;display:none;color:white;padding:10px;' id='status_msg'></div>  \
+                                <div style='display:flex;'> \
+                            <img alt='volunteer image' class='padding_zero' src='"+resp.picture +"' style='display:inline-block;margin:10px;' height=150px  width=150px > \
+                                            <div class='margin_left' style='display:inline-block;margin-left:50px; '> \
+                                                <div style='display:flex;;flex-flow: column wrap;'> \
+                                                        <p class='det' >Name:<span class='val_prof_span'>"+resp.name+" </span></p> \
+                                                        <p class='det' >Gender : "+resp.gender+" </p> \
+                                                        <p class='det'>Age : "+resp.age+" </p>\
+                                                        <p class='det'>Email : "+resp.email+" </p>\
+                                                        <p class='det'>Phone : "+resp.phone+" </p>\
+                                                        <p class='det' >City : "+resp.city+" </p>\
+                                                        <p class='det' >Skype Id : "+resp.skype_id+" </p>\
+                                                        <p class='det'>Language : "+resp.pref_medium+" </p>\
+                                                        <p class='det'>Profession : "+resp.profession+" </p>\
+                                                        <p class='det'>Reference Channel : "+resp.Reference_Channel_name+" </p>\
+                                                        <p class='det'>Short notes : "+resp.short_notes+" </p>"
+                                                        ;
+
+                //availability template:
+                var availability_tmpl = $("#availability_tmpl").html();
+                var compiledTemplate = _.template(availability_tmpl);
+                var templateResult = compiledTemplate({'resp': resp});
+                var x = $(templateResult);
+                resp_html = resp_html + 
+                                        "</div> \
+                                    </div> \
+                                </div><hr style='margin:0'> \
+                            <div style='display:flex;justify-content:space-between;padding:5px 5px 5px 10px'> \
+                                <p >Availability</p> \
+                                <button id='avail_btn' style='background-color:#E02786;' class='dt-button drop_down'></button> \
+                            </div>" +
+                            x.html();
+
+
+                var resp_html = resp_html +         "<!--</div> \
+                                            </div> \
+                                            </div><hr style='margin:0'> \
+                                            <div style='display:flex;justify-content:space-between;padding:5px 5px 5px 10px'> \
+                                                        <p >Availability</p> \
+                                                        <button id='avail_btn' style='background-color:#E02786;' class='dt-button drop_down'></button> \
+                                            </div> \
+                                            <div id='avail_div' class='hide' style=''> \
+                                                        <p class='det'>Available From : "+resp.from_date+"</p> \
+                                                        <p class='det'>Available till : "+resp.to_date+"</p> \
+                                                        <p class='det'> Preferred Days : "+resp.pref_days+"</p> \
+                                                        <p class='det'>Preferred Slots :  "+ resp.pref_slots+"</p> \
+                                            </div> \
+                                                <div style='display:flex;max-height:100px;overflow-y:auto;'> \
+                                                        <p class='det' style='flex:none'> Short Notes : </p> \
+                                                        <p class='det'  > "+ resp.short_notes +" </p> \
+                                               </div> \
+                                               <div style='display:flex;max-height:100px;overflow-y:auto;'> \
+                                                        <p class='det' style='flex:none'> Age : </p> \
+                                                        <p class='det'  > "+ resp.age +" </p> \
+                                               </div> \
+                                               <div style='display:flex;max-height:100px;overflow-y:auto;'> \
+                                                        <p class='det' style='flex:none'> Profession : </p> \
+                                                        <p class='det'  > "+ resp.profession +" </p> \
+                                               </div> \
+                                               <div style='display:flex;max-height:100px;overflow-y:auto;'> \
+                                                        <p class='det' style='flex:none'> Referred user id : </p> \
+                                                        <p class='det'  > "+ resp.referred_user_id +" </p> \
+                                               </div>--><hr style='margin:0'>\
+                                            <div style='display:none;' id='form_div'> \
+                                                <form id='status_form'  style='display:flex;border:none'> \
+                                                        {% csrf_token %} \
+                                                  <p style='position: absolute;margin-left:10px'>Completion Status : </p> \
+                                                  <div class='progress' style='width:45%;position:absolute;margin-top:3px;margin-left:46%'>\
+                                                    <div class='progress-bar progress-bar-striped active progress-bar-success'\
+                                                      role='progressbar' aria-valuenow='30'\
+                                                      aria-valuemin='0' aria-valuemax='100' style='width:30%;position:relative;height:30px'>\
+                                                      30 %\
+                                                    </div>\
+                                                  </div>\
+                                                  <div  id='statuses' style='margin-top:25px'> \
+                                                        <input type='hidden' name='id'   value="+resp.id+" / > \
+                                                        <p class='det'>Role : <select class='role_css' name='role' id='role' style='width:132px;margin-left:64px'>"
+                                                        + role_options +
+                                                        "</select> </p> \
+                                                        <p class='det role_det_css'>Role Status : <select class='role_css' name='role_status' id='role_status' style='width:132px;margin-left:20px'> \
+                                                               <option value='New'>New</option> \
+                                                               <option value='Active'>Active</option> \
+                                                               <option value='Inactive'>Inactive</option> \
+                                                               <option value='Dormant'>Dormant</option> \
+                                                               <option val='Others'>Others</option> \
+                                                        </select> </p> \
+                                                        <p class='det'>Role Outcome : <select name='o_come' id='o_come'> \
+                                                               <option value='Not_Started'>Not Started</option> \
+                                                               <option value='Inprocess'>In Process</option> \
+                                                               <option value='Recommended'>Recommended</option> \
+                                                               <option value='Recommended_for_Alternate_Role'>RFA</option> \
+                                                               <option value='Not_Eligible'>Not Eligible</option> \
+                                                        </select> </p> \
+                                                        <p class='det'>VP Outcome : <select class='vp_css' name='vpo_come' id='vpo_come'> \
+                                                               <option value=''>------</option> \
+                                                               <option value='Not_Started'>Not Started</option> \
+                                                               <option value='Onboard_Complete'>Onboard Complt</option> \
+                                                               <option value='Not_Interested'>Not Interested</option> \
+                                                               <option value='UnSubscribe'>UnSubscribe</option> \
+                                                               <option value='Not_Available'>Not Available</option> \
+                                                               <option value='Not_Reachable'>Not Reachable</option> \
+                                                               <option value='No_Response'>No Response</option> \
+                                                        </select> </p> \
+                                                        <p class='det'>Computer: <select class='computer' name='computer' id='computer'> \
+                                                               <option value='YES'>YES</option> \
+                                                               <option value='NO'>NO</option> \
+                                                               </select> </p> \
+                                                               <p class='det'>Internet: <select class='Internet' name='Internet' id='Internet'> \
+                                                               <option value='YES'>YES</option> \
+                                                               <option value='NO'>NO</option> \
+                                                               </select> </p> \
+                                                               <p class='det'>Webcam: <select class='Webcam' name='Webcam' id='Webcam'> \
+                                                               <option value='YES'>YES</option> \
+                                                               <option value='NO'>NO</option> \
+                                                               </select> </p> \
+                                                               <p class='det'>Headset: <select class='Headset' name='Headset' id='Headset'> \
+                                                               <option value='YES'>YES</option> \
+                                                               <option value='NO'>NO</option> \
+                                                               </select> </p> \
+                                                 </div> \
+                                                 <div id='remarks_div' style='margin-top:25px'> \
+                                                     <p class='det' style='margin-left:0'>Remarks : </p> \
+                                                     <textarea rows='2' id='remarks' name='remarks' style='width:250px'></textarea> \
+                                                 </div> \
+                                                 </form> \
+                                             </div> \
+                                            <div style='padding:10px 0px;width:100%;display:flex;'> \
+                                                <button class='dt-button' style='background-color:#2ABE69;margin:auto;color:white' id='update_btn'>Update status</button> \
+                                                <button class='dt-button' style='background-color:#2ABE69;margin:auto;color:white;display:none' id='Submit'>Submit</button> \
+                                                <button class='dt-button' style='background-color:#2ABE69;margin:auto;color:white;display:none' id='Cancel'>Cancel</button> \
+                                            </div> \
+                                            </div>";
+                            $('#detail_body').html(resp_html);/*.find('#remarks,#o_come,#pc_status,#status').each(function(){
+                                        var ele = $(this).attr('id');
+                                        if(ele=='o_come'){
+                                                 $('#o_come').val(resp.dicussion_outcome);
+                                          }else if(ele=='pc_status'){
+                                                 $('#pc_status').val(resp.profile_complete_status);
+                                          }else if(ele=='status'){
+                                                 $('#status').val(resp.status);
+                                          }else if(ele=='remarks'){
+                                                 $('#remarks').val(resp.remarks);
+                                          }
+
+                                   });*/
+                                   change_fields(resp);
+                            }).done(function() { //Post for vol details end
+
+      $('#availability_form').parsley().on('field:validated', function() {
+        $("#from, #to, #follow_up").removeAttr("min");
+        var ok = $('.parsley-error').length === 0;
+        $('.bs-callout-info1').toggleClass('hidden', !ok);
+        $('.bs-callout-warning1').toggleClass('hidden', ok);
+      })
+      .on('form:submit', function() {
+        var availability = $("input[name='availability']:checked").val();
+       /*  if(availability === "available"){
+                evd.preferences_submit("vol_db"); */
+        var id = $("input[type=hidden][name=id]").val();
+        if(availability === "available"){
+                evd.preferences_submit("vol_db", id);
+                //window.location.reload();
+                //window.history.pushState(null, null, "#");
+        }
+        //unavilable
+        else{
+            /* evd.preferences_submit("vol_db"); */
+            evd.preferences_submit("vol_db", id);
+            //window.history.pushState(null, null, "#");
+        }
+        $('#status_msg').text("Availability updated Successfully").slideDown(1000).slideUp(2000);
+        //setTimeout(location.reload.bind(location), 1000);
+        return false;
+      });
+//                     });
+
+
+//                     });//first td click end
+
+        //A & P form: restrict past dates from selecting.
+        today = new Date();
+        today = today.getFullYear() + "-" + ((today.getMonth()+1) <10 ? '0' + (today.getMonth()+1) : (today.getMonth()+1)) + "-" +
+                (today.getDate()<10 ? '0'+today.getDate() : today.getDate());
+        $("#from, #to, #follow_up").prop("min", today);
+        var availability = $("input[name='availability']:checked").val();
+        if(availability === "available"){
+           $("#follow_up").removeAttr("required");
+        }
+        else{
+            $("#from, #to").removeAttr("required");
+            if($.inArray($("select[name='reason'").val(),
+                    ["Interested, but not now", "Interested, but Occupied with Professional commitments", "Interested, but Occupied with Personal commitments"])>-1){
+                $(".follow_up").removeClass("hidden");
+                $("#follow_up").prop("required", "true");
+            }
+            else{
+                $(".follow_up").addClass("hidden");
+                $("#follow_up").removeAttr("required");
+            }
+        }
+
+        //follow up date
+    /*     $("body").on("change", "select[name='reason']", function(){
+            if($.inArray($(this).val(),
+                    ["Interested, but not now", "Interested, but Occupied with Professional commitments", "Interested, but Occupied with Personal commitments"])>-1){
+                $(".follow_up").removeClass("hidden");
+                $("#follow_up").prop("required", "true");
+            }
+            else {
+                $(".follow_up").addClass("hidden");
+                $("#follow_up").removeAttr("required");
+            }
+        });
+        //availability
+        $("body").on("click", "input[type='radio'][name='availability']", function(){
+            var availability = $("input[name='availability']:checked").val();
+            if(availability === "unavailable"){
+                $(".avail").addClass("hidden");
+                $(".unavail").removeClass("hidden");
+                $("#from, #to").removeAttr("required");
+                $("#follow_up").prop("required", "true");
+            } else{
+                $(".unavail").addClass("hidden");
+                $(".avail").removeClass("hidden");
+                $("#follow_up").removeAttr("required");
+                $("#from, #to").prop("required", "true");
+            } */
+
+
+                    });
+
+                    });//first td click end
+
+        //follow up date
+        $("body").on("change", "select[name='reason']", function(){
+            if($.inArray($(this).val(),
+                    ["Interested, but not now", "Interested, but Occupied with Professional commitments", "Interested, but Occupied with Personal commitments"])>-1){
+                $(".follow_up").removeClass("hidden");
+                $("#follow_up").prop("required", "true");
+            }
+            else {
+                $(".follow_up").addClass("hidden");
+                $("#follow_up").removeAttr("required");
+            }
+        });
+        //availability
+        $("body").on("click", "input[type='radio'][name='availability']", function(){
+            var availability = $("input[name='availability']:checked").val();
+            if(availability === "unavailable"){
+                $(".avail").addClass("hidden");
+                $(".unavail").removeClass("hidden");
+                $("#from, #to").removeAttr("required");
+            } else{
+                $(".unavail").addClass("hidden");
+                $(".avail").removeClass("hidden");
+                $("#follow_up").removeAttr("required");
+                $("#from, #to").prop("required", "true");
+            }
+
+        });
+
+        //submit form
+      /*$('#availability_form').parsley().on('field:validated', function() {
+        $("#from, #to, #follow_up").removeAttr("min");
+        var ok = $('.parsley-error').length === 0;
+        $('.bs-callout-info1').toggleClass('hidden', !ok);
+        $('.bs-callout-warning1').toggleClass('hidden', ok);
+      })
+      .on('form:submit', function() {
+        var availability = $("input[name='availability']:checked").val();
+        if(availability === "available"){
+                evd.preferences_submit("vol_db");
+                window.location.reload();
+                //window.history.pushState(null, null, "#");
+        }
+        //unavilable
+        else{
+            evd.preferences_submit("vol_db");
+            //window.history.pushState(null, null, "#");
+        }
+        setTimeout(location.reload.bind(location), 1000);
+        return false;
+      });*/
+
+
+
+                            $('#details').on('hidden', function () {
+                                // do something…
+                                $('#detail_body').html('<div style="text-align:center;margin-top:100px;"><img alt="Loader gif" src="/static/images/loader.gif" /></div>');
+                            });
+
+                            $('#detail_body').on('click','#Cancel',function(){ $('#form_div,#update_btn,#Cancel,#Submit').slideToggle()  });
+                            $('#detail_body').on('click','#update_btn',function(){ $(this).hide(); $('#Submit,#Cancel').show();  $('#form_div').slideDown();});
+                            $('#detail_body').on('click','#avail_btn',function(e){ $('#avail_div').toggleClass('hide flex1');$(e.target).toggleClass('drop_down drop_up');
+                            });
+                            $('#detail_body').on('click','#Submit',function(){
+                                      var form_eles =  $('#status_form').serializeArray();
+                                      var form_data = {};
+                                      for(i=0;i<form_eles.length;i++){
+                                          var ele = form_eles[i];
+                                          form_data[ele.name]=ele.value
+                                      }
+                                     $.post('/update_vol_status/',form_data,function(resp){
+                                            $('#status_msg').text(resp).slideDown(1000).slideUp(2000);
+                                     }).done(function(){ $('#update_btn,#form_div,#Cancel,#Submit').toggle(); }).fail(function(){alert('Some Error occured')});
+                             });
+
+
+
+
+    $.fn.dataTable.ext.buttons.reload = {
+        "sUrl": "",
+        "sType": "POST",
+        "fnData":    false,
+        "action": function ( e, dt, node, config ) {
+            var data = dt.ajax.params() || {};
+
+            // Optional static additional parameters
+            data.length = -1;
+            data.download_excel = true;
+
+            if ( config.fnData ) {
+                config.fnData( data );
+            }
+
+            var url = config.sUrl,
+                method = config.sType && config.sType.toLowerCase() || "get";
+
+            show_message("loading...", true);
+            $[method](url, data).done(function (resp) {
+
+                var link = resp.excel_link;
+                show_message("<a id=\"download-link\" href=\""+ link +"\" style=\"color: white; text-decoration: underline\">Click to download</a>");
+
+            }).fail(function () {
+
+                alert("Oops!, Unable to generate xls");
+                hide_message();
+            });
+        }
+    };
+
+
+
+    // DataTable
+    var dtable = $('#db_table').
+        on('preXhr.dt', function ( e, settings, data ) {
+             if (settings.jqXHR) settings.jqXHR.abort();
+        } ).
+        DataTable( {
+        columns: [
+            {"name": "ID", "data": "id"},
+            {"name": "User Name", "data": "username"},
+            {"name": "Email", "data": "email"},
+            {"name": "First Name", "data": "first_name"},
+            {"name": "Last Name", "data": "last_name"},
+            {"name": "Language", "data": "pref_medium"},
+            {"name": "City", "data": "city"},
+            {"name": "Phone", "data": "phone"},
+            {"name": "Center", "data": "center_name"},
+            {"name": "Preferred Roles", "data": "prefered_roles"},
+            {"name": "Role Status", "data": "role_status"},
+            {"name": "Role Outcome", "data": "role_outcome"},
+            {"name": "Active Teacher", "data": "is_active_teacher"}, 
+            {"name": "Role Completion Status", "data": "role_onboarding_status"},
+            {"name": "Recommended Date", "data": "recommended_date"},
+            {"name": "Skype ID", "data": "skype_id"},
+            {"name": "Reference Channel", "data": "reference_channel"},
+            {"name": "Orientation", "data": "evd_rep"},
+            {"name": "Computer", "data": "computer"},
+            {"name": "Availability", "data": "availability"},
+            {"name":"Preferred Subjects","data":"pref_subjects"},
+            {"name": "Preferred Day","data":"pref_days"},
+            {"name": "Preferred Slots","data":"pref_slots"},
+            {"name": "Available From", "data": "from_date"},
+            {"name": "Available Till", "data": "to_date"},
+            {"name": "Last Login", "data": "last_login"},
+            {"name": "Joined Date", "data": "date_joined"},
+            {"name": "Short Notes", "data": "short_notes"},
+            {"name": "Age", "data": "age"},
+            {"name": "Profession", "data": "profession"},
+            {"name": "Referred user id", "data": "referred_user_id"},
+            {"name": "VP Outcome", "data": "vp_outcome"},
+            {"name": "Remarks","data":"remarks"},
+        ],
+        "autoWidth": false,
+        "oLanguage": {
+                     "sLoadingRecords": '<img alt="Loader gif" class="loading" src="/static/images/table_loader.gif">'
+                   },
+        "processing": true,
+        "serverSide": true,
+
+        "ajax": {
+                    "url": "/get_vol_data/",
+                    "type": "POST",
+                    "datatype": "json",
+                },
+
+        "order": [[ 0, "desc" ]],
+        "columnDefs": [
+            {
+            "targets": "id_column",
+            "data": null,
+            "render": function (data, type, full, meta)
+                   {
+                        return '<a   class="prof_det" data-toggle="tooltip"  title="Double Click to Edit.." data-placement="right" style="color:black;cursor:pointer;" data-id='+data+'>'+data+'</a>';
+                    },
+            },
+            {
+            "targets": "roles_column",
+            "data": 'prefered_roles',
+            "render": function (data, type, full, meta)
+                    {
+                        if ( data.length == 0 ){
+                            return '<td></td>'
+                        }
+                        
+                        var select_content = '<td><select name="user_roles_' + full.id + '" class="user_roles_drop_down">',
+                            end_select_tag = '</select></td>';
+
+
+                        options = '';
+                        data.forEach(function (role_data, i) {
+                            var new_option = '<option id=\"'+ role_data.role_id + '\"'
+                            var new_option = new_option+' class=\"column-'+ full.id +'\"';
+                            var new_option = new_option+' value=\"' + role_data.name +'\"';
+                            if ( i == 0) {
+                                new_option = new_option+' selected >' + role_data.name + '</option>';
+                            } else{
+                                new_option = new_option+'>' + role_data.name + '</option>';
+                            }
+                            options = options + new_option
+                        });
+                        return select_content+options+end_select_tag
+                    },
+            },
+            {
+            "targets": "role_status",
+            "data": 'role_specific_status',
+            "render": function (data, type, full, meta)
+                    {
+                        if ( Object.keys(data).length == 0 ){
+                            return '<td></td>'
+                        }
+
+                        var values = "",
+                            selected_role = $('#user_roles option:selected').attr("id");
+                        var td_id = "role_status_td_" + full.id
+
+                        $.each(data, function(key, value) {
+                             values = values + '<span id=\"'+ key +'\" class = \"role_status_column-'+ full.id
+                            values = values + '\" hidden>' + value +'</span>'
+                        });
+                        return '<td class=' + td_id + '>' + values +'</td>'
+                    },
+            },
+            {
+            "targets": "role_outcome",
+            "data": 'role_specific_outcome',
+            "render": function (data, type, full, meta)
+                    {
+                        if ( Object.keys(data).length == 0 ){
+                            return '<td></td>'
+                        }
+
+                        var values = "";
+                        $.each(data, function(key, value) {
+                            values = values + '<span id=\"'+ key +'\" class = \"role_outcome_column-'+ full.id
+                            values = values + '\" hidden>' + value +'</span>'
+                        });
+
+                        return '<td>'+ values +'</td>'
+                    },
+            },
+            {
+            "targets": "role_onboarding_status",
+            "data": 'role_specific_onboarding',
+            "render": function (data, type, full, meta)
+                    {
+                        if ( Object.keys(data).length == 0 ){
+                            return '<td></td>'
+                        }
+
+                        var values = "";
+                        $.each(data, function(key, value) {
+                            values = values + '<span id=\"'+ key +'\" class = \"column-'+ full.id
+                            values = values + '\" hidden>' + value +'</span>'
+                        });
+
+                        return '<td>'+ values +'</td>'
+                    },
+            },
+            {
+            "targets": "recommended_date",
+            "data": 'recommended_date',
+            "render": function (data, type, full, meta)
+                    {
+                        if ( Object.keys(data).length == 0 ){
+                            return '<td></td>'
+                        }
+
+                        var values = "";
+                        $.each(data, function(key, value) {
+                            values = values + '<span id=\"'+ key +'\" class = \"column-'+ full.id
+                            values = values + '\" hidden>' + value +'</span>'
+                        });
+
+                        return '<td>'+ values +'</td>'
+                    },
+            },
+            {
+            "targets": "availability",
+            "date" : "availability",
+            "render": function (data, type, full, meta)
+                    {
+                        if ( Object.keys(data).length == 0 ){
+                            return '<td></td>'
+                        }
+
+                        var values = "";
+                        $.each(data, function(key, value) {
+                            values = values + '<span id=\"'+ key +'\" class = \"column-'+ full.id
+                            values = values + '\" hidden>' + value +'</span>'
+                        });
+
+                        return '<td>'+ values +'</td>'
+                    },
+            }
+        ],
+        
+        "drawCallback": function( settings ) {
+            $(".user_roles_drop_down").change(function() {
+                var usr_id = (this.name).split("_")[2]
+                var index = (this.selectedIndex)
+                let role_id = $(this).children("option").eq(index).attr("id")
+                var elem = document.getElementsByClassName('role_status_column-' + usr_id)
+                for(i=0;i!=elem.length;++i){
+                     elem[i].style.visibility = "hidden" ;
+                    if(this.selectedIndex == i){
+                        elem[this.selectedIndex].style.visibility = "visible" ;
+                        elem[this.selectedIndex].removeAttribute("hidden");   
+                    }   
+                }
+                var elem = document.getElementsByClassName('role_outcome_column-' + usr_id)
+                for(i=0;i!=elem.length;++i){
+                     elem[i].style.visibility = "hidden" ;
+                    if( parseInt(role_id) == parseInt(elem[i].getAttribute('id'))){
+                        elem[i].style.visibility = "visible" ;
+                        elem[i].removeAttribute("hidden");
+                    }
+                }
+
+            
+            })
+
+
+         },
+         
+        "orderCellsTop": true,
+        "deferRender": true,
+        "iDisplayLength": 10,
+        "bPaginate": true,
+        "scrollX": "100%",
+        "fixedColumns": true,
+        "dom": 'Bfrtip',
+        "buttons": [
+                {
+                    "extend": 'reload',
+                    "text": 'Download as Excel',
+                    "title": 'eVidyaloka',
+                    "sUrl": '/get_vol_data/',
+                 },
+            ],
+        "fnRowCallback": function ( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+            // Populating Row Specific Fields Ie: Role Completion Status, Role Specific Outcome, Role Status
+            var role_elements = nRow.getElementsByClassName('column-'+aData.id),
+                selected_role = null;
+                selected_class = null;
+
+            $.each(role_elements, function() {
+                if (this.tagName == "OPTION" && this.selected == true){
+                    selected_role = this.id;
+                    selected_class = this.className;
+                }
+
+                if (this.tagName == "OPTION") {
+                    return;
+                }
+
+                if ( selected_role != null && selected_class != null ) {
+                    if (this.tagName == "SPAN" && this.className == selected_class && this.id == selected_role) {
+                        resp = this.removeAttribute("hidden");
+                    }
+                }
+            });
+
+            role_elements = nRow.getElementsByClassName('role_status_column-'+aData.id);
+
+            $.each(role_elements, function() {
+                selected_class = 'role_status_column-' + aData.id
+
+                if ( selected_role != null && selected_class != null ) {
+                    if (this.tagName == "SPAN" && this.className == selected_class && this.id == selected_role) {
+                        resp = this.removeAttribute("hidden");
+                    }
+                }
+            });
+            role_elements = nRow.getElementsByClassName('role_outcome_column-'+aData.id);
+
+            $.each(role_elements, function() {
+            selected_class = 'role_outcome_column-' + aData.id
+            console.log("selected_class",selected_class)      
+            if ( selected_role != null && selected_class != null ) {
+                if (this.tagName == "SPAN" && this.className == selected_class && this.id == selected_role) {
+                resp = this.removeAttribute("hidden");
+        }
+    }
+});
+
+        }
+    } );
+
+    $("tr td:nth-child(30)").css("width","500px");
+    $("tr th:nth-child(30)").css("width","500px");
+    $("tr td:nth-child(20)").css("width","300px");
+    $("tr th:nth-child(20)").css("width","300px");
+
+
+    $('#min2').datepicker(
+          { onSelect: function(date) {
+              dtable.draw();
+                    },
+          });
+    $('#max2').datepicker(
+          { onSelect: function(date) {
+              dtable.draw();
+                    },
+          });
+
+
+    // Apply the filter
+    var previous_searched_id =  0;
+    $('#id_col').on('keyup change','input', function () {
+    if (previous_searched_id != this.value) {
+        valu = $(this).val();
+        dtable
+          .column( '0:visible' )
+          .search( valu )
+          .draw();
+        previous_searched_id = valu;
+    }
+    });
+
+    var global_search_previous_value = "";
+    $('#db_table_filter').on('keyup change','input', function () {
+    if (global_search_previous_value != this.value) {
+        valu = $(this).val();
+        dtable
+        .column( '#db_table_filter' )
+        .search( valu )
+        .draw();
+        global_search_previous_value = valu;
+    }
+    });
+
+    var previous_value = "";
+    $( dtable.table().header() ).on( 'keyup change','input', function () {
+    if (previous_value != this.value) {
+        dtable
+        .column( $(this).parent().index()+':visible' )
+        .search( this.value )
+        .draw();
+        previous_value = this.value;
+    }
+    } );
+
+
+    $("body").on("change", "#user_roles", function(){
+        var selected_class = $(this).find("option:selected").attr("class"),
+            selected_role_id = $(this).find("option:selected").attr("id");
+
+        if (selected_class != null && selected_role_id != null){
+
+            resp = $("span."+selected_class).css("display", "none");
+
+            resp = $("span#"+selected_role_id+"."+selected_class).css("display", "block");
+        }
+    });
+
+
+    $("body").on("click", "#download-link", function () {
+        window.setTimeout(function () {
+            hide_message();
+        }, 1000)});
+
+
+    });//document ready
+
+    </script>
+    <script>
+$(document).ready(function() {
+	jQuery(function($) {
+		$(document).ajaxStop(function() {
+			$("#ajax_loader").hide();
+			$(".message-overlay").hide();
+		});
+		$(document).ajaxStart(function() {
+            //$("body").append('<div id="overlay" style="background-color:grey;position:absolute;top:0;left:0;height:100%;width:100%;z-index:999></div>');
+			$("#ajax_loader").show();
+			$(".message-overlay").show();
+		});
+	});
+});
+</script>
+
+{% endblock %}
+
+{% block head_styles %}
+        {{ block.super }}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/s/dt/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.10,b-1.1.0,b-colvis-1.1.0,b-flash-1.1.0,b-html5-1.1.0,b-print-1.1.0,cr-1.3.0,fc-3.2.0,fh-3.1.0,kt-2.1.0,sc-1.4.0,se-1.1.0/datatables.min.css"/>
+        <style>
+           Html{
+                   background-image: url(/static/images/ev_bg_white.png);
+                   background-color:white;
+            }
+         /* editor styles */
+          #filterrow > th{
+              font-weight: normal !important;
+              background-color: white;
+          }
+          table > thead > tr > th{
+              font-weight: normal !important;
+          }
+          p.det {
+                    margin:10px;
+                    line-height: 14px;
+               }
+         div.dataTables_scroll{
+                   width:1420px;
+            }
+         .drop_down:before{
+                 content:'Show';
+             }
+         .drop_up:before{
+                 content:'Hide';
+             }
+         .flex{
+                 display : flex;
+             }
+         .hide{
+                 display : none;
+             }
+        .availability{
+            margin-left: 12%;
+            height: 20px;
+        }
+        .availability p {
+            float: left;
+            min-width: 80px;
+        }
+        input[name='pref_sub'] {
+            height: 25px;
+            display: inline;
+            /* top: 0; */
+            left: -10px !important;
+            width: 15px;
+            position: absolute !important;
+        }
+        .availability p input[type='radio'] {
+            height: 12px;
+        }
+        .pref_sub div{
+            line-height: 30px;
+        }
+        #detail_body{
+            height: 500px;
+            overflow-x: auto;
+        }
+        /* Ensure that the demo table scrolls */
+            th { white-space: nowrap;font-size:16px; }
+            th >input { white-space: nowrap;font-size:16px; }
+             td { white-space: nowrap;font-size:14px; }
+            div#db_table_filter{
+                    //margin-right:-300px;
+                    margin-right:-60px;
+            }
+            div#db_table_paginate{
+                    //margin-right:-260px;
+                    margin-right:-50px;
+            }
+            div#db_table_filter > label{
+                    font-size:14px;
+            }
+            .dt-buttons{
+                margin-left:10px;
+            }
+            div.dataTables_wrapper {
+                    width: 1110px;
+                    }
+            th input {
+                    width: 100%;
+                    min-width:50px;
+                    }
+            input[type=search]{
+                 height:25px;
+                 display:inline;
+                 width:auto;
+                border-radius:5px;
+                background-color:#EEEEEE;
+            }
+            ::-webkit-input-placeholder {
+                font-size:12px;
+                color: black;
+                text-align:center;
+               }
+               .dataTables_filter label { float: none }
+            #filterrow > th > input{
+                color : black;
+                font-size : 14px;
+            }
+            tr.selected{
+               background-color: #B0BED9;
+             }
+            thead{
+                background-color: #27a3e2 !important;
+                color:white;
+            }
+            tbody>tr>td:first-child{
+                background-color:#9da6ea !important;
+                color:black;
+            }
+            .dt-button{
+                background-color:#88b54e !important;
+                background-image:none !important;
+                color:white !important;
+                border :none;
+            }
+            .dt-buttons{
+                margin-bottom:10px;
+            }
+            img.loading {
+                position: relative;
+                margin-left: 530px;
+                float: left;
+            }
+            .hideForPortal {
+                display: none;
+            }
+            @media only screen and (max-width: 480px) and (min-width: 0px)  {
+            .hideForPortal {
+                display: block;
+            }
+            .download_btn_css {
+                left: 1% !important;
+            }
+            .heatMap_btn_css {
+                left: 1% !important;
+            }
+            div.dt-buttons {
+                text-align: left !important;
+            }
+            a.dt-button {
+                width: 147px !important;
+                margin-left: -1.6% !important;
+            }
+            div.dataTables_wrapper {
+                width: 100%;
+            }
+            .dataTables_filter {
+                width: 100%;
+                margin-left: 21%;
+            }
+            .paging_simple_numbers {
+                font-size: 2.5vw;
+                width: 100%;
+            }
+            .dataTables_info {
+                font-size: 2.9vw;
+            }
+            #details {
+                width: 100% !important;
+                display: block;
+                top: 0% !important;
+                margin: 0px !important;
+                padding-left: 0px;
+                left: 0px !important;
+            }
+            .margin_left {
+                 margin-left: 0px !important;
+            }
+            .padding_zero {
+                padding: 0px !important;
+            }
+            .availability {
+                margin-left: 0px !important;
+            }
+            .padding_zero {
+                padding: 0px;
+            }
+            .margin_left_zero {
+                margin-left: 1% !important;
+            }
+            .margin_zero {
+                margin: 0px !important;
+            }
+            .available_css {
+                min-width: 20% !important;
+            }
+            .radio_btn_css {
+                margin-top: 1%;
+                min-width: 15% !important;
+            }
+            .unavailable_css {
+                min-width: 34% !important;
+            }
+            .radio_btn_css1 {
+                margin-top: 1%;
+                min-width: 8% !important;
+            }
+            .role_css {
+                margin-left: 0% !important;
+            }
+            .vp_css {
+                width: 100% !important;
+            }
+            #remarks_div {
+                width: 100% !important;
+            }
+            #remarks {
+                width: 100% !important;
+                height: 79% !important;
+            }
+            }
+
+            @media only screen and (max-width: 767px) and (min-width: 480px)  {
+            .hideForPortal {
+                display: block;
+            }
+            .download_btn_css {
+                left: 5% !important;
+            }
+            .heatMap_btn_css {
+                left: 5% !important;
+            }
+            div.dt-buttons {
+                text-align: left !important;
+                margin-left: 5% !important;
+            }
+            a.dt-button {
+                width: 147px !important;
+            }
+            div#db_table_filter {
+                margin-right: 0px !important;
+            }
+            div#db_table_filter > label {
+                margin-right: 2% !important;
+            }
+            div.dataTables_wrapper {
+                width: 100%;
+            }
+            .dataTables_filter {
+                width: 100%;
+                margin-left: 21%;
+            }
+            .paging_simple_numbers {
+                font-size: 2.5vw;
+                width: 100%;
+            }
+            .dataTables_info {
+                font-size: 2.9vw;
+            }
+            #details {
+                width: 100% !important;
+                display: block;
+                top: 0% !important;
+                margin: 0px !important;
+                padding-left: 0px;
+                left: 0px !important;
+            }
+            .margin_left {
+                 margin-left: 0px !important;
+            }
+            .padding_zero {
+                padding: 0px !important;
+            }
+            .availability {
+                margin-left: 0px !important;
+            }
+            .padding_zero {
+                padding: 0px;
+            }
+            .margin_left_zero {
+                margin-left: 1% !important;
+            }
+            .margin_zero {
+                margin: 0px !important;
+            }
+            .available_css {
+                min-width: 20% !important;
+            }
+            .radio_btn_css {
+                margin-top: 1%;
+                min-width: 15% !important;
+            }
+            .unavailable_css {
+                min-width: 34% !important;
+            }
+            .radio_btn_css1 {
+                margin-top: 1%;
+                min-width: 8% !important;
+            }
+            .role_css {
+                margin-left: 0% !important;
+            }
+            .vp_css {
+                width: 80% !important;
+            }
+            #remarks_div {
+                width: 100% !important;
+            }
+            #remarks {
+                width: 100% !important;
+                height: 79% !important;
+            }
+            }
+
+            @media only screen and (max-width: 1024px) and (min-width: 767px) {
+                .hideForPortal {
+                    display: block;
+                }
+
+                .download_btn_css {
+                    left: 5% !important;
+                }
+
+                .heatMap_btn_css {
+                    left: 5% !important;
+                }
+
+                div.dt-buttons {
+                    text-align: left !important;
+                    margin-left: 5% !important;
+                }
+
+                a.dt-button {
+                    width: 147px !important;
+                }
+
+                div#db_table_filter {
+                    margin-right: 0px !important;
+                }
+
+                div#db_table_filter > label {
+                    margin-right: 2% !important;
+                }
+
+                div.dataTables_wrapper {
+                    width: 100%;
+                }
+
+                .dataTables_filter {
+                    width: 100%;
+                    margin-left: 21%;
+                }
+
+                .paging_simple_numbers {
+                    font-size: 2.2vw;
+                    width: 100%;
+                    margin-right: 9% !important;
+                }
+
+                .dataTables_info {
+                    font-size: 2.2vw;
+                    margin-left: 33%;
+                }
+
+                #details {
+                    width: 100% !important;
+                    display: block;
+                    top: 0% !important;
+                    margin: 0px !important;
+                    padding-left: 0px;
+                    left: 0px !important;
+                }
+
+                .margin_left {
+                    margin-left: 0px !important;
+                }
+
+                .padding_zero {
+                    padding: 0px !important;
+                }
+
+                .availability {
+                    margin-left: 0px !important;
+                }
+
+                .padding_zero {
+                    padding: 0px;
+                }
+
+                .margin_left_zero {
+                    margin-left: 1% !important;
+                }
+
+                .margin_zero {
+                    margin: 0px !important;
+                }
+
+                .available_css {
+                    min-width: 20% !important;
+                }
+
+                .radio_btn_css {
+                    margin-top: 1%;
+                    min-width: 15% !important;
+                }
+
+                .unavailable_css {
+                    min-width: 34% !important;
+                }
+
+                .radio_btn_css1 {
+                    margin-top: 1%;
+                    min-width: 8% !important;
+                }
+
+                .role_css {
+                    margin-left: 0% !important;
+                }
+
+                .vp_css {
+                    width: 76% !important;
+                }
+
+                #remarks_div {
+                    width: 100% !important;
+                }
+
+                #remarks {
+                    width: 100% !important;
+                    height: 79% !important;
+                }
+
+                .role_det_css {
+                    margin-right: 11% !important;
+                }
+            }
+        .dt-button {
+            /* background-color: #45a3e3 !important; */
+           font-family: sans-sarif !important;
+            height: 24pt;
+            font-size: 14px!important;
+            }
+        .btn-danger {
+            background: #45a3e3 !important;
+        }
+        .btn-info {
+            background: #45a3e3 !important;
+        }
+        #db_table_previous, #db_table_next{
+            font-family: sans-serif !important;
+        }
+
+        </style>
+
+{% endblock %}
+
+{% block  body_container %}
+
+{# Custom Popup related #}
+<div class="message-overlay hide"></div>
+<div class="message"><p></p></div>
+
+{%if is_partner or is_school_admin%}
+<div class="inner" style="height: 100%;">
+    <div class="col-md-2" style="height: 100%;">
+      {%include "navbar.html"%}
+    </div>
+    <div class="col-md-10" style="height: 100%; overflow-y: auto; right: -15px; padding-left: 3%;">
+{%else%}
+<div class="admin_inner">
+     <div class="col-md-12">
+{%endif%}
+<div style='padding:10px;text-align:center;font-size:23px;background-color:#27A3E2;color:white;margin-top: 15px;'>Volunteer Dashboard</div>
+    <div  id='' style='background-color:white;padding-top:15px;margin-bottom:35px;overflow-x:auto;' >
+        <div id="evd-notification" class="evd-notification volDetails alert alert-warning hide" style="">
+            <div>
+                <a type="button" id ="closeButtonId" class="clos close_msg_div">X</a>
+                <p class="msg-body volDetailsId"></p>
+            </div>
+        </div>
+        <a href="/get_master_db/" class="download_btn_css" style="position:relative;left:180px;text-shadow:none;z-index:100">
+            <div class="btn btn-success download_master" style="position:absolute;text-shadow:none;width: 175px" onclick="$(this).text('Downloading...');
+            setTimeout( function(){$('.download_master').text('Download Master DB');},16000);">Download Master DB</div>
+        </a>
+        <br class="hideForPortal"><br class="hideForPortal">
+        <a href="/volunteer_heatmap/" target="_blank" class="heatMap_btn_css" style="position:relative;left:360px;text-shadow:none;z-index:100">
+            <div class="btn btn-success" style="position:absolute;text-shadow:none;width: 147px">Heat Map</div>
+        </a>
+        <br class="hideForPortal"><br class="hideForPortal">
+        <div style='width:100%;height:10%'>
+        </div>
+        <table id="db_table" class="table table-striped table-bordered" cellspacing="0">
+            <thead>
+            <tr>
+                <th class='id_column'>ID</th>
+                <th>User Name</th>
+                <th>Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Language</th>
+                <th>City</th>
+                <th>Phone</th>
+                <th>Center</th>
+                <th class="roles_column">Preferred Roles</th>
+                <th class="role_status">Role Status</th>
+                <th class="role_outcome">Role Outcome</th>
+                <th>Active Teacher</th>
+            
+                <th class="role_onboarding_status">Role Completion Status</th>
+                <th class="recommended_date">Recommended Date</th>
+                <th>Skype ID</th>
+                <th>Reference Channel</th>
+                <th>Orientation</th>
+                <th>Computer</th>
+                <th class="availability">Availability</th>
+                <th>Preferred Subjects</th>
+                <th>Preferred Day</th>
+                <th>Preferred Slots</th>
+                <th>Available From</th>
+                <th>Available Till</th>
+                <th>Last Login</th>
+                <th>Joined Date</th>
+                <th>Short Notes</th>
+                <th>Age</th>
+                <th>Profession</th>
+                <th>Referred user id</th>
+                <th>VP Outcome</th>
+                <th>Remarks</th>
+            </tr>
+            <tr id='filterrow'>
+                <th id='id_col'>ID</th>
+                <th>User Name</th>
+                <th>Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Language</th>
+                <th>City</th>
+                <th>Phone</th>
+                <th>Active Teacher</th>
+                <th>Center</th>
+                <th>Preferred Roles</th>
+                <th>Role Status</th>
+                <th>Role Outcome</th>
+                <th>Role Completion Status</th>
+                <th>Recommended Date</th>
+                <th>Skype ID</th>
+                <th>Reference Channel</th>
+                <th>Orientation</th>
+                <th>Computer</th>
+                <th>Avail</th>
+                <th>Preferred Subjects</th>
+                <th>Preferred Day</th>
+                <th>Preferred Slots</th>
+                <th>Available From</th>
+                <th>Available Till</th>
+                <th>Last Login</th>
+                <th>Joined Date</th>
+                <th>Short Notes</th>
+                <th>Age</th>
+                <th>Profession</th>
+                <th>Referred user id</th>
+                <th>VP Outcome</th>
+                <th>Remarks</th>
+            </tr>
+            </thead>
+            <tbody id='tab_data'>
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<!--<div id='details' class='modal' style="display:none;height:300px;" >
+    <a class="modalCloseImg close" style='color:white;opacity:1 !important;margin-top:-5px;font-size:15px;cursor:pointer;' data-dismiss="modal">X</a>
+    <div style='background-color:#EA7916;height:15px;padding:10px;color:white'>Profile Details</div>
+    <div id='detail_body'>
+           <div style='text-align:center;margin-top:100px;'>
+                  <img alt="Loader gif" src='/static/images/loader.gif' />
+           </div>
+    </div>
+</div>-->
+  <!-- Modal -->
+  <div class="modal fade" id="details" role="dialog" style="display:none;top:40%; width: 580px;">
+    <div class="">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h6 class="modal-title">Profile Details</h6>
+        </div>
+        <div class="modal-body" id="detail_body">
+            <div style='text-align:center;margin-top:100px;'>
+                <img alt="Loader gif" src='/static/images/loader.gif' />
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+    <div id='ajax_loader' style="position: fixed; left: 48%; top:43%; display:none; z-index: 999;">
+	<img alt="Loader gif" src="/static/img_new/ajax-loader.gif" style="width: 65%;" />
+	</div> 
+  </div>
+  <script type="text/javascript">
+  $(".clos").click( function(){ parent.$.fn.colorbox.close()} );
+</script>
+{% endblock %}

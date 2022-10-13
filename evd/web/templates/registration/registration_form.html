@@ -1,0 +1,25 @@
+
+{% block body_container %}
+<div class="row">
+    <div class="span12">
+        <h1>Register</h1>
+    </div>
+    <div class="span2" style="margin-top: 20px">
+    </div>
+    <div class="span5" style="text-align: center;">
+        <div class="form">
+            <form action="/accounts/register/" method="post">
+                {% csrf_token %}
+                <table>
+                    {{ form.as_table }}
+                </table>
+
+                <div align="center">
+                    <br/>
+                    <input class="btn-primary" style="height:30px" type="submit" value="Join Evd"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock body_container %}

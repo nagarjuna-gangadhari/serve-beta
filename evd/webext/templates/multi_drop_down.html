@@ -1,0 +1,84 @@
+<style>
+    .is-dropdown-submenu{
+        transition-duration: 10ms;
+        border-radius: 5px;
+    }
+    li[role="menuitem"]{
+        border: 1px rgb(133, 133, 133);
+    }
+    li[role="menuitem"] :hover {
+        color:rgb(247, 116, 40);
+    }
+    .ui-menu{
+        z-index: 1000 !important;
+    }
+</style>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<div class="w-full flex items-center justify-center border-b border-black text-xs font-semibold">
+    <ul class="dropdown menu" data-dropdown-menu="k6zlu5-dropdown-menu" role="menubar">
+        <li role="none"><a href="#my-center-search-modal" role="menuitem">MY CENTER</a></li>
+        <li role="none" class="is-dropdown-submenu-parent opens-right" data-is-click="false">
+          <a href="#Item-1" role="menuitem" aria-haspopup="true" aria-label="Item 1">Item 1</a>
+          <ul class="menu submenu is-dropdown-submenu first-sub vertical" data-submenu="" role="menubar" style="">
+            <li role="none" class="is-submenu-item is-dropdown-submenu-item"><a href="#Item-1A" role="menuitem">Item 1A</a></li>
+            <li role="none" class="is-dropdown-submenu-parent is-submenu-item is-dropdown-submenu-item opens-right" data-is-click="false">
+              <a href="#Item-1B" role="menuitem" aria-haspopup="true" aria-label="Item 1B">Item 1B</a>
+              <ul class="menu submenu is-dropdown-submenu vertical" data-submenu="" role="menubar" style="">
+                <li role="none" class="is-submenu-item is-dropdown-submenu-item"><a href="#Item-1Bi" role="menuitem">Item 1B i</a></li>
+                <li role="none" class="is-submenu-item is-dropdown-submenu-item"><a href="#Item-1Bii" role="menuitem">Item 1B ii</a></li>
+                <li role="none" class="is-dropdown-submenu-parent is-submenu-item is-dropdown-submenu-item opens-right" data-is-click="false">
+                  <a href="#Item-1Biii" role="menuitem" aria-haspopup="true" aria-label="Item 1B iii">Item 1B iii</a>
+                  <ul class="menu submenu is-dropdown-submenu vertical" data-submenu="" role="menubar" style="">
+                    <li role="none" class="is-submenu-item is-dropdown-submenu-item"><a href="#Item-1Biiialpha" role="menuitem">Item 1B iii alpha</a></li>
+                    <li role="none" class="is-submenu-item is-dropdown-submenu-item"><a href="#Item-1Biiiomega" role="menuitem">Item 1B iii omega</a></li>
+                  </ul>
+                </li>
+                <li role="none" class="is-dropdown-submenu-parent is-submenu-item is-dropdown-submenu-item opens-right" data-is-click="false">
+                  <a href="#Item-1Biv" role="menuitem" aria-haspopup="true" aria-label="Item 1B iv">Item 1B iv</a>
+                  <ul class="menu submenu is-dropdown-submenu vertical" data-submenu="" role="menubar" style="">
+                    <li role="none" class="is-submenu-item is-dropdown-submenu-item"><a href="#Item-1Bivalpha" role="menuitem">Item 1B iv alpha</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li role="none" class="is-submenu-item is-dropdown-submenu-item"><a href="#Item-1C" role="menuitem">Item 1C</a></li>
+          </ul>
+        </li>
+        <li role="none" class="is-dropdown-submenu-parent opens-right" data-is-click="false">
+          <a href="#Item-2" role="menuitem" aria-haspopup="true" aria-label="Item 2">Item 2</a>
+          <ul class="menu submenu is-dropdown-submenu first-sub vertical" data-submenu="" role="menubar" style="">
+            <li role="none" class="is-submenu-item is-dropdown-submenu-item"><a href="#Item-2A" role="menuitem">Item 2A</a></li>
+            <li role="none" class="is-submenu-item is-dropdown-submenu-item"><a href="#Item-2B" role="menuitem">Item 2B</a></li>
+          </ul>
+        </li>
+        <li role="none"><a href="#Item-3" role="menuitem">Item 3</a></li>
+        
+    </ul>
+</div>
+
+
+<!-- modals -->
+
+<div class="modal" id="my-center-search-modal">
+    <div class="modal-box -mt-56">
+        <h3 class="font-bold text-lg text-center text-gray-800">SEARCH CENTER</h3>
+        <div class="flex items-center justify-center space-x-2 mt-10 w-full h-10">
+          <div class="w-full"><input type="text" id="my-center-search" placeholder="Search Center" class="input input-bordered rounded w-full min-w-xs w-11/12" /></div>
+          <div class="modal-action"><button href="#" class="btn btn-success btn-sm mb-8">GO</button></div>
+        </div>
+        <div id="center-search-list"></div>
+      <div class="modal-action">
+       <a href="#" class="btn bg-red-400">close</a>
+      </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script>
+    $( "#my-center-search" ).autocomplete({
+        source: "/v2/ajax/getSelCentersBaseOnUser",
+        minLength: 2,
+        select: function( event, ui ) {
+            $('#center-search-list').val(ui.item.value)
+        }
+      });
+</script>

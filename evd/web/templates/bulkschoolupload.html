@@ -1,0 +1,415 @@
+{% extends "base.html" %}{% load staticfiles %} {% block body_container2 %}
+<link rel="stylesheet" href="/static/css/tailwind.min.css">
+<script src="/static/css/fontawesome/js/all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js" integrity="sha512-wBcFatf7yQavHQWtf4ZEjvtVz4XkYISO96hzvejfh18tn3OrJ3sPBppH0B6q/1SHB4OKHaNNUKqOmsiTGlOM/g==" crossorigin="anonymous"></script>
+<style>
+
+</style>
+
+<div class="top-0 bg-white shadow-xl m-8 border-2 border-blue-400 rounded-lg">
+    <h2 class="text-center text-blue-400 my-12 font-bold text-6xl">Bulk school create</h2>
+    <div class="flex justify-center">
+        <div class="flex items-center justify-end">
+            <a id="get_sample" class="w-48 mx-8 flex flex-row items-center justify-center px-4 py-4 bg-yellow-300 text-blue rounded-lg shadow-lg tracking-wide uppercase border-2 border-yellow-300 cursor-pointer hover:border-black no-underline hover:no-underline"
+                href="/static/bulk_create_digital_school.xlsx" download="sample_bulk_create_digital_school.xlsx">
+                <i class="fas fa-cloud-download-alt"></i>
+                <span class="text-sm font-bold leading-normal mx-2 text-center">Get Template</span>
+            </a>
+        </div>
+        <div class="flex items-center justify-end">
+            <a id="get_sample" class="w-48 mx-8 flex flex-row items-center justify-center px-4 py-4 bg-yellow-300 text-blue rounded-lg shadow-lg tracking-wide uppercase border-2 border-yellow-300 cursor-pointer hover:border-black no-underline hover:no-underline"
+                href="/static/bulk_create_digital_school_instructions.xlsx" download="Instructions_bulk_create_digital_school.xlsx">
+                <i class="fas fa-cloud-download-alt"></i>
+                <span class="text-sm font-bold leading-normal mx-2 text-center">Instructionos</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="flex justify-center items-center">
+        <div class="text-center p-20 flex-auto justify-center">
+            <form id='upload_form' enctype="multipart/form-data">
+                <div id="inputs" class="flex justify-center items-center space-x-12">
+                    <label class=" flex flex-col items-center justify-center px-12 py-4 bg-white rounded-full shadow-md border border-blue cursor-pointer hover:bg-purple-600 hover:text-white text-purple-600 ease-linear transition-all duration-150">
+                                        <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                                        <span class="mt-2 text-base leading-normal">Select a xl-file</span>
+                                        <input id="xlfile" class="hidden" type="file" accept=".xlsx">
+                                    </label>
+                    <label class=" flex flex-col items-center justify-center px-12 py-4 bg-white rounded-full shadow-md border border-blue cursor-pointer hover:bg-purple-600 hover:text-white text-purple-600 ease-linear transition-all duration-150 ">
+                                        <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                                        <span class="mt-2 text-base leading-normal">Select logo images</span>
+                                        <input id="logo_files" class="hidden" type="file" accept=".png, .jpg, .jpeg" multiple="multiple">
+                                    </label>
+                    <label class=" flex flex-col items-center justify-center px-12 py-4 bg-white rounded-full shadow-md border border-blue cursor-pointer hover:bg-purple-600 hover:text-white text-purple-600 ease-linear transition-all duration-150">
+                                        <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                                        <span class="mt-2 text-base leading-normal">Select banner images</span>
+                                        <input id="banner_files" class="hidden" type="file" accept=".png, .jpg, .jpeg" multiple="multiple">
+                                    </label>
+                </div>
+                <div class="w-1/2 flex items-center jutify-center">
+                    {% if request.user.is_superuser %}
+                    <div class="w-full flex items-center jutify-center space-x-2">
+                        <label for="partner" class="block text-gray-700 capitalize dark:text-gray-200">Select partner</label>
+                        <select required id="partner" class="block w-42 px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"> 
+                            <option value="0" selected>Select Partner</option>    
+                            {% for x in  all_partners %}    
+                                <option value="{{x.contactperson.id}}" >{{x.contactperson.id}} - {{x.name}}</option>
+                                {% endfor %}
+                            </select>
+                    </div>
+                    {% else %}
+                    <input type="hidden" id="partner" value="{{partner.id}}"> {% endif %}
+                    <div>
+                        <button id="xlSub" class="bg-purple-500 my-12 text-white active:bg-purple-600 font-bold uppercase text-xl p-6 rounded-xl shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button"> Upload</button>
+                        <button id="xlDown" onclick="download_results()" class="bg-red-500 my-12 text-white active:bg-red-600 font-bold uppercase text-xl p-6  rounded-xl shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                            type="button" style="display: none;">Download Results</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- <div class="my-8 mx-12">
+        <div class="h-4 rounded-full bg-gray-200 shadow-xl">
+            <div id="" class="w-6/12 h-full bg-yellow-600 rounded-full">
+                <div class="text-white text-center text-sm px-2 rounded-full">50%</div>
+            </div>
+        </div>
+    </div> -->
+</div>
+
+<div class="mt-2 mx-12">
+    <div class="flex flex-col h-96">
+        <div class="flex-grow overflow-auto">
+            <table class="w-full table-auto">
+                <thead class="justify-between sticky top-0">
+                    <tr class="bg-green-600 text-gray-100 font-semibold">
+                        <th class="px-16 py-2">S.No</th>
+                        <th class="px-16 py-2">School_name</th>
+                        <th class="px-16 py-2">Partner_id</th>
+                        <th class="px-2 py-2">>>></th>
+                        <th class="px-16 py-2">Status</th>
+                        <th class="px-16 py-2">Error</th>
+                    </tr>
+                </thead>
+                <tbody id="table_of_items" class="bg-gray-200">
+                    <tr class="bg-white border-b-2 border-gray-200">
+                        <td class="px-16 py-2 text-center">1</td>
+                        <td class="px-16 py-2">sample school</td>
+                        <td class="px-16 py-2">123</td>
+                        <td class="px-2 py-2"></td>
+                        <td class="px-16 py-2">uploaded</td>
+                        <td class="px-16 py-2">None</td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+
+        // setup session cookie data. This is Django-related
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+        // end session cookie data setup. 
+
+    });
+</script>
+<script>
+    var processed_sheet = [];
+    document.getElementById("xlfile").addEventListener("change", (event) => {
+        selectedFile = event.target.files[0];
+    });
+
+
+    document.getElementById("xlSub").addEventListener("click", () => {
+        let partner_id = parseInt($("#partner").val())
+        console.log(partner_id)
+        if (partner_id == "" || partner_id == null || partner_id == undefined || partner_id == '0') {
+            alert("Please select a partner")
+            return
+        }
+        if (selectedFile) {
+            let fileReader = new FileReader();
+            fileReader.readAsBinaryString(selectedFile);
+            fileReader.onload = (event) => {
+                // console.log(event.target.result);
+                let data = event.target.result;
+                let workbook = XLSX.read(data, {
+                    type: "binary"
+                });
+                workbook.SheetNames.forEach(sheet => {
+                    let rowObject = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+                    let workbooksheet = {
+                        "sheet": sheet,
+                        "table": rowObject
+                    };
+
+                    processed_sheet = [];
+                    datatables(workbooksheet)
+                    $("#xlSub").hide();
+                    $("#inputs").hide();
+                    // console.log(workbooksheet)
+                    $("#table_of_items tr").remove();
+                    // console.log(JSON.stringify(rowObject));
+                });
+            }
+        }
+
+    });
+
+    function create_school(row, logoId, bannerId) {
+        var school_data = {
+            "partnerId": row["partner_id"],
+            "name": row["school_name"],
+            "purpose": row["statement_of_purpose"],
+            "description": row['description'],
+            "logoId": logoId,
+            "courseProvider": row["course_provider_code"],
+            "bannerId": bannerId,
+            "taluk": row["taluk"],
+            "district": row["district"],
+            "state": row["state"],
+            "pin_code": row["pin_code"],
+            "selectedStates": row["selected_states"],
+            "is_bulk": true
+        }
+
+        console.log(school_data)
+
+        $.ajax({
+            url: '/bulk-upload-digital-school/',
+            type: 'POST',
+            data: JSON.stringify(school_data),
+            dataType: "json",
+            success: function(response) {
+                console.log(response)
+                row['status'] = 'Uploaded'
+                row['error'] = 'None'
+                row['school_id'] = response.data['id']
+                displayItems(row)
+            },
+            error: function(xhr, errmsg, err) {
+                // $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg + "></div>")
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                var jsonk = $.parseJSON(xhr.responseText);
+                row['status'] = 'Not-Uploaded'
+                row['error'] = jsonk['error']['message']
+                row['school_id'] = ''
+                displayItems(row)
+            }
+
+        });
+    }
+
+
+    function verifyFileIsImage(file) {
+        // verifies the file extension is one we support.
+        var extension = file.name.split('.').pop().toLowerCase(); //file.substr( (file.lastIndexOf('.') +1) );
+        switch (extension) {
+            case 'jpg':
+                return 2
+            case 'png':
+                return 1
+            case 'jpeg':
+                return 3
+            default:
+                notAllowedFiles.push(file)
+                return null
+        }
+    };
+
+
+    async function uploadFile(file, format, type) {
+
+        var logoid = null;
+        var data = new FormData(); //Create formdata objects to facilitate file transfer to the back end
+        data.append("file", file) //To add (encapsulate) a file object to a formdata object
+        data.append("format", format)
+        data.append("doc_type", type)
+
+        await $.ajax({
+            url: '/upload_digital_school_doc/?format=' + format + '&doc_type=' + type,
+            type: 'POST',
+            data: data,
+            cache: false, //Upload files without caching
+            processData: false, //Do not serialize data
+            contentType: false, //No special connection type defined
+            success: function(response) {
+                console.log(response)
+                logoid = response['data']['id']
+            },
+            error: function(xhr, errmsg, err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg + "></div>")
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+
+        })
+        console.log(logoid)
+        return logoid
+    }
+
+
+    async function uploader(file) {
+        let format = await verifyFileIsImage(file)
+        const type = 1 // upload doc type: 
+        let id = await uploadFile(file, format, type)
+        return id
+
+    }
+
+
+    async function datatables(response) {
+        let partner_id = parseInt($("#partner").val())
+        console.log(partner_id)
+        if (partner_id == "" || partner_id == null || partner_id == undefined || partner_id == '0') {
+            alert("Please select a partner")
+            return
+        }
+        var table = response['table']
+        loop1:
+            for (const x in table) {
+                if (Object.hasOwnProperty.call(table, x)) {
+                    const row = table[x];
+                    row['index'] = x;
+                    row["partner_id"] = partner_id;
+                    const logo_file_name = row["logo_name"]
+                    const banner_file_name = row["banner_name"]
+                    let logoFiles = $("#logo_files").prop('files');
+                    let bannerFiles = $("#banner_files").prop('files');
+                    const filearray = [];
+                    const filearray2 = [];
+                    var logoFile;
+                    var bannerFile;
+                    var bannerId;
+
+                    for (const key in logoFiles) {
+                        loop2: if (Object.hasOwnProperty.call(logoFiles, key)) {
+                            logoFile = logoFiles[key];
+                            if (logoFile.name == logo_file_name) {
+                                filearray.push(logo_file_name)
+                                break loop2;
+                            }
+                        }
+                    }
+                    if (filearray.length == 0) {
+                        row['status'] = 'Not-Uploaded'
+                        row['error'] = 'No image found'
+                        let ek = await displayItems(row)
+                        continue;
+                    }
+
+                    for (const key in bannerFiles) {
+                        loop3: if (Object.hasOwnProperty.call(bannerFiles, key)) {
+                            bannerFile = bannerFiles[key];
+                            if (bannerFile.name == banner_file_name) {
+                                filearray2.push(banner_file_name)
+                                break loop3;
+                            }
+                        }
+                    }
+
+
+                    var logoId = await uploader(logoFile);
+                    if (filearray2.length != 0) {
+                        var bannerId = await uploader(bannerFile);
+                    } else {
+                        var bannerId = '';
+                    }
+                    const sc = await create_school(row, logoId, bannerId)
+                    console.log(sc)
+
+
+                }
+            }
+        console.log(processed_sheet)
+        $("#xlDown").show();
+
+
+
+    }
+
+
+    function fileUploadComplete(fileItem) {
+        data = {
+            uploaded: true,
+            fileSize: fileItem.size,
+            file: policyData.file_id,
+
+        }
+        $.ajax({
+            method: "POST",
+            data: data,
+            url: "/upload_digital_school_doc/",
+            success: function(data) {
+                displayItems(fileItemList)
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert("An error occured, please refresh the page.")
+            }
+        })
+    }
+
+
+    function displayItems(row) {
+
+        var text_color = 'text-green-400';
+        if (row['error'] != 'None') {
+            var text_color = 'text-red-400';
+        }
+        $("#table_of_items").append('<tr class= "bg-white border-b-2 border-gray-200  hover:bg-gray-200 ' + text_color + '"> \
+                                            <td  class="w-1/6 py-2 mx-2 border-r">' + row['index'] + '</td>\
+                                            <td  class="w-1/6 py-2 mx-2 border-r">' + row['school_name'] + ' - ' + row['school_id'] + '</td>\
+                                            <td  class="w-1/6 py-2 mx-2 border-r">' + row['partner_id'] + '</td>\
+                                            <td  class="w-1/6 py-2 mx-2 border-r"></td>\
+                                            <td  class="w-1/6 py-2 mx-2 border-r">' + row['status'] + '</td>\
+                                            <td  class="w-1/6 py-2 mx-2 ">' + row['error'] + '</td>\
+                                        </tr> ');
+
+        processed_sheet.push(row);
+        return 'added'
+    }
+
+    function download_results() {
+        const fileName = 'results.xlsx';
+        const ws = XLSX.WorkSheet = XLSX.utils.json_to_sheet(processed_sheet);
+        const wb = XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'test');
+        XLSX.writeFile(wb, fileName);
+        location.reload(false);
+    }
+</script>
+
+
+{% endblock %}

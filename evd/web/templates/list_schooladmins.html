@@ -1,0 +1,328 @@
+{% extends "base.html" %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+
+    <style>
+        .mySchoolDiv {
+            background-color:#ffffff;
+            padding : 15px 20px 20px 30px;
+        }
+        .verification{
+            margin-top:15px;
+        }
+        input, textarea {
+            margin-bottom : 0px !important;
+        }
+        thead{
+            background-color: #525A99 !important;
+            color: white;
+        }
+        thead th{
+            border-bottom: 1px solid #111;
+            font-weight: bold !important;
+        }
+        .tableCaption{
+            padding: 20px;
+            text-align: center;
+            font-size: 23px;
+            font-weight: bold;
+            background-color: #27A3E2;
+            color: white;
+        }
+        .spantext{
+            text-align: center !important;
+        }
+
+        tfoot {
+            display: table-header-group !important;
+        }
+
+    </style>
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_container %}
+    {{ block.super }}
+
+
+
+<div class="row" style="min-height: 450px !important;">
+    <div class="col-md-12 col-sm-12 mySchoolDiv" >
+        <div style="overflow-x:auto;">
+            {% if view_flag %}
+                <div>
+                    <div class="col-md-12 col-sm-12">
+                        <div class="col-md-8 col-sm-8">
+                            <h3>School Admin - {{schooladmins.name}}</h3>
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <a href="" class="btn btn-info pull-right" style="margin-top: 1.9%;" data-toggle="modal" data-target="#patUpdateModal" title="Update Type & Status">Update <i class="fa fa-edit fa-lg"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-122 col-sm-12"><hr style="margin: 0px 0px 20px 0px !important;"/></div>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th><b>School Admin Name</b></th>
+                                <td>{{schooladmins.name}}</td>
+                                <th><b>Organization Name</b></th>
+                                <td>{{schooladmins.name_of_organization}}</td>
+                            </tr>
+                            <tr>
+                                <th><b>Organization Email</b></th>
+                                <td>{{schooladmins.email}}</td>
+                                <th><b>Organization Phone</b></th>
+                                <td>{{schooladmins.phone}}</td>
+                            </tr>
+                            <tr>
+                                <th><b>Status</b></th>
+                                <td>{{schooladmins.status}}</td>
+                                <!-- <th><b>Partner Type</b></th>
+                                <td>{% if partner.partnertype.all|length %}{% for ptype in partner.partnertype.all %}{{ptype.name}}{% if not forloop.last %},{% endif %}{% endfor %}{% else %} -- {% endif %}</td> -->
+                                <th><b>Address</b></th>
+                                <td>{{schooladmins.address}}</td>
+                            </tr>
+                            <!-- <tr>
+                                <th><b>Address</b></th>
+                                <td colspan="3">{{partner.address}}</td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Modal -->
+
+                 <div id="patUpdateModal" class="modal fade" tabindex="-1" role="dialog" align="center" aria-labelledby="modal__Default" aria-hidden="true" >
+                    <div class="modal-dialog mob-width" style="max_width:100%;width:unset !important;height: 100% !important; margin:unset">
+                        <!-- Modal content-->
+                        <div class="modal-content" style="height:95%">
+                            <div class="modal-header">
+                                <h4 class="modal-title col-sm-10" id="exampleModalLabel" style="font-weight:bold;width: unset;">Update Partner Status & Type</h4>
+                                <button type="button" class="close col-sm-2" data-dismiss="modal" aria-label="Close" title="Close">
+                                   <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body col-lg-12">
+                                <form action="/v2/update_schooladmin_status/{{schooladmins.id}}/" method="post" style="border:None;">
+                                    {% csrf_token %}
+                                    <div style="text-align: left;padding-left: 16%;">
+                                        <label>Select Status</label>
+                                        <select id='schooladmin_status' name="schooladmin_status" >
+                                            {% for choice in status_choices %}
+                                                <option value='{{choice}}' {% if schooladmins.status == choice %} selected="selected" {% endif %}>{{choice}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <!-- <div id='preferred_roles' style="text-align: left;padding-left: 16%;margin-top:16px;">
+                                        <label>Type of Partner</label>
+                                        {% for ptype in partner_types %}
+                                            <div class='row' style="text-align: left;padding-left: 16%;">
+                                                <p class='role_ele'>
+                                                    <input type="checkbox" id="{{ ptype.name }}" style="position: absolute !important;left: -9999px !important;" name='ptypes' value={{ ptype.id }} {% for uptype in partner.partnertype.all %} {% if ptype == uptype %} checked="checked" {% endif %} {% endfor %}/>
+                                                    <label for="{{ ptype.name }}" class='myevd_label'>{{ ptype.name }}</label>
+                                                </p>
+                                            </div>
+                                        {% endfor %}
+                                    </div> -->
+                                    <br>
+                                    <div>
+                                        <button type="submit" class="btn btn-success">Update</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" title="Close">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Modal end-->
+
+                <div class="row" style="overflow-x:auto;">
+                    <div class="col-md-12 col-sm-12">
+                        <h4>Contact Person Details</h4>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <table class="col-md-12 col-sm-12 table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th><b>Name</b></th>
+                                    <td>{{schooladmins.contactperson.first_name}} {{schooladmins.contactperson.last_name}}</td>
+                                    <th><b>email</b></th>
+                                    <td>{{schooladmins.contactperson.email}}</td>
+                                </tr>
+                                <tr>
+                                    <th><b>Profession<b></th>
+                                    {% if schooladmins.contactperson.userprofile.profession %}
+                                        <td>{{schooladmins.contactperson.userprofile.profession}}</td>
+                                    {% else %}
+                                        <td> -- </td>
+                                    {% endif %}
+                                    <th><b>Gender</b></th>
+                                    <td>{{schooladmins.contactperson.userprofile.gender}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" style="overflow-x:auto;">
+                    <div class="col-md-12 col-sm-12">
+                        <h4>Organisation  Details</h4>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <table class="col-md-12 col-sm-12 table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th><b>Organisation Name</b></th>
+                                    <td>{{schooladmins.name_of_organization}}</td>
+                                    <th><b>Organisation Address</b></th>
+                                    <td>{{schooladmins.address}}</td>
+                                </tr>
+                                <!-- <tr>
+                                    <th><b>Logo<b></th>
+                                        <td>{{partner.logo}}</td>
+                                    <th><b>Website Address</b></th>
+                                    <td>{{partner.delivery_partnerobj.all.0.website_address}}</td>
+                                </tr>
+                                <tr>
+                                    <th><b>Office Phone<b></th>
+                                        <td>{{partner.delivery_partnerobj.all.0.office_phone}}</td>
+                                    <th><b>Email</b></th>
+                                    <td>{{partner.email}}</td>
+                                </tr>
+                                <tr>
+                                    <th><b>Type of Organization<b></th>
+                                        <td>{{partner.delivery_partnerobj.all.0.type_of_org}}</td>
+                                    <th><b>Date of Registration</b></th>
+                                    <td>{{partner.delivery_partnerobj.all.0.date_of_reg}}</td>
+                                </tr>
+                                <tr>
+                                    <th><b>Place of Registration<b></th>
+                                        <td>{{partner.delivery_partnerobj.all.0.place_of_reg}}</td>
+                                    <th><b>Registration Number</b></th>
+                                    <td>{{partner.delivery_partnerobj.all.0.reg_number}}</td>
+                                </tr>
+                                <tr>
+                                    <th><b>12A/80G Number<b></th>
+                                        <td>{{partner.delivery_partnerobj.all.0.number}}</td>
+                                    <th><b>FCRA Regn. Numbers</b></th>
+                                    <td>{{partner.delivery_partnerobj.all.0.fcra_reg_number}}</td>
+                                </tr>
+                                <tr>
+                                    <th><b>FCRA Acc Number<b></th>
+                                        <td>{{partner.delivery_partnerobj.all.0.fcra_acc_number}}</td>
+                                    <th><b>Bank Name</b></th>
+                                    <td>{{partner.delivery_partnerobj.all.0.bank_name}}</td>
+                                </tr>
+                                <tr>
+                                    <th><b>IFSC Code<b></th>
+                                        <td>{{partner.delivery_partnerobj.all.0.ifsc_code}}</td>
+                                    <th><b>Account Holder Name</b></th>
+                                    <td>{{partner.delivery_partnerobj.all.0.acc_holder_name}}</td>
+                                </tr>
+                                <tr>
+                                    <th><b>Account Number<b></th>
+                                        <td>{{partner.delivery_partnerobj.all.0.acc_number}}</td>
+                                    <th><b>Type Of Account</b></th>
+                                    <td>{{partner.delivery_partnerobj.all.0.type_of_acc}}</td>
+                                </tr> -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% else %}
+                <table class="table table-bordered" id="myTable">
+                    <caption class="tableCaption">School Admins List</caption>
+                    <thead>
+                        <tr>
+                            <th><b>School Admin Name</b></th>
+                            <th><b>Organization Name</b></th>
+                            <th><b>Organization Email</b></th>
+                            <th><b>Contact Person</b></th>
+                            <th><b>Status</b></th>
+                            <th><b>View </b></th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Partner Name</th>
+                            <th>Organization Name</th>
+                            <th>Organization Email</th>
+                            <th>Contact Person</th>
+                            <th>Status</th>
+                            <th>View</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% for sch_admin in schooladmins %}
+                            <tr>
+                                <td>{{sch_admin.name}}</td>
+                                <td>{{sch_admin.name_of_organization}}</td>
+                                <td>{{sch_admin.email}}</td>
+                                <td>{{sch_admin.contactperson.first_name}} {{sch_admin.contactperson.last_name}}</td>
+                                <td>{{sch_admin.status}}</td>
+                                <td style="text-align:center"><a href="/v2/school_admins/{{sch_admin.id}}/" class="btn btn-sm" title="View School">View</a> </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block bottom_scripts %}
+    {{ block.super }}
+
+    <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+
+
+        $(document).ready( function () {
+            $(".inner.clearfix").css("width","85%");
+
+            // Setup - add a text input to each footer cell
+            $('#myTable tfoot th').each( function () {
+                var title = $(this).text();
+                $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+            } );
+
+            $("#myTable").DataTable({
+                "bLengthChange": false,
+                "pageLength": 25,
+            });
+
+            // DataTable
+            var table = $('#myTable').DataTable();
+
+            // Apply the search
+            table.columns().every( function () {
+                var that = this;
+                $( 'input', this.footer() ).on( 'keyup change', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+        });
+
+
+    </script>
+
+{% endblock %}

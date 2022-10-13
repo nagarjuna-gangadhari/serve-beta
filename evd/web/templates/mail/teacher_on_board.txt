@@ -1,0 +1,22 @@
+<html lang="en">
+ <body>
+ <p>Dear {{ user }},</p>
+
+<p>Congratulations! We are pleased to confirm that you have been assigned to {{center_name}} as {{subject}} teacher.
+     
+
+
+<p>Please login at www.evidyaloka.org/myevidyaloka to view the details of the center, the point of contact for the center and the timetable.</p>
+
+<p>We will share the entire Class Package with you in a separate email. </p>
+
+<p>
+With Regards,
+
+eVidyaloka On-boarding Team
+
+www.evidyaloka.org
+Skype: evidyaloka.helpdesk | Phone: 080 - 40903939 |
+Email: volunteer@evidyaloka.org</p>
+ </body>
+ 

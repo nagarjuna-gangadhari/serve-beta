@@ -1,0 +1,135 @@
+{% extends "footer_base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+        .subcontent .sub-menu {
+            padding:10px 20px;
+        }
+        .subcontent ul li {
+            font-size:14px;
+            padding-left:15px;
+        }
+        .sub-menu p {
+            margin-bottom:10px;
+        }
+        .subcontent ul {
+            margin-bottom:0px;
+        }
+        .sub-menu .blue {
+            color:#f2a587;
+        }
+        .sub-menu img {
+            margin:10px;
+        }
+        .sub-menu b {
+            font-weight:bold;
+        }
+        .sub-menu #skypeid {
+            margin-left:49px;
+        }
+        .sub-menu #skypeid p {
+            margin-bottom:5px;
+        }
+        .sub-menu #skypeid ul li {
+            margin-bottom:5px;
+            padding-left:0px;
+        }
+        .blue {
+            color: #11BEEE;
+            text-shadow: 0 -1px #f2a587,0 1px
+        }
+    </style>
+{% endblock %}
+
+{% block leftnav_list %}
+    <li><a href="/intro/" class="about-1"><span>Intro</span></a></li>
+    <li><a href="/code_conduct/" class="about-2"><span>Code of Conduct</span></a></li>
+    <li><a href="/skype/" class="about-3 active"><span>Skype</span></a></li>
+    <!--<li><a href="#" class="about-4"><span>My Classroom</span></a></li>-->
+    <li><a href="/mybook/" class="about-5"><span>My Book</span></a></li>
+    <li><a href="#" class="about-6"><span>Aids & tools</span></a></li>
+{% endblock %}
+{% block top_content %}
+    <div class="top clearfix">
+        <div class="intro">
+            <h1>Skype</h1>
+        </div>
+    </div>
+{% endblock %}
+{% block bottom_content %}
+    <div class="paper-bg-wrapper">
+        <div class="paper-bg">
+            <div class="subcontent">
+                <h1 class="blue">Skype - Get your Skype Id</h1>
+                <div class="sub-menu">
+                    <p><span class="blue">Step1 :</span> Visit <a href="http://www.skype.com/">www.skype.com</a> and Install</p>
+                    <p><span class="blue">Step2 :</span> Join Skype and Get your Skype Id</p>
+                    <p>If you already have a Skype Id, You can skip Step 1 and 2</p>
+                    <p><span class="blue">Step3 :</span> Get familiarized with the Skype user interface</p>
+                    <p><span class="blue">Step4 :</span> Add eVidyaloka admins Skype id to your contact</p>
+                    <div id="skypeid">
+                        <p>Following Ids can be added:</p>
+                        <ul>
+                            <li>vensr2000 (Venkat)</li>
+                            <li>satish.viswanathan(Satish)</li>
+                            <li>priyah_1981 (Priya)</li>
+                        </ul>
+                    </div>
+                </div>
+                <h1 class="blue">Before you make a video call</h1>
+                <div class="sub-menu">
+                    <ul>
+                        <li>Check that your system meets the 
+                            <a href="https://support.skype.com/faq/FA597">minimum system requirements</a>
+                            . The person you are calling will also need to meet these requirements.
+                        </li>
+                        <li>Check that your 
+                            <a href="https://support.skype.com/faq/FA3731">webcam is working properly</a>. If it's not working, 
+                            <a href="https://support.skype.com/faq/FA1267">these steps</a> can help.
+                        </li>
+                    </ul>
+                </div>
+                <h1 class="blue">To make a video call</h1>
+                <div class="sub-menu">
+                    <ul>
+                        <li>Sign in to Skype, then click the Contacts tab.
+                            <img src="/static/images/FA3681a2.png" />
+                        </li>
+                        <li>
+                            <p>Find the person you want to call and check that they are online. If they are, you will see this <a href="https://support.skype.com/faq/FA3501/">status icon</a> next to their name.</p>
+                            <img src="/static/images/fa3681_icon1.png" />
+                            <p>If you see one of these icons, it means the person is on a mobile or other device, so you won'tbe able to video call, but you can 
+                                <a href="https://support.skype.com/faq/FA10935/">make a voice call</a> with a little 
+                                <a href="http://www.skype.com/go/skypecredit/?intcmp=CS-Upsell-FA3681-1">Skype Credit</a> or a 
+                                <a href="http://www.skype.com/go/subscriptions/?intcmp=CS-Upsell-FA3681-2">subscription</a>
+                            </p>
+                            <img src="/static/images/fa3681_icon2.png" />
+                        </li>
+                        <li>Click the contact. You will see their details in the main window.
+                            <img src="/static/images/FA3681b2.png" />
+                        </li>
+                        <li>
+                            <p>Click the Video call button.</p>
+                            <img src="/static/images/fa3681_button1.png" />
+                            <p>The screen changes color, a call bar appears near the bottom of the screen and you will hear ringing until the other person answers.</p>
+                            <p>If you'd like to mute the ringtone, in the menu, go to <b>Tools &gt; Options</b>, then select the <b>Sounds</b> tab. Uncheck <b>ringtone</b> in the list of sounds, then click <b>Save</b>.</p>
+                        </li>
+                        <li>Smile, wave, say hello!
+                            <img src="/static/images/fa3681_3.jpg" />
+                        </li>
+                        <li>
+                            <p>If you can't see or hear each other, click the call quality button in the call bar and check your settings (you may have to move your mouse to make the call bar appear).</p>
+                            <img src="/static/images/fa3681_4.jpg" />
+                            <p>Get more help with <a href="https://support.skype.com/faq/FA900/">checking your call quality settings</a></p>
+                        </li>
+                        <li>To end the call, click the end call icon.
+                            <img src="/static/images/fa3681_5.jpg" />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

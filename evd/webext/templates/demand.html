@@ -1,0 +1,210 @@
+{% extends 'base_generic.html' %}{% load filters %} {% block title %}Demand | eVidyaloka{% endblock %} {% block head %}
+<style>
+    .Blink {
+        animation: blinker 0.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;
+    }
+    
+    @keyframes blinker {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
+    }
+</style>
+{% endblock %} {% block body %}
+
+<div class="w-full">
+    <div class="">
+        <div class="grid md:grid-cols-5">
+            <div onclick="togglepanel()" class="block sm:hidden p-2 bg-red-400 text-xl"> <i class="fas fa-chevron-down"></i> Demand</div>
+            <div id="leftpanel" class="h-screen bg-teal-50 md:border-[#66669a] border-r-2 transition duration-150 ease-out hover:ease-in mobileblock">
+                <div class="w-full p-3 bg-[#66669a] text-white text-xl font-bold text-center">Demand</div>
+                <div id="volType" class="grid grid-col-1 gap-4 mt-4 md:ml-4 font-bold">
+                    {% if request.user.is_authenticated %} 
+                        {% if is_teacher or is_flt_teacher or is_content_developer or is_internal %}
+                            {% if is_teacher %}
+                                <div id="btn1" onclick="showStuff('1', this)" class="w-full p-2 rounded-l-3xl border-l-2 border-t-2 border-b-2 border-teal-700 hover:bg-green-500 text-center cursor-pointer">Online Teaching</div>
+                            {% endif %} 
+                            {% if is_flt_teacher %}
+                                <div id="btn2" onclick="showStuff('2', this)" class="w-full p-2 rounded-l-3xl border-l-2 border-t-2 border-b-2 border-teal-700 hover:bg-green-500 text-center cursor-pointer">Facilitated Teaching</div>
+                            {% endif %} 
+                            {% if is_content_developer %}
+                                <div id="btn3" onclick="showStuff('3', this)" class="w-full p-2 rounded-l-3xl border-l-2 border-t-2 border-b-2 border-teal-700 hover:bg-green-500 text-center cursor-pointer">Content Development</div>
+                            {% endif %}
+                        {% else %} 
+                            <div id="btn1" onclick="showStuff('1', this)" class="w-full p-2 rounded-l-3xl border-l-2 border-t-2 border-b-2 border-teal-700 hover:bg-green-500 text-center cursor-pointer">Online Teaching</div>
+                            <div id="btn2" onclick="showStuff('2', this)" class="w-full p-2 rounded-l-3xl border-l-2 border-t-2 border-b-2 border-teal-700 hover:bg-green-500 text-center cursor-pointer">Facilitated Teaching</div>
+                            <div id="btn3" onclick="showStuff('3', this)" class="w-full p-2 rounded-l-3xl border-l-2 border-t-2 border-b-2 border-teal-700 hover:bg-green-500 text-center cursor-pointer">Content Development</div>
+                        {% endif %} 
+                    {% else %}
+                    <div id="btn1" onclick="showStuff('1', this)" class="w-full p-2 rounded-l-3xl border-l-2 border-t-2 border-b-2 border-teal-700 hover:bg-green-500 text-center cursor-pointer">Online Teaching</div>
+                    <div id="btn2" onclick="showStuff('2', this)" class="w-full p-2 rounded-l-3xl border-l-2 border-t-2 border-b-2 border-teal-700 hover:bg-green-500 text-center cursor-pointer">Facilitated Teaching</div>
+                    <div id="btn3" onclick="showStuff('3', this)" class="w-full p-2 rounded-l-3xl border-l-2 border-t-2 border-b-2 border-teal-700 hover:bg-green-500 text-center cursor-pointer">Content Development</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="overflow-y-auto h-screen md:col-span-4 bg-gray-200 ">
+                <!-- component -->
+                <section id="tab1" class="tab max-w-auto mx-auto px-4 sm:px-6 lg:px-4 py-6 block">
+                    <div class="w-full h-full md:px-48 pb-6">
+                        <div onclick="window.location.href='/v2/demand/online/'" class="w-full p-2 text-center font-bold text-xl rounded-full bg-white text-green-600 hover:bg-orange-400 hover:scale-105 transition duration-150 ease-out hover:ease-in cursor-pointer">Check All ....</div>
+                    </div>
+                    <div id="teaching" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+                </section>
+                <section id="tab2" class="tab max-w-auto mx-auto px-4 sm:px-6 lg:px-4 py-6 hidesection">
+                    <div class="w-full h-full md:px-48 pb-6">
+                        <div onclick="window.location.href='/v2/demand/ft/'" class="w-full p-2 text-center font-bold text-xl rounded-full bg-white text-green-600 hover:bg-orange-400 hover:scale-105 transition duration-150 ease-out hover:ease-in cursor-pointer">Check All ....</div>
+                    </div>
+                    <div id="flt" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+                </section>
+                <section id="tab3" class="tab max-w-auto mx-auto px-4 sm:px-6 lg:px-4 py-6 hidesection">
+                    <div class="w-full h-full md:px-48 pb-6">
+                        <div onclick="window.location.href='/v2/demand/content/'" class="w-full p-2 text-center font-bold text-xl rounded-full bg-white text-green-600 hover:bg-orange-400 hover:scale-105 transition duration-150 ease-out hover:ease-in cursor-pointer">Check All ....</div>
+                    </div>
+                    <div id="content" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+                </section>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}{% block scripts %} {{ teaching_data|json_script:"teaching_data" }} {{ content_dev|json_script:"content_dev" }} {{ flt_data|json_script:"flt_data" }}
+{{ content_demand|json_script:"content_demand_data" }}
+<script>
+    var teachingData = JSON.parse(JSON.parse(document.getElementById('teaching_data').textContent));
+    var contentData = JSON.parse(document.getElementById('content_demand_data').textContent);
+    var fltData = JSON.parse(JSON.parse(document.getElementById('flt_data').textContent));
+    console.log(teachingData);
+    console.log(contentData);
+    console.log(fltData);
+    
+
+    function getTeachingData() {
+        var div = document.getElementById('teaching');
+        if (teachingData != null && teachingData != '' && teachingData != 'undefined') {
+            for (var i = 0; i < teachingData.length; i++) {
+                var item = teachingData[i];
+                icon = '<i class="fas fa-book-open fa-4x"></i>';
+                if (item['subject'].includes('English')) {
+                    icon = '<i class="fas fa-language fa-4x"></i>';
+                } else if (item['subject'].includes('Science')) {
+                    icon = '<i class="fas fa-microscope fa-4x"></i>';
+                } else if (item['subject'].includes('Math')) {
+                    icon = '<i class="fa-solid fa-plus-minus fa-4x"></i>';
+                }
+                let link = "'/v2/demand/online?subject=" + item['subject'] + "'";
+
+
+                div.innerHTML += '<div onclick="window.location.href=' + link + '" class="w-full bg-white hover:bg-orange-400 hover:scale-105 transition duration-150 ease-out hover:ease-in rounded-lg p-8 flex flex-col justify-center items-center cursor-pointer">\
+                <div class="mb-4">' + icon + '</div>\
+                <div class="text-lg text-green-600 font-bold">' + item['subject'] + '</div>\
+                <div class="text-center flex w-full text-sm mt-2">\
+                    <div class="w-1/2 border-r-2 flex items-center">' + item['running_teacher'] + ' Teaching\
+                        <i class="fa fa-circle Blink text-red-600 text-[5px] px-1"></i>\
+                    </div>\
+                    <div class="w-1/2">' + item['pending_teacher'] + ' Required</div>\
+                </div>\
+            </div>'
+            }
+        }
+    }
+
+    function getContentData() {
+        var div = document.getElementById('content');
+        if (contentData != null && contentData != '' && contentData != 'undefined') {
+            for (var i = 0; i < contentData.length; i++) {
+                const item = contentData[i];
+                const workstream = item['workstream__name'];
+                icon = '<i class="fa-solid fa-photo-film fa-4x"></i>';
+                if (workstream.includes('Video')) {
+                    icon = '<i class="fa-solid fa-photo-film fa-4x"></i>';
+                } else if (workstream.includes('Activity')) {
+                    icon = '<i class="fa-solid fa-puzzle-piece fa-4x"></i>';
+                } else if (workstream.includes('Worksheet')) {
+                    icon = '<i class="fa-solid fa-sheet-plastic fa-4x"></i>';
+                } else if (workstream.includes('LessonPlan')) {
+                    icon = '<i class="fa-solid fa-ruler-combined fa-4x"></i>';
+                } else if (workstream.includes('Textbook')) {
+                    icon = '<i class="fa-solid fa-book fa-4x"></i>';
+                }
+
+                let link = "'/v2/demand/content?workstream=" + workstream + "'";
+
+                div.innerHTML += '<div onclick="window.location.href=' + link + '" class="w-full bg-white hover:bg-orange-400 hover:scale-105 transition duration-150 ease-out hover:ease-in rounded-lg p-8 flex flex-col justify-center items-center cursor-pointer">\
+                <div class="mb-4">' + icon + '</div>\
+                <div class="text-lg text-green-600 font-bold">' + workstream + '</div>\
+                </div>'
+            }
+        }
+    }
+
+    function getFltData() {
+        var div = document.getElementById('flt');
+        if (fltData != null && fltData != '' && fltData != 'undefined') {
+            for (var i = 0; i < fltData.length; i++) {
+                var item = fltData[i];
+                icon = '<i class="fas fa-book-open fa-4x"></i>';
+                if (item['subject'].includes('English')) {
+                    icon = '<i class="fas fa-language fa-4x"></i>';
+                } else if (item['subject'].includes('Science')) {
+                    icon = '<i class="fas fa-microscope fa-4x"></i>';
+                } else if (item['subject'].includes('Math')) {
+                    icon = '<i class="fa-solid fa-plus-minus fa-4x"></i>';
+                }
+
+                let link = "'/v2/demand/ft?flag=true&subject=" + item['subject'] + "'";
+
+                div.innerHTML += '<div onclick="window.location.href=' + link + '" class="w-full bg-white hover:bg-orange-400 hover:scale-105 transition duration-150 ease-out hover:ease-in rounded-lg p-8 flex flex-col justify-center items-center cursor-pointer">\
+                <div class="mb-4">' + icon + '</div>\
+                <div class="text-lg text-green-600 font-bold">' + item['subject'] + '</div>\
+                <div class="text-center flex w-full text-sm">\
+                    <div class="w-1/2 border-r-2 flex items-center">' + item['teaching'] + ' Teaching\
+                        <i class="fa fa-circle Blink text-red-600 text-[5px] px-1"></i>\
+                    </div>\
+                    <div class="w-1/2">' + item['required'] + ' Required</div>\
+                </div>\
+                </div>'
+            }
+        }
+    }
+
+
+
+
+    getTeachingData()
+    getContentData()
+    getFltData()
+
+    $('#volType div').first().click();
+    
+
+    function showStuff(id, id2) {
+        for (var i = 1; i <= 3; i++) {
+            document.getElementById("tab" + i).style.display = "none";
+            
+            try {
+                document.getElementById("btn" + i).style.backgroundColor = "";
+              }
+              catch(err) {
+                console.log(err.message);
+              }
+
+        }
+        id2.style.backgroundColor = "#34ccfe";
+        document.getElementById("tab" + id).style.display = "block";
+    }
+
+    function togglepanel() {
+        var x = document.getElementById("leftpanel");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>
+{% endblock %}
+
+</html>

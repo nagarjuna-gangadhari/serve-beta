@@ -1,0 +1,47 @@
+<html lang="en">
+ <head>
+ <style>
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.button1 {background-color: rgba(3, 186, 0, 0.98);} /* Blue */
+</style>
+ </head>
+ <body>
+
+<p>Dear {{ user.first_name }} {{ user.last_name }},</p>
+Your selection of course : {{slots.0.center.name}}, {{grade}} th {{subject}} is Not Confirmed. 
+
+<p>This is because: {{reason}}</p>
+
+{% if reason == "Timings could not be offered for the selected course in this center" or reason == "The language for chosen center does not match with your preferred language" %}
+<p>Request you to rebook another course by visiting the Demand page.</p>
+<a class="button button1"  href="http://www.evidyaloka.org/v2/demand/online/">Select your Class</a>
+{% elif reason == "You have been assigned an alternate offering after discussion" %}
+<p>Hope you have confirmed on the center and the course request raised by the Delivery Coordinator.</p>
+<a class="button button1"  href="http://www.evidyaloka.org/v2/demand/online/">Select your Class</a>
+{% else %}
+<p>a) Kindly fill the (Self Evaluation form) (if reason 4 (a)) as the next step and you will be one step closer to start teaching.</p>
+<p>b) Kindly book the (Teacher Selection Discussion slot) (if reason 4 (b)) as the next step and you will be one step closer to start teaching.</p>
+{% endif %}
+{% if reason != "You have not completed the on-boarding steps to start teaching" %}
+<p>We look forward to your active participation & contribution.</p>
+{% else %}
+
+<p>We look forward to you completing the above step and becoming a part of eVidyaloka, with active participation & contribution.</p>
+{% endif %}
+<p>With Regards,</p>
+<p>eVidyaloka On boarding Team</p>
+<p>www.evidyaloka.org</p>
+
+</body>

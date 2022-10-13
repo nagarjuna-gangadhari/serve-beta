@@ -1,0 +1,121 @@
+{% extends "base.html" %} {% load filters %} {% load tags %} {% load staticfiles %} {% block head_title %} Volunteer Certificates | eVidyaloka {% endblock %} {% block head_styles %} {{ block.super }} {% endblock %} {% block body_container2 %}
+
+<script src="/static/css/tailwindcss3.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+<div class="w-full h-screen bg-gray-100">
+    <div class="w-full py-10 text-5xl font-bold text-center">Volunteer Certificates</div>
+    <div class="mx-48 my-4">
+        <table id="oldcertificates" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Center</th>
+                    <th>Sessions</th>
+                    <th>AY</th>
+                    <th>Generated Date</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody id="old_certificates_rows"></tbody>
+        </table>
+    </div>
+{% endblock %} {% block bottom_scripts %} {{ block.super }} {{ certificates|json_script:"certificates_data" }}
+
+<script>
+    const certificates_dump = JSON.parse(JSON.parse(document.getElementById('certificates_data').textContent));
+    console.log(certificates_dump)
+    certificates_dump.forEach((x, i) => $('#old_certificates_rows').append(`
+    <tr>
+        <td>${i}</td>
+        <td>${x.user__first_name} ${x.user__last_name}</td>
+        <td>${x.center__name}</td>
+        <td>${x.sessions}</td>
+        <td>${x.ay__title}</td>
+        <td>${x.created_on.split(' ')[0]}</td>
+        <td>
+            <div class="p-2 rounded-xl bg-green-400 cursor-pointer text-center" onclick="createPdf('${x.user__first_name.toUpperCase()} ${x.user__last_name.toUpperCase()}', '${x.sessions}', '${x.center__name}', '${x.ay__title}', '${x.created_on.split(' ')[0]}', '1')">Download</div>
+        </td>
+    </tr>
+    
+    `))
+
+    $(document).ready(function() {
+        $('#oldcertificates').DataTable();
+
+    });
+
+</script>
+
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.3.4/js/dataTables.select.min.js"></script>
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+<script src="https://unpkg.com/downloadjs@1.4.7"></script>
+<script>
+    const {
+        degrees,
+        PDFDocument,
+        rgb,
+        StandardFonts
+    } = PDFLib
+
+    async function createPdf(name, sessions, center, ay, generatedDate, pageId) {
+        // Fetch an existing PDF document
+        const url = '/static/volunteer_certificates/avt_2022.pdf';
+        const templatePdfBytes = await fetch(url).then(res => res.arrayBuffer())
+        const templatePdfDoc = await PDFDocument.load(templatePdfBytes)
+        const pdfDoc = await PDFDocument.create();
+        const [templatePage] = await pdfDoc.copyPages(templatePdfDoc, [parseInt(pageId) - 1])
+
+        pdfDoc.addPage(templatePage)
+
+        const helveticaFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
+        const pages = pdfDoc.getPages()
+        const firstPage = pages[0]
+        const {
+            width,
+            height
+        } = firstPage.getSize()
+        firstPage.drawText(name, {
+            x: 500,
+            y: 430,
+            size: 16,
+            font: helveticaFont,
+        })
+
+        firstPage.drawText(center, {
+            x: 580,
+            y: 392,
+            size: 12,
+            font: helveticaFont,
+        })
+        firstPage.drawText(sessions, {
+            x: 675,
+            y: 373,
+            size: 12,
+            font: helveticaFont,
+        })
+        firstPage.drawText(ay, {
+            x: 768,
+            y: 373,
+            size: 12,
+            font: helveticaFont,
+        })
+        firstPage.drawText(generatedDate.split(' ')[0], {
+            x: 360,
+            y: 210,
+            size: 16,
+            font: helveticaFont,
+        })
+        const pdfBytes = await pdfDoc.save()
+
+        // Trigger the browser to download the PDF document
+        download(pdfBytes, name + '_' + center + '_' + ay + ".pdf", "application/pdf");
+    }
+</script>
+
+
+
+{% endblock %}

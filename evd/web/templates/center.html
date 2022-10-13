@@ -1,0 +1,125 @@
+{% extends 'new_base_temp.html' %}
+<!DOCTYPE html>
+<html>
+{% block head %}
+{{ block.super }}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/themes/dot-luv/jquery-ui.css">
+    <link rel="stylesheet" href="/static/css/demandpage.css">
+
+{% endblock %}
+{% block content %}
+<style >
+.dropdown-menu.sub_logout {
+    left: 45px;
+}
+</style>
+    <section>
+    <div class='container' style='margin-top:80px;'  >
+       <div class='row' >
+          <h2 style='margin:35px 0px 15px 15px;'>Explore eVidyaloka Centers</h2>
+       </div>
+       <div class='row'>
+          <div class='col-sm-offset-10 col-sm-2'>
+              <div class='btn btn-warning myevd'><a href='/myevidyaloka/'><i class="fa fa-home fa-lg" aria-hidden="true"></i> &nbsp Go Back to My eVidyaloka</a></div>
+          </div>
+       </div>
+       <div class='row' id='preloader' style='display:none'>
+            <div class='col-sm-offset-5 col-sm-1' style='padding:10px;'>
+                <img src='/static/images/loader_demand.gif' style='margin-left:50px;' />
+            </div>
+       </div>
+       <div class='row'>
+       <div class='col-sm-3' style='margin-top:6px;'>
+               <div class='row filter_section' id='filter_langs'>
+                 <h4>Preferred Language <span style='display:inline;font-size:12px;margin-left:45px;cursor:pointer'>▼</span></h4>
+                    <hr style='margin:0px !important'>
+                    <div class='optns'>
+                        {% for language in language_list %}
+                        <div class="checkbox">
+                            <label class='demand_label'>
+                                <input type="checkbox" data-value='{{ language }}' class='fil_opts'>{{ language }}
+                            </label>
+                         </div>
+                        {% endfor %}
+                </div>
+           </div>
+           <div class='row filter_section' id='filter_location'>
+                 <h4>Preferred Location <span style='display:inline;font-size:12px;margin-left:45px;cursor:pointer'>▼</span></h4>
+                    <hr style='margin:0px !important'>
+                    <div class='optns'>
+                        {% for ent in location_list %}
+                        <div class="checkbox">
+                            <label class='demand_label'>
+                                <input type="checkbox" data-value='{{ ent }}' class='fil_opts'>{{ ent }}
+                            </label>
+                         </div>
+                        {% endfor %}
+                </div>
+           </div>
+       </div><!-- filter col -->
+       <div class='col-sm-1 col-md-1'></div>
+         <div class='col-sm-8 col-md-8'>
+           <div class="alert alert-danger .alert-dismissible hidden" id='medium_alert' role="alert" style="margin-top:17px;margin-bottom:0px !important;color:red;background-color:#F77D7D">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <strong style='color:white;'>Warning!</strong> <p class='alert_msg'style="font-weight:bold !important;color:white;">Your preferred language is not matching your filter</p>
+           </div>
+           {% if is_authenticated %}
+               <div class='row status_bar'>
+                    <div class='col-xs-6'>
+                        <p>Your Profile status : <span style='font-weight:bold;'>{{ user_details.profile_status }}</span></p>
+                    </div>
+                    <div class='col-xs-6'>
+                        <p>Your Preferred Language : <span style='font-weight:bold;'>{{ user_details.preferred_language }}</span></p>
+                    </div>
+               </div>
+           {% endif %}
+           <input type="hidden" value="{{center_data}}" id="centerDataId"/>
+           <div class='row'>
+                <div class="controls">
+                  <div class='row' id='filters_div'>
+                  </div>
+                </div>
+           </div>
+           <div class='row' id='thumbs_div' >
+           </div>
+           <input type="hidden" id="pageId"/>
+         </div>
+    </div>
+     <div class="row" id="pagination_data" style="text-align:center;margin-left:300px"></div>
+       </div><!--thumbs-div-col -->
+</section>
+<p class="med hidden" id={{ pref_med }}>
+{% if user.is_authenticated %}
+<p class="usr hidden" id="true">
+{% else %}
+<p class="usr hidden" id="false">
+{% endif %}
+{% endblock %}
+    {% block import_scripts %}
+    <script src="/static/js_new/jquery-1.10.2.min.js"></script>
+    <script src="/static/js_new/classie.min.js"></script>
+    <script src="/static/js_new/cbpAnimatedHeader.min.js"></script>
+    <script src="/static/js_new/owl.carousel.min.js"></script>
+    <script src="/static/js_new/scrollReveal.min.js"></script>
+    <script src="/static/js_new/jquery.scrollTo.js" defer="defer"></script>
+    <!--<script src="/static/js_new/jquery.nav.js" defer="defer"></script>-->
+    <script src="/static/js_new/imagesloaded.pkgd.min.js" defer="defer"></script>
+    <script src="/static/js_new/isotope.min.js" defer="defer"></script>
+    <script src="/static/js_new/jquery.magnific-popup.min.js" defer="defer"></script>
+    <script src="/static/js_new/jqBootstrapValidation.min.js" defer="defer"></script>
+    <script src="https://code.jquery.com/ui/1.9.1/jquery-ui.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="/static/js_new/custom.min.js"></script>
+    <script src="/static/js_new/login_modal.min.js"></script>
+    <script src="/static/js_new/login_function.js"></script>
+
+
+     <script type="text/javascript" src="/static/js/underscore-min.js"></script>
+     <script type="text/javascript" src="/static/js/centerViewAll.js"></script>
+     <script src="https://cdn.jsdelivr.net/scrollreveal.js/3.1.1/scrollreveal.min.js"></script>
+     {% endblock import_scripts %}
+
+</html>

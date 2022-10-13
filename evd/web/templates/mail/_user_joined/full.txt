@@ -1,0 +1,3 @@
+{{user.first_name }} {{ user.last_name }} joined  {{user.date_joined}}
+http://{{ current_site }}{{ user.get_profile.link }}
+

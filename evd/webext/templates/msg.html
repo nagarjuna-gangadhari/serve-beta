@@ -1,0 +1,15 @@
+ {% if message %}
+ <b>{{total}}</b>
+<ul>
+    {% for data in message %}
+        <li>{{ data }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<ul>
+   
+        <li>Nothing is deleted..........</li>
+  
+</ul>
+
+{% endif %}

@@ -1,0 +1,117 @@
+{% extends "base.html" %}{% load staticfiles%} {% block body_container2 %}
+<link rel="stylesheet" href="{% static 'css/tailwind.min.css' %}">
+<script src="{% static 'css/fontawesome/js/all.min.js' %}"></script>
+
+<div class="{% if user.is_authenticated %}  {% else %}mt-32{% endif %}   bg-gray-50">
+    <div class="pt-2 md:pt-8 text-lg md:text-6xl font-bold text-center text-red-500">ROSHNI 2021</div>
+    <div class="text-center text-2xl font-bold md:text-4xl mt-8">eVidyaloka's National Partner Summit</div>
+    <div class="text-center text-xs md:text-xl mt-2">Celebrating Innovation in Delivery of Education at the Grossroots</div>
+    <div class="text-center text-2xl font-bold bg-yellow-100 text-green-600 py-2 mt-4">Day 1 - 28 August 2021 ( Saturday)</div>
+    <div class="text-center text-2xl font-bold bg-yellow-100 text-green-600 py-2 mb-4">Day 2 - 30 August 2021 (Monday)</div>
+    <div class="text-center text-2xl">Inviting NGOs and Educators to Participate</div>
+    <div class="mt-5 text-center ">Entry is FREE !</div>
+    <div class="flex justify-center items-center mb-10 mt-2 ">
+        <a class="flex justify-center items-center w-80 h-16 rounded-full bg-blue-800 text-3xl font-bold hover:border-2 hover:border-black" href="https://forms.gle/mgW89pCzsncFo2Yy6">
+            <h3 class="no-underline text-white">Register</h3>
+        </a>
+    </div>
+    <div class="flex justify-around ">
+        <div class="bg-gray-600 w-96 h-68 mx-2 md:mx-4 p-2 shadow-xl rouneded-lg ">
+            <img src="/static/web/img/nps/1.jpeg " alt="img ">
+
+        </div>
+        <div class="bg-gray-600 w-96 h-68 mx-2 md:mx-4 p-2 shadow-xl rouneded-lg ">
+            <img src="/static/web/img/nps/3.jpeg " alt="img ">
+
+        </div>
+        <div class="bg-gray-600 w-96 h-68 mx-2 md:mx-4 p-2 shadow-xl rouneded-lg ">
+            <img src="/static/web/img/nps/4.jpeg " alt="img ">
+        </div>
+        <div class="bg-gray-600 w-96 h-68 mx-2 md:mx-4 p-2 shadow-xl rouneded-lg ">
+            <img src="/static/web/img/nps/5.jpeg " alt="img ">
+
+        </div>
+        <div class="bg-gray-600 w-96 h-68 mx-2 md:mx-4 p-2 shadow-xl rouneded-lg ">
+            <img src="/static/web/img/nps/6.jpeg " alt="img ">
+
+        </div>
+    </div>
+    <div class="text-center mt-14 mb-4 font-bold text-5xl ">Agenda</div>
+    <div class="bg-green-100 h-4/5 py-4 md:mx-10 rounded-3xl mx-2 ">
+        <div class=" ">
+            <div class="text-center text-red-600 font-bold">Day 1 - 28 August 2021 ( Saturday) </div>
+            <div class="text-center font-bold mt-4 ">Keynote Address</div>
+            <div class="my-2">
+                <div class="text-center font-serif  ">Arun Jain</div>
+                <div class="text-center ">Chairman and MD, Intellect Design Arena Ltd.</div>
+            </div>
+            <div class="text-center font-bold mt-6 ">
+                Capacity Building Workshops in Hindi, Kannada, Tamil, Telugu & English
+            </div>
+            <div class="text-center ">Session I - Crowdfunding</div>
+            <div class="text-center ">Session II - Pitching for CSR Funds</div>
+            <div class="text-center ">Session III - Nonprofit Website Best Practices</div>
+        </div>
+    </div>
+    <div class="flex justify-center items-center my-10 ">
+        <a class="flex justify-center items-center w-80 h-16 rounded-full bg-blue-800 text-3xl font-bold hover:border-2 hover:border-black" href="https://forms.gle/mgW89pCzsncFo2Yy6">
+            <h3 class="no-underline text-white">Register</h3>
+        </a>
+    </div>
+    <div class="bg-yellow-100 text-gray-800 h-4/5 mx-2 md:mx-10 py-4 rounded-3xl ">
+        <div class="text-center text-blue-800 font-bold">Day 2 - 30 August 2021 (Monday)</div>
+        <div class="text-center font-bold mt-4">Keynote Address</div>
+        <div class="mt-2">
+            <div class="text-center ">Prof. Anil Gupta</div>
+            <div class="text-center ">Founder - Honey Bee Network</div>
+        </div>
+        <div class="text-center mt-4 font-bold mt-10 ">
+            Innovative practices in the delivery of school education
+        </div>
+        <div class=text-center>Presentation by Program Partners</div>
+        <div class="text-center font-bold mt-10 ">Partner Awards and Felicitations</div>
+    </div>
+    <div class="flex justify-center items-center my-10 ">
+        <a class="flex justify-center items-center w-80 h-16 rounded-full bg-blue-800 text-3xl font-bold hover:border-2 hover:border-black" href="https://forms.gle/mgW89pCzsncFo2Yy6">
+            <h3 class="no-underline text-white">Register</h3>
+        </a>
+    </div>
+    <div class="bg-green-100 h-4/5 py-8 my-4 md:mx-10 rounded-3xl mx-2 ">
+        <div class="justify-center ">
+            <div class="text-center text-4xl text-gray-800 font-bold ">Testimonials</div>
+            <div class="flex justify-around flex-row mt-10 ">
+                <div class="bg-gray-600 mx-2 md:mx-4 p-2 shadow-xl rounded-lg ">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/4Y1aGTZGpCA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="bg-gray-600 mx-2 md:mx-4 p-2 shadow-xl rounded-lg ">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/4Y1aGTZGpCA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="flex justify-center items-center my-10 ">
+        <a class="flex justify-center items-center w-80 h-16 rounded-full bg-blue-800 text-3xl font-bold hover:border-2 hover:border-black" href="https://forms.gle/mgW89pCzsncFo2Yy6">
+            <h3 class="no-underline text-white">Register</h3>
+        </a>
+    </div>
+    <div class="bg-yellow-100 h-4/5 py-8 my-4 md:mx-10 rounded-3xl mx-2 ">
+        <div class="justify-center ">
+            <div class="text-center text-4xl text-green-600 font-bold ">Event Partners</div>
+            <div class="flex justify-around mt-10 ">
+                <div class="bg-gray-600 w-80 h-68 mx-2 md:mx-4 p-2 shadow-xl rouneded-lg ">
+                    <img src="/static/web/img/nps/1.jpeg " alt="img">
+                </div>
+                <div class="bg-gray-600 w-80 h-68 mx-2 md:mx-4 p-2 shadow-xl rouneded-lg ">
+                    <img src="/static/web/img/nps/1.jpeg " alt="img">
+                </div>
+                <div class="bg-gray-600 w-80 h-68 mx-2 md:mx-4 p-2 shadow-xl rouneded-lg ">
+                    <img src="/static/web/img/nps/1.jpeg " alt="img">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

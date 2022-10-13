@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+{% block html %}
+<html>
+   {% block head %}
+   <head>
+      <!--<script src="/static/js/jquery.min.js"></script>-->
+
+
+
+      <meta name="description" content="eVidyaloka is a non-profit organization that focuses on transforming the educational landscape of rural India. eVidyaloka creates digital classrooms for children in remote villages, with support of local communities and Volunteer Teachers across globe with standardized lesson plans and teaching aids">
+      <meta name="keywords" content="evidyaloka, children, rural school, learn, rural education, children education, teachers, volunteers, volunteers to teach, volunteer teachers, education, student education, online teaching, digital classrooms, virtual teaching, ngo, free education, remote village education, internet education, teaching channel, sponsor for education, sponsor for school, donate for school, donate for education"/>
+      <meta charset="utf-8">
+
+      <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
+      <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
+      <link rel="stylesheet" media="screen" href="/static/css/fonts.css" />
+      <link rel="stylesheet" media="all" href="/static/css/home_new.min.css" />
+      <link rel="stylesheet" media="all" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+      <link rel="shortcut icon" type="image/x-icon" href="/static/images/evidyalogo.png" />
+   </head>
+   {% endblock %}
+ {% block body %}
+   <body class="page index light_theme">
+   <div class="row">
+      <div id="universe col-md-12">
+        {% block navbar %}
+        <div class="row evd_logo">
+         <nav class="standard container row absolute">
+            <h1 class="span4"><a class="svg" href="/">Evidyaloka</a></h1>
+            <ul class="global_nav span20">
+               <!--<li><a href=""><span>Home</span></a></li>-->
+               <li class=""><a data-toggle="modal" data-target="#login-test"><span>Home</span></a></li>
+               <li><a href="/about/"><span>About Us</span></a></li>
+               <li class=""><a data-toggle="modal" data-target="#login-modal"><span>Sign up as a Volunteer</span></a></li>
+            </ul>
+         </nav>
+        </div>
+
+
+
+ <!-- login test-->
+
+
+
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/static/css/evl.css" />
+    <!-- login and signup code -->
+
+    <div id="login-modal" class="modal-layer modal">
+      <div class="modal-layer-inner" style="width: 700px;">
+        <a href="#" class="close" data-dismiss="modal" style="margin:-23px -30px 0px 0px;padding:0px;float:right">X</a>
+        <div class="modal-left">
+            <div class="vol-option">
+                <p>Educate - Anywhere Anytime</p>
+            </div>
+            <div>
+                <img src="/static/images/GLOBE.png">
+                <p>Teach online</p>
+                <p style="font-size:12px;line-height:1.4em;color:#777;">Primary activity where one connect with village through Skype and teach the children. 2 hrs in a week.</p>
+            </div>
+            <div>
+                <img src="/static/images/SHARE.png">
+                <p>Contribute to contents (offline)</p>
+                <p style="font-size:12px;line-height:1.4em;color:#777;">Develop lesson plans, search videos, pictures, activities, for a given topic, that will be used by the Teachers. Work offline at your pace.</p>
+            </div>
+            <div>
+                <img src="/static/images/ICON-5.png">
+                <p>Class Administrator (Remote)</p>
+                <p style="font-size:12px;line-height:1.4em;color:#777;">Coordinates with Teachers, Centre and makes sure, class happens on time, conduct review meetings over skype. 3-4 hrs in a week, over phone,email & Skype.</p>
+            </div>
+            <div style="margin-top:10px;">
+                <img src="/static/images/ICON-4.png">
+                <p>Be a well wisher</p>
+                <p style="font-size:12px;line-height:1.4em;color:#777;">You believe in the cause, model and help Spread the word, give feedback and follow eVidyaloka</p>
+            </div>
+            <div style="margin-left: 150px;margin-top: -10px;">
+                <p><a href="/volunteer/">Know more...</a></p>
+            </div>
+        </div>
+
+        <div class="modal-content">
+          <div id="login_modal_container">
+            <div class="top">
+              <p>Skip forms, use your Facebook account</p><a href="{% url socialauth_begin 'facebook' %}" id="" class=
+              "fb-connect-trigger login-fb">Login with Facebook</a>
+              <span class="divide">Or</span>
+              <div style="">
+              <div id="p_sign" >Dont have an Account? &nbsp&nbsp&nbsp&nbsp<a  id="sign-up" href="#" style="height:30px;background-color:#2ecc71;width:110px;padding-left:5px;padding-right:5px;" class="show-signup btn">Sign up</a> </div><br>
+              <div id="p_login" style="display:none" > Already registered? &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a id="login" href="#" style="background-color:#2ecc71;height:30px;width:110px;padding-left:5px;padding-right:5px;" class="show-login btn">Login</a></div>
+              </div>
+              <span id="current-form-desc" style="font-size:18px;" class="show-on-login show-on-fp"></span>
+              <span id='buffer' style='color:red'></span>
+
+            </div>
+
+            <div class="form hide-temp" id="login-form" style="">
+              <form action="/accounts/register/" id="login-signup-form" method="POST" accept-charset="utf-8">
+
+                {% csrf_token %}
+                <input type="hidden" name="next" value='/myevidyaloka/'/>
+                <div class="input text show-on-login show-on-signup" style="">
+                  <label for="username">Your User Name</label> <input name="username" type="text" data-validate="true" data-field-type="username" data-show-tooltip="true" data-placement="right" placeholder="Your username" maxlength="80" id="username" />
+                </div>
+                <small class="show-on-signup">username should contain [a-z][0-9]<br/> ex: jhon, mike, amy</small>
+                <div class="input text required show-on-fp show-on-signup" style="">
+                  <label for="username">Email</label> <input name="email" type="text" data-validate="true" data-field-type="email" data-show-tooltip="true" data-placement="right"  placeholder="Your Email" maxlength="80" id="email" />
+                </div>
+                <small class="show-on-signup">ex: you@yourdomain.com</small>
+                <div class="input password required hide show-on-login" style="">
+                  <label for="password">Password</label> <input type="password" data-validate="true" data-field-type="password" data-show-tooltip="true" name="password" placeholder="Password" data-placement="right" id="password" />
+                </div>
+                <div class="input password required show-on-signup" style="">
+                  <label for="password">Password</label> <input type="password" data-validate="true" data-field-type="password" data-show-tooltip="true"  name="password1" placeholder="Password" data-placement="right" id="password" />
+                </div>
+                <small class="show-on-signup">atleast 5 characters</small>
+                <div class="input password required show-on-signup">
+                  <label for="password2">Password( again )</label> <input type="password" data-validate="true" data-field-type="password" data-show-tooltip="true" name="password2" placeholder="Password again" data-placement="right" id="password2" />
+                </div>
+                <small class="show-on-signup" style="margin-bottom:10px">repeat the same password</small>
+                <!--
+                <div class="input checkbox show-on-signup" style="overflow:hidden;">
+                    <label for="accept" style="margin:0px;color:#777;display:inline"><input type="checkbox" name="accept" value="1" id="accept" />&nbsp;<a href="/conduct/">I accept to Code of Conduct</a></label>
+                </div>
+                -->
+                <div class="clearfix row show-on-login" style="display:none">
+                  <div class="input checkbox row-left clearfix">
+                    <input type="checkbox" name="remember_me" value="1" id="UserRememberMe" checked /> <label for="UserRememberMe">Remember me</label>
+                  </div>
+
+                  <div class="row-right show-on-login" style="display:none">
+                    <a id="fp" href="#">Forgot your password?</a>
+                  </div>
+                </div>
+                <div id="submit" class="submit show-on-fp show-on-login show-on-signup" style="margin-top:10px">
+                    <a rel="submit" href="#login-signup-form" pre-call="pre_submit" callback="after_submit" class="btn">
+                        <span class="ajax-button-label">Sign up</span>
+                    </a>
+                </div>
+              </form>
+              <p id="form-error" style="font-style:italic;color:red;display:none"></p>
+              <p id="form-success" style="font-style:italic;display:none"></p>
+            </div>
+
+            <div id="fb-root">
+              <script async="" src="http://connect.facebook.net/en_US/all.js" type="text/javascript"></script>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</div>
+<style>
+#fade-layer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: black;
+    -ms-filter: "alpha(opacity=80)";
+    filter: alpha(opacity=80);
+    opacity: .8;
+    z-index: 250;
+    display: none;
+    zoom: 1!important
+}
+.modal-layer {
+    position: fixed;
+    top: 142px;
+    left: 50%;
+    z-index: 300;
+    display: none
+}
+.modal-layer-inner {
+    padding: 30px 40px;
+    background-color: white;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0 0 15px rgba(0, 0, 0, .3);
+    -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, .3);
+    box-shadow: 0 0 15px rgba(0, 0, 0, .3);
+    position: relative
+}
+    .close-modal {
+        width: 18px;
+        height: 18px;
+        text-indent: -9999em;
+        display: block;
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        background: transparent url(/static/images/wishbone_sprite.png) no-repeat -39px -185px;
+    }
+    #current-form-desc.error {
+        color:red;
+    }
+    #current-form-desc.success {
+        color:green;
+    }
+    #bottom {
+        background: transparent !important;
+    }
+    .modal-backdrop, .modal-backdrop.fade.in {
+        opacity: 0.8;
+        filter: alpha(opacity=80);
+    }
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1040;
+        background-color: black
+    }
+    .modal-layer {
+        z-index: 1041;
+    }
+    .modal.fade.in {
+        top: 50%;
+    }
+    .modal.fade {
+        top: -25%;
+        -webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
+        -moz-transition: opacity 0.3s linear, top 0.3s ease-out;
+        -ms-transition: opacity 0.3s linear, top 0.3s ease-out;
+        -o-transition: opacity 0.3s linear, top 0.3s ease-out;
+        transition: opacity 0.3s linear, top 0.3s ease-out;
+    }
+    .modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        z-index: 1050;
+        width: 560px;
+        margin: -250px 0 0 -280px;
+        background-color: white;
+        border: 1px solid #999;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        -webkit-border-radius: 6px;
+        -moz-border-radius: 6px;
+        border-radius: 6px;
+        -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+        -webkit-background-clip: padding-box;
+        -moz-background-clip: padding-box;
+        background-clip: padding-box;
+    }
+
+.select-order input,
+.visuallyhidden,
+.modal-content .form .text label,
+.modal-content .form .password label,
+#login_register_container .text label,
+#login_register_container .password label {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px
+}
+    .modal-content {
+        box-shadow:none !important;
+        border:none !important;
+        width: 262px;
+        margin-left: 358px;
+        min-height:393px;
+    }
+    #login-modal {
+        width: 700px !important;
+        margin: 0px 0 0 -350px !important;
+    }
+    #login-modal small{
+        display: none;
+    }
+    #form-error {
+        padding: 10px 0px;
+        text-align: center;
+    }
+    #form-success {
+        padding: 10px 0px;
+        text-align: center;
+        color:green;
+    }
+    span.login-signup-label:hover {
+        color: white;
+    }
+    .callout {
+        padding: 10px !important;
+        width: 100% !important;
+        margin: 0px !important;
+    }
+    .callout h5 {
+        margin: 0px 0px 5px 0px !important;
+    }
+    .modal-left {
+        width: 330px;
+        height: 393px;
+        position: absolute;
+        border-right: 1px solid #666;
+    }
+    div.modal-left > div {
+        height:85px;
+    }
+    div.modal-left p {
+        margin-left: 50px;
+        position: relative;
+        float: left;
+        margin-right:28px;
+    }
+    div.modal-left img {
+        height: 40px;
+        width: 40px;
+        position: absolute;
+        display: block;
+    }
+.modal-content .top {
+    text-align: center;
+    font-size: 12px;
+    font-family: 'PlutoCondRegularItalic';
+    margin-bottom: 10px
+}
+.modal-content #login_modal_container .top {
+    margin-bottom: 0
+}
+.modal-content #login_modal_container .form {
+    margin-top: 10px
+}
+.modal-content #login_modal_container .form .text input,
+.modal-content #login_modal_container .form .password input {
+    width: 240px
+}
+.modal-content .top p {
+    margin-bottom: 5px;
+    font-family: 'PlutoCondRegular'
+}
+.modal-content .form {
+    width: 262px
+}
+#login_register_container .top {
+    text-align: center;
+    font-size: 14px;
+    font-family: 'PlutoCondRegularItalic';
+    color: #bcbcbc
+}
+#login_register_container .top p {
+    margin-bottom: 7px;
+    font-family: 'PlutoCondRegular';
+    color: #4a4a4a
+}
+#content .login-fb {
+    display: block
+}
+.login-fb {
+    background: transparent url(/static/images/login_facebook.png) no-repeat 0 0;
+    width: 262px;
+    height: 34px;
+    text-indent: -9999em;
+    display: block;
+    margin: 0 auto 13px
+}
+.login-fb:hover {
+    background-position: 0 -34px
+}
+.login-fb:active {
+    background-position: 0 -68px
+}
+#login_register_container .top a,
+.modal-content #login_modal_container .top a {
+    margin-bottom: 6px;
+    font-size: 14px;
+    display: inline-block
+}
+.lt-ie8 #login_register_container .top a {
+    display: inline
+}
+.lt-ie8 .modal-content #login_modal_container .top a {
+    display: inline
+}
+.modal-content #login_modal_container .top a.login-fb {
+    display: block
+}
+.modal-content #login_modal_container .top p {
+    font-size: 14px
+}
+#login_register_container .top a.login-fb {
+    display: block
+}
+.top .divide {
+    background: transparent url(/static/images/divide.gif) no-repeat 50% 50%;
+    font-size: 14px;
+    color: #bcbcbc;
+    font-family: 'PlutoCondRegularItalic';
+    display: block;
+    margin-bottom: 4px
+}
+.top span {
+    display: inline;
+    font-size: 12px;
+    color: #bcbcbc
+}
+#login_modal_container .top span,
+#login_register_container .top span {
+    display: block
+}
+#login_register_container .form {
+    width: 266px;
+    margin-top: 16px
+}
+#login_register_container .form .text input,
+#login_register_container .form .password input {
+    width: 246px
+}
+::-webkit-input-placeholder {
+    font-family: 'PlutoCondRegularItalic'
+}
+:-moz-placeholder {
+    font-family: 'PlutoCondRegularItalic';
+    color: #aaa
+}
+.form-error::-webkit-input-placeholder {
+    color: #4a4a4a
+}
+.form-error:-moz-placeholder {
+    color: #4a4a4a
+}
+.form p.note {
+    font-size: 12px;
+    color: #bcbcbc;
+    font-family: 'PlutoCondRegularItalic';
+    text-align: center;
+    margin: 13px auto 0;
+    width: 90%
+}
+label {
+    font-size: 12px;
+    font-family: 'PlutoCondRegularItalic';
+    margin: 0
+}
+.checkbox input {
+    float: left;
+    position: relative
+}
+.checkbox label {
+    float: left;
+    position: relative;
+    margin: 0 0 0 10px
+}
+.modal-layer .checkbox label,
+.modal-layer .row a {
+    line-height: 19px
+}
+.modal-layer .checkbox input {
+    height: 19px
+}
+.lt-ie8.checkbox label {
+    line-height: 20px
+}
+/*.row {
+    position: relative;
+    display: block;
+    width: 100%
+}*/
+.row-left {
+    width: 50%;
+    float: left;
+    position: relative;
+    text-align: right
+}
+.row-right {
+    width: 50%;
+    float: right;
+    position: relative
+}
+/*.row a {
+    vertical-align: top;
+    font-size: 12px;
+    font-family: 'PlutoCondRegularItalic';
+    line-height: 12px
+}*/
+#login_register_container .row a {
+    line-height: 13px
+}
+.lt-ie9 .form label {
+    display: block
+}
+.input {
+    position: relative
+}
+.text input,
+.password input {
+    padding: 6px 9px;
+    width: 100%;
+    font-size: 14px;
+    color: #4a4a4a;
+    background-color: white;
+    border: 1px solid #686868;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    margin-bottom: 9px;
+    font-family: 'PlutoCondRegular'
+}
+.lt-ie8 .text input,
+.lt-ie8 .password input {
+    height: 18px
+}
+textarea {
+    padding: 6px 9px;
+    width: 97%;
+    font-size: 14px;
+    color: #4a4a4a;
+    background-color: white;
+    border: 1px solid #686868;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    font-family: 'PlutoCondRegular';
+    margin-bottom: 10px
+}
+.lt-ie9 textarea.disabled {
+    background-color: #eeecea
+}
+textarea.disabled {
+    background-color: rgba(255, 255, 255, .4);
+    border: 1px solid #dddad9
+}
+.error input,
+.error select,
+.error textarea,
+input.error,
+select.error,
+textarea.error {
+    background-color: #ffc8b3
+}
+.submit {
+    margin-top: 20px
+}
+.action-forgotpassword .jagged-border,
+.action-passwordrequest .jagged-border,
+.action-register .jagged-border {
+    width: 338px;
+    width: 348px;
+    background: transparent url(/static/images/jagged_border3.gif) repeat-x 0 100%;
+    padding-bottom: 6px;
+    margin: 0 auto
+}
+.action-forgotpassword .jagged-border-inner,
+.action-passwordrequest .jagged-border-inner,
+.action-register .jagged-border-inner {
+    border: 1px solid #c7c3bf;
+    background-color: white;
+    display: block;
+    border-bottom: 0
+}
+.action-forgotpassword #login_register_container,
+.action-passwordrequest #login_register_container {
+    padding: 25px 36px 15px
+}
+.forgotpw_section .submit {
+    margin-top: 5px
+}
+.forgotpw_header {
+    text-align: center
+}
+.forgotpw_header h2 {
+    font-size: 24px;
+    margin-bottom: 10px
+}
+.forgotpw_header p {
+    font: 14px/17px 'PlutoCondRegular';
+    margin-bottom: 20px
+}
+.submit input {
+    cursor: pointer;
+    width: 100%;
+    line-height: 100%
+}
+.lt-ie8.submit input {
+    line-height: 1
+}
+#login_register_container .input .error-message {
+    left: -241px;
+    width: 226px
+}
+#login_register_container .input .error-message span {
+    width: 200px
+}
+.input .error-message {
+    background: transparent url(/static/images/error_bubble.gif) no-repeat 0 100%;
+    position: absolute;
+    left: -211px;
+    top: 0;
+    width: 196px;
+    padding-bottom: 1px
+}
+.lt-ie8.input .error-message {
+    top: 13px
+}
+.input .error-message span {
+    background: transparent url(/static/images/error_bubble.gif) no-repeat 0 0;
+    font-size: 12px;
+    font-family: 'PlutoCondRegularItalic';
+    padding: 6px 13px;
+    width: 170px;
+    display: block
+}
+.hide {
+    display: none
+}
+#login_register_container .edit-temp {
+    display: none
+}
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto
+}
+.invisible {
+    visibility: hidden
+}
+.clearfix:before,
+.clearfix:after,
+.paging:before,
+.paging:after {
+    content: "";
+    display: table
+}
+.clearfix:after,
+.paging:after {
+    clear: both
+}
+.clearfix,
+.paging {
+    *zoom: 1
+}
+@media only screen and (max-device-width: 1024px) {
+    .paper-bg .section.scroll-focus .scroll-arrow {
+        -webkit-animation: none
+    }
+}
+@media only screen and (max-device-width: 640px) {
+    #success-stories .intro h2 br {
+        display: none
+    }
+    .modal-layer {
+        position: absolute
+    }
+}
+</style>
+
+
+
+
+<script>
+</script>
+
+
+
+
+
+
+
+
+        {% endblock %}
+        {% block body_section %}
+
+
+
+
+
+
+
+
+
+        <div class="push"></div>
+        {% endblock %}
+    </div>
+      {% block footer%}
+      <div class="sticky_foote">
+<div class="row">
+         <div class="row" style="height:100px;background-color:#7F8488;padding-left:135px">
+            <div class="col-md-4 figure">
+              <a target="_blank" href="https://twitter.com/evidyaloka">
+                <img src="/static/images/twitter.png" width="250px" height="80px" style="padding-top:15px">
+              </a>
+            </div>
+            <div class="col-md-4 figure">
+              <a href="https://www.facebook.com/eVidyaloka/" target="_blank">
+                 <img src="/static/images/rsz_fb3.png" width="250px" height="80px" style="padding-top:15px">
+              </a>
+            </div>
+            <div class="col-md-4">
+              <a href="https://www.youtube.com/user/eVidyaloka" target="_blank">
+                 <img src="/static/images/youtube.png" width="250px" height="85px" style="padding-top:15px">
+              </a>
+            </div>
+        </div>
+</div>
+        <div class="row footer_social" style="height:160px;background-color:#4841B2;padding-top:30px;padding-left:235px">
+            <div class="col-md-4">
+                <ul class="">
+                    <li><a class="text-hover" data-hover="FAQs" href="" style="color:white">FAQs</a></li>
+                    <li><a href="" style="color:white">Resources</a></li>
+                    <li><a href="">Media Kit</a></li>
+                    <li><a href="">Careers</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul>
+                    <li><a href="">Volunteer</a></li>
+                    <li><a href="">Evidyaloka Model</a></li>
+                    <li><a href="">Governance</a></li>
+                    <li><a href="">Operating Principles</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul>
+                    <li><a href="">Donate</a></li>
+                    <li><a href="">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+         <footer class="standard">
+            <div class="container row">
+               <div class="span24">
+                  <ul class="primary_links">
+                     <li><a href="">Terms</a></li>
+                     <li><a href="">Privacy Policy</a></li>
+                  </ul>
+                  <ul class="secondary_links">
+                     <li><span>&copy; Copyright eVidyaloka Trust 2016</span></li>
+                  </ul>
+               </div>
+            </div>
+         </footer>
+        {% endblock %}
+      </div>
+</div>
+   </body>
+   {% endblock %}
+<style>
+.evd_logo{
+    height:100px;
+}
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -4em;
+}
+.sticky_foote, .push {
+    height: 4em;
+}
+.footer_social ul li a{
+    font-size:12px;
+    color:white;
+}
+.ss-system:before,
+.ss-system.right:after {
+    content: '💻'
+}
+.ss-alarm:before,
+.ss-alarm.right:after {
+    content: '🕒'
+}
+.ss-teacher:before,
+.ss-teacher.right:after {
+    content: '💁'
+}
+.span01{
+    width:225px;
+}
+.tabs-bottom {
+    position: relative;
+    padding-bottom: 3em;
+}
+.tabs-bottom .ui-tabs-nav {
+    background:transparent;
+    position: absolute;
+    left: 0.25em;
+    right: 0.25em;
+    bottom: 0.25em;
+    padding: 0em 0.2em 0.2em;
+}
+.tabs-bottom .ui-tabs-nav li {
+    display: inline-block;
+    float: none;
+    top: -4px;
+    margin: 0em;
+    padding-bottom: 0px;
+    margin-top: 0.6em;
+    font-size: 80%;
+}
+.tabs-min {
+    background: #B5C6CF;
+    border: none;
+}
+.tabs-min .ui-widget-header {
+    background: #1A2930;
+    border: none;
+    border-top: 1px solid #c0c0c0;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+}
+.tabs-min .ui-tabs-nav .ui-state-default {
+    background: transparent;
+    border: none;
+}
+.tabs-min .ui-tabs-nav .ui-state-active {
+    background: transparent url("/static/images/arrow2.png") no-repeat top center;
+    border: none;
+    background-size: 30px 15px;
+}
+.tabs-min .ui-tabs-nav .ui-state-default a {
+    color: #c0c0c0;
+}
+.tabs-min .ui-tabs-nav .ui-state-active a {
+    color: #194961;
+}
+.tabs-min .ui-tabs-nav{
+    height: 5em;
+    width:100%;
+    text-align: center;
+}
+.tabs-min .ui-tabs-nav li.ui-tabs-selected,
+.tabs-min .ui-tabs-nav li.ui-state-active {
+    margin-top: 0em;
+    font-size: 100%;
+}
+/* hover effects */
+.text-hover {
+}
+.text-hover:before {
+}
+/* Opacity #2 */
+.figure {
+    background: transparent;
+}
+.figure img {
+    //opacity: 1;
+    //-webkit-transition: .3s ease-in-out;
+    //transition: .3s ease-in-out;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: .3s ease-in-out;
+    transition: .3s ease-in-out;
+}
+.figure:hover img {
+    opacity: .5;
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+}
+</style>
+
+
+
+
+
+
+</html>
+{% endblock %}
+

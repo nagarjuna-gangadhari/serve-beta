@@ -1,0 +1,5 @@
+Hello {{username}},<br><br><br>
+
+The {{topic_name}}, submitted for  {{grade}} {{subject}} from {{board}} board in {{language}}! has been reviewed by our Subject Matter Experts.<br><br> 
+The review comments are uploaded at the end of the ‘{{topic_name}}.’<br><br> 
+Kindly request you to make the changes by —--( 5 days from date of review email sent).<br><br><br>

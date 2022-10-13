@@ -1,0 +1,50 @@
+{% extends 'new_ui.html' %}
+
+{% block content %}
+
+<section>
+<div style=" margin-top: 8%;margin-left: 4%;">Home >> My eVidyaloka</div>
+<div class="container" style="width:93%;margin-top: 2%;background-color:white;">
+    <br>
+     <div class="row">
+        <div class="col-sm-2">
+            <div> <button type="button" class="btn btn-success">Profile<i class="fa fa-pencil" aria-hidden="true"></i></button></div><br>
+            <div style="margin-top: -10%;">  <button type="button" class="btn btn-success">Settings</button></div>
+            <div style="margin-top: 2%;"><button type="button"  class="btn btn-success">Logout</button></div>
+        </div>
+         <div align="center" class="col-sm-8">
+
+            <span><p style="font-size:23px;font-weight: bold;">Your request has been sent for approval of the coordinator.
+                <br>Details of the slot you selected are given below:-
+            </p></span>
+
+              <div class="div1">
+                  <p style="color: red;font-weight: bold;font-size: 22px;">ABC School, Coorg<br>
+                  Monday and Friday<br>
+                  9 am to 10 am<br>
+                  Language - Kannada</p>
+                   <i class="fa fa-pencil" style="font-size: 149px;margin-left: 195px;margin-top: -100%;" aria-hidden="true"></i>
+
+             </div>
+
+         </div>
+
+
+     </div>
+    <br>
+    <div class="row" align="center">
+            <div>
+             <span><p style="font-size: 20px;font-weight: 500;">Meanwhile, you can browse more opportunities</p></span>
+                </div>
+        <div class="col-md-2"
+             style="width:20%;margin-left:39%;text-align: center;background: #31b2de;padding:12px;margin-bottom:25px;color:white;">
+            <a style="font-family:serif;font-size: 20px;color:white;" href="/v2/final_page">Browse Opportunities</a>
+        </div>
+
+
+         </div>
+
+
+    </div>
+    </section>
+{% endblock content %}

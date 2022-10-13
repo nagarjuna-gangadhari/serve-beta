@@ -1,0 +1,45 @@
+
+
+{% extends "base.html" %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+
+   
+
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+
+
+
+
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+   
+   <iframe style="width: 1300px;margin-left: -184px;" src="https://analytics.evidyaloka.org/kibana/app/kibana#/dashboard/883855d0-83a4-11ea-8386-fdeb838d2158?embed=true&_g=(filters:!())&_a=(description:'',filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:c2cf10c0-8148-11ea-8386-fdeb838d2158,key:'academic+year.keyword',negate:!f,params:(query:Ay-19-20),type:phrase),query:(match:('academic+year.keyword':(query:Ay-19-20,type:phrase))))),fullScreenMode:!f,options:(hidePanelTitles:!f,useMargins:!t),panels:!((embeddableConfig:(),gridData:(h:6,i:'0e9fe9b3-3ca1-4f1f-9166-27d3bc5b97c9',w:48,x:0,y:0),id:'74a8dbc0-83a4-11ea-8386-fdeb838d2158',panelIndex:'0e9fe9b3-3ca1-4f1f-9166-27d3bc5b97c9',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:7,i:'28a69f7d-10a8-4685-bf65-691c4c8441d5',w:13,x:0,y:6),id:f9dde400-9030-11ea-8386-fdeb838d2158,panelIndex:'28a69f7d-10a8-4685-bf65-691c4c8441d5',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:7,i:'8bdbdf35-7b81-42e2-abfd-4bf7b783e239',w:13,x:13,y:6),id:'3c64d5e0-9031-11ea-8386-fdeb838d2158',panelIndex:'8bdbdf35-7b81-42e2-abfd-4bf7b783e239',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:7,i:fa671f6c-4cbe-4a45-ae9f-ec6f6c6e00d4,w:14,x:26,y:6),id:'2c3c6370-9114-11ea-8386-fdeb838d2158',panelIndex:fa671f6c-4cbe-4a45-ae9f-ec6f6c6e00d4,type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:7,i:'896d7cf4-8a8c-4dd4-ad63-00aa7a77855e',w:15,x:0,y:13),id:c8428ec0-9114-11ea-8386-fdeb838d2158,panelIndex:'896d7cf4-8a8c-4dd4-ad63-00aa7a77855e',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:7,i:ce31a573-3dbc-4856-ac3a-f4a869b66570,w:11,x:15,y:13),id:e6cbf0c0-9114-11ea-8386-fdeb838d2158,panelIndex:ce31a573-3dbc-4856-ac3a-f4a869b66570,type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:15,i:'43242c8a-528b-428f-af19-dc071b00d850',w:24,x:0,y:20),id:f3c8ff60-83a5-11ea-8386-fdeb838d2158,panelIndex:'43242c8a-528b-428f-af19-dc071b00d850',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:15,i:a41a1434-c05c-488e-b2cc-18a349d619f3,w:24,x:24,y:20),id:'052b3830-83b1-11ea-8386-fdeb838d2158',panelIndex:a41a1434-c05c-488e-b2cc-18a349d619f3,type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:15,i:'2b08ed7f-d2c0-4a0e-819a-cb22f229eaa3',w:24,x:0,y:35),id:'547ce4f0-83b2-11ea-8386-fdeb838d2158',panelIndex:'2b08ed7f-d2c0-4a0e-819a-cb22f229eaa3',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:15,i:'81dabb31-2e24-44b5-b75a-33d5a86b6a87',w:24,x:24,y:35),id:a846e550-83b1-11ea-8386-fdeb838d2158,panelIndex:'81dabb31-2e24-44b5-b75a-33d5a86b6a87',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:15,i:'63938281-e84f-4688-89a6-5a1f22e97ca7',w:24,x:0,y:50),id:'9cd376b0-8619-11ea-8386-fdeb838d2158',panelIndex:'63938281-e84f-4688-89a6-5a1f22e97ca7',type:visualization,version:'7.5.0'),(embeddableConfig:(),gridData:(h:15,i:'23ad65d1-d1d6-4089-9abc-765f529afd4e',w:24,x:24,y:50),id:a96b28c0-861c-11ea-8386-fdeb838d2158,panelIndex:'23ad65d1-d1d6-4089-9abc-765f529afd4e',type:visualization,version:'7.5.0')),query:(language:kuery,query:''),timeRestore:!f,title:KPI02-Dashboard,viewMode:view)" height="600" width="800"></iframe>
+{% endblock %}
+
+
+{% block bottom_scripts %}
+    {{ block.super }}
+
+    <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+
+
+<!--    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"/>-->
+<!--    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"/>
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<!--    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
+
+
+
+
+
+
+{% endblock %}

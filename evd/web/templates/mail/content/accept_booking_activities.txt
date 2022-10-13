@@ -1,0 +1,19 @@
+Dear {{username}},<br><br><br><br>
+
+
+Many students in the rural communities will benefit from the Activities that you create and share.<br><br>
+
+We are pleased to confirm that you have been assigned to create a PowerPoint presentation on activities for the subtopics in {{topic_name}}, for  {{grade}} {{subject}} from {{board}} in {{language}}. <br><br>
+Kindly create the PPT in the template provided for the sub-topics in the chapter. The activity created has to help children understand the concepts in the given chapter by a hands-on activity. <br><br><br><br>
+
+Please find below the textbook link, guidelines to follow, sample for your reference and template to create the content.<br><br><br><br>
+
+Textbook link: Not Available<br>
+Guideline: https://docs.google.com/document/d/1FNkAH1_ls-hyXSjK8LDp2IezauI5vA8B/edit<br>
+Template: Not Available<br>
+Sample: https://onedrive.live.com/edit.aspx?resid=B2056AF1AAD6E0AC!135604&ithint=file%2cdocx&authkey=!ADJY95XFO8rt2O8<br>
+
+Please login at www.evidyaloka.org/myevidyaloka to view the details of the booked chapter.<br><br><br>
+
+Please feel free to reach out to us for further queries.<br>
+Email id: <content.development@evidyaloka.org><br><br><br>

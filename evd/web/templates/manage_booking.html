@@ -1,0 +1,599 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% load filters %}
+
+<!DOCTYPE html>
+{% block body_container2 %}
+{{ block.super }}
+
+<style>
+
+    [id^=tsd_modal_], [id^=user_modal_]{
+        margin: 0px;
+        background: transparent;
+        width: inherit;
+
+    }
+
+    #publish_slots_modal{
+        left: 50%;
+    }
+    .slot_days .checkbox label{
+        font-size:12px;
+    }
+    /*end override fix*/
+
+    select.custom-select{
+        display: inline-block;
+        max-width: 100%;
+        padding: .375rem 1.75rem .375rem .75rem;
+        padding-right: .75rem\9;
+        color: #55595c;
+        vertical-align: middle;
+        background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='#333' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right .75rem center; 
+        background-image: none\9;
+        -webkit-background-size: 8px 10px;
+        background-size: 8px 10px;
+        border: 1px solid rgba(0,0,0,.15);
+        border-radius: .25rem;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+    }
+    .modal label{
+        margin-right:10%;
+        font-weight: 300;
+        font-size: 16px;
+    }
+    .modal select{
+        width:40%;
+    }
+
+    .other_reason{
+        margin-bottom: 28px;
+    }
+    input#other_reason{
+        width: 40%;
+        background: white;
+        margin-left: 49%;
+        height: 30px;
+        border-radius: 0;
+        border-color: #d9d9d9;
+    }
+
+    #manage_booking_table_filter{
+        display: none;
+    }
+
+    .button-10 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 6px 14px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+      border-radius: 6px;
+      border: none;
+    
+      color: #fff;
+      background: linear-gradient(180deg, #4B91F7 0%, #367AF6 100%);
+       background-origin: border-box;
+      box-shadow: 0px 0.5px 1.5px rgba(54, 122, 246, 0.25), inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2);
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    
+
+    
+</style>
+
+
+<link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet" />
+
+
+<div style="margin: 30px;">
+    <h3 style="text-align: center;background: darkslateblue;color: white;padding:10px">Manage Booking</h3>
+    
+    <table id="manage_booking_table" class="display nowrap" style="width:100%;">
+        
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>Volunteer Name</th>
+                <th>Booked Date</th>
+                <th>TSD Date</th>
+                <th>TSD Time</th>
+                <th>TSD Panel Member</th>
+                <th>TSD Outcome</th>
+                <th>Role</th>
+            </tr>
+            <tr>
+                <th>Booking ID</th>
+                <th>Volunteer Name</th>
+                <th>Booked Date</th>
+                <th>TSD Date</th>
+                <th>TSD Time</th>
+                <th>TSD Panel Member</th>
+                <th>TSD Outcome</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+
+        
+    </table>
+
+
+    <!-- Modal -->
+
+    <!-- tsd_details_modal -->
+    <div class="modal fade" id="tsd_modal" style="">
+        <div class="modal-dialog" id="tsd_modal_dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">TSD Details</h4>
+                </div>
+                <div class="modal-body" style="text-align:center;background: aliceblue;">
+                    <div id="message" class="alert alert-success" style="display: none;">
+                        <p>Details updated successfully</p>
+                    </div>
+
+                    <br><br>
+                    <p>
+                        <label for="panel_member">Select Panel Member : </label>
+                        <select class="custom-select" name="panel_member" id="panel_member">
+                                
+                               
+                            </select>
+                    </p><br>
+                    <p>
+                        <label for="outcome">Select TSD Outcome : </label>
+                        <select class="custom-select" name="outcome" id="outcome">
+                               
+                            </select>
+                    </p><br>
+                    <p class="{% if slot.outcome != 'Cancelled' %}hide{% endif %} reason">
+                        <label for="reason">Cancellation Reason: </label>
+                        <select class="custom-select" name="reason" id="reason">
+                               
+                            </select>
+                    </p><br>
+                    <p class="other_reason{% if not 'Others' in slot.cancel_reason %} hide{% endif %}">
+                        <input type="text" class="" id="other_reason" value="{{slot.cancel_reason|slice:'9:'}}"></input>
+                    </p>
+                    <p style="text-align: right;margin-right: 12%;">
+                        <button id="" class="btn btn-success" onclick="tsd_save()" style="width: 20%;">Save</button>
+                        <input type="hidden" id='tsd_id' value="">
+                    </p>`
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- user_details_modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="user_modal" role="dialog" style="display:none;">
+        <div class="">
+
+            <!-- Modal content-->
+            <div class="modal-content" style="background:aliceblue">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title">Profile Details</h5>
+                </div>
+                <div class="modal-body" id="">
+                    <div class="row">
+                        <div class="col-md-4" style="border-right:1px solid gray">
+                            <img src="/static/images/user_small.png" style="display:inline-block;margin:10px;" height="130px" width="130px">
+                        </div>
+                        <!--col-->
+                        <div class="col-md-8">
+                            <table class='userDetailsTable'> </table>
+                        </div>
+                        <!--col-->
+                    </div>
+                    <!--row-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div><!-- container -->
+{% endblock %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.bootstrap.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $(document).ready(function() {
+        var csrftoken = getCookie('csrftoken');
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+    });
+
+    //default filer on date:
+    let today = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toISOString() ;
+    let ftoday = today.split('T')[0]
+    
+
+    $(document).ready(function(){
+
+        // Setup - add a text input to each footer cell
+        $('#manage_booking_table thead tr:nth-child(2) th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+        } );
+
+        var ajax_data = 1000;
+        
+        // DataTable
+        $.table = $('#manage_booking_table').on( 'init.dt', function () {
+            setTimeout(function(){$('#manage_booking_table th:nth-child(4) input').val(ftoday).focus().change();},100); // set data on load table
+            } ).DataTable({
+            processing: true,
+            //searching: false,
+            ordering: false,
+            ajax: {
+                url: '/manage_booking/',
+                method: "POST",
+                data: function(d){d.limit = ajax_data},
+                xhrFields: {
+                    withCredentials: true
+                },
+                dataSrc: function (data) {
+                    return JSON.parse(data['data']['data']);
+                },
+            },
+            deferRender: true,
+            columns: [
+                { data: 'id' },
+                { data: 'userp__user__first_name' },
+                { data: 'booked_date' },
+                { data: 'start_time' },
+                { data: 'end_time' },
+                { data: 'tsd_panel_member__user__first_name' },
+                { data: 'outcome' },
+                { data: 'role__name' },
+            ],
+            columnDefs: [
+                {
+                    render: function (data, type, row) {
+                        return `<button onclick="tsdDetails(${row['id']})">${data}</button>`;
+                    },
+                    targets: 0,
+                },
+                {
+                    render: function (data, type, row) {
+                        return `<div onclick="userDetails(${row['userp__user__id']})"><a href="#">${row['userp__user__id']} - ${row['userp__user__first_name']} ${row['userp__user__last_name']}<a></div>`;
+                    },
+                    targets: 1,
+                },
+                {
+                    render: function (data, type, row) {
+                        let book_date = row['booked_date'] ? row['booked_date'].split(' ')[0] : ''
+                        return `${book_date}`;
+                    },
+                    targets: 2,
+                },
+                {
+                    render: function (data, type, row) {
+                        let tsd_date = row['start_time'] ? row['start_time'].split(' ')[0] : ''
+                        let book_date = row['booked_date'] ? row['booked_date'].split(' ')[0] : ''
+                        if ( tsd_date == book_date) {
+                            return `<b>${tsd_date}</b>`
+                        }
+                        return `${tsd_date}`;
+                    },
+                    targets: 3,
+                },
+                {
+                    render: function (data, type, row) {
+                        let tsd_time = row['start_time'] ? `${row['start_time'].split(' ')[1].slice(0,5)}-${row['end_time'].slice(0,5)}` : ''
+                        return `${tsd_time}`;
+                    },
+                    targets: 4,
+                },
+                {
+                    render: function (data, type, row) {
+                        return `${data} ${row['tsd_panel_member__user__last_name']}`;
+                    },
+                    targets: 5,
+                },
+                {
+                    render: function (data, type, row) {
+                        let color = 'green';
+                        if (data == 'Cancelled') {
+                            color = 'red';
+                        } else if (data == 'Assigned') {
+                            color = 'blue';
+                        } else if (data == 'Scheduled') {
+                            color = 'yello';
+                        };
+                        return `<span style="color:${color}">${data}</span>`;
+                    },
+                    targets: 6,
+                },
+            ],
+            dom: 'Bfrtip',
+            buttons: ['csv', 'excel',
+                    {
+                        text: `Refresh Table`,
+                        className: 'button-10',
+                        action: function () {
+                            ajax_data = $("#limit").val()
+                            $.table.ajax.reload();
+                        }
+                    },
+                    {
+                        text: `<select id='reload_time' style="border-left: 2px;">
+                                    <option value='30' selected>5 min</option>
+                                    <option value='60'>10 min</option>
+                                    <option value='180'>30 min</option>
+                                    <option value='360'>1 hr</option>
+                                </select>`
+                    },
+                    {
+                        text: `<label style="padding-left:10px" for="limit">Select data limit</label>
+                                <select name="limit" id="limit">
+                                    <option value="1000" selected>1000</option>
+                                    <option value="5000">5000</option>
+                                    <option value="10000">10000</option>
+                                    <option value='0'>All</option>
+                                </select>`
+                    }
+                ],
+
+            initComplete: function () {
+                // Apply the search
+                this.api()
+                    .columns()
+                    .every(function () {
+                        var that = this;
+                        $('input', this.header()).on('keyup change clear', function () {
+                            if (that.search() !== this.value) {
+                                that.search(this.value).draw();
+                            }
+                        });
+                    });
+            },            
+        });
+
+         // Create the chart with initial data
+        var container = $('<div/>').insertAfter($.table.table().container());
+    
+        var chart = Highcharts.chart(container[0], {
+            chart: {
+                type: 'pie',
+            },
+            title: {
+                text: `<button class='button-10'>TSD Outcome</button>`,
+            },
+            series: [
+                {
+                    data: chartData($.table),
+                },
+            ],
+        });
+    
+        // On each draw, update the data in the chart
+        $.table.on('draw', function () {
+            chart.series[0].setData(chartData($.table));
+        });
+
+
+        function chartData(table) {
+            var counts = {};
+         
+            // Count the number of entries for each position
+            $.table
+                .column(6, { search: 'applied' })
+                .data()
+                .each(function (val) {
+                    if (counts[val]) {
+                        counts[val] += 1;
+                    } else {
+                        counts[val] = 1;
+                    }
+                });
+         
+            // And map it to the format highcharts uses
+            return $.map(counts, function (val, key) {
+                return {
+                    name: key,
+                    y: val,
+                };
+            });
+        }
+
+        $('#manage_booking_table th:nth-child(3) input').datepicker({
+            changeMonth: true,
+            dateFormat: 'yy-mm-dd',
+        });
+        $('#manage_booking_table th:nth-child(4) input').datepicker({
+            changeMonth: true,
+            dateFormat: 'yy-mm-dd',
+        });
+
+
+        var interval = (3600000)
+        var intervalId
+
+        function startInterval(_interval) {
+            // Store the id of the interval so we can clear it later
+            intervalId = setInterval(function() {
+            console.log(_interval);
+            $.table.ajax.reload();
+            }, _interval);
+        }
+
+
+        $('#reload_time').on('change', function() {
+            interval = (10000 * parseInt($(this).val()))
+            clearInterval(intervalId);
+            // just start a new one
+            startInterval(interval);
+            console.log(interval)
+        });
+    });
+
+    //css override issue
+    $(".clearfix").removeClass("inner").removeClass("clearfix");
+    //reason for cancellation
+    $("#outcome").on("change",  function(){
+        var tsd_outcome = $(this).val();
+        if(tsd_outcome === 'Cancelled'){
+            $(this).parent('p').siblings("p.reason").removeClass("hide");
+        }
+        else{
+            $(this).parent('p').siblings("p.reason").addClass("hide");
+            $(this).parent('p').siblings("p.other_reason").addClass("hide");
+        }
+    });
+
+    //other reason show / hide
+    $("#reason").on("change", function(){
+        if($(this).val() === "Others"){
+            $(this).parent('p').siblings('p.other_reason').removeClass("hide");
+        } else{
+            $(this).parent('p').siblings('p.other_reason').addClass("hide");
+        }
+    });
+
+
+
+    function tsdDetails(bookingId) {
+        $.get("/v2/tsd_details/", {
+            'slot_id': bookingId
+        }, function(resp) {
+            panel_member_list = resp.panel_member_list;
+            tsd_outcome_list = resp.tsd_outcome_list;
+            cancel_reasons = resp.cancel_reasons;
+            panel_list_option = '<option value="">--- Select ---</option>';
+            tsd_outcome_list_option = '';
+            cancel_reasons_option = '';
+            for (i = 0; i < panel_member_list.length; i++) {
+                if (resp.booked_slots.tsd_member == panel_member_list[i].name) {
+                    panel_list_option += '<option value="' + panel_member_list[i].id + '" selected >' + panel_member_list[i].name + '</option>'
+                } else {
+                    panel_list_option += '<option value="' + panel_member_list[i].id + '" >' + panel_member_list[i].name + '</option>'
+                }
+
+            }
+            for (i = 0; i < tsd_outcome_list.length; i++) {
+                if (resp.booked_slots.outcome == tsd_outcome_list[i]) {
+                    tsd_outcome_list_option += '<option value="' + tsd_outcome_list[i] + '" selected >' + tsd_outcome_list[i] + '</option>'
+                } else {
+                    tsd_outcome_list_option += '<option value="' + tsd_outcome_list[i] + '" >' + tsd_outcome_list[i] + '</option>'
+                }
+
+            }
+            for (i = 0; i < cancel_reasons.length; i++) {
+
+                cancel_reasons_option += '<option value="' + cancel_reasons[i] + '" >' + cancel_reasons[i] + '</option>'
+
+            }
+            $('#tsd_id').val(bookingId);
+            $('#reason').html(cancel_reasons_option);
+            $('#panel_member').html(panel_list_option);
+            $('#outcome').html(tsd_outcome_list_option);
+            $('#message').hide()
+            $("#tsd_modal").modal();
+
+
+        });
+
+    }
+
+    function userDetails(userId) {
+        $.get("/v2/tsd_user_details/", {
+            'userId': userId
+        }, function(resp) {
+            table = "<tr><td><strong>User ID</strong></td><td> &nbsp;&nbsp;: &nbsp;&nbsp;</td><td>" + resp.user_id + "</td></tr>";
+            table += "<tr><td><strong>User Name</strong></td><td> &nbsp;&nbsp;: &nbsp;&nbsp;</td><td>" + resp.username + "</td></tr>";
+            table += "<tr><td><strong>Email</strong></td><td> &nbsp;&nbsp;: &nbsp;&nbsp;</td><td>" + resp.email + "</td></tr>";
+            table += "<tr><td><strong>Skype</strong></td><td> &nbsp;&nbsp;: &nbsp;&nbsp;</td><td>" + resp.skype + "</td></tr>";
+            table += "<tr><td><strong>Phone</strong></td><td> &nbsp;&nbsp;: &nbsp;&nbsp;</td><td>" + resp.phone + "</td></tr>";
+            table += "<tr><td><strong>Medium</strong></td><td> &nbsp;&nbsp;: &nbsp;&nbsp;</td><td>" + resp.medium + "</td></tr>";
+            table += "<tr><td><strong>Course</strong></td><td> &nbsp;&nbsp;: &nbsp;&nbsp;</td><td>" + resp.subject + "</td></tr>";
+            table += "<tr><td><strong>Location</strong></td><td> &nbsp;&nbsp;: &nbsp;&nbsp;</td> <td>" + resp.location + "</td></tr>";
+            $('.userDetailsTable').html(table);
+            $('#user_modal').modal();
+
+        });
+
+    }
+
+        //tsd save details:
+    function tsd_save(){
+        let data = {'tsd_member': $("#panel_member").val(), 
+                    'tsd_outcome': $("#outcome").val(), 
+                    'slot_id': $('#tsd_id').val(), 
+                    'cancel_reason': $("#reason").val()
+                }
+        $("#message").hide();
+        $.ajax({
+            url: "/manage_booking/", // the endpoint
+            type: "PUT", // http method
+            data: JSON.stringify(data), // data sent with the post request
+            dataType: 'json',
+            success: function(response) {
+                let data = JSON.parse(response['data']['data'])
+                console.log(data)
+                $("#message").show();
+                //$.table.ajax.reload();
+                $.table.row( $(this).parent.parent ).data(data[0]).draw()
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(xhr, errmsg, err)
+            }
+        });
+
+    };
+
+</script>
+
+
+{% endblock head_scripts %}

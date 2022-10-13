@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <script defer src="https://rawgit.com/kimmobrunfeldt/progressbar.js/master/dist/progressbar.js"></script>
+    <script defer src="/static/js/selectize.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/selectize.css" />
+    <script src='/static/js_new/profile.js' type='text/javascript' ></script>
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+    <div class="container-fluid new_dash_container" >
+        <div class='row onboarding material_div standard_row row-centered' >
+            <div class='onboarding_status'>
+                <h4>Teacher Onboarding</h4>
+                <hr>
+                <div class='col-sm-6'>
+                    <div class='self_eval onboarding-step'>
+                       <h3>Step 1 </h3>
+                       <div class='row'>
+                            <img src='/static/images/self-evaluate.png' height=150px>
+                       </div>
+                       <div class='row'>
+                            <h4>Self Evaluation</h4>
+                       </div>
+                       <div class='row'>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                       </div>
+                       <div class='row'>
+                            <div class='btn btn-info' > <a  data-toggle='modal' href='#'  data-target="#self_evaluation">Take this Step</a></div>
+                       </div>
+                    </div>
+                </div>
+                <div class='col-sm-6'>
+                    <div class='self_eval onboarding-step'>
+                       <h3>Step 2 </h3>
+                       <div class='row'>
+                            <img src='/static/images/talk-evidyaloka.png' height=150px>
+                       </div>
+                       <div class='row'>
+                            <h4>Teacher Selection Discussion</h4>
+                       </div>
+                       <div class='row'>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                       </div>
+                       <div class='row'>
+                            <div class='btn btn-info' > <a  data-toggle='modal' href='#'  data-target="#tsd">Take this Step</a></div>
+                       </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class='row standard_row' style='height : 200px; margin-top : 30px;'>
+            <div class='col-sm-7' style=' padding-left:0px;'>
+                <div class='material_div sec_title' style='min-height:200px;'>
+                    <h5>View oppourtunities</h5>
+                    <hr>
+                </div>
+            </div>
+            <div class='col-sm-5' style=' padding-right : 0px;'>
+                <div class='material_div sec_title' style='min-height:200px;'>
+                    <h5>Know what's going on..</h5>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+<div id="tsd" class="modal fade" role="dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" >
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" style="font-size:30px">&times;</button>
+            <h4 class="modal-title">Teacher Selection Discussion</h4>
+        </div>
+        <div class="modal-body">
+            
+        </div>
+    </div>
+</div>
+
+<div id="self_evaluation" class="modal fade" role="dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" >
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" style="font-size:30px">&times;</button>
+            <h4 class="modal-title">Self Evaluation</h4>
+        </div>
+        <div class="modal-body">
+            
+        </div>
+    </div>
+</div>
+
+
+
+<div style='display:none; visibility : hidden; height:0px;width:0px; ' id='circle1'></div>
+<div style='display:none; visibility : hidden; height:0px;width:0px; ' id='circle2'></div>
+<div style='display:none; visibility : hidden; height:0px;width:0px; ' id='circle3'></div>
+<div style='display:none; visibility : hidden; height:0px;width:0px; ' id='circle'></div>
+{% endblock %}
+
+
+

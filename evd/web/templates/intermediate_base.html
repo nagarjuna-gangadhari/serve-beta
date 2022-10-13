@@ -1,0 +1,174 @@
+{% extends 'new_base_temp.html' %}
+{% load tags %}
+{% load filters %}
+
+{% block head %}
+	{{ block.super }}
+	<link rel="stylesheet" type="text/css" href="/static/css/main.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/evl.css" />
+    <link href='/static/css_new/dropzone.min.css' rel='stylesheet'>
+    <link rel='stylesheet' href='/static/css/breadcrumb.css'>
+    <link href='/static/css/myevd.css' rel='stylesheet'>
+
+    <style type="text/css">
+    	.caret {
+    		vertical-align: middle !important;
+    	}
+    	.btn {
+    		background: #2e8dc7;
+    		font-size: 14px;
+    		line-height: 1.42857143;
+    		display: inline-block !important;
+    	}
+    	.profile-edit-2 {
+    		background-color: rgba(255,255,255,0.1) !important;
+    	}
+    	.modal {
+		    top: 0% !important;
+		}
+		.modal form {
+			padding: 0px 38px 0px;
+			border: none;
+		}
+		.divide{
+			margin: 5px 0px;
+		}
+		#profName {
+			margin-top: 0px !important;
+		}
+		.dropdown-menu {
+			background: #fff;
+		}
+		.dropdown-menu li > a:hover,
+		.dropdown-menu li > a:focus,
+		.dropdown-submenu:hover > a {
+			background-color: #ccc !important;
+		}
+		.btn-default {
+			background: #cbcbcb ;
+		}
+		.btn-default:hover {
+			border-color: #adadad;
+			background-color: #cbcbcb;
+    		background-position: 0 -15px;
+		}
+		.icon {
+			display: inline-block !important;
+		}
+		.submit a {
+			width: 100% !important;
+		}
+    </style>
+{% endblock head %}
+
+{% block content %}
+
+	{% block user_info %}
+        {% if request.user.is_authenticated %}
+            <div id="content" class="clearfix">
+                <section id="featured1" class="dark with-bg_my_evd">
+                   <div class='row'>
+                      <div class="container" style='height:160px;'>
+                        <div class="row" >
+                          	<div class="profile-sec-1 col-xs-offset-3 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-xs-6 col-sm-1 col-md-1 col-lg-1">
+                                <a data-toggle='modal' href='#'  data-target="#change_pic" class="thumbnail profile_pic_thumb">
+                                  <div class='flyout' >Change Pic</div>
+                                  <img class='profile_img img-responsive' src="{{ request.user.userprofile.picture }}" alt="...">
+                                </a>
+                            </div>
+                          	<div class="profile-sec-2 col-xs-offset-3 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                            <div class='profile-edit-1'>
+                                <div  class='user_dets'>
+                                    <p class='u_name' >{% if request.user.first_name %}{{ request.user.first_name|title }} {{ request.user.last_name }}{% else %}Add your name {%endif%}</p>
+                                    <div class='hidden-xs profile-lnk-sm'>
+                                        <p> {% if request.user.userprofile.city %}From : {{ request.user.userprofile.city }}, {{ request.user.userprofile.country }} {% else %}
+                                            Add your location {% endif %}</p>
+                                        </div>
+                                        <div class='row'>
+                                            <div class='hidden-xs profile-lnk-sm col-sm-12'>
+                                                <p class="edit_profile_btn"> <a href="/profile/">Edit profile</a></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='hidden-xs  col-sm-offset-6 col-sm-1'>
+                                <div class='btn btn-default profile-edit-2'> <a href='/onboarding/'>Onboarding Status</a></div>
+                            </div>
+                            <div class='hidden-xs  col-sm-offset-6 col-sm-1'>
+                            	{%  activity_center request.user  %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        	    <div class="black"></div>
+        	</section>
+        {% endif %}
+    {% endblock %}
+
+	{% if request.user.is_authenticated %}
+    	<div class="about-container" style='padding-bottom : 0px; padding-top: 0px;'>
+    {% else %}
+    	<div class="about-container" style='padding-bottom : 0px; padding-top: 100px;'>
+    {% endif %}
+        {% if request.user.is_authenticated %}
+        	{% block breadcrumb %}
+				<nav class="breadcrumb_css navbar navbar-default">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                          <span class="sr-only">Toggle navigation</span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          </button>
+                    </div>
+                        <div id="navbar" class="navbar-collapse collapse">
+                            <ul class="dashboard-breadcrumb">
+                                <li class="header">
+                                    <a href="/myevidyaloka/"><i class="fa fa-home fa-lg" aria-hidden="true"></i>&nbsp&nbspMy eVidyaloka</a>
+                                    <span class="divider">&gt;</span>
+                                </li>
+                                {% block userprofile %}
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="/profile/">My Profile<b class="caret"></b></a>
+                                    <ul class="dropdown-menu" style="display: none;">
+                                        <li><a href="/profile/">Profile</a></li>
+                                    </ul>
+                                    <span class="divider">|</span>
+                                </li>
+                                {% endblock %}
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="/myevidyaloka/contributions/">My Contributions  <b class="caret"></b></a>
+                                    <ul class="dropdown-menu" style="display: none; ">
+                                        <li><a href="/myevidyaloka/contributions/">Donations</a></li>
+                                        <li><a href="/donorupdate/">Donor Update</a></li>
+                                    </ul>
+                                    <span class="divider">|</span>
+                                </li>
+                                {% block breadcrumb_extras %}
+
+                                {% endblock %}
+                                {% breadcrumb request.user center.id %}
+
+            {% endblock breadcrumb %}
+        {% endif %}
+        <div class="clearfix inner">
+            {% block body_container %}
+            {% endblock %}
+        
+    </div>
+</div></div>
+{% endblock content %}
+
+{% block scripts %}
+	{{ block.super }}
+	<script type="text/javascript" src="/static/js/bootstrap-dropdown.min.js"></script>
+	<script type="text/javascript">
+		$("li.dropdown, ul.dropdown-menu").mouseenter(function(){
+            $(this).children("ul.dropdown-menu").show();
+        });
+        $("li.dropdown, ul.dropdown-menu").mouseleave(function(){
+            $(this).children("ul.dropdown-menu").hide();
+        });
+	</script>
+{% endblock scripts %}

@@ -1,0 +1,93 @@
+{% extends "generic/base.html" %}
+{% block head_title %}eVidyaLoka{% endblock %}
+
+{% block head_styles %}
+    <link rel="stylesheet" href="/static/css/docs.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-v2.0.0.min.css">
+    <link href="/static/css/facebook.css" type="text/css" rel="stylesheet" media="all" />
+{% endblock %}
+
+{% block head_scripts %}
+    <script src="/static/js/jquery-1.7.1.min.js"></script>
+    <script src="/static/js/bootstrap-custom-dropdown.js"></script>
+    <script src="/static/js/bootstrap-tooltip.min.js"></script>
+    <script src="/static/js/bootstrap-popover.js"></script>
+    <script src="/static/js/application.js"></script>
+    <script src="/static/js/bootstrap-modal.min.js"></script>
+    <script type="text/javascript" src="/static/js/sequence/sequence.jquery-min.js"></script>
+    <!--<script type="text/javascript" src="/static/js/jquery.ui.core.js"></script>-->
+    <script>
+        var urlParams = {};
+        (function () {
+              var e,
+              a = /\+/g,  // Regex for replacing addition symbol with a space
+              r = /([^&=]+)=?([^&]*)/g,
+              d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
+              q = window.location.search.substring(1);
+              while (e = r.exec(q))
+              urlParams[d(e[1])] = d(e[2]);
+         })();
+         $(document).ready(function(){
+             window.evd = window.evd.init();
+             {% block doc_ready %}
+             {% endblock %}
+         });
+    </script>
+
+{% endblock %}
+
+
+{% block body %}
+    <div class="navbar navbar-fixed-top">
+        <div class="evd-inner">
+
+            <div class="container">
+                <a class="brand" style="font-size:30px;padding-top:0px;padding-bottom:0px" href="/"><img class="pull-left" style="width:55px" src="/static/images/evd_logo.png"/><span class="pull-left" style="margin-left:10px;margin-top:16px;">eVidyaLoka</span></a>
+                <ul class="nav top-bar-nav pull-right" style="margin-top:5px;margin-left:0px">
+                    {% if user.is_authenticated %}
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><b>{{ user.username }} <i class="caret"></i></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/user_profile/">My Settings</a></li>
+                                <li><a href="/accounts/logout/">Logout</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-container" class="container">
+
+        {% block body_container %}
+
+        {% endblock %}
+
+    </div>
+    <!-- footer --!>
+    {% block footer %}
+    <footer style="border-top: 1px solid #E5E5E5">
+        <div class="navbar">
+            <div class="evd-inner">
+
+                <div class="container">
+                    <ul class="nav" style="margin-left:auto;margin-right:auto;float:none;display:table">
+                        <li><a href="/about_us/">About us</a></li>
+                        <li><a href="/vision/">Vision & Mission</a></li>
+                        <!--<li><a href="/values/">Values</a></li>-->
+                        <li><a href="/operating_principles/">Operating Principles</a></li>
+                        <li><a href="/faq/">FAQ</a></li>
+                        <li><a href="/contact_us/">Contact us</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
+    {% block outside_container %}
+    {% endblock %}
+    {% block bottom_scripts %}
+    {% endblock %}
+
+{% endblock %}

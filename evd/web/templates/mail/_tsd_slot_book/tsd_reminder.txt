@@ -1,0 +1,31 @@
+<html lang="en">
+<body>
+<p>Dear {{volunteer_name}},</p>
+
+<p>Greetings from eVidyaloka!</p>
+
+<p>Thank you for registering with us as a Volunteer Teacher to educate the rural children of India. </p>
+
+<p>This is a reminder mail about your booking at eVidyaloka for Teacher Selection Discussion.</p>
+
+<p><b>Details:</b></p>
+
+<p><b>Date and Time: {{date_time}}</b></p>
+
+<p><b>Skype Discussion id: evidyaloka.discussion</b></p>
+
+<p><b>Request you to be on time and come online either from a laptop or from a desktop during the Skype video discussion.</b></p>
+
+<p>For any queries, please do write back to discussions@evidyaloka.org</p>
+
+
+<p>With Regards,<br>
+eVidyaloka Onboarding Team.</p>
+</body>
+
+
+
+
+
+
+

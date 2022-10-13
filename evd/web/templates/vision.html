@@ -1,0 +1,86 @@
+{% extends "footer_base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+        <style>
+            .right-content .top {
+                padding:34px 37px;
+            }
+            div.intro {
+                padding-bottom:35px;
+            }
+            div#vision p {
+                padding:20px;
+            }
+            div#mission ul, div#values ul {
+                padding-left:40px !important;
+            }
+            div#mission ul li, div#values ul li {
+                background:none !important;
+                padding:10px 0px 0px 0px !important;
+                font-size:14px;
+            }
+            .blue {
+                color:#11BEEE;
+                text-shadow:0 -1px #0D94BA,0 1px white;
+            }
+           div#mission p {
+           padding-top:20px;
+           padding-left:20px;
+           }
+        </style>
+{% endblock %}
+{% block leftnav_list %}
+    <li><a href="/about/" class="about-1"><span>About us</span></a></li>
+    <li><a href="/vision/" class="about-2 active"><span>Vision & Mission</span></a></li>
+    <li><a href="/operating_principles/" class="about-3"><span>Principles</span></a></li>
+    <li><a href="/conduct/" class="about-4"><span>Code of Conduct</span></a></li>
+    <li><a href="/who_we_are/" class="about-5"><span>Who We Are</a></li>
+    <li><a href="/careers/" class="about-6" ><span>Careers</span></a></li>
+    <li><a href="/news_events/" class="about-7" ><span>News & Events</span></a></li>
+    <li><a href="/governance/" class="about-8" ><span>Governance</span></a></li>
+    <li><a href="/partners/" class="about-9"><span>Partners</span></a></li>
+    <li><a href="/faq/" class="about-10"><span>FAQ</span></a></li>
+    <li><a href="/contact_us/" class="about-11"><span>Contact Us</span></a></li>
+        
+{% endblock %}
+{% block top_content %}
+
+   <!-- <div class="top clearfix">
+        <div class="intro">
+            <h2>Read about our <a href="#vision">vision </a>,
+                                <a href="#mission">mission</a> and 
+                                <a href="#values">values</a></h2>
+        </div>
+    </div>-->
+{% endblock %}
+{% block bottom_content %}
+    <div class="paper-bg-wrapper">
+        <div class="paper-bg">
+            <div id="faq" class="subcontent">
+                <div id="vision">
+                    <h1 class="blue">Vision</h1>
+                    <p>To create a Knowledgeable & Empowered rural India through quality education. </p>
+                </div>
+                <div id="mission">
+                    <h1 class="blue">Mission</h1>
+                        <p>Connecting passionate volunteers to provide Quality education for Rural Children </p>
+                    <ul>
+                        <li>In partnership with Government and local communities.</li>
+                        <li>Leveraging technology to empower learning ecosystem.</li>
+                    </ul>
+                </div>
+                <div id="values">
+                    <h1 class="blue">Values</h1>
+                    <ul>
+                        <li>Selflessness : Nothing is 'MINE'</li>
+                        <li>Integrity : Non-negotiable</li>
+                        <li>Passion  : Giving time to educate</li>
+                        <li>Execution : Committed to make things happen</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

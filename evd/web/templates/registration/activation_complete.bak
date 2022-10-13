@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block body_container %}
+<div class="row">
+    <div class="span12">
+        <h1>Activation Complete!</h1>
+    </div>
+    <div class="span5" style="margin-top: 20px">
+        <strong>You can explore Evidhyaloka now</strong>
+        <p>
+            Your native people are waiting for you... Make them educated.
+        </p>
+        <script>window.location = "/"</script>
+    </div>
+</div>
+{% endblock body_container %}

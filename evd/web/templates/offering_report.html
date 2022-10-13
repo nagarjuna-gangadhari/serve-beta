@@ -1,0 +1,831 @@
+{% extends "base.html" %}
+
+{% block head_scripts %}
+{{ block.super }}
+<link rel="stylesheet" href="/static/css/stats.css" />
+
+<style>
+	.right-content .top {
+		padding: 34px 37px;
+	}
+
+	.subcontent {
+		background: none;
+	}
+
+	div.intro h3 {
+		padding-bottom: 35px;
+	}
+
+	div.video {
+		padding: 50px;
+	}
+
+	input {
+		display: inline-block;
+	}
+
+	label {
+		position: relative;
+	}
+
+	.dt-buttons {
+		display: none;
+	}
+
+	tbody tr td {
+		text-align: center !important;
+	}
+
+	th {
+		border-top: 1px solid #dddddd;
+		border-bottom: 1px solid #dddddd;
+		border-right: 1px solit;
+		text-align: center;
+	}
+
+	th:first-child {
+		border-left: 1px solid #dddddd;
+	}
+
+	#offerDataTablediv {
+		border: 2px solid gray;
+		border-radius: 1ch;
+		width: auto;
+
+	}
+
+	#offerDataTable_length {
+
+		position: relative;
+		left: 31px;
+		top: 22px
+	}
+
+	#offerDataTable_filter {
+		position: relative;
+		right: 31px;
+		top: 15px
+	}
+
+	#offerDataTable_info {
+
+		/* left: 300px; */
+		margin-left: 30px;
+	}
+
+	#offerDataTable_paginate {
+
+		/* right: 300px; */
+		margin-right: 20px;
+	}
+</style>
+<script src="https://kendo.cdn.telerik.com/2017.1.223/js/jszip.min.js"></script>
+<script src="https://kendo.cdn.telerik.com/2017.1.223/js/kendo.all.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+<link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+<link href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
+<script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.js"></script>
+{% endblock %}
+{% block body_container %}
+<div id="loader" class="px-12 py-2" style="display: none; position: fixed; left: 48%; top: 48%;"><img src="/static/img_new/ajax-loader.gif" alt="spinner" /></div>
+
+{%if is_partner%}
+<div class="inner" style="height: 100%;">
+	<div class="col-md-2" style="height: 100%;">
+		{%include "navbar.html"%}
+	</div>
+	<div class="col-md-10" style="height: 100%;overflow-y: auto; right: -15px; padding-left:3%">
+		{%else%}
+		<div class="admin_inner">
+			<div class="col-md-12">
+				{%endif%}
+				<input type="hidden" id="pageId" />
+				<input type="hidden" id="emptyList" />
+				<input type="hidden" id="ay_start_date" value="{{start_date}}">
+				<input type="hidden" id="ay_end_date" value="{{end_date}}">
+				<div class="title">
+					<h1>Demand Dashboard </h1>
+				</div>
+				<div class="row" style="margin:10px;">
+					<div class="col-md-3 col-xs-12">
+						<label>State:</label>
+						<select id="state_id" onchange="centerNameList()">
+							<option value="All">All States</option>
+							{% for states in state %}
+								<option value="{{states}}">{{states}}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="col-md-4 col-xs-12">
+						<label>Partners:</label> <select id="id_partner" style='width: 40%;'>
+							<option value="All">All Partners</option> 
+							{% for partner in partners_list %}
+								<option value="{{partner.delivery_partner_id}}">{{partner.delivery_partner__name_of_organization}}</option> 
+							{% endfor %}
+						</select>
+					</div>
+					<div class="col-md-5 col-xs-12">
+						<label>Delivery coordinator:</label> <select id="id_delivery_coord" style='width: 50%;'>
+							<option value="All">All Delivery Coordinator</option> 
+							{% for del_coordinator in del_coordinator_list %}
+							<option value="{{del_coordinator.delivery_coordinator_id}}">
+								{{del_coordinator.delivery_coordinator__first_name}}
+								{{del_coordinator.delivery_coordinator__last_name}}</option> 
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="row" style="padding-top: 30px;margin:10px;">
+					<div class="col-md-3 col-xs-12">
+						<label>Center:</label> <select id="center_id" style='width: 50%;'>
+							<option value="All">All Center</option> 
+							{% for centers in center %}
+							<option value="{{centers.id}}">{{centers}}</option> 
+							{% endfor %}
+						</select>
+					</div>
+
+					<div class="col-md-4 col-xs-12">
+						<!-- <div class="row"> -->
+						<label>Status:</label>
+						<select id='status_id' name='status_id'>
+							<option value="All">All</option>
+							<option value="running">Running</option>
+							<option value="pending">Pending</option>
+							<option value="completed">Completed</option>
+							<option value="not_approved">not_approved</option>
+							<option value="backfill">Backfill</option>
+						</select>
+					</div>
+
+					<div class="col-md-4 col-xs-12">
+						<label>Academic Year:</label>
+						<select id="ayfy_id">
+							{% for ayfys_title in ayfys_titles %}
+							<option value="{{ayfys_title}}">{{ayfys_title}}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="row" style="margin:10px;padding-top: 30px;">
+					<div class="col-md-3 col-xs-12">
+						<label> From:</label> <input type="text" style='width: 40%;padding: 3px 6px;''
+				id="from" name=' from'>
+					</div>
+					<div class="col-md-4 col-xs-12">
+						<label>To:</label>
+						<input type="text" id="to" style='width: 40%;padding: 3px 6px;' name='to'>
+					</div>
+					<div class="col-md-1 col-xs-12" id="offeringData">
+						<a href="#"><i class="fa fa-file-excel-o fa-2x" aria-hidden="true"
+								title="Download offering Report"></i></a>
+					</div>
+					<div class="col-md-1 col-sm-6 col-xs-12 btnCss">
+						<button type="submit" id="generate_btn" class="btn btn-success btnCSS"
+							onclick="offeringList();">Submit</button>
+					</div>
+					<div class="col-md-2 col-sm-6 col-xs-12 btnCss">
+						<button type="submit" id="share_demands_btn" class="btn btn-success btnCSS"
+							onclick="getSharableURLwithDemands();">Show Demands to Share</button>
+					</div>
+				</div>
+
+				<div id="sharableDemandsInfo" class="col-sm-12 col-md-12 col-lg-12" style="margin-top: 12px;">
+
+				</div>
+
+				<div id="messageForEmptyList" style="padding-top: 8%;"></div>
+				<div id="countPaginationId" align="right"></div>
+				<div class="col-md-12 col-xs-12" style='margin-top: 20px;'>
+
+					<div id="table_id1"></div>
+				</div>
+				<div class="row" id="hideDivId">
+					<div class="col-md-12">
+						<table id="hiddenTableId" name="Table" class="table table-hover table-striped table-condensed"
+							style="margin-left: 10px;">
+						</table>
+					</div>
+
+				</div>
+				<div id="pagination_data" style="text-align:center"></div>
+				<div id="offerDataTablediv" class="row" style="margin:10px;overflow: scroll;">
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<script type="text/javascript" src="https://www.google.com/jsapi"> </script>
+
+	<script>
+		$(document).ready(function () {
+			$(function () {
+				$('#from').datepicker({
+					changeMonth: true,
+					minDate: new Date(2013, 3, 1),
+					dateFormat: "dd-mm-yy"
+				});
+				$('#to').datepicker({
+					changeMonth: true,
+					minDate: new Date(2013, 3, 8),
+					dateFormat: "dd-mm-yy"
+				});
+				var query = window.location.search.substring(1);
+				if (query != "") {
+					var query_list = query.split("&");
+					for (var qry in query_list) {
+						if (query_list[qry].indexOf("from=") != -1) {
+							frm = query_list[qry].substring(5);
+						} else if (query_list[qry].indexOf("to=") != -1) {
+							t = query_list[qry].substring(3);
+						}
+					}
+					$('#from').val(frm);
+					$('#to').val(t);
+				} else {
+					var startDate = $("#ay_start_date").val();
+					startDate = startDate.split('-');
+					$('#from').val(startDate[2] + '-' + startDate[1] + '-' + startDate[0]);
+					var endDate = $("#ay_end_date").val();
+					endDate = endDate.split('-');
+					$('#to').val(endDate[2] + '-' + endDate[1] + '-' + endDate[0]);
+
+
+				}
+
+
+				offeringList();
+			});
+
+			$("#hiddenTableId").hide();
+			$("#hideDivId").hide();
+
+		});
+	</script>
+	<script>
+		$(document).ready(function () {
+			$("#hiddenTableId").hide();
+			$("#hideDivId").hide();
+
+		});
+	</script>
+	<script>
+
+		var thead = '<thead style="background-color: white;"><tr><th class="hide"><b>Offering Id</b><th class="hide"><b>Active Teacher Id</b></th></th><th class="hide"><b>Course Id</b></th><th><b>Center</b></th><th><b>Subject</b></th><th><b>Grade</b></th><th><b>Teacher Name</b></th><th><b>Email Id</b></th><th><b>Phone</b></th><th><b>Language</b></th><th><b>Status</b></th><th><b>Demand Booked Date</th></b></th><th><b>Demand Assigned Date</th></b><th><b>First Session Date</th></b><th class="hide"><b>Start Date</b></th><th class="hide"><b>End Date</b></th><th class="hide"><b>academic_year_id</b></th><th class="hide"><b>course_type</b></th><th class="hide"><b>picture</b></th></tr></thead>';
+		var tbody = '<tbody id="table_data"></tbody>';
+		var tableData = thead
+
+		function offeringList() {
+			$('#loader').show();
+			var center_id = $('#center_id').val();
+			var id_partner = $('#id_partner').val();
+			var state_id = $('#state_id').val();
+			var status = $("#status_id").val();
+			var page = $("#pageId").val();
+			var status = $("#status_id").val();
+			var ayfy = $("#ayfy_id").val();
+			var id_delivery_coord = $("#id_delivery_coord").val();
+			var start_date = $('#from').val();
+			var end_date = $('#to').val();
+			let data = {
+				'center_id': center_id,
+				'id_delivery_coord': id_delivery_coord,
+				'&state_id': state_id,
+				'ayfy': ayfy,
+				'page': page,
+				'status': status,
+				'start_date': start_date,
+				'end_date': end_date,
+				'partner': id_partner,
+			}
+
+			$.ajax({
+				url: "/v2/offering_report/", // the endpoint
+				type: "POST", // http method
+				data: JSON.stringify(data),
+				dataType: 'json',
+				success: function (data) {
+
+					$('#loader').hide();
+					var allData = data.all_offers;
+					AllData(allData);
+					var offering_list = data.offers;
+					var current_page = data.current;
+					var prev_page = data.prev;
+					var next_page = data.next;
+					var total_page = data.total;
+					var count = data.count;
+					var message = data.errorMsg;
+					$("#overlay").hide();
+					$("#messageForEmptyList").hide();
+					$("#messageForEmptyList").empty();
+					if (message != null && message != '' && message != 'undefined') {
+						$("#emptyList").val(message);
+					} else {
+
+						$("#emptyList").val(message);
+					}
+					if (offering_list != null && offering_list != '' && offering_list != 'undefined') {
+						offering_data = '';
+						$(document).find("#offerDataTablediv").empty();
+						$(document).find("#offerDataTablediv").html('<table id="offerDataTable" class="cell-border hover", style="width:100%;"></table>');
+
+						$("#offerDataTable").DataTable({
+
+							data: allData,
+							columns: [
+								{ data: "center_name", title: "Center Name" },
+								{ data: "subject", title: "Subject" },
+								{ data: "Grade", title: "Grade" },
+								{ data: "teacher_id", title: "Teacher Id" },
+								{ data: "Teacher", title: "Teacher Name" },
+								{ data: "email_id", title: "Email Id" },
+								{ data: "phone", title: "Phone" },
+								{ data: "Language", title: "Language" },
+								{ data: "Status", title: "Offering Status" },
+								{ data: "demand_status", title: "Demand Status" },
+								{ data: "demand_status_date", title: "Demand Booked Date" },
+
+								{ data: "assignment_date", title: "Assigned Date" },
+								{ data: "first_session_date", title: "First Session Date" }
+							]
+						});
+						$("#table_id").html(tableData);
+
+						var pagination_template = '';
+						if (tableData != null && tableData != ' ' && tableData != 'undefined' && tableData.length > '0') {
+							pagination_template += "<ul class='pagination' style='padding-left: 210px;padding-right: 187px;'>";
+							if (total_page >= 1) {
+								if (current_page > 1) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + prev_page + ")'" + prev_page + "' ><i class='fa fa-chevron-left'></i></a></li> ";
+								} else {
+									pagination_template += "<li><a class='page' href='javascript:void(0);'><i class='fa fa-chevron-left'></i></a></li> ";
+								}
+								if (current_page != 1) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(1)'>1</a></li> ";
+								}
+								if (current_page > 4 && current_page <= 10) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page - 1) + ")'" + (current_page - 1) + "' >...</a></li> ";
+								}
+								if ((current_page - 50) > 0) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page - 50) + ")'" + (current_page - 50) + "' >...</a></li> ";
+								}
+								if ((current_page - 11) > 0 && (current_page - 11) != 1) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page - 11) + ")'" + (current_page - 11) + "' >" + (current_page - 11) + "</a></li> ";
+								}
+								if ((current_page - 10) > 0) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page - 10) + ")'" + (current_page - 10) + "' >...</a></li> ";
+								}
+								if ((current_page - 2) > 0 && (current_page - 2) != 1) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page - 2) + ")'" + (current_page - 2) + "' >" + (current_page - 2) + "</a></li> ";
+								}
+								if ((current_page - 1) > 0 && (current_page - 1) != 1) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page - 1) + ")'" + (current_page - 1) + "' >" + (current_page - 1) + "</a></li> ";
+								}
+								pagination_template += "<li  class='active'><a class='page' href='javascript:void(0);' onclick='loadPagination(" + current_page + ")'" + current_page + "' >" + current_page + "</a></li> ";
+								if ((current_page + 1) <= total_page) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page + 1) + ")'" + (current_page + 1) + "' >" + (current_page + 1) + "</a></li> ";
+								}
+								if ((current_page + 2) <= total_page) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page + 2) + ")'" + (current_page + 2) + "' >" + (current_page + 2) + "</a></li> ";
+								}
+								if ((current_page + 10) < total_page) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page + 10) + ")'" + (current_page + 10) + "' >...</a></li> ";
+								}
+								if ((current_page + 11) < total_page) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page + 11) + ")'" + (current_page + 11) + "' >" + (current_page + 11) + "</a></li> ";
+								}
+								if ((current_page + 50) < total_page) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page + 50) + ")'" + (current_page + 50) + "' >...</a></li> ";
+								}
+								if ((current_page >= (total_page - 10)) && (current_page < (total_page - 3))) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page + 1) + ")'" + (current_page + 1) + "' >...</a></li> ";
+								}
+								if ((current_page + 3) <= total_page) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + total_page + ")'" + total_page + "' >" + total_page + "</a></li> ";
+								}
+								if (current_page < total_page) {
+									pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + next_page + ")'" + next_page + "' ><i class='fa fa-chevron-right'></i></a></li> ";
+								} else {
+									pagination_template += "<li><a class='page' href='javascript:void(0);'><i class='fa fa-chevron-right'></i></a></li> ";
+								}
+							}
+							pagination_template += "</ul>";
+						}
+						var span = '';
+						span = '<span class="col-sm" style="text-align :right;" >';
+						var curent_count_end = '';
+						var curent_count = '';
+						if (total_page > 0) {
+							curent_count = (current_page * 20) - 19;
+							if (current_page < total_page) {
+								span += 'Showing ' + curent_count + ' to ' + current_page * 20 + ' Offering List of ' + count + ' Offering List';
+							} else {
+								span += 'Showing ' + curent_count + ' to ' + count + ' Offering List of ' + count + ' Offering List';
+							}
+						}
+						span += '</span>';
+						$("#countPaginationId").html(span);
+						$('#pagination_data').html(pagination_template);
+						downloadOfferingData();
+					} else {
+						var table = '';
+						var thead = '';
+						var tab1 = '';
+						thead += '<thead colspan="7" style="background-color: white;">';
+						thead += '<tr><th class="hide"><b>offering_id</b><th class="hide"><b>active_teacher_id</b></th></th><th class="hide"><b>course_id</b></th><th><b>Center</b></th><th><b>Subject</b></th><th><b>Grade</b></th><th><b>Teacher_name</b></th><th><b>Email Id</b></th><th><b>Phone</b></th><th><b>Language</b></th><th><b>Status</b></th><th><b>Demand Booked Date</b></th><th><b>Assignment Date</b></th><th><b>First Session Date</b></th><th class="hide"><b>start_date</b></th><th class="hide"><b>end_date</b></th><th class="hide"><b>academic_year_id</b></th><th class="hide"><b>course_type</b></th><th class="hide"><b>picture</b></th></tr>';
+						thead += '</thead>';
+						tab1 = '<tbody align="center">';
+						tab1 += '<tr>';
+						tab1 += '<td colspan="7" > No data Found</td>';
+						tab1 += '</tr>';
+						tab1 += '</tbody>';
+						var tableData1 = thead + tab1;
+						$("#table_id").html(tableData1);
+						$("#pagination_data").html('');
+						$("#countPaginationId").html('');
+
+					}
+
+				},
+
+				error: function (xhr, errmsg, err) {
+					$('#loader').hide();
+					console.log(xhr, errmsg, err)
+					//alert('Oops! We have encountered an error: ' + xhr.responseText['error']['message'], 'danger'); // provide a bit more info about the error to the console
+					console.log(xhr.status + ": " + xhr.responseText, xhr.responseText['error']['message']); // provide a bit more info about the error to the console
+				}
+			});
+		}
+		function AllData(offering_list) {
+			var thead = '<thead style="background-color: white;"><tr><th class="hide"><b>Offering Id</b><th class="hide"><b>Active Teacher Id</b></th></th><th class="hide"><b>Course Id</b></th><th><b>Center</b></th><th><b>Subject</b></th><th><b>Grade</b></th><th><b>Teacher Name</b></th><th><b>Email Id</b></th><th><b>Phone</b></th><th><b>Language</b></th><th><b>Status</b></th><th><b>Demand Booked Date</th></b></th><th><b>Demand Assigned Date</th></b><th><b>First Session Date</th></b><th class="hide"><b>Start Date</b></th><th class="hide"><b>End Date</b></th><th class="hide"><b>academic_year_id</b></th><th class="hide"><b>course_type</b></th><th class="hide"><b>picture</b></th></tr></thead>';
+			var tbody = '<tbody id="table_data">';
+			for (i = 0; i < offering_list.length; i++) {
+				tbody += '<tr><td class="hide">' + offering_list[i]['offering_id'] + '</td><td class="hide">' + offering_list[i]['teacher_id'] + '</td><td class="hide">' + offering_list[i]['course_id'] + '</td><td>' + offering_list[i]['center_name'] + '</td><td>' + offering_list[i]['subject'] + '</td><td>' + offering_list[i]['Grade'] + '</td><td>' + offering_list[i]['Teacher'] + '</td><td>' + offering_list[i]['email_id'] + '</td><td>' + offering_list[i]['phone'] + '</td><td>' + offering_list[i]['Language'] + '</td><td>' + offering_list[i]['Status'] + '</td><td>' + offering_list[i]['demand_booked_date'] + '</td><td>' + offering_list[i]['assignment_date'] + '</td><td>' + offering_list[i]['first_session_date'] + '</td><td class="hide">' + offering_list[i]['start_date'] + '</td><td class="hide">' + offering_list[i]['end_date'] + '</td><td class="hide">' + offering_list[i]['academic_year_id'] + '</td><td class="hide">' + offering_list[i]['course_type'] + '</td><td class="hide">' + offering_list[i]['picture'] + '</td></tr>';
+			}
+			tbody += '</tbody>';
+			var tableData = thead + tbody;
+			$("#hiddenTableId").html(tableData);
+		}
+
+		function downloadOfferingData() {
+			$('#hiddenTableId').dataTable({
+				"destroy": true,
+				"lengthMenu": false,
+				"bLengthChange": false,
+				"bFilter": false,
+				"pageLength": 20,
+				"aaSorting": [],
+				"bStateSave": false,
+				"paging": false,
+				"ordering": false,
+				"info": false,
+				dom: 'Bfrtip',
+				buttons: [
+					{
+						extend: 'excel',
+						filename: 'Offering Report',
+						className: 'excelButton',
+
+					}
+
+				]
+			});
+		}
+		$('#offeringData').on('click', function () {
+			$("#messageForEmptyList").hide();
+			$("#messageForEmptyList").empty();
+			var msg = $("#emptyList").val();
+			//alert(msg)
+			if (msg != null && msg != '' && msg != 'undefined') {
+				messageBox = '<div class="alert alert-';
+				messageBox += 'danger';
+				messageBox += ' Box alert-dismissable" style="line-height: 0;width: 50%;margin-left: 25%;">';
+				messageBox += '<a href="#" data-dismiss="alert" class="close popup_close" style="font-size: x-large ;top: -22px;">&times;</a>';
+				messageBox += msg + '</div>';
+				$("#messageForEmptyList").append(messageBox);
+				$("#messageForEmptyList").show();
+			} else {
+				$(".excelButton").trigger('click');
+				downloadOfferingData();
+			}
+		});
+		function loadPagination(Page) {
+			var pageId = $("#pageId").val(Page);
+			offeringList();
+		}
+/* $('body').on("click",".popup_close",function(){
+							window.location.reload();
+						}); */
+	</script>
+	<script>
+		function centerNameList() {
+			var id_partner = $("#id_partner").val();
+			var id_delivery_coord = $("#id_delivery_coord").val();
+
+			var state_name = $("#state_id").val();
+			//var center_id = $('#center_id').val();
+			var ajaxUrl = '/v2/ajax/getCenterNameByStateType/?state_name=' + state_name + '&partner=' + id_partner + '&id_delivery_coord=' + id_delivery_coord
+			$.ajax({
+				url: ajaxUrl,
+				success: function (data) {
+					console.log(data)
+					$("#center_id").empty();
+					if (data != null && data != '' && data != 'undefined') {
+						var centerName = data.center;
+						var centerId = data.center_id;
+						filter_center = '';
+						filter_center += '<option value="All">All Center</option>'
+						for (i = 0; i < data.length; i++) {
+							filter_center += '<option value=' + data[i]['center_id'] + '>' + data[i]['center'] + '</option>'
+						}
+						$("#center_id").html(filter_center)
+					}
+					if ($("#id_partner").val() == -1 || $("#id_partner").val() == 'All') {
+						var partner_list = []
+						for (i = 0; i < data.length; i++) {
+							var is_present = 'no';
+							for (j = 0; j < partner_list.length; j++) {
+								if (data[i]['partnerid'] == partner_list[j]['partnerid']) {
+                                    	//console.log(data[i]['partnerid'])
+										is_present = 'yes';
+									break;
+								}
+							}
+							if (is_present == 'no') {
+								partner_list.push({ 'partnerid': data[i]['partnerid'], 'partner_name': data[i]['partner_name'] });
+							}
+						}
+						var options = '<option value="All">All</option>';
+						for (i = 0; i < partner_list.length; i++) {
+							options += '<option value="' + partner_list[i]['partnerid'] + '"';
+							if (partner_list[i]['partnerid'] == '{{partner_id}}')
+								options += 'selected="selected" ';
+							options += '>' + partner_list[i]['partner_name'] + '</option>';
+						}
+						$("#id_partner").empty();
+						$("#id_partner").append(options);
+					}
+					if ($("#id_delivery_coord").val() == -1 || $("#id_delivery_coord").val() == 'All') {
+						var del_coord_list = []
+						for (i = 0; i < data.length; i++) {
+							var is_present = 'no';
+							for (j = 0; j < del_coord_list.length; j++) {
+								if (data[i]['del_coordinator_id'] == del_coord_list[j]['del_coordinator_id']) {
+									console.log(data[i]['del_coordinator_id'])
+									is_present = 'yes';
+									break;
+								}
+							}
+							if (is_present == 'no') {
+								if (data[i]['del_coordinator_id'] != null && data[i]['del_coordinator_id'] != '' && data[i]['del_coordinator_id'] != 'undefined') {
+									del_coord_list.push({ 'del_coordinator_id': data[i]['del_coordinator_id'], 'del_coord_name': data[i]['del_coord_name'] });
+								}
+							}
+						}
+						var options = '<option value="All">All</option>';
+						for (i = 0; i < del_coord_list.length; i++) {
+							options += '<option value="' + del_coord_list[i]['del_coordinator_id'] + '"';
+							if (del_coord_list[i]['del_coordinator_id'] == '{{delivery_coordinator_id}}')
+								options += 'selected="selected" ';
+							options += '>' + del_coord_list[i]['del_coord_name'] + '</option>';
+						}
+						$("#id_delivery_coord").empty();
+						$("#id_delivery_coord").append(options);
+					}
+				},
+				error: function () {
+					//alert("error");
+				}
+			});
+		}
+	</script>
+	<script>
+		$(document).ready(function () {
+			
+
+			$("#id_partner").on('change', function () {
+				var state = $("#state_id").val();
+				var id_partner = $("#id_partner").val();
+				var id_delivery_coord = $("#id_delivery_coord").val();
+
+				$("#center_id").empty();
+				$.ajax({
+					url: '/v2/ajax/getCenterNameByStateType?state_name=' + state + '&partner=' + id_partner + '&id_delivery_coord=' + id_delivery_coord,
+					dataType: 'JSON',
+					success: function (data) {
+						console.log('data', data)
+						if (data != null && data != '' && data != 'undefined') {
+							var options = '<option value=-1>All</option>';
+							for (i = 0; i < data.length; i++) {
+								options += '<option value="' + data[i]['center_id'] + '"';
+								if (data[i]['center_id'] == '{{center_id}}')
+									options += 'selected="selected" ';
+								options += '>' + data[i]['center'] + '</option>';
+							}
+							$("#center_id").append(options);
+						}
+						if ($("#id_delivery_coord").val() == -1 || $("#id_delivery_coord").val() == 'All') {
+
+
+							var del_coord_list = []
+							for (i = 0; i < data.length; i++) {
+								var is_present = 'no';
+								for (j = 0; j < del_coord_list.length; j++) {
+									if (data[i]['del_coordinator_id'] == del_coord_list[j]['del_coordinator_id']) {
+										console.log(data[i]['del_coordinator_id'])
+										is_present = 'yes';
+										break;
+									}
+								}
+								if (is_present == 'no') {
+									if (data[i]['del_coordinator_id'] != null && data[i]['del_coordinator_id'] != '' && data[i]['del_coordinator_id'] != 'undefined') {
+										del_coord_list.push({ 'del_coordinator_id': data[i]['del_coordinator_id'], 'del_coord_name': data[i]['del_coord_name'] });
+									}
+								}
+							}
+							var options = '<option value="All">All</option>';
+							for (i = 0; i < del_coord_list.length; i++) {
+								options += '<option value="' + del_coord_list[i]['del_coordinator_id'] + '"';
+								if (del_coord_list[i]['del_coordinator_id'] == '{{delivery_coordinator_id}}')
+									options += 'selected="selected" ';
+								options += '>' + del_coord_list[i]['del_coord_name'] + '</option>';
+							}
+							$("#id_delivery_coord").empty();
+							$("#id_delivery_coord").append(options);
+						}
+						if ($("#state_id").val() == -1 || $("#state_id").val() == 'All') {
+							var state_list = []
+							for (i = 0; i < data.length; i++) {
+								var is_present = 'no';
+								for (j = 0; j < state_list.length; j++) {
+									if (data[i]['state'] == state_list[j]['state']) {
+										// <!--console.log(data[i]['state'])-->
+										is_present = 'yes';
+										break;
+									}
+								}
+								if (is_present == 'no') {
+									state_list.push({ 'state': data[i]['state'] });
+								}
+							}
+
+							var options = '<option value=All>All</option>';
+							for (i = 0; i < state_list.length; i++) {
+								options += '<option value="' + state_list[i]['state'] + '"';
+								if (state_list[i]['state'] == '{{state}}')
+									options += 'selected="selected" ';
+								options += '>' + state_list[i]['state'] + '</option>';
+							}
+							$("#state_id").empty();
+							$("#state_id").append(options);
+
+						}
+
+					}
+				});
+			});
+			$("#id_delivery_coord").on('change', function () {
+				var state = $("#state_id").val();
+				var id_partner = $("#id_partner").val();
+				var id_delivery_coord = $("#id_delivery_coord").val();
+				console.log("ssss", id_delivery_coord)
+				$("#center_id").empty();
+				$.ajax({
+					url: '/v2/ajax/getCenterNameByStateType?state_name=' + state + '&partner=' + id_partner + '&id_delivery_coord=' + id_delivery_coord,
+					dataType: 'JSON',
+					success: function (data) {
+						if (data != null && data != '' && data != 'undefined') {
+							var options = '<option value=-1>All</option>';
+							for (i = 0; i < data.length; i++) {
+								options += '<option value="' + data[i]['center_id'] + '"';
+								if (data[i]['center_id'] == '{{center_id}}')
+									options += 'selected="selected" ';
+								options += '>' + data[i]['center'] + '</option>';
+							}
+							$("#center_id").append(options);
+						}
+
+						if ($("#id_partner").val() == -1 || $("#id_partner").val() == 'All') {
+							var partner_list = []
+							for (i = 0; i < data.length; i++) {
+								var is_present = 'no';
+								for (j = 0; j < partner_list.length; j++) {
+									if (data[i]['partnerid'] == partner_list[j]['partnerid']) {
+										// <!--console.log(data[i]['partnerid'])-->
+										is_present = 'yes';
+										break;
+									}
+								}
+								if (is_present == 'no') {
+									partner_list.push({ 'partnerid': data[i]['partnerid'], 'partner_name': data[i]['partner_name'] });
+								}
+							}
+							var options = '<option value="All">All</option>';
+							for (i = 0; i < partner_list.length; i++) {
+								options += '<option value="' + partner_list[i]['partnerid'] + '"';
+								if (partner_list[i]['partnerid'] == '{{partner_id}}')
+									options += 'selected="selected" ';
+								options += '>' + partner_list[i]['partner_name'] + '</option>';
+							}
+							$("#id_partner").empty();
+							$("#id_partner").append(options);
+						}
+						if ($("#state_id").val() == 'All') {
+
+
+							var state_list = []
+							for (i = 0; i < data.length; i++) {
+								var is_present = 'no';
+								for (j = 0; j < state_list.length; j++) {
+									if (data[i]['state'] == state_list[j]['state']) {
+										// <!--console.log(data[i]['state'])-->
+										is_present = 'yes';
+										break;
+									}
+								}
+								if (is_present == 'no') {
+									state_list.push({ 'state': data[i]['state'] });
+								}
+							}
+
+							var options = '<option value=All>All</option>';
+							for (i = 0; i < state_list.length; i++) {
+								options += '<option value="' + state_list[i]['state'] + '"';
+								if (state_list[i]['state'] == '{{state}}')
+									options += 'selected="selected" ';
+								options += '>' + state_list[i]['state'] + '</option>';
+							}
+							$("#state_id").empty();
+							$("#state_id").append(options);
+
+						}
+					}
+				});
+			});
+
+		});
+
+		function getSharableURLwithDemands() {
+			var center_id = $('#center_id').val();
+			var state = $('#state_id').val();
+			var id_partner = $('#id_partner').val();
+			var ayfy = $("#ayfy_id").val();
+			var start_date = $('#from').val();
+			var end_date = $('#to').val();
+			console.log("center_id " + center_id + "partner_id " + id_partner + " state_id :" + state + " status: " + status + " ayfy: " + ayfy + " start_date: " + start_date + " end_date" + end_date);
+			$.ajax({
+				url: '/config/getsharableDemandsInfo?state=' + state + '&partner=' + id_partner + '&center=' + center_id + '&academicyear=' + ayfy + '&from=' + start_date + '&to=' + end_date,
+				dataType: 'JSON',
+				success: function (data) {
+					$('#sharableDemandsInfo').empty();
+					var content = '<p>Total number of Demands are : ' + data.length + '<br>'
+					content += "<table class='table table-bordered'><thead><tr><th><b>Center Name</b></th><th><b>Medium</b></th><th><b>Subject</b></th><th><b>Grade</b></th></thead><tbody>";
+					for (var i = 0; i < data.length; i++) {
+						content += '<tr><td>' + data[i]['center__name'] + '</td><td>' + data[i]['course__subject'] + '</td><td>' + data[i]['language'] + '</td><td>' + data[i]['course__grade'] + '</td></tr>';
+					}
+					content += '</tbody></table><br><div class="col-sm-12 col-md-12 col-lg-12"><button type="button" class="btn btn-sm pull-right" onclick=getSharableDemandURL()>Save & Get Sharable URL</button></div>';
+					$('#sharableDemandsInfo').append(content);
+
+				}
+			});
+		}
+
+		function getSharableDemandURL() {
+			var center_id = $('#center_id').val();
+			var state = $('#state_id').val();
+			var id_partner = $('#id_partner').val();
+			var ayfy = $("#ayfy_id").val();
+			var start_date = $('#from').val();
+			var end_date = $('#to').val();
+			console.log("center_id " + center_id + "partner_id " + id_partner + " state_id :" + state + " status: " + status + " ayfy: " + ayfy + " start_date: " + start_date + " end_date" + end_date);
+			$.ajax({
+				url: '/config/getsharableURLfor?state=' + state + '&partner=' + id_partner + '&center=' + center_id + '&academicyear=' + ayfy + '&from=' + start_date + '&to=' + end_date,
+				success: function (data) {
+					$('#sharableDemandsInfo').empty();
+					var content = 'https://www.evidyaloka.org/v2/demandList/' + data + '';
+					var content1 = $('<input type="text"  id="myInput" value=""><button onclick="copyShortURL()">Copy text</button>')
+					content1[0].value = content;
+					$('#sharableDemandsInfo').append(content1);
+				}
+			});
+		}
+
+		function copyShortURL() {
+			var copyText = document.getElementById("myInput");
+			copyText.select();
+			copyText.setSelectionRange(0, 99999)
+			document.execCommand("copy");
+			alert("Copied the text: " + copyText.value);
+		}
+	</script>
+
+	{% endblock %}

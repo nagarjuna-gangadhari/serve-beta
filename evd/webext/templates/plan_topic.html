@@ -1,0 +1,360 @@
+<html>
+
+<head>
+    {% extends "base.html" %} {% load tags %} {% load filters %} {% block head_title %}Modify Enrollment{% endblock %} {% block head_styles %}
+
+    <style>
+        #uvTab {
+            display: none;
+        }
+        
+        .mylivechat_inline * {
+            display: none;
+        }
+    </style>
+
+    <link rel='stylesheet' type='text/css' href='/static/css/calendar/fullcalendar.css' />
+    <link rel="stylesheet" type="text/css" href="/static/css/calendar/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/jquery-ui.css" />
+    <link rel="stylesheet" href="/static/css/centeradmin.css" /> {% endblock %} {% block top_bar %}{% endblock %} {% block breadcrumb %}{% endblock %} {% block head_scripts %} {{ block.super }} {% endblock %} {% block body_container %}
+</head>
+
+<body style="background-color:#FFFFA6;margin-left:60px;">
+    {% block user_info %} {% endblock %}
+    <a class="clos" style="padding-left: 764px; font-size: 25px; margin-top: 100px;">
+        <span id="menuClose" class="glyphicon glyphicon-remove-circle" style="background-color: ##a7905b00; color: black;"></span>
+    </a>
+
+    <center>
+        <h5 style="font-size: 20px; font-weight: bold; color: brown;"> Course : {{offering.course.board_name}} {{offering.course.grade}} {{offering.course.subject}}</h5>
+    </center>
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-1" style="font-size: 15px ;">
+                Grade
+            </div>
+            <div class="col-2">
+                <select id="offering_grade" class="form-select col" aria-label=".form-select-lg example">
+                    <option value="{{offering.course.grade}}">{{offering.course.grade}}</option>
+                    {% for grade in revision_grades %}
+                    <option value="{{grade}}">{{grade}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container" style="position:absolute;padding-top:15px;">
+
+
+
+
+        <form id="form-modify-course" style="margin-top:10px; font-size: 14px;" method="POST">
+            {% csrf_token %}
+            <div class="row">
+
+                <input type="hidden" name="center_id" value="{{center.id}}" />
+                <input type="hidden" name="offering_id" id='offering_id' value="{{offering.id}}" />
+            </div>
+            <div class="row">
+
+                <div class="col-sm-3" style="font-weight: bold; ">
+                    <div class="row justify-content-center">
+                        <div id="all_topics_grade" class="col" style="">Grade:{{offering.course.grade}}</div>
+                        <div id="all_topics_title" class="col">CourseTopics({{ all_topics|length }})</div>
+                    </div>
+
+                    <select multiple="multiple" id="masterlist" name="masterlist1[]" style="width:160px; height:300px;">
+                        {% for topic in all_topics %}
+                        <option value='{{topic.id}}' {% if topic.publish %} data-topic-url="{{topic.url}}" style="width:140px; color:green;" {% endif  %}    > {{topic.title}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                <div class="col-sm-2" style="margin-top:160px;margin-right:60px; font-size: 20px;">
+                    <div class="justify-center items-center">
+                        <div type='button' class="btn btn-primary mb-3" id='btnRight' style="font-size: 15px;">Add<span class="glyphicon glyphicon-chevron-right"></span></div><br>
+                        <div type='button' class="btn btn-primary" id='btnRight1' style="font-size: 15px;">Remove<span class="glyphicon glyphicon-chevron-left"></span></div>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-3" style="">
+                    <p><b> Planned Topics ({{ planned_topics|length }})</b> </p>
+                    <select multiple="multiple" id="enrolllist" class='planned_topic' name="enrolllist1[]" style="width:140px; color:green; height:300px;">
+                        {% for topics in planned_topics %}
+                            <option  value='{{topics.id}}' onmouseover="repeater=setInterval(subTopic({{topics.id}},'planned_topic'), 100);" onmouseout="clearInterval(repeater);"   id='{{topics.id}}' title=''> {{topics.title}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-sm-3" style=" float:right">
+                    <p><b> Completed Topics ({{complted_topic|length}})</b> </p>
+                    <select multiple="multiple" id="derolllist" class='completed_topic' name="derolllist1[]" style="width:140px;color:red; height:300px;">
+                        {% for topics in complted_topic %}
+                        <option  value='{{topics.id}}'  onmouseover="repeater=setInterval(subTopic({{topics.id}},'completed_topic'), 100);" onmouseout="clearInterval(repeater);"  id='{{topics.id}}'> {{topics.title}}</option>
+
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+            <br>
+            <div class='row'>
+                <span><strong>&#9733; Course Topics highlighted in Green Color has a detailed Lesson Plan. Please click on the topic to access the same.</strong></span>
+
+            </div>
+
+
+            <div style="text-align:right; ">
+                <input type="button" style="padding-left:10px; padding-right:10px; margin-top:40px;" class="btn btn-danger" value="Cancel" id='cancelId' onclick="refresh();"> &nbsp;&nbsp;&nbsp;
+                <input type="submit" id="onsubmit" style="padding-left:10px; padding-right:10px; margin-top:40px;" class="btn btn-success" value="Submit" formtarget="_self" formaction="/v2/modify_topics/">
+            </div>
+
+        </form>
+    </div>
+
+
+    {% endblock %} {% block footer %} {% endblock %}
+</body>
+{% block bottom_scripts %}
+<script>
+    window.center_id = {
+        {
+            center.id
+        }
+    };
+</script>
+
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+</script>
+
+
+<script>
+    /* $('#enrolllist').click(function(){
+                                                                                                                                                                                                                                                                                                                                                                                                            	var topicId = $('#enrolllist').val(); 
+                                                                                                                                                                                                                                                                                                                                                                                                            	alert($('#enrolllist').val());
+                                                                                                                                                                                                                                                                                                                                                                                                            }); */
+
+    function refresh() {
+        parent.$.fn.colorbox.close();
+    }
+
+    var repeater;
+
+    function subTopic(topicId, className) {
+        var is_complted_sub_topic = false;
+        if (className == 'completed_topic') {
+            is_complted_sub_topic = true;
+        }
+        var offering_id = $('#offering_id').val();
+        var ajaxUrl = '/v2/get_sub_topic/?topic_id=' + topicId + '&is_complted_sub_topic=' + is_complted_sub_topic + '&offering_id=' + offering_id;
+        $.ajax({
+            url: ajaxUrl,
+            success: function(data) {
+                var dataList = '';
+                jsonStr = JSON.parse(data);
+                if (jsonStr.length > 0) {
+                    for (i = 0; i < jsonStr.length; i++) {
+                        dataList += jsonStr[i]['name'];
+                        dataList += '\n';
+                    }
+                    $('.' + className).find('#' + topicId).attr('title', dataList);
+
+                } else {
+                    $('.' + className).find('#' + topicId).attr('title', 'No subtopics');
+                }
+
+            },
+            error: function() {
+                //alert('error');
+            }
+
+        });
+    }
+
+    $(document).ready(function() {
+
+        $('#btnRight').click(function(e) {
+            temp = [];
+            var selectedOpts = $('#masterlist option:selected');
+            var optsin_enroll = $('#enrolllist option').each(function() {
+                temp.push($(this).val())
+            });
+            var optsin_enroll1 = $('#derolllist option').each(function() {
+                temp.push($(this).val())
+            });
+            optstoappend = [];
+            if (selectedOpts.length == 0) {
+                alert("Nothing to add.");
+                e.preventDefault();
+            }
+            for (i = 0; i < selectedOpts.length; i++) {
+                if (jQuery.inArray(selectedOpts[i].value, temp) == -1) {
+                    optstoappend.push(selectedOpts[i]);
+                }
+            }
+            $('#enrolllist').append($(optstoappend).clone());
+
+            e.preventDefault();
+
+        });
+        $('#onsubmit').click(function() {
+            //var en_count= $('#enrolllist option').length;
+            var msg = "Are you sure? you want to modify planned topics."
+            var r = confirm(msg);
+            if (r == true) {
+                $('#derolllist option').prop('selected', true);
+                $('#enrolllist option').prop('selected', true);
+            } else {
+                return false;
+            }
+
+        });
+
+
+        $('#btnLeft').click(function(e) {
+            temp = [];
+            optstoappend = [];
+            var selectedOpts = $('#enrolllist option:selected');
+            var optsin_master = $('#masterlist option').each(function() {
+                temp.push($(this).val())
+            });
+            if (selectedOpts.length == 0) {
+                alert("Nothing to move.");
+                e.preventDefault();
+            }
+            for (i = 0; i < selectedOpts.length; i++) {
+                if (jQuery.inArray(selectedOpts[i].value, temp) == -1) {
+                    optstoappend.push(selectedOpts[i]);
+                }
+            }
+
+            $('#masterlist').append($(optstoappend).clone());
+            $(selectedOpts).remove();
+            e.preventDefault();
+        });
+
+
+        $('#btnRight1').click(function(e) {
+            var selectedTopic = $('#enrolllist option:selected');
+            temp = [];
+            removeTopic = [];
+            var optsin_enroll1 = $('#derolllist option').each(function() {
+                temp.push($(this).val());
+            });
+            if (selectedTopic.length == 0) {
+                alert("Nothing to move.");
+                e.preventDefault();
+            }
+            for (i = 0; i < selectedTopic.length; i++) {
+                if (jQuery.inArray(selectedTopic[i].value, temp) == -1) {
+                    removeTopic.push(selectedTopic[i]);
+                }
+            }
+            $(removeTopic).remove();
+            e.preventDefault();
+        });
+        $('#btnLeft1').click(function(e) {
+            var selectedOpts = $('#derolllist option:selected');
+            if (selectedOpts.length == 0) {
+                alert("Nothing to move.");
+                e.preventDefault();
+            }
+            $('#enrolllist').append($(selectedOpts).clone());
+            $(selectedOpts).remove();
+            e.preventDefault();
+        });
+
+
+
+
+        $("#menuClose").click(function() {
+
+            $(".clos").click(function() {
+                parent.$.fn.colorbox.close()
+            });
+        });
+
+
+
+
+    });
+    $('#masterlist').on('click', function() {
+        var url = $(this).children(":selected").attr("data-topic-url");
+        if (url != null && url != '' && url != 'undefined') {
+            window.open(url, '_blank');
+        }
+
+    });
+</script>
+<script>
+    $("#offering_grade").click(function(e) {
+        var grade = $(e.target).val();
+
+        // var grade = $('#offering_grade').val();
+        var offering_id = $('#offering_id').val();
+        $('#all_topics_grade').text('Grade:' + grade)
+
+
+        $.ajax({
+            url: '/v2/change_grade/',
+            type: "POST",
+            data: {
+                'csrfmiddlewaretoken': getCookie('csrftoken'),
+                'offering_id': offering_id,
+                'grade': grade
+            },
+            dataType: 'json',
+            success: function(response) {
+                console.log(response)
+                $('#all_topics_title').text('CourseTopics-' + response.length)
+                $('#masterlist').find('option').remove();
+                for (const key in response) {
+                    $('#masterlist').append($('<option>', {
+                        value: response[key].id,
+                        text: response[key].title
+                    }));
+                }
+            },
+
+            error: function(xhr, errmsg, err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg + "></div>")
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+
+        });
+
+    });
+</script>
+
+
+
+
+
+
+
+{% endblock %}
+
+
+</html>

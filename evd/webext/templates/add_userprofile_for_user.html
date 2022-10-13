@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+
+    <script>
+        (function () {
+
+        var evl = window.EVL = window.EVL || {};
+        evl.user_location_info =  {{user_location_info|safe}};
+      }());
+
+        $(function(){
+            $('[data-toggle="popover"]').popover();
+        });
+
+    </script>
+
+    <!--<script src="/static/js/upload/location.js"></script>-->
+    <script src='/static/js_new/parsley.min.js' type='text/javascript' ></script>
+
+    <script defer src="/static/js/selectize.min.js"></script>
+
+{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+<link rel="stylesheet" type="text/css" href="/static/css/selectize.css" />
+<style>
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{
+	background-color: #22567d;
+	color: #f5f5f5;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+    background-color: #167ac6;
+}
+.nav-tabs > li > a{
+    color: #f5f5f5;
+    cursor: default;
+    background-color: #167ac6;
+    border: 1px solid #ddd;
+    border-bottom-color: #f5f5f5;
+    font-size: 15px;
+}
+[type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+    display: inline !important;
+    width: 10%;
+    position:static !important;
+}
+
+.inputClass{
+    height: 32px;
+    font-size: 12px;
+    color: black;
+    border: 1px solid #ccc;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.submit_profile{
+    margin-bottom: 22px;
+    width: 100px;
+    <!--position: relative;-->
+    top: 7px;
+    float: right;
+    left: -160px;
+}
+
+.ec-checkbox.check-xl .ec-checkbox__control {
+    width: 40px;
+    height: 34px;
+}
+
+
+</style>
+
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+{% endblock %}
+
+
+{% block body_container%}
+{{ block.super }}
+
+<div class="container-fluid" style="background-color:white;min-height: 450px !important;">
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			<div class="row">
+                <div class="col-sm-9">
+                    <h3 style="margin-left:3%;font-weight:bold;">User Info</h3>
+                </div>
+                <div class="col-sm-3">
+                    <!--<span class="pull-right" style="margin-top:20px">Go back</span>-->
+                </div>
+            </div>
+            <hr>
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                      <ul class="nav nav-tabs nav-stacked" style="margin-right: -4%; text-align:center">
+                            <li class="active"><a href="#profile" data-toggle="tab"
+                                aria-expanded="false" id='1'>Profile</a></li>
+                              <li></li>
+                      </ul>
+                </div>
+                <div class="col-lg-10 col-md-10 col-sm-10">
+                    <div class="tab-content">
+                        <div id="profile" class="tab-pane fade in active" style="padding-bottom:3%;">
+                            <div class="row" style="border:1px solid #e5e5e5;margin:5px 0px;">
+                                <div>
+                                    <h4 style="padding-left:3%; font-weight:bold;"> My Profile</h4>
+                                    <hr/>
+                                </div>
+                                <form action="/v2/update_no_profile/" id="id_form_no_userprofile" method="POST" data-parsley-validate="">
+                                    {% csrf_token %}
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-3 col-sm-3" for="id_firstname">First Name <span style="color:red;">*</span></label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="text" name="firstname" id="id_firstname" value="{{ user.first_name }}" placeholder="FirstName" required>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-offset-2 col-sm-offset-2 col-md-3 col-sm-3" for="id_lastname">Last Name <span style="color:red;">*</span></label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="text" name="lastname" id="id_lastname" value="{{ user.last_name }}" placeholder="LastName" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-3 col-sm-3" for="id_gender">Gender <span style="color:red;">*</span></label>
+                                            <select class="inputClass col-md-6 col-sm-6" style="background-color: #fff; border-radius: 4px;" name="gender" id="id_gender" required>
+                                                <option value="">--Select Gender--</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-offset-2 col-sm-offset-2 col-md-3 col-sm-3" for="id_dob">Date of Birth <span style="color:red;">*</span></label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="date" name="dob" id="id_dob" value="" placeholder="Date of Birth" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-3 col-sm-3" for="id_email">Email <span style="color:red;">*</span></label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="email" name="email" id="id_email" placeholder="Email" value="{{ user.email }}" required>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-offset-2 col-sm-offset-2 col-md-3 col-sm-3" for="id_alt_email">Alternate Email</label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="email" name="alt_email" id="id_alt_email" value="" placeholder="Alternate Email">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-3 col-sm-3" for="id_skypeid">Skype ID</label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="text" name="skype_id" id="id_skypeid" value="" placeholder="Skype ID">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-offset-2 col-sm-offset-2 col-md-3 col-sm-3" for="id_phone">Phone No</label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="text" name="phone" id="id_phone" value="" placeholder="Phone No" data-parsley-pattern="^(\+?(([0-9]){1,3})[-.\s])?((((([0-9]){2,3})[-.\s]){1,2}([0-9]{4,10}))|([0-9]{10}))$">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-3 col-sm-3" for="medium">Preferred Medium <span style="color:red;">*</span></label>
+                                            <select class="inputClass col-md-6 col-sm-6" style="background-color: #fff; border-radius: 4px;" name="prefered_medium" id="medium" required>
+                                                <option value="" selected="selected">--Select Language--</option>
+                                                <option value="Bengali">Bengali</option>
+                                                <option value="Gujarathi">Gujarathi</option>
+                                                <option value="Hindi">Hindi</option>
+                                                <option value="Kannada">Kannada</option>
+                                                <option value="Malayalam">Malayalam</option>
+                                                <option value="Marathi">Marathi</option>
+                                                <option value="Oriya">Oriya</option>
+                                                <option value="Punjabi">Punjabi</option>
+                                                <option value="Assamese">Assamese</option>
+                                                <option value="Tamil">Tamil</option>
+                                                <option value="Telugu">Telugu</option>
+                                                <option value="Urdu">Urdu</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-offset-2 col-sm-offset-2 col-md-3 col-sm-3" for="countryId">Country <span style="color:red;">*</span></label>
+                                            <select class="countries inputClass col-md-6 col-sm-6" name="country" style="background-color: #fff; border-radius: 4px;" id="countryId" required="">
+                                                <option value="">Select Country</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-3 col-sm-3" for="stateId">State <span style="color:red;">*</span></label>
+                                            <select class="states inputClass col-md-6 col-sm-6" name="state" style="background-color: #fff; border-radius: 4px;" id="stateId" required="">
+                                                <option value="">Select State</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-offset-2 col-sm-offset-2 col-md-3 col-sm-3" for="cityId">City <span style="color:red;">*</span></label>
+                                            <select class="cities inputClass col-md-6 col-sm-6" name="city" style="background-color: #fff; border-radius: 4px;" id="cityId" required="">
+                                                <option value="">Select City</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-3 col-sm-3" for="id_profession">Profession</label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="text" name="profession" id="id_profession" value="" placeholder="Profession">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label class="col-md-offset-2 col-sm-offset-2   col-md-3 col-sm-3" for="id_short_notes">Short Notes</label>
+                                            <input class="inputClass col-md-6 col-sm-6" type="text" name="short_notes" id="id_short_notes" value="" placeholder="Brief Intro">
+                                        </div>
+                                    </div>
+                                    <div class='col-lg-12 col-md-12 col-sm-12'>
+                                        <input class='submit_profile btn btn-sm btn-success' type="submit" id='submit_profile' value="Save"/>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div  id="" class="tab-pane fade">
+                            <div class="row" style="margin-left:5%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block bottom_scripts %}
+ {{ block.super }}
+
+<script>
+
+var current_selected_country_id, current_selected_state_id, current_selected_city_id;
+
+$(document).ready(function() {
+
+    $(".inner.clearfix").css("width","85%");
+
+    $.get("/v2/get_country_state_city", function(response) {
+		for ( var i = 0; i < response['data'].length; ++i ) {
+			var option = $('<option />');
+			option.attr('value', response['data'][i]['country_name']).text(response['data'][i]['country_name']);
+			option.attr('countryId', response['data'][i]['custom_country_id']);
+
+			$('.countries').append(option);
+		}
+		$(".countries").prop("disabled",false);
+	});
+
+	$(".countries").on("change", function(ev) {
+		var countryId = $("option:selected", this).attr('countryId');
+		$(".states option:gt(0)").remove();
+		current_selected_country_id = -1;
+		if(countryId != '') {
+			current_selected_country_id = countryId;
+            $(".cities option:gt(0)").remove();
+
+            $.get("/v2/get_country_state_city/?country=" + countryId, function(response) {
+				for ( var i = 0; i < response['data'].length; ++i ) {
+					var option = $('<option />');
+					option.attr('value', response['data'][i]['state_name']).text(response['data'][i]['state_name']);
+					option.attr('stateid', response['data'][i]['custom_state_id']);
+					$('.states').append(option);
+				}
+				$(".states").prop("disabled",false);
+				$(".states").prop("selectedIndex", 0);
+
+				if($('.states').children().length == 1){
+					$('.states').append('<option val="others">Others</option>');
+					$('.cities').append('<option val="others">Others</option>');
+				}
+            });
+		}
+	});
+
+	$(".states").on("change", function(ev) {
+		var stateId = $("option:selected", this).attr('stateid');
+		$(".cities option:gt(0)").remove();
+		current_selected_state_id = -1;
+		if ( stateId != '' ) {
+			current_selected_state_id = stateId;
+			$.get("/v2/get_country_state_city/?country=" + current_selected_country_id + "&state=" + stateId, function(response) {
+				for ( var i = 0; i < response['data'].length; ++i ) {
+					var option = $('<option />');
+					option.attr('value', response['data'][i]['city_name']).text(response['data'][i]['city_name']);
+					option.attr('cityid', response['data'][i]['custom_city_id']);
+					$('.cities').append(option);
+				}
+				$(".cities").prop("disabled",false);
+				$(".cities").prop("selectedIndex", 0);
+
+				if($('.cities').children().length <= 1) {
+					$('.cities').append('<option val="others">Others</option>');
+				}
+            });
+		}
+	});
+
+});
+</script>
+
+{% endblock %}

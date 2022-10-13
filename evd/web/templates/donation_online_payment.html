@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load filters %}
+{% load tags %}
+
+{% block head_title %}eVidyaloka - Online Payment{% endblock %}
+
+{% block body_container %}
+
+<div style="text-align: center; padding: 120px 30px;">
+    <h2 style="font-size: 2.5em">Processing...</h2><br/>
+    <p>Please do not hit refresh or back button during the process</p><br/>
+    <p>You will be redirected to the payment gateway in a while</p>
+</div>
+
+<div style="display:none">
+    <form id='payment_input' name="payment_input" action="https://www.tpsl-india.in/PaymentGateway/TransactionRequest.jsp" method="post">
+        <input type="hidden" name="msg" value="{{ message }}">
+        <input type="hidden" name="amount" value="{{ amount }}">
+        <input type="submit" value="Submit">
+    </form>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+        $("#payment_input").submit();
+    });
+</script>
+{% endblock %}

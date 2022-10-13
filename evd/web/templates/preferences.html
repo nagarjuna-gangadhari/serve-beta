@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <script src="/static/js/jquery-ui.min.js"></script>
+{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+    <style>
+        .ui-widget-content .ui-icon {
+            background-image:url('/static/images/ui-icons_222222_256x240.png');
+        }
+    </style>
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+    window.evd.pre_profile_save = function(){
+        var q = "";
+        $("select[multiple='multiple']").each(function() {
+            var $that = $(this);
+            q = "";
+            $.each($(this).children(":selected"), function(index,val) {
+                    q += $(this).attr("value") + ( index < ($that.children(":selected").length - 1) ? ";" : "" );
+            });
+            $(this).prev().val(q);
+        });
+
+        q = "";
+        days="";
+        $.each($("div.timing-inner-wrapper"), function(index,val){
+            q += $(this).children().eq(1).val() + "-" + $(this).children().eq(2).val() + ( index < ($("div.timing-inner-wrapper").length - 1) ? ";" : "");
+            $("input[name='prefered_timings']").val(q);
+            days += $(this).children().eq(0).val() + ( index < ($("div.timing-inner-wrapper").length - 1) ? ";" : "");
+            $("input[name='prefered_days']").val(days);
+        });
+    }
+{% endblock %}
+
+{% block body_container %}
+    <div class="row">
+        <div class="span12 trans-block" style="min-height:500px;">
+            <div class="row">
+                <div class="span12" style="margin-top:30px;">
+                    <h2 class=="pull-left" style="padding-left:50px;">Preferences</h2>
+                </div>
+            </div>
+            <form id="user_settings_form" class="form-horizontal" method="POST" action="/save_user_profile/" >
+                {% csrf_token %}
+                <div class="row">
+                    <div class="span6 offset1" style="padding-top:30px">
+                        <div class="control-group">
+                                <label class="control-label text-left">Prefered days</label>
+                                <div class="timing-wrapper">
+                                    <input type="hidden" name="prefered_days" />
+                                    <input type="hidden" name="prefered_timings" />
+                                    <div class="timing-inner-wrapper controls">
+                                        <!--<div id="prefered_days" class="controls">-->
+                                            <select id="prefered_days" class="span1">
+                                                <option value="Mon">Mon</option>
+                                                <option value="Tue">Tue</option>
+                                                <option value="Wed">Wed</option>
+                                                <option value="Thu">Thu</option>
+                                                <option value="Fri">Fri</option>
+                                                <option value="Sat">Sat</option>
+                                                <option value="Sun">Sun</option>
+                                            </select>
+                                            <select class="span1" name="prefered_timings_mor"  >
+                                                    <option>From</option>
+                                                {% for i in 1234567891011|make_list %}
+                                                    <option value="{{ forloop.counter0 }}">{{ forloop.counter0 }}:00</option>
+                                                {% endfor %}
+                                                {% for i in 12345678910|make_list %}
+                                                    <option value="{{ forloop.counter|add_digits:12 }}">{{ forloop.counter|add_digits:12 }}:00</option>
+                                                {% endfor %}
+                                            </select>
+                                            <select class="span1" name="prefered_timings_eve" >
+                                                    <option>To</option>
+                                                {% for i in 1234567891011|make_list %}
+                                                    <option value="{{ forloop.counter0 }}">{{ forloop.counter0 }}:00</option>
+                                                {% endfor %}
+                                                {% for i in 12345678910|make_list %}
+                                                    <option value="{{ forloop.counter|add_digits:12 }}">{{ forloop.counter|add_digits:12 }}:00</option>
+                                                {% endfor %}
+                                            </select>
+                                            <a class="btn add-timing"><i class="icon-plus" style="background-position: -408px -96px;"></i></a>
+                                        <!--</div>-->
+                                    </div>
+                                    <div style="clear:both"></div>
+                                </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label text-left">Prefered Subjects</label>
+                            <div class="controls">
+                                <input type="hidden" name="prefered_subjects" />
+                                <select id="prefered_subjects" multiple="multiple" class="span2" >
+                                    {% for course in courses %}
+                                        <option value="{{ course.subject }}">{{ course.subject }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label text-left">Role</label>
+                                <div class="controls">
+                                    <input type="hidden" name="prefered_roles" />
+                                    <select id="prefered_roles" multiple="multiple" class="span2" >
+                                        {% for role in roles %}
+                                            <option value="{{ role }}">{{ role }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                        </div>
+                   </div>
+                   <div class="span5" style="padding-top:30px;">
+                        <!--<div class="control-group">
+                            <label class="control-label" for="select01"  style="text-align:left;">Role</label>
+                                <div class="controls">
+                                    <input type="hidden" name="prefered_roles" />
+                                    <select id="prefered_roles" multiple="multiple" class="span2" >
+                                        {% for role in roles %}
+                                            <option value="{{ role }}">{{ role }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                        </div>-->
+                        <div class="control-group">
+                                <label class="control-label text-left">Medium</label>
+                                <div class="controls">
+                                    <input type="hidden" name="prefered_medium">
+                                    <select id="medium" multiple="multiple" class="span2">
+                                        <option>Telugu</option>
+                                        <option>English</option>
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="control-group">
+                                <label class="control-label text-left">Available from</label>
+                                <div class="controls">
+                                    <input type="text" class="span2" id="from-date" name="from_date" value="{% if user_profile.from_date %}{{ user_profile.from_date.year }}-{{ user_profile.from_date.month }}-{{ user_profile.from_date.day }}{% endif %}">
+                                </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label text-left">Available upto</label>
+                            <div class="controls">
+                                <input type="text" class="span2" id="to-date" name="to_date" value="{% if user_profile.to_date %}{{ user_profile.to_date.year }}-{{ user_profile.to_date.month }}-{{ user_profile.to_date.day }}{% endif %}">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <a rel="submit" href="#user_settings_form" class="btn btn-primary pull-right" pre-call="pre_profile_save" style="margin-right:80px;">
+                                    <span class="ajax-button-label" data-loading="Please Wait">Save</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block bottom_scripts %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function(){
+            var curr_date = new Date(),
+                curr_day = curr_date.getDate(),
+                curr_month = curr_date.getMonth() + 1,
+                curr_year = curr_date.getFullYear(),
+                min_date = curr_year +"-"+ curr_month +"-"+ curr_day;
+
+            var future_date = new Date(curr_date.setMonth(curr_date.getMonth()+1.5)),
+                future_day = future_date.getDate(),
+                future_month = future_date.getMonth() + 1,
+                future_year = future_date.getFullYear(),
+                max_date = future_year +"-"+ future_month +"-"+ future_day;
+
+            $("input[name='from_date']").datepicker({
+                dateFormat: "yy-mm-dd",
+                minDate: min_date,
+            });
+            $("input[name='to_date']").datepicker({
+                dateFormat: "yy-mm-dd",
+                minDate: max_date,
+            });
+            $(".add-timing").click(function(e) {
+                var $wrapper = $(this).parents("div.timing-wrapper");
+                var $clone = $wrapper.children("div.timing-inner-wrapper").slice(0,1).clone(true);
+                $wrapper.append($clone);
+                $(".add-timing").hide();
+                $(".add-timing").last().show();
+                e.preventDefault();
+            });
+            var pref_days = "{{ user_profile.pref_days }}";
+            pref_days = pref_days.split(";");
+            for( var day in pref_days)
+            {
+                //$("#prefered_days").children("option[value='"+ pref_days[day] +"']").attr({"selected": "selected"});
+                $(".weekday-checkbox").each(function() {
+                    if($(this).attr("value") === pref_days[day]){
+                        $(this).attr({"checked" : "checked"});
+                    }
+                });
+            }
+
+            var pref_subjects = "{{ user_profile.pref_subjects }}";
+            pref_subjects = pref_subjects.split(";");
+            for( var subject in pref_subjects )
+            {
+                $("#prefered_subjects").children("option[value='" + pref_subjects[subject] + "']").attr({"selected":"selected"});
+            }
+
+            var pref_roles = "{{ user_profile.pref_roles}}";
+            pref_roles = pref_roles.split(";");
+            for( var role in pref_roles )
+            {
+                $("#prefered_roles").children("option[value='" + pref_roles[role] + "']").attr({"selected":"selected"});
+            }
+
+            var pref_medium = "{{ user_profile.pref_medium }}";
+            pref_medium = pref_medium.split(";");
+            for( var medium in pref_medium )
+            {
+                $("#medium").children("option[value='" + pref_medium[medium] + "']").attr({"selected":"selected"});
+            }
+
+            var pref_slots = "{{ user_profile.pref_slots }}";
+            pref_slots = pref_slots.split(";");
+            pref_slot1 = pref_slots[0].split("-");
+            $children1 = $("div.timing-inner-wrapper").children("select");
+            $children1.eq(0).children("option[value='"+ pref_slot1[0] +"']").attr({"selected": "selected"});
+            $children1.eq(1).children("option[value='"+ pref_slot1[1] +"']").attr({"selected": "selected"});
+
+            pref_slots = pref_slots.slice(1);
+
+            if(pref_slots.length > 0){
+                $.each(pref_slots,function(i,v){
+                    curr_pref_slot = pref_slots[i].split("-");
+                    $("#add-timing").trigger("click");
+                    $children = $("div.timing-inner-wrapper").eq(i).children("select");
+                    $children.eq(0).children("option[value='"+ curr_pref_slot[0] +"']").attr({"selected": "selected"});
+                    $children.eq(1).children("option[value='"+ curr_pref_slot[1] +"']").attr({"selected": "selected"});
+                });
+           }
+
+        });
+    </script>
+{% endblock %}

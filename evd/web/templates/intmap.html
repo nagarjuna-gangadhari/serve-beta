@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">{% load staticfiles%}
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>My shedule | eVidyaloka</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/static/images/evidyalogo.png" />
+    <!-- <link href="https://playground.anychart.com/6fpDuHUr/iframe" rel="canonical"> -->
+    <meta content="Choropleth Map,Geo Chart,Geo Visualization" name="keywords">
+    <meta content="AnyChart - JavaScript Charts designed to be embedded and integrated" name="description">
+
+    <!-- <link href="{% static 'anychart_india/css/anychart-ui.min.css' %}" rel="stylesheet" type="text/css"> -->
+    <link href="{% static 'css/tailwind.min.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'css/fontawesome/js/all.min.js' %}"></script>
+
+    <style>
+        [x-cloak] {
+            display: none;
+        }
+        
+        [type="checkbox"] {
+            box-sizing: border-box;
+            padding: 0;
+        }
+        
+        .form-checkbox {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+            display: inline-block;
+            vertical-align: middle;
+            background-origin: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            flex-shrink: 0;
+            color: currentColor;
+            background-color: #fff;
+            border-color: #e2e8f0;
+            border-width: 1px;
+            border-radius: 0.25rem;
+            height: 1.2em;
+            width: 1.2em;
+        }
+        
+        .form-checkbox:checked {
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
+            border-color: transparent;
+            background-color: currentColor;
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+
+<body class="">
+    <div class="grid grid-cols-1 md:grid-cols-2">
+        <div class="h-96 md:h-1/2 md:h-screen ">
+            <div class="h-full flex justify-center items-center">
+
+                <div id="container" class=" w-4/5 h-4/5 ">
+                    <h1 class="text-center font-bold text-md md:text-xl text-gray-600">eVidyaloka Teach Through Television</h1>
+                    <h1 class="flex items-center justify-end text-right text-xs md:text-xs  my-1 text-gray-400">
+                        <div class="mx-2 text-xs"><i class="fas fa-info-circle"></i></div> Double click to select</h1>
+                    <h1 class="flex items-center justify-end text-right text-xs md:text-xs   text-gray-400">
+                        <div class="mx-2 text-xs text-yellow-300"><i class="fas fa-square"></i></div>Available States</h1>
+                </div>
+            </div>
+        </div>
+        <div class="h-screen mt-2 md:mt-0">
+            <!-- component -->
+            <div class="antialiased sans-serif md:h-screen">
+                <div class="container mx-auto pr-2 h-screen">
+                    <h1 id="table_hading" class="text-base font-bold flex items-center justify-center text-center  p-6 text-gray-600">
+                        <div id="tablehead" class="mx-2">All states</div> Television Classes Timetable
+                        <div class=" mx-2"><i class="fas fa-tv"></i></div>
+                    </h1>
+
+                    <div class="overflow-x-auto bg-white rounded-lg shadow overflow-y-auto relative h-5/6 text-xs">
+                        <table class="border-collapse table-auto w-full whitespace-no-wrap bg-white table-striped relative">
+                            <thead>
+                                <tr class="text-center">
+                                    <!-- <th class="bg-gray-100 sticky top-0 border-b border-gray-200 text-gray-600 font-bold tracking-wider uppercase">state</th> -->
+                                    <th class="bg-gray-100 sticky top-0 border-b border-gray-200 text-gray-600 font-bold tracking-wider uppercase">class</th>
+                                    <th class="bg-gray-100 sticky px-4 top-0 border-b border-gray-200 text-gray-600 font-bold tracking-wider uppercase">subject</th>
+                                    <th class="bg-gray-100 sticky px-4 top-0 border-b border-gray-200 text-gray-600 font-bold tracking-wider uppercase">chapter</th>
+                                    <th class="bg-gray-100 sticky px-4 top-0 border-b border-gray-200 text-gray-600 font-bold tracking-wider uppercase">chapter name</th>
+                                    <th class="bg-gray-100 sticky px-4 top-0 border-b border-gray-200 text-gray-600 font-bold tracking-wider uppercase">date</th>
+                                    <th class="bg-gray-100 sticky px-4 top-0 border-b border-gray-200 text-gray-600 font-bold tracking-wider uppercase">time</th>
+                                    <th class="bg-gray-100 sticky top-0 border-b border-gray-200 text-gray-600 font-bold tracking-wider uppercase">chanel</th>
+                                    <!-- <th class="bg-gray-100 sticky top-0 border-b border-gray-200 text-gray-600 font-bold tracking-wider uppercase">link</th> -->
+                                </tr>
+                            </thead>
+                            <tbody id="table_of_items">
+
+                            </tbody>
+
+                        </table>
+                        <div id="null_table" class="w-full h-full flex justify-center items-center" style="display: none;">
+                            <div class="font-bold text-4xl"> comming soon ... <i class="fas fa-biking"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- <script src="{% static 'anychart_india/js/proj4.js' %}"></script> -->
+
+    <!-- <script src="{% static 'anychart_india/js/anychart-exports.min.js' %}"></script> -->
+    <!-- <script src="{% static 'anychart_india/js/anychart-ui.min.js' %}"></script> -->
+    <!-- <script src="{% static 'anychart_india/jjs/dark_earth.js' %}"></script> -->
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script> -->
+    <script src="{% static 'anychart_india/js/india.js' %}"></script>
+    <script src="{% static 'anychart_india/js/anychart-base.min.js' %}"></script>
+    <script src="{% static 'anychart_india/js/anychart-map.min.js' %}"></script>
+    <script type="text/javascript">
+        window.onload = function() {
+            get_week('AN', true)
+        }
+
+        function map(active_states) {
+            var ast = active_states['states']
+            var active_states = []
+            for (let index = 0; index < ast.length; index++) {
+                var ast_map = new Object();
+                ast_map['id'] = 'IN.' + ast[index];
+                active_states.push(ast_map)
+            }
+
+
+            // load map
+            var map = anychart.map();
+            var states_Map = new Map();
+            console.log(states_Map)
+
+            // create data set
+            var dataSet = anychart.data.set(
+                [{
+                    "id": "IN.AN",
+                    "value": 0
+                }, {
+                    "id": "IN.AP",
+                    "value": 1
+                }, {
+                    "id": "IN.AR",
+                    "value": 2
+                }, {
+                    "id": "IN.AS",
+                    "value": 3
+                }, {
+                    "id": "IN.BR",
+                    "value": 4
+                }, {
+                    "id": "IN.CH",
+                    "value": 5
+                }, {
+                    "id": "IN.CT",
+                    "value": 6
+                }, {
+                    "id": "IN.DN",
+                    "value": 7
+                }, {
+                    "id": "IN.DD",
+                    "value": 8
+                }, {
+                    "id": "IN.DL",
+                    "value": 9
+                }, {
+                    "id": "IN.GA",
+                    "value": 10
+                }, {
+                    "id": "IN.GJ",
+                    "value": 11
+                }, {
+                    "id": "IN.HR",
+                    "value": 12
+                }, {
+                    "id": "IN.HP",
+                    "value": 13
+                }, {
+                    "id": "IN.JH",
+                    "value": 14
+                }, {
+                    "id": "IN.KA",
+                    "value": 15
+                }, {
+                    "id": "IN.KL",
+                    "value": 16
+                }, {
+                    "id": "IN.LD",
+                    "value": 17
+                }, {
+                    "id": "IN.MP",
+                    "value": 18
+                }, {
+                    "id": "IN.MH",
+                    "value": 19
+                }, {
+                    "id": "IN.MNL",
+                    "value": 20
+                }, {
+                    "id": "IN.ML",
+                    "value": 21
+                }, {
+                    "id": "IN.MZ",
+                    "value": 22
+                }, {
+                    "id": "IN.NL",
+                    "value": 23
+                }, {
+                    "id": "IN.OR",
+                    "value": 24
+                }, {
+                    "id": "IN.PY",
+                    "value": 25
+                }, {
+                    "id": "IN.PB",
+                    "value": 26
+                }, {
+                    "id": "IN.RJ",
+                    "value": 27
+                }, {
+                    "id": "IN.SK",
+                    "value": 28
+                }, {
+                    "id": "IN.TN",
+                    "value": 29
+                }, {
+                    "id": "IN.TR",
+                    "value": 30
+                }, {
+                    "id": "IN.UP",
+                    "value": 31
+                }, {
+                    "id": "IN.UT",
+                    "value": 32
+                }, {
+                    "id": "IN.WB",
+                    "value": 33
+                }, {
+                    "id": "IN.TG",
+                    "value": 34
+                }, {
+                    "id": "IN.JK",
+                    "value": 35
+                }, {
+                    "id": "IN.LA",
+                    "value": 36
+                }]
+            );
+
+
+            // add a listener
+            map.listen("pointClick", function(e) {
+                var code_hasc = e.iterator.get("id")
+                var state = code_hasc.split(".", 2)[1];
+                var full_state_name
+
+                // get full state name from map object
+                var object = e.actualTarget.Yr
+                for (const k in object) {
+                    var codec = object[k]['properties']['code_hasc']
+                    if (codec == code_hasc) {
+                        full_state_name = object[k]['properties']['name']
+                    }
+                }
+                document.getElementById("tablehead").innerHTML = full_state_name;
+                get_week(state)
+
+            });
+
+
+            // create choropleth series
+            series = map.choropleth(dataSet);
+
+            // set geoIdField to 'id', this field contains in geo data meta properties
+            series.geoIdField('id');
+
+            // set map color settings
+            // series.colorScale(anychart.scales.linearColor('#2485d0', '#868a82'));
+            series.hovered().fill('#000000');
+            // set the ranges for the scale
+            currentColorScale = anychart.scales.ordinalColor();
+            currentColorScale.ranges([{
+                'to': 1,
+                'from': 0
+            }, {
+                'to': 2,
+                'from': 1
+            }, {
+                'to': 3,
+                'from': 2
+            }, {
+                'to': 4,
+                'from': 3
+            }, {
+                'to': 5,
+                'from': 4
+            }, {
+                'to': 6,
+                'from': 5
+            }, {
+                'to': 7,
+                'from': 6
+            }, {
+                'to': 8,
+                'from': 7
+            }, {
+                'to': 9,
+                'from': 8
+            }, {
+                'to': 10,
+                'from': 9
+            }, {
+                'to': 11,
+                'from': 10
+            }, {
+                'to': 12,
+                'from': 11
+            }, {
+                'to': 13,
+                'from': 12
+            }, {
+                'to': 14,
+                'from': 13
+            }, {
+                'to': 15,
+                'from': 14
+            }, {
+                'to': 16,
+                'from': 15
+            }, {
+                'to': 17,
+                'from': 16
+            }, {
+                'to': 18,
+                'from': 17
+            }, {
+                'to': 19,
+                'from': 18
+            }, {
+                'to': 20,
+                'from': 19
+            }, {
+                'to': 21,
+                'from': 20
+            }, {
+                'to': 22,
+                'from': 21
+            }, {
+                'to': 23,
+                'from': 22
+            }, {
+                'to': 24,
+                'from': 23
+            }, {
+                'to': 25,
+                'from': 24
+            }, {
+                'to': 26,
+                'from': 25
+            }, {
+                'to': 27,
+                'from': 26
+            }, {
+                'to': 28,
+                'from': 27
+            }, {
+                'to': 29,
+                'from': 28
+            }, {
+                'to': 30,
+                'from': 29
+            }, {
+                'to': 31,
+                'from': 30
+            }, {
+                'to': 32,
+                'from': 31
+            }, {
+                'to': 33,
+                'from': 32
+            }, {
+                'to': 34,
+                'from': 33
+            }, {
+                'to': 35,
+                'from': 34
+            }, {
+                'to': 36,
+                'from': 35
+            }]);
+
+            // set the single hue progression
+            // var colors = anychart.color.bipolarHueProgression('#0679d1', '#FFEB3B', 36);
+            var colors = ["#FAE7B5", "#B2BEB5", "#7CB9E8", "#FF9966", "#B284BE", "#B2BEB5", "#72A0C1", "#EDEAE0", "#F0F8FF", "#F19CBB",
+                "#C46210", "#EFDECD", "#E52B50", "#9F2B68", "#3B7A57", "#D3212D", "#FFBF00", "#FF7E00", "#9966CC", "#3DDC84",
+                "#CD9575", "#665D1E", "#B0BF1A", "#7CB9E8", "#C0E8D5", "#B284BE", "#AB274F", "#72A0C1", "#0048BA", "#B0BF1A",
+                "#7CB9E8", "#C0E8D5", "#B284BE", "#AB274F", "#72A0C1", "#EDEAE0"
+            ]
+
+
+            // define the colors 
+            currentColorScale.colors(colors);
+            series.colorScale(currentColorScale);
+
+            // create and enable the colorRange
+            var colorRange = map.colorRange();
+
+            // set geo data, you can find this map in our geo maps collection
+            // https://cdn.anychart.com/#maps-collection
+            map.geoData(anychart.maps['india']);
+
+            //set map container id (div)
+            map.container('container');
+
+            // custome legend
+            map.legend(false);
+            map.legend().itemsLayout("vertical");
+            map.legend().position("right");
+            map.legend().align("center");
+            map.legend().positionMode("outside");
+            map.legend().items([{
+                text: "Available states",
+                iconSize: 8,
+                iconFill: "#fcdf03",
+                iconStroke: "1 #96a6a6",
+                fontColor: "#96a6a6",
+                fontSize: 8,
+                fontWeight: 400
+            }])
+
+
+            var series = map.marker(active_states); // active states
+            series.labels(false); // remove  lable
+            series.fill("gold");
+            series.stroke("green");
+            map.tooltip().format(""); // remove tooltip 
+
+            //initiate map drawing
+            map.draw();
+        }
+
+
+
+        // $('#alert').delay(5000).fadeOut('slow')
+
+        // Get time table
+        function get_week(state, active_states) {
+            $.ajax({
+                url: "/get_time_table/", // the endpoint
+                type: "POST", // http method
+                data: {
+                    "state": state,
+                    "map": true
+                },
+
+                success: function(response) {
+                    datatables(response[1], state);
+                    if (active_states) {
+                        map(response[0])
+                    }
+
+                    console.log('full response ---------------------', response)
+                },
+
+                error: function(xhr, errmsg, err) {
+                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg + "></div>")
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+        };
+        var time_table = ''
+
+        function datatables(response, state) {
+
+            $("#table_of_items tr").remove();
+
+            // console.log(response)
+            // console.log(state)
+            var response = response['table']
+            var x, i = 1;
+            if (response.length > 0) {
+                $("#null_table").hide();
+                for (x in response) {
+                    var row = response[x]['fields'];
+                    da = row['date'];
+                    date = da.split("T", 1);
+                    time = da.split('T', 2)[1];
+                    $("#table_of_items").append("<tr id='tr" + i + "' class='text-center' ></tr>");
+                    // $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'>" + row['state'] + "</td>");
+                    $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'>" + row['student_class'] + "</td>");
+                    $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'>" + row['subject'] + "</td>");
+                    $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'>" + row['chapter_name'] + "</td>");
+                    $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'>" + row['chapter_name'] + "</td>");
+                    $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'>" + date + "</td>");
+                    $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'>" + time + "</td>");
+                    $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'>" + row['chanel'] + "</td>");
+                    // $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'><a href='" + row['link'] + "' >link</a></td>");
+
+                    // for (y in row) {
+                    //     // console.log(row[y])
+                    // }
+                    i = i + 1
+
+                }
+            } else {
+                $("#null_table").show();
+            }
+            var table = document.getElementById("table_of_items");
+
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+<html lang="en">
+<body>
+<p>Dear VM Team,</p>
+
+<p>Greetings of the day!</p>
+
+<p>Please find below the details of volunteer who dropped on {{Drop_Date}}</p>
+
+<p>eV Id: {{Id}}</p>
+
+<p>Name: {{Name}}</p>
+
+<p>Center: {{Center}}</p>
+
+<p>Grade: {{Grade}}</p>
+
+<p>Subject: {{Subject}}</p>
+
+<p>First Session Date: {{Joining}}</p>
+
+<p>Drop Date: {{Drop_Date}}</p>
+
+<p style= "color: red">Drop Category: {{drop_category}}</p>
+
+<p style= "color: red">Drop Reason: {{drop_reason}}</p>
+
+
+<p>Regards,<br>
+Team eVidyaloka.</p>
+</body>

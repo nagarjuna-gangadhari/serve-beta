@@ -1,0 +1,590 @@
+{% extends "base.html" %}{% load staticfiles%} {% block body_container2 %}
+
+<link rel="stylesheet" href="{% static 'css/tailwind.min.css' %}">
+<style>
+    .anychart-credits {
+        display: none;
+    }
+</style>
+<script src="{% static 'css/fontawesome/js/all.min.js' %}"></script>
+<div {% if request.user.is_authenticated %}{% else %}class="mt-36" {% endif %}>
+    <div class="shadow-xl bg-gray-400 rounded-lg mx-8 mt-8 flex flex-col p-2 font-sans">
+        <span class="text-center text-white font-bold tex-base md:text-4xl my-1">Learn Through Television</span>
+    </div>
+    <div class="mx-8 md:mx-96 mt-8 text-sm md:text-xl flex text-center flex p-2 font-sans">
+        Through our Teach through Television Program (TTT), we are transforming the educational landscape of rural India! Engaging and curated content is telecast through our Partner Cable networks and is broadcast across the country!
+    </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2">
+
+    <div class="h-96 md:h-1/2 md:h-screen mt-0">
+        <div class="h-full flex justify-center items-center">
+
+            <div id="container" class=" w-4/5 h-4/5 ">
+                <h1 class="flex items-center justify-end text-right text-sm md:text-base font-bold  mb-1 text-black">
+                    <div class="mx-2 text-sm md:text-base"><i class="fas fa-info-circle"></i></div> Double click to select</h1>
+                <h1 class="flex items-center justify-end text-right text-sm md:text-base font-bold   text-black">
+                    <div class="mx-2 text-base text-yellow-300"><i class="fas fa-star"></i></div>Available States</h1>
+            </div>
+        </div>
+    </div>
+    <div class="h-1/2 md:h-screen mt-2 md:mt-16 md:mx-8">
+        <!-- component -->
+        <div class="antialiased sans-serif md:h-full">
+            <div class="container mx-auto md:pr-2 h-full">
+                <h1 id="table_hading" class="text-base md:text-3xl font-bold flex items-center justify-center text-center  p-6 text-gray-600">Schedule for
+                    <div id="tablehead" class="mx-2 text-green-600"></div>
+                    <div class=" mx-2"><i class="fas fa-tv"></i></div>
+                </h1>
+
+                <div class="overflow-x-auto bg-gray-100 rounded-lg shadow overflow-y-auto relative h-1/2 text-sm">
+                    <table class="border-collapse table-auto w-full whitespace-no-wrap bg-white table-striped relative">
+                        <thead class="bg-gray-600">
+                            <tr class="text-white text-xs md:text-xl uppercase">
+                                <!-- <th class="bg-gray-100 sticky top-0 border-b border-gray-200 text-gray-600 font-bold tracking-wider uppercase">state</th> -->
+                                <th class="bg-gray-100 sticky top-0 border-b border-gray-200 font-bold text-center bg-gray-400 py-2">class</th>
+                                <th class="bg-gray-100 sticky px-4 top-0 border-b border-gray-200 font-bold text-center bg-gray-400 ">subject</th>
+                                <th class="bg-gray-100 sticky px-4 top-0 border-b border-gray-200 font-bold text-center bg-gray-400">chapter name</th>
+                                <th class="bg-gray-100 sticky px-4 top-0 border-b border-gray-200 font-bold text-center bg-gray-400">date</th>
+                                <th class="bg-gray-100 sticky px-4 top-0 border-b border-gray-200 font-bold text-center bg-gray-400">time</th>
+                                <th class="bg-gray-100 sticky top-0 border-b border-gray-200 font-bold text-center bg-gray-400">channel</th>
+                                <!-- <th class="bg-gray-100 sticky top-0 border-b border-gray-200 text-gray-600 font-bold tracking-wider uppercase">link</th> -->
+                            </tr>
+                        </thead>
+                        <tbody id="table_of_items" class="text-xl">
+
+                        </tbody>
+
+                    </table>
+                    <div id="null_table" class="w-full h-4/5 flex justify-center items-center" style="display: none;">
+                        <div class="font-bold text-lg md:text-4xl"> The timetable will be available soon… <i class="fas fa-biking"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="{% static 'anychart_india/js/india.js' %}"></script>
+<script src="{% static 'anychart_india/js/anychart-base.min.js' %}"></script>
+<script src="{% static 'anychart_india/js/anychart-map.min.js' %}"></script>
+<script type="text/javascript">
+    var states_full = {
+        'Andaman and Nicobar Islands': 'AN',
+        'Andhra Pradesh': 'AP',
+        'Arunachal Pradesh': 'AR',
+        'Assam': 'AS',
+        'Bihar': 'BR',
+        'Chandigarh': 'CH',
+        'Chhattisgarh': 'CT',
+        'Dadra and Nagar Haveli': 'DN',
+        'Daman and Diu': 'DD',
+        'Delhi': 'DL',
+        'Goa': 'GA',
+        'Gujarat': 'GJ',
+        'Haryana': 'HR',
+        'Himachal Pradesh': 'HP',
+        'Jammu and Kashmir': 'JK',
+        'Jharkhand': 'JH',
+        'Karnataka': 'KA',
+        'Kerala': 'KL',
+        'Lakshadweep': 'LD',
+        'Madhya Pradesh': 'MP',
+        'Maharashtra': 'MH',
+        'Manipur': 'MN',
+        'Meghalaya': 'ML',
+        'Mizoram': 'MZ',
+        'Nagaland': 'NL',
+        'Odisha': 'OR',
+        'Puducherry': 'PY',
+        'Punjab': 'PB',
+        'Rajasthan': 'RJ',
+        'Sikkim': 'SK',
+        'Tamil Nadu': 'TN',
+        'Telangana': 'TG',
+        'Tripura': 'TR',
+        'Uttarakhand': 'UT',
+        'Uttar Pradesh': 'UP',
+        'West Bengal': 'WB '
+    }
+    window.onload = function() {
+        $.get("https://ipinfo.io", function(response) {
+            const state_code = states_full[response.region];
+            document.getElementById("tablehead").innerHTML = response.region;
+        }, "jsonp");
+        get_week('TG', true); // **only call active states at initial else it will create multiple maps
+    }
+
+    // Get time table
+    function get_week(state, active_states) {
+        $.ajax({
+            url: "/get_time_table/", // the endpoint
+            type: "POST", // http method
+            data: {
+                "state": state,
+                "map": true
+            },
+
+            success: function(response) {
+                datatables(response[1], state);
+                if (active_states) {
+                    map(response[0])
+                }
+
+                // console.log('full response ---------------------', response)
+            },
+
+            error: function(xhr, errmsg, err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg + "></div>")
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    };
+
+
+    function map(active_states) {
+
+        // active states
+        var ast = active_states['states']
+        var active_states = []
+        for (let index = 0; index < ast.length; index++) {
+            var ast_map = new Object();
+            ast_map['id'] = 'IN.' + ast[index];
+            active_states.push(ast_map)
+        }
+
+
+        // load map
+        var map = anychart.map();
+        var states_Map = new Map();
+        // console.log(active_states)
+
+        // create data set
+        var states_data = [{
+            "id": "IN.AN",
+            "value": 0
+        }, {
+            "id": "IN.AP",
+            "value": 1
+        }, {
+            "id": "IN.AR",
+            "value": 2
+        }, {
+            "id": "IN.AS",
+            "value": 3
+        }, {
+            "id": "IN.BR",
+            "value": 4
+        }, {
+            "id": "IN.CH",
+            "value": 5
+        }, {
+            "id": "IN.CT",
+            "value": 6
+        }, {
+            "id": "IN.DN",
+            "value": 7
+        }, {
+            "id": "IN.DD",
+            "value": 8
+        }, {
+            "id": "IN.DL",
+            "value": 9
+        }, {
+            "id": "IN.GA",
+            "value": 10
+        }, {
+            "id": "IN.GJ",
+            "value": 11
+        }, {
+            "id": "IN.HR",
+            "value": 12
+        }, {
+            "id": "IN.HP",
+            "value": 13
+        }, {
+            "id": "IN.JH",
+            "value": 14
+        }, {
+            "id": "IN.KA",
+            "value": 15
+        }, {
+            "id": "IN.KL",
+            "value": 16
+        }, {
+            "id": "IN.LD",
+            "value": 17
+        }, {
+            "id": "IN.MP",
+            "value": 18
+        }, {
+            "id": "IN.MH",
+            "value": 19
+        }, {
+            "id": "IN.MNL",
+            "value": 20
+        }, {
+            "id": "IN.ML",
+            "value": 21
+        }, {
+            "id": "IN.MZ",
+            "value": 22
+        }, {
+            "id": "IN.NL",
+            "value": 23
+        }, {
+            "id": "IN.OR",
+            "value": 24
+        }, {
+            "id": "IN.PY",
+            "value": 25
+        }, {
+            "id": "IN.PB",
+            "value": 26
+        }, {
+            "id": "IN.RJ",
+            "value": 27
+        }, {
+            "id": "IN.SK",
+            "value": 28
+        }, {
+            "id": "IN.TN",
+            "value": 29
+        }, {
+            "id": "IN.TR",
+            "value": 30
+        }, {
+            "id": "IN.UP",
+            "value": 31
+        }, {
+            "id": "IN.UT",
+            "value": 32
+        }, {
+            "id": "IN.WB",
+            "value": 33
+        }, {
+            "id": "IN.TG",
+            "value": 34
+        }, {
+            "id": "IN.JK",
+            "value": 35
+        }, {
+            "id": "IN.LA",
+            "value": 36
+        }]
+        var dataSet = anychart.data.set(states_data);
+
+
+        // add a listener
+        map.listen("pointClick", function(e) {
+            var code_hasc = e.iterator.get("id")
+
+            var state = code_hasc.split(".", 2)[1];
+            var full_state_name
+            if (state == 'MNL') { // due to manipur code is diffrent
+                var postal = 'MN'
+            } else {
+                var postal = state
+            }
+            // get full state name from map object
+            var state_object = e.actualTarget.Yr
+                // console.log(state_object)
+
+            for (const k in state_object) {
+                var codecs = state_object[k]['properties']['postal']
+                if (codecs == postal) {
+                    full_state_name = state_object[k]['properties']['name']
+
+                }
+            }
+            document.getElementById("tablehead").innerHTML = full_state_name;
+            get_week(state)
+
+        });
+
+
+        // create choropleth series
+        series = map.choropleth(dataSet);
+
+        // set geoIdField to 'id', this field contains in geo data meta properties
+        series.geoIdField('id');
+
+        // set map color settings
+        // series.colorScale(anychart.scales.linearColor('#2485d0', '#868a82'));
+        series.hovered().fill('#000000');
+        // set the ranges for the scale
+        currentColorScale = anychart.scales.ordinalColor();
+        currentColorScale.ranges([{
+            'to': 1,
+            'from': 0
+        }, {
+            'to': 2,
+            'from': 1
+        }, {
+            'to': 3,
+            'from': 2
+        }, {
+            'to': 4,
+            'from': 3
+        }, {
+            'to': 5,
+            'from': 4
+        }, {
+            'to': 6,
+            'from': 5
+        }, {
+            'to': 7,
+            'from': 6
+        }, {
+            'to': 8,
+            'from': 7
+        }, {
+            'to': 9,
+            'from': 8
+        }, {
+            'to': 10,
+            'from': 9
+        }, {
+            'to': 11,
+            'from': 10
+        }, {
+            'to': 12,
+            'from': 11
+        }, {
+            'to': 13,
+            'from': 12
+        }, {
+            'to': 14,
+            'from': 13
+        }, {
+            'to': 15,
+            'from': 14
+        }, {
+            'to': 16,
+            'from': 15
+        }, {
+            'to': 17,
+            'from': 16
+        }, {
+            'to': 18,
+            'from': 17
+        }, {
+            'to': 19,
+            'from': 18
+        }, {
+            'to': 20,
+            'from': 19
+        }, {
+            'to': 21,
+            'from': 20
+        }, {
+            'to': 22,
+            'from': 21
+        }, {
+            'to': 23,
+            'from': 22
+        }, {
+            'to': 24,
+            'from': 23
+        }, {
+            'to': 25,
+            'from': 24
+        }, {
+            'to': 26,
+            'from': 25
+        }, {
+            'to': 27,
+            'from': 26
+        }, {
+            'to': 28,
+            'from': 27
+        }, {
+            'to': 29,
+            'from': 28
+        }, {
+            'to': 30,
+            'from': 29
+        }, {
+            'to': 31,
+            'from': 30
+        }, {
+            'to': 32,
+            'from': 31
+        }, {
+            'to': 33,
+            'from': 32
+        }, {
+            'to': 34,
+            'from': 33
+        }, {
+            'to': 35,
+            'from': 34
+        }, {
+            'to': 36,
+            'from': 35
+        }]);
+
+        // set the single hue progression
+        // var colors = anychart.color.bipolarHueProgression('#0679d1', '#FFEB3B', 36);
+        var colors = ["#FAE7B5", "#B2BEB5", "#7CB9E8", "#FF9966", "#B284BE", "#B2BEB5", "#72A0C1", "#EDEAE0", "#F0F8FF", "#F19CBB",
+            "#C46210", "#EFDECD", "#E52B50", "#9F2B68", "#3B7A57", "#D3212D", "#FFBF00", "#FF7E00", "#9966CC", "#3DDC84",
+            "#CD9575", "#665D1E", "#B0BF1A", "#7CB9E8", "#C0E8D5", "#B284BE", "#AB274F", "#72A0C1", "#0048BA", "#B0BF1A",
+            "#7CB9E8", "#C0E8D5", "#B284BE", "#AB274F", "#72A0C1", "#EDEAE0"
+        ]
+
+
+        //change opacity of unavilable states
+        // var active_state_ids = []
+        // for (state in states_data) {
+        //     for (act in active_states) {
+        //         if (active_states[act].id == states_data[state]['id']) {
+        //             var s = states_data[state]['value']
+        //             active_state_ids.push(s)
+        //         }
+        //     }
+        // }
+
+        // let new_colors = [];
+        // let num = 0;
+        // for (const color in colors) {
+        //     let flag = true
+        //     for (const s in active_state_ids) {
+
+        //         if (active_state_ids[s] === num) {
+        //             console.log(num)
+        //             new_colors.push(colors[color]);
+        //             flag = false
+
+        //         }
+        //     }
+        //     if (flag) {
+        //         new_colors.push(LightenDarkenColor(colors[color], 300));
+        //     }
+        //     num = num + 1;
+
+        // }
+
+        // console.log(new_colors)
+
+        // define the colors 
+        currentColorScale.colors(colors);
+        series.colorScale(currentColorScale);
+
+
+        // create and enable the colorRange
+        var colorRange = map.colorRange();
+
+        // set geo data, you can find this map in our geo maps collection
+        // https://cdn.anychart.com/#maps-collection
+        map.geoData(anychart.maps['india']);
+
+        //set map container id (div)
+        map.container('container');
+
+        // custome legend
+        map.legend(false);
+        map.legend().itemsLayout("vertical");
+        map.legend().position("right");
+        map.legend().align("center");
+        map.legend().positionMode("outside");
+        map.legend().items([{
+            text: "Available states",
+            iconSize: 8,
+            iconFill: "#fcdf03",
+            iconStroke: "1 #96a6a6",
+            fontColor: "#96a6a6",
+            fontSize: 8,
+            fontWeight: 400
+        }])
+
+
+        var series = map.marker(active_states); // active states
+        series.labels(false); // remove  lable text
+        series.normal().type("star4"); // lable button type
+        series.fill("gold");
+        series.stroke("green");
+        series.size('7')
+        map.tooltip().format(""); // remove tooltip 
+
+        var credits = map.credits();
+        credits.enabled(false);
+
+        map.background().fill("#f0f0f0");
+
+        //initiate map drawing
+        map.draw();
+    }
+
+
+
+    // $('#alert').delay(5000).fadeOut('slow')
+
+
+    function datatables(response, state) {
+
+        $("#table_of_items tr").remove();
+
+        // console.log(response)
+        // console.log(state)
+        var response = response['table']
+        var x, i = 1;
+        if (response.length > 0) {
+            $("#null_table").hide();
+            for (x in response) {
+                var row = response[x]['fields'];
+                da = row['date'];
+                date = da.split("T", 1);
+                time = da.split('T', 2)[1];
+                $("#table_of_items").append("<tr id='tr" + i + "' class='text-center text-xs md:text-xl hover:bg-gray-400' ></tr>");
+                // $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'>" + row['state'] + "</td>");
+                $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'>" + row['student_class'] + "</td>");
+                $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'>" + row['subject'] + "</td>");
+                $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'>" + row['chapter_name'] + "</td>");
+                $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'>" + date + "</td>");
+                $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'>" + time + "</td>");
+                $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'>" + row['chanel'] + "</td>");
+                // $("#tr" + i).append("<td class='border-dashed border-t border-gray-200'><a href='" + row['link'] + "' >link</a></td>");
+
+                i = i + 1
+
+            }
+        } else {
+            $("#null_table").show();
+        }
+
+    }
+</script>
+<script>
+    function LightenDarkenColor(col, amt) {
+
+        var usePound = false;
+
+        if (col[0] == "#") {
+            col = col.slice(1);
+            usePound = true;
+        }
+
+        var num = parseInt(col, 16);
+
+        var r = (num >> 16) + amt;
+
+        if (r > 255) r = 255;
+        else if (r < 0) r = 0;
+
+        var b = ((num >> 8) & 0x00FF) + amt;
+
+        if (b > 255) b = 255;
+        else if (b < 0) b = 0;
+
+        var g = (num & 0x0000FF) + amt;
+
+        if (g > 255) g = 255;
+        else if (g < 0) g = 0;
+
+        return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
+
+    }
+</script>
+
+{% endblock %}

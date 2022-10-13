@@ -1,0 +1,25 @@
+
+Dear {{username}},<br><br><br>
+
+
+Many students in the rural communities will benefit from the Videos that you create and share.<br><br>
+
+We are pleased to confirm that you have been assigned to create a set of {{demands.count}} Video's relevant to sub-topics along with answer keys for the Chapter - {{topic_name}}, for  {{grade}} {{subject}} from {{board}} board in {{language}}.<br><br>
+
+The subtopics for the chapter are:<br><br>
+{% for demand in demands %}
+&nbsp;&nbsp;&nbsp;{{forloop.counter}}. &nbsp;&nbsp;  {{demand.subtopic.name}}
+{% endfor %}
+
+<br> <br><br> <br><br> <br>
+Please find below, the guidelines to follow, sample for your reference, and template to create the content.<br> <br>
+PFB the link for the books. Kindly submit the worksheets and the Answer keys as separate documents as shown in the sample below using the template provided below. <br><br><br><br>
+Textbook link: Not Available<br>
+Guideline: Not Available<br>
+Template: Not Available<br>
+Sample: Not Available<br><br><br>
+
+Please login at www.evidyaloka.org/myevidyaloka to view the details of the booked chapter.<br><br>
+
+Please feel free to reach out to us for further queries.<br>
+Email id: <content.development@evidyaloka.org><br><br><br>

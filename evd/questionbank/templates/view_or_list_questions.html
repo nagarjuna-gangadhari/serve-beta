@@ -1,0 +1,749 @@
+{% extends "base.html" %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+
+    <style>
+        .mySchoolDiv {
+            background-color:#ffffff;
+            padding : 15px 20px 20px 30px;
+        }
+        .verification{
+            margin-top:15px;
+        }
+        input, textarea {
+            margin-bottom : 0px !important;
+        }
+        thead{
+            background-color: #52ccfd !important;
+            color: white;
+        }
+        thead th{
+            border-bottom: 1px solid #111;
+            font-weight: bold !important;
+            text-align: center;
+        }
+        .tableCaption{
+            padding: 20px;
+            text-align: center;
+            font-size: 23px;
+            font-weight: bold;
+            background-color: #52ccfd;
+            color: white;
+        }
+        .spantext{
+            text-align: center !important;
+        }
+
+        tfoot {
+            display: table-header-group !important;
+        }
+        th{
+            font-weight: bold !important;
+        }
+        #myTable_filter{
+            display: none;
+        }
+        tfoot>tr>th>input{
+            text-align: center;
+            width: 100%;
+        }
+        #myTable_paginate>a{
+            font-family: sans-serif !important;
+        }
+
+
+
+
+        ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+          font-family: sans-serif;
+        }
+
+        .ui-datepicker-title {
+            color: black;
+        }
+
+        select.ui-datepicker-month, select.ui-datepicker-year {
+            width: 45% !important;
+            font-family: sans-serif;
+            font-weight: normal;
+        }
+
+        .ui-datepicker-month {
+            margin-right: 2px !important;
+        }
+
+        .bottom_margin_px {
+			margin-bottom: 2px;
+		}
+
+		.timing_slot{
+			border: 1px solid #d3d3d3;
+			padding: 10px;
+			border-radius: 5px;
+		}
+
+        .center_div {
+			margin: 0 auto;
+		}
+
+		.days_table{
+			text-align: center;
+			font-size: 14px;
+			color: black;
+			font-family: sans-serif;
+		}
+
+		.days_table label{
+			color: black;
+			font-family: sans-serif;
+		}
+
+		.days_table input[type=checkbox] {
+			color: black;
+			font-family: sans-serif;
+			position: initial;
+			margin-left: -60px;
+			margin-top: -23px;
+			padding: 5px;
+			height: unset;
+		}
+
+        #add_demand_btn_container {
+            width: 100%;
+        }
+
+		.collapsible {
+			border: none;
+			background-color: #27A3E2;
+			border-radius: 5px;
+			cursor: pointer;
+			text-align: left;
+			padding: 12px;
+			width: inherit;
+			font-size: 16px;
+			font-family: sans-serif;
+			color: white;
+			outline: none;
+		}
+
+		.active, .collapsible:hover {
+			background-color: #035E8C;
+			color: white;
+		}
+
+		.new_booking_form {
+			border: 2px solid #27A3E2;
+			border-radius: 5px;
+		}
+
+		.options_container {
+			width: 90%;
+			margin-top: 24px;
+		}
+
+		input.larger {
+	      width: 10px;
+	      height: 10px;
+	    }
+
+		.row_child {
+			width: 35%;
+			height: inherit;
+			padding-left: 6px;
+			outline: none;
+			border-radius: 5px;
+			border: 1px solid rgb(166, 166, 166);
+		}
+
+		.popup_row_child {
+			width: 100%;
+			height: 30px;
+			padding-left: 6px;
+			outline: none;
+			border-radius: 5px;
+			border: 1px solid rgb(166, 166, 166);
+		}
+
+		.row_container {
+			height: 30px;
+			font-size: 16px;
+		}
+
+        fieldset {
+            overflow: hidden
+        }
+
+		.radio-buttons {
+          clear: none;
+        }
+
+        .radio-buttons label {
+          float: left;
+          clear: none;
+          display: block;
+          padding: 0px 1em 0px 3px;
+        }
+
+		input[type=radio],
+        input.radio {
+          float: left;
+          clear: none;
+          margin: 2px 0 0 2px;
+        }
+
+        #provisional_demand_lists {
+            width: 1200px;
+            margin-left: -130px;
+        }
+
+		#video_url {
+		    display: inline-block;
+		}
+
+		#teachers_count {
+			border: 1px solid rgb(166, 166, 166);
+			border-radius: 5px;
+			outline: none;
+			padding-left: 6px;
+			display: inline-block;
+		}
+
+		select {
+			outline: none;
+			font-size: 12px;
+		}
+
+		.btn-primary {
+			background-color: #27A3E2;
+			border-color: #27A3E2;
+		}
+
+		.option_label {
+			width: 10%;
+			color: black;
+			text-align: right;
+			margin-right: 10px;
+			font-family: sans-serif;
+		}
+
+		.popup_option_label {
+			width: 100%;
+			color: black;
+			text-align: right;
+			font-family: sans-serif;
+		}
+
+		#volunteer_list_table {
+		    max-height: 240px;
+		}
+
+		.table-fixed tbody {
+			height: 200px;
+			overflow-y: auto;
+			width: 100%;
+		}
+
+		.table-fixed thead,
+		.table-fixed tbody,
+		.table-fixed tr,
+		.table-fixed td,
+		.table-fixed th {
+			display: block;
+		}
+
+		.day_from {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 0px !important;
+        }
+
+		.table-fixed tr:after {
+			content: "";
+			display: block;
+			visibility: hidden;
+			clear: both;
+		}
+
+		.table-fixed tbody td,
+		.table-fixed thead > tr > th {
+			float: left;
+		}
+
+		.table > thead > tr > th,
+		.table > thead > tr > td {
+			font-size: .9em;
+			font-weight: 400;
+			border-bottom: 0;
+			letter-spacing: 1px;
+			vertical-align: top;
+			padding: 8px;
+			background: #27A3E2;
+			text-transform: uppercase;
+			color: #ffffff;
+		}
+
+		.demand_details_popup, .demand_view_popup, .demand_convert_popup {
+			background:transparent;
+			cursor:pointer;
+			display:none;
+			/*height: 100%;*/
+			top: 50px;
+			position:fixed;
+			text-align:center;
+			width:100%;
+			z-index:10000;
+			margin-left: -17%;
+		}
+
+		.demand_convert_popup > div {
+		    background-color: #fff;
+			box-shadow: 5px 5px 30px #000000;
+			display: inline-block;
+			height: auto;
+			max-width: 865px;
+			vertical-align: middle;
+			width: 100%;
+			position: relative;
+			border-radius: 5px;
+			overflow-y: 2px;
+			overflow-x: 2px;
+			padding: 15px 2%;
+			margin-top: 100px;
+		}
+
+		.demand_view_popup > div {
+			background-color: #fff;
+			box-shadow: 5px 5px 30px #000000;
+			display: inline-block;
+			height: auto;
+			max-width: 865px;
+			vertical-align: middle;
+			width: 100%;
+			position: relative;
+			border-radius: 5px;
+			overflow-y: 2px;
+			overflow-x: 2px;
+			padding: 15px 2%;
+			margin-top: 100px;
+		}
+
+		.demand_details_popup > div {
+			background-color: #fff;
+			box-shadow: 5px 5px 30px #000000;
+			display: inline-block;
+			height: auto;
+			max-width: 865px;
+			/*min-height: 480px;*/
+			vertical-align: middle;
+			width: 100%;
+			position: relative;
+			border-radius: 5px;
+			overflow-y: 2px;
+			overflow-x: 2px;
+			padding: 15px 2%;
+			margin-top: 100px;
+		}
+
+		.popupHeading{
+			/* background-color: #27A3E2;
+			margin-left: -85px;
+			margin-right: -84px;
+			margin-top: -14px;
+			border-top-left-radius: 2%;
+			padding: 13px; */
+			border: none;
+			text-align: center;
+			font-size: 16px;
+			font-family: sans-serif;
+			color: black;
+			font-weight: bold;
+		}
+
+		.popupCloseButton {
+			background-color: #fff;
+			border: 3px solid #27A3E2;
+			border-radius: 50px;
+			cursor: pointer;
+			display: inline-block;
+			font-family: arial;
+			font-weight: bold;
+			position: absolute;
+			top: -12px;
+			right: -12px;
+			font-size: 25px;
+			line-height: 25px;
+			width: 30px;
+			height: 30px;
+			text-align: center;
+		}
+
+		.popupCloseButton:hover {
+			color:white;
+			background-color: #27A3E2;
+			border: 3px solid white;
+		}
+
+		#demand_table_body tr:hover td {
+			background-color: #27A3E2;
+			color: white;
+		}
+
+		body {
+			background-color:snow;
+		}
+
+		tbody > td {
+			color: black;
+		}
+
+		.icon-bar {
+			width: 100%; /* Full-width */
+			background-color: #E0E1E3;
+			overflow: auto; /* Overflow due to float */
+			float: right;
+		}
+
+		.icon-bar div {
+			float: right; /* Float links side by side */
+			text-align: center; /* Center-align text */
+			width: 3.5%;
+			padding: 3px 0; /* Some top and bottom padding */
+			transition: all 0.3s ease; /* Add transition for hover effects */
+			color: white; /* White text color */
+			font-size: 18px; /* Increased font size */
+			color: #555555;
+		}
+
+		.icon-bar div:hover {
+			color: white;
+			background-color: #27A3E2; /* Add a hover color */
+		}
+
+		.active {
+			background-color: #4CAF50; /* Add an active/current color */
+		}
+    </style>
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_container %}
+    {{ block.super }}
+
+
+
+<div class="row" style="min-height: 450px !important;">
+    <div class="center_div" style="margin-top: 2.5%;">
+        <div class="col-md-12 col-sm-12 mySchoolDiv" >
+            {% if view_flag %}
+                <div style="overflow:auto;">
+                    {% if err_msg %}
+                        <p>{{err_msg}}</p>
+                    {% else %}
+                        <table class="table table-bordered" id="viewTable">
+                            <caption class="tableCaption">View Question
+                                {% if canEdit %}
+                                <span class="pull-right" style="font-size:16px;"><a style="color:white;vertical-align: initial !important;font-family: sans-serif;" href="/questions/update/{{question.id}}/" title="Edit Question" >Edit Question</a></span>
+                                {% endif %}
+                                <span class="pull-right" style="font-size:16px; margin-right:16px;"><a style="color:white;vertical-align: initial !important;font-family: sans-serif;" href="/questions/" title="Go Back to List Questions" >List Questions</a></span>
+                            </caption>
+                            <tr>
+                                <th>Board</th>
+                                <td>{{question.board}}</td>
+                                <th>Subject</th>
+                                <td>{{question.subject}}</td>
+                                <th>Grade</th>
+                                <td>{{question.grade}}</td>
+                            </tr>
+                            <tr>
+                                <th>Topic</th>
+                                <td>{{question.topic}}</td>
+                                <th>Sub Topic</th>
+                                <td>{{question.subtopic.name}}</td>
+                                <th>Exercise Number</th>
+                                <td>{{question.exercise_number}}</td>
+                            </tr>
+                            <tr>
+                                <th>Question Type</th>
+                                <td>{{question.question_type}}</td>
+                                <th>Difficulty Level</th>
+                                <td>{{question.difficulty_level}}</td>
+                                <!-- <th>Is Deleted</th> -->
+                                <!-- <td>{{question.is_deleted}}</td> -->
+                            </tr>
+                            <tr>
+                                <th>Question Stem</th>
+                                <td colspan="5">{{question.question_instruction}}</td>
+                            </tr>
+                            <tr>
+                                <th>Question</th>
+                                <td colspan="5">{{question.question}}</td>
+                            </tr>
+                            <tr>
+                                <th>Question Answer</th>
+                                <td colspan="5" id="ansQuestion">{{question.answer_question}}</td>
+                            </tr>
+                            <tr>
+                                <th>Correct Answer</th>
+                                <td colspan="5" id = "correctans">{{question.correct_answer}}</td>
+                            </tr>
+                            <tr>
+                                <th>Solution</th>
+                                <td colspan="5">{{question.solution}}</td>
+                            </tr>
+                            <tr>
+                                <th>Added By</th>
+                                <td>{{question.added_by}}</td>
+                                <th>Added On</th>
+                                <td id ="date_added"></td>
+                            </tr>
+                            {% if question.updated_by %}
+                                <tr>
+                                    <th>Updated By</th>
+                                    <td>{{question.updated_by}}</td>
+                                    <th>Updated On</th>
+                                    <td id="date_updated"></td>
+                                </tr>
+                            {% endif %}
+                        </table>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div id="add_demand_btn_container"  style="width: 940px; margin: auto;">
+                    <button type="button" class="collapsible bottom_margin_px">Manage Questions</button>
+                </div>
+                <div id="new_booking_form" class="center_div new_booking_form" style="width: 940px;">
+                    <div class="center_div options_container">
+                        <div id="alert_message" class="alert" style="display: None;">
+                        </div>
+                            
+                            <form method = 'GET' action= "/questions"> 
+                                {% csrf_token %}
+                            <div class="row_container">
+                                <label class="option_label">Boards {{details}}<span style="color:red;">*</span></label>
+                                <select name="board" id="boards" class="row_child" required>
+                                    <option value="">Select Board</option>
+                                    <option value="All">All</option>
+                                    {% for board in boards %}
+                                    
+                                        <option value="{{ board }}">{{ board }}</option>
+                                    {% endfor %}
+                                </select>
+                                
+                                <label class="option_label">Grade<span style="color:red;">*</span></label>
+                                <select name="grade" id="grade" class="row_child" required>
+                                    <option value="">Select Grade</option>
+                                    <option value="All">All</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                            <br>
+                            <div class="row_container">
+                                <label class="option_label">Subjects<span style="color:red;">*</span></label>
+                                <select name="subject" id="subjects" class="row_child" required>
+                                    <option value="">Select Subject</option>
+                                    <option value="All">All</option>
+                                </select>
+            
+                            
+                                <label class="option_label">Status<span style="color:red;">*</span></label>
+                                <select name="status" id="status" class="row_child" required>
+                                    <option value="">Select Status</option>
+                                    <option value="All">All</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Rejected">Rejected</option>
+                                    <optin value="Submitted">Submitted</optin>
+                                </select>
+            
+                                </div>
+                            <br><br>
+                            <div class="row_container" style="text-align: center;">
+                                <button id='' type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                            <br>
+                        </form> 
+                    </div>
+                </div>
+                <br><br>
+                <div style="overflow:auto;">
+                    <table class="table table-bordered" id="myTable">
+                        <caption class="tableCaption">Questions List</caption>
+                        <thead>
+                            <tr>
+                                <th>Board / Subject / Grade</th>
+                                <th>Topic</th>
+                                <th>Question</th>
+                                <th>Status</th>
+                                <th>Added By</th>
+                                <th>Added On</th>
+                                {%if is_superadmin %}
+                                    <th>Approve / Reject</th>
+                                {% endif %}
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Board / Subject / Grade</th>
+                                <th>Topic</th>
+                                <th>Question</th>
+                                <th>Status</th>
+                                <th>Added By</th>
+                                <th>Added On</th>
+                                {%if is_superadmin %}
+                                    <th style="display:none">Approve / Reject</th>
+                                {% endif %}
+                                <th style="display:none">Action</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                        {% if questions %}
+                            {% for question in questions %}
+                                <tr>
+                                    <td>{{question.board}} / {{question.subject}} / {{question.grade}}</td>
+                                    <td>{{question.topic}}</td> 
+                                    <td>{{question.question}}</td>
+                                    <td>{{question.status}}</td>
+                                    <td>{{question.added_by.first_name}} {{question.added_by.last_name}} - {{question.added_by.id}}</td>
+                                    <td>{{question.added_on}}</td>
+                                    {%if is_superadmin %}
+                                        <td>
+                                            <a href="/questions/approve/reject/?id={{question.id}}&approve=1" class="btn btn-primary a-btn-slide-text" style="padding: 7px 8px;font-size: 13px;">
+                                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                            </a>
+                                            <a href="/questions/approve/reject/?id={{question.id}}&approve=0" class="btn btn-primary a-btn-slide-text" style="padding: 7px 8px;font-size: 13px;">
+                                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                            </a>
+                                        </td>
+                                    {% endif %}
+                                    <td nowrap=""><a href="/questions/{{question.id}}" title="View Question"><i class="fa fa-eye fa-2x" style="color: #27A3E2;font-size: 1.5em;"></i></a> &nbsp; &nbsp;
+                                                    {% if canDelete or request.user == question.added_by %}<a href="#" onclick="deleteQuestion('{{question.id}}')" title="Delete Question"><i class="fa fa-trash fa-2x" style="color: #27A3E2;font-size: 1.5em;"></i></a>{% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr><td colspan="4"> No Questions found to display. Click <a href="/questions/add/" style="vertical-align: initial !important; font-size:14px !important">here</a> to add Question. </td></tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block bottom_scripts %}
+    {{ block.super }}
+
+    <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+
+
+        $(document).ready( function () {
+            if("{{question.question_type}}"=="MCQs"){
+                var ansQues = "{{question.answer_question}}"
+                ansQues=ansQues.split("&#39").join().split("u,;").join().replace(/,;,/g,'').replace(/;, ;/g,'').replace(/ ]/g,'').replace(/,;]/g,'').replace(/;]/g,'')
+                ansQues=ansQues.slice(2)
+                $("#ansQuestion").text(ansQues)
+            }
+            if("{{question.question_type}}"=="MCQs"){
+                var correctans = "{{question.correct_answer}}"
+                correctans=correctans.split("&#39").join().split("u,;").join().replace(/,;,/g,'').replace(/;, ;/g,'').replace(/ ]/g,'').replace(/,;]/g,'').replace(/;]/g,'')
+                correctans=correctans.slice(2)
+                $("#correctans").text(correctans)
+            }
+            var d = '{{question.added_on}}';
+            d = d.split(' ').slice(0, 3).join(" ")
+            d = d.substring(0, d.length - 1)
+            var ud = '{{question.updated_on}}';
+            ud = ud.split(' ').slice(0, 3).join(" ")
+            ud = ud.substring(0, ud.length - 1)
+            
+            $("#date_added").text(d)
+            $("#date_udated").text(ud)
+            if("{{question.question_type}}"=="True/False"){
+                $("#ansQuestion").text("True/False")
+            }
+            $(".inner.clearfix").css("width","85%");
+
+            // Setup - add a text input to each footer cell
+            $('#myTable tfoot th').each( function () {
+                var title = $(this).text();
+                $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+            } );
+
+            $("#myTable").DataTable({
+                "bLengthChange": false,
+                "pageLength": 25,
+            });
+
+            // DataTable
+            var table = $('#myTable').DataTable();
+
+            // Apply the search
+            table.columns().every( function () {
+                var that = this;
+                $( 'input', this.footer() ).on( 'keyup change', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+        });
+        function deleteQuestion(questionId){
+            var dlt = confirm("Are you sure want to Delete? ");
+            if (dlt == true){
+                $.get('/questions/delete/'+questionId , function(data, success){
+                    alert(data);
+                    var forceGet = true;
+                    setTimeout(function(){
+                        location.reload(forceGet);
+                    },100);
+                })
+            }
+        }
+
+
+        $('#boards,#grade').change(function () {
+				console.log("yes")
+                board_val = $('#boards').val()
+                grade_val = $('#grade').val()
+                if(grade_val == '' || board_val == ''){
+                    //  Show the alert message
+                    $("#alert_message").addClass("alert-info").html('<strong>Info!</strong> Please Select both boards and grade.').show();
+                } else {
+                    // Hiding the alert message
+                    $("#alert_message").hide();
+                    $.get("/v2/get_videos_form_details?board_name="+board_val+"&grade="+grade_val, function(response) {
+					html_data = '<option value="">Select Subject</option>'
+					for(let i=0; i<(response['subjects']).length; i++){
+						html_data += '<option value='+response["subjects"][i]+'>'+response["subjects"][i]+'</option>'
+					}
+					$('#subjects').html(html_data);
+				});
+
+                } 
+            });
+    </script>
+
+{% endblock %}

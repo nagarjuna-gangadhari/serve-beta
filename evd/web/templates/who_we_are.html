@@ -1,0 +1,774 @@
+
+
+
+
+{% extends "footer_base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+   <link href="/static/css/modal.css" rel="stylesheet">
+   <link href="/static/css/evl.css" rel="stylesheet">
+    <style>
+     html{
+        background-image: url(/static/images/ev_bg_white.png);
+          }
+
+        #header .inner{
+        width:79%;
+        padding-right:0px;
+
+        }
+        #hdr_login{ 
+         width:66% !important;
+        }
+        #visshymodal .modal-body .image{    
+            margin: 10px 10px 10px 0px;
+        }
+        #visshymodal .modal-header h3 {
+            color: #F15A22;
+            margin: 0px;
+        }
+        #visshymodal .title {
+            display: block;
+        }
+        #visshymodal .info p {
+            display: inline; 
+        }
+        #header .inner{
+            background: none;
+        }
+        #visshymodal .modal-body h4{
+             color: #F15A22;
+        }
+        .more a {
+            text-decoration: none;
+        }
+        .submenu li a{
+            padding: 0px 13px !important;
+        }
+        a {
+            text-decoration:none !important;
+        }
+       .text:hover {
+            text-decoration: none;
+            color: #F15A22;
+            font-family: 'PlutoCondRegular' !important;
+       }
+       .profile:hover{
+            cursor: pointer !important;
+       }
+      .title {
+            color: #F15A22;
+            font-family: 'PlutoCondRegular' !important;
+       }
+       .main-nav-2  a{
+            color:rgb(144, 157, 113) !important;
+       }
+       .team {
+            cursor: pointer;
+       }
+       #visshymodal .modal-body .info {
+            font-family: 'PlutoCondRegular' !important;
+            
+       }
+       #visshymodal .text {
+            display:none; 
+        }   
+      #visshymodal .dot{
+            display:none;
+      }
+       .submenu li {
+            margin: 0px !important;
+            padding:5px 0px !important;
+            display: table-cell;
+            vertical-align: middle;
+            height:  30px !important;
+            line-height: 20px !important;
+        }
+        .right-content .top {
+            padding:34px 37px;
+        }
+        .user-pic {
+            height: 195px;
+            margin-top: 0px !important;
+            width: 151px;
+        }
+        .subcontent .threecol .block {
+            height: 100px !important;
+        }
+        .subcontent h4 span {
+            color: #F15A22 !important;
+            text-shadow: 0 -1px #F15A22,0 1px white !important;
+        }
+        .text {
+             font-family: 'PlutoCondRegular' !important;
+        }
+
+        #logo-1 {
+            background-image: url(/static/images/aspire.jpg) !important;
+        }
+        #logo-2 {
+            background-image: url(/static/images/kauffman-labs.jpg) !important;
+        }
+        #logo-3 {
+            background-image: url(/static/images/uncommon-schools.jpg) !important;
+        }
+        .subcontent .img-block .info {
+            width:499px !important;
+        }
+        .info .expand {
+            cursor: pointer;
+            color: #F15A22 !important;
+        }
+        .info p {
+            text-align: justify;
+        }
+        .f-team {
+            padding: 5px;
+            border: 1px solid;
+            border-radius: 5px;
+            background: #f15a22;
+            color: white;
+            cursor:pointer;
+        }
+        h1#logo > a{
+            text-decoration: none;
+            color: #F15A22;
+            font-family:'PlutoCondRegular';
+        }
+        a {
+            color:#F15A22;
+        }
+        .nav_left > h3 {
+            top:20px;
+            left:65px;
+            color:#004f00;
+        }
+        h3 {
+            font-family:'PlutoCondRegular' !important;
+        }
+        h4 {
+            font-family:'PlutoCondRegular' !important;
+        }
+        .image {
+            float:left;
+            position: relative;
+            overflow: hidden;
+            width: 180px;
+            height: 195px;
+        }
+        .image > img {
+            position: absolute !important;
+            top: 0px;
+            width: auto;
+            height: 195px;
+        }
+        .dropdown-menu {
+            background-color:#FFEBCD !important;
+        }
+        .management-team h4 {
+            padding:0px;
+            font-size:16px;
+        }
+        .center-admin-team li {
+            list-style: circle !important;
+            padding:10px;
+        }
+        .center-admin-team ul {
+            padding-left: 40px;
+        }
+        .f-team h1 {
+            float:left;
+        }
+        .f-team span {
+            float:right;
+        }
+        #ui-datepicker-div {
+            display:none;
+        }
+        .table {
+            width: 100%;
+            margin-left: 25px;
+            margin-top:10px;
+            line-height: 1.8em;
+            text-align: left;
+        }
+        thead td {
+            color:#F15A22;
+        }
+
+        .about-container {
+            padding-bottom:  0px !important;
+        }
+
+        #visshymodal .modal-body .info > p:last-child {
+            display: block;
+        }
+        body {
+            font-family: 'PlutoCondRegular' !important;
+        }
+    </style>
+{% endblock %}
+{% block head_scripts %}
+   <script src="/static/js/jquery.min.js"></script>
+   <script src="/static/js/bootstrap-modal.min.js"></script>
+   <script src="/static/js/bootstrap-carousel.js"></script>
+   <script src="/static/js/application.js"></script>
+
+    <script>
+
+    $(document).ready(function(){
+        $('#hdr_donate').css('width','64%');
+        $('.info').on('click','.expand',function(e){
+            e.preventDefault();
+            $(this).parents('.info').find('.more').removeClass('hide');
+            $(this).addClass('hide');
+        });
+        $('.f-team').click(function(e){
+            e.preventDefault();
+            var $that = $(this).next('.team');
+            if($that.hasClass('hide')){
+                $that.removeClass('hide');
+                //$that.slideToggle('slow');
+                $('.f-team').not($(this)).next('.team').addClass('hide');
+                //$that.addClass('hide');
+            }else{
+                $that.addClass('hide');
+            }
+            footer_adjust();
+        });
+        $('body').find('#ui-datepicker-div').remove();
+    });
+</script>
+
+{% endblock %}
+{% block leftnav_list %}
+
+    <li><a href="/about/" class="about-1"><span>About us</span></a></li>
+    <li><a href="/vision/" class="about-2"><span>Vision & Mission</span></a></li>
+    <li><a href="/operating_principles/" class="about-3"><span>Principles</span></a></li>
+    <li><a href="/conduct/" class="about-4"><span>Code of Conduct</span></a></li>
+    <li><a href="/who_we_are/" class="about-5 active"><span>Who We Are</a></li>
+    <li><a href="/careers/" class="about-6" ><span>Careers</span></a></li>
+    <li><a href="/news_events/" class="about-7" ><span>News & Events</span></a></li>
+    <li><a href="/governance/" class="about-8" ><span>Governance</span></a></li>
+    <li><a href="/partners/" class="about-9"><span>Partners</span></a></li>
+    <li><a href="/faq/" class="about-10"><span>FAQ</span></a></li>
+    <li><a href="/contact_us/" class="about-11"><span>Contact Us</span></a></li>
+        
+{% endblock %}
+{% block top_content %}
+
+    <!--<div class="top clearfix">
+        <div class="intro">
+            <h2>Find out more about <a href="#">our team</a> & <a href="/partners/">our partners</a>. Still have questions? <a href="/contact_us/">Contact us</a> today</h2>
+        </div>
+    </div> -->
+{% endblock %}Administrators
+{% block bottom_content %}
+
+    <div class="paper-bg-wrapper">
+        <div class="paper-bg">
+
+
+            <div class="f-team founder" style="height:40px;">
+                <h4 style="height:1px;">Board of Trustees & Advisers</h4>     
+                <span style="margin-top:-12px;">&#9660;</span>
+                <div style="clear:both"></div>
+    </div>
+
+            <div class="founder-team team ">
+                <div id="our-team" class="subcontent group clearfix ">
+
+                        <div class='team' style="float:left; margin-right:50px;margin-left:50px; width:33%;position:absolute;">
+                            <div class="img-block clearfix">
+                                   <div class='image'>
+                                        <img class="user-pic" src="/static/images/visshy.png"/>    
+                                   </div>
+
+                                         <div class="info">
+                                          <h4><span>Vishy Thiagarjan</span></h4>
+                                          <span class="title">Trustee/Chairman of Trust</span>
+
+<p>An engineering from BITS,<br> Pilani, has more than fifteen<br> years of experience in<span class="dot"> ...</span></p>
+<a class="text">Read More</a>
+<p class="more hide"> mobile, Internet and telecommunications technologies. He is currently a VP, Device Software at Veveo India (P) Ltd, prior to that he was with Motorla, and Winphoria Networks.
+Vishy strongly believes that educating a child is the best way to create responsible individuals for the future that will make a better society/country /world. The opportunity @eVidyloka to use technology to provide quality education is a step towards that dream.</p>
+<p class="more hide"><a href="http://www.linkedin.com/pub/vishwanathan-thiagarajan/3/4a5/1b7">Linked Profile</a></p>
+</div>
+                                        <div style="clear:both"></div>
+                           </div>
+                    </div>
+                                    <div class='team' style="margin-left:280px;;width:33%;position:relative;margin-top:px;">
+                                       <div class="img-block clearfix">
+                                             <div class='image'>
+                                                <img class="user-pic" src="/static/images/Ravi.jpg" />
+                                             </div>
+                                             <div class="info">
+                                                 <h4><span>Ravichandran V</span></h4>
+                                                 <span class="title">Trustee</span>
+
+<p>An investment banker who <br>moved in to Shared Services<br> and was the Head of HP's<span class="dot"> ...</span></p> 
+<a class="text">Read More</a>
+<p class="more hide">Global Business Services before moving to Early Childhood Care. Currently, with Floretz Academy that is in to Montessori Schooling for children in the age group of 2 to 6 years in Bangalore, India.
+In past Ravi held various positions including, Sr. VP, at HP Global Business Services &
+ Managing Director - India ANZ Operations & Technology Pt Ltd., Vice President, Bank Muscat</p>                                                <p class="more hide"><a href="http://www.linkedin.com/pub/ravichandran-venkataraman/4/130/210" target="_blank">Linked Profile</a></p>                                                 </div>
+                                               <div style="clear:both"></div>
+                                         </div>
+                                  </div>
+                                <div class="team pull-right"style="float:right;margin-top:-390px;width:33%; clear:both;position:relative;margin-right:-80px;clear:both">
+                                      <div class="img-block clearfix" >
+                                             <div class="image">
+                                                     <img class="user-pic" src="/static/images/venkats.png" />
+                                           </div>
+                                             <div class="info">
+                                                     <h4><span>Venkat Sriraman</span></h4>
+                                                      <span class="title">Co-Founder/ Trustee</span>
+                                                         <p>An Engineering graduate  <br> from BITS, Pilani  ( Class <br>of '95)  has held various <span class="dot"> ...</span></p>
+                                                             <a class="text">Read More</a>
+                                                             <p class="more hide"> ( Class of '95)  has held various engineering   positions in the field of software product and IT application development in companies like Aditi, Citigroup, Honeywell, Microsoft and Dell.A passionate technologist, who gets excited about applying technology to solve chronic social challenges of India and eVidyaloka is a dream, to be realized in that direction, in the form of a social enterprise.  For him, the move from a corporate job to the development sector is a profession change and believes in applying the professional competencies gained, towards the execution of a larger social initiative.</p>
+                                                             <p class="more hide"><a href="http://www.linkedin.com/profile/view?id=1499476" target="_blank">Linked Profile</a></p>
+                                              </div>
+                                                      <div style="clear:both"></div>
+                                      </div>
+                               </div>
+
+
+
+  <div class='team' style="float:left; margin-right:60px;margin-left:60px; width:33%;position:absolute">
+           <div class="img-block clearfix" style="clear:both;">
+                         <div class="image">
+                              <img class="user-pic" src="/static/images/ram_kumar.jpg" />
+                           </div>
+                        <div class="info">
+                             <h4><span>RamKumar V</span></h4>
+                               <span class="title">Trustee</span>
+<p>I am a management consultant<br> by profession, presently a<br> senior director with Cedar<span class="dot"> ...</span></p>
+<a class="text">Read More</a>
+<p class="more hide"> - a global management consulting firm, and had earlier worked with PricewaterhouseCoopers. He is a Postgraduate in Management from BITS, Pilani and has completed executive education programs at INSEAD and Harvard.
+
+With a firm conviction that education is the panacea for the sustained growth of a society, Ram brings his experience of formulating and implementing strategy for multiple global clients, in the institutional building of eVidyaloka, and promulgating the philosophy of rural education</p>
+                            <p class="more hide"><a href="https://www.linkedin.com/profile/view?id=46905081" target="_blank">Linked Profile</a></p>
+                       </div>
+                               <div style="clear:both"></div>
+          </div>
+   </div>
+
+<div class='team' style=" float:left;margin-left:280px;margin-right:10px;width:33%;position:relative;margin-top:-1px;">
+     <div class="img-block clearfix">
+         <div class='image'>
+               <img class="user-pic" src="/static/images/Rizwan.jpg"/>
+         </div>
+          <div class="info">
+              <h4><span>Rizwan Tayaballi</span></h4>
+              <span class="title">Advisor</span>
+            
+               <p> Rizwan Tayabali is the  <br> Director of the UK based  <br> impact and scaling <span class="dot"> ...</span></p>
+               <a class="text">Read More</a>
+                <p class="more hide"> consultancy Social Effect and joint CEO of Make A Difference, India. He has worked
+                with and advised more than 150 non-profits and social enterprises in 25 countries around the world. 
+                Rizwan has also worked with some of the UK's top finance and retail companies as a management consultant,
+                and thus has deep experience of both the commercial and social sectors. He is on the board of various
+                international non-profit organizations and has spoken on social change at a number of universities including the University of Oxford, UEA and INSEAD."
+                <p class="more hide"><a href=" http://www.linkedin.com/in/rizwantayabali">Linked Profile</a></p>
+         </div>
+
+<!--                       <div class='image'>
+                             <img class="user-pic" src="/static/images/Satish.jpg"/>
+                      </div>
+              <div class="info">
+                           <h4><span>Satish Viswanathan</span></h4>
+                           <span class="title">Co-Founder/ Advisor</span> 
+                           <p>A Finance Professional -<br> Chartered Accountant <br> & cost Accountant <span class="dot"> ...</span>  </p>
+                              <a class="text">Read More</a>
+                           <p class="more hide">  started his career with in Banking Industry 
+                            with nationalized bank in village for 2 years and later on moved to corporate.He has 
+                            worked with Hewlett-Packard & Currently with Microsoft with experience in roles -
+                            (Controllership, Planning, Business Management & Operations). A passionate teacher at heart, 
+                            aspires to unleash the power of human connect, to be realized by bringing people together for cause of Rural Children education @eVidyaloka.</p>
+                          <p class="more hide"><a href="http://www.linkedin.com/profile/view?id=20415140" target="_blank">Linked Profile</a></p>
+             </div>-->
+                   <div style="clear:both"></div>    
+   </div>
+</div>
+
+<div class='team'style="float:right; margin-top:-5px;margin-right:-80px;position:relative;width:33%;">
+       <div class="img-block clearfix">
+            <div class='image'>
+                   <img class="user-pic" src="/static/images/Vyjayanthi.jpg"/>
+             </div>
+             <div class="info">
+                           <h4><span>Vyjayanthi Sankar</span></h4>
+                           <span class="title"> Advisor</span>
+                           
+                          <p> A Leading Education,<br>  Assessment and Manage<br>ment expert, Vyjayanthi’ <span class="dot"> ...</span> </p>
+                            <a class="text">Read More</a>
+                             <p class="more hide"> clients include the Brookings Institution, The World Bank, 
+                             UNICEF, National and State Governments, several NGOs and CSR. Her current research is on building 
+                             regional learning assessment for South Asia while she supports UN’s Learning
+                             Metric Task Force by strengthening capacity for educational assessments in the region.
+                            In 2013-14, Vyjayanthi was awarded the prestigious Fulbright Humphrey Fellowship by the US Congress 
+                            and spent the year in Penn State University for her academic work and at The World Bank in Washington DC.
+                            Prior to her Fulbright Fellowship, Vyjayanthi was part of the start-up team in Educational Initiatives (EI) 
+                            as Vice President since 2003, and founded its Large Scale Assessment Division and built it to become the leading assessment provider in South Asia
+                            <p class="more hide "><a href="https://www.linkedin.com/in/vyjayanthisankar" target="_blank">Linked Profile</a></p>
+            </div>
+                  <div style="clear:both"></div>
+       </div>
+</div>   
+<!--
+  <div class="img-block clearfix" style="margin-left:65px;">
+         <div class='image'>
+               <img class="user-pic" src="/static/images/Rizwan.jpg"/>
+         </div>
+          <div class="info">
+              <h4><span>Rizwan Tayaballi</span></h4>
+              <span class="title">Advisor</span>
+            
+               <p> Rizwan Tayabali is the  <br> Director of the UK based  <br> impact and scaling <span class="dot"> ...</span></p>
+               <a class="text">Read More</a>
+                <p class="more hide"> consultancy Social Effect and joint CEO of Make A Difference, India. He has worked
+                with and advised more than 150 non-profits and social enterprises in 25 countries around the world. 
+                Rizwan has also worked with some of the UK's top finance and retail companies as a management consultant,
+                and thus has deep experience of both the commercial and social sectors. He is on the board of various
+                international non-profit organizations and has spoken on social change at a number of universities including the University of Oxford, UEA and INSEAD."
+                <p class="more hide"><a href=" http://www.linkedin.com/in/rizwantayabali">Linked Profile</a></p>
+         </div>
+         <div style="clear:both"></div>
+ </div>-->
+</div>
+</div>
+            <div class="f-team" style="height:40px;">
+                <h4 style="height:1px;">Execution Team</h4>
+                <span style="margin-top:-12px;">&#9660;</span>
+                <div style="clear:both"></div>
+            </div>
+<div class="management-team team hide">
+      <div id="our-team" class="subcontent group clearfix">
+
+                <div class="team" style="position:absolute;float:left; margin-right:50px;margin-left:40px; width:33%;">
+                     <div class="img-block clearfix">
+                                <div class='image'>
+                                    <img class="user-pic" src="/static/images/venkatsir.png" />
+                               </div>
+
+                             <div class="info">
+                                       <h4><span>Venkat Sriraman</span></h4>
+                                       <span class="title">Executive Director</span>  
+                                        <p>An Engineering graduate<br> from BITS, Pilani  <span class="dot"> ...</span></p>
+                                        <a class="text">Read More</a>
+                                        <p class="more hide"> ( Class of '95) has  
+                                        held various engineering positions in the field of software product and IT application development in companies like Aditi,
+                                        Citigroup, Honeywell, Microsoft and Dell.A passionate technologist, who gets excited about applying technology to solve chronic
+                                        social challenges of India and eVidyaloka is a dream, to be realized in that direction, in the form of a social enterprise. 
+                                        For him, the move from a corporate job to the development sector is a profession change and believes in applying the professional
+                                        competencies gained, towards the execution of a larger social initiative.</p>
+                                        <p class="more hide"><a href="http://www.linkedin.com/profile/view?id=1499476" target="_blank">Linkedin Profile</a></p>
+                            </div>
+                              <div style="clear:both"></div>
+                      </div>
+            </div>
+         <div class="team" style="float:left; margin-right:10px;margin-left:280px; width:33%;">
+                    <div class="img-block clearfix">
+                            <div class='image'>
+                            <img class="user-pic" src="/static/images/kripa.jpg" />
+                            </div>
+                           <div class="info">
+                                 <h4><span>Kripa</span></h4>
+                                <span class="title">Program Manager - Operations</span>
+                                <p>A graduate from UDCT,<br> Mumbai and a post   <span class="dot"> ...</span></p>
+                                <a class="text">Read More </a>
+                                <p class="more hide"> graduate from IIT, Kanpur (2010 Batch); she has been into Financial Analytics for 3 years before deciding 
+                                to switch her career path from corporate to development sector. She has been an enthusiastic and zealous contributor in various NGOs 
+                                before like Prayas, Akshaya Patra,Teach for India and Dream a Dream.
+                                A passionate teacher at heart, she believes, education plays an integral role in shaping and helping a nation grow. 
+                                She brings with her an enriched experience in field of teacher training, people management and an eagerness to articulate, design and implem                                ent new ideas to enhance effective learning in students from Rural India.
+                                Outside eVidyaloka, she is an ardent photographer and loves to travel and capture the scenic beauty and vibrant moments.</p>
+                          </div>
+                               <div style="clear:both"></div>
+                    </div>
+        </div>
+        <div class="team" style="float:right; margin-right:-100px;margin-left:20px; width:33%;oveflow:hidden;margin-top:0px;">
+                 <div class="img-block clearfix">
+                      <div class='image'>
+                        <img class="user-pic" src="/static/images/sugantha.jpg" />
+                     </div>
+                       <div class="info">
+                                <h4><span>Sugantha</span></h4>
+                                <span class="title">Curriculum Manager</span>
+                                 <p >I  am, Sugantha Rajan,<br> associated with   <span class="dot"> ...</span></p>
+                                 <a class="text">Read More</a>
+                                 <p class ="more hide">eVidyaloka before it was established as a full fledged NGO. In the past I had volunteered as a Teacher for TamilNadu                                  centres. Presently I play the role of Curriculum Coordinator across all centers of eVidyaloka. 
+                                 I hold a Master's degree in Software Systems from BITS Pilani (BE in ECE from Coimbatore), mother of 2 kids, had worked in IT companies for                                 15+ years in US (initial 2 years from India). 
+                                 My family relocated to India this year. I am excited to be a part of this journey towards helping students in rural areas. I am proud to sh                                are that I am also a current teacher volunteer for Maths subject in Tamil Nadu centre.</p>
+                       </div>
+                       <div style="clear:both"></div>
+                </div>
+    </div>
+        <div class="team" style="float:left; margin-right:10px;margin-left:50px;margin-top:50px;width:33%;">
+                <div class="img-block clearfix">
+                      <div class='image'>
+                            <img class="user-pic" src="/static/images/praneeth.jpg" />
+                     </div>
+                       <div class="info">
+                             <h4><span> Venkata Praneeth</span></h4>
+                             <span class="title">IT Developer</span>
+                             <p>The GEEK and our Silent <br>Killer(Popularly known as <span class="dot"> ...</span></p>
+                             <a class="text">Read More</a>
+                             <p class="more hide">  SK).  A B.tech in the stream of Computer Science, graduated in the year 2012 and pursuing his M Tech (Computer Science). His words, "I am glad, i joined eVidyaloka, where i got an oppourtunity to build my career in IT( Information Technology ) as well as associating to a reputed social organization."</p>
+                       </div>
+                             <div style="clear:both"></div>
+              </div>
+    </div>
+        <div class="team" style="float:left; margin-right:0px;margin-left:290px; width:33%;oveflow:hidden;margin-top:-370px">
+            <div class="img-block clearfix">
+                            <div class='image'>
+                            <img class="user-pic" src="/static/images/Gayathri.png" />
+                    </div>
+                  <div class="info">
+                           <h4><span>Gayathri Ramesh</span></h4>
+                           <span class="title">Ops Manager(TN)</span>
+                           <p > I am Smt.Gayathri Ramesh,<br> a complete homemaker   <span class="dot"> ...</span></p>
+                           <a class="text">Read More</a>
+                           <p class="more hide"> whose world goes around my family alone. I have been following eVidyal
+                             oka since its inception in all its activities. I have always looked upon the founders as my inspiration to do something not just for monetary c                             ause. After I felt that my kids are less dependent on me I began to think if I'm capable of doing something else on a positive note. I signed u                             p one fine morning into eVidyaloka after confirming that I need not teach or develop lesson plans, which have never been my force.
+                            I love organizing and managing things and hence made an entry into eVidyaloka as one of its Admin with a pinch of fear. I am a perfectionist and love challenges. I strive to face them and succeed too. Thus began my journey 2 years ago and this is my life now. I'm possessed about my center, the children there and the team that runs with me. We see our own world at the center .I don't imagine a day without eVidyaloka which has fulfilled my passion for talking. I don't describe my role                             at eVidyaloka as something driven by passion or for the sake of service or something to give back to the society but it is my strong feeling that eveiry child deserves the same platform of learning and not deprived of the exposure just because they belong to the rural set up.</p>
+                  </div>
+                       <div style="clear:both"></div>
+            </div>
+    </div>
+        <div class="team" style="float:right; margin-right:0px;margin-right:-100px; width:33%;oveflow:hidden;margin-top:-370px">
+                <div class="img-block clearfix">
+                        <div class='image'>
+                            <img class="user-pic" src="/static/images/nikitha1.jpg" />
+                        </div>
+                       <div class="info">
+                             <h4><span>Nikitha Madan</span></h4>
+                             <span class="title">Ops Coordinator(AP)</span>
+                             <p >I had completed <br>my MCA in <span class="dot"> ...</span></p>
+                             <a class="text">Read More</a>
+                             <p class="more hide"> Coimbatore.Right now settled in Chennai. After my studies I started my career as a teacher in a small school. Teaching kids is my passion. Going way beyond teaching and sharing my knowledge, to bring out the subject to life in ways students will always remember. Volunteering gives us the opportunity to learn about ourselves, to learn about those around us. It is a way to satisfy that need to directly help and change someone’s life.
+
+<b>" Ask not what your country can do for you, ask what you can do for your country."</b> </p>  
+                     </div>
+                     <div style="clear:both"></div>
+               </div>
+</div>
+
+
+        <div class="team" style="float:left; margin-right:10px;margin-left:50px;margin-top:50px;width:33%;">
+            <div class="img-block clearfix">
+                            <div class='image'>
+                            <img class="user-pic" src="/static/images/deepika.jpg" />
+                    </div>
+                  <div class="info">
+                           <h4><span>Deepika Begur</span></h4>
+                           <span class="title">Assistant Manager</span>
+                           <p > Deepika is a post graduate<br> in Bio technology.  <span class="dot"> ...</span></p>
+                           <a class="text">Read More</a>
+                           <p class="more hide"> A Kannadiga, born and brought up in Ananthpur, AP, traces back her drive towards larger societal help to her school and college days. Someone who is passionate about imparting life skills at early stages of student life and prepare them up as emotionally strong individuals as they enter the society. Had worked in a Biotech company briefly, before shifting to the social space with YouthForSeva. And now at eVidyaloka - An empowered, enabling and congenial cultured work place is what keeps her going in realizing her dream of establishing her own NGO down the line.
+                           </p>
+                  </div>
+                       <div style="clear:both"></div>
+            </div>
+    </div>
+
+        <div class="team" style="float:left; margin-right:0px;margin-left:290px; width:33%;oveflow:hidden;margin-top:-370px">
+            <div class="img-block clearfix">
+                            <div class='image'>
+                            <img class="user-pic" src="/static/images/pratima.jpg" />
+                    </div>
+                  <div class="info">
+                           <h4><span>Pratima Chattopadhyay</span></h4>
+                           <span class="title">Manager - Class Delivery</span>
+                           <p >I am Pratima based out <br> of Bangalore.  <span class="dot"> ...</span></p>
+                           <a class="text">Read More</a>
+                           <p class="more hide">I have been working in the e-learning industry for the past eight years. I am very glad to be a part of eVidyaloka, as it gives me an opportunity to do what I always wanted to do- use my skills for those who need it. At eVidyaloka I feel I can use my e-learning experience  for educating the kids in villages. I also love travelling and am very enthusiastic about food.  
+
+                           </p>
+                  </div>
+                       <div style="clear:both"></div>
+            </div>
+    </div>
+        <div class="team" style="float:right; margin-right:0px;margin-right:-100px; width:33%;oveflow:hidden;margin-top:-370px">
+                <div class="img-block clearfix">
+                        <div class='image'>
+                            <img class="user-pic" src="/static/images/rishi.jpg" />
+                        </div>
+                       <div class="info">
+                             <h4><span>Rishi Mazumdar</span></h4>
+                             <span class="title">Program Manager</span>
+                             <p >Rishi has a total <br> experience of close to 12 years.  <span class="dot"> ...</span></p>
+                             <a class="text">Read More</a>
+                             <p class="more hide"> He started his career as a Computer Science Teacher in Lucknow (his hometown). Later he moved to the corporate sector, and worked with Companies like IBM Global Services and Dell Inc. While he was with Dell, he worked in functions like Software Engineering, Operations, Training and Development, Process Engineering and Analytics. After spending a considerable amount of time with corporates, he got an opportunity to work with Azim Premji Foundation, where he was program managing their field institute operations. In his most recent role, he was building the Operations unit of a health startup. He is passionate about technology and education and how the same could be amalgamated to create an affordable education model for the nation. His hobbies include photography, travelling, running, cycling and trekking. He has a Student Pilot Certification in Paragliding.</p>
+                     </div>
+                     <div style="clear:both"></div>
+               </div>
+</div>
+
+
+</div>
+</div>
+<!--To attain Class admins with photo -->
+ <div class="f-team" >
+                <h4 style="height:1px;">Class Administrators</h4>
+                <span style="margin-top:-12px;">&#9660;</span>
+                <div style="clear:both"></div>
+
+</div>
+
+ <div class="Class Administrators team hide">
+        <div id="our-team" class="subcontent clearfix">
+<!--
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <style>
+  .carousel-inner > .item > img,
+  .carousel-inner > .item > a > img {
+      width: 100%;
+      margin: 0px;
+  }
+  </style>
+</head>
+<body>
+-->
+  <div id="myCarousel" class="carousel slide" style="margin-left:-40px;width:800px;background-color:#E6E1DD;">
+    <!-- Wrapper for slides -->
+          <div class="carousel-inner" >
+              <div class="item active"><!--1 st slide-->
+                    <table class="slides"style="border:none;margin-top:-40px;margin-left:160px;">
+                            <tbody> 
+                                <tr>
+                                      <div class="img-block clearfix">
+                                              <td style="border:none;height:30px;width:30px;">
+                                                      <div class='image'>
+                                                             <img class="user-pic profile" style="border:none;" src="/static/images/dhathri.jpg"/>
+                                                     </div>
+                                                    <div class="info hide">
+                                                             <h4><span>Dhathri Potla</span></h4>
+                                                              <span class="title">Admin Pesarlanka</span>
+                                                              <p>She has been associated with eVidyaloka since 3 yrs now and it has been an amazing experience so far. She says that "This volunteering opportunity is no more "volunteering" as it has been part and parcel of my life. It not only gives me the satisfaction of serving the society, but also gives me lot of confidence and helps me build and enhance the skills that int turn help my back at my work."
+Out of eVidyaloka she work for Microsoft in operations, application support and also have a great passion for yoga. She likes to plan everything and also always aim to be a perfectionist. So now you know that she was busy with, when neither she is at office or executing eVidyaloka activities. :)</p>
+                                                   </div >
+                                             </td>
+                                                  <div style="clear:both"></div>
+                                        </div>   
+                                      <div class="img-block clearfix">
+                                          <td>
+                                               <div class='image'>
+                                                   <img style="border:none;margin-left:10px;" class="user-pic profile" src="/static/images/class1/geetha.jpg" />
+                                               </div>
+                                            <div class="info hide">
+                                                <p class="more hide"><h4><span>Geetha Viswanathan</span></h4>
+                                                <span class="title">Admin Udnabad</span>
+                                                 <p>I am a homemaker wiht two grown daughres.Now that I have more time to myself, I was looking for something personally fulfiing. my association with Evidyaloka has given me that and more. Helping with the education of such keen kids and working with such willing teachers is agret experience. I am glad to be a part of this growing family.</p>
+                                           </div>
+                                       </td>
+                                           <div style="clear:both"></div>
+                                    </div>
+                                <div class="img-block clearfix" >
+                                      <td>
+                                           <div class="image">
+                                                   <img style="border:none;margin-left:10px;" class="user-pic profile" src="/static/images/class1/rini.jpg" />
+                                           </div>
+                                           <div class="info hide">
+                                                   <h4><span>Rini Jose</span></h4>
+                                                   <span class="title">Charchgura Hira and Cahrchgura Moti Centre Admin</span>
+                                                   <p> A full time  homemaker who stumbled on evidyaloka while searching net for something to her free time to productive use.Hope this Journey with evidyaloka will be the most memorable one.</p>
+                                         </div>
+                                      </td>
+                                               <div style="clear:both"></div>
+                                </div>
+                        </tr>
+                </table>
+      </div>
+<div class="item"><!--2nd slide-->
+           <table class="slides"style="border:none;margin-top:-40px;margin-left:160px;overflow:hidden;">
+                    <tr>
+                         <div class="img-block clearfix">            
+                         <td>
+                                 <div class='image'>
+                                       <img style="border:none;margin-left:10px;" class="user-pic profile" src="/static/images/class1/ashwini.jpg" />
+                               </div>
+                              <div class="info hide">
+                                       <h4><span>Ashwini Valimbe </span></h4>
+                                      <span class="title">Shitalpur Admin</span>
+                                      <p>I am a Doctor working into health technology, mother of a 14year old son.Transformed India is my dream and I embarked on this journey with Evidyaloka which gave me an opportunity to partcipate in disseminating quality education.I look forward to give more time to this and develop a health education program for the school children in future.
+     </p>
+                                </div>
+                        </td>
+                               <div style="clear:both"></div>
+                      </div>
+        
+ 
+                             <div class="img-block clearfix">
+                                    <td style="border:none;height:30px;width:30px;">
+                                        <div class="image"> <img class="user-pic profile" style="border:none;margin-left:10px;" src="/static/images/ram.jpg"/>
+                                        </div>
+                                       <div class="info hide">
+                                           <h4><span>Rama Sudhakar N</span></h4>
+                                           <span class="title">Vamakuntla Centre Admin</span>
+                                           <p> An IT professional working with TCS in 24/7 shifts to support Microsoft network.
+                                             A person, who believes only education/literacy can change the standards and fate of a country.
+                                             Always intended to do something to the society and found eVidyaloka almost close to my thoughts.
+                                             A voluntary teacher in a local government school. A true lover of teaching</p>
+                                        </div>
+                                  </td>
+            
+                            </div>
+                          <div class="img-block clearfix" >
+                            <td>  
+                                 <div class="image">
+                                       <img style="border:none;margin-left:10px;" class="user-pic profile" src="/static/images/balan.jpg" />
+                               </div>
+                                <div class="info hide">
+                                   <h4><span>Balan Varadarajan</span></h4>
+                                    <span class="title">Bero Hira and Bero Moti centre Admin</span>
+                                    <p>I am 64 years and semi retired now. 
+                                        Worked mostly with Multinational companies like Samsung , Mentergy , Gilat Satellite etc.
+                                        iBasic Qualification : Graduate.Expertise in Sales & Marketing.Wife is an Author. </p>
+                                  </div>
+                           </td>
+                                   <div style="clear:both"></div>
+                        </div>
+                </tr>
+     </tbody>
+</table>
+      </div>
+      </div>
+   <!-- Left and right controls -->
+                 <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                      <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                      <span class="sr-only">Next</span>
+                </a>
+  </div>
+
+
+
+
+<!--Carosule ending-->
+            </div>
+
+    </div>
+
+    <div id ="visshymodal" class="modal">
+        <div class="modal-header">
+            <h3 id="myModalLabel">eVidyaloka Team<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button></h3>
+        </div>
+        <div class="modal-body">
+        </div>
+    </div>
+
+   <script src="/static/js/who_we_are.js"></script>
+{% endblock %}
+
+

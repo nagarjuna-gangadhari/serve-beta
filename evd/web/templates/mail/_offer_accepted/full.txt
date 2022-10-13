@@ -1,0 +1,22 @@
+User {{ user.first_name }} {{ user.last_name }} has {{ contxt }} Demand slots.
+
+Volunteer Details:
+----------------------------
+Name : {{ user.first_name }} {{ user.last_name }}
+ID :  {{ user.id }}
+Email-id : {{ user.email }}
+
+Course Details:
+--------------
+course        : {{ offer_title }}
+
+center        : {{ offer.center }}
+
+Details of {{ contxt }} Slots:
+-----------------------------------
+{% for ent in slots %}
+{{ ent.center.name }} {{ ent.day }} {{ ent.start_time }} to {{ ent.end_time }} {% if contxt == 'Blocked' %} ---> {{ ent.offering.course.grade }} {{ ent.offering.course.subject }} (Offering ID : {{ ent.offering.id }}) {% endif %}
+{% endfor %}
+
+upto          : {{ offer.end_date }}
+

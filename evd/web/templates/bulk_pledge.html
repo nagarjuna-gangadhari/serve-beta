@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+ {% load filters %}
+ {% load tags %}
+ {% block head_title %}eVidyaloka - Receipt Generation{% endblock %}
+ {% block head_styles %}
+ {{ block.super }}
+  <style>
+   input[type="file"]{ background-color:#1e5d91;color:white;   }
+  </style>
+ {% endblock %}
+{% block head_scripts %}
+{{ block.super }}
+<script type="text/javascript">
+function file_upload()
+{
+var fpath = document.getElementById('exl').value;
+if(fpath == "")
+{
+evd.show_msg("upload Excel file");
+return false;
+}
+else
+{
+// code to get File Extension..
+
+var arr1 = new Array;
+arr1 = fpath.split("\\");
+var len = arr1.length;
+var img1 = arr1[len-1];
+var filext = img1.substring(img1.lastIndexOf(".")+1);
+// Checking Extension
+if(filext == "xls" || filext == "xlsx")
+{
+evd.show_msg("File has been upload correctly");
+return true;
+}
+else
+{
+ evd.show_msg("Invalid File Format Selected");
+return false;
+}
+}
+}
+</script>
+<script type="text/javascript">
+function files_upload()
+{
+var fpath = document.getElementById('files').value;
+if(fpath == "")
+{
+evd.show_msg("Please choose receipts to upload");
+return false;
+}
+else
+{
+// code to get File Extension..
+decd_arr =[];
+console.log($('#files').get(0).files.length);
+for(var i=0;i<$('#files').get(0).files.length;i++)
+{
+console.log(i);
+fle= $('#files').get(0).files[i].name;
+console.log(fle);
+var arr1 = new Array;
+arr1 = fle.split("\\");
+var len = arr1.length;
+var img1 = arr1[len-1];
+var filext = img1.substring(img1.lastIndexOf(".")+1);
+// Checking Extension
+if(filext == "pdf")
+{
+decd_arr.push(1);
+}
+else
+{
+decd_arr.push(0);
+}
+}
+console.log(decd_arr);
+for(var i=0;i<decd_arr.length;i++)
+{ if(decd_arr[i]!=1){evd.show_msg('Invalid file format'); return false;  }  }
+evd.show_msg('File/s uploaded Successfully!...')
+return true;
+}}
+</script>
+
+<script>
+    var selDiv = "";
+        
+    document.addEventListener("DOMContentLoaded", init, false);
+    
+    function init() {
+        document.querySelector('#files').addEventListener('change', handleFileSelect, false);
+        selDiv = document.querySelector("#selectedFiles");
+    }
+        
+    function handleFileSelect(e) {
+        
+        if(!e.target.files) return;
+        
+        selDiv.innerHTML = "";
+        
+        var files = e.target.files;
+        for(var i=0; i<files.length; i++) {
+            var f = files[i];
+            
+            selDiv.innerHTML += "<li >"+f.name + "</li>";
+
+        }
+        
+    }
+    </script>
+<script>
+$(function(){
+$('#gen_recpt').change(function(){ if($(this).is(":checked")){ $('#note').hide(); }else{$('#note').show();} });
+$('#ui_chng').click(function(){$('#form1,#instr,#note').slideUp();$('#upload_ui').slideDown();});
+});
+</script>
+
+{% endblock %}
+ {% block body_container %}
+ <div style=" height:1000px;text-align:center;">
+<h1 style="font-size:25px; font-weight:bold; margin-bottom:30px; ">Bulk Receipt Updation</h1>
+
+
+
+    <form action="/bulk_pledge/" id="form1" enctype="multipart/form-data" onsubmit="return file_upload()"  method="post"  >{% csrf_token %}
+
+  <span style="display:inline;font-weight:bold;font-style:italic; font-size:18px;"> Excel File:&nbsp&nbsp&nbsp</span> <input id="exl" type="file" style="display:inline;width:220px;padding:8px;border-radius:10px;"  name="excelfile">
+     <input type="submit" style="display:inline;height:35px;font-size:14px;padding-left:10px;margin-left:10px;padding-right:10px;"  class="btn" value="Upload Details"><br>
+     <input type="checkbox" name="gen_recpt" id="gen_recpt" disabled  style="float:left;margin-top:10px;width:15px;height:15px;margin-left:335px;"><label style="padding-left:10px;;float:left;font-size:16px;margin-bottom:10px;display:inline;margin-top:10px;"> Generate Receipts </label>
+<div id="note" style="background-color:white;margin-top:40px;padding:5px; text-align:left">
+<p  ><strong>Note : </strong>Please Ensure that you have uploaded receipts into the folder "/static/uploads/donation_receipts/pdf_files/" with naming convention as "donorname_receiptNO_donation_receipt.pdf" </p>
+</br>
+<p>For Example:  venkat_123_donation_receipt.pdf</p>
+
+</br>
+<p style="display:inline;">If not uploaded? You can Upload here   :   </p> <button type="button" id="ui_chng"  style="cursor:pointer;display:inline-block">Upload Receipts</button>
+</div>
+  </form>
+<div  id="instr" style="border-radius:10px;text-align:center;margin-top:30px;margin-left:auto;margin-right:auto;background-color:white; width:800px;height:240px;">
+     <p style="font-weight:bold;font-size:18px;padding-top:10px;"> Instructions</p>
+
+     <div style="margin-left:20px;text-align:left; margin-top:10px;border-radius:10px;position: absolute;width:760px; height:180px;border:2px solid green;">
+        <div style="width:100%; margin:30px;">
+             <div style="float:left; border-radius:100%; height:20px; width:20px; background-color:#F15A1E;">
+             </div>
+             <p > &nbsp&nbsp&nbspFill in the pre-designed <a href="/static/downloads/receipt_gen.xls" style="box-shadow: 10px 10px 5px #888888; width:60px;height:30px;display:inline;font-size:14px;padding-left:7px;padding-right:7px;padding-top:7px;padding-bottom:7px;;" class="btn"><bld style="color:white;">excel template</bld></a>, with the transaction details to generate the receipts..  </p>
+        </div>
+        <div style="width:100%; margin:30px;">
+             <div style="float:left; border-radius:100%; height:20px; width:20px; background-color:green;">
+             </div>
+                <p> &nbsp&nbsp&nbspLocate the file by clicking on "Choose File " button.  </p>
+
+        </div>
+        <div style="width:100%; margin:30px;">
+             <div style="float:left; border-radius:100%; height:20px; width:20px; background-color:#F15A1E;">
+             </div>
+                <p> &nbsp&nbsp&nbspClick on "Upload" to generate receipts. </p>
+
+        </div>
+
+     </div>
+
+ </div>
+<div id="upload_ui" style="display:none;border-radius:5px;background-color:white;padding:20px;width:60%;margin:auto;">
+<form id="form2" method="post" action="/load_receipts/" onsubmit="return files_upload()" enctype="multipart/form-data">{% csrf_token %}
+
+        Files: <input type="file" id="files" name="files" multiple style="margin-bottom:20px;display:inline;"><button type="button" style="float:right;display:inline;" value="Back" onClick="history.go(0)">Back</button>
+        <div id="selectedFiles" style="text-align:left;background-color:white;width:500px;margin:auto;"></div>
+
+        <input type="submit"  class='btn' value="Upload" style="margin:auto;font-size:14px;padding-left:5px;padding-right:5px;" >
+
+    </form>
+</div>
+
+
+
+{% endblock %}
+{% block body %}
+{{ block.super }}
+{% endblock %}

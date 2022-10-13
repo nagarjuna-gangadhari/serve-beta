@@ -1,0 +1,716 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+    <script>
+      window.onload = function(){
+        var from_vol = window.location.search;
+        var s = document.createElement('script');
+        var ns = document.createElement('noscript');
+        s.type = 'text/javascript';
+        if(from_vol === "?from=volunteer"){
+            
+            var code = "";
+                //"!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?" +
+                //"n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;" +
+                //"n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;" +
+                //"t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window," +
+                //"document,'script','https://connect.facebook.net/en_US/fbevents.js');" +
+                //"fbq('init', '1264112123750308');" +
+                //"fbq('track', 'PageView');";
+            var code2 = ""; //"<img height='1' width='1' style='display:none' src='https://www.facebook.com/tr?id=1264112123750308&ev=PageView&noscript=1'\>";
+            try{
+                s.appendChild(document.createTextNode(code));
+                ns.appendChild(document.createTextNode(code2));
+                document.body.appendChild(s);
+                document.body.appendChild(ns);
+            } catch (e) {
+                s.text = code;
+                ns.text = code2;
+                document.body.appendChild(s);
+                document.body.appendChild(ns);
+            }
+                //"<noscript><img height='1' width='1' style='display:none'" +
+                //"src='https://www.facebook.com/tr?id=754135028101900&ev=PageView&noscript=1'>" +
+                //"</noscript>"
+        }
+      }
+    </script>
+    <script>
+
+      (function () {
+
+        var evl = window.EVL = window.EVL || {};
+        evl.user_location_info =  {{user_location_info|safe}};
+      }());
+
+    </script>
+
+    <script defer src="https://www.youtube.com/iframe_api"></script>
+    <script defer src="https://rawgit.com/kimmobrunfeldt/progressbar.js/master/dist/progressbar.js"></script>
+    <script src="/static/js/upload/location.js"></script>
+    <script defer src="/static/js/selectize.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/selectize.css" />
+    <script src='/static/js_new/parsley.min.js' type='text/javascript' ></script>
+    <script src='/static/js_new/profile.js' type='text/javascript' ></script>
+
+    <script>
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: 'DhmVpNCEWOo',
+          controls : 0,
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      } 
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        //event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+    	  
+        if(event.data == 0 ){
+         evd.ajax_sub('/save_base_profile/',{'step':'orientation'},function(){});
+        }
+        if(event.data == 1 ){
+        	viewVideo();
+           }
+        //if (event.data == YT.PlayerState.PLAYING && !done) {
+          //setTimeout(stopVideo, 6000);
+          //done = true;
+        //}
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
+      $(function(){
+        $('[data-toggle="popover"]').popover();
+        var profile_completion_status = $('.new_dash_container').attr('data-profile_completion_status');
+        if(profile_completion_status === 'True'){
+            $(".not_editable").removeClass("hide");
+            $(".editable").addClass("hide");
+        }
+        $("body").on("click", ".cancel_edit_profile", function(event){
+            event.preventDefault();
+            $(".not_editable").removeClass("hide");
+            $(".editable").addClass("hide");
+        });
+        $("body").on("click", ".edit_profile", function(){
+            $(".not_editable").addClass("hide");
+            $(".editable").removeClass("hide");
+        });
+        $("body").on("click", ".evd_beats", function(){
+            console.log('engage');
+            window.location.pathname="/engage/";
+        });
+        //redirect_to_onboard
+
+        $("body").on("click", ".redirect_to_onboard", function(){
+            window.location.pathname="/onboarding/";
+        });
+
+        
+
+
+        //code of conduct checkbox:save enable/disable
+        $("#profile_sub").removeAttr("disabled");
+        $("body").on("change", "#code_conduct", function(){
+            if (document.getElementById('code_conduct').checked){
+                $("#profile_sub").removeAttr("disabled");
+            }
+            else{
+                $("#profile_sub").attr("disabled","disabled");
+            }
+        });
+      });
+      $(function() {
+        $(".btn-pref .btn").click(function (e) {
+            e.preventDefault();
+            $(".btn-pref .btn").removeClass("btn-warning").addClass("btn-default");
+            // $(".tab").addClass("active"); // instead of this do the below
+            $(this).removeClass("btn-default").addClass("btn-warning");
+        });
+        /*// store the currently selected tab in the hash value
+        $(".btn-group button").on("shown.bs.tab", function(e) {
+            var id = $(e.target).attr("href").substr(1);
+            window.location.hash = id;
+        });*/
+
+        // on load of the page: switch to the currently selected tab
+        var hash = window.location.hash;
+        window.setTimeout(function(){$('.nav-tabs a[href="' + hash + '"]').trigger('click');}, 1);
+
+        $('.nav-tabs a').click(function (e) {
+            $(this).tab('show');
+            var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+            window.location.hash = this.hash;
+            $('html,body').scrollTop(scrollmem);
+        });
+      });
+
+
+    </script>
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+    {% include "code_conduct_modal.html" %}
+    <style>
+    .parsley-errors-list.filled {
+            opacity: 1;
+            margin-top: -6%;
+            margin-bottom: 8%;
+        }
+
+
+    @media only screen and (max-width: 480px) and (min-width: 0px)  {
+    .nav-tabs {
+    border-bottom: 1px solid #ddd;
+    margin-left: 21.8%;
+    }
+    .basic_profile {
+    background-color: white;
+    padding-bottom: 20px;
+    box-shadow: #B7B7B7 1px 1px 5px;
+    margin-left: 22%;
+    overflow-y: hidden;
+    }
+    .col-xs-2 {
+    width: 16.66666667%;
+    margin-left: 93%;
+    margin-top: -18%;
+    }
+
+    .popover{
+        top: 10%;
+        left: 51%;
+        display: block;
+    }
+    .popover.right {
+            margin-left: -51%;
+    }
+    .fade.in {
+        opacity: 1;
+    }
+    .popover {
+        min-width: 122px;
+        text-align: center;
+    }
+
+    .role_selection {
+    background-color: white;
+    padding: 0px 10px 7px 20px;
+    margin-right: -29%;
+    margin-left: 19%;
+    box-shadow: #B7B7B7 1px 1px 5px;
+    }
+
+    .modal-content {
+     margin: 18% !important;
+    position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    }
+
+    .modal.fade.in {
+    top: 50% !important;
+    bottom: 22% !important;
+    }
+    }
+
+    @media only screen and (max-width: 767px) and (min-width: 480px) {
+
+    .nav-tabs {
+        border-bottom: 1px solid #ddd;
+        margin-left: 19%;
+    }
+    .basic_profile {
+        background-color: white;
+        padding-bottom: 20px;
+        box-shadow: #B7B7B7 1px 1px 5px;
+        margin-left: 19%;
+        margin-top: 0%;
+    }
+    .col-xs-2 {
+    width: 16.66666667%;
+    margin-left: 53%;
+    margin-top: -7%;
+    }
+
+   .role_selection {
+    background-color: white;
+    padding: 0px 10px 7px 20px;
+    margin-right: -23%;
+    margin-left: 17%;
+    box-shadow: #B7B7B7 1px 1px 5px;
+    }
+
+    .popover{
+        top: 10%;
+        left: 51%;
+        display: block;
+    }
+    .popover.right {
+            margin-left: -51%;
+    }
+    .fade.in {
+        opacity: 1;
+    }
+    .popover {
+        min-width: 122px;
+        text-align: center;
+    }
+
+    .modal.fade.in {
+    top: 50%;
+    bottom: 25%;
+    }
+    }
+
+
+    @media only screen and (max-width: 1024px) and (min-width: 767px)  {
+    .nav-tabs {
+    border-bottom: 1px solid #ddd;
+    margin-left: 9.5%;
+    }
+    .basic_profile {
+    background-color: white;
+    padding-bottom: 20px;
+    box-shadow: #B7B7B7 1px 1px 5px;
+    margin-left: 9.5%;
+    width: fit-content;
+    }
+    .role_selection {
+    background-color: white;
+    padding: 0px 10px 7px 20px;
+    margin-right: 8%;
+    margin-left: 8%;
+    box-shadow: #B7B7B7 1px 1px 5px;
+    }
+}
+
+   <!-- @media (max-width: 984px) {
+        .inner{
+            #margin-left: -5em;
+            width: 100%;
+            margin-left: 0%;
+
+        }
+       &lt;!&ndash; #contact-buttons-bar, .mylivechat_inline, .popover, #orientation{
+            display: none!important;
+        }&ndash;&gt;
+        .section_title {
+        /* position: absolute; */
+        left: 6%;
+        /* margin-top: -1%; */
+        }
+        .save_div{
+            margin-left: 0!important;
+            margin-top: 0!important;
+        }
+        .about-container{
+            padding-left:0!important;
+            margin-left:0!important;
+        }
+        .profile_div{
+            margin-left: 10em;
+        }
+        .new_dash_container{
+            width: 100%;
+        }
+        .new_dash_container input, .new_dash_container .selectize-input, .countries, .states, .cities{
+            width: 100%!important;
+        }
+        .new_dash_container .nav-tabs{
+            width: 100%!important;
+        }
+    }-->
+
+    .tab-content > div:last-child {
+        display : block !important;
+    }
+        .btn-pref .btn {
+            -webkit-border-radius:0 !important;
+        }
+    .input-group{
+    position: relative;
+    display: block;
+    border-collapse: separate;
+    padding-bottom: 20px;
+    }
+    .input-group-addon{
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color:red;
+    display:block;
+    text-align:left;
+    }
+    </style>
+    <div class="container-fluid new_dash_container" data-profile_completion_status="{{user_profile.profile_completion_status}}">
+    
+        <div class='row my_profile' style="position:relative">
+          <div class="col-lg-12 col-sm-12">
+            <ul class="nav nav-tabs" style="width: 1000px;float: left;">
+                <li class="active"><a data-toggle="tab" 
+                href="#profile" style="font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;color:black">Profile</a></li>
+                <li><a data-toggle="tab" 
+                href="#orientation" style="font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;color:black">Orientation</a></li>
+                
+            </ul>
+            <div class="tab-content">
+                <div id="profile" class="tab-pane fade in active">
+                    <div class='basic_profile col-xs-12 col-sm-12 col-md-12' >
+                     <div class='section_title'>
+                             {% if message %}
+							<br />
+							<div class="alert alert-info alert-dismissable" style="line-height: 0;">
+								<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>
+									{{message}}
+							</div>
+			                {% endif %}
+                        </div>
+                        <div class='section_title'>
+                            <h5> My Profile</h5>
+                            <hr class="hidden-xs hidden-sm">
+                        </div>
+                        <div class="alert alert-danger hidden" id='feed_back' role="alert" >
+                            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                            <span class="sr-only">Error:</span>
+                            <span class='error-msg'>Enter a valid email address</span>
+                        </div>
+
+                        <div class="bs-callout bs-callout-warning hidden">
+                            <h4>Oh snap!</h4>
+                            <p>This form seems to be invalid :(</p>
+                        </div>
+
+                        <div class="bs-callout bs-callout-info hidden">
+                            <h4>Yay!</h4>
+                            <p>Everything seems to be ok :)</p>
+                        </div>
+
+                        <div class="editable1">
+                            <form  id='basic_profile_form' method='POST' enctype="multipart/form-data" data-parsley-validate="">
+                                {% csrf_token %}
+                              <div class="col-md-4">
+                                <input type='hidden' name='step' value='base_profile' />
+                                <div class='row standard_row'>
+                                    <div class='col-xs-12 col-sm-12 col-md-6 col-lg-6'>
+                                        <a data-toggle="popover" data-trigger="hover" data-content="First Name">
+                                            <div class="input-group">
+                                            <input type='text' class="form-control" name='first_name' placeholder="FirstName" 
+                                            value='{{ user_profile.user.first_name }}' required="">
+                                            <span class="input-group-addon">*</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class='col-xs-12  col-sm-12 col-md-6 col-lg-6'>
+                                        <a data-toggle="popover" data-trigger="hover" data-content="Last Name">
+                                        <div class="input-group">
+                                            <input type='text' class="form-control" name='last_name' placeholder="LastName" 
+                                            value='{{ user_profile.user.last_name }}' required="">
+                                            <span class="input-group-addon">*</span>
+                                        </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class='row standard_row'>
+                                    <div class='col-xs-12  col-sm-12 col-md-6 col-lg-6'>
+                                        <a data-toggle="popover" data-trigger="hover" data-content="E-mail">
+                                            <div class="input-group">
+                                            <input type='email' class="form-control" name='email' placeholder="Email "
+                                            value='{{ user_profile.user.email }}' required="">
+                                            <span class="input-group-addon">*</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class='col-xs-12  col-sm-12 col-md-6 col-lg-6'>
+                                        <a data-toggle="popover" data-trigger="hover" data-content="Alternate Email">
+                                            <input type='email' class="form-control" name='alt_email' placeholder="Alternate Email" 
+                                            value='{{ user_profile.secondary_email }}' >
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class='row standard_row'>
+                                    <div class='col-xs-12  col-sm-12 col-md-6 col-lg-6'>
+                                      <a data-toggle="popover" data-trigger="hover" data-content="Skype ID">
+                                        <input type='text' class="form-control" name='skype_id' placeholder="Skype ID"
+                                               value='{{ user_profile.skype_id }}'>
+                                      </a>
+                                    </div>
+                                    <div class='col-xs-12  col-sm-12 col-md-6 col-lg-6'>
+                                      <a data-toggle="popover" data-trigger="hover" data-content="Phone No.">
+                                        <input type='text' class="form-control" name='phone' placeholder="Phone No"
+                                               value='{{ user_profile.phone }}' data-parsley-pattern="^(\+?(([0-9]){1,3})[-.\s])?((((([0-9]){2,3})[-.\s]){1,2}([0-9]{4,10}))|([0-9]{10}))$">
+                                      x
+                                    </div>
+                                </div>
+                                <div class='row standard_row'>
+                                    <div class='col-xs-12  col-sm-12 col-md-6 col-lg-6'>
+                                      <a data-toggle="popover" data-trigger="hover" data-content="Gender">
+                                         <select name="gender" id="genderId" class="selects-up" required="">
+                                                {% if user_profile.gender == "" %}
+                                                    <option value="">--Select Gender--</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                {% elif user_profile.gender == "male" %}
+                                                    <option value="">--Select Gender--</option>
+                                                    <option value="male" selected="selected">Male</option>
+                                                    <option value="female">Female</option>
+                                                {% else %}
+                                                    <option value="">--Select Gender--</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female" selected="selected">Female</option>
+                                                {% endif %}
+                                         </select>
+                                        <span class="input-group-addon" style="border: none; top:0; background: none; position: absolute; right: 0;">*</span>
+                                      </a>
+                                    </div>
+                                    <div class='col-xs-12  col-sm-12 col-md-6 col-lg-6'>
+                                      <a data-toggle="popover" data-trigger="hover" data-content="Age">
+                                        <div class="input-group">
+                                        <input type='number' name='age' class="form-control" placeholder="Age"
+                                               value='{{ user_profile.age }}' required="" min="0" max="100">
+                                        <span class="input-group-addon">*</span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                </div>
+                                <div class='row standard_row'>
+                                    <div class='col-xs-12  col-sm-12 col-md-12 col-lg-12'>
+                                      <a data-toggle="popover" data-trigger="hover" data-content="Profession">
+                                        <select name= "profession" id="professionId" class=' selects-up'>
+                                            <option value="">--Select Your Profession--</option>
+                                            {% for item in prof_list %}
+                                              {% if user_profile.profession == item %}
+                                                 <option value="{{item}}" selected="selected">{{item}}</option>
+                                              {% else %}
+                                                 <option value="{{item}}">{{item}}</option>
+                                              {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                      </a>
+                                    </div>
+                                </div>
+                                <div class='row standard_row'>
+                                    <div class='col-xs-12  col-sm-12 col-md-6 col-lg-6'>
+                                      <a data-toggle="popover" data-trigger="hover" data-content="Preferred Medium">
+                                        <select name="prefered_medium" id="medium" class=' selects-up' required="">
+                                            {% if user_profile.pref_medium %}
+                                                <option value="{{ user_profile.pref_medium }}" selected="selected">
+                                                {{ user_profile.pref_medium }}</option>
+                                            {% else %}
+                                                <option value="" selected="selected">--Select Language--</option>
+                                            {% endif %}
+                                            <option value="Bengali">Bengali</option>
+                                            <option value="Gujarathi">Gujarathi</option>
+                                            <option value="Hindi">Hindi</option>
+                                            <option value="Kannada">Kannada</option>
+                                            <option value="Malayalam">Malayalam</option>
+                                            <option value="Marathi">Marathi</option>
+                                            <option value="Oriya">Oriya</option>
+                                            <option value="Punjabi">Punjabi</option>
+                                            <option value="Assamese">Assamese</option>
+                                            <option value="Tamil">Tamil</option>
+                                            <option value="Telugu">Telugu</option>
+                                            <option value="Urdu">Urdu</option>
+                                        </select>
+                                        <span class="input-group-addon" style="border: none; top:0; background: none; position: absolute; right: 0;">*</span>
+                                      </a>
+                                    </div>
+                                    <div class='col-xs-12  col-sm-12 col-md-6 col-lg-6'>
+                                      <a data-toggle="popover" data-trigger="hover" data-content="Referrer">
+                                        <input type='text' name='refer_name' id='refer' class="form-control" placeholder="Referrer"
+                                               value='{{ user_profile.referer }}'>
+                                      </a>
+                                        <input type="hidden" id="refer_id" name="reference_id" value='{% if user_profile.referred_user %} user_profile.referrer.id {% endif %}' rel="tooltip" >
+                                    </div>
+                                </div>
+                                <div class='row standard_row'>
+                                   <div class='col-xs-12  col-sm-12 col-md-6 col-lg-6'>
+                                      <a data-toggle="popover" data-trigger="hover" data-content="Reference Channel">
+                                        <select name="referencechannel" class='selects-up'>
+                                         {% if referencechannel %}
+                                            <option value="{{referencechannel.id}}" selected="selected">
+                                                {{referencechannel.name}} </option>
+                                        {% else %}
+                                            <option value="" selected="selected">--Select--</option>
+                                        {% endif %}
+                                            {% for ref_channel in ref_channels %}
+                                               <option value="{{ref_channel.id}}">{{ref_channel.name}}</option>
+                                            {% endfor %}
+                                         </select>
+                                      </a>
+                                   </div>
+                                    <div class='col-xs-12  col-sm-12 col-md-6 col-lg-6'>
+                                     <a data-toggle="popover" data-trigger="hover" data-content="Country">
+                                        <div class="input-group">
+                                      <select name="country" class="countries form-control" id="countryId" required="">
+                                          <option value="">Select Country</option>
+                                      </select>
+                                        <span class="input-group-addon">*</span>
+                                    </div>
+                                    </a>
+
+                                    </div>
+                                </div>
+                                <div class='row standard_row'>
+                                    <div class='col-xs-12  col-sm-12 col-md-6 col-lg-6'>
+                                     <a data-toggle="popover" data-trigger="hover" data-content="State">
+                                      <div class="input-group">
+                                      <select name="state" class="states form-control" id="stateId" required="">
+                                          <option value="">Select State</option>
+                                      </select>
+                                      <span class="input-group-addon">*</span>
+                                      </div>
+                                    </a>
+
+                                    </div>
+                                    <div class='col-xs-12  col-sm-12 col-md-6 col-lg-6'>
+                                     <a data-toggle="popover" data-trigger="hover" data-content="City">
+                                      <div class="input-group">
+                                      <select name="city" class="cities form-control" id="cityId" required="">
+                                          <option value="">Select City</option>
+                                      </select>
+                                      <span class="input-group-addon">*</span>
+                                      </div>
+                                     </a>
+                                    </div>
+                                </div>
+                                <div class='row standard_row'>
+                                    <div class='col-xs-12 col-sm-12'>
+                                      <a data-toggle="popover" data-trigger="hover" data-content="Brief Intro">
+                                        <input type='textarea' name='short_notes' cols=4 class="form-control" placeholder="Brief Intro"
+                                               value='{{ user_profile.short_notes }}'>
+                                      </a>
+                                    </div>
+                                </div>
+                              </div><!--col-md-4-->
+                              <div class="col-md-offset-1 col-md-6">
+
+
+                                <div style="width:100%">
+                                    <div class='section_sub_title'>
+                                        <h5> Ways to contribute </h5>
+                                    </div>
+                                    <div id='preferred_roles'>
+                                       {% for role in roles %}
+                                         {% if role.type != 'Internal' %}
+                                           <div class='row'>
+                                                <div class='col-md-10'>
+                                                   <p class='role_ele'>
+                                                        <input type="checkbox" id="{{ role.name }}" name='roles' value={{ role.id }} {% if role.id = 6 or role.id = 7 %}disabled{% endif %}{% if role.id in pref_roles %} checked {% endif %} /> 
+                                                        <label for="{{ role.name }}" class='myevd_label'  {% if role.id = 8 or role.id = 9 or role.id = 10 %}style="visibility:hidden;"{% endif %}   >{{ role.name }}</label>
+                                                   </p>
+                                                </div>
+                                                <div class='col-xs-2'>
+                                                  <a data-toggle="popover" data-trigger="hover" title={{role.name}} {% if role.id = 8 or role.id = 9 or role.id = 10 %}style="visibility:hidden;"{% endif %} data-placement="top" data-content="{{role.description}}">
+                                                   <img src='{% if role.id == 1 %}/static/img_new/teacher_role.png{% else %}/static/img_new/admin_role.png{% endif %}' {% if role.id = 8 or role.id = 9  or role.id = 10 %}style="visibility:hidden;"{% endif %}/>
+                                                  </a>
+                                                </div>
+                                           </div>
+                                        {% endif %}
+                                       {% endfor %}
+                                    </div>
+                                </div>
+
+                              </div><!--col-md-6-->
+                                <div class='col-xs-12 col-sm-12 col-md-6 save_div' style='margin-left: 40%;margin-top: -3%;'>
+                                    <input  class='btn btn-info' disabled="disabled" type="submit" id='profile_sub' value="Save"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    </div>
+                    <div id="orientation" class="tab-pane fade">
+                        <div class=' col-xs-12 col-sm-12 col-md-12 orientation_and_preferences '>
+                            <div class='role_selection'>
+                                <div class='row standard_row'>
+                                    <div class='section_title'>
+                                        <h5> Orientation</h5>
+                                        <p>
+                                            This 12 mins video provides complete details about how eVidyaloka works. It is encouraged to complete this video, 
+                                            before proceeding with Onboarding for any volunteering role.
+                                        </p>
+                                        <hr>
+                                        <div class="alert alert-success hide complete_orientation_alert">
+                                            <a class="close redirect_to_onboard" data-dismiss="alert" aria-label="close"
+                                                style="font-size:30px;padding-top:0;margin-top:-5px">
+                                            &times;</a>
+                                            Please Complete the Orientation to proceed or close to redirect to <strong>onboarding</strong>.
+                                        </div>
+                                        <div class='col-xs-12 col-sm-12 col-md-6 col-md-offset-3 col-lg-6'>
+                                            <img src="/static/images/orientation_youtube.jpg" data-toggle="modal" 
+                                                data-target="#orientation_modal"
+                                                class="img-responsive video0" style="width:95%;height:200px;cursor:pointer"/>
+                                            <!--<div class="embed-responsive embed-responsive-16by9">
+                                            <div id="player"></div>
+                                            </div>-->
+                                            <div class='section_status'>
+                                                <p>Status : <span id='orientation_status'>{% if user_profile.evd_rep %} <strong>Complete</strong>
+                                                {% else %} 
+                                                  <strong>Incomplete</strong>
+                                                  <br>The status gets updated to Complete automatically, when the video is watched till the end
+                                                {% endif %}</span></p>
+                                                <a style="line-height:19px;text-shadow:none" href="/onboarding/"><button class="btn btn-info">Watch Later</button></a> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+   <script>
+    function viewVideo(){
+    	activity_name="Viewed Orietation Video";
+    	activity_type="Page Visit"
+    	ajaxUrl = '/ajax/save_user_activity_by_ajax?activity_name='+activity_name+'&activity_type='+activity_type
+    	$.ajax({
+    	        url : ajaxUrl,
+    	        success: function (jsonStr) {
+    	        	//alert(jsonStr);
+    	        },
+    	        error: function() {
+    	        alert("error");
+    	          }
+    	      });
+    }
+    </script> 
+{% endblock %}

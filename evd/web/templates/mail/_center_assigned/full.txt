@@ -1,0 +1,8 @@
+Congrats You are assigned as a centeradmin
+
+CENTER DETAILS:
+--------------
+Name     : {{ center.name }}
+State    : {{ center.state }}
+District : {{ center.district }}
+

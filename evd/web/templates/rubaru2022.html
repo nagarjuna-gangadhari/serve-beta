@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Primary Meta Tags -->
+    <title>RUBARU | eVidyaloka</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/static/images/favicon.ico" type="image/x-icon">
+    <meta name="title" content="Rubaru 2022 - annual flagship event of eVidyaloka.">
+    <meta name="description" content="Rubaru is an annual summit from eVidyaloka, promoting the spirit of rural-urban connection. This is the fourth edition of the event, where thought leaders from across the industry come together on a social discussion platform to engage, discuss, and share valuable insights with other industry leaders.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.evidyaloka.org/rubaru/">
+    <meta property="og:title" content="Rubaru 2022 - annual flagship event of eVidyaloka.">
+    <meta property="og:description" content="Rubaru is an annual summit from eVidyaloka, promoting the spirit of rural-urban connection. This is the fourth edition of the event, where thought leaders from across the industry come together on a social discussion platform to engage, discuss, and share valuable insights with other industry leaders.">
+    <meta property="og:image" content="https://www.evidyaloka.org/static/images/vol_pics/nad_social.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.evidyaloka.org/rubaru/">
+    <meta property="twitter:title" content="Rubaru 2022 - annual flagship event of eVidyaloka.">
+    <meta property="twitter:description" content="Rubaru is an annual summit from eVidyaloka, promoting the spirit of rural-urban connection. This is the fourth edition of the event, where thought leaders from across the industry come together on a social discussion platform to engage, discuss, and share valuable insights with other industry leaders.">
+    <meta property="twitter:image" content="https://www.evidyaloka.org/static/images/vol_pics/nad_social.png">
+
+
+
+    <script src="/static/css/tailwindcss3.js"></script>
+    <script src="/static/css/fontawesome/js/all.min.js"></script>
+    <style>
+        /* width */
+        
+         ::-webkit-scrollbar {
+            width: 2px;
+        }
+        /* Track */
+        
+         ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        /* Handle */
+        
+         ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+        /* Handle on hover */
+        
+         ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        @media screen and (max-width: 660px) {
+            .unhide {
+                display: none;
+            }
+        }
+        
+        .banner {
+            height: 32rem;
+        }
+        
+        @media screen and (max-width: 660px) {
+            .banner {
+                height: 10rem;
+            }
+        }
+        
+        .serif {
+            font-family: 'Zilla Slab', serif;
+        }
+        
+        [x-cloak] {
+            display: none;
+        }
+        
+        .grid-indigo {
+            background-image: radial-gradient(#005e14 2px, transparent 2px);
+            background-size: 16px 16px;
+        }
+    </style>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Anton|Roboto');
+        .word {
+            perspective: 1000px;
+        }
+        
+        .word span {
+            cursor: pointer;
+            display: inline-block;
+            user-select: none;
+        }
+        
+        .word span:nth-child(1).active {
+            animation: balance 1.5s ease-out;
+            transform-origin: bottom left;
+        }
+        
+        @keyframes balance {
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+            30%,
+            60% {
+                transform: rotate(-45deg);
+            }
+        }
+        
+        .word span:nth-child(2).active {
+            animation: shrinkjump 1s ease-in-out;
+            transform-origin: bottom center;
+        }
+        
+        @keyframes shrinkjump {
+            10%,
+            35% {
+                transform: scale(2, .2) translate(0, 0);
+            }
+            45%,
+            50% {
+                transform: scale(1) translate(0, -150px);
+            }
+            80% {
+                transform: scale(1) translate(0, 0);
+            }
+        }
+        
+        .word span:nth-child(3).active {
+            animation: falling 2s ease-out;
+            transform-origin: bottom center;
+        }
+        
+        @keyframes falling {
+            12% {
+                transform: rotateX(240deg);
+            }
+            24% {
+                transform: rotateX(150deg);
+            }
+            36% {
+                transform: rotateX(200deg);
+            }
+            48% {
+                transform: rotateX(175deg);
+            }
+            60%,
+            85% {
+                transform: rotateX(180deg);
+            }
+            100% {
+                transform: rotateX(0deg);
+            }
+        }
+        
+        .word span:nth-child(4).active {
+            animation: rotate 1s ease-out;
+        }
+        
+        @keyframes rotate {
+            20%,
+            80% {
+                transform: rotateY(180deg);
+            }
+            100% {
+                transform: rotateY(360deg);
+            }
+        }
+        
+        .word span:nth-child(5).active {
+            animation: toplong 1.5s linear;
+        }
+        
+        @keyframes toplong {
+            10%,
+            40% {
+                transform: translateY(-48vh) scaleY(1);
+            }
+            90% {
+                transform: translateY(-48vh) scaleY(4);
+            }
+        }
+        
+        .word span:nth-child(6).active {
+            animation: falling 2s ease-out;
+            transform-origin: top center;
+        }
+        
+        @keyframes falling {
+            12% {
+                transform: rotateX(240deg);
+            }
+            24% {
+                transform: rotateX(150deg);
+            }
+            36% {
+                transform: rotateX(200deg);
+            }
+            48% {
+                transform: rotateX(175deg);
+            }
+            60%,
+            85% {
+                transform: rotateX(180deg);
+            }
+            100% {
+                transform: rotateX(0deg);
+            }
+        }
+        
+        .word span:nth-child(8).active {
+            animation: shrinkjump 1s ease-in-out;
+            transform-origin: top center;
+        }
+        
+        @keyframes shrinkjump {
+            10%,
+            35% {
+                transform: scale(2, .2) translate(0, 0);
+            }
+            45%,
+            50% {
+                transform: scale(1) translate(0, -150px);
+            }
+            80% {
+                transform: scale(1) translate(0, 0);
+            }
+        }
+        
+        .fixed {
+            position: fixed;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="bg-[url('/static/images/rubaru/2022/BG.jpg')] bg-center bg-cover">
+        <nav>
+            <div class="w-full flex flex-wrap items-center justify-center my-2">
+                <a href="/" class="px-2 md:px-0 mr-2 md:mr-0 md:ml-8 ml-2 ">
+                    <img src="/static/images/evidya.png" alt="alt placeholder" class="w-8 md:w-12 h-8 md:h-14 mt-1 inline mx-auto">
+                </a>
+                <a href="/" class="md:px-2 md:mr-2">
+                    <img src="/static/images/eVidyaloka_logo_TM_2.png" alt="alt placeholder" class="w-42 md:w-56 h-12 md:h-20 -mt-1 inline mx-auto">
+                </a>
+            </div>
+        </nav>
+        <div class="text-2xl text-center text-teal-700 mt-2 font-serif">presents</div>
+        <div class="flex flex-col justify-center items-center space-y-6">
+            <!-- <div class="word text-center text-5xl md:text-7xl lg:text-9xl font-black text-cyan-600 font-sans">
+                <span class="text-pink-500">R</span>
+                <span class="text-fuchsia-500">U</span>
+                <span class="text-yellow-500">B</span>
+                <span class="text-voilet-500">A</span>
+                <span class="text-teal-500">R</span>
+                <span class="text-lime-500">U</span>
+                <span></span>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">2022</span>
+            </div> -->
+            <div class="w-full text-center text-5xl lg:text-[168px] font-bold text-teal-700 "><span>RUBARU 2022</span></div>
+            <div class="w-full text-center text-base md:text-3xl lg:text-5xl text-teal-700 font-medium font-serif"><span>INCLUSIVE OUTLOOK FOR SUSTAINED IMPACT</span></div>
+        </div>
+
+        <div class="w-full flex flex-col justify-center items-center my-2 lg:px-40">
+            <div class="bg-amber-200 shadow-xl p-4 lg:rounded-3xl h-auto lg:h-58  w-full grid grid-cols-2 md:grid-cols-5 lg:grid-cols-5 md:gap-2 lg:gap-5 pl-8 md:pl-12 lg:pl-18">
+                <div class="w-32 flex flex-col justify-center items-center space-y-2">
+                    <div class="w-32 h-32 shadow-lg shadow-yellow-400 bg-[url('/static/images/rubaru/2022/Ravichandran_V.png')] bg-center bg-contain rounded-full"></div>
+                    <div class="w-32 flex flex-col justify-center items-center">
+                        <span class="text-center text-base font-bold">Ravichandran V </span>
+                        <span class="text-center text-base font-normal">Chairperson, Board of Trustees</span>
+                    </div>
+                </div>
+                <div class="w-32 flex flex-col justify-center items-center space-y-2">
+                    <div class="w-32 h-32 shadow-lg shadow-yellow-400 bg-[url('/static/images/rubaru/2022/V_Ramkumar.png')] bg-center bg-contain rounded-full"></div>
+                    <div class="w-32 flex flex-col justify-center items-center">
+                        <span class="text-center text-base font-bold">V Ramkumar</span>
+                        <span class="text-center text-base font-normal">Member,</span>
+                        <span class="text-center text-base font-normal">Board of Trustees</span>
+                    </div>
+                </div>
+                <div class="w-32 flex flex-col justify-center items-center space-y-2">
+                    <div class="w-32 h-32 shadow-lg shadow-yellow-400 bg-[url('/static/images/rubaru/2022/Venkat_Sriraman.png')] bg-center bg-contain rounded-full"></div>
+                    <div class="w-36 flex flex-col justify-center items-center">
+                        <span class="text-center text-base font-bold">Venkat Sriraman</span>
+                        <span class="text-center text-base font-normal">Founder & Member, Board of Trustees</span>
+                    </div>
+                </div>
+                <div class="w-32 flex flex-col justify-center items-center space-y-2">
+                    <div class="w-32 h-32 shadow-lg shadow-yellow-400 bg-[url('/static/images/rubaru/2022/Viswanathan_T.png')] bg-center bg-contain rounded-full"></div>
+                    <div class="w-32 flex flex-col justify-center items-center">
+                        <span class="text-center text-base font-bold">Viswanathan T</span>
+                        <span class="text-center text-base font-normal">Member,</span>
+                        <span class="text-center text-base font-normal">Board of Trustees</span>
+                    </div>
+                </div>
+                <div class="w-32 flex flex-col justify-center items-center space-y-2 pl-40 md:pl-0">
+                    <div class="w-32 h-32 shadow-lg shadow-yellow-400 bg-[url('/static/images/rubaru/2022/Brinda_P.png')] bg-center bg-contain rounded-full"></div>
+                    <div class="w-32 flex flex-col justify-center items-center">
+                        <span class="text-center text-base font-bold">Brinda P</span>
+                        <span class="text-center text-base font-normal">CEO</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="w-full flex flex-col justify-center items-center mx-20 my-4 space-y-2">
+                <span class="w-full text-center text-2xl italic px-4 lg:px-0">The board of trustees and management of eVidyaloka are delighted to invite you to grace the occasion of our annual celebration RUBARU 2022 on,</span>
+                <div class="w-full flex flex-col justify-center items-center text-teal-700">
+                    <span class="text-center text-3xl font-bold">February 26, 2022</span>
+                    <span class="text-center text-3xl font-bold">9:00 am - 12:00 noon</span>
+                    <a href="https://vimeo.com/event/1846753" target="__blank" class="px-8 py-2 my-2 rounded-full bg-teal-700 text-center text-base md:text-xl lg:text-2xl text-white underline decoration-solid hover:scale-105 ">Join event</a>
+                </div>
+            </div>
+        </div>
+        <div class="w-full lg:h-96 px-4 md:px-10 lg:px-48 my-10">
+            <div class="w-full flex flex-col justify-center items-center space-y-2">
+                <div class="text-center text-3xl text-bold text-teal-700 font-medium">Overview</div>
+                <div>
+                    <div class="font-serief text-lg whitespace-normal">
+                        <a class="font-bold">Overview : </a> Rubaru is the annual summit by eVidyaloka, promoting the spirit of rural-urban connection. This is the third edition of the event, where thought leaders, from across the industry come together
+                        on a social discussion platform, to engage and discuss with other industry leaders, CxOs, CSR heads and business leaders and share thoughts and insights.</div>
+                    <div class="font-serief text-lg whitespace-normal my-4 ml-">
+                        <p class="font-bold">The Purpose of Rubaru : </p>
+                        <p>eVidyaloka is keen to create and celebrate the combined determination of individual impacting the rural education system through urban support. Our focus is on:</p>
+                    </div>
+
+                    <div class="font-serief text-lg whitespace-normal">
+                        <ul class="ml-8 list-disc">
+                            <li>How can urban development impact the rural education system in India?</li>
+                            <li>How are educational institutes looking at the governance, and impact of technology to scale?</li>
+                            <li>How does one build a future-ready system by multiple stakeholders participating in solutions?</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="w-full lg:px-20">
+            <div class="w-full h-20 bg-[url('/static/images/rubaru/2022/Separator.png')] bg-center bg-contain bg-no-repeat"></div>
+        </div>
+        <div class="w-full flex flex-col justify-center items-center">
+            <div class="w-full h-96 flex justify-center items-center">
+                <div class="w-96 flex flex-col justify-center items-center space-y-4">
+                    <span class="text-center text-3xl font-serif text-teal-700">Chief Guest</span>
+                    <div class="w-56 h-56 bg-[url('/static/images/rubaru/2022/Sridhar_Vembu.png')] bg-center bg-contain rounded-full"></div>
+                    <div class="flex flex-col justify-center items-center">
+                        <span class="text-center text-xl font-bold">Padma Shri Sridhar Vembu</span>
+                        <span class="text-center text-lg font-normal">CEO, Zoho Corporation</span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="w-full h-84 grid grid-cols-2 gap-2 md:gap-5 pl-0 md:pl-10 lg:pl-48">
+                <div class="w-48 md:w-96 flex flex-col justify-center items-center space-y-4">
+                    <span class="text-center text-2xl font-serif text-teal-700">Keynote Address</span>
+                    <div class="w-40 md:w-48 h-40 md:h-48 bg-[url('/static/images/rubaru/2022/Pratyush_Kumar_Panda.png')] bg-center bg-contain rounded-full"></div>
+                    <div class="flex flex-col justify-center items-center">
+                        <span class="text-center text-xl font-bold">Pratyush Kumar Panda</span>
+                        <span class="text-center text-lg font-normal">Head CSR and Sustainability, LTI</span>
+                    </div>
+                </div>
+                <div class="w-48 md:w-96 flex flex-col justify-center items-center space-y-4">
+                    <span class="text-center text-2xl font-serif text-teal-700">Guest of Honour</span>
+                    <div class="w-40 md:w-48 h-40 md:h-48 bg-[url('/static/images/rubaru/2022/Veena_Naravane.png')] bg-center bg-contain rounded-full"></div>
+                    <div class="flex flex-col justify-center items-center">
+                        <span class="text-center text-xl font-bold">Veena Naravane</span>
+                        <span class="text-center text-lg font-normal">President, AWWA</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="w-full lg:px-20 my-4">
+                <div class="w-full h-20 rotate-180 bg-[url('/static/images/rubaru/2022/Separator.png')] bg-center bg-contain bg-no-repeat"></div>
+            </div>
+
+            <div class="w-full h-64 flex justify-center items-center">
+                <div class="w-96 flex flex-col justify-center items-center space-y-4">
+                    <span class="text-center text-3xl font-serif text-teal-700">Address by Chief Patron</span>
+                    <div class="w-48 h-48 bg-[url('/static/images/rubaru/2022/Prof_V_Krishnamurthy.png')] bg-center bg-contain rounded-full"></div>
+                    <div class="w-96 flex flex-col justify-center items-center">
+                        <span class="text-center text-xl font-bold">Prof. V Krishnamurthy</span>
+                        <span class="text-center text-lg font-normal">Chief Patron, eVidyaloka Trust</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="w-full my-12 mt-16 lg:px-20 space-y-4">
+            <div class="text-center text-3xl font-bold font-serif text-teal-700"><span>Round Table Discussions</span></div>
+            <div class="relative space-y-4 bg-amber-200 shadow-xl p-4 lg:rounded-3xl h-auto lg:h-58">
+                <div class="text-xl text-center font-bold text-teal-700"><span>Inclusive Education - 2022 and beyond</span></div>
+                <div class="absolute top-0 -left-2 -rotate-45 overflow-hidden bg-red-400 px-2 rounded-full font-bold">Panel 1</div>
+                <div class="w-full grid grid-cols-2 md:grid-cols-5 lg:grid-cols-5 md:gap-2 lg:gap-5 pl-8 md:pl-12 lg:pl-24">
+                    <div class="w-32 flex flex-col justify-center items-center space-y-2">
+                        <div class="w-32 h-32 shadow-lg shadow-yellow-400 bg-[url('/static/images/rubaru/2022/Manisha_Natarajan.png')] bg-center bg-contain rounded-full"></div>
+                        <div class="w-52 flex flex-col justify-center items-center">
+                            <span class="text-center text-base font-bold">Manisha Natarajan</span>
+                            <span class="text-center text-base font-normal">Journalist & Public Speaker,</span>
+                            <span class="text-center text-base font-normal">Moderator</span>
+                        </div>
+                    </div>
+                    <div class="w-32 flex flex-col justify-center items-center space-y-2">
+                        <div class="w-32 h-32 shadow-lg shadow-yellow-400 bg-[url('/static/images/rubaru/2022/Brinda_P.png')] bg-center bg-contain rounded-full"></div>
+                        <div class="w-32 flex flex-col justify-center items-center">
+                            <span class="text-center text-base font-bold">Brinda P</span>
+                            <span class="text-center text-base font-normal">CEO,</span>
+                            <span class="text-center text-base font-normal">eVidyaloka</span>
+                        </div>
+                    </div>
+                    <div class="w-32 flex flex-col justify-center items-center space-y-2">
+                        <div class="w-32 h-32 shadow-lg shadow-yellow-400 bg-[url('/static/images/rubaru/2022/Ramji_Raghavan.png')] bg-center bg-contain rounded-full"></div>
+                        <div class="w-48 flex flex-col justify-center items-center">
+                            <span class="text-center text-base font-bold">Ramji Raghavan</span>
+                            <span class="text-center text-sm font-normal">Founder & Chairperson, Agastya Foundation</span>
+                        </div>
+                    </div>
+                    <div class="w-32 flex flex-col justify-center items-center space-y-2">
+                        <div class="w-32 h-32 shadow-lg shadow-yellow-400 bg-[url('/static/images/rubaru/2022/Dhimant_Parekh.png')] bg-center bg-contain rounded-full"></div>
+                        <div class="w-32 flex flex-col justify-center items-center">
+                            <span class="text-center text-base font-bold">Dhimant Parekh</span>
+                            <span class="text-center text-base font-normal">Founder & CEO, The Better India</span>
+                        </div>
+                    </div>
+                    <div class="w-32 flex flex-col justify-center items-center space-y-2 pl-36 md:pl-0">
+                        <div class="w-32 h-32 shadow-lg shadow-yellow-400 bg-[url('/static/images/rubaru/2022/Puja_Marwaha.png')] bg-center bg-contain rounded-full"></div>
+                        <div class="w-32 flex flex-col justify-center items-center">
+                            <span class="text-center text-base font-bold">Puja Marwaha</span>
+                            <span class="text-center text-base font-normal">CEO,</span>
+                            <span class="text-center text-base font-normal">CRY</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="relative space-y-4 bg-amber-200 shadow-xl p-4 lg:rounded-3xl h-auto lg:h-58">
+                <div class="text-xl text-center font-bold text-teal-700 -shadow-lg shadow-yellow-400"><span>Sustained Impact In Education</span></div>
+                <div class="absolute top-0 -left-2 -rotate-45 overflow-hidden bg-red-400 px-2 rounded-full font-bold">Panel 2</div>
+                <div class="w-full grid grid-cols-2 md:grid-cols-5 lg:grid-cols-5 md:gap-2 lg:gap-5 pl-8 md:pl-12 lg:pl-24">
+                    <div class="w-32 flex flex-col justify-center items-center space-y-2">
+                        <div class="w-32 h-32 shadow-lg shadow-yellow-400 bg-[url('/static/images/rubaru/2022/V_Ramkumar.png')] bg-center bg-contain rounded-full"></div>
+                        <div class="w-52 flex flex-col justify-center items-center">
+                            <span class="text-center text-base font-bold">V Ramkumar</span>
+                            <span class="text-center text-base font-normal">Member & Board of Trustees, Moderator</span>
+                        </div>
+                    </div>
+                    <div class="w-32 flex flex-col justify-center items-center space-y-2">
+                        <div class="w-32 h-32 shadow-lg shadow-yellow-400 bg-[url('/static/images/rubaru/2022/Ketan_Patel.png')] bg-center bg-contain rounded-full"></div>
+                        <div class="w-32 flex flex-col justify-center items-center">
+                            <span class="text-center text-base font-bold">Ketan Patel</span>
+                            <span class="w-20 text-center text-base font-normal">MD, </span>
+                            <span class="w-20 text-center text-base font-normal"> HP India</span>
+                        </div>
+                    </div>
+                    <div class="w-32 flex flex-col justify-center items-center space-y-2">
+                        <div class="w-32 h-32 shadow-lg shadow-yellow-400 bg-[url('/static/images/rubaru/2022/Dependra_Mathur.png')] bg-center bg-contain rounded-full"></div>
+                        <div class="w-56 flex flex-col justify-center items-center">
+                            <span class="text-center text-base font-bold">Dependra Mathur</span>
+                            <span class="text-center text-base font-normal">Head - Human Resources Development, Infosys BPM</span>
+                            <span class="text-center text-base font-normal"></span>
+                        </div>
+                    </div>
+                    <div class="w-42 flex flex-col justify-center items-center space-y-2">
+                        <div class="w-32 h-32 shadow-lg shadow-yellow-400 bg-[url('/static/images/rubaru/2022/Manikandan.png')] bg-center bg-contain rounded-full"></div>
+                        <div class="w-32 flex flex-col justify-center items-center">
+                            <span class="text-center text-base font-bold">Manikandan</span>
+                            <span class="w-32 text-center text-base font-normal">Sr. VP-Legal & Secretarial,</span>
+                            <span class="w-36 text-center text-base font-normal">CAMS</span>
+                        </div>
+                    </div>
+                    <div class="w-32 flex flex-col justify-center items-center space-y-2 pl-36 md:pl-0">
+                        <div class="w-32 h-32 shadow-lg shadow-yellow-400 bg-[url('/static/images/rubaru/2022/Kumar_Anurag_Pratap.png')] bg-center bg-contain rounded-full"></div>
+                        <div class="w-48 flex flex-col justify-center items-center">
+                            <span class="text-center text-base font-bold">Kumar Anurag Pratap</span>
+                            <span class="w-20 text-center text-base font-normal">CSR Head, Capgemini</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="w-full flex items-center justify-center my-10">
+            <a class="w-full px-20 py-2 md:py-4 mx-6 md:mx-32 lg:mx-96  rounded-full bg-teal-700 text-center text-2xl md:text-3xl lg:text-4xl text-white underline decoration-solid hover:scale-105 " href="https://vimeo.com/event/1846753">Join event</a>
+        </div>
+        <div class="bg-gray-100 mt-8 ">
+            <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row ">
+                <p class="text-gray-500 text-sm text-center sm:text-left ">© 2021
+                    <a href="/" class="text-gray-600 ml-1 " target="_blank ">eVidyaloka</a>
+                </p>
+                <span class="inline-flex sm:ml-auto sm:mt-0 mt-2 justify-center sm:justify-start ">
+            <a href="https://www.facebook.com/eVidyaloka/" class="text-gray-500 ">
+              <i class="fab fa-facebook-f "></i>
+            </a>
+            <a href="https://twitter.com/evidyaloka" class="ml-3 text-gray-500 ">
+              <i class="fab fa-twitter "></i>
+            </a>
+            <a href="https://in.linkedin.com/company/evidyaloka-trust" class="ml-3 text-gray-500 ">
+              <i class="fab fa-linkedin-in "></i>
+            </a>
+            <a href="https://www.youtube.com/c/eVidyalokatv/featured" class="ml-3 text-gray-500 ">
+              <i class="fab fa-youtube "></i>
+            </a>
+            <a href="https://www.instagram.com/evidyaloka/?hl=en" class="ml-3 text-gray-500 ">
+              <i class="fab fa-instagram "></i>
+            </a>
+          </span>
+            </div>
+
+        </div>
+    </div>
+</body>
+<script>
+    const spans = document.querySelectorAll('.word span');
+
+    spans.forEach((span, idx) => {
+        span.addEventListener('click', (e) => {
+            e.target.classList.add('active');
+        });
+        span.addEventListener('animationend', (e) => {
+            e.target.classList.remove('active');
+        });
+
+        // Initial animation
+        setTimeout(() => {
+            span.classList.add('active');
+        }, 750 * (idx + 1))
+    });
+</script>
+
+</html>

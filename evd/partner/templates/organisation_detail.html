@@ -1,0 +1,325 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block head_title %}eVidyaloka - Organisation Details{% endblock %}
+
+{% block doc_ready %}
+ {{ block.super }}   
+{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="/static/css/admindash.css" />
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+
+    {% if is_delivery %}
+    <style>
+        .contributions{
+            display : none !important;
+        }
+        .copyhover{
+            cursor:pointer;
+            color:green;
+        }
+    </style>
+    {% endif %}
+<style>
+  .inner{
+     /*width: 1040px;*/
+   }
+   .ui-autocomplete {
+   	 overflow-y: auto;
+   	 max-height:400px;
+   }
+   .ui-autocomplete-loading {
+   	 background:url('/static/img/facebook_loading.gif') no-repeat right center ;
+   }
+
+
+   @media only screen and (max-width: 480px) and (min-width: 0px)  {
+   .cont-align {
+       <!--position: absolute !important;-->
+    width: 93% !important;
+    overflow-x: visible !important;
+    }
+
+
+    .page-align{
+    margin-right: 10%;
+    }
+
+     .wid-align{
+     width: 104% !important;
+     margin-left: -2%;
+     }
+
+   }
+     @media only screen and (max-width: 480px) and (min-width: 380px)  {
+
+     }
+
+    @media only screen and (max-width: 768px) and (min-width: 480px)  {
+    .cont-align {
+       <!--position: absolute !important;-->
+    width: 93% !important;
+    overflow-x: visible !important;
+    }
+
+    .page-align{
+    margin-right: 10%;
+    }
+
+     .wid-align{
+     width: 104% !important;
+     margin-left: -2%;
+     }
+
+
+
+    }
+
+    @media only screen and (max-width: 1024px) and (min-width: 768px)  {
+
+
+    .wid-align{
+     width: 104% !important;
+     }
+
+     .container {
+    width: 100%;
+    }
+
+    }
+
+</style>
+
+<style>
+    .ec-checkbox.check-lg .ec-checkbox__control {
+        width: 28px;
+        height: 28px;
+    }
+    .ec-checkbox__control {
+        width: 24px;
+        height: 24px;
+        border: 1px solid #ccc;
+        position: relative;
+        margin-right: 10px;
+        border-radius: 2px;
+        -webkit-transition: .3s;
+        -o-transition: .3s;
+        transition: .3s;
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 auto;
+        flex: 0 0 auto;
+    }
+
+       .myInput{
+            display: inline;
+            max-width: 70%;
+            margin-bottom:15px !important;
+       }
+       .myLabel {
+            min-width : 25% !important;
+            width:20px;
+            font-family: sans-serif;
+            font-weight: normal;
+            vertical-align:middle;
+            margin-right: 6px;
+       }
+       .myroleLabel{
+            font-size: 13px;
+            font-family: 'PlutoCondRegularItalic' !important;
+            padding-left: 40px  !important;
+            pointer-events: auto;
+       }
+       .dot {
+              height:200px;
+              width:200px;
+              background-color:#41505785;
+              border-radius: 50%;
+              display: inline-block;
+        }
+        .count{
+              color:white!important;
+              font-weight: 700!important;
+              margin-top: 86px !important;
+        }  
+
+</style> 
+{% endblock %}
+{% block body_container %}
+{%if is_partner%}
+<div class="inner" style="100%">
+    <div class="col-md-2" style="height: 100%">
+      {%include "navbar.html"%}
+    </div>
+    <div class="col-md-10" style="height: 100%;overflow-y: auto; right: -15px; padding-left: 3%">
+{%else%}
+<div>
+     <div class="col-md-12">
+{%endif%}
+<div class="col-sm-12 col-md-12 col-lg-12" style="background: #fff;padding: 15px 0px 15px 15px;top:15pt;">
+    <fieldset>
+        <lagend><h4 style="display:inline-block;float:left;"><b>Organization Details</b></h4></lagend>
+        &nbsp;&nbsp;
+        <button type="edit" class="btn btn-success" id="edit">Edit</button>
+        <button type="submit" form="id_org_details" class="btn btn-success" name="submit_ord_details" id="submit_ord_details" style="margin-bottom:1px;display:none" >Update</button>
+<!--        <form id="id_org_details" method="post" enctype="multipart/form-data" action="/partner/org_details/">-->
+<!--            <button type="submit" class="btn btn-success" name="submit_ord_details" id="submit_ord_details" style="display:none">Update</button></form>-->
+        <hr/>
+        <div class="row">
+            <form id="id_org_details" method="post" enctype="multipart/form-data" action="/partner/org_details/">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class=" col-sm-5 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_org_name" class="myLabel">Name of Organization</label>
+                        <input id="id_org_name" class="myInput form-control" type="text" name="org_name" value="{{partner.name_of_organization}}" />
+                    </div>
+                    <div class="col-sm-5 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_address" class="myLabel">Address</label>
+                        <input id="id_address" type="text" name="address" value="{{partner.address}}" class="myInput form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class=" col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_org_logo" class="myLabel">Logo</label>
+                        <input id="id_org_logo" class="myInput form-control" type="file" name="org_logo" accept="image/*" style="display: inline!important;" value={{partner.logo}}  />
+                    </div>
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                    </div>
+                </div>
+                {% csrf_token %}
+                {% if is_partner_delivery or is_partner_volunteer %}
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_website_address" class="myLabel">Website Address</label>
+                        <input id="id_website_address" type="text" name="website_address" value="{{partner.delivery_partnerobj.all.0.website_address}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_office_phone" class="myLabel">Office Phone</label>
+                        <input id="id_office_phone" type="text" name="office_phone" value="{{partner.delivery_partnerobj.all.0.office_phone}}" class="myInput form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_email" class="myLabel">Email</label>
+                        <input id="id_email" type="text" name="email" value="{{partner.email}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_org_type" class="myLabel">Type of Organization</label>
+                        <select id="id_org_type" name="org_type" class="myInput form-control" style="width:100%">
+                            {% if is_partner_volunteer %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "Corporate" %}<option value="Corporate" selected="selected">Corporate</option> {% else %} <option value="Corporate">Corporate</option> {% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "AcademicInstitution" %}<option value="Academic Institution" selected="selected">Academic Institution</option> {% else %} <option value="Academic Institution">Academic Institution</option> {% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "VolunteeringCommunity" %}<option value="Volunteering Community" selected="selected">Volunteering Community</option> {% else %} <option value="Volunteering Community">Volunteering Community</option> {% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "RegionalCommunity" %}<option value="Regional Community" selected="selected">Regional Community</option> {% else %} <option value="Regional Community">Regional Community</option> {% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "LinguisticCommunity" %}<option value="Linguistic Community" selected="selected">Linguistic Community</option> {% else %}<option value="Linguistic Community">{% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "SpecialInterestGroup" %}<option value="Special Interest Group" selected="selected">Special Interest Group</option>{% else %}<option value="Special Interest Group">Special Interest Group</option>{% endif %}
+                            {% elif is_partner_delivery %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "Trust" %} <option value="Trust"  selected="selected">Trust</option> {% else %} <option value="Trust">Trust</option> {% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "Society" %} <option value="Society" selected="selected">Society</option> {% else %} <option value="Society">Society</option> {% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "Section8" %} <option value="Section 8" selected="selected">Section 8</option> {% else %} <option value="Section 8">Section 8</option> {% endif %}
+                            {% endif %}
+                                {% if partner.delivery_partnerobj.all.0.type_of_org|cut:" " == "Others" %}<option value="Others" selected="selected">Others</option> {% else %} <option value="Others">Others</option> {% endif %}
+                        </select>
+                    </div>
+                </div>
+
+                {% if is_partner_delivery %}
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_date_of_reg" class="myLabel">Date of Registration</label>
+                        <input id="id_date_of_reg" type="text" name="date_of_reg" value="{{partner.delivery_partnerobj.all.0.date_of_reg}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_org_reg_place" class="myLabel">Place of Registration</label>
+                        <input id="id_org_reg_place" type="text" name="org_reg_place" value="{{partner.delivery_partnerobj.all.0.place_of_reg}}" class="myInput form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_reg_number" class="myLabel">Registration Number</label>
+                        <input id="id_reg_number" type="text" name="reg_number" value="{{partner.delivery_partnerobj.all.0.reg_number}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_number" class="myLabel">12A/80G Number</label>
+                        <input id="id_number" type="text" name="number" value="{{partner.delivery_partnerobj.all.0.number}}" class="myInput form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class=" col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_fcra_reg_number" class="myLabel">FCRA Regn. Number</label>
+                        <input id="id_fcra_reg_number" type="text" name="fcra_reg_number" value="{{partner.delivery_partnerobj.all.0.fcra_reg_number}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_fcra_acc_number" class="myLabel">FCRA Acc Number</label>
+                        <input id="id_fcra_acc_number" type="text" name="fcra_acc_number" value="{{partner.delivery_partnerobj.all.0.fcra_acc_number}}" class="myInput form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_bank_name" class="myLabel">Bank Name</label>
+                        <input id="id_bank_name" type="text" name="bank_name" value="{{partner.delivery_partnerobj.all.0.bank_name}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_ifsc_code" class="myLabel">IFSC Code</label>
+                        <input id="id_ifsc_code" type="text" name="ifsc_code" value="{{partner.delivery_partnerobj.all.0.ifsc_code}}" class="myInput form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_acc_name" class="myLabel">Account Holder Name</label>
+                        <input id="id_acc_name" type="text" name="acc_name" value="{{partner.delivery_partnerobj.all.0.acc_holder_name}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_acc_number" class="myLabel">Account Number</label>
+                        <input id="id_acc_number" type="text" name="acc_number" value="{{partner.delivery_partnerobj.all.0.acc_number}}" class="myInput form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-6 col-md-6 col-lg-6"style="padding:0px;">
+                        <label for="id_acc_type" class="myLabel">Type Of Account</label>
+                        <input id="id_acc_type" type="text" name="acc_type" value="{{partner.delivery_partnerobj.all.0.type_of_acc}}" class="myInput form-control" />
+                    </div>
+                    <div class="col-sm-offset-1 col-md-offset-1 col-sm-5 col-md-5 col-lg-5">
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-md-offset-5 col-sm-offset-5 col-sm-4 col-md-4">
+                        <!-- <button type="submit" class="btn btn-success" name="submit_ord_details" id="submit_ord_details" style="margin-bottom:16px;display:none" >Update</button> -->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </fieldset>
+</div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block bottom_scripts %}
+    {{ block.super }}
+    <script type="text/javascript" src="/static/js/calendar/jquery-ui-1.8.17.custom.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="/static/js_new/jquery-ui.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#id_org_details input[type="text"]').prop("disabled", true);
+            $('#id_org_details #id_org_logo').prop("disabled", true);
+            $('#id_org_details #id_org_type').prop("disabled", true);
+            var logo = document.getElementById('id_org_logo')
+            logo.setAttribute('type', 'text')
+
+        });
+        $("#edit").on('click', function () {
+            $("#submit_ord_details").show();
+            $('#id_org_details input[type="text"]').prop("disabled",false);
+            $('#id_org_details #id_org_logo').prop("disabled",false);
+            $('#id_org_details #id_org_type').prop("disabled",false);
+            var logo = document.getElementById('id_org_logo')
+            logo.setAttribute('type', 'file')
+        });
+    </script>
+{% endblock %}

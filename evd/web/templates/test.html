@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/calendar/gcal.js"></script>
+    <script type="text/javascript" src="/static/js/calendar/jquery-ui-1.8.17.custom.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+                var date = new Date();
+                var d = date.getDate();
+                var m = date.getMonth();
+                var y = date.getFullYear();
+                var get_future_date = function(curr_date, offset_month){
+                    return new Date(curr_date.setMonth(curr_date.getMonth() + offset_month));
+                };
+                var calendar = $("#calendar").fullCalendar({
+                        theme: true,
+                        header: {
+                                left: 'prev,next today',
+                                center: 'title',
+                                right: 'month,agendaWeek,agendaDay'
+                        },
+                        selectable: true,
+/*                        select: function(start, end, allDay) {
+                                var title = prompt('Event Title:');
+                                if (title) {
+                                        calendar.fullCalendar('renderEvent',
+                                                {
+                                                        title: title,
+                                                        start: start,
+                                                        end: end,
+                                                        allDay: allDay
+                                                },
+                                                true // make the event "stick"
+                                        );
+                                }
+                                calendar.fullCalendar('unselect');
+                        },*/
+                        editable: true,
+                        dragOpacity: 0.2,
+                        columnFormat: {
+                                    month: 'ddd',    // Mon
+                                    week: 'ddd d/M', // Mon 9/7
+                                    day: 'dddd d/M'  // Monday 9/7
+                        },
+                        eventSources: [
+                            {
+                                events: [
+                                            {% for session in sessions %}
+                                            {
+                                                title: '{{ session.offering }}',
+                                                start: new Date("{{ session.date_start.isoformat }}"),
+                                                allDay: false,
+                                                color: "#46D150",
+                                                textColor: "black",
+                                            },
+                                            {% endfor %}
+                                            {% for session in others_session %}
+                                            {% if not session.date_start == None %}
+                                            {
+                                                title: '{{ session.offering }}',
+                                                start: new Date("{{ session.date_start.isoformat }}"),
+                                                allDay: false,
+                                                color: "#E80531",
+                                                textColor: "black",
+                                            }{% if not forloop.last %},{% endif %}
+                                            {% endif %}
+                                            {% endfor %}
+                                        ],
+                            }
+                        ],
+                       /* eventClick: function(event, element) {
+                                var prev_title = event.title;
+                                var new_title = window.prompt("Title:" + event.title);
+                                if (new_title) {
+                                    event.title = new_title;
+                                }
+                                else {
+                                    event.title = prev_title;
+                                }
+                                calendar.fullCalendar('updateEvent', event);
+                                if (event.url) {
+                                        window.open(event.url);
+                                        return false;
+                                }
+                        },
+                        eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) {
+                                alert(
+                                    event.title + " was moved " +
+                                    dayDelta + " days and " +
+                                    minuteDelta + " minutes."
+                                );
+                                if (allDay) {
+                                    alert("Event is now all-day");
+                                }else{
+                                    alert("Event has a time-of-day " + event.start + " to " + event.end);
+                                }
+                                if (!confirm("Are you sure about this change?")) {
+                                    revertFunc();
+                                }
+                        },
+                        eventResize: function (event, dayDelta, minuteDelta, revertFunc) {
+                                alert("The end date of " + event.title + " has been moved " + dayDelta + " days and " + minuteDelta + " minutes");
+                                if(!confirm("Are you sure?")) {
+                                    revertFunc();
+                                }
+                        },*/
+                        eventMouseover: function(event, jsEvent, view) {
+                               if (view.name !== 'agendaDay') {
+                                    $(jsEvent.target).attr('title', event.title);
+                                }
+                        },
+                        dayClick: function() {
+                            var mon_year = $(".fc-header-title").text().split(" ");
+                            var day = $(this).find(".fc-day-number").text();
+                            if( mon_year[0] == "july") { var month= 6};
+                            $('#calendar').fullCalendar( 'changeView', 'agendaDay' );
+                            $("#calendar").fullCalendar( 'gotoDate', mon_year[1], month, day );
+                        }
+                });
+        });
+
+    </script>
+
+{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <link rel='stylesheet' type='text/css' href='/static/css/calendar/fullcalendar.1.5.3.min.css'/>
+    <link rel="stylesheet" type="text/css" href="/static/css/calendar/theme.css" />
+    <style type='text/css'>
+        #calendar {
+                width: 700px;
+                font-size: 10px;
+                float: right;
+            }
+        .fc-header-title h2 {
+                font-size: 13px;
+                white-space: normal !important;
+           }
+        .fc-view-month .fc-event, .fc-view-agendaWeek .fc-event {
+                font-size: 10px;
+                overflow: hidden;
+                height: 15px;
+           }
+        .fc-view-agendaWeek .fc-event-vert {
+                font-size: 10px;
+                overflow: hidden;
+                width: 60px !important;
+          }
+        .fc-agenda-axis {
+                width: 20px !important;
+                font-size: .7em;
+          }
+        .fc-button-content {
+                padding: 0;
+          }
+    </style>
+{% endblock %}
+
+{% block body_container %}
+    <div id="calendar"></div>
+
+{% endblock %}

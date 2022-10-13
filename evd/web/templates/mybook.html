@@ -1,0 +1,95 @@
+{% extends "footer_base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+        .subcontent .sub-menu {
+            padding:10px 20px;
+        }
+        .subcontent ul {
+            margin-top:10px;
+        }
+        .subcontent ul li {
+            font-size:14px;
+        }
+        .sub-menu p {
+            margin-bottom:10px;
+        }
+        .subcontent ul {
+            margin-bottom:0px;
+        }
+        .sub-menu .blue {
+            color:#f2a587;
+        }
+        .blue {
+            color: #11BEEE;
+            text-shadow: 0 -1px #f2a587,0 1px
+        }
+    </style>
+{% endblock %}
+
+{% block leftnav_list %}
+    <li><a href="/intro/" class="about-1"><span>Intro</span></a></li>
+    <li><a href="/code_conduct/" class="about-2"><span>Code of Conduct</span></a></li>
+    <li><a href="/skype/" class="about-3"><span>Skype</span></a></li>
+    <!--<li><a href="#" class="about-4"><span>My Classroom</span></a></li>-->
+    <li><a href="/mybook/" class="about-5 active"><span>My Book</span></a></li>
+    <li><a href="/aidsntools" class="about-6"><span>Aids & tools</span></a></li>
+    <li><a href="/selfpaced" class="about-6"><span>Self Paced Trainings</span></a></li>
+    <li><a href="/Curriculum Review" class="about-6"><span>Curriculum Review</span></a></li>
+{% endblock %}
+{% block top_content %}
+    <div class="top clearfix">
+        <div class="intro">
+            <h1>My Book</h1>
+        </div>
+    </div>
+{% endblock %}
+{% block bottom_content %}
+    <div class="paper-bg-wrapper">
+        <div class="paper-bg">
+            <div class="subcontent">
+                <h1 class="blue">What is My Book</h1>
+                <div class="sub-menu">
+                    <p>This section is developed by our Content Volunteers - with a objective to provide Teaching volunteers resources to teach the children for class 6 to 8. Teachers who come with non-teaching background can use this as Teaching resource materials and we woucl encourage them to follow through the lesson plan to cover the concepts and topics to be covered which are aligned to the Curriculum of Respective State boar.</p>
+                    <p>We are in continuous process of evolution and encourage you to give feedback and participate in the process to develop this as a standardized delivery resources for evidyaloka teachers.</p>
+                    <p class="blue">My book has the following:</p>
+                    <ul>
+                        <li>Lesson Plan - Teaching aid for the chapter with resources/links recommended</li>
+                        <li>Transliteration document - Key word transliteration for chapters (This IS WIP)</li>
+                        <li>Student resrources - WIP ( Intent is to give summary documentation to the children in the local language and english)</li>
+                        <li>Assessment questions - This will assist teachers to review the class for QUIZ. We will come back with an assessment framework by end of July.</li>
+                    </ul>
+                </div>
+                <h1 class="blue">Tips to use My Book</h1>
+                <div class="sub-menu">
+                    <p> - It is recommended to use Internet Explorer or Chrome, to view the Lesson Plans</p>
+                    <p> - There may be issues in opening it in Mozilla Firefox</p>
+                    <p> - In IE9 - Please do the following to load the Lesson Plan properly :</p>
+                    <ul style="margin-bottom:10px;">
+                        <li>Click 'No' in the "https://<blah>" popup box</li>
+                        <li>Click "Show all contents", if you are using IE9</li>
+                    </ul>
+                    <p> - Please select 'Lesson Plan' for Content Type, which is the main teaching resource.</p>
+                    <p class="blue">Known issue :</p>
+                    <p>The Topic List box, loads all the topics, irrespective of other filters</p>
+                </div>
+                <h1 class="blue">Help us to Improve</h1>
+                <div class="sub-menu">
+                    <ul>
+                        <li>
+                            As Teachers you play an important role in helping us with feedback on continuous improvement of our contents for its Relevance, Facts & Any other interesting references you can add to improve the content.
+                        </li>
+                        <li>
+                            We will make every attempt to reach out to our content volunteers to share the feedback and make have this documented to followup
+                        </li>
+                        <li>
+                            As you go through the next section - you will have a Sample Lesson Plan prepared by our Content Volunteer for Class 7- Science Subject - Water
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

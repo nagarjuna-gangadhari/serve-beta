@@ -1,0 +1,1048 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/mystud.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+
+    <style>
+        .table>tbody>tr>td {
+            vertical-align: baseline !important;
+        }
+        
+        .container-fluid {
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            background-attachment: fixed;
+            background-position: center;
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+        
+        .model {
+            max-height: 455px;
+            overflow: auto;
+        }
+        
+        .active_stud {
+            background-color: #FF7043;
+        }
+        
+        .pagination>li>a,
+        .pagination>li>span {
+            position: relative;
+            float: none ! important;
+        }
+        
+        .pagination {
+            margin: 20px 0 ! important;
+        }
+        
+        p.az {
+            vertical-align: bottom;
+            height: 32px;
+            width: 100%;
+            color: #5f6368;
+            font-weight: normal;
+            background-color: rgba(241, 243, 244, 0.871);
+            text-align: center;
+            margin-left: 10px;
+            font-size: 15px;
+            padding: 5px 0px 0px 0px;
+        }
+        
+        p.ay {
+            vertical-align: bottom;
+            height: 32px;
+            width: 100%;
+            color: #5f6368;
+            font-weight: normal;
+            background-color: rgba(241, 243, 244, 0.871);
+            text-align: center;
+            margin-left: 10px;
+            font-size: 15px;
+            padding: 5px 0px 0px 0px;
+        }
+        
+        button.ax {
+            font-size: 15px;
+            color: #1a73e8 !important;
+            font-weight: normal;
+            background-color: rgba(241, 243, 244, 0.871);
+            margin-left: 0px;
+            margin-top: -2px;
+        }
+        
+        button.ax:hover {
+            background-color: rgba(212, 239, 241, 0.6);
+        }
+        
+        button.aw {
+            font-size: 15px;
+            color: #1a73e8 !important;
+            font-weight: normal;
+            background-color: rgba(241, 243, 244, 0.871);
+            margin-left: 0px;
+            margin-top: -2px;
+        }
+        
+        button.aw:hover {
+            background-color: rgba(212, 239, 241, 0.6);
+        }
+        
+        h4.all-student-list {
+            margin-top: 5px;
+        }
+        
+        span.close:hover {
+            color: rgb(0, 0, 0) !important;
+            opacity: 1 !important;
+        }
+        
+        span.close {
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            color: black !important;
+            opacity: 0.5 !important;
+            text-shadow: 0px 0px #ffffff !important;
+        }
+        
+        p.outline {
+            margin: 7px 0px 10px;
+        }
+        
+        i.excel-icon {
+            font-size: 30px;
+        }
+        
+        button.br {
+            font-size: 17px;
+            margin-left: 16px;
+        }
+        
+        button.bd {
+            margin-left: 13px;
+        }
+        
+        button.bp {
+            margin-right: 0px;
+        }
+    </style>
+
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2017.1.223/js/jquery.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2017.1.223/js/jszip.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2017.1.223/js/kendo.all.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="/static/js/underscore-min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/student-module.css">
+    <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.js"></script>
+
+
+</head>
+
+<body style=" line-height: 0.428571 !important;">
+    <div class="container-fluid" style="height: 720px;">
+        <div class="row" style="background-color: #27ae60; padding: 0px;">
+            <!-- Row 1 -->
+            <div class="col-sm-offset-5 col-sm-2" style="color: white; text-align: center; font-weight: bold;">
+                <h4 class="all-student-list"><b>All Students List</b></h4>
+            </div>
+            <div class="col-sm-2">
+                <a class="clos" style="padding-left: 405px; font-size: 20px; margin-top: 70px;"><span class="close"
+				id="menuClose" style="background-color:#27ae60;margin-top:10px;position:absolute;bottom:-14px;">x</span></a>
+            </div>
+        </div>
+        <!-- end row 1 -->
+        <div class="row">
+            <div class="col-md-12">
+                <!--Row 2 -->
+                <!-- <div class="row">
+				<div class="col-sm-4" style="margin:7px 5px 5px 11%; width:20%;">
+				<div calss="row">
+				<label style="margin-bottom: 8px;">Grade</label>
+					<select id="gradeId" class="form-control"
+						style="width: 100%;">
+						<option value="">Select Grade</option>
+						<option value="3" {% if grade == '3' %}selected="selected"{% endif %} >3rd</option>
+						<option value="4" {% if grade == '4' %}selected="selected"{% endif %} >4th</option>
+						<option value="5" {% if grade == '5' %}selected="selected"{% endif %} >5th</option>
+						<option value="6" {% if grade == '6' %}selected="selected"{% endif %}>6th</option>
+					    <option value="7" {% if grade == '7' %}selected="selected"{% endif %}>7th</option>
+						<option value="8" {% if grade == '8' %}selected="selected"{% endif %}>8th</option>
+						<option value="9" {% if grade == '9' %}selected="selected"{% endif %}>9th</option>
+						<option value="10" {% if grade == '10' %}selected="selected"{% endif %}>10th</option>
+						<option value="11" {% if grade == '11' %}selected="selected"{% endif %}>11th</option>
+						<option value="12" {% if grade == '12' %}selected="selected"{% endif %}>12th</option>
+					</select>
+				</div>
+				</div>
+
+
+				<div class="col-sm-4" style="margin:7px; width:20%;">
+				<label style="margin-bottom: 8px;">Gender</label>
+					<select class="form-control" id="genderId"
+						style="width: 100%;">
+						<option value="">Select Gender</option>
+						<option value="Male" {% if gender == 'Male' %}selected="selected"{% endif %}>Male</option>
+						<option value="Female" {% if gender == 'Female' %}selected="selected"{% endif %}>Female</option>
+					</select>
+				</div>
+
+				<div class="col-sm-4" style="margin:7px 5px 5px 0%; width:20%;">
+				<div calss="row">
+				<label style="margin-bottom: 8px;">Status</label>
+				<select id="statusId" class="form-control"
+						style="width: 100%;">
+						<option value="">Select Status</option>
+						<option value="Alumni"{% if status == 'Alumni' %}selected="selected"{% endif %}> Alumni </option>
+						<option value="Active"{% if status == 'Active' %}selected="selected"{% endif %}> Active</option>
+						<option value="Inactive"{% if status == 'Inactive' %}selected="selected"{% endif %}> Inactive</option>
+				</select>
+				</div>
+				</div>
+				
+				
+				<div class="col-sm-1 ref" style="margin-right: 22px;margin-top: -9px;" >
+					<button class="btn btn-primary" title="Refresh"
+						onclick="window.location.reload()"
+						style="margin-top:41%;">
+						<span class="fa fa-refresh"></span>
+					</button>
+				</div> -->
+                <br><br><br>
+                <div class="container">
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label for="grade">Grade</label><br><br>
+                            <select id="gradeId" class="form-control" required>
+								<option value="">Select Grade</option>
+								<option value="3" {% if grade == '3' %}selected="selected"{% endif %} >3</option>
+								<option value="4" {% if grade == '4' %}selected="selected"{% endif %} >4</option>
+								<option value="5" {% if grade == '5' %}selected="selected"{% endif %} >5</option>
+								<option value="6" {% if grade == '6' %}selected="selected"{% endif %}>6</option>
+								<option value="7" {% if grade == '7' %}selected="selected"{% endif %}>7</option>
+								<option value="8" {% if grade == '8' %}selected="selected"{% endif %}>8</option>
+								<option value="9" {% if grade == '9' %}selected="selected"{% endif %}>9</option>
+								<option value="10" {% if grade == '10' %}selected="selected"{% endif %}>10</option>
+								<option value="11" {% if grade == '11' %}selected="selected"{% endif %}>11</option>
+								<option value="12" {% if grade == '12' %}selected="selected"{% endif %}>12</option>
+							</select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="gender">Gender</label><br><br>
+                            <select class="form-control" id="genderId" required>
+								<option value="">Select</option>
+								<option value="Male" {% if gender == 'Male' %}selected="selected"{% endif %}>Male</option>
+								<option value="Female" {% if gender == 'Female' %}selected="selected"{% endif %}>Female</option>
+							</select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="status">Status</label><br><br>
+                            <select id="statusId" class="form-control" style="width:100%;">
+								<option value="">Select</option>
+								<option value="Alumni"{% if status == 'Alumni' %}selected="selected"{% endif %}> Alumni </option>
+								<option value="Active"{% if status == 'Active' %}selected="selected"{% endif %}> Active</option>
+								<option value="Inactive"{% if status == 'Inactive' %}selected="selected"{% endif %}> Inactive</option>
+							</select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="grade">Promotion Grade</label><br><br>
+                            <select id="promotion_grade_id" class="form-control" style="padding-left:9px;" required>
+								<option value="">Select Grade</option>
+								 <!-- <option value="3" {% if grade == '3' %}selected="selected"{% endif %} >3rd</option>
+								<option value="4" {% if grade == '4' %}selected="selected"{% endif %} >4th</option>
+								<option value="5" {% if grade == '5' %}selected="selected"{% endif %} >5th</option>
+								<option value="6" {% if grade == '6' %}selected="selected"{% endif %}>6th</option>
+								<option value="7" {% if grade == '7' %}selected="selected"{% endif %}>7th</option>
+								<option value="8" {% if grade == '8' %}selected="selected"{% endif %}>8th</option>
+								<option value="9" {% if grade == '9' %}selected="selected"{% endif %}>9th</option>
+								<option value="10" {% if grade == '10' %}selected="selected"{% endif %}>10th</option>
+								<option value="11" {% if grade == '11' %}selected="selected"{% endif %}>11th</option>
+								<option value="12" {% if grade == '12' %}selected="selected"{% endif %}>12th</option>  -->
+							</select>
+                        </div>
+                        <div class="form-group col-md-1">
+
+                            <a href="" id="btn_promote" class="btn btn-primary bp" style='margin-top: 16px; font-size: 12px;' onclick="promote('table_id');return false;">Promote</a>
+                        </div>
+                        {% if user.is_superuser or is_partner or is_Assistant or is_field_coordinator %}
+                        <div id="dlt-button" class="form-group col-md-1">
+                            <label></label><br><br><br>
+                            <button class='btn btn-primary bd' style="margin-bottom: 8px; font-size: 12px;" onclick="deleteRow('table_id')">Delete</button>
+
+                        </div>
+                        {% endif %}
+                        <div class="form-group col-md-1">
+                            <label></label><br><br><br>
+                            <button class="btn btn-primary br" title="Refresh" onclick="window.location.reload()">
+								<span class="fa fa-refresh"></span>
+							</button>
+                        </div>
+                        <div class="form-group col-md-1" id="excelTarget">
+                            <label></label><br><br><br>
+                            <a href="#" class="export-xls"><i class="fa fa-file-excel-o fa-2x excel-icon" aria-hidden="true"></i>
+							<p class="outline">xlsx</p></a>
+                        </div>
+                        <div id="students" style="max-height:540px;"></div>
+                    </div>
+                </div>
+
+                <div id="students" style="max-height: 540px;"></div>
+
+            </div>
+            <!--end row 2 -->
+            <input type="hidden" value="{{message}}" name="message" id="messageId" />
+            <input type="hidden" value="{{centerId}}" id="centerId" />
+            <div id="messageDiv"></div>
+            <input type="hidden" value="{{student.id}}" name="student_id" />
+            <input type="hidden" value="{{grade}}" name='grade' />
+            <input type="hidden" value="{{is_centeradmin}}" id="centerAdmin" />
+            <input type="hidden" value="{{is_delivery}}" id="is_delivery" />
+            <input type="hidden" value="{{is_Assistant}}" id="classAssistant" />
+            <input type="hidden" value="{{user.is_superuser}}" id="superUser" />
+            <input type="hidden" value="{{is_field_coordinator}}" id="fieldCoordinator" />
+
+
+            <div id="countPaginationId" align="right" style="margin-right: 10px;"></div>
+            <div style="text-align: right; margin:30px 20px 10px 0px ;">
+                <div id="div_select_all" style="display: none; margin-top:-18px;">
+                    <p class="az"><span id="keyword_all">All </span><span id="studentNo">  </span> students on this page are selected.
+                        <button type="button" class="ax btn btn-xs" id="btn_select_all" onclick="selectAllHandler()"><span >Select All <span id="countStudent"></span> Students</span></button>
+                    </p>
+                </div>
+                <div id="div_clear_all" style="display: none;margin-top:-18px;">
+                    <p class="ay">All <span id="studentNo1"> </span> students are selected.
+                        <button type="button" class="aw btn btn-xs" id="btn_clear_all" onclick="clearSelectionHandler()">Clear Selection</button>
+                    </p>
+                </div>
+            </div>
+            <div class="row " style=" margin-top:5px;background-color: white;width:101%">
+                <div class="col-sm-12 col-md-12 model" style="height:455px;">
+                    <input class="form-control" style="width: 115px;margin-left: 160px;" type="text" placeholder="Student Name" id="searchStudent" onkeyup="searchFunction(this.id)"></input>
+                    <table id="table_id" class="table table-striped table-condensed" style="width: 100%;margin:7px; ">
+                    </table>
+                </div>
+                <input type="hidden" id="pageId" />
+                <input type="hidden" value="{{page}}" name="page" id="FromEditPageId" />
+                <input type="hidden" value="{{grade}}" name="grade" id="FromEditGradeId" />
+                <input type="hidden" value="{{gender}}" name="gender" id="FromEditGenderId" />
+                <input type="hidden" value="{{status}}" name="status" id="FromEditStatusId" />
+                <br>
+                <div class="row" id="pagination_data" style="text-align:center"></div>
+
+            </div>
+
+        </div>
+    </div>
+    </div>
+</body>
+<script>
+    var flagForSelectAll = false;
+
+    function selectAllHandler() {
+        flagForSelectAll = true;
+        $("#div_select_all").hide();
+        $("#div_clear_all").show();
+    }
+
+    function clearSelectionHandler() {
+        flagForSelectAll = false;
+        $("#div_select_all").hide();
+        $("#div_clear_all").hide();
+        checkAll($("#check_all"));
+    }
+
+    var tableToExcel = (function() {
+        var uri = 'data:application/vnd.ms-excel;base64,',
+            template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table cellspacing="0" rules="rows" border="1" style="color:Black;background-color:White;border-color:#CCCCCC;border-width:1px;border-style:None;width:100%;border-collapse:collapse;font-size:9pt;text-align:center;">{table}</table></body></html>',
+            base64 = function(s) {
+                return window.btoa(unescape(encodeURIComponent(s)))
+            },
+            format = function(s, c) {
+                return s.replace(/{(\w+)}/g, function(m, p) {
+                    return c[p];
+                })
+            }
+        return function(table, name) {
+            if (!table.nodeType) table = document.getElementById(table)
+            var ctx = {
+                worksheet: name || 'Worksheet',
+                table: table.innerHTML
+            }
+            if (navigator.msSaveBlob) {
+                var blob = new Blob([format(template, ctx)], {
+                    type: 'application/vnd.ms-excel',
+                    endings: 'native'
+                });
+                navigator.msSaveBlob(blob, 'export.xls')
+            } else {
+                window.location.href = uri + base64(format(template, ctx))
+            }
+        }
+    })()
+</script>
+<script>
+    $(document).ready(function() {
+        //window.parent.jQuery.colorbox.resize({width : "1400px",height : "auto"});
+        var page = $("#FromEditPageId").val();
+        if (page != null && page != '' && page != 'undefined') {
+            $("#pageId").val($("#FromEditPageId").val());
+        }
+        var grade = $("#FromEditGradeId").val();
+        if (grade != null && grade != '' && grade != 'undefined') {
+            $("#gradeId").val($("#FromEditGradeId").val());
+        }
+        var gender = $("#FromEditGenderId").val();
+        if (gender != null && gender != '' && gender != 'undefined') {
+            $("#genderId").val($("#FromEditGenderId").val());
+        }
+        var status = $("#FromEditStatusId").val();
+        if (status != null && status != '' && status != 'undefined') {
+            $("#statusId").val($("#FromEditStatusId").val());
+        }
+        window.parent.jQuery.colorbox.resize({
+            width: "auto",
+            height: "100%"
+        });
+        refresh_data();
+    });
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie
+                        .substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    $("#gradeId").on("change", function() {
+        refresh_data();
+    });
+    $("#genderId").on("change", function() {
+        refresh_data();
+    });
+    $("#statusId").on("change", function() {
+        refresh_data();
+    });
+
+    function refresh_data() {
+        var csrftoken = getCookie('csrftoken');
+        var current_page = '';
+        var next_page = '';
+        var prev_page = ''
+        var total_page = '';
+        var tableData = '';
+        var count = '';
+        var thead = '<thead>';
+        var tbody = '<tbody>';
+        var pageId = $("#pageId").val();
+        var message = $("#messageId").val();
+        var center = $("#centerId").val();
+        var grade = $("#gradeId").val();
+        var gender = $("#genderId").val();
+        var status = $("#statusId").val();
+        var role_centerAdmin = $("#centerAdmin").val();
+        var role_delivery = $("#is_delivery").val();
+        var role_classAssistant = $("#classAssistant").val();
+        var role_fieldCoordinator = $("#fieldCoordinator").val();
+        var superUser = $("#superUser").val();
+        thead += '<tr><th width="4%"><input type="checkbox" onchange="changeFlagForSelectAll(); checkAll(this); noOfChecked()" name="chk[]" id="check_all" /></th><th width="4%">ID</th><th width="6%">Student Name</th><th width="3%">Photo</th><th width="3%">DOB</th><th width="3%">Roll Number</th><th width="3%">Grade</th><th width="5%">Gender</th><th style="display:none;"width="6%">Father Occupation</th><th style="display:none;" width="6%">Mother Occupation</th>';
+        thead += '<th width="7%" style="display:none;">Strengths</th><th style="display:none;" width="7%">weakness</th><th style="display:none;" width="7%">Observation</th><th width="3%">Status</th><th width="6%">KYC Number</th>{% if is_partner or is_delivery %}<th width="5%">Action</th>{% endif %}';
+        if (superUser == "True" || role_classAssistant == "True" || role_delivery == "True") {
+            if (status == "Alumni") {
+                thead += '<th width="2%">Almni Reached</th>';
+            }
+            thead += '<th width="5%">Action</th>';
+        } else if (role_fieldCoordinator == "True") {
+            if (status == "Alumni") {
+                thead += '<th width="2%">Almni Reached</th>';
+            }
+        } else if (role_centerAdmin == "True" || role_classAssistant == "True" || role_fieldCoordinator == "True" || role_delivery == "True" ) {
+            if (status != "Alumni") {
+                thead += '<th width="5%">Action</th>';
+            }
+        }
+        thead += '</tr></thead>';
+        $.post('/v2/getstudentLIstData/', {
+            'csrfmiddlewaretoken': csrftoken,
+            'page': pageId,
+            'message': message,
+            'center': center,
+            'grade': grade,
+            'gender': gender,
+            'status': status
+        }, function(resp) {
+            resp9 = resp;
+            current_page = resp.current;
+            prev_page = resp.prev;
+            next_page = resp.next;
+            total_page = resp.total;
+            count = resp.count;
+            var center_list_data = '';
+            var promoted_grade_option = '<option value="">Select Grade</option>';
+            if (resp != null && resp != '' && resp != 'undefined') {
+                $("#promotion_grade_id").empty();
+                if (resp.student_list != null && resp.student_list != '' && resp.student_list != 'undefined') {
+                    var jsonObj = resp.student_list;
+                    var promoted_grade = resp.promoted_grade;
+                    var promoted_grade_option = '<option value="">Select Grade</option>';
+                    //for (i = 0; i < promoted_grade.length; i++) {
+                    if (promoted_grade[0] != undefined) {
+                        promoted_grade_option = '<option value="' + promoted_grade[0] + '">' + promoted_grade[0] + '</option><option value="Alumni">Alumni</option>';
+                    }
+                    //}
+
+                    for (i = 0; i < jsonObj.length; i++) {
+                        if (jsonObj[i]['DOB'] != null) {
+                            var only_date = jsonObj[i]['DOB'].substring(0, 11);
+                            var dates = only_date.split("-");
+                            only_date = dates[2].trim() + '-' + dates[1] + '-' + dates[0];
+                        } else {
+                            only_date = '';
+                        }
+                        tbody += '<tr>';
+                        tbody += '<td>' + '<input onchange="noOfChecked()" type="checkbox" name="check" id="id_' + jsonObj[i]["id"] + '" />' + " " + '</td>';
+                        tbody += '<td>' + jsonObj[i]['id'] + '</td>';
+                        tbody += '<td>' +
+                            jsonObj[i]['studentName'] +
+                            '</td>';
+                        tbody += '<td><img src="' + jsonObj[i]['photo'] + '" width="50px" height:"50px" /></td>';
+                        tbody += '<td>' + only_date + '</td>';
+                        tbody += '<td>' +
+                            jsonObj[i]['school_rollno'] +
+                            '</td>';
+                        tbody += '<td>' + jsonObj[i]['grade'] +
+                            '</td>';
+                        tbody += '<td>' + jsonObj[i]['gender'] +
+                            '</td>';
+                        tbody += '<td style="display:none;">' +
+                            jsonObj[i]['father_occupation'] +
+                            '</td>';
+                        tbody += '<td style="display:none;">' +
+                            jsonObj[i]['mother_occupation'] +
+                            '</td>';
+                        tbody += '<td style="display:none;">' +
+                            jsonObj[i]['strengths'] +
+                            '</td>';
+                        tbody += '<td style="display:none;">' +
+                            jsonObj[i]['weakness'] +
+                            '</td>';
+                        tbody += '<td style="display:none;">' +
+                            jsonObj[i]['observation'] +
+                            '</td>';
+                        tbody += '<td>' + jsonObj[i]['status'] +
+                            '</td>';
+                        if (jsonObj[i]['kyc_number'] != null) {
+                            tbody += '<td>' + jsonObj[i]['kyc_number'] + '</td>';
+                        } else {
+                            tbody += '<td>' + 'Null' + '</td>';
+                        }
+
+                        
+
+                        
+                        if (status == "Alumni" & role_classAssistant == "True" || role_delivery == "True" || role_delivery == "True") {
+                            if (jsonObj[i]['is_reached'] == true) {
+                                tbody += '{% if user.is_superuser or is_field_coordinator or is_Assistant or is_delivery %}<td ><input checked type="checkbox" onclick="is_reached(' + jsonObj[i]['id'] + ', $(this));" id="r' + jsonObj[i]['id'] + '"></td>{% endif %}';
+                            } else {
+                                tbody += '{% if user.is_superuser or is_field_coordinator or is_Assistant or is_delivery %}<td ><input type="checkbox" onclick="is_reached(' + jsonObj[i]['id'] + ', $(this));" id="r' + jsonObj[i]['id'] + ' "></td>{% endif %}';
+                            }
+                        }
+                        
+
+                        if (jsonObj[i]['status'] == "Alumni") {
+                            tbody += '{% if is_centeradmin or is_Assistant or user.is_superuser or is_partner or is_field_coordinator or is_delivery %}<td style="word-break:initial;":><a href="/v2/edit_student/?student_id=' + jsonObj[i]['id'] + '&page=' + current_page + '&center_id=' + jsonObj[i]['center_id'] + '&grade=' + grade + '&gender=' + gender + '"><i class="fas fa-edit" style="font-size:18px"></i></a>&nbsp;&nbsp;{% endif %}';
+                            tbody += '</tr>';
+                        } else {
+                            tbody += '{% if is_centeradmin or is_Assistant or user.is_superuser or is_partner or is_field_coordinator or is_delivery %}<td style="word-break:initial;":><a href="/v2/edit_student/?student_id=' + jsonObj[i]['id'] + '&page=' + current_page + '&center_id=' + jsonObj[i]['center_id'] + '&grade=' + grade + '&gender=' + gender + '"><i class="fas fa-edit" style="font-size:18px"></i></a>&nbsp;&nbsp;{% endif %}';
+                            tbody += '</tr>';
+                        }
+                    }
+                    tbody += '</tbody>';
+                    tableData = thead + '' + tbody;
+                } else {
+                    tableData = '<h3 style="margin-left: 43%; margin-top: 13%;">No Data Available.</h3>';
+                }
+            }
+            $("#promotion_grade_id").html(promoted_grade_option);
+
+            var span = '';
+            span = '<span class="col-sm" style="text-align :right;" >';
+            var curent_count_end = '';
+            var curent_count = '';
+            if (total_page > 0) {
+                curent_count = (current_page * 10) - 9;
+                if (count == 0) {
+                    curent_count = 0;
+                }
+                if (current_page < total_page) {
+                    span += ' ' + curent_count + ' - ' + current_page * 10 + ' of ' + count + ' Students';
+                } else {
+                    span += ' ' + curent_count + ' - ' + count + ' of ' + count + ' Students';
+                }
+            }
+            span += '</span>';
+            $("#countPaginationId").html(span);
+            document.getElementById("countStudent").innerHTML = count;
+            document.getElementById("studentNo1").innerHTML = count;
+
+
+            $('#table_id').html(tableData);
+            var pagination_template = '';
+            if (tableData != null && tableData != ' ' && tableData != 'undefined' && tableData.length > '0') {
+                pagination_template += "<ul class='pagination' id='paginationOfStudentList' style='padding-left: 210px;padding-right: 187px;'>";
+                if (total_page > 1) {
+                    if (current_page > 1) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + prev_page + ")'" + prev_page + "' ><i class='fa fa-chevron-left'></i></a></li> ";
+                    } else {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);'><i class='fa fa-chevron-left'></i></a></li> ";
+                    }
+                    if (current_page != 1) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(1)'>1</a></li> ";
+                    }
+                    if (current_page > 4 && current_page <= 10) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page - 1) + ")'" + (current_page - 1) + "' >...</a></li> ";
+                    }
+                    if ((current_page - 50) > 0) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page - 50) + ")'" + (current_page - 50) + "' >...</a></li> ";
+                    }
+                    if ((current_page - 11) > 0 && (current_page - 11) != 1) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page - 11) + ")'" + (current_page - 11) + "' >" + (current_page - 11) + "</a></li> ";
+                    }
+                    if ((current_page - 10) > 0) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page - 10) + ")'" + (current_page - 10) + "' >...</a></li> ";
+                    }
+                    if ((current_page - 2) > 0 && (current_page - 2) != 1) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page - 2) + ")'" + (current_page - 2) + "' >" + (current_page - 2) + "</a></li> ";
+                    }
+                    if ((current_page - 1) > 0 && (current_page - 1) != 1) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page - 1) + ")'" + (current_page - 1) + "' >" + (current_page - 1) + "</a></li> ";
+                    }
+                    pagination_template += "<li  class='active'><a class='page' href='javascript:void(0);' onclick='loadPagination(" + current_page + ")'" + current_page + "' >" + current_page + "</a></li> ";
+                    if ((current_page + 1) <= total_page) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page + 1) + ")'" + (current_page + 1) + "' >" + (current_page + 1) + "</a></li> ";
+                    }
+                    if ((current_page + 2) <= total_page) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page + 2) + ")'" + (current_page + 2) + "' >" + (current_page + 2) + "</a></li> ";
+                    }
+                    if ((current_page + 10) < total_page) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page + 10) + ")'" + (current_page + 10) + "' >...</a></li> ";
+                    }
+                    if ((current_page + 11) < total_page) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page + 11) + ")'" + (current_page + 11) + "' >" + (current_page + 11) + "</a></li> ";
+                    }
+                    if ((current_page + 50) < total_page) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page + 50) + ")'" + (current_page + 50) + "' >...</a></li> ";
+                    }
+                    if ((current_page >= (total_page - 10)) && (current_page < (total_page - 3))) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + (current_page + 1) + ")'" + (current_page + 1) + "' >...</a></li> ";
+                    }
+                    if ((current_page + 3) <= total_page) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + total_page + ")'" + total_page + "' >" + total_page + "</a></li> ";
+                    }
+                    if (current_page < total_page) {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);' onclick='loadPagination(" + next_page + ")'" + next_page + "' ><i class='fa fa-chevron-right'></i></a></li> ";
+                    } else {
+                        pagination_template += "<li><a class='page' href='javascript:void(0);'><i class='fa fa-chevron-right'></i></a></li> ";
+                    }
+                }
+                pagination_template += "</ul>";
+            }
+            if (resp9.message != null && resp9.message != '' && resp9.message != 'undefined') {
+                var messageDiv = '<div class="alert alert-success alert-dismissable" style="line-height: 0;">';
+                messageDiv += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+                messageDiv += resp9['message'] + '</div>';
+            }
+
+            if (flagForSelectAll) {
+                // Don't change the order here
+                $("#div_select_all").hide();
+                checkAll($("#check_all"));
+                $("#div_clear_all").show();
+            } else {
+                $("#div_select_all").hide();
+                $("#div_clear_all").hide();
+            }
+
+            $("#messageDiv").empty();
+            $("#messageId").removeAttr('value');
+            $("#messageDiv").append(messageDiv);
+            $('#pagination_data').html(pagination_template);
+        }).done(function() {});
+
+    }
+
+    function loadPagination(Page) {
+        var pageId = $("#pageId").val(Page);
+        refresh_data();
+    }
+</script>
+<script>
+    function deleteRecord(student_id, page, centerId) {
+        alert("student_id", student_id);
+        var ajaxUrl = '/v2/delete_student/?student_id=' + student_id + '&page=' + page + '&centerId=' + centerId;
+        var grade = $("#gradeId").val();
+        var gender = $("#genderId").val();
+        var status = $("#statusId").val();
+        if (grade != null && grade != '' && grade != 'undefined') {
+            ajaxUrl += '&grade=' + grade;
+        }
+        if (gender != null && gender != '' && gender != 'undefined') {
+            ajaxUrl += '&gender=' + gender;
+        }
+        if (status != null && status != '' && status != 'undefined') {
+            ajaxUrl += '&status=' + status;
+        }
+        $.ajax({
+            url: ajaxUrl,
+            success: function(data) {
+                $("#messageId").val(data['message']);
+                refresh_data();
+                $("#deleteid").dialog('close')
+                setTimeout(function() {
+                    location.reload();
+                }, 3000);
+            },
+            error: function() {
+                alert("Error");
+            }
+        });
+
+    }
+
+    function deleteRow(tableID) {
+        var my_check_box_selected = [];
+        $("input[name='check']:checked").each(function(index, obj) {
+            my_check_box_selected.push(obj['id'])
+        });
+        if (my_check_box_selected.length > 0) {
+            var result = confirm("Want to delete " + my_check_box_selected.length + " students?");
+            if (result) {
+                var csrftoken = getCookie('csrftoken');
+                var my_check_box_selected = [];
+                $("input[name='check']:checked").each(function(index, obj) {
+                    my_check_box_selected.push(obj['id'])
+                });
+                // data = {'csrfmiddlewaretoken' : csrftoken,'my_check_box_ids':my_check_box_selected}
+                var ajaxUrl = '/v2/std_deleting_student/';
+                $.post(ajaxUrl, {
+                    'csrfmiddlewaretoken': csrftoken,
+                    'my_check_box_ids': JSON.stringify(my_check_box_selected)
+                }, function(message) {
+                    alert(message);
+                    setTimeout(function() {
+                        location.reload();
+                    }, 100);
+                });
+            }
+        } else {
+            alert("Please select students to delete")
+        }
+    }
+
+    function promote(tableID) {
+        if ($("#statusId").val() === "Alumni") {
+            alert("You cannot promote Alumni");
+            return false;
+        }
+        var e = document.getElementById("promotion_grade_id");
+        var grade = document.getElementById("gradeId");
+        if (e.value == "") {
+            alert("Please select Promotion Grade!");
+            return false;
+        }
+
+        if (grade.value == '') {
+            alert("Please select Grade!");
+            return false;
+        }
+        var grade_to_promote = e.options[e.selectedIndex].value;
+        var my_check_box_selected = [];
+        $("input[name='check']:checked").each(function(index, obj) {
+            my_check_box_selected.push(obj['id'])
+        });
+        if (my_check_box_selected.length > 0) {
+            var confirm_message = "Would you like to promote {%} student(s) to next grade?"
+            if (flagForSelectAll) {
+                confirm_message = confirm_message.replace("{%}", document.getElementById("countStudent").innerHTML)
+            } else {
+                confirm_message = confirm_message.replace("{%}", my_check_box_selected.length)
+            }
+            var result = confirm(confirm_message);
+            if (result) {
+                var csrftoken = getCookie('csrftoken');
+                var selected_students = [];
+                var selected_grade = document.getElementById("gradeId").value;
+                var selected_gender = document.getElementById("genderId").value;
+                var selected_status = document.getElementById("statusId").value;
+                var selected_center = $("#centerId").val();
+
+                if (!flagForSelectAll) {
+                    $("input[name='check']:checked").each(function(index, obj) {
+                        selected_students.push(obj['id'])
+                    });
+                }
+
+                var ajaxUrl = '/v2/students_grade_promotion/';
+                $.post(ajaxUrl, {
+                    'csrfmiddlewaretoken': csrftoken,
+                    'grade_to_promote': grade_to_promote,
+                    'selected_students': selected_students,
+                    'center_id': selected_center,
+                    'grade': selected_grade,
+                    'gender': selected_gender,
+                    'status': selected_status,
+                    'is_all': (flagForSelectAll) ? 1 : 0
+                }, function(message) {
+                    alert(message);
+                    setTimeout(function() {
+                        location.reload();
+                    }, 100);
+                });
+            }
+        } else {
+            alert("Please select students to promote")
+        }
+    }
+
+    function changeFlagForSelectAll() {
+        flagForSelectAll = false;
+        $("#dlt-button").show();
+    }
+
+    function checkAll(ele) {
+
+        var checkboxes = document.getElementsByTagName('input');
+        if (ele.checked) {
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].type == 'checkbox') {
+                    checkboxes[i].checked = true;
+                }
+            }
+            if (document.getElementById("countStudent").innerHTML > 10) {
+                $("#div_select_all").show();
+                $("#div_clear_all").hide();
+            }
+
+        } else {
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].type == 'checkbox') {
+                    checkboxes[i].checked = false || flagForSelectAll;
+                }
+            }
+            $("#div_select_all").hide();
+            $("#div_clear_all").hide();
+        }
+    }
+
+    function delRecord(student_id, page, centerId) {
+        $.confirm({
+            title: '',
+            content: ' Are you sure you want to delete ? ',
+            buttons: {
+                confirm: function() {
+                    deleteRecord(student_id, page, centerId);
+                },
+                cancel: function() {
+
+                },
+
+            }
+        });
+    }
+
+
+    $(".export-xls").click(function(e) {
+        console.log("Fffdwsdwesdwe")
+        e.stopPropagation();
+        e.preventDefault();
+        var grade = $("#gradeId").val();
+        var gender = $("#genderId").val();
+        var status = $("#statusId").val();
+        var center = $("#centerId").val();
+        $.ajax({
+            url: '/v2/get_student_db/?grade=' + grade + '&gender=' + gender + '&centerId=' + center + '&status=' + status,
+
+            success: function(data) {
+
+                var all_data = data
+                if (all_data == '')
+                    return;
+
+                JSONToCSVConvertor(all_data, "", true);
+
+            }
+        });
+    });
+
+    function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
+        //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
+        var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+
+        var CSV = '';
+        //Set Report title in first row or line
+
+        CSV += ReportTitle + '\r\n\n';
+
+        //This condition will generate the Label/Header
+        if (ShowLabel) {
+            var row = "";
+
+            //This loop will extract the label from 1st index of on array
+            for (var index in arrData[0]) {
+
+                //Now convert each value to string and comma-seprated
+                row += index + ',';
+            }
+
+            row = row.slice(0, -1);
+
+            //append Label row with line break
+            CSV += row + '\r\n';
+        }
+
+        //1st loop is to extract each row
+        for (var i = 0; i < arrData.length; i++) {
+            var row = "";
+
+            //2nd loop will extract each column and convert it in string comma-seprated
+            for (var index in arrData[i]) {
+                row += '"' + arrData[i][index] + '",';
+            }
+
+            row.slice(0, row.length - 1);
+
+            //add a line break after each row
+            CSV += row + '\r\n';
+        }
+
+        if (CSV == '') {
+            alert("Invalid data");
+            return;
+        }
+
+        //Generate a file name
+        var fileName = "studentList_";
+        //this will remove the blank-spaces from the title and replace it with an underscore
+        fileName += ReportTitle.replace(/ /g, "_");
+
+        //Initialize file format you want csv or xls
+        var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+
+        // Now the little tricky part.
+        // you can use either>> window.open(uri);
+        // but this will not work in some browsers
+        // or you will not get the correct file extension    
+
+        //this trick will generate a temp <a /> tag
+        var link = document.createElement("a");
+        link.href = uri;
+
+        //set the visibility hidden so it will not effect on your web-layout
+        link.style = "visibility:hidden";
+        link.download = fileName + ".csv";
+
+        //this part will append the anchor tag and remove it after automatic click
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    $("#menuClose").click(function() {
+
+        $(".clos").click(function() {
+            parent.$.fn.colorbox.close()
+        });
+    });
+
+    function noOfChecked() {
+        var checkbox = document.getElementsByName('check');
+        var countCheckboxes = 0;
+        for (var i = 0; i < checkbox.length; i++) {
+            if (checkbox[i].checked == true) {
+                countCheckboxes++;
+            }
+        }
+        document.getElementById("keyword_all").innerHTML = (countCheckboxes < 10) ? "" : "All ";
+        document.getElementById("studentNo").innerHTML = countCheckboxes;
+    }
+
+    function searchFunction(id) {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById(id);
+        filter = input.value.toUpperCase();
+        table = document.getElementById("table_id");
+        tr = table.getElementsByTagName("tr");
+        n = 2
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[n];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+
+
+    $(document).ready(function() {
+        $("#btn_select_all").click(function() {
+            $("#dlt-button").hide();
+        });
+
+        $("#btn_clear_all").click(function() {
+            $("#dlt-button").show();
+        });
+
+    });
+
+
+    function is_reached(id, _this) {
+        if (_this.is(':checked')) {
+            var is_reached = 1
+        } else {
+            var is_reached = 0
+        }
+
+        var csrftoken = getCookie('csrftoken');
+        $.ajax({
+            url: "/v2/student-reach-status/", // the endpoint
+            type: "POST", // http method
+            data: {
+                'csrfmiddlewaretoken': csrftoken,
+                "is_reached": is_reached,
+                'id': id
+            },
+
+            success: function(response) {
+                console.log(response)
+
+                // console.log('full response ---------------------', response)
+            },
+
+            error: function(xhr, errmsg, err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg + "></div>")
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    }
+</script>
+
+</html>

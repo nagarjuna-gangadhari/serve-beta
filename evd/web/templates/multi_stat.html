@@ -1,0 +1,1411 @@
+{% extends "base.html" %}{% load staticfiles%} {% block head_styles %} {{ block.super }}
+<!-- <link rel="stylesheet" href="/static/css/tailwind.min.css"> -->
+<script src="/static/css/tailwindcss3.js"></script>
+<script src="/static/css/fontawesome/js/all.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<style>
+    .content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .loader-wrapper {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #bcc8da79;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .loader {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        position: relative;
+        border: 4px solid #Fff;
+        animation: loader 2s infinite ease;
+    }
+    
+    .loader-inner {
+        vertical-align: top;
+        display: inline-block;
+        width: 100%;
+        background-color: #fff;
+        animation: loader-inner 2s infinite ease-in;
+    }
+    
+    @keyframes loader {
+        0% {
+            transform: rotate(0deg);
+        }
+        25% {
+            transform: rotate(180deg);
+        }
+        50% {
+            transform: rotate(180deg);
+        }
+        75% {
+            transform: rotate(360deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+    
+    @keyframes loader-inner {
+        0% {
+            height: 0%;
+        }
+        25% {
+            height: 0%;
+        }
+        50% {
+            height: 100%;
+        }
+        75% {
+            height: 100%;
+        }
+        100% {
+            height: 0%;
+        }
+    }
+</style>
+<style>
+    .lds-roller {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+    }
+    
+    .lds-roller div {
+        animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        transform-origin: 40px 40px;
+    }
+    
+    .lds-roller div:after {
+        content: " ";
+        display: block;
+        position: absolute;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #fff;
+        margin: -4px 0 0 -4px;
+    }
+    
+    .lds-roller div:nth-child(1) {
+        animation-delay: -0.036s;
+    }
+    
+    .lds-roller div:nth-child(1):after {
+        top: 63px;
+        left: 63px;
+    }
+    
+    .lds-roller div:nth-child(2) {
+        animation-delay: -0.072s;
+    }
+    
+    .lds-roller div:nth-child(2):after {
+        top: 68px;
+        left: 56px;
+    }
+    
+    .lds-roller div:nth-child(3) {
+        animation-delay: -0.108s;
+    }
+    
+    .lds-roller div:nth-child(3):after {
+        top: 71px;
+        left: 48px;
+    }
+    
+    .lds-roller div:nth-child(4) {
+        animation-delay: -0.144s;
+    }
+    
+    .lds-roller div:nth-child(4):after {
+        top: 72px;
+        left: 40px;
+    }
+    
+    .lds-roller div:nth-child(5) {
+        animation-delay: -0.18s;
+    }
+    
+    .lds-roller div:nth-child(5):after {
+        top: 71px;
+        left: 32px;
+    }
+    
+    .lds-roller div:nth-child(6) {
+        animation-delay: -0.216s;
+    }
+    
+    .lds-roller div:nth-child(6):after {
+        top: 68px;
+        left: 24px;
+    }
+    
+    .lds-roller div:nth-child(7) {
+        animation-delay: -0.252s;
+    }
+    
+    .lds-roller div:nth-child(7):after {
+        top: 63px;
+        left: 17px;
+    }
+    
+    .lds-roller div:nth-child(8) {
+        animation-delay: -0.288s;
+    }
+    
+    .lds-roller div:nth-child(8):after {
+        top: 56px;
+        left: 12px;
+    }
+    
+    @keyframes lds-roller {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+{% endblock %} {% block head_scripts %} {{ block.super }}
+<!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script> -->
+{% endblock %} {% block body_container %} {%if is_partner or is_school_admin %}
+
+<div class="inner flex">
+    <div class="w-1/5 h-full">
+        {%include "navbar.html"%}
+    </div>
+    <div class="w-4/5 h-full overflow-y-auto ">
+        {%else%}
+        <div class="admin_inner">
+            <div class="w-full">
+                {%endif%}
+
+                <div class="mt-12 w-full ">
+                    <div class="shadow-xl bg-blue-400 rounded-lg overflow-hidden mx-8 flex flex-col p-2 font-sans">
+                        <span class="text-center text-white font-bold text-4xl uppercase my-1">Operations Dashboard</span>
+                    </div>
+                    <div class="shadow-xl border-blue-600 border-2 rounded-lg overflow-hidden my-4 flex flex-col p-4 font-sans">
+                        <!-- <span class="text-center text-gray-600 font-bold text-xl uppercase my-4">choose centers by:</span> -->
+                        <form method="post" id="stat_form" class="mt-2">
+                            {% csrf_token %}
+                            <div class="flex justify-around space-x-0">
+                                <div class="flex justify-center items-center">
+                                    <label for="state">STATES:</label>
+                                    <select required class="rounded text-center mx-2 w-80" size="6" name="state_id" id="state_id" multiple>
+                                        <option selected value="-1">ALL</option>
+                                        {%for state in states %}
+                                        <option value="{{state}}">{{state}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="flex justify-center items-center">
+                                    <label for="partner">PARTNERS:</label>
+                                    <select class="rounded border- text-center mx-2 w-80" size="6" name="partner_id" id="partner_id" multiple>
+                                        <option selected value="-1">ALL</option>
+                                    </select>
+                                </div>
+                                <div class="flex justify-center items-center">
+                                    <label for="donor">DONORS:</label>
+                                    <select class="rounded text-center mx-2 w-80" size="6" name="donor_id" id="donor_id" multiple>
+                                        <option selected value="-1">ALL</option>
+                                    </select>
+                                </div>
+                                <div class="flex justify-center items-center">
+                                    <label for="center">CENTERS:</label>
+                                    <select class="rounded text-center mx-2 h-full w-96" size="6" name="center_id" id="center_id" multiple style="height: 100%;">
+                                        <option selected value="-1">ALL</option> 
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex justify-around text-center mt-10 py-4 border-t border-1 space-x-0">
+                                <div class="w-3/12 h-56">
+                                    <div class="flex justify-center items-center">
+                                        <label for="center">COURSE:</label>
+                                        <select class="form-multiselect rounded text-center mx-2 w-96" size="8" name="course_id" id="course_id" multiple>
+                                            <option selected value="-1" >ALL</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="w-9/12">
+                                    <div class="flex justify-around space-x-2">
+                                        <div class="flex justify-center items-center">
+                                            <label for="center">ACADAMIC YEAR:</label>
+                                            <select class="form-multiselect rounded text-center mx-2 h-10 w-40" name="ay_id" id="ay_id">
+                                                {% for ay in ays %}
+                                                <option {% if forloop.first %} selected {% endif %}   value="{{ay}}" >{{ay}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="flex justify-center items-center">
+                                            <label for="from_date">FROM DATE:</label>
+                                            <input required class="rounded mx-2 h-14 w-80 p-2" value="" type="date" name="from_date" id="from_date">
+                                        </div>
+                                        <div class="flex justify-center items-center">
+                                            <label for="to_date">TO DATE</label>
+                                            <input required class="rounded mx-2 h-14 w-80 p-2" value="" type="date" name="to_date" id="to_date">
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-center items-center text-center border-t border-1 pr-20 pt-16">
+                                        <button type="submit" class="submit shadow-xl bg-green-400 hover:bg-green-600 text-2xl font-bold rounded mr-10 mt-4 h-16 w-80">Get Details</button>
+                                        <div id="timer" class="submit-loader bg-green-600 text-2xl flex justify-center items-center mx-4 font-bold rounded ml-4 h-16 w-80" style="display:none">
+                                            <div class="loader flex text-center"><span class="loader-inner"></span></div>
+                                            <!-- <div class="lds-roller text-red-400">
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- component -->
+                    <div class="rounded-lg border-2 dark:bg-gray-900 py-6 flex flex-col justify-center sm:py-12">
+                        <span class="text-center text-black font-bold text-4xl uppercase mb-6">summary</span>
+                        <div class="flex justify-around items-center text-sm">
+                            <!-- SMALL CARD ROUNDED -->
+                            <div class="bg-gray-100 border-red-600 dark:bg-gray-800 bg-opacity-95 border-opacity-60 | p-4 border-solid rounded-3xl border-2 | flex justify-around cursor-pointer | hover:bg-red-400 dark:hover:bg-indigo-600 hover:border-transparent | transition-colors duration-500">
+                                <div class="flex justify-center items-center text-4xl object-cover p-4"><i class="fas fa-school"></i></div>
+                                <div class="flex flex-col justify-center items-center">
+                                    <p class="text-gray-900 dark:text-gray-300 font-semibold">Centers</p>
+                                    <p id="summary_centers" class="text-black dark:text-gray-100 text-justify font-semibold"></p>
+                                </div>
+                            </div>
+                            <div class="bg-gray-100 border-yellow-600 dark:bg-gray-800 bg-opacity-95 border-opacity-60 | p-4 border-solid rounded-3xl border-2 | flex justify-around cursor-pointer | hover:bg-yellow-400 dark:hover:bg-green-600 hover:border-transparent | transition-colors duration-500">
+                                <div class="flex justify-center items-center text-4xl object-cover p-4"><i class="fas fa-chalkboard-teacher"></i></div>
+                                <div class="flex flex-col justify-center items-center">
+                                    <p class="text-gray-900 dark:text-gray-300 font-semibold">Courses</p>
+                                    <p id="summary_course" class="text-black dark:text-gray-100 text-justify font-semibold"></p>
+                                </div>
+                            </div>
+                            <div class="bg-gray-100 border-blue-600 dark:bg-gray-800 bg-opacity-95 border-opacity-60 | p-4 border-solid rounded-3xl border-2 | flex justify-around cursor-pointer | hover:bg-blue-400 dark:hover:bg-green-600 hover:border-transparent | transition-colors duration-500">
+                                <div class="flex justify-center items-center text-4xl object-cover p-4"><i class="far fa-bookmark"></i></div>
+                                <div class="flex flex-col justify-center items-center">
+                                    <p class="text-gray-900 dark:text-gray-300 font-semibold">Active Offering</p>
+                                    <p id="summary_active_offering" class="text-black dark:text-gray-100 text-justify font-semibold"></p>
+                                </div>
+                            </div>
+                            <!-- <div class="bg-gray-100 border-pink-600 dark:bg-gray-800 bg-opacity-95 border-opacity-60 | p-4 border-solid rounded-3xl border-2 | flex justify-around cursor-pointer | hover:bg-pink-400 dark:hover:bg-red-600 hover:border-transparent | transition-colors duration-500">
+                                <div class="flex justify-center items-center text-4xl object-cover p-4"><i class="fab fa-hive"></i></div>
+                                <div class="flex flex-col justify-center items-center">
+                                    <p class="text-gray-900 dark:text-gray-300 font-semibold">Sessions</p>
+                                    <p id="summary_total_sessions" class="text-black dark:text-gray-100 text-justify font-semibold"></p>
+                                </div>
+                            </div> -->
+                            <div class="bg-gray-100 border-green-600 dark:bg-gray-800 bg-opacity-95 border-opacity-60 | p-4 border-solid rounded-3xl border-2 | flex justify-around cursor-pointer | hover:bg-green-400 dark:hover:bg-yellow-600 hover:border-transparent | transition-colors duration-500">
+                                <div class="flex justify-center items-center text-4xl p-4 object-cover"><i class="fas fa-user-astronaut"></i></div>
+                                <div class="flex flex-col justify-center items-center">
+                                    <p class="text-gray-900 dark:text-gray-300 font-semibold">Active Teachers</p>
+                                    <p id="summary_active_teacher" class="text-black dark:text-gray-100 text-justify font-semibold"></p>
+                                </div>
+                            </div>
+
+                            <!-- <div class="bg-gray-100 border-indigo-600 dark:bg-gray-800 bg-opacity-95 border-opacity-60 | p-4 border-solid rounded-3xl border-2 | flex justify-around cursor-pointer | hover:bg-indigo-400 dark:hover:bg-indigo-600 hover:border-transparent | transition-colors duration-500">
+                                <div class="flex justify-center items-center text-4xl object-cover p-4"><i class="fab fa-nutritionix"></i></div>
+                                <div class="flex flex-col justify-center items-center">
+                                    <p class="text-gray-900 dark:text-gray-300 font-semibold">Class: plan/actual</p>
+                                    <p id="summary_plan" class="text-black dark:text-gray-100 text-justify font-semibold"></p>
+                                </div>
+                            </div> -->
+
+
+                            <div class="bg-gray-100 border-pink-600 dark:bg-gray-800 bg-opacity-95 border-opacity-60 | p-4 border-solid rounded-3xl border-2 | flex justify-around cursor-pointer | hover:bg-pink-400 dark:hover:bg-pink-600 hover:border-transparent | transition-colors duration-500">
+                                <div class="flex justify-center items-center text-4xl object-cover p-4"><i class="fas fa-user-friends"></i></div>
+                                <div class="flex flex-col justify-center items-center">
+                                    <p class="text-gray-900 dark:text-gray-300 font-semibold">Master Students</p>
+                                    <p id="summary_total_students" class="text-black dark:text-gray-100 text-justify font-semibold"></p>
+                                </div>
+                            </div>
+                            <!-- <div class="bg-gray-100 border-yellow-600 dark:bg-gray-800 bg-opacity-95 border-opacity-60 | p-4 border-solid rounded-3xl border-2 | flex justify-around cursor-pointer | hover:bg-yellow-400 dark:hover:bg-pink-600 hover:border-transparent | transition-colors duration-500">
+                                <div class="flex justify-center items-center text-4xl object-cover p-4"><i class="fas fa-people-carry"></i></div>
+                                <div class="flex flex-col justify-center items-center">
+                                    <p class="text-gray-900 dark:text-gray-300 font-semibold">Enrolled Students</p>
+                                    <p id="summary_enroll_students" class="text-black dark:text-gray-100 text-justify font-semibold"></p>
+                                </div>
+                            </div> -->
+
+                            <div class="bg-gray-100 border-pink-600 dark:bg-gray-800 bg-opacity-95 border-opacity-60 | px-4 pb-2 border-solid rounded-3xl border-2 | flex justify-around cursor-pointer | hover:bg-pink-400 dark:hover:bg-pink-600 hover:border-transparent | transition-colors duration-500">
+                                <div class="flex flex-col justify-center items-center">
+                                    <div class="flex flex-row justify-center items-center py-1">
+                                        <p class="text-gray-900 dark:text-gray-300 font-semibold">Enrolled Students</p>
+                                    </div>
+                                    <div class="flex flex-row justify-around items-center text-lg font-bold">
+                                        <div class="flex flex-col justify-center items-center px-2 border-r-2">
+                                            <p class="text-gray-900 dark:text-gray-300 ">Total</p>
+                                            <p id="summary_enroll_students" class="text-black dark:text-gray-100 text-justify font-semibold">0</p>
+                                        </div>
+                                        <div class="flex flex-col justify-center items-center px-2 border-r-2">
+                                            <p class="text-gray-900 dark:text-gray-300">Boys</p>
+                                            <p id="summary_enroll_students_boys" class="text-black dark:text-gray-100 text-justify font-semibold">0</p>
+                                        </div>
+                                        <div class="flex flex-col justify-center items-center px-2">
+                                            <p class="text-gray-900 dark:text-gray-300">Girls</p>
+                                            <p id="summary_enroll_students_girls" class="text-black dark:text-gray-100 text-justify font-semibold">0</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <div class="bg-gray-100 border-pink-600 dark:bg-gray-800 bg-opacity-95 border-opacity-60 | px-4 pb-2 border-solid rounded-3xl border-2 | flex justify-around cursor-pointer | hover:bg-pink-400 dark:hover:bg-pink-600 hover:border-transparent | transition-colors duration-500">
+                                <div class="flex flex-col justify-center items-center">
+                                    <div class="flex flex-row justify-center items-center">
+                                        <div class="flex justify-center items-center text-2xl object-cover px-4 py-2"><i class="fas fa-user-friends"></i></div>
+                                        <p class="text-gray-900 dark:text-gray-300 font-semibold">Students</p>
+                                    </div>
+                                    <div class="flex flex-row justify-around items-center text-lg font-bold">
+                                        <div class="flex flex-col justify-center items-center px-2 border-r-2">
+                                            <p class="text-gray-900 dark:text-gray-300 ">Total</p>
+                                            <p id="summary_total_students" class="text-black dark:text-gray-100 text-justify font-semibold">0</p>
+                                        </div>
+                                        <div class="flex flex-col justify-center items-center px-2 border-l-2">
+                                            <p class="text-gray-900 dark:text-gray-300">Enrolled</p>
+                                            <p id="summary_enroll_students" class="text-black dark:text-gray-100 text-justify font-semibold">0</p>
+                                        </div>
+                                        <div class="flex flex-col justify-center items-center px-2">
+                                            <p class="text-gray-900 dark:text-gray-300">Attended</p>
+                                            <p id="summary_present_students" class="text-black dark:text-gray-100 text-justify font-semibold">0</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div> -->
+
+
+                            <!-- <div class="bg-gray-100 border-green-600 dark:bg-gray-800 bg-opacity-95 border-opacity-60 | p-4 border-solid rounded-3xl border-2 | flex justify-around cursor-pointer | hover:bg-green-400 dark:hover:bg-yellow-600 hover:border-transparent | transition-colors duration-500">
+
+                                <div class="flex flex-col justify-center items-center">
+                                    <div class="flex flex-row justify-center items-center">
+                                        <div class="flex justify-center items-center text-2xl object-cover px-4 py-2"><i class="fas fa-user-friends"></i></div>
+                                        <p class="text-gray-900 dark:text-gray-300 font-semibold">Students</p>
+                                    </div>
+
+                                    <div class="flex flex-row justify-around items-center text-lg font-bold">
+
+                                        <div class="flex flex-col justify-center items-center px-2 border-r-2">
+                                            <p class="text-gray-900 dark:text-gray-300">Present</p>
+                                            <p id="summary_present_students" class="text-black dark:text-gray-100 text-justify font-semibold">0</p>
+                                        </div>
+                                        <div class="flex flex-col justify-center items-center px-2">
+                                            <p class="text-gray-900 dark:text-gray-300">Attendance %</p>
+                                            <p id="summary_attendence" class="text-black dark:text-gray-100 text-justify font-semibold"></p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="bg-gray-100 border-green-600 dark:bg-gray-800 bg-opacity-95 border-opacity-60 | p-4 border-solid rounded-3xl border-2 | flex justify-around cursor-pointer | hover:bg-green-400 dark:hover:bg-yellow-600 hover:border-transparent | transition-colors duration-500">
+                                <div class="flex justify-center items-center text-4xl object-cover p-4"><i class="fas fa-table"></i></div>
+                                <div class="flex flex-col justify-center items-center">
+                                    <p class="text-gray-900 dark:text-gray-300 font-semibold">Attendance</p>
+                                    <p id="summary_attendence" class="text-black dark:text-gray-100 text-justify font-semibold"></p>
+                                </div>
+                            </div>
+                            <!-- END SMALL CARD ROUNDED -->
+                        </div>
+                    </div>
+
+                    <!-- charts -->
+                    <div class="flex  justify-center items-center " style="height: 400px;">
+                        <div class="shadow-xl bg-gray-200 flex flex-col w-1/2 h-5/6 m-8">
+                            <p class="p-2 w-full bg-gray-400 rounded-t-xl  text-center text-white font-bold text-xl uppercase">Session Details</p>
+                            <div class="pichart-loader w-full h-full flex justify-center items-center">
+                                <div class="loader"><span class="loader-inner"></span></div>
+                            </div>
+                            <div id="donutchart" class="pichart w-full h-full" style="display:none"></div>
+                        </div>
+                        <div class="shadow-xl bg-gray-200 flex flex-col w-1/2 h-5/6 m-8">
+                            <p class="p-2 w-full bg-gray-400 rounded-t-xl  text-center text-white font-bold text-xl uppercase">Cancelled Session Details</p>
+                            <div class="pichart-loader w-full h-full flex justify-center items-center">
+                                <div class="loader"><span class="loader-inner"></span></div>
+                            </div>
+                            <div id="piechart" class="pichart w-full h-full" style="display:none"></div>
+                        </div>
+                    </div>
+
+                    <!-- table -->
+                    <div id="course_coverage_wraper" class="flex flex-col mb-14" style="display:none">
+                        <p class="p-4 w-full bg-gray-400 rounded-t-xl text-center text-white font-bold text-2xl uppercase">Course Coverage</p>
+                        <!-- <div class="cc shadow-xl bg-gray-200 flex justify-center items-center w-full h-96">
+                            <div class="loader flex"><span class="loader-inner"></span></div>
+                        </div> -->
+                        <div id="course_coverage_div" class="flex aa" style="height: 40rem;"></div>
+                    </div>
+                    <div id="session_table_wraper" class="flex flex-col mb-14" style="display: none;">
+                        <div class="flex items-center justify-center relative w-full p-4 bg-gray-400 rounded-t-xl text-center text-white font-bold text-2xl uppercase">
+                            <div class="justify-self-center">Session Details</div>
+                            <div><a id="ExportSession" class="absolute right-0 top-0 justify-self-end p-2" href="#"><i class="fas fa-file-download fa-2x"></i></a></div>
+                        </div>
+
+                        <!-- <div class="shadow-xl zz bg-gray-200 flex justify-center items-center w-full h-48">
+                            <div class="loader flex"><span class="loader-inner"></span></div>
+                        </div> -->
+
+                        <div id="session_table" class="">
+                            <!--Divs that will hold each control and chart-->
+                            <div class="h-48 w-full bg-gray-200">
+                                <div class="flex flex-row h-24 items-center justify-around">
+                                    <div id="session_status_filter"></div>
+                                    <div id="session_center_filter"></div>
+                                    <div id="session_course_filter"></div>
+                                </div>
+                                <div class="flex flex-row h-24 items-center justify-around">
+                                    <div id="session_teacher_filter"></div>
+                                    <div id="session_comment_filter"></div>
+                                </div>
+                            </div>
+                            <div id="session_table_div" class="flex"></div>
+                        </div>
+                    </div>
+
+                    <div id="center_table_wraper" class="flex flex-col" style="display: none;">
+                        <div class="flex items-center justify-center relative p-4 w-full bg-gray-400 rounded-t-xl text-center text-white font-bold text-2xl uppercase">
+                            <div class="justify-self-center">Center Details</div>
+                            <div><a id="ExportCenter" class="absolute right-0 top-0 justify-self-end p-2" href="#"><i class="fas fa-file-download fa-2x"></i></a></div>
+                        </div>
+                        <!-- <div class="shadow-xl mm bg-gray-200 flex justify-center items-center w-full h-96">
+                            <div class="loader flex"><span class="loader-inner"></span></div>
+                        </div> -->
+                        <div id="center_table_div" class="flex"></div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/jquery_multi_select.min.js"></script>
+<script type="text/javascript">
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+<script>
+
+    $(document).ready(function() {
+
+        
+
+        fetch_details(true, true, true, true, true, true)
+
+        let today = new Date();
+        let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+
+        let today_date = today.getDate()
+        let today_month = today.getMonth() + 1
+        let today_year = today.getFullYear()
+
+        let yesterday_date = yesterday.getDate()
+        let yesterday_month = yesterday.getMonth() + 1
+        let yesterday_year = yesterday.getFullYear()
+
+
+        if (today_date < 10) {
+            today_date = "0" + today_date;
+        }
+        if (today_month < 10) {
+            today_month = "0" + today_month;
+        }
+        if (yesterday_date < 10) {
+            yesterday_date = "0" + yesterday_date;
+        }
+        if (yesterday_month < 10) {
+            yesterday_month = "0" + yesterday_month;
+        }
+
+        var yesterday2 = yesterday_year + '-' + yesterday_month + '-' + yesterday_date;
+        var today2 = today_year + '-' + today_month + '-' + today_date;
+        // console.log('yester day ', yesterday2, today2)
+        $('#from_date').val(yesterday2);
+        $('#to_date').val(today2);
+
+        get_stat_summary();
+        get_stat_table();
+        get_session_table();
+        get_course_coverage();
+
+    });
+
+    $("#state_id").on('change', function() {
+        fetch_details(false, true, true, true, true, true)
+    });
+    $("#partner_id").on('change', function() {
+        fetch_details(false, false, true, true, true, true)
+    });
+    $("#donor_id").on('change', function() {
+        fetch_details(false, false, false, true, true, true)
+    });
+    $("#center_id").on('change', function() {
+        fetch_details(false, false, false, false, true, true)
+    });
+
+
+    $("#stat_form").submit(function(e) {
+        e.preventDefault();
+        get_stat_summary();
+        get_stat_table();
+        get_session_table();
+        get_course_coverage();
+
+    });
+
+
+    function fetch_details(all = false, state_field = false, partner_field = false, donor_field = false, center_field = false, course_field = false) {
+        // console.log(all, state_field, partner_field, donor_field, center_field, course_field)
+
+        if (all) {
+            var state = ["-1"],
+                partner = -1,
+                donor = -1,
+                center = -1,
+                course = -1;
+
+        } else if (state_field) {
+            var state = $("#state_id").val(),
+                partner = -1,
+                donor = -1,
+                center = -1,
+                course = -1;
+        } else if (partner_field) {
+            var state = $("#state_id").val(),
+                partner = $("#partner_id").val(),
+                donor = -1,
+                center = -1,
+                course = -1;
+        } else if (donor_field) {
+            var state = $("#state_id").val(),
+                partner = $("#partner_id").val(),
+                donor = $('#donor_id').val(),
+                center = -1,
+                course = -1;
+        } else if (center_field) {
+            var state = $("#state_id").val(),
+                partner = $("#partner_id").val(),
+                donor = $('#donor_id').val(),
+                center = $('#center_id').val(),
+                course = -1;
+        }
+
+
+        data = {
+                "type": 1,
+                "state": state,
+                "partner": partner,
+                "donor": donor,
+                "center": center,
+                "course": course
+            }
+            // console.log(data)
+
+        $.ajax({
+            url: "/stat_fetch_details/", // the endpoint
+            type: "POST", // http method
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            data: data,
+            dataType: 'json',
+
+            success: function(response) {
+                // console.log(response)
+
+                let centers = response[0]
+                let partners = response[1]
+                let donors = response[2]
+                let states = response[3]
+                let courses = response[4]
+
+
+
+
+                // replace partner
+                if (partner_field & state_field) {
+                    $("#partner_id").empty();
+                    var options = '<option selected value=-1>All</option>';
+                    for (const key in partners) {
+                        options += '<option value="' + partners[key]['partner_id'] + '">' + partners[key]['partner_name'] + ' </option>';
+                    }
+                    $("#partner_id").append(options);
+
+                }
+                // replace donor
+                if (donor_field & partner_field) {
+                    $("#donor_id").empty();
+                    var options = '<option selected value=-1>All</option>';
+                    for (const key in donors) {
+                        options += '<option value="' + donors[key]['donor_id'] + '">' + donors[key]['donor_name'] + ' </option>';
+                    }
+                    $("#donor_id").append(options);
+
+                }
+                // replace centers
+                if (center_field & donor_field) {
+                    $("#center_id").empty();
+                    var options = '<option selected value=-1>All</option>';
+                    for (const key in centers) {
+                        options += '<option value="' + centers[key]['center_id'] + '">' + centers[key]['center_name'] + ' </option>';
+                    }
+
+                    $("#center_id").append(options);
+                    document.getElementById("summary_centers").textContent = centers.length;
+                }
+                // replace course
+                if (course_field) {
+                    $("#course_id").empty();
+                    var options = '<option selected value=-1>All</option>';
+                    for (const key in courses) {
+                        options += '<option value="' + courses[key]['id'] + '">' + courses[key]['board'] + '-' + courses[key]['class'] + '-' + courses[key]['subject'] + ' </option>';
+                    }
+                    $("#course_id").append(options);
+                    document.getElementById("summary_course").textContent = courses.length;
+
+
+                }
+
+            },
+
+            error: function(xhr, errmsg, err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg + "></div>")
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+
+
+        // console.log(state, partner, donor, center, course)
+    }
+
+
+    function get_stat_summary() {
+        $(".submit").hide();
+        $(".submit-loader").show();
+        var serializedData = $("#stat_form").serialize();
+
+        $.ajax({
+            url: "/stat_summary/", // the endpoint
+            type: "POST", // http method
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            data: serializedData,
+            dataType: 'json',
+
+            success: function(response) {
+                console.log(response); // another sanity check
+                $(".submit").show();
+                $(".submit-loader").hide();
+
+
+                $('#summary_centers').empty().append(response['center_count']);
+                $('#summary_teachers').empty().append(response['teacher_count']);
+                $('#summary_active_teacher').empty().append(response['active_teacher_count']);
+                $('#summary_active_offering').empty().append(response['active_offering_count']);
+                $('#summary_total_sessions').empty().append(response['total_sessions']);
+
+                $('#summary_total_students').empty().append(response['total_students_center']);
+                // $('#summary_total_students_boys').empty().append(response['total_students_boys_center']);
+                // $('#summary_total_students_girls').empty().append(response['total_students_girls_center']);
+
+                $('#summary_enroll_students').empty().append(response['enroll_students']);
+                $('#summary_enroll_students_boys').empty().append(response['enroll_students_boys']);
+                $('#summary_enroll_students_girls').empty().append(response['enroll_students_girls']);
+
+
+                $('#summary_present_students').empty().append(response['session_unique_present_students']);
+
+                $('#summary_plan').empty().append(calculate_percentage(response['total_sessions'], response['completed_sessions']));
+                // $('#summary_attendence').empty().append(calculate_percentage(response['session_enrolled_students'], response['session_present_students']));
+
+            },
+
+            error: function(xhr, errmsg, err) {
+                console.log(errmsg)
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg + "></div>")
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+
+                $(".submit").show();
+                $(".submit-loader").hide();
+
+
+                $('#summary_centers').empty().append(response['center_count']);
+                $('#summary_teachers').empty().append(response['teacher_count']);
+                $('#summary_active_teacher').empty().append(response['active_teacher_count']);
+                $('#summary_active_offering').empty().append(response['active_offering_count']);
+                $('#summary_total_sessions').empty().append(response['total_sessions']);
+                $('#summary_total_students').empty().append(response['total_students_center']);
+                $('#summary_enroll_students').empty().append(response['enroll_students']);
+                $('#summary_present_students').empty().append(response['present_students']);
+                $('#summary_plan').empty().append(calculate_percentage(response['total_sessions'], response['completed_sessions']));
+                $('#summary_attendence').empty().append(calculate_percentage(response['session_enrolled_students'], response['session_present_students']));
+            }
+        })
+
+    }
+
+    function calculate_percentage(x, y) {
+
+        var perc = 0;
+        if (x == 0 || y == 0) {
+            perc = 0
+        } else {
+            perc = ((y / x) * 100).toFixed(1);
+        }
+
+        return perc
+    }
+
+
+    function get_stat_table() {
+        $("#center_table_wraper").hide()
+        var serializedData = $("#stat_form").serialize();
+        // console.log(serializedData)
+        $.ajax({
+            url: "/get_stat_table/", // the endpoint
+            type: "POST", // http method
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            data: serializedData,
+            dataType: 'json',
+
+            success: function(response) {
+                $("#center_table_wraper").show()
+                if (response['table_data_single']) {
+                    center_table_single(response['table_data_single'])
+                } else {
+                    center_table(response['table_data'])
+                }
+            },
+
+            error: function(xhr, errmsg, err) {
+                alert(errmsg + 'in table data')
+                    // $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg + "></div>")
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+
+                $(".mm").hide();
+                // center_table(response['table_data'])
+                // console.log(response['table_data'])
+
+            }
+        })
+
+    }
+
+
+    function get_session_table() {
+        $(".pichart-loader").show();
+        $(".pichart").hide();
+        $("#session_table_wraper").hide();
+        var serializedData2 = $("#stat_form").serialize();
+        google.charts.load('current', {
+            'packages': ['table']
+        });
+
+        $.ajax({
+            url: "/get_session_table/", // the endpoint
+            type: "POST", // http method
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            data: serializedData2,
+            dataType: 'json',
+
+            success: function(session_response) {
+                // console.log(session_response);
+                $(".pichart-loader").hide();
+                $(".pichart").show();
+                session_table(session_response['session_table'])
+                    // call charts
+                class_status(session_response['status_count'])
+                cancle_class_status(session_response['cancle_status_count'])
+
+            },
+
+            error: function(xhr, errmsg, err) {
+                $(".pichart-loader").hide();
+                $(".pichart").show();
+                session_table(session_response['session_table'])
+                    // call charts
+                class_status(session_response['status_count'])
+                cancle_class_status(session_response['cancle_status_count'])
+                alert(errmsg + 'in table data')
+                    // $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg + "></div>")
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+
+
+            }
+        })
+    }
+
+
+    function get_course_coverage() {
+
+        $('#course_coverage_wraper').hide()
+        var serializedData3 = $("#stat_form").serialize();
+
+        $.ajax({
+            url: "/get_course_coverage/", // the endpoint
+            type: "POST", // http method
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            data: serializedData3,
+            dataType: 'json',
+
+            success: function(course_coverage_response) {
+                course_coverage(course_coverage_response)
+            },
+
+            error: function(xhr, errmsg, err) {
+                alert(errmsg + 'in table data')
+                    // $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg + "></div>")
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+
+
+            }
+        })
+    }
+</script>
+<script type="text/javascript">
+    var SessionDataTable;
+    var CenterDataTable;
+    var centerColumns;
+    var sessionColumns;
+    google.charts.load('current', {
+        'packages': ["corechart", "table", "controls", "LineChart", "line"]
+    });
+
+    function class_status(myclass) {
+
+        var class_data = []
+        var total_classes = 0
+
+        if (myclass.length) {
+
+            for (let index = 0; index < myclass.length; index++) {
+                class_data.push([myclass[index]['status'], myclass[index]['session_status_count']])
+                total_classes = total_classes + parseInt(myclass[index]['session_status_count'])
+            }
+        } else {
+            // alert('No session data available')
+        }
+        // console.log(class_data)
+
+        var sortedArray = class_data.sort(function(a, b) {
+            return b[1] - a[1];
+        });
+        sortedArray.unshift(['status', 'session_status_count'])
+
+        google.charts.setOnLoadCallback(drawChart1);
+        // drawChart1();
+
+        function drawChart1() {
+            var visualization_data = sortedArray
+            var data1 = google.visualization.arrayToDataTable(
+                visualization_data
+            );
+            var options = {
+                title: 'Total classes: ' + total_classes,
+                pieHole: 0.4,
+                colors: ['#00a62c', '#820073', '#b7ba00', '#ba1600']
+            };
+
+            var chart1 = new google.visualization.PieChart(document.getElementById('donutchart'));
+            chart1.draw(data1, options);
+
+
+            function selectHandler() {
+                var selectedItem = chart1.getSelection();
+                if (selectedItem) {
+                    // console.log(selectedItem);
+                    // var value = class_data[selectedItem[0]['row'] + 1];
+                    // console.log('The user selected ' + value);
+                    $('#session_table_wraper').show()
+                }
+            }
+            google.visualization.events.addListener(chart1, 'select', selectHandler);
+        }
+    }
+
+
+    function cancle_class_status(myclass) {
+        var cancle_class_data = []
+        var cancle_class_count = 0
+        cancle_class_data.push(['reason', 'count']) //Header
+        if (myclass.length) {
+            for (let index = 0; index < myclass.length; index++) {
+                if (index >= 0) {
+                    cancle_class_data.push([myclass[index]['cancel_reason'], myclass[index]['session_cancellReason_count']])
+                    cancle_class_count = cancle_class_count + myclass[index]['session_cancellReason_count']
+                }
+            }
+            // console.log(cancle_class_data)
+        } else {
+            // alert('No session data available')
+        }
+
+
+
+        google.charts.load("current", {
+            packages: ["corechart"]
+        });
+        google.charts.setOnLoadCallback(drawChart2);
+
+
+
+        function drawChart2() {
+            // console.log(cancle_class_data)
+            var data = google.visualization.arrayToDataTable(
+                cancle_class_data
+            );
+
+            var options = {
+                title: 'Total canceled classes: ' + cancle_class_count,
+                pieSliceText: 'label',
+                slices: {
+                    2: {
+                        offset: 0.2
+                    },
+                    4: {
+                        offset: 0.2
+                    },
+                    6: {
+                        offset: 0.2
+                    },
+                    8: {
+                        offset: 0.2
+                    },
+                },
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart.draw(data, options);
+        }
+    }
+
+
+    function center_table(table_data) {
+        // console.log(table_data)
+        var total_present_students = 0
+        var total_enroll_students = 0
+        var center_data = [];
+        var percentege = 0;
+        var total_percentege = 0;
+        if (table_data.length) {
+            for (let index = 0; index < table_data.length; index++) {
+                percentege = percentege + parseFloat(table_data[index]['attendance_perc'])
+                total_enroll_students = total_enroll_students + parseInt(table_data[index]['enrol_students'])
+                total_present_students = total_present_students + parseInt(table_data[index]['present_students'])
+                    // console.log(table_data[index])
+                center_data.push([
+                    table_data[index]['center_name'],
+                    parseInt(table_data[index]['offering_count']),
+                    parseInt(table_data[index]['planned_session']),
+                    parseInt(table_data[index]['online_session']),
+                    parseInt(table_data[index]['offline_session']),
+                    parseInt(table_data[index]['cancelled_session']),
+                    parseInt(table_data[index]['online_session'] + table_data[index]['offline_session']),
+                    parseInt(table_data[index]['total_students']),
+                    // parseInt(table_data[index]['enrol_students']),
+                    // parseInt(table_data[index]['present_students']),
+                    parseFloat(table_data[index]['attendance_perc'])
+
+                ])
+
+            }
+        }
+
+
+        // console.log(center_data)
+        // console.log(total_enroll_students + '/' + total_present_students)
+        total_percentege = (percentege / table_data.length).toFixed(1)
+        $('#summary_attendence').empty().append(total_percentege);
+        google.charts.setOnLoadCallback(drawTable);
+
+
+        function drawTable() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'CENTER');
+            data.addColumn('number', 'OFFERINGS');
+            data.addColumn('number', 'PLANED SESSIONS');
+            data.addColumn('number', 'ONLINE SESSIONS');
+            data.addColumn('number', 'OFFLINE SESSIONS');
+            data.addColumn('number', 'CANCEL SESSIONS');
+            data.addColumn('number', 'COMPLETED SESSIONS');
+            data.addColumn('number', 'TOTAL STUDENTS');
+            // data.addColumn('number', 'ENROLL');
+            // data.addColumn('number', 'PRESENT');
+            data.addColumn('number', 'ATTENDANCE %');
+
+
+            // build column headings for csv data
+            csvColumns = '';
+            for (var i = 0; i < data.getNumberOfColumns(); i++) {
+                csvColumns += data.getColumnLabel(i);
+                if (i < (data.getNumberOfColumns() - 1)) {
+                    csvColumns += ',';
+                }
+            }
+            centerColumns = csvColumns += '\n';
+
+            data.addRows(
+                center_data
+            );
+
+            window.CenterDataTable = data
+
+            var table = new google.visualization.Table(document.getElementById('center_table_div'));
+            var cssClassNames = {
+                'headerRow': 'font-black text-blue-400 text-lg',
+                'tableRow': 'text-xl',
+                'oddTableRow': '',
+                'selectedTableRow': '',
+                'hoverTableRow': 'text-xl',
+                'headerCell': '',
+                'tableCell': 'text-xl',
+                'rowNumberCell': ''
+            };
+            table.draw(data, {
+                showRowNumber: true,
+                width: '100%',
+                height: '100%',
+                pageSize: 10,
+                cssClassNames: cssClassNames,
+                // sortColumn: 1,
+                sort: 'enable',
+                pagingSymbols: {
+                    prev: 'prev',
+                    next: 'next'
+                }
+            });
+        }
+    }
+
+
+
+    function center_table_single(table_data) {
+        var center_data = [];
+        var percentege = 0;
+        var total_percentege = 0;
+        if (table_data.length) {
+            for (let index = 0; index < table_data.length; index++) {
+                percentege = percentege + parseFloat(table_data[index]['attendance_perc'])
+                center_data.push([
+                    table_data[index]['center_name'],
+                    table_data[index]['subject'],
+                    parseInt(table_data[index]['grade']),
+                    table_data[index]['teacher'],
+                    parseInt(table_data[index]['planned_sessions']),
+                    parseInt(table_data[index]['online_sessions']),
+                    parseInt(table_data[index]['offline_sessions']),
+                    parseInt(table_data[index]['cancelled_sessions']),
+                    parseInt(table_data[index]['online_sessions'] + table_data[index]['offline_sessions']),
+                    parseInt(table_data[index]['total_students']),
+                    // parseInt(table_data[index]['enrol_students']),
+                    // parseInt(table_data[index]['present_students']),
+                    parseFloat(table_data[index]['attendance_perc'])
+
+                ])
+            }
+        }
+
+        google.charts.setOnLoadCallback(drawTable);
+
+        total_percentege = (percentege / table_data.length).toFixed(1)
+        $('#summary_attendence').empty().append(total_percentege);
+
+        function drawTable() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'CENTER');
+            data.addColumn('string', 'OFFERING');
+            data.addColumn('number', 'GRADE');
+            data.addColumn('string', 'TEACHER');
+            data.addColumn('number', 'PLANED SESSIONS');
+            data.addColumn('number', 'ONLINE SESSIONS');
+            data.addColumn('number', 'OFFLINE SESSIONS');
+            data.addColumn('number', 'CANCEL SESSIONS');
+            data.addColumn('number', 'COMPLETED SESSIONS');
+            data.addColumn('number', 'TOTAL STUDENTS');
+            // data.addColumn('number', 'ENROLL');
+            // data.addColumn('number', 'PRESENT');
+            data.addColumn('number', 'ATTENDANCE %');
+
+
+            // build column headings for csv data
+            csvColumns = '';
+            for (var i = 0; i < data.getNumberOfColumns(); i++) {
+                csvColumns += data.getColumnLabel(i);
+                if (i < (data.getNumberOfColumns() - 1)) {
+                    csvColumns += ',';
+                }
+            }
+            centerColumns = csvColumns += '\n';
+
+            data.addRows(
+                center_data
+            );
+
+            window.CenterDataTable = data
+
+            var table = new google.visualization.Table(document.getElementById('center_table_div'));
+            var cssClassNames = {
+                'headerRow': 'font-black text-blue-400 text-lg',
+                'tableRow': 'text-xl',
+                'oddTableRow': '',
+                'selectedTableRow': '',
+                'hoverTableRow': 'text-xl',
+                'headerCell': '',
+                'tableCell': 'text-xl',
+                'rowNumberCell': ''
+            };
+
+            table.draw(data, {
+                'allowHtml': true,
+                'cssClassNames': cssClassNames,
+                showRowNumber: true,
+                width: '100%',
+                height: '100%',
+                pageSize: 10,
+                // sortColumn: 1,
+                sort: 'enable',
+                pagingSymbols: {
+                    prev: 'prev',
+                    next: 'next'
+                }
+            });
+        }
+
+
+    }
+
+
+    function session_table(session_table_data) {
+        var session_data = [];
+        if (session_table_data.length) {
+            for (let index = 0; index < session_table_data.length; index++) {
+                session_data.push([
+                    session_table_data[index]['center'],
+                    session_table_data[index]['course'],
+                    session_table_data[index]['starttime'],
+                    session_table_data[index]['endtime'],
+                    session_table_data[index]['teacher'],
+                    session_table_data[index]['status'],
+                    session_table_data[index]['cancel_reason'],
+                    parseInt(session_table_data[index]['total_student']),
+                    parseInt(session_table_data[index]['present_students']),
+                    parseInt(session_table_data[index]['session_attendance'])
+
+                ])
+
+            }
+        }
+
+        google.charts.load('current', {
+            'packages': ['table', 'controls']
+        });
+
+
+        google.charts.setOnLoadCallback(drawTable);
+
+        function drawTable() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'CENTER');
+            data.addColumn('string', 'COURSE');
+            data.addColumn('string', 'SESSION START');
+            data.addColumn('string', 'SESSION END');
+            data.addColumn('string', 'TEACHER');
+            data.addColumn('string', 'STATUS');
+            data.addColumn('string', 'CANCEL REASON');
+            data.addColumn('number', 'TOTAL STUDENTS');
+            data.addColumn('number', 'PRESENT STUDENTS');
+            data.addColumn('number', 'ATTENDANCE %');
+
+            // build column headings for csv data
+            csvColumns = '';
+            for (var i = 0; i < data.getNumberOfColumns(); i++) {
+                csvColumns += data.getColumnLabel(i);
+                if (i < (data.getNumberOfColumns() - 1)) {
+                    csvColumns += ',';
+                }
+            }
+            sessionColumns = csvColumns += '\n';
+
+            data.addRows(
+                session_data
+            );
+            window.SessionDataTable = data //assign data to global variable
+
+
+            var dashboard = new google.visualization.Dashboard(
+                document.getElementById('session_table'));
+
+            var session_status_filter = new google.visualization.ControlWrapper({
+                'controlType': 'CategoryFilter',
+                'containerId': 'session_status_filter',
+                'options': {
+                    'filterColumnLabel': 'STATUS'
+                }
+            });
+            var session_center_filter = new google.visualization.ControlWrapper({
+                'controlType': 'CategoryFilter',
+                'containerId': 'session_center_filter',
+                'options': {
+                    'filterColumnLabel': 'CENTER',
+                    'matchType': 'any'
+                }
+            });
+            var session_cancel_filter = new google.visualization.ControlWrapper({
+                'controlType': 'CategoryFilter',
+                'containerId': 'session_comment_filter',
+                'options': {
+                    'filterColumnLabel': 'CANCEL REASON',
+                    'matchType': 'any'
+                }
+            });
+
+            var session_teacher_filter = new google.visualization.ControlWrapper({
+                'controlType': 'CategoryFilter',
+                'containerId': 'session_teacher_filter',
+                'options': {
+                    'filterColumnLabel': 'TEACHER',
+                    'matchType': 'any'
+                }
+            });
+
+            var session_course_filter = new google.visualization.ControlWrapper({
+                'controlType': 'CategoryFilter',
+                'containerId': 'session_course_filter',
+                'options': {
+                    'filterColumnLabel': 'COURSE',
+                    'matchType': 'any'
+                }
+            });
+            // -----------------------------------------------------------------------
+            var cssClassNames = {
+                'headerRow': 'font-black text-blue-400 text-lg',
+                'tableRow': 'text-xl',
+                'oddTableRow': '',
+                'selectedTableRow': '',
+                'hoverTableRow': 'text-xl',
+                'headerCell': '',
+                'tableCell': 'text-xl',
+                'rowNumberCell': ''
+            };
+            var table_options = {
+                'allowHtml': true,
+                'cssClassNames': cssClassNames,
+                'showRowNumber': true,
+                'width': '100%',
+                'height': '100%',
+                'pageSize': 10,
+                // 'sortColumn': 1,
+                'sort': 'enable',
+                'pagingSymbols': {
+                    prev: 'prev',
+                    next: 'next'
+                }
+            }
+            var session_table = new google.visualization.ChartWrapper({
+                'chartType': 'Table',
+                'containerId': 'session_table_div',
+                'options': table_options
+            });
+            dashboard.bind([session_status_filter, session_center_filter, session_cancel_filter, session_teacher_filter, session_course_filter], session_table);
+            dashboard.draw(data);
+        }
+
+    }
+
+    function course_coverage(data) {
+        // console.log(data)
+
+        let DataTable = [];
+        DataTable.push(['Course', 'Planned', 'Completed']);
+        for (let index = 0; index < data.length; index++) {
+            const element = data[index];
+            let course = element['board_name'] + '-' + element['subject'] + '-' + element['grade']
+            DataTable.push([course, parseInt(element['total_sessions']), parseInt(element['completed_sessions_count'])]);
+        }
+        // console.log(DataTable)
+
+        google.charts.load('current', {
+            packages: ['corechart', 'bar']
+        });
+        google.charts.setOnLoadCallback(drawTitleSubtitle);
+
+        function drawTitleSubtitle() {
+            var data = google.visualization.arrayToDataTable(DataTable);
+
+            var materialOptions = {
+                height: 400,
+                chart: {
+                    title: '.',
+                    // subtitle: 'Based on most recent and previous census data'
+                },
+                hAxis: {
+                    title: 'Sessions',
+                    minValue: 0,
+                },
+                vAxis: {
+                    title: 'Course'
+                },
+                bars: 'horizontal',
+                isHtml: true,
+            };
+            // $('#course_coverage_wraper').show()
+            var materialChart = new google.charts.Bar(document.getElementById('course_coverage_div'));
+            materialChart.draw(data, materialOptions);
+        }
+
+    }
+
+    $('#ExportSession').click(function() {
+        var csvFormattedDataTable = sessionColumns + google.visualization.dataTableToCsv(SessionDataTable);
+        var encodedUri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csvFormattedDataTable);
+        this.href = encodedUri;
+        this.download = 'session-table-data.csv';
+        this.target = '_blank';
+    })
+    $('#ExportCenter').click(function() {
+
+        var csvFormattedDataTable = centerColumns + google.visualization.dataTableToCsv(CenterDataTable);
+        var encodedUri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csvFormattedDataTable);
+        this.href = encodedUri;
+        this.download = 'center-table-data.csv';
+        this.target = '_blank';
+    })
+</script>
+{% endblock %}

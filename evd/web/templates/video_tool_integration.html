@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+
+<style>
+    .video_tool_style {
+        background-color: #ffffff;
+        padding: 15px 20px 20px 30px;
+    }
+
+    .hr_double_line {
+        border-top: 4px double #333;
+        padding: 2px 0;
+    }
+
+    .vl {
+        border-left: 4px double #333;
+        height: 740px;
+
+    }
+
+    .logo_fonts {
+        padding-left: 1%;
+        font-size: 17px;
+        color: gray
+    }
+
+    .checkbox_style {
+        position: absolute;
+        left: 50px;
+        height: 30px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    tr {
+        line-height: 45px;
+    }
+
+    /* td {
+        width: 33.33%;
+    } */
+
+    table tr:hover {
+        background-color: lightgray;
+    }
+
+    .button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 9px 9px;
+        border-radius: 1ch;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    .a_style {
+        position: relative;
+        top: 17px;
+    }
+</style>
+<script>
+    function getCookieValue(a) {
+        var b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+        return b ? b.pop() : '';
+    }
+
+    function submitVideoTools(id) {
+        // alert(id)
+        checked_checkbox_val = []
+        $.each($("input[name='video_tool']:checked"), function(){
+            checked_checkbox_val.push($(this).val());
+        });
+        // alert(checked_checkbox_val)
+        if(checked_checkbox_val.length == 0)  {
+            alert("Please select atleast one video tool.")
+            // $("#alert_message").addClass('alert-warning').html('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warn! </strong>Please select atleast one video tool.').css('display', 'block');
+            return false;
+        }
+        var post_data = {
+            'csrfmiddlewaretoken': getCookieValue('csrftoken'),
+            'video_tool_ids' : checked_checkbox_val
+        }
+
+        $.post('/v2/video/tool/', post_data, function(response) {
+            if(response['success']) {
+                alert(response['success'])
+                // $("#alert_message").addClass('alert-success').html('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success! </strong>' + response['success']).css('display', 'block');
+            } else {
+                alert(response['error'])
+                // $("#alert_message").addClass('alert-danger').html('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error! </strong>' + response['error']).css('display', 'block');
+            }
+        });
+    }
+</script>
+<link rel="stylesheet" href="/static/css/colorbox.css" />
+<link rel="stylesheet" href="/static/css/jquery-ui.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+{% endblock %}
+
+{% block doc_ready %}
+{{ block.super }}
+{% endblock %}
+
+{% block body_container %}
+{{ block.super }}
+<div class="inner" style="height: 100%;">
+    <div class="col-md-2" style="height: 100%;">
+        {% include "navbar.html" %}
+    </div>
+    <div class="col-md-10" style="height: 100%;overflow-y: auto; right: -15px; padding-left: 3%; top:15px;">
+        <div class="row video_tool_style" style="width: 100%; margin-left: 0px;background-color:#ffffff;">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 hr_double_line">
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div id="alert_message" class="alert alert-dismissible" style="display:none"></div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                <table>
+                    <tr>
+                        <td style="width: 20%;">
+                            <input name="video_tool" type="checkbox" value="1" style="position: relative; left: 25px; height: 20px;" {% if 1 in teaching_software_ids or "1" in teaching_software_ids %} checked {% endif %}>
+                        </td>
+                        <td>
+                            <img src='/static/uploads/images/webex.png' style="height: 45px;margin-left: -3%;"><span class="logo_fonts"> Webex</span>
+                        </td>
+                        <td>
+                            <a href='/static/gudeline_docs/How to use webex.pdf' class="a_style" target="_blank">guideline</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;">
+                            <input name="video_tool" type="checkbox" value="2" style="position: relative; left: 25px; height: 20px;" {% if 2 in teaching_software_ids or "2" in teaching_software_ids %} checked {% endif %}>
+                        </td>
+                        <td>
+                            <img src='/static/uploads/images/meet_512dp.png' style="height: 50px;margin-left: -4%;"><span class="logo_fonts">Gmeet</span>
+                        </td>
+                        <td>
+                            <a href='/static/gudeline_docs/How to use google meet.pdf' class="a_style" target="_blank">guideline</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input name="video_tool" type="checkbox" value="3" style="position: relative; left: 25px; height: 20px;" {% if 3 in teaching_software_ids or "3" in teaching_software_ids %} checked {% endif %}>
+                        </td>
+                        <td>
+                            <img src='/static/uploads/images/skype_512.png' style="height: 46px;margin-left: -3%;"><span class="logo_fonts">
+                                Skype</span>
+                        </td>
+                        <td>
+                            <a href='/static/gudeline_docs/HOW TO USE SKYPE.pdf' class="a_style" target="_blank">guideline</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input name="video_tool" type="checkbox" value="4" style="position: relative; left: 25px; height: 20px;" {% if 4 in teaching_software_ids or "4" in teaching_software_ids %} checked {% endif %}>
+                        </td>
+                        <td>
+                            <img src='/static/uploads/images/zoom_300.png' style="height: 47px; margin-left: -3%;"><span class="logo_fonts">
+                                Zoom</span>
+                        </td>
+                        <td>
+                            <a href='/static/gudeline_docs/How to use Zoom App.pdf' class="a_style" target="_blank">guideline</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input name="video_tool" type="checkbox" value="5" style="position: relative; left: 25px; height: 20px;" {% if 5 in teaching_software_ids or "5" in teaching_software_ids %} checked {% endif %}>
+                        </td>
+                        <td>
+                            <img src='/static/uploads/images/microsoft_team.png' style="height: 40px; margin-left: -2%;"><span class="logo_fonts"> Microsoft - Teams</span>
+                        </td>
+                        <td>
+                            <a href='/static/gudeline_docs/How to use Microsoft teams.pdf' class="a_style" target="_blank">guideline</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input name="video_tool" type="checkbox" value="6" style="position: relative; left: 25px; height: 20px;" {% if 6 in teaching_software_ids or "6" in teaching_software_ids %} checked {% endif %}>
+                        </td>
+                        <td>
+                            <img src='/static/uploads/images/jiomeet.jpeg' style="height: 45px;width: 45px; margin-left: -3%;"><span class="logo_fonts"> Jiomeet</span>
+                        </td>
+                        <td>
+                            <a href='/static/gudeline_docs/How to use jio Meet.pdf' class="a_style" target="_blank">guideline</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input name="video_tool" type="checkbox" value="7" style="position: relative; left: 25px; height: 20px;" {% if 7 in teaching_software_ids or "7" in teaching_software_ids %} checked {% endif %}>
+                        </td>
+                        <td>
+                            <img src='/static/uploads/images/jitsi_512.png' style="height: 51px;margin-left: -4%;"><span class="logo_fonts">
+                                Jitsi</span>
+                        </td>
+                        <td>
+                            <a href='/static/gudeline_docs/How to use Jitsi App.pdf' class="a_style" target="_blank">guideline</a>
+                        </td>
+                    </tr>
+                    <!-- <tr>
+                        <td>
+                            <input name="video_tool" type="checkbox" value="8" style="position: relative; left: 25px; height: 20px;" {% if 8 in teaching_software_ids or "8" in teaching_software_ids %} checked {% endif %}>
+                        </td>
+                        <td>
+                            <img src='/static/uploads/images/instavc_512.png' style="height: 40px; margin-left: -2%;"><span
+                        class="logo_fonts"> InstaVC</span>
+                        </td>
+                        <td>
+                            <a href='' target="_blank" class="a_style">guideline</a>
+                        </td>
+                    </tr> -->
+                </table>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+            <br>
+            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <button id="submit" type="button" class="button" style="justify-content: center;margin-left: 41%;" onclick="submitVideoTools(this.id);">Submit</button>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

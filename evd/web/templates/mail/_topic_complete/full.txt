@@ -1,0 +1,13 @@
+Dear Admin,
+
+You have the  {{ inreview_topics|length  }}  Topics ready for Review
+--------------------------------------------------------------------------------------------------------------
+| Board  |  Subject   |  Grade  |  Topic  |  Workstream  |  Author   |  Date Updated  |
+--------------------------------------------------------------------------------------------------------------
+{% for topicd in inreview_topics %}
+| {{ topicd.topic.course_id.board_name }}  |  {{ topicd.topic.course_id.subject }}  |  {{ topicd.topic.course_id.grade }}  |  {{ topicd.topic.title  }}  |  {{ topicd.attribute.types  }}  |   {{ topicd.author.first_name  }}  |   {{ topicd.last_updated_date|date:"d/M/Y" }}  |
+{% endfor %}
+
+
+Regards,
+eVidyaloka Content Team

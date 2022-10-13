@@ -1,0 +1,767 @@
+{% extends "intermediate_base.html" %} {% block head %} {{ block.super }}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/themes/dot-luv/jquery-ui.css">
+<script src="/static/js_new/jquery-1.10.2.min.js"></script>
+<link href="/static/campaign/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="/static/css/fontawesome/js/all.min.js"></script>
+<style>
+    body {
+        font-family: sans-serif;
+    }
+    /* h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  } */
+    
+    p {
+        font-size: 16px;
+    }
+    
+    .hide_ans {
+        display: none;
+    }
+    
+    #leftContent::-webkit-scrollbar {
+        display: none;
+    }
+    
+    #leftContent {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    hr {
+        display: block;
+        height: 1px;
+        width: 50%;
+        border: 0;
+        border-top: 2.5px solid #ef7d00;
+        border-radius: 5px;
+        margin: auto;
+        padding: 0;
+    }
+    
+    .up-arrow {
+        background-position: 0 -130px;
+        float: left;
+        width: 5px;
+        height: 11px;
+        margin-top: 3px;
+        margin-right: 5px;
+        position: absolute;
+        left: 0px;
+    }
+    
+    .icon-down-arrow {
+        background-position: -4px -52px;
+        float: left;
+        width: 14px;
+        height: 6px;
+        margin-top: 7px;
+        margin-right: 5px;
+        position: absolute;
+        left: -4px;
+    }
+    
+    ul.collapsable li.question {
+        font-size: 16px;
+        font-family: sans-sarif;
+        position: relative;
+        padding-left: 10px;
+        margin-bottom: 15px;
+        cursor: pointer;
+    }
+    
+    ul.answer li {
+        color: #4A4A4A;
+        font-size: 14px;
+        padding-left: 10px;
+        margin-bottom: 8px;
+        font-family: sans-sarif;
+    }
+    
+    #theCarousel img {
+        border-radius: 50%;
+        width: 25%;
+    }
+    
+    #upi_qr ol li {
+        list-style-type: upper-roman;
+        list-style-position: inside;
+        display: list-item;
+    }
+</style>
+{% endblock head %} {% block content %} {{ block.super }}
+<div class="container" id="innner_container">
+    <div class="row" style="margin: 0px;">
+        <div class="col-lg-12 col-md-12 col-sm-12" style="margin-top: 2.5%;margin-bottom: 2.5%;padding: 0px;">
+            <div>
+                <div id="leftContent" class="col-lg-8 col-md-8 col-sm-12">
+                    <div class="row" style="padding: 0% 1.5% 1.5% 1.5%;margin: 0px 0px 10px 0px;">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="carousel slide multi-item-carousel" id="headerCarousel">
+                                <div class="carousel-inner">
+
+                                    <div class="item active">
+                                        <div class="col-lg-12 col-md-12 col-sm-12" style="background-color: white; border-radius: 2.5%;padding: 0%;">
+                                            <img src="/static/images/sponsor_page/3.jpg" class="img-responsive center-block">
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="col-lg-12 col-md-12 col-sm-12" style="background-color: white; border-radius: 2.5%;padding: 0%;">
+                                            <img src="/static/images/sponsor_page/9.jpg" class="img-responsive center-block">
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="col-lg-12 col-md-12 col-sm-12" style="background-color: white; border-radius: 2.5%;padding: 0%;">
+                                            <img src="/static/images/sponsor_page/10.jpg" class="img-responsive center-block">
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="col-lg-12 col-md-12 col-sm-12" style="background-color: white; border-radius: 2.5%;padding: 0%;">
+                                            <img src="/static/images/sponsor_page/11.png" class="img-responsive center-block">
+                                        </div>
+                                    </div>
+                                    <a class="left carousel-control" href="#headerCarousel" data-slide="prev" style="opacity: 0.25;"><i class="glyphicon glyphicon-chevron-left black"></i></a>
+                                    <a class="right carousel-control" href="#headerCarousel" data-slide="next" style="opacity: 0.25;"><i class="glyphicon glyphicon-chevron-right black"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="rightContent" class="col-lg-4 col-md-4 col-sm-12">
+
+                    <!--Donation Form-->
+                    <div id="donation_dialog" style="text-align:center;border: 2.5px solid #aaa7a7;border-radius: 5px;">
+                        <div id="donate_form" style="display: block;border-radius: 5px;">
+                            <div style="background-color: #ef7d00;color: white;padding: 2.5%;">
+                                <h3 style="text-align: center;font-weight: 500;"><i>Enable the <br>transformation!</i></h3>
+                            </div>
+                            <div style="padding:2.5%;">
+                                <div class="btn" style="height: 40px;font-size: 16px;font-weight: bold;background-color: #ef7d00;width: 24.5%;float: left;cursor: pointer;margin: 2.5% 0.5% 10% 0%;padding:2.5%;border-radius: 2px;" onclick="donationOption(1000, 'Support 1 child to get access to Digital School');">
+                                    &#x20B9; 1,000
+                                </div>
+                                <div class="btn" style="height: 40px;font-size: 16px;font-weight: bold;background-color: #ef7d00;width: 24.5%;float: left;cursor: pointer;margin: 2.5% 0.5% 10% 0%;padding:2.5%;border-radius: 2px;" onclick="donationOption(3650, 'Support 1 child to have access to Live Classes');">
+                                    &#x20B9; 3,650
+                                </div>
+                                <div class="btn" style="height: 40px;font-size: 16px;font-weight: bold;background-color: #ef7d00;width: 24.5%;float: left;cursor: pointer;margin: 2.5% 0.5% 10% 0%;padding:2.5%;border-radius: 2px;" onclick="donationOption(16250, 'Support 5 children to learn through 1 Tablet');">
+                                    &#x20B9; 16,250
+                                </div>
+                                <div class="btn" style="height: 40px;font-size: 16px;font-weight: bold;background-color: #ef7d00;width: 24.5%;float: left;cursor: pointer;margin: 2.5% 0.5% 10% 0%;padding:2.5%;border-radius: 2px;" onclick="donationOption(100000, 'Sponsor 1 Digital School');">
+                                    &#x20B9; 1,00,000
+                                </div>
+                            </div>
+                            <div style="padding:10%;padding-bottom: 2.5%;">
+                                <div style="margin-bottom: 5%;">
+                                    <h4 id="donation_detail" style="text-align: center;">General Contribution</h4>
+                                    <input id="donationAmount" name="amount" class="form-control" style="color: black;background-color: white;height: 50px; text-align: center;width: 100%;margin: auto;" name='enter_amount' placeholder="Rs. 1000" type="number" />
+                                </div>
+                                <div style="margin:auto;">
+                                    <button type="button" id="donate_button_now" class="btn" style="background-color: #ef7d00;color: white;height: 40px;font-size: large;width: 50%;">Donate Now</button>
+                                </div>
+                                <div style="margin-bottom: 2.5%;margin-top: 10%;">
+                                    <h5 style="text-align: center;font-weight: bold;color: grey;">Donations made to eVidyaloka Trust are exempt from tax under Section 80G of the Income Tax Act.</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="nationalModal" style="display: none;">
+                            <!-- <div style="background-color: #ef7d00;color: white;padding: 2.5%;">
+                <h3 style="text-align: center;"><b>Please Select an Option!
+                  </b></h3>
+              </div> -->
+                            <br>
+                            <br>
+                            <div class="btn" style="background-color: #ef7d00;padding: 2.5%;margin:auto;cursor: pointer;width: 75%;color: white;font-weight: bold;font-size: large;height: 40px;" onclick="$('#indianForm').css('display', 'block');$('#nationalModal').css('display', 'none');scroll_dialog();">
+                                INDIAN DONORS
+                            </div>
+                            <br>
+                            <br>
+                            <div class="btn" style="background-color: #ef7d00;padding: 2.5%;margin: auto;cursor: pointer;width: 75%;color: white;font-weight: bold;font-size: large;height: 40px;" onclick="$('#nriDonor').css('display', 'block');$('#nationalModal').css('display', 'none');$('#foreign_user_amount').val($('#donationAmount').val()); scroll_dialog();">
+                                NRI/FOREIGN DONORS
+                            </div>
+                            <br>
+                            <br>
+                            <div style="padding-bottom: 2.5%;">
+                                <button type="button" class="btn btn-sm" style="background-color: white;color: grey;" onclick="$('#donate_form').css('display', 'block');$('#nationalModal').css('display', 'none');scroll_dialog();"><i
+                  class="glyphicon glyphicon-arrow-left"></i><br>Back</button>
+                            </div>
+                            <!-- <div style="background-color: #888888;padding: 2.5%;margin: auto;cursor: pointer;width: 37.5%;color: white;font-weight: bold;font-size: medium;"
+                onclick="$('#donate_form').css('display', 'block');$('#nationalModal').css('display', 'none');">
+                BACK
+              </div> -->
+                            <br>
+                        </div>
+                        <form action="#" id="indianForm" style="display: none;">
+                            {% csrf_token %}
+                            <div style="background-color: #888888;padding: 1.5%;color: white;">
+                                <h4 style="text-align: center;margin-bottom: 0px;"><b>Kindly fill your details
+                  </b></h4>
+                                <p>all fields are mandatory*</p>
+                            </div>
+                            <div style="padding: 2.5%;">
+                                <input type="text" placeholder="First Name*" name="first_name" data-validate="true" style="color: black;width: 90%; padding: 12px 20px; margin: 2.5px 0; display: inline-block; border-bottom: 1px solid #ccc;border-top: 0px;border-left: 0px;border-right: 0px; border-radius: 4px;box-sizing: border-box;"
+                                    required>
+                                <input type="text" placeholder="Last Name*" name="last_name" data-validate="true" style="color: black;width: 90%; padding: 12px 20px; margin: 2.5px 0; display: inline-block; border: 1px solid #ccc;border-top: 0px;border-left: 0px;border-right: 0px; border-radius: 4px;box-sizing: border-box;"
+                                    required>
+                                <input type="text" placeholder="Email*" name="email" data-validate="true" style="color: black;width: 90%; padding: 12px 20px; margin: 2.5px 0; display: inline-block; border: 1px solid #ccc;border-top: 0px;border-left: 0px;border-right: 0px; border-radius: 4px;box-sizing: border-box;"
+                                    required>
+                                <input type="text" placeholder="Phone Number*" name="phone" data-validate="true" style="color: black;width: 90%; padding: 12px 20px; margin: 2.5px 0; display: inline-block; border: 1px solid #ccc;border-top: 0px;border-left: 0px;border-right: 0px; border-radius: 4px;box-sizing: border-box;"
+                                    required>
+                                <input type="text" placeholder="Address*" name="address" style="color: black;width: 90%; padding: 12px 20px; margin: 2.5px 0; display: inline-block; border: 1px solid #ccc;border-top: 0px;border-left: 0px;border-right: 0px; border-radius: 4px;box-sizing: border-box;"
+                                    required>
+                                <select name="channel" id="channel" onchange="get_ref()" style="color: black;width: 90%; padding: 12px 20px; margin: 2.5px 0; display: inline-block; border: 1px solid #ccc;border-top: 0px;border-left: 0px;border-right: 0px; border-radius: 4px;box-sizing: border-box;"
+                                    required>
+                                  <option disabled selected value="" >How did you find out about us ?</option>
+                                  <option value="Back to eVidya School">Back to eVidya School</option>
+                                  <option value="Bangalore 10K Run">Bangalore 10K Run</option>
+                                  <option value="Corporate">Corporate</option>
+                                  <option value="Daan Utsav">Daan Utsav</option>
+                                  <option value="Email">Email</option>
+                                  <option value="Facebook">Facebook</option>
+                                  <option value="India Assoc – Nashville">India Assoc – Nashville</option>
+                                  <option value="Word of Mouth">Word of Mouth</option>
+                                  <option value="LTI">LTI</option>
+                                  <option value="Other">Other</option>
+                                </select>
+
+                                <input type="text" placeholder="Country*" name="country" value="India" style="color: black;width: 90%; padding: 12px 20px; margin: 2.5px 0; display: none; border: 1px solid #ccc;border-top: 0px;border-left: 0px;border-right: 0px; border-radius: 4px;box-sizing: border-box;">
+                                <input type="text" placeholder="Reference*" name="reference" data-validate="true" id="reference" style="color: black;width: 90%; padding: 12px 20px; margin: 2.5px 0; display: none; border: 1px solid #ccc;border-top: 0px;border-left: 0px;border-right: 0px; border-radius: 4px;box-sizing: border-box;"
+                                    disabled>
+                                <input type="text" placeholder="State*" name="state" data-validate="true" style="color: black;width: 90%; padding: 12px 20px; margin: 2.5px 0; display: inline-block; border: 1px solid #ccc;border-top: 0px;border-left: 0px;border-right: 0px; border-radius: 4px;box-sizing: border-box;"
+                                    required>
+                                <input type="text" placeholder="City*" name="city" data-validate="true" style="color: black;width: 90%; padding: 12px 20px; margin: 2.5px 0; display: inline-block; border: 1px solid #ccc;border-top: 0px;border-left: 0px;border-right: 0px; border-radius: 4px;box-sizing: border-box;"
+                                    required>
+                                <input type="text" placeholder="Pin Code*" name="pincode" data-validate="true" style="color: black;width: 90%; padding: 12px 20px; margin: 2.5px 0; display: inline-block; border: 1px solid #ccc;border-top: 0px;border-left: 0px;border-right: 0px; border-radius: 4px;box-sizing: border-box;"
+                                    required>
+                                <input type="text" placeholder="Residential Status*" value="Resident Indian" name="res_status" style="color: black;width: 90%; padding: 12px 20px; margin: 2.5px 0; display: inline-block; border: 1px solid #ccc;border-top: 0px;border-left: 0px;border-right: 0px; border-radius: 4px;box-sizing: border-box;"
+                                    readonly>
+                                <input type="text" placeholder="Pan No.*" name="pan" data-validate="true" style="color: black;width: 90%; padding: 12px 20px; margin: 2.5px 0; display: inline-block; border: 1px solid #ccc;border-top: 0px;border-left: 0px;border-right: 0px; border-radius: 4px;box-sizing: border-box;"
+                                    required>
+                            </div>
+                            <div style="padding:2.5% 2.5% 2.5% 2.5%;text-align: left;">
+                                <p style="margin: 0px;font-size: smaller;"><b style="font-size: small;">Disclaimer: </b>By sharing your details, you agree to receive updates from eVidyaloka via email. If you’ll like to change this or have queries regarding your donation please write to donate@evidyaloka.org</p>
+                            </div>
+                            <div style="padding:2.5% 5% 20% 5%;text-align: left;">
+                                <h4>Payment Options:</h4>
+                                <input id="upi_payment" name="payment_type" type="radio" value="upi">
+                                <label for="upi_payment">UPI</label><br>
+                                <input id="bank_payment" name="payment_type" type="radio" value="Bank Transfer" checked>
+                                <label for="bank_payment">Bank Transfer</label><br>
+                                <input id="online_payment" name="payment_type" type="radio" value="online" checked>
+                                <label for="online_payment">Online</label><br>
+                                <p style="text-align: left;margin: 0px;font-size: 12px;">Only for Indian Cards and Bank Accounts</p>
+                                <h5 style="text-align: center;">Donations made to eVidyaloka Trust are exempt from tax under Section 80G of the Income Tax Act.</h5>
+                                <button type="button" class="btn btn-sm" style="background-color: white;float: left;color: grey;" onclick="$('#indianForm').css('display', 'none');$('#nationalModal').css('display', 'block');scroll_dialog();"><i
+                    class="glyphicon glyphicon-arrow-left"></i><br>Back</button>
+                                <button type="submit" class="btn btn-lg" style="background-color: #ef7d00;color: white;border: 0px;float: right;">Donate Now</button>
+                            </div>
+
+                        </form>
+                        <div id="nriDonor" style="display: none;text-align: left;padding: 5%;">
+                            <!-- <form action="https://fundraisers.giveindia.org/api/donations" method="post" target="_blank" style="max-width: 300px; width: 100%;">
+                                <input type="hidden" name="redirect_url" value="https://dev.evidyaloka.org/v2/thank_you/">
+                                <input type="hidden" name="project_id" value="5ece13b87f11060602f66d1e">
+                                <button type="submit" style="background-image: url('https://letzchangefiles.s3-ap-southeast-1.amazonaws.com/19fff995-0105-4968-81e9-9e34349413fc.png'); background-repeat: no-repeat; background-size: 100%; cursor: pointer; height: 85px; width: 100%; border: none;"></button>
+                            </form> -->
+                            <form action="https://give.do/api/donations" method="post" target="_blank" style="max-width: 300px; width: 100%;">
+                                <input type="hidden" name="project_id" value="61c1a907ea6e25129cc1f2f5">
+                                <input id="foreign_user_amount" type="hidden" name="amount" value="1000">
+                                <input type="hidden" name="redirect_url" value="https://dev.evidyaloka.org/v2/thank_you/">
+                                <button type="submit" style="background-image:url('https://letzchangefiles.s3-ap-southeast-1.amazonaws.com/19fff995-0105-4968-81e9-9e34349413fc.png');background-repeat:no-repeat;background-size:100%;height:85px;width:100%;border:none"></button>
+                            </form>
+                            <div style="padding:2.5% 5% 10% 5%;text-align:center;">
+                                <h6 style="color: grey;">Write to donate@evidyaloka.org for any further assistance.</h6>
+                                <button type="button" class="btn btn-lg" style="background-color: white;color: grey;" onclick="$('#nriDonor').css('display', 'none');$('#nationalModal').css('display', 'block');scroll_dialog();"><i
+                  class="glyphicon glyphicon-arrow-left"></i><br>Back</button>
+                            </div>
+                        </div>
+                        <div id="upi_qr" style="display: none;text-align: left;">
+                            <input type="hidden" name="id" value="">
+                            <div style="padding: 2.5%;margin: 2.5%;">
+                                <img src="/static/images/qr_code_evloka_croped.jpg" alt="QR CODE" class="img-responsive center-block">
+                            </div>
+                            <div style="margin: 2.5%;padding: 2.5%;">
+                                <h4 style="font-weight: bold;">Steps to make a Donation:</h4>
+                                <ol>
+                                    <li>Scan QR Code or transfer to 9886167041@sbi from any UPI app.</li>
+                                    <li>Note the transaction number of the payment.</li>
+                                    <li>Enter the transaction number in the following form and click confirm.</li>
+                                </ol>
+                            </div>
+                            <div style="margin: 5%; border: 1px solid #333;padding: 2.5% 2.5% 20% 5%;text-align: center;">
+                                <label for="transaction_no">Transaction Number :</label><br>
+                                <input type="text" id="transaction_no" name="transaction_no"><br><br>
+                                <button type="button" class="btn btn-sm" style="background-color: white;float: left;color: grey;" onclick="$('#upi_qr').css('display', 'none');$('#indianForm').css('display', 'block');scroll_dialog();"><i
+                    class="glyphicon glyphicon-arrow-left"></i><br>Back</button>
+                                <button class="btn btn-success" type="button" style="float: right;margin: 2.5%;" onclick="upi_id_update();">Confirm</button>
+                            </div>
+                        </div>
+                        <div id="bank_ui" style="display: none;text-align: left;">
+                            <input type="hidden" name="id" value="">
+                            <div style="font-weight: bold;padding: 2.5%;margin: 2.5%;">
+                                <h3 style="text-align: center;font-weight: bold;"><u>Account Details</u></h3>
+                                <table style="border-spacing: 2.5px;font-size:medium;border-collapse: unset;">
+                                    <tr>
+                                        <td>Payee Name:</td>
+                                        <td> eVidyaloka Trust</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Account Type:</td>
+                                        <td> Current Account</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Account Number:</td>
+                                        <td> 31682441993</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bank:</td>
+                                        <td> State Bank of India</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Branch:</td>
+                                        <td> Sector-2, HSR Layout, Bangalore</td>
+                                    </tr>
+                                    <tr>
+                                        <td>IFSC Code:</td>
+                                        <td> SBIN0030495</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <!-- <div style="text-align: center;margin: 2.5%;">
+                <h5>Upon confirmation of payment, we will share the 80G receipt to the registered email ID within 14 days.</h5>
+                <h5><b>Please write to donate@evidyaloka.org for any further assistance.</b></h5>
+            </div> -->
+                            <div style="text-align: center;margin-bottom: 15%;padding: 5%;">
+                                <button type="button" class="btn btn-sm" style="background-color: white;float: left;color: grey;" onclick="$('#bank_ui').css('display', 'none');$('#indianForm').css('display', 'block');scroll_dialog();"><i
+                class="glyphicon glyphicon-arrow-left"></i><br>Back</button>
+                                <button class="btn btn-success" type="button" style="margin: 2.5%;float: right;" onclick="window.location='/sponsor/thankyou/'">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <!-- <hr> -->
+            <div id="centerContent" class="col-lg-12 col-md-12 col-sm-12" style="padding: 0px;">
+                <div class="row" style="margin: auto;">
+                    <div class="col-lg-12 col-md-12 col-sm-12" style="padding: 0%;text-align: center;">
+                        <h3 style="text-align: center;font-weight: bold;">Together, we can ensure Rural India continues to learn</h3><br>
+                        <p>The COVID-19 pandemic has shown us how challenging it is for children in rural and semi-urban areas to access quality education, whether online or offline. The effect of the lockdown has brought education to a standstill for millions
+                            of rural children.</p>
+                        <p>Since 2011, eVidyaloka has been using technology to empower rural children by connecting passionate volunteers across the globe, online. While students in cities attend online classes from the comfort of their homes, most students
+                            across Rural India have limited access to Internet-enabled devices and teachers equipped to teach online.</p>
+                        <p>While we can reach students through our existing programs, there are still many children in danger of being pushed out of formal education, and the marginalized populations, as always, remain at a greater risk.</p>
+                        <p>In our endeavour to ensure that no child is deprived of learning, eVidyaloka is focusing on a multi-delivery approach to ensure more children are reached outside of the Digital Classroom Program, by piloting Digital School.</p>
+                        <p>It is a multi-delivery approach to ensure more children are reached. This is an outside school learning opportunity and intervention for children. This approach enables learning for a child from TV lesson broadcasts, printed workbooks
+                            & worksheets, and an online app.</p>
+                        <p>Our goal this year is to support these children, and reach out to more, so that no child is left-out of learning.</p>
+                    </div>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="row" style="margin: auto;">
+                    <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+                        <h3><b>Program Impact</b></h3>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 text-center" style="margin: 1.5%;">
+                        <img src="/static/images/Icons-4_colour_options/2.png" class="img-responsive center-block">
+                        <p style="text-align: center;"><b>15,000+<br>students learning online</b></p>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 text-center" style="margin: 1.5%;">
+                        <img src="/static/images/Icons-4_colour_options/26.png" class="img-responsive center-block">
+                        <p style="text-align: center;"><b>25,00,000+<br>Students learning through television</b></p>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 text-center" style="margin: 1.5%;">
+                        <img src="/static/images/Icons-4_colour_options/7.png" class="img-responsive center-block">
+                        <p style="text-align: center;"><b>2,500+ <br>Volunteers teaching & Creating content</b></p>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 text-center" style="margin: 1.5%;">
+                        <img src="/static/images/Icons-4_colour_options/11.png" class="img-responsive center-block">
+                        <p style="text-align: center;"><b>11 States,<br> 6 Languages</b></p>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 text-center" style="margin: 1.5%;">
+                        <img src="/static/images/Icons-4_colour_options/15.png" class="img-responsive center-block">
+                        <p style="text-align: center;"><b>245+ <br>Villages</b></p>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-8" style="margin-bottom: 1.5%;">
+                        <button type="button" class="btn-lg" style="float: left;font-weight: bold;color: white;background-color: grey;" onclick="window.location='https://www.evidyaloka.org/donorupdate/';">Latest Updates</button>
+                        <p style="float: right;font-weight: bold;font-size: 14px;padding: 10px 20px;">*AY 2020-21</p>
+                    </div>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="row" style="margin: auto;">
+                    <div class="col-lg-12 col-md-12 col-sm-12 text-center" style="padding: 0%;">
+                        <h2 style="text-align: center;font-weight: bold;"><b>Testimonials</b></h2>
+                        <div class="carousel slide multi-item-carousel" id="theCarousel">
+                            <div class="carousel-inner">
+                                <div class="item active">
+                                    <div class="col-lg-12 col-md-12 col-xs-12" style="background-color: white;height: 400px; border-radius: 2.5%;">
+                                        <p style="background-color: white;padding: 1.5%;text-align: center;"><em><q>Education for kids has always been something which I strongly believe in.
+                          Teach them young and watch them grow into fine young adults !!
+                          I have been doing a small bit for multiple years now and hope to be able to continue doing it in the coming times.</q></em></p>
+                                        <div class="carousel-caption" style="color: black;">
+                                            <img src="/static/images/vol_pics/madhu.jpg" class="img-responsive center-block">
+                                            <h4>Madhukar B.K</h4>
+                                            <h6>Individual Donor, Bangalore</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="col-lg-12 col-md-12 col-xs-12" style="background-color: white;height: 350px; border-radius: 2.5%;">
+                                        <p style="background-color: white;padding: 1.5%;text-align: center;"><em><q>To educate students deprived of education is not an easy task. My best wishes to the team and their efforts.</q></em></p>
+                                        <div class="carousel-caption" style="color: black;">
+                                            <img src="/static/images/vol_pics/Testimonial - Sampa.jpg" class="img-responsive center-block">
+                                            <h4>Sampa Chatterjee</h4>
+                                            <h6>Individual Donor, Kolkata</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="col-lg-12 col-md-12 col-xs-12" style="background-color: white;height: 350px; border-radius: 2.5%;">
+                                        <p style="background-color: white;padding: 1.5%;text-align: center;"><em><q>Happy to be a small part of the change makers of today’s India. Great impact being done by eVidyaloka!</q></em></p>
+                                        <div class="carousel-caption" style="color: black;">
+                                            <img src="/static/images/vol_pics/Testimonial - Haresh.jpg" class="img-responsive center-block">
+                                            <h4>Haresh Velusamy</h4>
+                                            <h6>Individual Donor, Bangalore</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="col-lg-12 col-md-12 col-xs-12" style="background-color: white;height: 350px; border-radius: 2.5%;">
+                                        <p style="background-color: white;padding: 1.5%;text-align: center;"><em><q>I'm very proud to feel that I'm able to do something for uplifting rural children. I would like to continue my support towards this great cause & my dream too to transform rural & remote places into an education & skill development hub. eVidyaloka is one such platform which goes beyond that. Every child must get their basic education with confidence. 🙏🏻</q></em></p>
+                                        <div class="carousel-caption" style="color: black;">
+                                            <div style="font-size: 10rem;"><i class="fas fa-user"></i></div>
+                                            <h4>Donor</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- add  more items here -->
+
+                            </div>
+                            <a class="left carousel-control" href="#theCarousel" data-slide="prev" style="opacity: 0.1;"><i class="glyphicon glyphicon-chevron-left black"></i></a>
+                            <a class="right carousel-control" href="#theCarousel" data-slide="next" style="opacity: 0.1;"><i class="glyphicon glyphicon-chevron-right black"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="row" style="margin: auto;">
+                    <div class="col-lg-12 col-md-12 col-xs-12" style="padding: 0%;">
+                        <h2 style='text-align: center;font-weight: bold;'>Frequently Asked Questions</h2>
+                        <ul class="faq-menu collapsable" style="clear:both;">
+
+                            <li class="question" style='font-weight:bold;'>
+                                <span class="icon icon-arrow up-arrow"></span> Do I get receipts for the Sponsorships made?
+                            </li>
+                            <ul class="answer hide_ans">
+                                <li>We will be sharing an 80G receipt to the registered email ID within 14 days.</li>
+                            </ul>
+                            <li class="question" style='font-weight:bold;'>
+                                <span class="icon icon-arrow up-arrow"></span> What will my donation do?
+                            </li>
+                            <ul class="answer hide_ans">
+                                <li>Digital Classroom Model: Your donation will help us to cover the operating cost involved in delivering quality education to children across Rural India. This enables access to education using technology, deploying new volunteer
+                                    teachers, developing educational content, logistics and administration management. This is accomplished with the support of local partners who work to mobilise the community.
+                                </li>
+                                <li>Digital School Platform: Your donation will help us to facilitate the education of 100 children through a multi-modal delivery approach. Enabling a child to learn through ready to consume content – through app/television.
+                                    Along with deploying volunteer teachers for doubt clearing sessions, logistics and administration management. This will be accomplished with the support of local partners who will be the Community Connectors for the
+                                    Digital School</li>
+                            </ul>
+                            <li class="question" style='font-weight:bold;'>
+                                <span class="icon icon-arrow up-arrow"></span> What does the donation towards a Digital School do?
+                            </li>
+                            <ul class="answer hide_ans">
+                                <li>This donation covers the cost of establishing a Digital School and enables 100 children to learn through video sessions, worksheets and television and facilitated by our on-ground Community Connector. You can know more
+                                    about Digital School <a href="https://www.evidyaloka.org/digital_school/" style="color:#6200ff;display:inline;vertical-align: baseline;font-family: sans-serif !important;font-weight:bold;">here </a></li>
+                            </ul>
+                            <li class="question" style='font-weight:bold;'>
+                                <span class="icon icon-arrow up-arrow"></span> What does set-up of a Digital Classroom mean?
+                            </li>
+                            <ul class="answer hide_ans">
+                                <li>This donation covers the cost towards the infrastructural set-up – Computer, LED TV Screen, Camera, UPS and Modem. This infrastructure will help establish a Digital Classroom in an identified school in a remote village,
+                                    through which online classes can be conducted.</li>
+                            </ul>
+                            <li class="question" style='font-weight:bold;'>
+                                <span class="icon icon-arrow up-arrow"></span> Can I support eVidyaloka in any other way?
+                            </li>
+                            <ul class="answer hide_ans">
+                                <li> You can adopt a Digital Classroom for 1 year in an existing or new school. We are also accepting the donation of gadgets to support our learning programs. Please write to donate@evidyaloka.org to know more. Alternatively,
+                                    you can volunteer
+                                    <u style="color: blue;">donate@evidyaloka.org</u> to know more. Alternatively, you can <a href="https://www.evidyaloka.org/volunteer/" style="color:#ff0000;display:inline;vertical-align: baseline;font-family: sans-serif !important;font-weight:bold;">volunteer </a>your
+                                    time to teach and create content or <a href="https://www.evidyaloka.org/digital_school/" style="color:#ff0000;display:inline;vertical-align: baseline;font-family: sans-serif !important;font-weight:bold;">partner</a>                                    with us to run Digital Schools. </li>
+                            </ul>
+                            <!-- <li class="question">
+                <span class="icon icon-arrow up-arrow"></span>
+                For Child Sponsorships, will I come to know the details of the specific child/children?
+              </li>
+              <ul class="answer hide_ans">
+                <li>eVidyaloka targets an optimal strength of 45 students per school. As we work with govt.
+                  school children, we may not be able to share specific child details, as this covers the average
+                  operating cost for connecting a volunteer to the child/children.</li>
+                <li>However, if your sponsorship is for
+                  an entire class (15 children), we will share the respective school details with you.</li>
+              </ul> -->
+
+                            <li class="question" style='font-weight:bold;'>
+                                <span class="icon icon-arrow up-arrow"></span> Where can I know more about eVidyaloka’s model details?
+                            </li>
+                            <ul class="answer hide_ans">
+                                <li>
+                                    <a href="https://www.evidyaloka.org/volunteer/)" style="color:#F15A22;display:inline;vertical-align: baseline;font-family: sans-serif !important;">Please visit our General FAQ</a> section or write to <u style="color: blue;">talktosomeone@evidyaloka.org</u>.
+                                </li>
+                            </ul>
+                            <li class="question" style='font-weight:bold;'>
+                                <span class="icon icon-arrow up-arrow"></span> I am an organisation and looking to partner with eVidyaloka to support a school. How can I take this forward?
+                            </li>
+                            <ul class="answer hide_ans">
+                                <li>Please write to <u style="color: blue;">donate@evidyaloka.org</u> and we can set-up a meeting to understand the requirement.
+                                </li>
+                            </ul>
+                            <li class="question" style='font-weight:bold;'>
+                                <span class="icon icon-arrow up-arrow"></span> Will I get Tax exemptions on my donations?
+                            </li>
+                            <ul class="answer hide_ans">
+                                <li>Yes, donations made to eVidyaloka Trust are exempt from tax under Section 80G of the Income Tax Act. This tax exemption is applicable only for donations made by Indian Citizens and organisations eligible for this exemption.
+                                    Upon confirmation of your donation, we will share the donation receipt with you within 14 days. An NRI or Foreign Donor can donate to us through Give India. Donations through the platform, can receive the 501(c)(3)
+                                    and Gift Aid exemptions based on the location and currency preference. Follow the donation process on our website, and it will redirect you to Give India page for the final transaction.</li>
+                            </ul>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="row" style="margin: auto;">
+                    <div class="col-lg-4 col-md-4 col-xs-10 col-lg-offset-4 col-md-offset-4 col-xs-offset-1 text-center" style="padding:0%;">
+                        <button class="btn btn-xl center-block" id="scroll_top_button" style="font-size: x-large;background-color: #ef7d00;color: white;height: 45px;width: 60%;font-weight: bold;" onclick="scroll_dialog();">
+              Donate Today!
+            </button>
+                    </div>
+                </div>
+                <br>
+                <div class="row" style="margin: auto;">
+                    <p style="font-style: italic;font-size: 14px;text-align: center;">Donations made to eVidyaloka Trust are exempt from tax under Section 80G of the Income Tax Act.</p>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+<form id="payment_request" action="/sponsor/onlinepayments/" class="hide" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="amount" value="">
+    <input type="hidden" name="id" value="">
+</form>
+{% endblock content%} {% block scripts %} {{ block.super }}
+
+<script>
+    $(document).ready(function() {
+        var $div = $("#info").parent();
+        $div.removeClass('inner');
+        $(".question").each(function() {
+            $(this).click(function(e) {
+                var $span = $(this).children();
+                if ($span.hasClass("up-arrow")) {
+                    $span.removeClass("up-arrow");
+                    $span.addClass("icon-down-arrow");
+                } else {
+                    $span.removeClass("icon-down-arrow");
+                    $span.addClass("up-arrow");
+                }
+                var $ans = $(this).next();
+                $ans.slideToggle();
+                e.stopPropagation();
+            });
+        });
+
+        $(".answer a").click(function(e) {
+            e.stopPropagation();
+        });
+
+        $('.multi-item-carousel').carousel({
+            interval: 5000
+        });
+        // $('#leftContent').css('height', $('#rightContent').height());
+    });
+</script>
+<script>
+    function scroll_dialog() {
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $("#donation_dialog").offset().top - 60
+        }, 1000);
+    }
+
+    function upi_id_update() {
+        var donation_id = parseInt($('#upi_qr').find('input[name=id]').val());
+        var transaction_no = $('#transaction_no').val();
+
+        if (transaction_no) {
+            $.post("/v2/edit/pledge_details/", {
+                'donation_id': donation_id,
+                'transaction_no': transaction_no
+            }, "json").done(function(resp) {
+                window.location = "/sponsor/thankyou/";
+            }).fail(function() {
+                // alert("Oops!, Something went wrong, please try again later!");
+                window.location = "/v2/sponsor/thankyou/";
+            });
+        } else {
+            alert("Please enter the transaction number!")
+        }
+    }
+
+    function get_ref() {
+
+        var channel = $('#channel').val();
+        // $('#channel option[value='+channel+']').prop('selected', true)
+        if (channel == 'Corporate' || channel == 'Other') {
+            $('#reference').css('display', 'inline-block');
+            $('#reference').prop('disabled', false);
+            $('#reference').prop('required', true);
+        } else {
+            $('#reference').css('display', 'none');
+            $('#reference').prop('disabled', true);
+            $('#reference').prop('required', false);
+        }
+    }
+
+    function donationOption(val, txt) {
+        $('#donationAmount').val(val)
+            // $('#donationAmount').prop('disabled', 'true');
+        $('#donation_detail').text(txt);
+    }
+
+    $('#donate_button_now').on('click', function() {
+        if ($('#donationAmount').val() && $('#donationAmount').val() >= 100) {
+            $('#donate_form').css('display', 'none');
+            $('#nationalModal').css('display', 'block');
+            scroll_dialog();
+        } else {
+            alert("Transactions below Rs.100 is not financially viable for us!");
+        }
+
+    });
+
+    // let resizeObserver = new ResizeObserver(() => {
+    //   // $('#leftContent').css('height', $('#rightContent').height());
+    //   $('#donation_dialog')[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // });
+    // resizeObserver.observe($('#donation_dialog')[0]);
+
+    $('#indianForm').on('submit', function(e) {
+
+        e.preventDefault();
+        if ($(this).hasClass("data-loading")) {
+            return;
+        }
+        var isValid = true;
+
+        var $inputs = $('#indianForm').find("[data-validate='true']:visible");
+
+        $inputs.each(function() {
+
+            var inputName = $(this).attr("name"),
+                inputVal = $(this).val().trim();
+
+            if (inputVal.length === 0) {
+
+                isValid = false;
+                evd.show_msg($(this).attr("data-title") + " can not be empty!!!");
+                return false;
+            } else {
+                inputVal = inputVal.replace(/\s/g, "");
+                $(this).val(inputVal);
+
+                if (inputName == "passport" || inputName == "pan") {
+                    if (!inputVal.match(/^[A-Za-z0-9]{5,10}$/g)) {
+
+                        isValid = false;
+                        alert("Please check the " + inputName.toUpperCase() + " Number, something seems wrong!");
+                        return false;
+                    }
+                } else if (inputName == "email") {
+
+                    if (!inputVal.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+
+                        isValid = false;
+                        alert("Please check the Email Address, something seems wrong!");
+                        return false;
+                    }
+                } else if (inputName == "phone") {
+                    if (!inputVal.match(/^[0-9]{10}$/g)) {
+
+                        isValid = false;
+                        alert("Please check the Phone number, something seems wrong!");
+                        return false;
+                    }
+                } else if (inputName == "pincode") {
+                    if (!inputVal.match(/^[0-9]{6}$/g)) {
+
+                        isValid = false;
+                        alert("Please check the Pin Code, something seems wrong!");
+                        return false;
+                    }
+                }
+
+            }
+        });
+
+        if (!isValid) {
+
+            return;
+        }
+        var values = $('#indianForm').serializeArray();
+        var post_data = {};
+        // console.log(values);
+        $.each(values, function(i, value) {
+
+            post_data[value.name] = value.value;
+        });
+        post_data['amount'] = $('#donationAmount').val();
+        post_data['donate'] = $('#donation_detail').text();
+        post_data['channel'] = $('#channel :selected').text();
+        // console.log(post_data);
+        // console.log($('#channel :selected').val());
+        var $form = $(this),
+            $donate = $form.find("button[type=submit]"),
+            $payment_form = $('#payment_request');
+
+        $form.addClass("data-loading");
+        $donate.text("Processing...");
+        console.log(post_data)
+        $.post("/pledge/", post_data, "json").done(function(resp) {
+            if (post_data.payment_type == 'online') {
+                $payment_form.find("input[name=amount]").val(resp.amount);
+                $payment_form.find("input[name=id]").val(resp.donation_id);
+                $payment_form.submit();
+                // console.log(resp);
+            } else if (post_data.payment_type == 'upi') {
+                $('#indianForm').css('display', 'none');
+                $('#upi_qr').css('display', 'block');
+                $('#upi_qr').find('input[name=id]').val(resp.donation_id);
+                scroll_dialog();
+            } else if (post_data.payment_type == 'Bank Transfer') {
+                $('#indianForm').css('display', 'none');
+                $('#bank_ui').css('display', 'block');
+                $('#bank_ui').find('input[name=id]').val(resp.donation_id);
+                scroll_dialog();
+            }
+        }).fail(function(resp) {
+            // console.log(JSON.stringify(resp));
+            // alert("Oops!, Something went wrong, please try again later!");
+            window.location = "/v2/sponsor/thankyou/";
+
+        }).always(function() {
+            $donate.text("Donate Now");
+            $form.removeClass("data-loading");
+        });
+    });
+</script>
+{% endblock scripts %}

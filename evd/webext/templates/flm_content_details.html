@@ -1,0 +1,1522 @@
+{% extends "base.html" %}{% load staticfiles%} {% load filters %} {% block body_container2 %}
+
+<script src="/static/css/tailwindcss3.js"></script>
+<script src="/static/css/fontawesome/js/all.min.js"></script>
+<link rel="stylesheet" href="/static/css/jquery-ui.css" />
+<link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
+<style>
+    .no_scroll_bar::-webkit-scrollbar {
+        display: none;
+    }
+
+     ::-webkit-scrollbar-button {
+        height: 5px;
+    }
+
+     ::-webkit-scrollbar {
+        width: 5px;
+    }
+    /* Track */
+
+     ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px grey;
+        border-radius: 5px;
+    }
+    /* Handle */
+
+     ::-webkit-scrollbar-thumb {
+        background: rgb(99, 98, 98);
+        border-radius: 5px;
+    }
+
+    #menu .selected {
+        color: rgb(0, 0, 0);
+        background-color: #C1DCFE;
+        border-color: red;
+        pointer-events: none;
+        cursor: default;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .my_video_player-dimensions {
+            width: 370px;
+        }
+        #menu {
+            height: 0;
+            padding-bottom: 40px;
+        }
+    }
+
+    @media only screen and (max-width: 1024px) and (min-width: 767px) {
+        .my_video_player-dimensions {
+            width: 100%;
+        }
+    }
+</style>
+<style>
+    button {
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        appearance: none;
+        font-size: 14px;
+        padding: 4px 8px;
+        color: rgba(0, 0, 0, 0.85);
+        background-color: rgb(255, 255, 255);
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+    }
+
+    button:hover,
+    button:focus,
+    button:active {
+        cursor: pointer;
+        background-color: #ecf0f1;
+    }
+
+    .comment-thread {
+        width: 75%;
+        max-width: 100%;
+        margin: auto;
+        padding: 0 30px;
+        background-color: rgb(255, 255, 255);
+        border: 1px solid transparent;
+        /* Removes margin collapse */
+    }
+
+    .m-0 {
+        margin: 0;
+    }
+
+    .sr-only {
+        position: absolute;
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
+    /* Comment */
+
+    .comment {
+        position: relative;
+        margin: 20px auto;
+    }
+
+    .comment-heading {
+        display: flex;
+        align-items: center;
+        height: 50px;
+        font-size: 14px;
+    }
+
+    .comment-voting {
+        width: 20px;
+        height: 32px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+    }
+
+    .comment-voting button {
+        display: block;
+        width: 100%;
+        height: 50%;
+        padding: 0;
+        border: 0;
+        font-size: 10px;
+    }
+
+    .comment-info {
+        color: rgba(0, 0, 0, 0.5);
+        margin-left: 10px;
+    }
+
+    .comment-author {
+        color: rgba(0, 0, 0, 0.85);
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .comment-author:hover {
+        text-decoration: underline;
+    }
+
+    .replies {
+        margin-left: 20px;
+    }
+    /* Adjustments for the comment border links */
+
+    .comment-border-link {
+        display: block;
+        position: absolute;
+        top: 50px;
+        left: 0;
+        width: 12px;
+        height: calc(100% - 50px);
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        background-color: rgba(0, 0, 0, 0.1);
+        background-clip: padding-box;
+    }
+
+    .comment-border-link:hover {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    .comment-body {
+        padding: 0 20px;
+        padding-left: 28px;
+    }
+
+    .replies {
+        margin-left: 28px;
+    }
+    /* Adjustments for toggleable comments */
+
+    details.comment summary {
+        position: relative;
+        list-style: none;
+        cursor: pointer;
+    }
+
+    details.comment summary::-webkit-details-marker {
+        display: none;
+    }
+
+    details.comment:not([open]) .comment-heading {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .comment-heading::after {
+        display: inline-block;
+        position: absolute;
+        right: 5px;
+        align-self: center;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.55);
+    }
+
+    details.comment[open] .comment-heading::after {
+        content: "Click to hide";
+    }
+
+    details.comment:not([open]) .comment-heading::after {
+        content: "Click to show";
+    }
+    /* Adjustment for Internet Explorer */
+
+    @media screen and (-ms-high-contrast: active),
+    (-ms-high-contrast: none) {
+        /* Resets cursor, and removes prompt text on Internet Explorer */
+        .comment-heading {
+            cursor: default;
+        }
+        details.comment[open] .comment-heading::after,
+        details.comment:not([open]) .comment-heading::after {
+            content: " ";
+        }
+    }
+    /* Styling the reply to comment form */
+
+    .reply-form textarea {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        font-size: 16px;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 15px;
+        margin-bottom: 5px;
+    }
+
+    .d-none {
+        display: none;
+    }
+</style>
+<style>
+    /* custom css for radio button */
+
+    .dataTables_wrapper .dataTables_paginate {
+        float: right;
+        text-align: right;
+        margin-top: -30px;
+        margin-right: 20px;
+    }
+
+    .paginate_button {
+        margin-left: 10px;
+        margin-right: 10px;
+        padding: 5px 10px;
+        background-color: #C1DCFE;
+        cursor: pointer;
+    }
+
+    .radio_margin {
+        display: block;
+        position: relative;
+        padding-left: 24px;
+        margin-bottom: -14px;
+        cursor: pointer;
+        font-size: 22px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        left: 12px;
+    }
+    /* Hide the browser's default radio button */
+
+    .radio_margin input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .paginate_button {
+        font-family: sans-serif !important;
+    }
+    /* Create a custom radio button */
+
+    .checkmark {
+        position: absolute;
+        top: -19;
+        left: 79;
+        height: 27px;
+        width: 27px;
+        background-color: #eee;
+        border-radius: 50%;
+    }
+    /* On mouse-over, add a grey background color */
+
+    .radio_margin:hover input~.checkmark {
+        background-color: #ccc;
+    }
+    /* When the radio button is checked, add a blue background */
+
+    .radio_margin input:checked~.checkmark {
+        background-color: #2196F3;
+    }
+    /* Create the indicator (the dot/circle - hidden when not checked) */
+
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+    /* Show the indicator (dot/circle) when checked */
+
+    .radio_margin input:checked~.checkmark:after {
+        display: block;
+    }
+    /* Style the indicator (dot/circle) */
+
+    .radio_margin .checkmark:after {
+        top: 10px;
+        left: 9px;
+        width: 9px;
+        height: 8px;
+        border-radius: 50%;
+        background: white;
+    }
+
+    thead {
+        background-color: #27a3e2 !important;
+        color: white;
+        /*display: block;*/
+    }
+
+    .btn-submit {
+        color: white!important;
+        background: #47b3e1!important;
+        border-radius: 1!important;
+    }
+
+    .btn-sm {
+        background: #ee9c39;
+        color: white!important;
+        border-radius: 1!important;
+    }
+
+    tfoot {
+        display: table-header-group !important;
+    }
+
+    .tableCaption {
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        color: #27a3e2;
+    }
+
+    .step-progress {
+        counter-reset: step;
+    }
+
+    .step-progress li {
+        list-style-type: none;
+        width: 25%;
+        float: left;
+        font-size: 12px;
+        position: relative;
+        text-align: center;
+        text-transform: uppercase;
+        color: #7d7d7d;
+    }
+    /* .row a{
+          line-height: 0px !important;
+        } */
+
+    #test {
+        padding-top: 9%;
+        font-family: sans-serif;
+    }
+
+    .step-progress li:before {
+        width: 43px;
+        height: 41px;
+        content: counter(step);
+        counter-increment: step;
+        line-height: 35px;
+        border: 2px solid #7d7d7d;
+        display: block;
+        text-align: center;
+        margin: 0 auto 10px auto;
+        border-radius: 50%;
+        background: #e0e0e0;
+        border: 2px solid white;
+        box-shadow: 0px 0px 5px #ccc;
+    }
+
+    .step-progress li:after {
+        width: 84%;
+        height: 2px;
+        content: '';
+        position: absolute;
+        background-color: #7d7d7d;
+        top: 19px;
+        left: -42%;
+        z-index: 1;
+    }
+
+    .step-progress li:first-child:after {
+        content: none;
+    }
+
+    .step-progress li.active {
+        color: black;
+    }
+
+    .step-progress li.step2 {
+        color: black;
+    }
+
+    .step-progress li.step3 {
+        color: black;
+    }
+
+    .step-progress li.step4 {
+        color: black;
+    }
+
+    .step-progress li.active:before {
+        background: #59dfe6;
+        box-shadow: 0px 0px 5px #327bb9;
+    }
+
+    .step-progress li.step2:before {
+        background: #f19934;
+        box-shadow: 0px 0px 5px #d8580d;
+    }
+
+    .step-progress li.step3:before {
+        background: #ea6398;
+        box-shadow: 0px 0px 5px #c451d2;
+    }
+
+    .step-progress li.step4:before {
+        background: #65cd66;
+        box-shadow: 0px 0px 5px #5fdb6a;
+    }
+
+    .step-progress li.active+li:after {
+        background-color: #5ccdfc;
+        width: 84%;
+    }
+
+    .step-progress li.step2+li:after {
+        background-color: #f19934;
+        width: 84%;
+    }
+
+    .step-progress li.step3+li:after {
+        background-color: #ea6398;
+        width: 84%;
+    }
+
+    .search_margin {
+        font-size: 12px;
+        display: block;
+        width: 80%;
+        height: 100%;
+        padding: 5px 0px;
+        background: none;
+        background-image: none;
+        border: 1px solid #a0b3b0;
+        color: #ffffff;
+        border-radius: 5px;
+        -webkit-transition: border-color .25s ease, box-shadow .25s ease;
+        transition: border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .dataTables_filter {
+        margin-bottom: -38pt !important;
+        display: none !important;
+    }
+
+    #myTable_length {
+        display: none !important;
+    }
+
+    input {
+        font-weight: normal;
+    }
+</style>
+
+<div {% if request.user.is_authenticated %}{% else %}class="mt-36" {% endif %}></div>
+<div class="w-full bg-gray-50" style="font-family: 'Roboto', sans-serif;">
+    <div class="flex flex-col md:flex-row py-10">
+        <div class="w-full md:w-1/4 rounded-full flex items-center justify-center">
+            <a href="/v2/offering/topic-details/?center_id={{centerId}}&offering_id={{offeringId}}&ayfy_id={{ayId}}&topic_id={{topicId}}" class="hover:no-underline ">
+                <div class="flex items-center justify-around text-center">
+                    <div class="text-center text-4xl mx-4 text-red-600 transform hover:scale-150"><i class="fas fa-long-arrow-alt-left"></i></div>
+                    <div class="text-xl font-bold text-left px-1">{{subtopic_name|title}}</div>
+                </div>
+            </a>
+        </div>
+        <div class="w-full md:w-2/4 text-center md:text-justify md:pl-38 text-blue-600 font-bold text-3xl p-2 justify-self-center uppercase">{{board}} - {{subject}} {{grade}} grade – {{centerName}}</div>
+        <div class="w-full md:w-1/4 px-4">
+            <div class="text-center bg-yellow-400 font-bold text-xl p-2 rounded-lg cursor-pointer hove:scale-105" onclick="$('#rating_pop').show()">Rate this Content</div>
+        </div>
+    </div>
+    <div class="flex flex-col lg:flex-row  items-center justify-around w-full lg:h-[45rem]">
+        <div class="w-full h-full">
+            <div class="md:mx-10 flex items-center justify-start">
+                <div id="no_video" class="flex items-center justify-center bg-blue-200 border-2" style="display: none; width: 800px; height: 320px;"><div class="text-4xl font-bold">NO Compatble Video Available</div></div>
+                <video id="my_video_player" class="video-js vjs-default-skin" controls fluid width="800" height="320" poster="/static/images/evidyalogo.jpg" data-setup="{}">
+                    <source id="VideoSource" src="https://youtu.be/4Y1aGTZGpCA"  type="video/youtube"/>
+                    <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to aweb browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+                </video>
+            </div>
+            <div class="flex w-full px-2 md:px-10 my-10 pb-4 border-b">
+                <div class="w-3/5">
+                    <h3 id="current_video_title" class="text-left text-3xl font-bold">Introduction</h3>
+                    <p id="current_video_description" class="text-left text-xl mt-4">This is the default video</p>
+                </div>
+
+                <div class="flex justify-center items-center w-2/5">
+                    <div id="opendoubt" class="px-6 py-2 rounded-lg bg-green-400 cursor-pointer">Ask Doubt</div>
+
+                </div>
+            </div>
+
+        </div>
+        <div id="flm_play_list" class="w-full h-[32rem] md:h-[42rem] lg:mr-10 md:-mt-10 md:border border-black overflow-y-auto md:overscroll-none"></div>
+    </div>
+    <div class="w-full shadow-2xl border-r-2 border-gray-700">
+        <div id="menu" class="parent grid grid-flow-row grid-cols-2 md:grid-cols-4 rounded-lg parent" tabindex="0">
+            <div id="worksheet_tab" onclick="make_worksheet_table()" tabindex="1" class="flex items-center justify-center w-full cursor-pointer bg-gray-300 border-blue-200 border-t-2 border-r-2 border-gray-300 hover:border-blue-200 hover:bg-gray-400 font-bold rounded-t-2xl">
+                <div class="text-center text-2xl p-4"><i class="fas fa-scroll"></i></div>
+                <div class="text-cneter p-2">
+                    <p id="">Worksheets</p>
+                </div>
+            </div>
+            <div id="textbook_tab" onclick="make_textbook_table()" tabindex="2" class="flex items-center justify-center w-full cursor-pointer bg-gray-300 border-blue-200 border-t-2 border-x-2 border-gray-300 hover:border-blue-200 hover:bg-gray-400 font-bold rounded-t-2xl">
+                <div class="text-center text-2xl p-4"><i class="fas fa-book"></i></div>
+                <div class="text-cneter p-2">
+                    <p id="">Text Books</p>
+                </div>
+            </div>
+
+            <div id="doubts_tab" onclick="make_doubts_list()" tabindex="2" class="mx-1 flex items-center justify-center w-full cursor-pointer bg-gray-300 border-blue-200 border-t-2 border-l-2 border-gray-300 hover:border-blue-200 hover:bg-gray-400 font-bold rounded-t-2xl">
+                <div class="text-center text-2xl p-4"><i class="fas fa-book"></i></div>
+                <div class="text-cneter p-2">
+                    <p id="">Doubts Thread</p>
+                </div>
+            </div>
+
+            {% if showTpContent == 1 %}
+             <div id="thirdparty_tab" onclick="make_thirdparty_content_table()" tabindex="4" class="mx-1 flex items-center justify-center w-full cursor-pointer bg-gray-300 border-blue-200 border-t-2 border-l-2 border-gray-300 hover:border-blue-200 hover:bg-gray-400 font-bold rounded-t-2xl">
+                <div class="text-center text-2xl p-4"><i class="fas fa-book"></i></div>
+                <div class="text-cneter p-2">
+                    <p id="">Diksha Textbooks</p>
+                </div>
+            </div>
+             {% endif %}
+        </div>
+    </div>
+    <div class=" bg-gradient-to-r from-gray-50 to-blue-200">
+        <div class="md:py-20 flex bg-gradient-to-t from-gray-100 to-blue-200">
+            <div id="content_wraper" class="w-full" style="display: none;">
+                <div id="content_details" class="flex"></div>
+            </div>
+            <div id="doubts_wraper" class="flex items-center justify-center">
+                <div class="flex items-center justify-center ml-44">
+                    <table class="table table-bordered dataTable " id="myTable" role="grid" aria-describedby="myTable_info">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Topic</th>
+                                <th>Subtopic</th>
+                                <th>Status</th>
+                                <th>Doubt Doc</th>
+                                <th style="width: 100px;">Doubt Type</th>
+                                <th>Assigned To</th>
+                                <th style="width: 100px;">Added On</th>
+                                <th> Actions </th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th><input class='form-control' id="partnerName" type="text" onkeyup="myPartnerFilter()" placeholder="Search" value=""></th>
+                                <th><input class='form-control' id="schoolName" type="text" onkeyup="mySchoolFilter()" placeholder="Search" value=""></th>
+                                <th><input class='form-control' id="villageName" type="text" onkeyup="myVillageFilter()" placeholder="Search" value=""></th>
+                                <th><input class='form-control' id="myStatus" type="text" onkeyup="myStatusFilter()" placeholder="Search" value=""></th>
+                                <th></th>
+                                <th></th>
+                                <th><input class='form-control' id="addedby" type="text" onkeyup="addedbyfilter()" placeholder="Search" value=""></th>
+                                <th></th>
+                                <th></th>
+
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for doubtObj in doubtList %}
+                            <tr>
+                                <td> {{doubtObj.student.name}} </td>
+                                <td> {{doubtObj.topic.title}} </td>
+                                <td> {{doubtObj.subtopic.name}} </td>
+                                <td>{% if doubtObj.status == '1' %} Open {% elif doubtObj.status == '2' %} Resolved {% elif doubtObj.status == '3' %} Responded {% endif %}</td>
+                                <td> {% if doubtObj.resource_url %} <a class="btn btn-success" title="View" style="text-align: center; line-height: initial;" id='dt_image' href="{{doubtObj.resource_url}}"> View</a> {% endif %} </td>
+                                <td>{% if doubtObj.record_type == '1' %} Asked Doubt {% elif doubtObj.status == '2' %} Teacher Response {% endif %}</td>
+                                <td> {{doubtObj.assigned_to.first_name}} {{doubtObj.assigned_to.last_name}}</td>
+                                <td>{{doubtObj.created_on|date:"Y-m-d"}}</td>
+                                <td><a class="btn btn-success" title="View Detail" style="text-align: center; line-height: initial;" id='dt_action' onclick="doubtViewDetail({{doubtObj.id}})"> View Detail</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="doubtmodal" class="z-10 abolute fixed top-10 left-0 w-full h-screen flex items-center justify-center bg-gray-500 bg-opacity-80 transform scale-0 transition-transform duration-300">
+    <div class="bg-white w-10/12 h-3/5 rounded-lg border-2 border-gray-400 font-sans">
+        <div class="flex items-center bg-[#f47b4e]">
+            <div id="demandHeader" class="w-11/12 text-center font-semibold text-white text-3xl">Ask Doubt</div>
+            <div id="closebutton" type="button" class="w-1/12 focus:outline-none hover:text-white cursor-pointer mt-4 flex justify-center">
+                <div><i class="fas fa-times fa-2x"></i></div>
+            </div>
+        </div>
+        <div class="w-full h-3/4 flex p-8">
+            <div class="w-3/4 sapce-y-4">
+                <div class="my-4 flex">
+                    <label for="doubtStudentId" class="text-gray-700 font-bold">Select student :</label>
+                    <select name="doubtStudentId" id="doubtStudentId" class="w-96 border-2 border-gray-600 mx-20">
+                        <option value="" disabled>Select student</option>
+                    </select>
+                </div>
+                <div class="w-full h-48 mb-20">
+                    <label for="doubt_text" class="text-gray-700 font-bold">Doubt Text :</label>
+                    <textarea class="p-3" name="new_doubt_text" id="doubt_text" cols="10" rows="1" placeholder="doubt text"></textarea></div>
+                <div class="h-12 w-96">
+                    <label for="imgInp" class="text-gray-700 font-bold">Select Image(Only png, jpg):</label>
+                    <input accept=".png, .jpg" type='file' id="imgInp" />
+                </div>
+
+
+                <div class="flex items-center justify-center space-x-4">
+                    <div class="px-6 py-2 w-64 mt-8 rounded-lg bg-[#f47b4e] hover:bg-red-400 cursor-pointer my-4 font-bold text-white text-center" onclick="postDoubt()">Post Doubt</div>
+                    <div id="doubt_post_loader" class="mt-8 font-bold text-4xl" style="display: none;">Posting ....</div>
+                </div>
+
+            </div>
+            <div class="w-1/4 flex items-center justify-ccenter my-4">
+                <img class="w-96 h-96 bg-no-repeat bg-center" id="blah" src="#" alt="" />
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div id="doubtdetailmodal" class="z-10 abolute fixed top-10 left-0 w-full h-screen flex items-center justify-center bg-gray-500 bg-opacity-80 transform transition-transform duration-300" style="display: none;">
+    <div class="bg-white w-4/5 h-3/5 rounded-lg border-2 border-gray-400 font-sans">
+        <div class="flex items-center bg-[#f47b4e]">
+            <div class="w-11/12 text-center font-semibold text-white text-3xl">Doubt Details</div>
+            <div id="closebutton2" onclick="$('#doubtdetailmodal').hide()" type="button" class="w-1/12 focus:outline-none hover:text-white cursor-pointer mt-4 flex justify-center">
+                <div><i class="fas fa-times fa-2x"></i></div>
+            </div>
+        </div>
+        <div class=" overflow-x-auto">
+            <!-- component -->
+            <div class="w-full">
+                <div class="shadow overflow-hidden rounded border-b border-gray-200">
+                    <table class="min-w-full bg-white">
+                        <tbody id="detailpop" class="text-gray-700">
+                            <tr>
+                                <th class="w-1/6 text-left border font-bold py-3 px-4">Student Name</th>
+                                <td id="detail_student_name" class="w-1/6 text-left border py-3 px-4"></td>
+                                <th class="w-1/6 text-left border font-bold py-3 px-4">Status</th>
+                                <td id="detail_student_status" class="w-3/6 text-left border py-3 px-4"></td>
+                            </tr>
+                            <tr>
+                                <th class="w-1/6 text-left border font-bold py-3 px-4">Topic</th>
+                                <td id="detail_topic_name" class="w-1/6 text-left border py-3 px-4"></td>
+                                <th class="w-1/6 text-left border font-bold py-3 px-4">Subtopic</th>
+                                <td id="detail_subtopic_name" class="w-3/6 text-left border py-3 px-4"></td>
+                            </tr>
+                            <tr>
+                                <th class="w-1/6 text-left border font-bold py-3 px-4">Asked Date</th>
+                                <td id="detail_doubt_asked_date" class="w-1/6 text-left border py-3 px-4"></td>
+                                <th class="w-1/6 text-left border font-bold py-3 px-4">Doubt</th>
+                                <td class="w-3/6 text-left border py-3 px-4">
+                                    <div class="py-4 text-green-400 font-bold border-b"><a id="detail_doubt_attachment" href="#">view atchment</a></div>
+                                    <div id="detail_doubt_text" class="py-2"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="w-1/6 text-left border font-bold py-3 px-4">Assigned To</th>
+                                <td id="detail_assigned_to" class="w-1/6 text-left border py-3 px-4"></td>
+                                <th class="w-1/6 text-left border font-bold py-3 px-4">Responded By</th>
+                                <td id="detail_responded_by" class="w-3/6 text-left border py-3 px-4"></td>
+                            </tr>
+                            <tr>
+                                <th class="w-1/6 text-left border font-bold py-3 px-4">Response on</th>
+                                <td id="detail_response_on" class="w-1/6 text-left border py-3 px-4"></td>
+                                <th class="w-1/6 text-left border font-bold py-3 px-4">Responded Text</th>
+                                <td id="detail_responded_text" class="w-3/6 text-left border py-3 px-4"></td>
+                            </tr>
+                            <tr>
+                                <th class="w-1/6 text-left border font-bold py-3 px-4">Attachment Type</th>
+                                <td id="detail_response_attachment_type" class="w-1/6 text-left border py-3 px-4"></td>
+                                <th class="w-1/6 text-left border font-bold py-3 px-4">Attachments</th>
+                                <td class="w-3/6 text-left border py-3 px-4 font-bold text-green-400">
+                                    <a id="detail_response_attachment" target="__blank" href="#"></a>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="py-12 backdrop-filter backdrop-blur transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0" id="rating_pop" style="display: none;">
+    <div class="container relative w-full md:w-3/4 w-full md:h-3/5 md:mt-96 bg-white rounded border-4 border-green-700">
+        <div class="py-8 md:px-5">
+            <div class="flex justify-between">
+                <div class="w-11/12 text-2xl font-bold uppercase text-center">Rating For - {{subtopic_name|title}}</div>
+                <div class="w-1/12 text-2xl font-bold cursor-pointer flex justify-end hover:text-red-500" onclick="$('#rating_pop').hide()">
+                    <i class="fas fa-times fa-2x"></i>
+                </div>
+            </div>
+            <div id="att_pop_data" class="flex flex-col space-y-20">
+                <div class="flex flex-col items-center justify-center space-y-20">
+                    <div class="flex w-full space-x-6">
+                        <div class="font-bold">How was the video</div>
+                        <div class="flex video_rating space-x-4">
+                            <div class="video__rating__star cursor-pointer"><i class="far fa-star"></i></div>
+                            <div class="video__rating__star cursor-pointer"><i class="far fa-star"></i></div>
+                            <div class="video__rating__star cursor-pointer"><i class="far fa-star"></i></div>
+                            <div class="video__rating__star cursor-pointer"><i class="far fa-star"></i></div>
+                            <div class="video__rating__star cursor-pointer"><i class="far fa-star"></i></div>
+                        </div>
+                    </div>
+                    <div class="flex w-full space-x-6">
+                        <div class="font-bold">How was the worksheet</div>
+                        <div class="flex workbook_rating space-x-4">
+                            <div class="workbook__rating__star cursor-pointer"><i class="far fa-star"></i></div>
+                            <div class="workbook__rating__star cursor-pointer"><i class="far fa-star"></i></div>
+                            <div class="workbook__rating__star cursor-pointer"><i class="far fa-star"></i></div>
+                            <div class="workbook__rating__star cursor-pointer"><i class="far fa-star"></i></div>
+                            <div class="workbook__rating__star cursor-pointer"><i class="far fa-star"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full flex space-x-6">
+                    <div class="font-bold">Comment</div>
+                    <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
+                </div>
+                <div class="w-full mt-24">
+                    <div class="flex justify-center">
+                        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="submit_rating()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://vjs.zencdn.net/7.15.4/video.min.js"></script>
+<script src="/static/js/videojs_youtube.js"></script>
+<script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+<script>
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+            return cookieValue;
+        }
+    }
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $(document).ready(function() {
+        var csrftoken = getCookie('csrftoken');
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+    });
+</script>
+
+{{ video|json_script:"videos_data" }} {{ worksheet|json_script:"worksheets_data" }} {{ textbook|json_script:"textbook_data" }} {{ doubts|json_script:"doubts_data" }} {{ tpContentList|json_script:"tpContentList" }} {{ enrolled_student|json_script:"enrolled_student_data" }}
+<script>
+    var videos_data = JSON.parse(document.getElementById('videos_data').textContent);
+    var worksheets_data = JSON.parse(document.getElementById('worksheets_data').textContent);
+    var textbooks_data = JSON.parse(document.getElementById('textbook_data').textContent);
+    var doubts_data = JSON.parse(document.getElementById('doubts_data').textContent);
+    var enrolled_student_data = JSON.parse(document.getElementById('enrolled_student_data').textContent);
+    var tpContentList = JSON.parse(document.getElementById('tpContentList').textContent);
+
+    console.log(enrolled_student_data);
+    var subtopic_id = '{{subtopic_id}}'
+    var subtopic_name = '{{subtopic_name}}'
+    var player = videojs('my_video_player');
+    var $x = $('#menu div').click(function() {
+        $x.removeClass('selected');
+        $(this).addClass('selected');
+    })
+
+    make_videos_table();
+    //document.getElementById('worksheet_tab').click();
+
+    $('document').ready(function() {
+        let video_id = document.getElementById('video0')
+        if (video_id) {
+            $('#no_video').hide()
+            $('#my_video_player').show()
+            video_id.click();
+        } else {
+            $('#no_video').show()
+            $('#my_video_player').hide()
+            //playVideo('https://youtu.be/4Y1aGTZGpCA', 'youtube', 'Introduction to eVidyaloka', 'eVidyaloka is a platform for students to learn and interact with the world of education.', 1);
+        }
+        $('#doubts_tab').click()
+    });
+
+    imgInp.onchange = evt => {
+        const [file] = imgInp.files
+        if (file) {
+            blah.src = URL.createObjectURL(file)
+        }
+    }
+
+    function playVideo(videoSource, type, title, description, id) {
+        document.getElementById('current_video_title').innerHTML = title
+        document.getElementById('current_video_description').innerHTML = description
+        player.src({
+            src: videoSource,
+            type: 'video/' + type
+        });
+
+        player.currentTime(50)
+        player.muted(false);
+        player.play();
+
+        player.on('play', (event) => {
+            update_video_playback(id, player.currentTime());
+            console.log('play time', player.currentTime());
+        });
+
+        player.on('pause', (event) => {
+            update_video_playback(id, player.currentTime());
+            console.log('pause time', player.currentTime());
+        });
+
+    }
+
+    function make_videos_table() {
+        player.autoplay('muted');
+        // $("#flm_play_list div").remove();
+        for (let index = 0; index < videos_data.length; index++) {
+            const video = videos_data[index];
+            let thumbnailUrl = '/static/img/video_placeholder.png'
+            let type = "'mp4'"
+            let duration = parseInt(video['duration'])
+            if (duration) {
+                duration = new Date(duration * 1000).toISOString().substr(11, 8)
+            }
+
+
+            // if (video['thumbnailUrl'] != '') {
+            //     thumbnailUrl = video['thumbnailUrl']
+            // }
+
+            if (video['contentHost'] == 'youtube') {
+                type = "'youtube'"
+            }
+
+            let url = "'" + video["url"] + "'"
+            let title = "'" + (video["title"]).replace("'", "") + "'"
+            let description = "'" + (video["description"]).replace("'", "") + "'"
+            let id = "'" + video["id"] + "'"
+            $('#flm_play_list').append('<div class="m-4 py-2 border-b hover:bg-gray-200 hover:text-green-500">\
+                                    <div class=" w-full flex">\
+                                        <div id="video' + index + '" onclick="playVideo(' + url + ', ' + type + ', ' + title + ', ' + description + ', ' + id + ')" class="cursor-pointer h-32 md:h-48 w-72 md:w-1/2 bg-contain md:bg-cover bg-center bg-no-repeat flex items-end justify-end" style="background-image: url(' + thumbnailUrl + ')" title="' + video['title'] + '"><p class="p-2 bg-blue-400 rounded-full text-base text-gray-800">' + duration + '</p></div>\
+                                        <div class="w-3/4 md:w-1/2 p-4 flex flex-col justify-between leading-normal">\
+                                            <div class="h-4">\
+                                                <div class="font-bold text-xl md:text-3xl">' + video['title'] + '</div>\
+                                            </div>\
+                                            <div class="font-bold text-base md:text-xl">'+video['author']+'</div>\
+                                        </div>\
+                                    </div>\
+                                </div>');
+        }
+    }
+
+    function make_worksheet_table() {
+        $('#content_wraper').show()
+        $('#doubts_wraper').hide()
+        player.pause();
+        $("#content_details div").remove();
+        if (worksheets_data.length > 0) {
+        console.log("make_worksheet_table ",worksheets_data)
+            for (let index = 0; index < worksheets_data.length; index++) {
+                const worksheet = worksheets_data[index];
+                let url = "'" + worksheet['url'] + "'"
+                let id = "'" + worksheet['id'] + "'"
+
+                $('#content_details').append('<div class="grid grid-flow-row grid-cols-2 md:grid-cols-6 gap-4 md:gap-16 items-center justify-center md:mx-48"><div class="h-96 w-64 md:w-72 flex flex-row border-2 border-gray-400 hover:border-blue-400  shadow-2xl bg-gradient-to-t from-gray-100 to-blue-200 rounded-l-lg rounded-r-3xl transform hover:z-50 hover:rotate-6 cursor-pointer" onclick="opendoc(' + url + ', ' + id + ')" style="background-image: url()" > \
+                            <div class="h-full w-4 border-r-4 border-gray-500 border-dotted"></div>\
+                            <div class="h-full mx-2 flex items-stretch justify-center">\
+                                <p class="font-bold text-3xl self-start text-center py-20">' + worksheet['title'] + '</p>\
+                            </div></div></div>')
+            }
+        } else {
+            $('#content_details').append('<div class="text-center text-bold text-3xl"> No Content Available </div>')
+        }
+    }
+
+    function make_textbook_table() {
+        $('#content_wraper').show()
+        $('#doubts_wraper').hide()
+        player.pause();
+        $("#content_details div").remove();
+        if (textbooks_data.length > 0) {
+            for (let index = 0; index < textbooks_data.length; index++) {
+                const textbook = textbooks_data[index];
+                let url = "'" + textbook['url'] + "'"
+
+                $('#content_details').append('<div class="grid grid-flow-row grid-cols-2 md:grid-cols-6 gap-4 md:gap-16 items-center justify-center md:mx-48"><div class="h-96 w-64 md:w-72 flex flex-row border-2 border-gray-400  shadow-2xl bg-contain bg-center bg-no-repeat rounded-l-lg rounded-r-3xl transform hover:z-50 hover:rotate-6 cursor-pointer" onclick="window.open(' + url + ')" style="background-image: url()" > \
+                            <div class="h-full w-4 border-r-4 border-gray-500 border-dotted"></div>\
+                            <div class="h-full mx-2 flex items-stretch justify-center">\
+                                <p class="font-bold text-3xl self-start text-center py-20">' + textbook['title'] + '</p>\
+                            </div></div></div>')
+            }
+        } else {
+            $('#content_details').append('<div class="text-center text-bold text-3xl py-42"> No Content Available </div>')
+        }
+    }
+
+    function make_doubts_list() {
+
+        $('#content_wraper').hide()
+        $('#doubts_wraper').show()
+        player.pause();
+        $("#content_details div").remove();
+        for (let index = 0; index < doubts_data.length; index++) {
+            const doubt = doubts_data[index];
+            if (doubt.parent_thread_id != null) {
+                let reply = `<details open class="comment" id="comment-${doubt.id}">
+                            <a href="#comment-${doubt.id}" class="comment-border-link">
+                                <span class="sr-only">Jump to comment-2</span>
+                            </a>
+                            <summary>
+                                <div class="comment-heading">
+                                    <div class="comment-info">
+                                        <a class="comment-author">${doubt.created_by_id}-${doubt.created_by__first_name} ${doubt.created_by__last_name}</a>
+                                        <p class="m-0">${doubt.created_on}</p>
+                                    </div>
+                                </div>
+                            </summary>
+
+                            <div class="comment-body">
+                                <p>${doubt.text}</p>
+                            </div>
+                        </details>`
+
+                $('#reply-' + doubt.parent_thread_id).append(reply);
+            } else {
+
+                let comment = `<div class="comment-thread">
+                            <!-- Comment 1 start -->
+                            <details open class="comment" id="comment-${doubt.id}">
+                                <a href="#comment-${doubt.id}" class="comment-border-link">
+                                    <span class="sr-only">Jump to comment-1</span>
+                                </a>
+                                <summary>
+                                    <div class="comment-heading">
+                                        <div class="comment-info">
+                                            <a class="comment-author">${doubt.student_id}-${doubt.student__name}</a>
+                                            <p class="m-0">${doubt.created_on}</p>
+                                        </div>
+                                    </div>
+                                </summary>
+
+                                <div class="comment-body">
+                                    <p class="py-2">${doubt.text}</p>
+                                </div>
+
+                                <div id="reply-${doubt.id}" class="replies"></div>
+                            </details>
+                        </div>`
+
+                $('#content_details').append(comment)
+            }
+        }
+    }
+
+    function make_thirdparty_content_table() {
+        $('#content_wraper').show()
+        $('#doubts_wraper').hide()
+        player.pause();
+        $("#content_details div").remove();
+        if (tpContentList.length > 0) {
+        console.log("tpContentList ",tpContentList)
+            for (let index = 0; index < tpContentList.length; index++) {
+                const worksheet = tpContentList[index];
+                let url = "'" + worksheet['url'] + "'"
+                let id = "'" + worksheet['id'] + "'"
+
+                $('#content_details').append('<div class="grid grid-flow-row grid-cols-2 md:grid-cols-6 gap-4 md:gap-16 items-center justify-center md:mx-48"><div class="h-96 w-64 md:w-72 flex flex-row border-2 border-gray-400 hover:border-blue-400  shadow-2xl bg-gradient-to-t from-gray-100 to-blue-200 rounded-l-lg rounded-r-3xl transform hover:z-50 hover:rotate-6 cursor-pointer" onclick="opendoc(' + url + ', ' + id + ')" style="background-image: url()" > \
+                            <div class="h-full w-4 border-r-4 border-gray-500 border-dotted"></div>\
+                            <div class="h-full mx-2 flex items-stretch justify-center">\
+                                <p class="font-bold text-3xl self-start text-center py-20">' + worksheet['title'] + '</p>\
+                            </div></div></div>')
+            }
+        } else {
+            $('#content_details').append('<div class="text-center text-bold text-3xl"> No Content Available </div>')
+        }
+    }
+
+    function update_video_playback(id, time) {
+        if (time > 0) {
+            let data = {
+                "contentDetailsId": id,
+                "offeringId": '{{offeringId}}',
+                "topicId": '{{topicId}}',
+                "subtopicId": subtopic_id,
+                "progress": time
+            }
+
+            console.log('update_video_playback', data);
+            $.ajax({
+                type: "POST",
+                url: "/v2/flm-content-view-status/",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(response) {
+                    console.log(response)
+                    if (response['status'] == 'success') {
+                        // alert(response['data']['message'])
+                        console.log('success')
+                    } else if (response['status'] == 'error') {
+                        alert(response['error']['message'])
+                            // modalHandler()
+                    }
+                },
+                failure: function(response) {
+                    console.log(response)
+                }
+            });
+        }
+
+    };
+
+
+    function opendoc(url, id) {
+        window.open(url, '_blank');
+        update_video_playback(id, 100);
+
+    }
+
+
+    document.addEventListener(
+        "click",
+        function(event) {
+            var target = event.target;
+            var replyForm;
+            if (target.matches("[data-toggle='reply-form']")) {
+                replyForm = document.getElementById(target.getAttribute("data-target"));
+                replyForm.classList.toggle("d-none");
+            }
+        },
+        false
+    );
+</script>
+<script>
+    for (let index = 0; index < enrolled_student_data.length; index++) {
+        const student = enrolled_student_data[index];
+        $('#doubtStudentId').append('<option value="' + student['id'] + '">' + student['id'] + ' - ' + student['name'] + '</option>')
+
+    }
+
+    const closebutton = document.getElementById('closebutton')
+    const modal = document.getElementById('doubtmodal')
+
+    $(document).on("click", '#opendoubt', function(event) {
+        modal.classList.add('scale-100')
+    });
+
+    closebutton.addEventListener('click', () => modal.classList.remove('scale-100'))
+
+    $(document).keyup(function(e) {
+        if (e.key === "Escape") { // escape key maps to keycode `27`
+            modal.classList.remove('scale-100')
+            $('#doubtdetailmodal').hide()
+        }
+    });
+
+
+    function postDoubt() {
+
+        $('#doubt_post_loader').show()
+
+        let imageFile = $("#imgInp").prop('files')[0];
+
+        if (imageFile) {
+            type = 'image'
+        } else {
+            type = null
+        }
+
+        var data = new FormData(); //Create formdata objects to facilitate file transfer to the back end
+        data.append("file", imageFile) //To add (encapsulate) a file object to a formdata object
+        data.append("centerId", '{{centerId}}')
+        data.append("offeringId", '{{offeringId}}')
+        data.append("topicId", '{{topicId}}')
+        data.append("subtopicId", subtopic_id)
+        data.append("studentId", $('select#doubtStudentId').val())
+        data.append("attachmentType", type)
+        data.append("doubtText", $('#doubt_text').val())
+
+
+        console.log(data)
+
+        $.ajax({
+            url: '/v2/flm-doubts/',
+            type: 'POST',
+            data: data,
+            cache: false, //Upload files without caching
+            processData: false, //Do not serialize data
+            contentType: false, //No special connection type defined
+            success: function(response) {
+                console.log(response)
+                $('#doubt_post_loader').hide()
+                window.location.reload()
+            },
+            error: function(xhr, errmsg, err) {
+                $('#doubt_post_loader').hide()
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+
+        })
+
+    }
+
+    function doubtViewDetail(id) {
+        $('#doubtdetailmodal').show()
+
+        let data = {
+            'doubtId': id,
+            'offeringId': '{{offeringId}}',
+        }
+
+        $.ajax({
+            url: '/v2/flm-doubts/',
+            type: 'GET',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(response) {
+                console.log(response)
+
+                $('#detail_response_attachment').text('')
+                $('#detail_doubt_attachment').text('')
+
+                if (response['data']['doubts']) {
+                    let doubt = response['data']['doubts'][0]
+                    let status = 'open'
+                    if (doubt.status == '2') {
+                        status = 'Resolved'
+                    } else if (doubt.status == '3') {
+                        status = 'Responded'
+                    }
+
+                    let resourse_url = '#'
+                    if (doubt.resource_url) {
+                        resourse_url = doubt.resource_url
+                        $('#detail_doubt_attachment').text('view attachment')
+                    }
+
+
+                    $('#detail_student_name').text(doubt['student_id'] + ' - ' + doubt['student__name'])
+                    $('#detail_student_status').text(status)
+                    $('#detail_topic_name').text(doubt['topic__title'])
+                    $('#detail_subtopic_name').text(doubt['subtopic__name'])
+                    $('#detail_doubt_asked_date').text(doubt['created_on'].split('T')[0])
+                    $('#detail_doubt_text').text(doubt['text'])
+                    $('#detail_doubt_attachment').attr('href', resourse_url)
+                    let assigned_to = ''
+                    if (doubt['assigned_to__first_name']) {
+                        assigned_to = doubt['assigned_to__first_name'] + ' ' + doubt['assigned_to__last_name']
+                    }
+                    $('#detail_assigned_to').text(assigned_to)
+
+                }
+
+
+                if (response['data']['response']) {
+                    let doubt = response['data']['response'][0]
+                    let resourse_url = '#'
+                    if (doubt.resource_url) {
+                        resourse_url = doubt.resource_url
+                        $('#detail_response_attachment').text('View Attachment')
+                    }
+
+                    let resource_type = 'URL'
+                    if (doubt.resource_type == '2') {
+                        resource_type = 'Image'
+                    }
+
+
+                    $('#detail_responded_by').text(doubt['created_by__first_name'] + ' ' + doubt['created_by__last_name'])
+                    $('#detail_response_on').text(doubt['created_on'].split('T')[0])
+                    $('#detail_responded_text').text(doubt['text'])
+                    $('#detail_response_attachment_type').text(resource_type)
+                    $('#detail_response_attachment').attr('href', resourse_url)
+                }
+                //detailpop(response['data']['doubts'][0], response['data']['response'][0])
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+
+        })
+    }
+
+
+    function detailpop(doubt, response) {
+        $('#doubtdetailmodal').show()
+        $('#detailpop tr').remove()
+
+        let status = 'open'
+        if (doubt.statu == '2') {
+            status = 'Resolved'
+        } else if (doubt.statu == '3') {
+            status = 'Responded'
+        }
+
+
+        let data = `<tr>
+                        <th class="w-1/6 text-left border font-bold py-3 px-4">Student Name</th>
+                        <td class="w-1/6 text-left border py-3 px-4">${doubt.student__name}</td>
+                        <th class="w-1/6 text-left border font-bold py-3 px-4">Status</th>
+                        <td class="w-3/6 text-left border py-3 px-4">${status}</td>
+                    </tr>
+
+                        `
+
+        $('#doubtdetailmodal').append(data)
+    }
+</script>
+
+<script>
+    var video_rating = 0;
+    var worksheet_rating = 0;
+    $('.video__rating__star').click(function() {
+        $('.video__rating__star').children().removeClass('text-orange-500');
+        for (let index = 0; index < $(this).parent().children().length; index++) {
+            if (index <= $(this).index()) {
+                $(this).parent().children().eq(index).children().addClass('text-orange-500');
+            }
+        }
+        video_rating = $(this).index() + 1;
+
+    });
+    $('.workbook__rating__star').click(function() {
+        $('.workbook__rating__star').children().removeClass('text-orange-500');
+        for (let index = 0; index < $(this).parent().children().length; index++) {
+            if (index <= $(this).index()) {
+                $(this).parent().children().eq(index).children().addClass('text-orange-500');
+            }
+        }
+        worksheet_rating = $(this).index() + 1;
+    });
+
+
+    function submit_rating() {
+        let data = {
+            "offeringId": '{{offeringId}}',
+            "topicId": '{{topicId}}',
+            "subtopicId": subtopic_id,
+            "videoRating": video_rating,
+            "worksheetRating": worksheet_rating,
+            "comment": $('#comment').val()
+        }
+        if (data['videoRating'] == 0 || data['worksheetRating'] == 0) {
+            alert('Please rate the video and worksheet')
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/v2/subtopic/content-details/",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(response) {
+                    console.log(response)
+                    if (response['status'] == 'success') {
+                        alert(response['data']['message'])
+                        $('#rating_pop').hide()
+                    } else if (response['status'] == 'error') {
+                        alert(response['error']['message'])
+                            // modalHandler()
+                    }
+                },
+                failure: function(response) {
+                    console.log(response)
+                }
+            });
+        }
+
+    }
+</script>
+<script>
+    window.onbeforeunload = function(e) {
+        e = e || window.event;
+
+        // For IE and Firefox prior to version 4
+        if (e) {
+            e.returnValue = 'did you gave the rating?';
+
+        }
+    };
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        // $(".inner.clearfix").css("width","85%");
+
+        // Setup - add a text input to each footer cell
+        // $('#myTable tfoot th').each( function () {
+        // //     var title = $(this).text();
+        // //    $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+        // } );
+
+        // $("#myTable").DataTable({
+        //         "bLengthChange": false,
+        //         "pageLength": 10,
+        // });
+
+        // Apply the search
+        var table = $('#myTable').DataTable();
+        $('#searchInWholeTable').on('keyup', function() {
+            table.search(this.value).draw();
+        });
+
+
+        // table.columns().every( function () {
+        //     var that = this;
+        //     $( 'input', this.footer() ).on( 'keyup', function () {
+        //         if ( that.search() !== this.value ) {
+        //             that
+        //                 .search( this.value )
+        //                 .draw();
+        //         }
+        //     } );
+        // } );
+    });
+
+    function myPartnerFilter() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("partnerName");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    var table = $('#myTable').DataTable();
+
+    // Apply the search
+    var table = $('#myTable').DataTable();
+    $('#searchInWholeTable_centers').on('keyup', function() {
+        table.search(this.value).draw();
+    });
+
+    table.columns().every(function() {
+        var that = this;
+        $('input', this.footer()).on('keyup change', function() {
+            if (that.search() !== this.value) {
+                that
+                    .search(this.value)
+                    .draw();
+            }
+        });
+    });
+
+    function mySchoolFilter() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("schoolName");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function myVillageFilter() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("villageName");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+
+    }
+
+    function myStatusFilter() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myStatus");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[3];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function addedbyfilter() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("addedby");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[6];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function addedonfilter() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("addedon");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[7];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function stateFilter() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("role");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[5];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+{% endblock %}

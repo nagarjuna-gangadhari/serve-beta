@@ -1,0 +1,15 @@
+Dear {{username}},<br><br>
+
+We take this opportunity to welcome you on-board, and join us in this passionate cause of nation-building. <br><br>
+
+Thank you for booking Chapter - {{topic_name}} - {{workstream}}, for {{grade}}  {{subject}}  from  {{board}} board. <br>
+You will receive a confirmation on the assignment within 48 hours. <br><br>
+
+Please login at www.evidyaloka.org/myevidyaloka to view the details of the chapter booked by you.<br><br>
+
+Upon confirmation of the assignment, you will be provided with the complete preparatory package, to create the {{topic_name}} for the selected chapter, in a separate mail.<br><br>
+
+Your {{topic_name}} submission would be supporting  thousands of children to learn and practice. <br><br><br>
+Thank you on behalf of the children and together let us make sure we reach every child with the opportunity to learn.<br><br><br>
+
+<br><br>

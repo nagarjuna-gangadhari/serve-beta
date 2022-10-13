@@ -1,0 +1,72 @@
+{% extends "footer_base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+        .subcontent .sub-menu {
+            padding:10px 20px;
+        }
+        .subcontent ul {
+            margin-top:10px;
+        }
+        .subcontent ul li {
+            font-size:14px;
+        }
+        .sub-menu p {
+            margin-bottom:10px;
+        }
+        .subcontent ul {
+            margin-bottom:0px;
+        }
+        .sub-menu .blue {
+            color:#f2a587;
+        }
+        .blue {
+            color: #11BEEE;
+            text-shadow: 0 -1px #f2a587,0 1px
+        }
+    </style>
+{% endblock %}
+{% block leftnav_list %}
+<!--    <li><a href="/intro/" class="about-1"><span>Intro</span></a></li>
+    <li><a href="/code_conduct/" class="about-2"><span>Code of Conduct</span></a></li>
+    <li><a href="/aidsntools/" class="about-6"><span>Aids & tools</span></a></li>
+    <li><a href="/selfpaced/" class="about-6"><span>Self Trainings</span></a></li>
+    <li><a href="/curriculumreview/" class="about-6"><span>Curriculum Review</span></a></li>-->
+ <li><a href="/aidsntools/" class="about-6"><span>Aids & tools</span></a></li>
+ <li><a href="/mytrainings/" class="about-6"><span>My Trainings</span></a></li>
+ <li><a href="/curriculumreview/" class="about-6"><span>Curriculum Review</span></a></li>
+
+{% endblock %}
+{% block top_content %}
+    <!--<div class="top clearfix">
+        <div class="intro">
+            <h1>Aids & Tools</h1>
+        </div>
+    </div>-->
+{% endblock %}
+{% block bottom_content %}
+    <div class="paper-bg-wrapper">
+        <div class="paper-bg">
+            <div class="subcontent">
+                <p>
+                <a href="https://www.youtube.com/playlist?list=PLbdxk95Fm6Yyz9ETN5Or7kWymi4JzZ5Mv" target="_blank"><span>Learn to use Skype</span></a><br>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PLbdxk95Fm6Yyz9ETN5Or7kWymi4JzZ5Mv" frameborder="0" allowfullscreen></iframe>
+                </p>
+               <!-- <br><p>
+                   <a href="https://www.youtube.com/watch?v=C3WouWiu7pI/" target="_blank" ><span>Learn to use Google Hangout</span></a>
+               <iframe width="560" height="315" src="//www.youtube.com/embed/C3WouWiu7pI" frameborder="0" allowfullscreen></iframe>-->
+               </p> <br>
+                <p>
+                    <a href="http://whiteboard.en.softonic.com/" target="_blank"><span>Whiteboard Software</span></a>
+                </p><br>
+                <p>
+                    <a href="https://www.flipkart.com/wacom-bamboo-cth301k-usb-touchpad/p/itmdsvfhaacacjfd" target="_blank"><span>Digital Pen/Pad </span></a> 
+                    </P><br>
+                <p>
+                    <a href="https://translate.google.co.in/" target="_blank"><span>Google Translate </span></a> 
+                    </P><br>
+                    </div>
+        </div>
+    </div>
+{% endblock %}

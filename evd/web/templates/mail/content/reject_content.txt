@@ -1,0 +1,5 @@
+Hello {{username}},
+
+The {{topic_name}} submitted for  {{grade}} {{subject}} from {{board}} board in {{language}} was not meeting the standard requirements as per our guidelines and hence the topic has been released. Feel free to book another chapter to create content of your interest.
+
+Thank you for your time and interest.

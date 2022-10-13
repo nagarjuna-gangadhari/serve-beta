@@ -1,0 +1,502 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% load filters %}
+
+<!DOCTYPE html>
+{% block body_container2 %}
+{{ block.super }}
+
+<style>
+    #manage_demand_table_filter{
+        display: none;
+    }
+
+    .button-10 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 6px 14px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+      border-radius: 6px;
+      border: none;
+    
+      color: #fff;
+      background: linear-gradient(180deg, #4B91F7 0%, #367AF6 100%);
+       background-origin: border-box;
+      box-shadow: 0px 0.5px 1.5px rgba(54, 122, 246, 0.25), inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2);
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    
+</style>
+
+
+<link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet" />
+
+
+<div style="margin: 30px;">
+    <h3 style="text-align: center;background: darkslateblue;color: white;padding:10px; font-weight:bold;">Demand Dashboard</h3>
+
+    <div class="col-md-12">
+        <div class="row" style="margin:10px;">
+            <div class="col-md-3 col-xs-12">
+                <label>State:</label>
+                <select id="filter_states" class="filters">
+                    <option value="All" selected>All</option>
+                    {% for states in state %}
+                        <option value="{{states}}">{{states}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <label>Partners:</label> 
+                <select id="filter_partner" style='width: 40%;' class="filters">
+                    <option value="All" selected>All</option> 
+                    {% for partner in partners_list %}
+                        <option value="{{partner.delivery_partner_id}}">{{partner.delivery_partner__name_of_organization}}</option> 
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-5 col-xs-12">
+                <label>Delivery coordinator:</label> 
+                <select id="filter_delivery_coord" style='width: 50%;' class="filters">
+                    <option value="All" selected>All</option> 
+                    {% for del_coordinator in del_coordinator_list %}
+                    <option value="{{del_coordinator.delivery_coordinator_id}}">
+                        {{del_coordinator.delivery_coordinator__first_name}}
+                        {{del_coordinator.delivery_coordinator__last_name}}</option> 
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row" style="padding-top: 30px;margin:10px;">
+            <div class="col-md-3 col-xs-12">
+                <label>Center:</label> 
+                <select id="filter_center" style='width: 50%;' class="filters">
+                    <option value="All" selected>All</option> 
+                    {% for centers in center %}
+                    <option value="{{centers.id}}">{{centers}}</option> 
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3 col-xs-12">
+                <label>Academic Year:</label>
+                <select id="filter_ay" class="filters">
+                    {% for ayfys_title in ayfys_titles %}
+                    <option value="{{ayfys_title}}" {% if forloop.first %} selected {% endif %}>{{ayfys_title}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3 col-xs-12">
+                <label>Assigned From:</label> 
+                <input class="filters" type="text"  id="filter_from" name='from'>
+            </div>
+            <div class="col-md-3 col-xs-12">
+                <label>Assigned To:</label> 
+                <input class="filters" type="text" id="filter_to"  name='to_date'>
+            </div>
+        </div>
+       
+        
+    </div>
+    
+    <table id="manage_demand_table" class="display nowrap" style="width:100%;">
+        
+        <thead>
+            <tr>
+                
+                <th>Board</th>
+                <th>Language</th>
+                <th>Center</th>                
+                <th>Program</th>                
+                <th>Offering Id</th>
+                <th>Grade</th>
+                <th>Subject</th>
+                <th>Offering Status</th>
+                <th>Demand Status</th>
+                <th>Book Date</th>
+                <th>Assigned Date</th>
+                <th>First Session Date</th>
+                <th>Teacher</th>
+                <th>Phone</th>
+                <th>Email</th>
+                
+            </tr>
+            <tr>
+                <th>Board</th>
+                <th>Language</th>
+                <th>Center</th> 
+                <th>Program</th>               
+                <th>Offering Id</th>
+                <th>Grade</th>
+                <th>Subject</th>
+                <th>Offering Status</th>
+                <th>Demand Status</th>
+                <th>Book Date</th>
+                <th>Assigned Date</th>
+                <th>First Session Date</th>
+                <th>Teacher</th>
+                <th>Phone</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+
+        
+    </table>
+</div>
+{% endblock %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.bootstrap.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $(document).ready(function() {
+        var csrftoken = getCookie('csrftoken');
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+    });
+
+    
+
+    $(document).ready(function(){
+
+        //default filer on date:
+        let today = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toISOString() ;
+        let ftoday = today.split('T')[0]
+        
+        //$('#filter_from').val(ftoday)
+        $('#filter_from').val(ftoday)
+
+        // Setup - add a text input to each footer cell
+        $('#manage_demand_table thead tr:nth-child(2) th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+        } );
+        
+        // DataTable
+        $.table = $('#manage_demand_table').on( 'init.dt', function () {
+            setTimeout(function(){$('#manage_booking_table th:nth-child(12) input').val(ftoday).focus().change();},100); // set data on load table
+            } ).DataTable({
+            processing: true,
+            //searching: false,
+            scrollX: true,
+            ordering: false,
+            ajax: {
+                url: '/v2/demand/stats/',
+                contentType: "application/json",
+                type: "POST",
+                data: function ( d ) {
+                    d.states = $('#filter_states option:selected').val(),
+                    d.partners = $('#filter_partner option:selected').val(),
+                    d.delivery = $('#filter_delivery_coord option:selected').val(),
+                    d.centers = $('#filter_center option:selected').val(),
+                    d.ay = $('#filter_ay option:selected').val(),
+                    d.from = $('#filter_from').val()  ? $('#filter_from').val() + " 00:00:00": null,
+                    d.to = $('#filter_to').val() ? $('#filter_to').val() + " 00:00:00" : null
+                    },
+                xhrFields: {
+                    withCredentials: true
+                },
+                dataSrc: function (data) {
+                    console.log(data)
+                    return data;
+                },
+            },
+            deferRender: true,
+            columns: [
+                { data: 'board_name' },
+                { data: 'language' },
+                { data: 'name' },
+                { data: 'program_type' },
+                { data: 'id' },
+                { data: 'grade' },
+                { data: 'subject' },
+                { data: 'status' },
+                { data: 'demand_status' },
+                { data: 'date_booked' },
+                { data: 'assigned_date' },
+                { data: 'first_session' },
+                { data: 'userId'},
+                { data: 'phone' },
+                { data: 'email' },
+                
+            ],
+            columnDefs: [
+            {
+                render: function (data, type, row) {
+                    if (data == null){
+                        return `------`
+                    }else{
+                        let program = 'Digital Classroom'
+                        if (data == 2){
+                            program = 'Digital School'
+                        }else if (data == 3){
+                            program = 'Sampoorna'
+                        }
+                        return program;
+                    }
+                    
+                },
+                targets: 3,
+            },
+            {
+                render: function (data, type, row) {
+                    let color = 'red';
+                    if (data == 'completed') {
+                        color = 'green';
+                    } else if (data == 'running') {
+                        color = 'blue';
+                    } else if (data == 'pending') {
+                        color = '#34deeb';
+                    };
+                    if (data == 'running' && row['userId'] == null){
+                        color = '#eb34d2';
+                        return `<span style="color:${color}">backfill</span>`;
+
+                    }
+                    return `<span style="color:${color}">${data}</span>`;
+                },
+                targets: 7,
+            },
+            {
+                render: function (data, type, row) {
+                    if (data == null){
+                        return `------`
+                    }else{
+                        return data;
+                    }
+                    
+                },
+                targets: 7,
+            },
+            {
+                render: function (data, type, row) {
+                    if (data == null){
+                        return `------`
+                    }else{
+                        return data;
+                    }
+                    
+                },
+                targets: 8,
+            },
+            {
+                render: function (data, type, row) {
+                    if (data != null ){
+                        return data;
+                        
+                    }else {
+                        return `------`
+                    }
+                    
+                },
+                targets: 9,
+            },
+            {
+                render: function (data, type, row) {
+                    if (data == null || row['status'] != 'running' || (row['status'] == 'running' && row['userId'] == null)){
+                        return `------`
+                    }else{
+                        return data;
+                    }
+                    
+                },
+                targets: 10,
+            },
+            {
+                render: function (data, type, row) {
+                    if (data == null){
+                        return `------`
+                    }else{
+                        return data;
+                    }
+                    
+                },
+                targets: 11,
+            },
+            {
+                render: function (data, type, row) {
+                    if (data == null){
+                        return `------`
+                    }else{
+                        return `${data} - ${row['first_name']} ${row['last_name']}`;
+                    }
+                    
+                },
+                targets: 12,
+            },
+            {
+                render: function (data, type, row) {
+                    if (data == null){
+                        return `------`
+                    }else{
+                        return data;
+                    }
+                    
+                },
+                targets: 13,
+            },
+            {
+                render: function (data, type, row) {
+                    if (data == null){
+                        return `------`
+                    }else{
+                        return data;
+                    }
+                    
+                },
+                targets: 14,
+            },
+            
+            ],
+            
+            dom: 'Bfrtip',
+            buttons: ['excelHtml5',
+                    'csvHtml5',
+                    {
+                        text: `Refresh Table`,
+                        className: 'button-10',
+                        action: function () {
+                            $.table.ajax.reload();
+                        }
+                    },
+                    
+                ],
+
+            initComplete: function () {
+                // Apply the search
+                this.api()
+                    .columns()
+                    .every(function () {
+                        var that = this;
+                        $('input', this.header()).on('keyup change clear', function () {
+                            if (that.search() !== this.value) {
+                                that.search(this.value).draw();
+                            }
+                        });
+                    });
+            },            
+        });
+
+         // Create the chart with initial data
+        var container = $('<div/>').insertAfter($.table.table().container());
+    
+        var chart = Highcharts.chart(container[0], {
+            chart: {
+                type: 'pie',
+            },
+            title: {
+                text: `<button class='button-10'>Demand Status</button>`,
+            },
+            series: [
+                {
+                    data: chartData($.table),
+                },
+            ],
+        });
+    
+        // On each draw, update the data in the chart
+        $.table.on('draw', function () {
+            chart.series[0].setData(chartData($.table));
+        });
+
+
+        function chartData(table) {
+            var counts = {};
+         
+            // Count the number of entries for each position
+            $.table
+                .column(7, { search: 'applied' })
+                .data()
+                .each(function (val) {
+                    if (counts[val]) {
+                        counts[val] += 1;
+                    } else {
+                        counts[val] = 1;
+                    }
+                });
+         
+            // And map it to the format highcharts uses
+            return $.map(counts, function (val, key) {
+                return {
+                    name: key,
+                    y: val,
+                };
+            });
+        }
+
+        $('#manage_demand_table th:nth-child(7) input').datepicker({
+            changeMonth: true,
+            dateFormat: 'yy-mm-dd',
+        });
+        $('#manage_demand_table th:nth-child(11) input').datepicker({
+            changeMonth: true,
+            dateFormat: 'yy-mm-dd',
+        });
+        $('#manage_demand_table th:nth-child(12) input').datepicker({
+            changeMonth: true,
+            dateFormat: 'yy-mm-dd',
+        });
+
+        $('#filter_from').datepicker({
+            changeMonth: true,
+            dateFormat: 'yy-mm-dd',
+        });
+        $('#filter_to').datepicker({
+            changeMonth: true,
+            dateFormat: 'yy-mm-dd',
+        });
+
+
+        
+    });
+
+    //css override issue
+    $(".clearfix").removeClass("inner").removeClass("clearfix");
+    
+
+    $('body').on('change', '.filters', function(){
+        $.table.ajax.reload();
+    });
+
+</script>
+
+
+{% endblock head_scripts %}

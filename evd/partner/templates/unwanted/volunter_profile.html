@@ -1,0 +1,415 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+<!--    <script>
+
+      (function () {
+
+        var evl = window.EVL = window.EVL || {};
+        evl.user_location_info =  {{user_location_info|safe}};
+      }());
+
+    </script>-->
+
+    <!-- <script defer src="https://www.youtube.com/iframe_api"></script>-->
+    <script defer src="https://rawgit.com/kimmobrunfeldt/progressbar.js/master/dist/progressbar.js"></script>
+    <!--<script src="/static/js/upload/location.js"></script>-->
+    <script defer src="/static/js/selectize.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/selectize.css" />
+    <script src='/static/js_new/parsley.min.js' type='text/javascript' ></script>
+    <script src='/static/js_new/partner_profile.js' type='text/javascript' ></script>
+
+    <script>
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: 'DhmVpNCEWOo',
+          controls : 0,
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      } 
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        //event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        if(event.data == 0 ){
+         evd.ajax_sub('/partner/save_profile/',{'step':'organisation'},function(){});
+        }
+        //if (event.data == YT.PlayerState.PLAYING && !done) {
+          //setTimeout(stopVideo, 6000);
+          //done = true;
+        //}
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
+      $(function(){
+        $('[data-toggle="popover"]').popover();
+        var profile_completion_status = $('.new_dash_container').attr('data-profile_completion_status');
+        if(profile_completion_status === 'True'){
+            $(".not_editable").removeClass("hide");
+            $(".editable").addClass("hide");
+        }
+        $("body").on("click", ".cancel_edit_profile", function(event){
+            event.preventDefault();
+            $(".not_editable").removeClass("hide");
+            $(".editable").addClass("hide");
+        });
+        $("body").on("click", ".edit_profile", function(){
+            $(".not_editable").addClass("hide");
+            $(".editable").removeClass("hide");
+        });
+        //redirect_to_onboard
+        $("body").on("click", ".redirect_to_onboard", function(){
+            window.location.pathname="/partner/home/";
+        });
+        //code of conduct checkbox:save enable/disable
+        $("#profile_sub").removeAttr("disabled");
+        $("body").on("change", "#code_conduct", function(){
+            if (document.getElementById('code_conduct').checked){
+                $("#profile_sub").removeAttr("disabled");
+            }
+            else{
+                $("#profile_sub").attr("disabled","disabled");
+            }
+        });
+      });
+      $(function() {
+        $(".btn-pref .btn").click(function (e) {
+            e.preventDefault();
+            $(".btn-pref .btn").removeClass("btn-warning").addClass("btn-default");
+            // $(".tab").addClass("active"); // instead of this do the below
+            $(this).removeClass("btn-default").addClass("btn-warning");
+        });
+        /*// store the currently selected tab in the hash value
+        $(".btn-group button").on("shown.bs.tab", function(e) {
+            var id = $(e.target).attr("href").substr(1);
+            window.location.hash = id;
+        });*/
+
+        // on load of the page: switch to the currently selected tab
+        var hash = window.location.hash;
+        window.setTimeout(function(){$('.nav-tabs a[href="' + hash + '"]').trigger('click');}, 1);
+
+        $('.nav-tabs a').click(function (e) {
+            $(this).tab('show');
+            var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+            window.location.hash = this.hash;
+            $('html,body').scrollTop(scrollmem);
+        });
+      });
+    </script>
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+    {% include "code_conduct_modal.html" %}
+    <style>
+    .tab-content > div:last-child {
+        display : block !important;
+    }
+        .btn-pref .btn {
+            -webkit-border-radius:0 !important;
+        }
+    .input-group{
+    position: relative;
+    display: block;
+    border-collapse: separate;
+    }
+    .input-group-addon{
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color:red;
+    display:block;
+    text-align:left;
+    border: none;
+    top: 0;
+    background: none;
+    position: absolute;
+    right: -15px;
+    }
+    .cbp-mc-form {
+        position: relative;
+    }
+    .cbp-mc-form:before, 
+    .cbp-mc-form:after { 
+        content: " "; display: table; 
+    }
+
+    .cbp-mc-form:after { 
+        clear: both; 
+    }
+
+    .cbp-mc-column {
+        width: 33%;
+        padding: 10px 30px;
+        float: left;
+    }
+
+    .cbp-mc-form label {
+        display: block;
+        font-size: 1.1em;
+        cursor: pointer;
+    }
+
+    .cbp-mc-form input,
+    .cbp-mc-form textarea,
+    .cbp-mc-form select {
+        font-family: 'Lato', Calibri, Arial, sans-serif;
+        line-height: 1.5;
+        padding: 5px 10px;
+        display: block;
+        width: 100%;
+        background: transparent;
+    }
+
+    .cbp-mc-form textarea {
+        min-height: 200px;
+    }
+
+    .cbp-mc-form input:focus,
+    .cbp-mc-form textarea:focus,
+    .cbp-mc-form label:active + input,
+    .cbp-mc-form label:active + textarea {
+        outline: none;
+        border: 3px solid #10689a;
+    }
+
+    .cbp-mc-form select:focus {
+        outline: none;
+    }
+
+    ::-webkit-input-placeholder { /* WebKit browsers */
+        color: #D3D3D3;
+        font-style: italic;
+    }
+
+    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+        color: #D3D3D3;
+        font-style: italic;
+    }
+
+    ::-moz-placeholder { /* Mozilla Firefox 19+ */
+        color: #D3D3D3;
+        font-style: italic;
+    }
+
+    :-ms-input-placeholder { /* Internet Explorer 10+ */
+        color: #D3D3D3;
+        font-style: italic;
+    }
+
+    .cbp-mc-submit-wrap {
+        text-align: center;
+        padding-top: 40px;
+        clear: both;
+    }
+
+    .cbp-mc-form input.cbp-mc-submit {
+        background: #10689a;
+        border: none;
+        color: #fff;
+        width: auto;
+        cursor: pointer;
+        display: inline-block;
+        padding: 15px 30px;
+        letter-spacing: 1px;
+        position: relative;
+        float: left;
+        left: 466px;
+    }
+
+    .cbp-mc-form input.cbp-mc-submit:hover {
+        background: #1478b1;
+    }
+
+    @media screen and (max-width: 70em) {
+        .cbp-mc-column {
+            width: 50%;
+        }
+        .cbp-mc-column:nth-child(3) {
+            width: 100%;
+        }
+    }
+
+    @media screen and (max-width: 48em) {
+        .cbp-mc-column {
+            width: 100%;
+            padding: 10px;
+        }
+    }
+    label{
+        font-weight: normal;
+    }
+
+    </style>
+    <div class="container-fluid new_dash_container" data-profile_completion_status="{{user_profile.profile_completion_status}}">
+        <div class='row my_profile' style="position:relative">
+          <div class="col-lg-12 col-sm-12">
+            <ul class="nav nav-tabs">
+                {% if org%}
+                    <li><a data-toggle="tab" href="#profile" style="font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;color:black">My Profile</a></li>
+                    <li class="active"><a data-toggle="tab"href="#organisation" style="font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;color:black">My Organization</a></li>
+
+                {% else %}
+                    <li class="active"><a data-toggle="tab"
+                    href="#profile" style="font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;color:black">My Profile</a></li>
+                    <li><a data-toggle="tab"
+                        href="#organisation" style="font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;color:black">My Organization</a></li>
+                {% endif %}
+            </ul>
+            <div class="tab-content">
+                <div id="profile" class="tab-pane fade in active">
+                    <div class='basic_profile col-xs-12 col-sm-12 col-md-12' >
+                        <div class='section_title'>
+                            <h5> My Profile</h5>
+                            <hr>
+                        </div>
+
+                        <div class="editable1">
+                            <form class="cbp-mc-form" id='basic_profile_form' method='POST' enctype="multipart/form-data" data-parsley-validate="">
+                                {% csrf_token %}
+                              <input type='hidden' name='step' value='base_profile' />
+                              <div class="cbp-mc-column">
+                                    <p style="padding-bottom:17px;"><b>Personal Details</b></p>
+                                    <label for="name">Name</label>
+                                    <div class="input-group">
+                                    <input type="text" id="name" name="name" placeholder="Jonathan"
+                                        value='{{ user_profile.user.first_name }}' required=""/>
+                                    <span class="input-group-addon">*</span>
+                                    </div>
+                                    <label for="authorized_signatory">Authorized Sign</label>
+                                    <div class="input-group">
+                                    <input name="authorized_signatory" id="authorized_signatory" placeholder = "Joe" type="text"
+                                        value='{{ partner_details.authorized_signatory}}' required=""/>
+                                    <span class="input-group-addon">*</span>
+                                    </div>
+                                    <label for="contact_number">Contact Number</label>
+                                    <div class="input-group">
+                                    <input name="contact_number" id="contact_number" placeholder = "+91 8751 999 111" type="text"
+                                        value='{{ user_profile.phone }}' required=""/>
+                                    <span class="input-group-addon">*</span>
+                                    </div>
+                                    <label for="email">Email</label>
+                                    <div class="input-group">
+                                    <input name="email" id="email" placeholder = "jon@doe.com" type="text"
+                                        value='{{ user_profile.user.email }}' required=""/>
+                                    <span class="input-group-addon">*</span>
+                                    </div>
+                                    <label for="evdpoc">eVidyaloka Project Point of Contact</label>
+                                    <input name="evdpoc" id="evdpoc" placeholder = "Mrs. Nikitha" type="text"
+                                    value='{{ partner_details.evdpoc}}'/>
+                              </div><!-- cbp-mc-column -->
+                              <div class="cbp-mc-column" style="left:200px; position:relative; float:left">
+                                    <p style="padding-bottom:17px;"><b>Bank Acc Details</b></p>
+                                    <label for="bank_name">Bank Name</label>
+                                    <input name="bank_name" id="bank_name" placeholder = "ICICI" type="text"
+                                    value='{{partner_details.bank_name}}'/>
+                                    <label for="ifsc_code">Ifsc Code</label>
+                                    <input name="ifsc_code" id="ifsc_code"  placeholder = "ICIC00003" type="text"
+                                    value='{{partner_details.ifsc_code}}' />
+                                    <label for="acc_holder_name">Acct. Holder Name</label>
+                                    <input name="acc_holder_name" id="acc_holder_name" placeholder = "Jonathan" type="text"
+                                    value='{{partner_details.acc_holder_name}}'/>
+                                    <label for="acc_number">Acct. Number</label>
+                                    <input name="acc_number" id="acc_number" placeholder = "35001555508" type="text"
+                                    value='{{partner_details.acc_number}}' />
+                                    <label for="type_of_acc">Type Of Account</label>
+                                    <input name="type_of_acc" id="type_of_acc" placeholder = "Savings" type="text"
+                                    value='{{partner_details.type_of_acc}}'/>
+                              </div>
+                              <div class="cbp-mc-submit-wrap">
+                                  <input class="cbp-mc-submit" type="submit" id='profile_submit' value="Save" />
+                              </div>
+                            </form>
+                        </div>
+                    </div>
+                </div> <!--Profile completes -->
+                <div id="organisation" class="tab-pane fade">
+                    <div class='basic_org col-xs-12 col-sm-12 col-md-12' style="background-color: white; padding-bottom: 20px; box-shadow: #B7B7B7 1px 1px 5px;">
+                    <div class='section_title'>
+                            <h5> My Organization</h5>
+                            <hr>
+                    </div>
+                    <div class="editable1">
+                        <form  class="cbp-mc-form" id='basic_org_form' method='POST' enctype="multipart/form-data" data-parsley-validate="">
+                                {% csrf_token %}
+                            <input type='hidden' name='step' value='base_org' />
+                            <div class="cbp-mc-column">
+                                <label for="organization">Organization</label>
+                                <div class="input-group">
+                                <input name="organization" id="organization" placeholder = "GANDHIAN ORGANISATION"
+                                 type="text"  value='{{ user_profile.reference_channel}}' required=""/>
+                                <span class="input-group-addon">*</span>
+                                </div>
+                                <label for="typeoforg">Type of Organization</label>
+                                <div class="input-group">
+                                <input name="typeoforg" id="typeoforg" placeholder = "society" type="text"
+                                 value='{{ partner_details.typeoforg}}' required=""/>
+                                <span class="input-group-addon">*</span>
+                                </div>
+                                <label for="address">Address</label>
+                                <input name="address" id="address"
+                                placeholder = "MBT Road,  Mulakalacheruvu (R.S), Pincode : 12345" type="text"
+                                 value='{{ partner_details.address}}' />
+                                <label for="date_of_reg">Date of Registration</label>
+                                <input name="date_of_reg" id="date_of_reg" placeholder = "16-10-1984" type="text"
+                                value='{{ partner_details.date_of_reg}}'/>
+                                <label for="place_of_reg">Place of Registration</label>
+                                <input name="place_of_reg" id="place_of_reg" placeholder = "Chittoor" type="text"
+                                value='{{ partner_details.place_of_reg}}'/>
+                            </div><!-- cbp-mc-column -->
+                            <div class="cbp-mc-column" style="left:200px; position:relative; float:left">
+                                <label for="reg_number">Registration Number</label>
+                                <input name="reg_number" id="reg_number" placeholder = "367/1984" type="text"
+                                value='{{ partner_details.reg_number}}'/>
+                                <label for="number">12A/80G Number</label>
+                                <input name="number" id="number" placeholder = "12 A . No : Hqrs/1 (67)/TPT/88-89" type="text"
+                                value='{{ partner_details.number}}'/>
+                                <label for="fcra_reg_number">FCRA Regn. Number</label>
+                                <input name="fcra_reg_number" id="fcra_reg_number" placeholder = "010140005" type="text"
+                                value='{{ partner_details.fcra_reg_number}}'/>
+                                <label for="fcra_acc_number">FCRA Account Number</label>
+                                <input name="fcra_acc_number" id="fcra_acc_number" placeholder = "588224613" type="text"
+                                value='{{ partner_details.fcra_acc_number}}'/>
+                            </div><!-- cbp-mc-column -->
+                            <div class="cbp-mc-submit-wrap">
+                                <input class="cbp-mc-submit" type="submit" id='profile_submit' value="Save" />
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+                </div> <!--Org details completes -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

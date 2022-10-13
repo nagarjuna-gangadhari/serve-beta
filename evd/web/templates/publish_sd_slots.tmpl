@@ -1,0 +1,8 @@
+<% _.each(resp , function (slot) { %>
+    <div class="col-md-3">
+        <div class="alert alert-danger select_slot">
+        <input type="hidden" value="<%= slot.id %>" id='slot_id'>
+            <h4><%= slot.start_time %> to <%= slot.end_time %></h4>
+        </div>
+    </div>
+<% }) %>

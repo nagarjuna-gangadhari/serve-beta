@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+{% block head_styles %}
+{{ block.super }}
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+    <style>
+.about-container{
+    margin-top: 80px;
+}
+.horiz ul li p{
+
+display:inline;
+}
+
+.transnsbox
+{
+  margin-bottom:10px;
+  border-radius: 10px;
+  background-color: white;
+  opacity:1;
+  padding: 60px;//20px;
+  font-family: Verdana,sans-serif;
+  filter:alpha(opacity=60); /* For IE8 and earlier */
+}
+.old_donor_alert{
+    width: 200px;
+    text-align: center;
+    display: inline-block;
+    font-weight: bold;
+}
+.old_donor_alert a, .old_donor_alert a:hover{
+    color: #31708f;
+    cursor: pointer;
+}
+.selected_alert{
+    background: #54c6ff;
+}
+.selected_alert a{
+    color: black;
+}
+body > img{
+    width: 100%;
+}
+</style>
+{% endblock %}
+
+{% block doc_ready %}
+{{ block.super }}
+
+
+
+
+{% endblock %}
+{% block head_scripts %}
+{{ block.super }}
+{% endblock %}
+{% block body_container %}
+{{ block.super }}
+<div style="margin-top:20px;">
+<center>
+   <h3 style="padding-bottom:10px;" > Donor Update</h3>
+</center>
+</div>
+<div class="transnsbox">
+
+<!--<h5 style=" margin-bottom:20px;margin-left:6px;"> Click here to view updates for other periods: </h5>-->
+<div class="alert alert-info old_donor_alert"><p><a data-url="/donor_updates/2/" data-height="530px">Q1-AY 13-14</a></p></div>
+<div class="alert alert-info old_donor_alert"><p><a data-url="/donor_updates/1/">Q3-AY 13-14</a></p></div>
+<div class="alert alert-info old_donor_alert"><p><a data-url="/static/images/eVidyaloka_Half-yearly_Update-FY14-15-pj.jpg">Q1-AY-14-15</a></p></div>
+<div class="alert alert-info old_donor_alert"><p><a data-url="/static/images/Q3-Ay14-15-Donor_Update.jpg">Q3-AY 14-15</a></p></div>
+<div class="alert alert-info old_donor_alert"><p><a data-url="/static/images/Donor Update Q1 - AY15-16.png">Q1-AY 15-16</a></p></div>
+<div class="alert alert-info old_donor_alert"><p><a data-url="/static/uploads/donor_updates/AY-15-16/index.htm">Q3-AY 15-16</a></p></div>
+<div class="alert alert-info old_donor_alert"><p><a data-url="/static/uploads/donor_updates/AY-16-17/index_0.htm">Q1-AY 16-17</a></p></div>
+<div class="alert alert-info old_donor_alert"><p>
+    <a data-url="/static/uploads/donor_updates/AY-16-17/index.htm" data-height="1330px">Q3-AY 16-17</a>
+</p></div>
+<div class="alert alert-info old_donor_alert"><p>
+       <a data-url="/static/uploads/donor_updates/AY-17-18/index.html" data-height="1330px">Q1-AY 17-18</a>
+
+</p></div>
+<div class="alert alert-info old_donor_alert"><p>
+    <a data-url="/static/uploads/donor_updates/donar1718.pdf" data-height="1330px">Q2-AY 17-18</a>
+</p></div>
+    <div class="alert alert-info old_donor_alert"><p>
+    <a data-url="/static/uploads/donor_updates/DONOR_UPDATE_18_19.pdf" data-height="1330px">Q1-AY 18-19</a>
+</p></div>
+<div class="alert alert-info old_donor_alert"><p>
+  <a data-url="/static/uploads/donor_updates/eVidyaloka_Q3_Report_2018_V1.2.pdf" data-height="1330px">Q3-AY 18-19</a>
+</p></div>
+<div class="alert alert-info old_donor_alert"><p>
+  <a data-url="/static/uploads/donor_updates/newsletter_donor_update_april_20.pdf" data-height="1330px">Q4-AY 19-20</a>
+</p></div>
+<div class="alert alert-info old_donor_alert"><p>
+  <a data-url="/static/uploads/donor_updates/Q-1Newsletter-v1(q1-20-21).pdf" data-height="1330px">Q1-AY 20-21</a>
+</p></div>
+<div class="alert alert-info old_donor_alert"><p>
+  <a data-url="/static/uploads/donor_updates/2021_Newsletter.pdf" data-height="1330px">AY 20-21</a>
+</p></div>
+<div class="alert alert-info old_donor_alert"><p>
+  <a data-url="/static/uploads/donor_updates/Q4_AY_20_21.pdf" data-height="1330px">Q4-AY 20-21</a>
+</p></div>
+<div class="alert alert-info old_donor_alert"><p>
+  <a data-url="/static/uploads/donor_updates/Q1_AY_21_22.pdf" data-height="1330px">Q1-AY 21-22</a>
+</p></div>
+<div class="alert alert-info old_donor_alert selected_alert"><p>
+  <a data-url="/static/uploads/donor_updates/Q2_AY_21_22.pdf" data-height="1330px">Q2-AY 21-22</a>
+</p></div>
+
+
+
+
+<!--<ul style='display:flex;'>
+<li style="display:inline;"><p>Q1-AY 13-14 : <a  class="update2 label label-primary" target="_blank"  href="/donor_updates/2/"> View </a></p></li>
+<li style="display:inline; margin-left:100px;margin-right:100px;" >
+  <p>Q3-AY 13-14 : <a  class="update label label-primary" target="_blank"  href="/donor_updates/1/">View</a></p>
+</li>
+<li style="display:inline;" >
+  <p>Q1-AY-14-15 : <a  class="update1 label label-primary" target="_blank"  href="/static/images/eVidyaloka_Half-yearly_Update-FY14-15-pj.jpg">View</a></p>
+</li>
+<li style="display:inline;margin-left:100px;" >
+  <p>Q3-AY-14-15 : <a  class="update4 label label-primary" target="_blank"  href="/static/images/Q3-Ay14-15-Donor_Update.jpg">View</a></p>
+</li>
+
+
+</ul>
+</div>
+<div style="margin-left:30px; margin-top:20px;" class="horiz">
+
+<ul style='display:flex;'>
+<li style="display:inline;" >
+  <p>Q1-AY-15-16 : <a  class="update4 label label-primary" target="_blank"  href="/static/images/Donor Update Q1 - AY15-16.png">View</a></p>
+</li>
+
+<li style="display:inline; margin-left : 97px;" >
+  <p>Q3-AY-15-16 : <a  class="update5 label label-primary" target="_blank"  href="/static/images/DonorUpdateQ3-AY15-16.jpg">View</a></p>
+</li>
+
+<li style="display:inline; margin-left : 97px;" >
+  <p>Q1-AY-16-17 : <a  class="update6 label label-primary" target="_blank"  href="/static/images/DonorUpdateQ1-AY16-17.jpg">View</a></p>
+</li>
+
+</ul>
+</div>
+<h5 style="padding-top:25px; margin-left:6px;">Current Period Update - AY-16-17  : </h5>
+</div>-->
+
+<div style='margin-top:30px;padding : 20px 0px; text-align:center' class="view_div">
+<iframe src="/static/uploads/donor_updates/Q1_AY_21_22.pdf" width=115% style='border:2px solid; margin-left:-7.5% !important;; height: 1330px'></iframe>
+</div> 
+</div>
+{% endblock %}
+
+{% block bottom_scripts %}
+{{ block.super }}
+<script>
+$(document).ready(function(){
+                $(".update").colorbox({iframe:true, fastIframe:false, width:"70%", height:"90%", transition:"fade", scrolling:true });
+                $(".update2").colorbox({iframe:true, fastIframe:false, width:"64%", height:"75%", transition:"fade", scrolling:false });
+                $(".update1").colorbox({iframe:true, fastIframe:false, width:"83%", height:"90%", transition:"fade", scrolling:true });
+                $(".update4").colorbox({iframe:true, fastIframe:false, width:"49%", height:"90%", transition:"fade", scrolling:true });
+                $(".update5").colorbox({iframe:true, fastIframe:false, width:"55%", height:"90%", transition:"fade", scrolling:true });
+                $(".update6").colorbox({iframe:true, fastIframe:false, width:"55%", height:"90%", transition:"fade", scrolling:true });
+
+    $("body").on("click", ".old_donor_alert", function(){
+        debugger;
+        $(".old_donor_alert").removeClass("selected_alert");
+        $(this).addClass("selected_alert");
+        var url = $(this).children("p").children("a").attr("data-url");
+        var height = $(this).children("p").children("a").attr("data-height");
+        $(".view_div").children("iframe").prop("src", url).css("height", height);
+
+    });
+    $("iframe").on("load", function(){
+        $(".view_div").children('iframe').contents().find("img").css("width","100%");
+        $(".view_div").children('iframe').contents().find("iframe").css("width", "920");
+    });
+});
+</script>
+<script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+<script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+   <!--  <script type="text/javascript" src="/static/js/jquery-ui.min.js"></script> -->
+     <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+
+{% endblock %}
+
+

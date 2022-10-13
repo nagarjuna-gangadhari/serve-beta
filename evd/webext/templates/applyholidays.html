@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+
+{% block head_scripts %}
+    {{ block.super }}
+
+{% endblock %}
+
+
+{% block head_styles %}
+    {{ block.super }}
+
+        <!-- Ignite UI Required Combined CSS Files -->
+   
+     <style>
+         .submitForm {
+            margin : 16px 5px;
+         }
+         label {
+            min-width: 39% !important;
+            text-align:center;
+         }
+         textArealabel {
+            min-width: 11% !important;
+            text-align:center;
+         }
+         .divrow{
+            margin-bottom:20px;
+         }
+         .errorlist {
+            color: red;
+            padding-left: 42%;
+            padding-top: 2%;
+         }
+                 thead{
+            background-color: #525A99 !important;
+            color: white;
+        }
+
+</style>
+
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+{% endblock %}
+
+
+{% block body_container%}
+    {{ block.super }}
+
+
+<!-- <script type="text/javascript">
+    $(function () {
+        $('#id_offering').multiselect({
+            includeSelectAllOption: true
+        });
+    });
+</script> -->
+
+    <link href="http://cdn-na.infragistics.com/igniteui/2019.1/latest/css/themes/infragistics/infragistics.theme.css" rel="stylesheet" />
+    <link href="http://cdn-na.infragistics.com/igniteui/2019.1/latest/css/structure/infragistics.css" rel="stylesheet" />
+
+    <script src="http://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.8.3.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <script src="http://cdn-na.infragistics.com/igniteui/2019.1/latest/js/infragistics.core.js"></script>
+    <script src="http://cdn-na.infragistics.com/igniteui/2019.1/latest/js/infragistics.lob.js"></script>
+
+<div class="col-sm-12 col-md-12 col-lg-12" style="background-color:#fff">
+    <div class="col-sm-12 col-md-12 col-lg-12" style="background-color: #27A3E2;;width: 102%;margin-left: -15px;height: 61px;">
+        <h3 style="color:white"><b>Apply Holidays</b></h3>
+        <hr/>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-12" style="margin-top: 39px;">
+
+        <form method="post"  >
+            {% csrf_token %}
+            <div class="row divrow">
+                <div class="fieldWrapper col-md-6 col-sm-6">
+                    {{ applyholiday_form.board.label_tag }}<span style="color:red">*</span>   {{ applyholiday_form.board }}
+                    {{ applyholiday_form.board.errors }}
+                </div>
+                <div class="fieldWrapper col-md-6 col-sm-6">
+                    {{ applyholiday_form.academic.label_tag }}<span style="color:red">*</span>  {{ applyholiday_form.academic }}
+                    {{ applyholiday_form.academic.errors }}
+                </div>
+            </div>
+
+            <div class="row divrow">
+                <div class="fieldWrapper col-md-6 col-sm-6">
+                    {{ applyholiday_form.calender.label_tag }}<span style="color:red">*</span>   {{ applyholiday_form.calender }}
+                    {{ applyholiday_form.calender.errors }}
+                </div>
+
+                <div class="fieldWrapper col-md-6 col-sm-6">
+                    {{ applyholiday_form.center.label_tag }}<span style="color:red">*</span>   {{ applyholiday_form.center }}
+                    {{ applyholiday_form.center.errors }}
+                </div>
+   
+            </div>
+
+            <div class="fieldWrapper col-md-12 col-sm-12" >
+                 <!-- <span class="col-md-4 col-sm-4">
+                            <button class="submitForm btn btn-success"  id="id_holidays" style="float:right;position:relative; left: 275px;" onclick="applyholiday('myTable')">Apply Holidays</button>
+                    </span> -->
+
+                    
+                    <span class="col-md-2 col-sm-2">
+                            <button class="submitForm btn btn-success" type="submit" id="submit_holidays" style="float:right; position: relative;left: 386px;">Submit</button>
+                    </span>
+               
+            </div>
+        </div>
+   
+
+        </form>
+    </div>
+
+    {% if list_view %}
+            <div id="holiday_courses_list">
+                <table class="table table-bordered" id="myTable">
+                    <thead style="background-color:#27A3E2;">
+                        <tr>
+                            <th style ="display: -webkit-inline-box;border:none;">
+                                <input type="checkbox" id="select_all" class="check_boxes" style="height:14px;position:relative;left:0px;" onclick="check_all_check_boxes(this)">Select all 
+                            </th>
+                            <th>Courses</th>
+                             <!-- <th>End Date</th> -->
+                            <!-- <th>Apply Holiday</th>  -->
+                        </tr>
+                    </thead>
+                    <tbody id="courses_list_body">
+                        {% for val in display_holidays %}
+                            <tr>
+                                <td><input type="checkbox" class="check_boxes" style="height:14px;position:relative;left:0px;" value= {{ val.offring_id }} onclick="select_invisual_checkbox({{ val.offring_id }})"></td>
+                                <td id="ed_date_{{val.id}}">{{val.subject}}</td>
+                                <!-- <td id="des_{{val.id}}">{{val.end_date}}</td> -->
+                            
+                                <!-- <td nowrap=""> -->
+                                    
+                    <!-- <button class="submitForm btn btn-danger" style="margin-top:0px;" onclick="applyholiday({{ val.offring_id }})">  Apply Holidays</button> -->
+            
+                                <!-- </td> -->
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    
+                    {% if not display_holidays %}
+                      <tbody>
+                        <tr >
+                          <th colspan="24" class="text-center" id="spanmessage">No records found</th>
+                        </tr>
+                      </tbody>
+                      {% endif %}
+                </table>
+                <div class="col-sm-12 col-md-12 col-lg-12" style="width: 85%;
+        margin-left: 96px;">
+            <div class="fieldWrapper col-md-offset-6 col-sm-offset-6">
+             
+        <span class="col-md-4 col-sm-4">
+            <button class="submitForm btn btn-success"  id="apply_holidays" style="float:right;position:relative; left: -56px;margin-top:10px;" onclick="applyholiday('myTable')">Apply Holidays</button>
+    </span>
+    </div>
+    </div>
+            </div>
+    {% endif %}
+</div>
+
+
+
+    <div id='delete_holiday' class="modal hide" style="max-height:500px; min-height:200px;background-color:white;overflow-y:auto;">
+    <a class="close" data-dismiss="modal" style="float:right;cursor:pointer;position:absolute;top:0px;right:0px;">X</a>
+    <div style="background-color:#F15A22;color:white;padding:20px;text-align: center; margin-left: -22px;font-size:18px;"> Confirm to Delete Holiday Sessions </div>
+<!--         <div style='margin-top:30px;text-align:center;'> 
+            <label style="display:inline; font-size:18px;">Select a Calender &nbsp&nbsp&nbsp&nbsp: &nbsp&nbsp&nbsp&nbsp </label> 
+            <select id='id_calender1'></select>
+            <div class='btn' id='cal_apply' style='margin-top:30px;cursor:pointer;width:80px;background-color:#27AE60;font-size:18px;margin-left:236px; color:white;'>Apply </div>
+       </div> -->
+
+        <div style='padding:40px;text-align: center;' id='preview'>
+            <p id='del_text' style='font-size:18px;font-weight:bold;margin-left: -27px;'>Sessions being deleted:</p>
+            <ul id='my_display_ul_data'></ul>
+            <div class='btn' type="submit" id='cal_submit' style='margin-top:30px;cursor:pointer;width:80px;background-color:#27AE60;font-size:18px;margin-left:-29px; color:white;' onclick="confirmtodelete()">Confirm </div>
+        </div>
+        <div style="display:none;padding:20px" id='ack'>
+            <div style='border:10px solid;padding:50px;text-align:center;' id='ack_msg'></div>
+
+        </div>
+        
+    </div>
+   
+
+{% endblock %}
+
+{% block bottom_scripts %}
+ {{ block.super }}
+
+
+
+
+<script>
+var table_ids = []
+var list_session_dates= {}
+$(document).ready(function() {
+$('#hidesesiionsbuttons').hide();
+  $('#id_launch_date').prop('type', 'date');
+
+  $(".save_edited_data").hide()
+    $(".inner.clearfix").css("width","85%");
+
+    $("#id_board").on('change', function() {
+        $.get("/v2/getacademic_year/?board="+this.value,function(resp){
+            $("#id_academic").empty();
+            $('#id_academic').append('<option value="">Select Academic Year</option>');
+            $.each(resp, function (i, resp) {
+                $('#id_academic').append('<option value="'+resp[0]+'">'+resp[1]+'</option>');
+            });
+        });
+    });
+
+
+    $("#id_academic").on('change', function() {
+        var board = $("#id_board").children("option:selected").val()
+        $.get("/v2/getcalender/?board="+board+"&academic_yr="+this.value,function(resp){
+            $("#id_calender").empty();
+            $('#id_calender').append('<option value="">Select Calender</option>');
+            // var window.calendar = resp;
+            $.each(resp, function (i, resp) {
+                $('#id_calender').append('<option value="'+resp[0]+'">'+resp[1]+'</option>');
+
+
+            });
+        });
+    });
+
+    $("#id_board").on('change', function() {
+        $.get("/v2/getcenter/?board="+this.value,function(resp){
+            $("#id_center").empty();
+            $('#id_center').append('<option value="">Select Center</option>');
+            $.each(resp, function (i, resp) {
+                $('#id_center').append('<option value="'+resp[0]+'">'+resp[1]+'</option>');
+            });
+        });
+    });
+
+        $("#id_center").on('change', function() {
+        $.get("/v2/getoffering/?center="+this.value,function(resp){
+            $("#id_offering").empty();
+            $('#id_offering').append('<option value="">Select All</option>');
+            $.each(resp, function (i, resp1) {
+                $('#id_offering').append('<option value="'+resp1[0]+'">'+resp1[1]+'</option>');
+
+            });
+        });
+    });
+         
+});
+    
+function applyholiday(id_name){
+    list_session_dates = {}
+    var calender_id = $('#id_calender').val();
+    var offering_id = $('#id_offering').val();
+    var center = $('#id_center').val();
+    var board = $('#id_board').val();
+    var academic_id = $('#id_academic').val();
+    $('#id_calender1').empty();
+    $('#id_calender1').val(calender_id);
+    $('#my_display_ul_data').empty();
+    var csrf_daa = $('input[name=csrfmiddlewaretoken]').val()
+    var obj = {'board':board,'center':center,'offering_id':table_ids,'calender_id':calender_id,'academic_id':academic_id,
+    "csrfmiddlewaretoken":csrf_daa}
+    $.post( "/v2/fetch_apply_holiday/",obj,function( data ) {
+        console.log("********** " + JSON.stringify(data));
+        if(JSON.stringify(data).length > 2){
+            $.each(data, function(i,resp){
+                var a = $("#id_calender option:selected").html();
+                var cal_id = $("#id_calender").val();
+                $('#id_calender1').append('<option value="'+cal_id+'">'+a+'</option>');
+                var sess_delete_html = "<hr><li>"+resp['name']+"<ul>";
+               // $('#my_display_ul_data').append("<li>"+resp['name']+"</li><ul>")
+                session_data = []
+                for(let j in resp['session']){
+                    session_data.push(resp['session'][j]['start_date'])
+                    sess_delete_html+="<li>"+resp['session'][j]['start_date']+" "+"to"+" "+resp['session'][j]['end_date']+"</li>";
+                }
+                list_session_dates[i] = session_data
+                sess_delete_html+="</ul>";
+                $('#my_display_ul_data').append(sess_delete_html);
+                $('#cal_submit').val(table_ids);
+            })
+            $('#delete_holiday').modal('show');
+        } else{
+            alert('There are no holiday sessions');
+        }
+    });
+}
+
+function confirmtodelete(){
+    var del = confirm("Are you sure you want to delete these sessions?");
+    if ( del === true ) {
+        var offering_id=$('#cal_submit').val();
+        var csrf_data = $('input[name=csrfmiddlewaretoken]').val()
+        var obj = {'offering_id': table_ids, "session_dates": list_session_dates, "csrfmiddlewaretoken": csrf_data}
+        $.post('/v2/Delete_singleoffering_Sessions/',obj,function(resp){
+            alert(resp['msg']);
+            window.location = "/v2/Applyholidays";
+        });
+    }
+}
+
+function Delete_Alloffering_holidaySessions(){
+    var id_center=$('#id_center').val();
+    var del = confirm("Are you sure you want to Delete All the Offeing Holiday Session ?");
+    var csrf_data = $('input[name=csrfmiddlewaretoken]').val()
+    var obj={'centerid':id_center,"csrfmiddlewaretoken":csrf_data} 
+      $.post('/v2/Delete_AllOffering_HolidaySessions/',obj,function(resp){
+            location.reload();
+
+      });
+  }
+
+
+  function check_all_check_boxes(ele) {
+    var checkboxes = document.getElementsByClassName(ele.className);
+    if(document.getElementById(ele.id).checked == false) {
+        document.getElementById(ele.id).checked = false
+        for (let i = 0; i < checkboxes.length; i++) {
+            value = checkboxes[i].value
+            let index = table_ids.indexOf(value);
+            if (index > -1) {
+                table_ids.splice(index, 1);
+            }
+            checkboxes[i].checked = false
+        }
+    } else {
+        document.getElementById(ele.id).checked = true
+        for (let i = 1; i < checkboxes.length; i++) {
+            if(table_ids.indexOf(checkboxes[i].value) == -1) {
+                table_ids.push(checkboxes[i].value)
+            } 
+            checkboxes[i].checked = true
+        }
+    }
+  }
+
+function select_invisual_checkbox(value) {
+    if(value in table_ids) {
+        let index = table_ids.indexOf(value);
+        if (index > -1) {
+            table_ids.splice(index, 1);
+        }
+    } else {
+        table_ids.push(value)
+    }
+}
+</script>
+
+
+
+{% endblock %}

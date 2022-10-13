@@ -1,0 +1,65 @@
+{% extends "footer_base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+        #donors-table {
+            border: 1px solid #B0AEAA;
+            width: 100%;
+        }
+        #donors-table th {
+            padding: 10px 5px;
+            width: 50%;
+            text-align: center;
+            background:transparent url(/static/images/dashed_line.png) repeat-x 0 100%;
+        }
+        #donors-table td {
+            padding: 10px 5px;
+        }
+        #donors-table tr:last-child td {
+            background: none;
+        }
+        /*
+        #donors-table tr td:first-child, #donors-table tr th:first-child {
+            border-right: 1px solid #B0AEAA;
+        }*/
+    </style>
+
+{% endblock %}
+
+{% block leftnav_list %}
+     <li><a href="/volunteer/" ><span>Spend some Time</span></a></li>
+     <li><a href="/spread/" ><span>Spread the Word</span></a></li>
+     <li><a href="/sponsor/" ><span>Share the Joy</span></a></li>
+     <li><a href="/donors/" class='active' ><span>Know the Donors</span></a></li>
+
+
+{% endblock %}
+
+{% block top_content %}
+   <!-- <div class="top clearfix">
+        <div class="intro">
+            <h1>List of Donors</h1>
+        </div>
+    </div>-->
+{% endblock %}
+
+
+{% block bottom_content %}
+
+<div class="paper-bg-wrapper">
+    <div class="paper-bg" style="border-top:0px;">
+        <div id="spread-word" class="subcontent clearfix">
+            <table class="table" id="donors-table">
+                <tbody>
+                    {% for donation in donations %}
+                    <tr>
+                        <td>{{ donation.name }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,2 @@
+Your on-boarding process as a {{ user.role }} is almost complete
+

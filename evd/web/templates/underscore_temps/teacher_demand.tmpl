@@ -1,0 +1,45 @@
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+    var container = $('{{ container }}');
+    $(container).on('mouseenter', '.demand_icon', function( event ) {
+            $(this).css("box-shadow", "1px 1px 7px #888888");
+    }).on('mouseleave', '.demand_icon', function( event ) {
+            $(this).css("box-shadow", "0.5px 0.5px 3px #888888");
+    });
+
+    var render_demand = function(container){
+        $.get('/render_demand/',{},function(resp){
+              resp1 = resp;
+              var temp= _.template("<% _.forEach(resp1.demand, function(u,i){ %>"+
+                           "<%  var colors = ['#FDD463', '#70CA76', '#F26F9C', '#3999BC', '#D8614C']; %>"+
+                           "<%  var random_color = colors[Math.floor(Math.random() * colors.length)]; %>"+
+                           " <div class='col-sm-6'>"+
+                           " <div class='row standard_row demand_icon' style='box-shadow :0.5px 0.5px 3px #888888' >"+
+                           "     <div class='col-sm-4'>"+
+                           "         <div class='demand_sm_dp' style='border-radius:100%; margin: 41% 13%;background-color:<%= random_color %>; height:60px; width:60px;text-align: center;color: white;font-size: 19px;padding: 19%;'>"+
+                           "             <%= u.center_short_name %>"+
+                           "         </div>"+
+                           "     </div>"+
+                           "     <div class='col-sm-8 cont-chg'>"+
+                           "         <div class='row'>"+
+                           "             <h5 style='padding-left:0px;'>School : <%= u.center_name %></h5>"+
+                           "         </div>"+
+                           "         <div class='row timings'>"+
+                           "             <p style='margin:0px'>Slot : <%= u.start_time %> to <%= u.end_time %></p>"+
+                           "         </div>"+
+                           "         <div class='row timings'>"+
+                           "             <p style='margin:0px;'>Language : <%= u.language %></p>"+
+                           "         </div>"+
+                           "         <div class='row timings'>"+
+                           "             <p style='margin:0px;'>Subject : Your preference</p>"+
+                           "         </div>"+
+                           "     </div>"+
+                           " </div>"+
+                        "</div>"+
+                        "    <% }) %>  " );
+            temp(resp1.demand);
+            container.html(temp);
+        });
+    }
+    render_demand(container);
+});

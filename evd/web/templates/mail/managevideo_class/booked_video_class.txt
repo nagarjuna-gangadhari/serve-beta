@@ -1,0 +1,21 @@
+
+<p>Dear {{volunteer_name}},</p>
+
+<p>We take this opportunity to welcome you on-board, and join us in this passionate cause of nation-building.</p> 
+<p>Thank you for booking Chapter - {{topic_title}}, of {{grade}}  {{Subject}}  from  {{board}} board. </p>
+<p>You will receive a confirmation on the assignment within 48 hours.</p>
+
+<p>Please login at www.evidyaloka.org/myevidyaloka to view the details of the chapter booked by you, and the training videos.</p>
+
+<p>On confirmation of the assignment, you will be provided the complete preparatory package, to create the Video capsules for the selected chapter, in a separate mail.</p>
+
+<p>Your recorded video capsules would be reaching thousands of children, for viewing and learning.</p> 
+<p>Thank you on behalf of the children and let us together make sure, we reach every child, with the learning opportunity.</p>
+
+
+
+<p>With Regards,</p>
+<p>eVidyaloka Team</p>
+<p>www.evidyaloka.org</p>
+<p>Skype: evidyaloka.helpdesk | Phone: 080 - 46808983 | Email:  videoclass@evidyaloka.org</p>
+

@@ -1,0 +1,383 @@
+{% extends "base.html" %} {% load filters %} {% load tags %} {% load staticfiles %} {% block head_title %} Generate Cirtificate | eVidyaloka {% endblock %} {% block head_styles %} {{ block.super }} {% endblock %} {% block body_container2 %}
+
+<script src="/static/css/tailwindcss3.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer"
+/>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<div id="loader" class="px-12 py-2" style="display: none; position: fixed; left: 48%; top: 48%;"><img src="/static/img_new/ajax-loader.gif" alt="spinner" /></div>
+<div class="w-full h-screen bg-gray-100">
+    <div class="w-full py-10 text-5xl font-bold text-center">Volunteer Certificates</div>
+
+
+    <div class="mx-48 my-4">
+        <table id="oldcertificates" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Center</th>
+                    <th>Sessions</th>
+                    <th>AY</th>
+                    <th>Generated Date</th>
+                    <th>Send Mail</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody id="old_certificates_rows"></tbody>
+        </table>
+    </div>
+
+
+    <div class="border-2 rounded-2xl border-gray-400">
+        <div class="h-32 text-center text-4xl font-bold flex items-center justify-center">Generate Certificates</div>
+        <div class="h-48 flex justify-around items-center mx-96">
+            <div class="space-x-6">
+                <label for="ay" class="font-bold">AY</label>
+                <select name="ay" id="ay" class="w-64 h-10 border-2"></select>
+            </div>
+
+            <div class="space-x-6">
+                <label for="state" class="font-bold">STATE</label>
+                <select name="state" id="state" class="w-64 h-10 border-2"></select>
+            </div>
+
+            <div class="space-x-6 flex items-center">
+                <label for="centers" class="font-bold">CENTER</label>
+                <select multiple name="centers" id="centers" class="w-96 h-10 border-2"></select>
+            </div>
+            <div>
+                <button id="generate" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Generate</button>
+            </div>
+        </div>
+        <div id="to_mail_wraper" class="w-full my-6 flex items-center justify-center space-x-10" style="display: none;">
+            <div class="text-2xl">Send all generated certificates to your mail</div>
+            <input class="w-96 h-14 rounded px-2" type="email" placeholder="Your Email" name="" id="to_mail">
+            <button class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition" onclick="send_to_user_mail()">Send</button>
+        </div>
+    </div>
+    <div class="mx-48 my-20">
+        <table id="newcertificates" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Center</th>
+                    <th>Sessions</th>
+                    <th>AY</th>
+                    <th>Generated Date</th>
+                    <th>Send Mail</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+{% endblock %} {% block bottom_scripts %} {{ block.super }} {{ centers|json_script:"centers_data" }} {{ certificates|json_script:"certificates_data" }} {{ ays|json_script:"ay_data" }}
+
+<script>
+    const centers_dump = JSON.parse(document.getElementById('centers_data').textContent);
+    const certificates_dump = JSON.parse(JSON.parse(document.getElementById('certificates_data').textContent));
+    const ay_dump = JSON.parse(document.getElementById('ay_data').textContent);
+    var certificates_data = [];
+
+
+    console.log(certificates_dump)
+
+    let states = [];
+    centers_dump.forEach((x, i) => states.push(x.state))
+    uniq_states = [...new Set(states)].sort();
+
+
+
+    uniq_states.forEach((x, i) => $('#state').append(`<option value="${x}">${x}</option>`))
+    ay_dump.forEach((x, i) => $('#ay').append(`<option value="${x}">${x}</option>`))
+    $('#state').on('change', function() {
+        let selected_state = $(this).val();
+        let centers = centers_dump.filter(x => x.state == selected_state);
+        $('#centers').empty();
+        centers.forEach((x, i) => $('#centers').append(`<option value="${x.id}">${x.name}</option>`))
+    })
+
+    $('#generate').on('click', function() {
+        $('#loader').show();
+        let ay = $('#ay').val();
+        let state = $('#state').val();
+        let centers = $('#centers').val();
+
+        if (centers == null || centers.length == 0) {
+            alert('Please select atleast one center');
+            return;
+        }
+
+        let data = {
+            ay: ay,
+            state: state,
+            centers: centers
+        }
+        console.log(data);
+
+        $.ajax({
+            url: '/config/generate_certificate',
+            type: 'POST',
+            data: JSON.stringify(data),
+            dataType: 'json',
+            success: function(data) {
+                $('#loader').hide();
+                alert('Certificates generated successfully');
+                if (data.length > 0) {
+                    $('#to_mail_wraper').show();
+                }
+
+                console.log(data)
+                certificates_data = data;
+                let new_data = [];
+
+                data.forEach((x, i) => {
+                    let cl = "alert_user('" + x.id + "','" + x.ay + "')";
+                    new_data.push({
+                        user_id: x.user_id,
+                        name: x.name.toUpperCase(),
+                        center: x.center,
+                        sessions: x.sessions,
+                        ay: x.ay,
+                        generated_date: x.generated_date.split(' ')[0],
+                        is_alerted: `<div class="flex items-center justify-center sapce-x-2 text-lg">${x.is_alerted  ? '<div class="mr-2" id="alert_'+ x.id +'" ><i class="fa-solid fa-circle-check fa-2x text-green-400"></i></div>':'<div class="mr-2" id="alert_'+ x.id +'"><i class="fa-solid fa-circle-exclamation fa-2x text-red-400"></i></div>'} ${x.is_alerted == 0 ? '<div id="alertk_'+ x.id +'" class="p-2 bg-blue-400 rounded-full cursor-pointer" onclick="'+ cl +'">Send</div>':'<div id="alertk_'+ x.id +'" class="p-2 bg-blue-400 rounded-full cursor-pointer" onclick="'+ cl +'">Send Again</div>'} </div>`,
+                        download: `<div class="p-2 rounded-xl bg-green-400 cursor-pointer text-center" onclick="createPdf('${x.name.toUpperCase()}', '${x.sessions}', '${x.center}', '${x.ay}', '${x.generated_date}', '1')">Download</div>`
+                    })
+                })
+
+
+                $('#newcertificates').DataTable().clear().destroy();
+                $('#newcertificates').DataTable({
+                    data: new_data,
+                    columns: [{
+                        data: 'user_id'
+                    }, {
+                        data: 'name'
+                    }, {
+                        data: 'center'
+                    }, {
+                        data: 'sessions'
+                    }, {
+                        data: 'ay'
+                    }, {
+                        data: 'generated_date'
+                    }, {
+                        data: 'is_alerted'
+                    }, {
+                        data: 'download'
+                    }]
+
+                })
+            },
+            error: function(data) {
+                alert('Something went wrong');
+                $('#loader').hide();
+                console.log(data)
+            }
+        })
+    })
+
+
+
+    for (let i = 0; i < certificates_dump.length; i++) {
+        let x = certificates_dump[i];
+
+        console.log(x)
+
+        let cl = "alert_user('" + x.id + "','" + x.ay__title + "')"
+
+
+        console.log(cl)
+
+        $('#old_certificates_rows').append(`
+            <tr>
+                <td>${x.user__id}</td>
+                <td>${x.user__first_name} ${x.user__last_name}</td>
+                <td>${x.center__name}</td>
+                <td>${x.sessions}</td>
+                <td>${x.ay__title}</td>
+                <td>${x.created_on.split(' ')[0]}</td>
+                <td><div class="flex items-center justify-center sapce-x-2 text-lg">${x.is_alerted  ? '<div class="mr-2" id="alert_'+ x.id +'"><i class="fa-solid fa-circle-check fa-2x text-green-400"></i></div>':'<div class="mr-2" id="alert_'+ x.id +'"><i class="fa-solid fa-circle-exclamation fa-2x text-red-400"></i></div>'} ${x.is_alerted == 0 ? '<div id="alertk_'+ x.id +'" class="p-2 bg-blue-400 rounded-full cursor-pointer" onclick="'+ cl +'">Send</div>':'<div id="alertk_'+ x.id +'" class="p-2 bg-blue-400 rounded-full cursor-pointer" onclick="'+ cl +'">Send Again</div>'} </div></td>
+                <td>
+                    <div class="p-2 rounded-xl bg-green-400 cursor-pointer text-center" onclick="createPdf('${x.user__first_name.toUpperCase()} ${x.user__last_name.toUpperCase()}', '${x.sessions}', '${x.center__name}', '${x.ay__title}', '${x.created_on.split(' ')[0]}', '1')">Download</div>
+                </td>
+            </tr>
+            
+            `)
+
+    }
+
+    function send_to_user_mail() {
+        let to_mail = $('#to_mail').val();
+        if (to_mail == '') {
+            alert('Please enter your email');
+            return;
+        }
+        let data = {
+            to_mail: to_mail,
+            certificates: certificates_data
+        }
+        $.ajax({
+            url: '/config/send_certificate',
+            type: 'POST',
+            data: JSON.stringify(data),
+            dataType: 'json',
+            success: function(data) {
+                alert('sent certificates to ' + to_mail);
+            },
+            error: function(data) {
+                alert('Something went wrong');
+                $('#loader').hide();
+                console.log(data)
+            }
+        })
+    }
+
+
+    function alert_user(id, ay) {
+        console.log(id, ay)
+        $('#loader').show();
+        $.ajax({
+            url: '/config/generate_certificate/',
+            type: 'PUT',
+            data: JSON.stringify({
+                'id': id,
+                'ay': ay
+            }),
+            dataType: 'json',
+            success: function(data) {
+                $('#loader').hide();
+                $('#alert_' + id).html('<i class="fa-solid fa-circle-check fa-2x text-green-400"></i>');
+                $('#alertk_' + id).html('Send Again');
+                alert('sent certificates to ' + id);
+            },
+            error: function(data) {
+                alert('Something went wrong');
+                $('#loader').hide();
+                console.log(data)
+            }
+        })
+    }
+
+
+    $(document).ready(function() {
+        $('#newcertificates').DataTable();
+        $('#oldcertificates').DataTable();
+
+    });
+</script>
+
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.3.4/js/dataTables.select.min.js"></script>
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+<script src="https://unpkg.com/downloadjs@1.4.7"></script>
+<script>
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $(document).ready(function() {
+        var csrftoken = getCookie('csrftoken');
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+    });
+</script>
+<script>
+    const {
+        degrees,
+        PDFDocument,
+        rgb,
+        StandardFonts
+    } = PDFLib
+
+    async function createPdf(name, sessions, center, ay, generatedDate, pageId) {
+        // Fetch an existing PDF document
+        const url = '/static/volunteer_certificates/avt_2022.pdf';
+        const templatePdfBytes = await fetch(url).then(res => res.arrayBuffer())
+        const templatePdfDoc = await PDFDocument.load(templatePdfBytes)
+        const pdfDoc = await PDFDocument.create();
+        const [templatePage] = await pdfDoc.copyPages(templatePdfDoc, [parseInt(pageId) - 1])
+
+        pdfDoc.addPage(templatePage)
+
+        const helveticaFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
+        const pages = pdfDoc.getPages()
+        const firstPage = pages[0]
+        const {
+            width,
+            height
+        } = firstPage.getSize()
+        firstPage.drawText(name, {
+            x: 500,
+            y: 430,
+            size: 16,
+            font: helveticaFont,
+        })
+
+        firstPage.drawText(center, {
+            x: 580,
+            y: 392,
+            size: 12,
+            font: helveticaFont,
+        })
+        firstPage.drawText(sessions, {
+            x: 675,
+            y: 373,
+            size: 12,
+            font: helveticaFont,
+        })
+        firstPage.drawText(ay, {
+            x: 768,
+            y: 373,
+            size: 12,
+            font: helveticaFont,
+        })
+        firstPage.drawText(generatedDate.split(' ')[0], {
+            x: 360,
+            y: 210,
+            size: 16,
+            font: helveticaFont,
+        })
+        const pdfBytes = await pdfDoc.save()
+
+        // Trigger the browser to download the PDF document
+        download(pdfBytes, name + '_' + center + '_' + ay + ".pdf", "application/pdf");
+    }
+</script>
+
+
+
+{% endblock %}

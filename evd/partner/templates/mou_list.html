@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% load filters %}
+
+{% block body_container %}
+{{ block.super }}
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<style>
+    table, th, td {
+      border: 1px solid black;
+    }
+    table,th{
+      background: white;
+    }
+    th input {
+                    width: 100%;
+                    min-width:50px;
+                    }
+    table,td{
+      background: white; 
+    }
+  thead{
+                background-color:#525A99 !important;
+                color:white;
+            }
+    </style>
+    </head>
+{%if is_partner or is_school_admin %}
+<div class="inner" style="height: 100%;">
+    <div class="col-md-2" style="height: 100%">
+      {%include "navbar.html"%}
+    </div>
+    <div class="col-md-10" style="height: 100%;overflow-y: auto;right: -15px; padding-left: 3%">
+{%else%}
+<div>
+     <div class="col-md-12">
+{%endif%}
+      <div style="padding-top: 15px; top:-7pt;">
+
+        {{Partner_mou_list.partner_id}}
+    
+      {% if request.user.is_superuser %}
+      <form method="GET" action="/partner/partner_mou/">
+        {% csrf_token %}
+        <!-- <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"> -->
+          <div class="col-sm-7 col-md-7 col-lg-7 col-xs-7"></div>
+          <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4"> 
+            <input autocomplete="on" name="search_results" id="search_results" placeholder="Search Partner"
+              onclick="getMouPartner(search_results);" value="{{partners_name}}" style="text-align:left !important; display:block !important;float: right;position:relative; left:23px;">
+          </div>
+          <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1">
+              <button onclick="filterTableData()" class="btn btn-success" style="height:32px;font-size:12px;position:relative; left:26px; top:23px;">Submit</button>
+          </div>
+          <!-- <div class="col-sm-4"></div> -->
+        </div>
+    </form>
+    
+    {% endif %}
+    {% if not request.user.is_superuser %}
+    <form method='POST' action="/partner/mou_form/">
+      {% csrf_token %}   
+    <button class="btn btn-success"  type="submit" style="margin-bottom: 10px" >New Agreement</button>
+  </form>
+  {% endif %}
+ 
+    <table class="table table-striped table-bordered css-serial" style="width:100%; ">
+              
+        <thead>
+      <tr style="height: 43px">
+        <th style=" background-color: #27a3e2; !important;font-size: 15px; color: white">Sl.No</th>
+        {% if request.user.is_superuser %}
+        <th  style=" background-color: #27a3e2; !important;font-size: 15px; color: white">Name</th>
+        {% endif %}
+        <th  style=" background-color: #27a3e2; !important;font-size: 15px; color: white">Estimated Cost(RS)</th>
+        <th  style=" background-color: #27a3e2; !important;font-size: 15px; color: white">Agreement Value(RS)</th> 
+        <th  style=" background-color: #27a3e2; !important;font-size: 15px; color: white">Partner Auth.Signatory</th>
+        <th  style=" background-color: #27a3e2; !important;font-size: 15px; color: white">eVidya Auth.Signatory</th>
+        <th  style=" background-color: #27a3e2; !important;font-size: 15px; color: white">Status</th>
+        <th  style=" background-color:#27a3e2 !important;font-size: 15px; color: white">Estimated Start Date </th>
+        
+        
+        <th  style=" background-color:#27a3e2 !important;font-size: 15px; color: white">Agreement{% if request.user.is_superuser %}/ Download {% endif %}</th>
+        <th  style=" background-color: #27a3e2; !important;font-size: 15px; color: white">Terms of Engagement{% if request.user.is_superuser %} /Download {% endif %}</th>
+     
+      </tr>
+    </thead>
+      <tbody>
+    {% for ent in Partner_mou_list %}
+    <tr>
+      <td></td>
+        {% if request.user.is_superuser %}
+      <td>{{ent.partner_name}}</td>
+      {% endif %}
+     <td> {{ent.estimated_cost}}</td>
+     <td> {{ent.mou_value}}</td>
+     <td id='Author_signature'>{{ent.Author_signature}}</td>
+     
+     <td>{{ent.Admin_signature}}</td>
+     <td>{{ent.status}}</td>
+     <td>{{ent.Start_Date|date:"Y-m-d"}}</td>
+     
+    
+
+     <td>
+        {% if request.user.is_superuser %}
+          {% if  ent.status == 'Draft' %}
+          <a href="/partner/update_mou/{{ ent.id }}/" style='color: lightslategrey; font-size:16px;padding:5px;'><span class="glyphicon glyphicon-edit" title="edit"></span></a>
+          {% elif ent.status == 'Partner Signed' or ent.status == 'School Admin Signed' %}
+            <a href="/partner/update_mou/{{ ent.id }}/" style='color: lightslategrey; font-size:16px;padding:5px;'><span class="glyphicon glyphicon-edit" title="edit"></span></a>
+          {%elif ent.status == 'Complete' %}
+            <a href="/partner/view_of_mou/{{ent.id}}" style='color: lightslategrey; font-size:16px;padding:5px;' /><span class="glyphicon glyphicon-eye-open" title="view"></span></a>
+            <a href="/partner/generate_certificate_for_Memorandum_of_Understanding/{{ ent.id }}/" target="_blank" style='color: lightslategrey; font-size:16px; padding:5px;' ><span class="glyphicon glyphicon-download-alt" title="download"></span></a>
+          {% endif %}
+        {% else %}
+          {% if  ent.status == 'Draft' %}
+            <span>
+              <a href="/partner/update_mou/{{ ent.id }}/" style='color: lightslategrey; font-size:16px;padding:5px;'><span class="glyphicon glyphicon-edit" title="edit"></span></a>
+            </span>
+          {% elif ent.status == 'Partner Signed' or ent.status == 'School Admin Signed' %}
+            <a href="/partner/view_of_mou/{{ent.id}}" style='color: lightslategrey; font-size:16px;padding:5px;' /><span class="glyphicon glyphicon-eye-open" title="view"></span></a>
+          {% elif ent.status == 'Complete' %}
+            <a href="/partner/view_of_mou/{{ent.id}}" style='color: lightslategrey; font-size:16px;padding:5px;' /><span class="glyphicon glyphicon-eye-open" title="view"></span></a>
+            <a href="/partner/generate_certificate_for_Memorandum_of_Understanding/{{ ent.id }}/" target="_blank" style='color: lightslategrey; font-size:16px; padding:5px;' ><span class="glyphicon glyphicon-download-alt" title="download"></span></a>
+          {% endif %}
+        {% endif %}
+      </td>
+      <td>
+          {% if request.user.is_superuser %}
+            {%if ent.status == 'Complete' %}
+              <a href="/partner/view_of_partner_engagement/{{ent.id}}" style='color: lightslategrey; font-size:16px;padding:5px;' /><span class="glyphicon glyphicon-eye-open" title="view"></span></a>
+              <a href="/partner/generate_certificate_for_Terms_of_Engagement/{{ ent.id }}/" target="_blank" style='color: lightslategrey; font-size:16px; padding:5px;' ><span class="glyphicon glyphicon-download-alt" title="download"></span></a>
+            {% endif %}
+          {% else %}
+            {% if ent.status == 'Complete' %}
+              <a href="/partner/view_of_partner_engagement/{{ent.id}}" style='color: lightslategrey; font-size:16px;padding:5px;' /><span class="glyphicon glyphicon-eye-open" title="view"></span></a>
+              <a href="/partner/generate_certificate_for_Terms_of_Engagement/{{ ent.id }}/" target="_blank" style='color: lightslategrey; font-size:16px; padding:5px;' ><span class="glyphicon glyphicon-download-alt" title="download"></span></a>
+            {% endif %}
+          {% endif %}
+        </td>
+
+      
+     <!-- {% if  ent.status == 'Draft' %}
+    <td><a href="/partner/update_mou/{{ ent.id }}/" style='color: lightslategrey; font-size:16px;padding:5px;'><span class="glyphicon glyphicon-edit" title="edit"></span></a></td>
+    <td></td>
+    {% endif %}
+    {% if  ent.status == 'Partner Signed' and  request.user.is_superuser %}
+    <td><a href="/partner/update_mou/{{ ent.id }}/" style='color: lightslategrey; font-size:16px;padding:5px;'><span class="glyphicon glyphicon-edit" title="edit"></span></a></td>
+    <td></td>
+    {% endif %}
+    
+    {% if  ent.status == 'Partner Signed' and  not request.user.is_superuser %}
+    <td>
+      <a href="/partner/view_of_mou/{{ent.id}}" style='color: lightslategrey; font-size:16px;padding:5px;' /><span class="glyphicon glyphicon-eye-open" title="view"></span></a>
+    </td>
+    <td>
+      <a href="/partner/view_of_partner_engagement/{{ent.id}}" style='color: lightslategrey; font-size:16px;padding:5px;' /><span class="glyphicon glyphicon-eye-open" title="view"></span></a>   </td>
+
+  
+    {% endif %}
+   {% if ent.status == 'Complete' %}
+   <td>
+    <a href="/partner/view_of_mou/{{ent.id}}"  style='color: lightslategrey; font-size:16px;padding:5px;'/><span class="glyphicon glyphicon-eye-open" title="view"></span> </a>
+  {% if request.user.is_superuser %}
+              <a href="/partner/generate_certificate_for_Memorandum_of_Understanding/{{ ent.id }}/" target="_blank" style='color: lightslategrey; font-size:16px; padding:5px;' ><span class="glyphicon glyphicon-download-alt" title="download"></span></a>
+               {% endif %}
+   </td>
+   <td>
+    <a href="/partner/view_of_partner_engagement/{{ent.id}}" style='color: lightslategrey; font-size:16px;padding:5px;'/><span class="glyphicon glyphicon-eye-open" title="view"></span></a>
+  {% if request.user.is_superuser %}
+              <a href="/partner/generate_certificate_for_Terms_of_Engagement/{{ ent.id }}/" target="_blank"  style='color: lightslategrey; font-size:16px;padding:5px;'><span class="glyphicon glyphicon-download-alt" title="download"></span></a>
+               {% endif %}
+</td>
+     
+   {% endif %} -->
+
+   
+    
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+ 
+      </div>
+    </div>
+    </div>
+    
+    {% for ent in Partner_mou_list %}
+   {% endfor%}
+     
+    <style>
+      .css-serial {
+  counter-reset: serial-number;  /* Set the serial number counter to 0 */
+}
+
+.css-serial td:first-child:before {
+  counter-increment: serial-number;  /* Increment the serial number counter */
+  content: counter(serial-number);  /* Display the counter */
+}
+    </style>
+
+    {% endblock %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <script>
+     $('#submitBtn').click(function () {
+        /* when the button in the form, display the entered values in the modal */
+        $('#typ').text($('#Author_signature').val());
+        $('#dat').html($('#id_no_coord').val());
+        $('#pdat').html($('#id_no_vol').val());
+        $('#remark').html($('#id_cost').val());
+        $('#mou').html($('#id_eemail').val());
+        
+        });
+        $('#submit').click(function () {
+        /* when the button in the form, display the entered values in the modal */
+        $('#typ').text($('#Author_signature').val());
+        $('#dat').html($('#id_no_coord').val());
+        $('#pdat').html($('#id_no_vol').val());
+        $('#remark').html($('#id_cost').val());
+        $('#mou').html($('#id_eemail').val());
+        
+        });
+
+    function filterTableData() {
+      // Manipulating DOM
+      partner_name = $$()//document.getElementById('search_results').value;
+      console.log("testing -----------", document.getElementsByClassName('search_results').value);
+    }  
+
+</script>
+{% endblock head_scripts %}
+

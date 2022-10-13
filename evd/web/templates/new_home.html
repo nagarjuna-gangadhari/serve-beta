@@ -1,0 +1,132 @@
+{% extends 'new_base.html' %}
+{% block body_section %}
+         <section class="new-hero">
+            <div class="container">
+               <div class="row">
+                  <h2 class="span24">Connecting Rural Children To Teachers</h2>
+               </div>
+               <div class="row">
+                  <h2 class="span24">There is a shortage of <strong>1.2 million </strong>teachers in <strong>India</strong></h2>
+               </div>
+               <div class="row">
+                  <div class="">
+                    <a class="button btn-learn" href="/learn_more/" style="background-color:#421EE8;color:white">Learn More</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a class="cta button btn-start" href="/start_teaching/" style="background-color:#ffc627;color:white">Start Teaching Online</a>
+                  </div>
+               </div>
+            </div>
+            <!--<div class="caption"><a target="_blank" href="">...</a></div>-->
+         </section>
+         <section class="patients">
+            <div class="container row">
+               <header class="span24">
+                  <h2>Schools that need you</h2>
+               </header>
+            </div>
+            <div class="container row patient_profiles">
+               <div>
+                  <div class="badge patient span8 normal">
+                     <a class="clickable" href="">
+                        <img alt="school1" width="300" height="248" src="/static/images/IMG_2196.jpg" style="margin-left:-6px;border-radius:10px" />
+                        <h3>Description... <span class="link">Read More&nbsp;&raquo;</span></h3>
+                     </a>
+                  </div>
+               </div>
+               <div>
+                  <div class="badge patient span8 normal" id="">
+                     <a class="clickable" href="">
+                        <img alt="School2" width="300" height="248" src="/static/images/IMG_5924.jpg" style="margin-left:-6px;border-radius:10px" />
+                        <h3>Description... <span class="link">Read More&nbsp;&raquo;</span></h3>
+                     </a>
+                  </div>
+               </div>
+          <div>
+                  <div class="badge patient span8 normal">
+                     <a class="clickable" href="">
+                        <img alt="School3" width="300" height="248" src="/static/images/IMG_5861__1455797416_122.166.172.222.jpg" style="margin-left:-6px;border-radius:10px" />
+                        <h3>Description... <span class="link">Read More&nbsp;&raquo;</span></h3>
+                     </a>
+                  </div>
+               </div>
+            </div>
+            <div class=""align="center"><a href="/see_all_schools/" class="button primary"style="">See all schools</a></div>
+         </section>
+         <section class="how_it_works">
+            <div class="container">
+               <header class="row">
+                  <h2>How eVidyaloka works</h2>
+               </header>
+               <div class="row">
+                  <div class=""align="center"><a class="button secondary" style="background-color:#fcd15c;" href="/learn_more/">Learn More</a></div>
+               </div>
+            </div>
+         </section>
+         <section class="how_it_works" style="background-color:#D83157;color:#EFF3F5">
+            <div class="container">
+               <header class="row">
+                    <h2>Impact Created</h2>
+               </header>
+               <div class="row">
+                  <div class="value span01">
+                     <img src="/static/images/teacher_icon.png" width="50px" height="50px"/>
+                     <!--<div class="icon"><i class="ss-community ss-teacher"></i></div>-->
+                     <h2>533</h2>
+                     <h3>Teachers Involved</h3>
+                  </div>
+                  <div class="value span01">
+                     <img src="/static/images/students.png" width="75px" height="75px" style="margin-bottom:-22px"/>
+                    <!-- <div class="icon"><i class="ss-community ss-femaleuser"></i></div>-->
+                     <h2>4610</h2>
+                     <h3>Children Benifited</h3>
+                  </div>
+                  <div class="value span01">
+                     <img src="/static/images/laptop.png" width="50px" height="50px"/>
+                     <!--<div class="icon"><i class="ss-community ss-system"></i></div>-->
+                     <h2>6823</h2>
+                     <h3>Online classes<br/>Conducted</h3>
+                  </div>
+                  <div class="value span01">
+                     <img src="/static/images/clock.png" width="50px" height="50px"/>
+                     <!--<div class="icon"><i class="ss-community ss-alarm"></i></div>-->
+                     <h2>136460</h2>
+                     <h3>Child Learning<br/>Hours</h3>
+                  </div>
+               </div>
+            </div>
+        </section>
+        <section class="how_it_works">
+            <div class="container">
+             <header class="row">
+                <h2>A hand of help can light a life</h2>
+             </header>
+               <div align="center" style="margin-bottom:20px">
+                  <p><a class="button btn-donate"style="background-color:#118320;color:white" href="/donate/">Donate</a></p>
+               </div>
+           </div>
+        </section>
+<style>
+.evd_logo{
+    height:0px !important;
+}
+.btn-learn:hover {
+  box-shadow: inset 0 0 20px rgba(19, 14, 200, 1), 0 0 20px rgba(3, 6, 181, 1);
+  outline-color: rgba(12, 14, 205, 1);
+  outline-offset: 15px;
+  text-shadow: 1px 1px 2px #9896E7;
+}
+.btn-start:hover{
+    box-shadow: inset 0 0 20px rgba(141, 155, 15, 1), 0 0 20px rgba(104, 110, 12, 1);
+    outline-color: rgba(231, 173, 22, 1);
+    outline-offset: rgba(231, 173, 22, 1);
+    text-shadow: 1px 1px 2px #CDCCE4;
+}
+.btn-donate:hover{
+    border: 1px solid;
+    box-shadow: inset 0 0 20px rgba(4, 132, 55, 1), 0 0 20px rgba(8, 247, 47, 1);
+    outline-color: rgba(12, 190, 28, 1);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px rgba(7, 40, 8, 1);
+}
+
+</style>
+{% endblock %}

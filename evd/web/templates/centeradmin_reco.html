@@ -1,0 +1,157 @@
+    {% for map in html_reco %}
+        <div class="header">
+            <a class="close" data-dismiss="modal" style="float:right">X</a>
+            <p>Recommendations for {{ map.offer }}</p>
+            </p>
+        </div>
+        <div style="padding:25px 10px 10px;margin:-1px;border:1px solid #333;border-top:0px">
+            {% if has_recommendations %}
+            <ul style="max-height:475px;overflow-y:auto;overflow-x:hidden;">
+                <!--<p><b> Best Recommendations </b></p>-->
+                {% for r in map.reco.reco1 %}
+                   {% if r.teacher.first_name and r.teacher.last_name %}
+                   <li class="teacher">
+                        <a class="btn expand">+</a>
+                        <span>{{ r.teacher.first_name }} {{ r.teacher.last_name }} - <label style="display:inline">1st best</label></span>
+                       <form method = "POST" action = "/assignoffer/" id="assign1-{{ forloop.counter }}">
+                            {% csrf_token %}
+                            <input type = "hidden" name = "offering" value = "{{map.offer_id}}" />
+                            <input type = "hidden" name = "user" value = "{{r.teacher.id}}" />
+                            <!--<input type = "hidden" name= "center_id" value = "{{ center.id }} " />-->
+                            <!--<button type="submit" class="btn ok-btn assign-btn"><i class="icon-ok"></i>Request</button>-->
+                        </form>
+                        {% if r.status %}
+                        <a class="assign-btn request-sent-btn status-{{ r.status }}">
+                            {{ r.status }}
+                        </a>
+                        {% else %}
+                        <a href="#assign1-{{ forloop.counter }}" rel="submit" callback="requestsent" class="btn assign-btn">
+                            <span class="ajax-button-label" data-loading="please-wait">Request</span>
+                        </a>
+                        {% endif %}
+                            <div class="hide preferences">
+                                {% if r.offerings %}
+                                <h3>Prefered Courses:</h3>
+                                <ul>
+                                    {% for offering in r.offerings %}
+                                       <li> {{ offering }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                                <h3>Preferences:</h3>
+                                <ul>
+                                {% if r.pref_days %}
+                                <li>Prefered days:
+                                    {% for day in r.pref_days %}
+                                        {{ day }}{% if not forloop.last %} ; {% endif %}
+                                    {% endfor %}</li>
+                                {% endif %}
+                                {% if r.pref_medium %}<li style="width:230px;float:left;">Language: {{ r.pref_medium }}</li>{% endif %}
+                                {% if r.pref_subjects %}<li>Subjects: {{ r.pref_subjects }}</li>{% endif %}
+                                <li style="width:230px;float:left;">Avail From: {{ r.from_date }}</li>
+                                <li>Avail To: {{ r.to_date }}</li>
+                            </div>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                {% for  r in map.reco.reco2 %}
+                    {% if r.teacher.first_name %}
+                    <li class="teacher">
+                        <a class="btn expand">+</a>
+                        <span>{{ r.teacher.first_name }} {{ r.teacher.last_name }} - <label style="display:inline">2nd best</label></span>
+                        <form method = "POST" action = "/assignoffer/" id="assign2-{{ forloop.counter }}">
+                            {% csrf_token %}
+                            <input type = "hidden" name = "offering" value = "{{map.offer_id}}" />
+                            <input type = "hidden" name = "user" value = "{{r.teacher.id}}" />
+                            <input type = "hidden" name= "center_id" value = "{{ center.id }} " />
+                        </form>
+                        {% if r.status %}
+                        <a class="assign-btn request-sent-btn status-{{ r.status }}">
+                                {{ r.status }}
+                        </a>
+                        {% else %}
+                        <a href="#assign2-{{ forloop.counter }}" rel="submit" pre-call="pre_requestsent" callback="requestsent" class="btn assign-btn">
+                            <span class="ajax-button-label" data-loading="please-wait">Request</span>
+                        </a>
+                        {% endif %}
+                        <div class="hide preferences">
+                            {% if r.offerings %}
+                            <h3>Prefered Courses:</h3>
+                            <ul style="margin-bottom:10px;">
+                                {% for offering in r.offerings %}
+                                    <li> {{ offering }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                            <h3>Preferences:</h3>
+                            <ul>
+                            {% if r.pref_days %}
+                            <li>Prefered days:
+                                {% for day in r.pref_days %}
+                                    {{ day }}{% if not forloop.last %} ; {% endif %}
+                                {% endfor %}</li>
+                            {% endif %}
+                            {% if r.pref_medium %}<li style="width:230px;float:left;">Language: {{ r.pref_medium }}</li>{% endif %}
+                            {% if r.pref_subjects %}<li>Subjects: {{ r.pref_subjects }}</li>{% endif %}
+                            <li style="width:230px;float:left;">Avai From: {{ r.from_date }}</li>
+                            <li>Avail To: {{ r.to_date }}</li>
+                        </div>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                {% for  r in map.reco.reco3 %}
+                    {% if r.teacher.first_name %}
+                    <li class="teacher">
+                        <a class="btn expand">+</a>
+                        <span>{{ r.teacher.first_name }} {{ r.teacher.last_name }} - <label style="display:inline">3rd best</label></span>
+                        <form method = "POST" action = "/assignoffer/" id="assign3-{{ forloop.counter }}">
+                            {% csrf_token %}
+                            <input type = "hidden" name = "offering" value = "{{map.offer_id}}" />
+                            <input type = "hidden" name = "user" value = "{{r.teacher.id}}" />
+                            <input type = "hidden" name= "center_id" value = "{{ center.id }} " />
+                            <!--<button type="submit" class="btn ok-btn assign-btn"><i class="icon-ok"></i>Request</button>-->
+                        </form>
+                        {% if r.status %}
+                        <a class="assign-btn request-sent-btn status-{{ r.status }}">
+                                {{ r.status }}
+                        </a>
+                        {% else %}
+                        <a href="#assign3-{{ forloop.counter }}" class="btn assign-btn" rel="submit" callback="requestsent">
+                            <span class="ajax-button-label" data-loading="please-wait">Request</span>
+                        </a>
+                        {% endif %}
+                        <div class="hide preferences">
+                            {% if r.offerings %}
+                            <h3>Prefered Courses:</h3>
+                            <ul>
+                                {% for offering in r.offerings %}
+                                    <li>{{ offering }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                            <h3>Preferences:</h3>
+                            <ul>
+                            {% if r.pref_days %}
+                            <li>Prefered days:
+                                {% for day in r.pref_days %}
+                                    {{ day }}{% if not forloop.last %} ; {% endif %}
+                                {% endfor %}</li>
+                            {% endif %}
+                            {% if r.pref_medium %}<li style="width:230px;float:left;">Language: {{ r.pref_medium }}</li>{% endif %}
+                            {% if r.pref_subjects %}<li>Subjects: {{ r.pref_subjects }}</li>{% endif %}
+                            <li style="width:230px;float:left;">Avail From: {{ r.from_date }}</li>
+                            <li>Avail To: {{ r.to_date }}</li>
+                        </div>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            {% else %}
+                <p style="padding:10px;text-align:center;font-style:italic;background:wheat">This course has no recommendations yet</p>
+            {% endif %}
+            <div style="text-align:center;border-top:1px solid #ccc;padding-top:5px;">
+                    <p>Or</p>
+                    <a class="btn select-teacher-btn" href="/teachers/?subject={{ map.subject }}&medium={{ map.medium }}&role=Teacher&from={{ map.start_date.day }}-{{ map.start_date.month }}-{{ map.start_date.year }}&to={{ map.end_date.day }}-{{ map.end_date.month }}-{{ map.end_date.year }}">Find teachers</a>
+            </div>
+        </div>
+    {% endfor %}

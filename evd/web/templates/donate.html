@@ -1,0 +1,39 @@
+{% extends "footer_base.html" %}
+
+{% block head_styles %}
+{{ block.super }}
+    <style>
+        .subcontent {
+            background:none;
+        }
+        .right-content .top {
+            padding:73px 37px;
+        }
+    </style>
+{% endblock %}
+{% block leftnav_list %}
+    <li><a href="/about/" class="about-1"><span>About us</span></a></li>
+    <li><a href="/vision/" class="about-2"><span>Vision & Mission</span></a></li>
+    <li><a href="/operating_principles/" class="about-3"><span>Principles</span></a></li>
+    <li><a href="/faq/" class="about-4"><span>FAQ</span></a></li>
+    <li><a href="/contact_us/" class="about-5"><span>Contact Us</span></a></li>
+    <li><a href="/donate/" class="about-5 active"><span>Donate</span></a></li>
+    <li><a href="/conduct/" class="about-6"><span>Code of Conduct</span></a></li>
+{% endblock %}
+{% block top_content %}
+
+<div class="top clearfix">
+    <div class="intro">
+        <h1>Donate</h1>
+    </div>
+</div>
+<div class="paper-bg-wrapper">
+    <div class="paper-bg">
+        <div class="subcontent" style="min-height:300px;">
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block bottom_content %}
+{% endblock %}
+

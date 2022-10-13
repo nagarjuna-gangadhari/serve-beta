@@ -1,0 +1,9 @@
+{% load i18n %}
+
+{% blocktrans %}
+{{ message }}
+
+
+-----------------------------
+
+{% endblocktrans %}

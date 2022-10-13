@@ -1,0 +1,1724 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <!-- <script src='/static/js_new/parsley.min.js' type='text/javascript' ></script> -->
+    <script>
+    var no_of_school = 0;
+    var no_of_coordinator = 0;
+    var total_cost = 0;
+    var no_of_volunteer = 0;
+    var available_from = new Date()
+    function calc() {
+        no_of_school = Number(document.getElementById('id_no_of_school').value);
+        no_of_coordinator = Number(document.getElementById('id_no_of_coordinator').value);
+        no_of_volunteer = Number(document.getElementById('id_no_of_volunteer').value);
+        no_of_months = Number(document.getElementById('no_of_months').value);
+        rate_of_volunteer = Number(document.getElementById('rate_of_volunteer').value);
+        rate_of_coordinator = Number(document.getElementById('rate_of_coordinator').value);
+        $('.no_of_schools').html(no_of_school);
+        $('.no_of_coordinators').html(no_of_coordinator);
+        $('.coordinator_cost').html(no_of_coordinator * 3000);
+        $('.no_of_volunteers').html(no_of_volunteer);
+        if (document.getElementById('id_available_from').value) {
+            available_from = new Date(document.getElementById('id_available_from').value);
+        }
+       
+		console.log("44444444444444444444444444444",available_from)
+		if (no_of_months != "" & available_from != ""){
+		end_date = new Date(available_from.setMonth(available_from.getMonth()+no_of_months));
+		end_date.setDate(end_date.getDate() - 1);
+		function convertfull(str) {
+		var date = new Date(str),
+		mnth = date.toLocaleString('default', { month: 'short' })
+
+		day = ("0" + date.getDate()).slice(-2);
+		return [day,mnth,date.getFullYear()].join("-");
+			}
+		end_date_full = convertfull(end_date)
+		start_date_full = convertfull(new Date(document.getElementById('id_available_from').value))
+		document.getElementById('end_date_full').innerHTML = end_date_full
+		document.getElementById('end_date_full2').innerHTML = end_date_full
+		document.getElementById('start_date_full').innerHTML = start_date_full
+		document.getElementById('start_date_full2').innerHTML = start_date_full
+		document.getElementById('start_date_full3').innerHTML = start_date_full
+		document.getElementById('start_date_full4').innerHTML = start_date_full
+		document.getElementById('start_date_full5').innerHTML = start_date_full
+		document.getElementById('rate_of_coordinators').innerHTML = document.getElementById('rate_of_coordinator').value+" INR"
+		document.getElementById('rate_of_volunteers').innerHTML = document.getElementById('rate_of_volunteer').value+" INR"
+
+
+		function convert(str) {
+		var date = new Date(str),
+		mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+		day = ("0" + date.getDate()).slice(-2);
+		return [day,mnth,date.getFullYear()].join("/");
+			}
+		end_date = convert(end_date)
+		console.log("###################"+end_date)
+
+		document.getElementById('end_date_id').value = end_date;
+		
+		}
+
+        var academic_year = '{{mou_form.academic_year_end}}';
+        academic_year = new Date(academic_year.replace(', midnight', ''))
+
+        total_cost = (rate_of_coordinator * no_of_coordinator)
+        if (no_of_volunteer > 0) {
+            // var diff = (academic_year.getTime() - available_from.getTime()) / 1000;
+            // diff /= (60 * 60 * 24 * 7 * 4);
+            // diff = Math.abs(Math.round(diff));
+			diff = no_of_months
+            $('.no_of_months').html(diff);
+			$('.end_date').html(end_date);
+            $('.volunteer_total_cost').html((rate_of_volunteer * no_of_volunteer) * diff)
+            total_cost = (rate_of_coordinator * no_of_coordinator) + ((rate_of_volunteer * no_of_volunteer) * diff);
+            $('.total_cost').html(total_cost);
+        }
+		if (no_of_coordinator < no_of_school) {
+			var msg ="No of coordinator should be more than No of Schools"
+			// document.getElementById("agreement").style.visibility="hidden";
+		}
+		else {
+			msg=""
+			document.getElementById("agreement").style.visibility="visible";
+		}
+        document.getElementById('id_total_cost').value = total_cost;
+        document.getElementById('alert-pop-up').value = msg;
+        document.getElementById('id_mou_value').value = total_cost;
+        document.getElementById('update').innerHTML = total_cost;
+    }
+  </script>
+{% endblock %}
+
+{% block head_styles %}
+{{ block.super }}
+<link href="https://fonts.googleapis.com/css?family=Merriweather&display=swap" rel="stylesheet">
+<style>
+    .label {
+        font-weight: 200 !important;
+    }
+
+    .page {
+        width: 21cm;
+        padding: 2cm;
+        margin: 1cm auto;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+
+	/* hr { 
+            position: relative; 
+            border: none; 
+            height: 4px; 
+        } */
+    .subpage {
+        padding: 1cm;
+        border: 5px red solid;
+        height: 256mm;
+        outline: 2cm #FFEAEA solid;
+    }
+
+    @page {
+        size: A4;
+        margin: 0;
+    }
+	input[type=number], input[type=date], .alphaonly {
+		width: 100%;
+		padding: 8px 10px;
+		/* margin: 8px 0; */
+		/* display: inline-block; */
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		box-sizing: border-box;
+		
+	}
+
+	input[type=text], input[type=date], .alphaonly {
+		width: 100%;
+		padding: 8px 10px;
+		/* margin: 8px 0; */
+		/* display: inline-block; */
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		box-sizing: border-box;
+		
+	}
+
+	input[type=checkbox] {
+		position: absolute;;
+		left:-28px !important;
+	}
+
+	.checkbox_label_text {
+		position: relative;
+		left: 35px;
+		/*top: 5px;*/
+	}
+
+	.col-form-label {
+		font-family: 'Merriweather', serif;
+		color: dimgray;
+	}
+    @media print {
+        .page {
+            margin: 0;
+            border: initial;
+            border-radius: initial;
+            width: initial;
+            min-height: initial;
+            box-shadow: initial;
+            background: initial;
+            page-break-after: always;
+        }
+    } 
+
+    .border_left_spacing{
+        padding-left:30px;
+    }
+
+    .border_style {
+        /*border:7px solid #dddddd;*/
+		background: white;
+    }
+    
+    .row_alignment {
+        position:relative;
+        left: 15px;
+        padding: 0px 50px 0px 50px;
+    }
+
+    .center_alignment {
+        text-align: center;
+    }
+
+    .label_style {
+        font-family: Arial, Helvetica, sans-serif !important;
+        font-size: 12px!important;
+        font-weight:100!important;
+    }
+
+	.btn_white {
+		background-color: white;
+		color: darkslategray;
+		background-repeat:no-repeat;
+		border: 1px solid darkslategray;
+		cursor:pointer;
+		overflow: hidden;
+		outline:none;
+		width:100%;
+	}
+
+	.btn_dark_slate_grey {
+		background-color: darkslategray;
+		color: white;
+		background-repeat:no-repeat;
+		border: 1px solid darkslategray;
+		cursor:pointer;
+		overflow: hidden;
+		outline:none;
+		color:white;
+		width:100%;
+		position:relative;
+		right:-31px;
+	}
+	.btn_dark_slate_grey:hover {
+		background-color: darkslategray;
+		color:white
+	}
+
+	.btn_white:hover {
+		background-color: white;
+		color:darkslategray;
+	}
+    
+	.padding0 {
+		padding:0px !important;
+	}
+
+	input[type="date"] {
+		position: relative;
+		padding: 10px;
+		cursor:pointer;
+	}
+
+	input[type="date"]::-webkit-calendar-picker-indicator {
+		color: transparent;
+		background: none;
+		z-index: 1;
+		cursor:pointer;
+	}
+
+	input[type="date"]:before {
+		color: transparent;
+		background: none;
+		display: block;
+		font-family: 'FontAwesome';
+		content: '\f073';
+		/* This is the calendar icon in FontAwesome */
+		width: 15px;
+		height: 20px;
+		position: absolute;
+		top: 0px;
+		right: 6px;
+		color: #999;
+		cursor:pointer;
+	}
+
+	.hr_class {
+		width:76%;
+		position:relative;
+		left:12%;
+	}
+	.col-form-label {
+		font-size: 11px;
+	}
+	button {
+		font-size: 11px;
+	}
+	.partner_nav .sidebar-right {
+		background-color: white;
+		position:relative;
+		left:-16%;
+		width:160%;
+	}
+	.li-bullets{
+		list-style-type: disc;
+		margin-left: 15px;
+	}
+	.admin_nav .sidebar-right {
+		background-color: white;
+		position:relative;
+		left:-50%;
+		width:260%;
+	}
+	.indent-left {
+		padding:10px 10px 10px 0px;
+		font-size: 11px;
+		font-family: 'Merriweather', serif;
+    	color: dimgray;
+	}
+	.question {
+		cursor:pointer;
+	}
+	.dot {
+		height: 7px;
+		width: 7px;
+		background-color: black;
+		border-radius: 50%;
+		display: inline-block;
+	}
+	.font_style {
+		font-family: Calibri, serif;
+	}
+
+	.header_color {
+		color: #366091;
+	}
+	.subheader_color {
+		color:#4f81bd;
+	}
+	.font_size_lg {
+		font-size: large;
+	}
+	.font_size_med {
+		font-size:medium;
+	}
+	.partner_nav{
+		height: 100%;
+		overflow-y:  auto;
+		right: -15px;
+		padding-left: 0px;
+	}
+	input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance:textfield;
+}
+
+</style>
+{% endblock %}
+
+{% block body_container %}
+    {{ block.super }}
+    {%if is_partner%}
+		<div class="inner" style="height: 100%;">
+		    <div class="col-md-2" style="height: 100%;">
+		      {%include "navbar.html"%}
+			</div>
+			<div class="partner_nav" style="padding-left: 3%;">
+		    <div class="col-md-8">
+		{%else%}
+		<div><div class="admin_nav">
+		     <div class="col-md-9">
+		{%endif%}
+			<!-- <div id="alert_placeholder"></div>
+			<div id="alert_placeholder1"></div> -->
+			{% if mou_form.mou_id %}
+			<form method="POST" action="/partner/update_mou/{{mou_form.mou_id}}" onsubmit="return checkCheckBoxes(this);"class="border_style">
+			{% else %}
+			<form method="POST" action="/partner/saving_mou/" onsubmit="return checkCheckBoxes(this);" class="border_style">
+			{% endif %}
+			{% csrf_token %}
+			<h1 class="center_alignment"> Agreement Inputs</h1>
+				
+							<!-- <div id="alert_placeholder"></div>
+			<div id="alert_placeholder1"></div> -->
+
+				<hr class="hr_class">
+				<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+					<div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
+					</div>
+						<input type="text" style ="border-color: transparent;color:red;padding-left: 84px;" id="alert-pop-up"  name="id_total_cost"  readonly/>
+				</div>
+
+
+				<p id ="alert_placeholder"></p>
+
+                <div class="form-group row row_alignment">
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
+                                <label for="id_no_of_school" class="col-form-label">
+                                    No. Of schools:<span style="color: red;">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-offset-1 col-md-7 col-sm-7 col-xs-7 col-lg-7">
+								{% if request.user.is_superuser and status == 'Partner Signed' %}
+								<input type="number" id="id_no_of_school" name="id_no_of_school" min="1" onkeyup="calc(this)" oninput="validity.valid||(value='');" value="{{mou_form.partner_mou_obj.No_Of_schools}}" required readonly>
+								{% else %}
+								<input type="number" id="id_no_of_school"  name="id_no_of_school" min="1" onkeyup="calc(this)" oninput="validity.valid||(value='');" value="{{mou_form.partner_mou_obj.No_Of_schools}}" required>
+								{% endif %}
+							</div>
+
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
+                                <label for="id_no_of_coordinator" class="col-form-label"style="display: inline-flex;">
+									No. of Coordinators trained to be required:<span style="color: red;">*</span>
+										{% if request.user.is_superuser and status == 'Draft' %}
+										<div class="col-lg-11">
+											<div style="position:relative; top:11px;left: 9px;">Rs</div>     
+										 </div>
+										<input type="number" style="width:80px;"min="1" id="rate_of_coordinator" name="rate_of_coordinator" onkeyup="calc(this)" oninput="validity.valid||(value='');" value="{{rate_of_coordinator}}" required ><div class="col-lg-11">
+											<div style="position:relative; top:11px;left: -11px;">X</div>     
+										 </div> 
+										{% else %}
+										<div class="col-lg-11">
+											<div style="position:relative; top:11px;left: 9px;">Rs</div>     
+										 </div>
+										<input type="number" style="width:80px;"min="1" id="rate_of_coordinator" name="rate_of_coordinator" onkeyup="calc(this)" oninput="validity.valid||(value='');" value="{{rate_of_coordinator}}" required readonly>
+										<div class="col-lg-11">
+											<div style="position:relative; top:11px;left: -11px;">X</div>     
+										 </div>
+										{% endif %}
+									
+                                </label>
+							</div>
+							<div></div>
+                            <div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-offset-1 col-md-7 col-sm-7 col-xs-7 col-lg-7">
+								{% if request.user.is_superuser and status == 'Partner Signed' %}
+								<input type="number" min="0" id="id_no_of_coordinator" name="id_no_of_coordinator" onkeyup="calc(this)" oninput="validity.valid||(value='');" value="{{mou_form.partner_mou_obj.No_of_Coordinators}}" required readonly>
+								{% else %}
+								<input type="number" min="0" id="id_no_of_coordinator" name="id_no_of_coordinator" onkeyup="calc(this)" oninput="validity.valid||(value='');" value="{{mou_form.partner_mou_obj.No_of_Coordinators}}" required  >
+								{% endif %}
+							</div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
+                                <label for="id_no_of_volunteer" class="col-form-label"style="display: inline-flex;">
+
+									Estimated no. of Volunteer Teachers required:<span style="color: red;">*</span>
+										{% if request.user.is_superuser and status == 'Draft' %}
+										<div class="col-lg-11">
+											<div style="position:relative; top:11px;left: 9px;">Rs</div>     
+										 </div>
+										<input type="number" style="width:80px;"min="1" id="rate_of_volunteer" name="rate_of_volunteer" onkeyup="calc(this)" oninput="validity.valid||(value='');" value="{{rate_of_volunteer}}" required >
+										<div class="col-lg-11">
+											<div style="position:relative; top:11px;left: -11px;">X</div>     
+										 </div>
+										{% else %}
+										<div class="col-lg-11">
+											<div style="position:relative; top:11px;left: 9px;">Rs</div>     
+										 </div>
+										<input type="number" style="width:80px;"min="1" id="rate_of_volunteer" name="rate_of_volunteer" onkeyup="calc(this)" oninput="validity.valid||(value='');" value="{{rate_of_volunteer}}" required readonly>
+										<div class="col-lg-11">
+											<div style="position:relative; top:11px;left: -11px;">X</div>     
+										 </div>
+										{% endif %}
+									
+                                </label>
+                            </div>
+                            <div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-offset-1 col-md-7 col-sm-7 col-xs-7 col-lg-7">
+								{% if request.user.is_superuser and status == 'Partner Signed' %}
+								<input type="number" min="1" id="id_no_of_volunteer" name="id_no_of_volunteer" onkeyup="calc(this)" oninput="validity.valid||(value='');" value="{{mou_form.partner_mou_obj.No_of_volunteer}}" required readonly>
+								{% else %}
+								<input type="number" min="1" id="id_no_of_volunteer" name="id_no_of_volunteer" onkeyup="calc(this)" oninput="validity.valid||(value='');" value="{{mou_form.partner_mou_obj.No_of_volunteer}}" required >
+								{% endif %}
+							</div>
+                        </div>
+						
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+							<div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
+                                <label for="id_available_from" class="col-form-label">
+                                     Estimated Start Date:<span style="color: red;">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-offset-1 col-md-7 col-sm-7 col-xs-7 col-lg-7">
+								{% if request.user.is_superuser %}
+								<input type='date' class="form-control" id='id_available_from' name="id_available_from" style="line-height: 11px;" onchange="calc(this)"value="{{mou_form.start_date}}" name='id_available_from' required readonly />
+								{% else %}
+								<input type='date' class="form-control" id='id_available_from' name="id_available_from" style="line-height: 11px;" onchange="calc(this)"value="{{mou_form.start_date}}" name='id_available_from' required />
+								{% endif %}
+							</div>
+						</div>
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
+                                <label for="no_of_months" class="col-form-label">
+                                    No. of Months:<span style="color: red;">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-offset-1 col-md-7 col-sm-7 col-xs-7 col-lg-7">
+								{% if request.user.is_superuser %}
+								<input type="number" min="1" max="100" id="no_of_months" name="no_of_months" onkeyup="calc(this)" oninput="validity.valid||(value='');" value="{{no_of_month}}" required readonly>
+								{% else %}
+								<input type="number" min="1" max="100" id="no_of_months" name="no_of_months" onkeyup="calc(this)" oninput="validity.valid||(value='');" value="{{no_of_month}}" required >
+								{% endif %}
+							</div>
+						</div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
+                                <label for="end_date_id" class="col-form-label">
+                                    Estimated End Date:<span style="color: red;"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-offset-1 col-md-7 col-sm-7 col-xs-7 col-lg-7">
+                                <input type="text" id="end_date_id" style="padding-left: 10px; width: 100%;" name="end_date_id" value="{{estimated_end_date}}" readonly/>
+                            </div>
+						</div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
+                                <label for="id_total_cost" class="col-form-label">
+                                    Estimated Cost:<span style="color: red;">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-offset-1 col-md-7 col-sm-7 col-xs-7 col-lg-7">
+                                <input type="number" id="id_total_cost"  name="id_total_cost" value="{{mou_form.partner_mou_obj.estimated_cost}}" readonly/>
+                            </div>
+						</div>
+						
+						<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+							<div class="col-md-offset-5 col-sm-offset-5 col-xs-offset-5 col-lg-offset-5 col-md-6 col-sm-6 col-xs-6 col-lg-6">
+							</div>
+						</div>
+						{% if request.user.is_superuser and status == 'Draft'%}
+						<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+							<div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
+								<label for="id_mou_value" class="col-form-label">
+									Agreement Value:
+								</label>
+							</div>
+							<div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-offset-1 col-md-7 col-sm-7 col-xs-7 col-lg-7">
+								<input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id='id_mou_value' name='id_mou_value' value="{{mou_form.mou_value}}">
+							</div>
+						</div>
+						{% else %}
+
+
+						<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+							<div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
+								<label for="id_mou_value" class="col-form-label">
+									Agreement Value:
+								</label>
+							</div>
+							<div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-offset-1 col-md-7 col-sm-7 col-xs-7 col-lg-7">
+								<input type='text' min="1" id='id_mou_value' name='id_mou_value' oninput="validity.valid||(value='');"  value="{{mou_form.mou_value}}" required readonly>
+							</div>
+						</div>
+						{% endif %}
+						
+						<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12" id="agreement">
+							<div class="col-md-offset-5 col-sm-offset-5 col-xs-offset-5 col-lg-offset-5 col-md-7 col-sm-7 col-xs-7 col-lg-7">
+								<div class="col-md-5 col-lg-5 col-sm-5 padding0">
+									{% if status != 'Partner Signed' %}
+									<button type="submit" name="save" id="save" value="Draft" class="btn btn_white" onClick="removeRequired(this.form)" style="font-size: 11px;">Save Agreement Draft</button>
+									{% endif %}
+								</div>
+								<div class=" col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-sm-5 col-md-5 col-lg-5 col-xs-5 padding0">
+									
+									<button name="btn" value="preview" id="submitBtn" data-toggle="modal" onclick="open_modal()" class="btn btn_dark_slate_grey" style="font-size: 11px;width:94% !important;">
+										<span class="glyphicon glyphicon-play" style="float:left;"></span>Preview Draft
+									</button>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12"><br></div>
+						{% csrf_token %}
+							{%  if request.user.is_superuser %}
+								<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+									<div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
+										<label for="id_author" class="col-form-label">
+											Partner Authorised Signatory :<span style="color: red;">*</span>
+										</label>
+									</div>
+									<div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-offset-1 col-md-7 col-sm-7 col-xs-7 col-lg-7">
+										<input type='text' id='id_author' name='id_author' class="alphaonly" value="{{mou_form.partner_mou_obj.Author_signature}}" readonly readonly>
+									</div>
+								</div>
+
+								<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+									<div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
+										<label for="id_author" class="col-form-label">
+											Evidyaloka Authorised Signatory :<span style="color: red;">*</span>
+										</label>
+									</div>
+									<div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-offset-1 col-md-7 col-sm-7 col-xs-7 col-lg-7">
+										{% if status == 'Draft'%}
+										<input type='text' id='id_author_evd' name='id_author_evd' class="alphaonly" required readonly>
+										{% else %}
+										<input type='text' id='id_author_evd' name='id_author_evd' class="alphaonly" required>
+										{% endif %}
+									</div>
+								</div>
+
+							{% else %}
+								<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+									<div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
+										<label for="id_author" class="col-form-label">
+											Partner Authorised Signatory :<span style="color: red;">*</span>
+										</label>
+									</div>
+									<div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-offset-1 col-md-7 col-sm-7 col-xs-7 col-lg-7">
+										<input type='text' id='id_author' name='id_author' class="alphaonly" value="{{mou_form.partner_mou_obj.Author_signature}}" required>
+									</div>
+								</div>
+
+								{% endif %}
+
+						{% if request.user.is_superuser and status == 'Draft'%}
+						<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" style="display: none;">
+							<div class="col-md-offset-5 col-sm-offset-5 col-xs-offset-5 col-lg-offset-5 col-md-3 col-sm-3 col-xs-3 col-lg-3">
+								<input type="checkbox" id="myCheck" name="CHECKBOX_1"style="margin-left: -8px;">
+                            	<span class="checkbox_label_text"><label for="myCheck" class="col-form-label">I agree.</label></span>
+							</div>
+							<div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-offset-1 col-md-3 col-sm-3 col-xs-3 col-lg-3">
+								{% csrf_token %}
+								{%  if request.user.is_superuser %}
+									<button class="btn btn_white" style="width:100% !important;font-size: 11px;" value="Complete" type="submit" name="save" id="save" onclick="save_and_generate()">AGREE & SAVE</button>
+								{% else %}
+									<button class="btn btn_white" name="save" id="save" value="Partner Signed" type="submit" style="width:100% !important;font-size: 11px;">AGREE & SAVE</button>
+								{% endif %}
+							</div>
+						</div>
+						{% else %}
+						<p id ="alert_placeholder1"></p>
+						<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+							<div class="col-md-offset-5 col-sm-offset-5 col-xs-offset-5 col-lg-offset-5 col-md-3 col-sm-3 col-xs-3 col-lg-3">
+								<input type="checkbox" id="myCheck" name="CHECKBOX_1"style="margin-left: -8px;">
+                            	<span  style="margin-left: 10px;" class="checkbox_label_text"><label for="myCheck" class="col-form-label">I agree.</label></span>
+							</div>
+							<div class="col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-offset-1 col-md-3 col-sm-3 col-xs-3 col-lg-3">
+								{% csrf_token %}
+								{%  if request.user.is_superuser %}
+									<button class="btn btn_white" style="width:100% !important;font-size: 11px;" value="Complete" type="submit" name="save" id="save" onclick="save_and_generate()">AGREE & SAVE</button>
+								{% else %}
+									{% if is_school_admin %}
+										<button class="btn btn_white" name="save" id="save" value="School Admin Signed" type="submit" style="width:100% !important;font-size: 11px;">SUBMIT</button>
+									{% else %}
+										<button class="btn btn_white" name="save" id="save" value="Partner Signed" type="submit" style="width:100% !important;font-size: 11px;">SUBMIT</button>
+									{% endif %}
+								{% endif %}
+							</div>
+						</div>
+						{% endif %}
+
+                    </div>
+                    <br>
+				</div>
+
+				<div class="col-md-3 col-xs-2 col-sm-2 col-lg-3"style="padding-top:20px;padding-left:85px;">
+					<div class="sidebar-right">
+						<div class="indent-left">
+							<h2 style="text-align:center;">Frequently Asked Questions</h2>
+							<ul class="faq-menu collapsable" style="clear:both;">
+								<li class="question" data-toggle="collapse" data-target="#mou_question_1">
+									<span class="glyphicon glyphicon-play"></span>
+									What is MoU?
+								</li>
+								<ul class="answer hide" id="mou_question_1">
+									<br/>
+									<li class="list_style">
+										MOU i.e. Memorandum of Understanding is an agreement made when two or more parties outlining the rights and obligations of the parties to the agreement are into initial discussions. It is just a means for two parties to reach a decision.
+									</li>
+								</ul>
+
+								<br/>
+								<li class="question" data-toggle="collapse" data-target="#mou_question_2">
+									<span class="glyphicon glyphicon-play"></span>
+									Is MOU legally binding?
+								</li>
+								<ul class="answer hide" id="mou_question_2">
+									<br/>
+									<li class="list_style">
+										MOU does not constitute a legally enforceable obligation. It is commonly used for a non-binding contract. If an MoU has been drawn for consideration, like for exchange of money, etc., the document would become binding on the parties, else it is a non-binding contract. Clauses such as jurisdiction clause, applicable law, indemnification have binding effects to the agreement.
+									</li>
+								</ul>
+
+								<br/>
+								<li class="question" data-toggle="collapse" data-target="#mou_question_3">
+									<span class="glyphicon glyphicon-play"></span>
+									Is Stamp Duty on MOU payable?
+								</li>
+								<ul class="answer hide" id="mou_question_3">
+									<br/>
+									<li class="list_style">
+										Normally, no stamp duty is payable on MOU. However, if the MOU incorporates an agreement to purchase immovable property worth more than Rs. 100/- and if you need to produce it in the court, it should be stamped. A stamp duty paid document gets evidentiary value and is admitted as evidence in court. Document not properly stamped, is not admitted as evidence by the Court.
+									</li>
+								</ul>
+
+								<br/>
+								<li class="question" data-toggle="collapse" data-target="#mou_question_4">
+									<span class="glyphicon glyphicon-play"></span>
+									Who can use a Memorandum of Understanding?
+								</li>
+								<ul class="answer hide" id="mou_question_4">
+									<br/>
+									<li class="list_style">
+										Books of accounts comprise of a Journal, a Ledger book, a Trial Balance, Original and carbon copies of bills/invoices/receipts /, Cash Book, Profit and Loss A/c, Balance Sheet and Cash Flow Statements.
+									</li>
+									<li class="li-bullets">
+										Companies or organizations can execute an MOU to establish partnerships with each other or individuals,
+									</li>
+									<li class="li-bullets">
+										A Government Agency can execute an MOU with another agency within the same Government 
+									</li>
+									<li class="li-bullets">
+										Individuals,,
+									</li>
+									<li class="li-bullets">
+										Trusts, etc.
+									</li>
+								</ul>
+
+								<br/>
+								<li class="question" data-toggle="collapse" data-target="#mou_question_5">
+									<span class="glyphicon glyphicon-play"></span>
+									What is Terms of Engagement?
+								</li>
+								<ul class="answer hide" id="mou_question_5">
+									<br/>
+									<li class="list_style">
+										Partners are required to provide terms of engagement for all to who they have a direct business relationship with, and therefore are paid directly by that Partner. This is a formal agreement between them, detailing the responsibilities of each party and the nature of the work required.
+									</li>
+								</ul>
+								<br/>
+								<li class="question" data-toggle="collapse" data-target="#mou_question_6">
+									<span class="glyphicon glyphicon-play"></span>
+									What are the contents in ToE?
+								</li>
+								<ul class="answer hide" id="mou_question_6">
+									<br/>
+									    <li class="li-bullets">Program Scope</li>
+									    <li class="li-bullets">Role and responsibilities</li>
+									    <li class="li-bullets">Infrastructure</li>
+									    <li class="li-bullets">Operations</li>
+									    <li class="li-bullets">Financials</li>
+									    <li class="li-bullets">Confidentiality</li>
+								</ul>
+								<br/>
+								<li class="question" data-toggle="collapse" data-target="#mou_question_7">
+									<span class="glyphicon glyphicon-play"></span>
+									Should ToE be printed?
+								</li>
+								<ul class="answer hide" id="mou_question_7">
+									<br/>
+									<li class="list_style">
+										It is the reference for the Partner, It has to be read and agreed by the partners. But not necessary to be printed.
+									</li>
+								</ul>
+								<br/>
+								<li class="question" data-toggle="collapse" data-target="#mou_question_8">
+									<span class="glyphicon glyphicon-play"></span>
+									What should be the start date of MoU?
+								</li>
+								<ul class="answer hide" id="mou_question_8">
+									<br/>
+									<li class="list_style">
+										The month from when eVidyaloka/Online classes will be implemented in the identified school. The first date of the Month should be taken as start date of MoU.
+									</li>
+								</ul>
+								<br/>
+								<li class="question" data-toggle="collapse" data-target="#mou_question_9">
+									<span class="glyphicon glyphicon-play"></span>
+									How many schools can be added in one MoU?
+								</li>
+								<ul class="answer hide" id="mou_question_9">
+									<br/>
+									<li class="list_style">
+										The schools in which you wish to start the digital classroom program in the same month can be in one MoU.
+									</li>
+								</ul>
+								<br/>
+								<li class="question" data-toggle="collapse" data-target="#mou_question_10">
+									<span class="glyphicon glyphicon-play"></span>
+									If I want to initiate the digital classroom program in the schools in different phases, can I add the schools in same MoU?
+								</li>
+								<ul class="answer hide" id="mou_question_10">
+									<br/>
+									<li class="li-bullets">
+										 The schools in which you planned to start the program in same month, can be added in MoU
+									</li>
+									<li class="li-bullets">
+									    The schools in which you will start the program in subsequent month, it should be in added in separate MoU with corresponding start date.
+									</li>
+								</ul>
+
+								<br/>
+								<li class="question" data-toggle="collapse" data-target="#mou_question_11">
+									<span class="glyphicon glyphicon-play"></span>
+									Why is the training cost included?
+								</li>
+								<ul class="answer hide" id="mou_question_11">
+									<br/>
+									<li class="list_style">
+										Trainings cost is include
+									</li>
+									<li class="li-bullets">
+										Trainer cost MoU
+									</li>
+									<li class="li-bullets">
+									    Materials will be provided for all participates.
+									</li>
+									<li class="li-bullets">
+									    Certificate will be given for all participates
+									</li>
+								</ul>
+
+								<br/>
+								<li class="question" data-toggle="collapse" data-target="#mou_question_12">
+									<span class="glyphicon glyphicon-play"></span>
+									What does training offer?
+								</li>
+								<ul class="answer hide" id="mou_question_12">
+									<br/>
+									<li class="list_style">
+										It will be 2 days training to coordinator and Administrator and it includes Introduction to evidyaloka, roles and responsibilities, basic computer usage , using evidyaloka platform for managing the classes
+									</li>
+								</ul>
+
+								<br/>
+								<li class="question" data-toggle="collapse" data-target="#mou_question_13">
+									<span class="glyphicon glyphicon-play"></span>
+									How is the estimated Cost Calculated?
+								</li>
+								<ul class="answer hide" id="mou_question_13">
+									<br/>
+									<li class="list_style">
+										Estimated value is calculated based on the number of volunteer teachers requested for the program and the number of trainings for the schools onboarded. The unit pricing for one offering is 1000 INR per month and the training fees is 3000 INR for each coordinator.
+									</li>
+									<li class="list_style">
+										For example, for running digital classes in one school with 4 teachers for 6 months in an academic year, the MoU value will be 4x1000x6+3000x1 = 27000
+									</li>
+								</ul>
+
+								<br/>
+								<li class="question" data-toggle="collapse" data-target="#mou_question_14">
+									<span class="glyphicon glyphicon-play"></span>
+									What can be the minimum number of months covered in a MoU?
+								</li>
+								<ul class="answer hide" id="mou_question_14">
+									<br/>
+									<li class="list_style">
+										Minimum number of months has to be 3 months that is one term. So there is some impact on kids as well
+									</li>
+								</ul>
+								<br/>
+								<li class="question" data-toggle="collapse" data-target="#mou_question_15">
+									<span class="glyphicon glyphicon-play"></span>
+									What can be the maximum number of months covered in a MoU?
+								</li>
+								<ul class="answer hide" id="mou_question_15">
+									<br/>
+									<li class="list_style">
+										Maximum number of months can be more than a year also. 
+									</li>
+								</ul>
+
+								<br/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+			</div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="confirm-submit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:850px;margin-left: -451px;">
+      <button type="button" class="btn btn-default" data-dismiss="modal">X</button>
+  		<div class="modal-body" style='height: 612px;overflow-y: scroll;'>
+    		<div class="page">
+				<p class="western" align="center"><span style="font-family: 'Times New Roman', serif;"><span
+						style="font-size: large;">Memorandum of Understanding</span></span></p>
+				<p class="western" align="justify"><span style="font-family: 'Times New Roman', serif;"><strong>I.
+						Parties</strong></span></p>
+				<p class="western" align="justify">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<span style="font-family: 'Times New Roman', serif;">
+					The purpose of this Memorandum of Understanding (&ldquo;MOU&rdquo;) is to establish a relationship between
+					<strong>eVidyaloka Education for All Network (eVean) Foundation, </strong>
+					having its office at
+					<strong> #10B 1 st Main Road MCSHColony, 5 th Block, HSR LAYOUT SECTOR 6 BANGALORE 560 102</strong>,
+					 herein referred to as &lsquo;eVean Foundation&rsquo; and &nbsp;&lsquo;
+					<strong>{{mou_form.partner_org_name}}</strong>&rsquo;
+					with their address at
+					<strong>{{mou_form.partner_address}}</strong>
+					herein referred to as &lsquo;PARTNER&rsquo; dated <strong><h id ="start_date_full5">{{start_date_full}}</h></strong></span>.
+					</span>
+				</p>
+
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					WHERE as eVean Foundation is a registered non profit section 8 company that focuses on serving 
+					the rural students and
+					transforming the educational landscape of rural India and eVean Foundation&rsquo;s services or program described in
+					this MOU will be provided to school/students mutually agreed between eVean Foundation and PARTNER.
+				</p>
+
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					WHERE as PARTNER is an individual with an intention to transform rural India through
+					technology and entrepreneurship and is interested in availing the eVean Foundation program to
+					the mutually agreed schools/students.&nbsp;
+				</p>
+
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						BOTH PARTIES HEREBY enter into this MOU to enable eVean Foundation and PARTNER to
+						provide said services/program to school(s) (“Schools”) covered in the Terms of Engagement
+						added as Exhibit 2 of the MOU.
+				</p>
+
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					<strong>II. Payments</strong>
+				</p>
+
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						PARTNER herewith acknowledges that Payments will be as agreed under the Scope &amp; Budget
+						Plan appearing in the Scope &amp; Budget added as Exhibit 1 of the MOU.
+				</p>
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					Payments will be made as a grant to eVean Foundation.
+				</p>
+
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					<strong>III. Duration</strong>
+				</p>
+
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					This MOU is for a period of <strong><span class ="no_of_months">{{no_of_month}}</strong> months from <strong><h id ="start_date_full">{{start_date_full}}</h></strong></span> to <strong><H id="end_date_full">{{estimated_end_date_full}}<H></strong>.
+					</p>
+
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					<strong>IV. Hold Harmless/Indemnity</strong>
+				</p>
+
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					Both eVean Foundation and PARTNER are independent enterprises and shall deal at arm's length and shall not
+					commit on each other's behalf without the express concurrence of the other.
+				</p>
+
+				<p class="western" align="justify">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<span style="font-family: 'Times New Roman', serif;">
+							Each party to this MOU agrees to indemnify and hold harmless the other for and from any claims,
+							causes of action, or any other proceeding of any type or kind that is made against the other where
+							such claim, cause of action or other proceeding arises from the conduct, act, omission, or
+							commission by the other party.
+					</span>
+				</p>
+				<p class="western" align="justify"><a name="_GoBack"></a> </p>
+				<p class="western" align="justify">&nbsp;</p>
+    		</div>
+    		<div class="page">
+				<p class="western" align="justify">
+					<a name="_gjdgxs"></a>
+					<span style="font-family: 'Times New Roman', serif;">
+					<strong>V. Exit/Renewal</strong>
+					</span>
+				</p>
+
+				<p class="western" align="justify">
+					<span style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					Either party may terminate this MOU at any time, without cause, with 30 days written notice to
+					the other party. Upon termination, both parties will work to close within 30 days all pending
+					matters and financial obligations. PARTNER will return or destroy all confidential information as
+					directed by eVean Foundation
+					</span>
+				</p>
+
+				<p class="western" align="justify"  style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					Both parties will honour the confidentiality and data protection commitment even after
+					termination and the same commitment shall survive indefinitely.
+				</p>
+
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					This engagement may be renewed and/or amended by mutual consent of the parties.  All
+					amendments must be in writing and signed by both the parties.
+				</p>
+
+				<p class="western" align="justify">
+					<span style="font-family: 'Times New Roman', serif;">
+					<strong>VI. Governing Law</strong>
+					</span>
+				</p>
+
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					The MOU shall be governed by the Indian Laws for the time being in force and till the period of
+					satisfactory performance of the MOU.
+				</p>
+
+				<p class="western" align="justify">
+					<span style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					The Courts of Bengaluru alone shall have exclusive jurisdiction in respect of any matter, claim or
+					dispute arising out of or in relation to this MOU.
+					</span>
+				</p>
+
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					IN WITNESS THEREOF, the parties to this agreement have duly executed it on the day, month and year
+					set forth below.
+				</p>
+
+				<p class="western" align="justify">
+					<span style="font-family: 'Times New Roman', serif;float:left;">
+					By: <u id="partner_auth_sign"></u>
+					</span>
+					<span style="font-family: 'Times New Roman', serif;float:right;">
+					By: __________________________
+					</span>
+				</p>
+				<p class="western" align="justify">&nbsp;</p>
+				<p class="western" align="justify">
+					<span style="font-family: 'Times New Roman', serif;float:left;">
+					Dated: _______________________
+					</span>
+					<span style="font-family: 'Times New Roman', serif; float:right;">
+					Dated: ________________________
+					</span>
+				</p>
+
+				<p class="western" align="justify">&nbsp;</p>
+				<p class="western" align="justify">
+					<span style="font-family: 'Times New Roman', serif;float:left;">
+					Address/Tel no: ________________
+					</span>
+					<span style="font-family: 'Times New Roman', serif;float:right;">
+					Address/Tel no: _________________
+					</span>
+				</p>
+
+				<p class="western" align="justify">&nbsp;</p>
+				<p class="western" align="justify">
+					<span style="font-family: 'Times New Roman', serif;">
+					Witness,
+					</span>
+				</p>
+				<p class="western" align="justify">
+					<span style="font-family: 'Times New Roman', serif;float:left">
+					By: __________________________
+					</span>
+					<span style="font-family: 'Times New Roman', serif;float:right">
+					By: __________________________
+					</span>
+				</p>
+
+				<p class="western" align="justify">&nbsp;</p>
+				<p class="western" align="justify">
+					<span style="font-family: 'Times New Roman', serif; float:left;">
+					Dated: _______________________
+					</span>
+					<span style="font-family: 'Times New Roman', serif;float:right;">
+					Dated:________________________
+					</span>
+				</p>
+
+				<p class="western" align="justify">&nbsp;</p>
+				<p class="western" align="justify">
+					<span style="font-family: 'Times New Roman', serif; float:left;">
+					Address/Tel no: ________________
+					</span>
+					<span style="font-family: 'Times New Roman', serif; float:right;">
+					Address/Tel no: ________________
+					</span>
+				</p>
+				<p class="western" align="justify">&nbsp;</p>
+				<p class="western" align="justify">&nbsp;</p>
+				<p class="western" align="justify">&nbsp;</p>
+				<p class="western">&nbsp;</p>
+				<p class="western">&nbsp;</p>
+				<p class="western" align="center">&nbsp;</p>
+				<p class="western" align="center">&nbsp;</p>
+			</div>
+
+    		<div class="page">
+				<p class="western" align="center">
+					<span style="font-family: 'Times New Roman', serif; font-size: medium;">
+					<strong>Exhibit 1</strong>
+					</span>
+				</p>
+				<p class="western">
+					<span style="font-family: 'Times New Roman', serif;">
+					<strong>Scope &amp; Budget Plan</strong>
+					<strong>:</strong>
+					</span>
+				</p>
+
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					This Scope &amp; Budget Plan (“Scope &amp; Budget Plan”) is executed by and between
+					eVidyaloka Education for All Network Foundation (“eVean Foundation”) and {{mou_form.partner_org_name}} (“PARTNER”) effective as of 
+					<span><h id="start_date_full3">{{start_date_full}}</h></span> and is governed by the
+					terms and conditions of, and shall be attached to the Memorandum of Understanding
+					between eVean Foundation and PARTNER dated <span><h id="start_date_full4">{{start_date_full}}</h></span>. Capitalized terms used
+					but not otherwise defined herein shall have the meanings ascribed to such terms in the
+					MOU.
+				</p>
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					The scope of the engagement is estimated,
+				</p>
+				<p class="western" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						1. To be for <span class="no_of_schools">{{no_of_schools}}</span> school.
+				</p>
+				<p class="western" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					2. Partner personnel to be trained is <span class="no_of_coordinators">{{No_of_Coordinators}}</span> Coordinator.
+				</p>
+				<p class="western" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					3. Start of the engagement is from <span><h id ="start_date_full2">{{start_date_full}}</h></span> and estimated till <h id="end_date_full2">{{estimated_end_date_full}}<h>.
+				</p>
+				<p class="western">&nbsp;</p>
+      			<p class="western">&nbsp;</p>
+				<table cellpadding="7" cellspacing="0" width="622">
+					<tbody>
+						<tr>
+							<td height="17" style="border: 1.00pt solid #95b3d7;padding: 0.18cm;" width="8.208955223880597%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><strong>Sl. No</strong></p>
+							</td>
+							<td
+							style="border-top: 1.00pt solid #95b3d7;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0.18cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="25.559701492537314%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><strong>Solution</strong></p>
+							</td>
+							<td
+							style="border-top: 1.00pt solid #95b3d7;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0.18cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.044776119402986%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><strong>Cost in INR</strong></p>
+							</td>
+							<td
+							style="border-top: 1.00pt solid #95b3d7;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0.18cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.417910447761194%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><strong>Units</strong></p>
+							</td>
+							<td
+							style="border-top: 1.00pt solid #95b3d7;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0.18cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.791044776119403%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><strong>Period</strong></p>
+							</td>
+							<td
+							style="border-top: 1.00pt solid #95b3d7;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0.18cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.97761194029851%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><strong>Total</strong></p>
+							</td>
+						</tr>
+						<tr>
+							<td height="35" style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: 1.00pt solid #95b3d7;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0.18cm;padding-right: 0.18cm;"
+							width="8.208955223880597%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><strong>1</strong></p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="25.559701492537314%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><strong>Academy -
+								Training</strong></p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.044776119402986%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">
+								<br>
+							</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.417910447761194%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">
+								<br>
+							</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.791044776119403%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">
+								<br>
+							</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.97761194029851%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">
+								<br>
+							</p>
+							</td>
+						</tr>
+						<tr>
+							<td height="35"
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: 1.00pt solid #95b3d7;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0.18cm;padding-right: 0.18cm;"
+							width="8.208955223880597%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">
+								<br>
+							</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="25.559701492537314%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">Coordinator</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.044776119402986%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: left;"><span><p id ="rate_of_coordinators">{{rate_of_coordinator}} INR </span></p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.417910447761194%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><span class="no_of_coordinators">{{No_of_Coordinators}}</span></p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.791044776119403%">
+							<p style="margin-bottom: 0cm;line-height: 120%;text-align: left;">1 Time</p>
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: left;">
+								<br>
+							</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.97761194029851%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><span class="coordinator_cost">{{total_co_ordinator_cost}} INR</span></p>
+							</td>
+						</tr>
+						<tr>
+							<td height="18"
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: 1.00pt solid #95b3d7;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0.18cm;padding-right: 0.18cm;"
+							width="8.208955223880597%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><strong>2</strong></p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="25.559701492537314%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><strong>Offering</strong></p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.044776119402986%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">
+								<br>
+							</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.417910447761194%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">
+								<br>
+							</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.791044776119403%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">
+								<br>
+							</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.97761194029851%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">
+								<br>
+							</p>
+							</td>
+						</tr>
+						<tr>
+							<td height="70"
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: 1.00pt solid #95b3d7;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0.18cm;padding-right: 0.18cm;"
+							width="8.208955223880597%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">
+								<br>
+							</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="25.559701492537314%">
+							<p style="line-height: 120%;text-align: justify;margin-bottom: 0cm;">Volunteer Platform</p>
+							<p style="line-height: 120%;text-align: justify;margin-bottom: 0cm;">Jupiter Platform</p>
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">Content Platform</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.044776119402986%">
+							<p style="line-height: 120%;text-align: justify;margin-bottom: 0cm;"><span><p id ="rate_of_volunteers">{{rate_of_volunteer}} </span>INR</p>
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">
+								<br>
+							</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.417910447761194%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><span class="no_of_volunteers">{{No_of_volunteer}}</span></p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.791044776119403%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><span class="no_of_months">{{no_of_month}} Months</span></p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.97761194029851%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><span class="volunteer_total_cost">{{total_volunteer_cost}} INR</span></p>
+							</td>
+						</tr>
+						<tr>
+							<td height="17"
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: 1.00pt solid #95b3d7;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0.18cm;padding-right: 0.18cm;"
+							width="8.208955223880597%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">
+								<br>
+							</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="25.559701492537314%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">
+								<br>
+							</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.044776119402986%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">
+								<br>
+							</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.417910447761194%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;">
+								<br>
+							</p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.791044776119403%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><strong>Grand Total</strong></p>
+							</td>
+							<td
+							style="border-top: none;border-bottom: 1.00pt solid #95b3d7;border-left: none;border-right: 1.00pt solid #95b3d7;padding-top: 0cm;padding-bottom: 0.18cm;padding-left: 0cm;padding-right: 0.18cm;"
+							width="16.97761194029851%">
+							<p style="margin-bottom: 0.25cm;line-height: 120%;text-align: justify;"><strong><span class="total_cost">{{grand_total}} INR</strong></span></p>
+							</td>
+						</tr>
+					</tbody>
+      			</table>
+    		</div>
+			<div class="page">
+				<p class="western" align="justify">
+					<span style="font-family: 'Times New Roman', serif;">
+					<strong>
+						Comments
+					</strong>:
+					</span>
+				</p>
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					1. Cheques to be drawn in favour of Evidyaloka Education for All Network Foundation
+				</p>
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					2. For NEFT, below are Account Details:
+				</p>
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						Evidyaloka Education for all Network Foundation,
+				</p>
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						A/c No: 38817871822, Bank Name: State Bank of India,
+				</p>
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					IFSC: SBIN0030495, PAN No: AAFCE6373A
+				</p>
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					3. For any queries, please contact venkat.sriraman@evidyaloka.org / +91 9902926149
+				</p>
+				<p class="western" align="justify">
+					<span style="font-family: 'Times New Roman', serif;">
+					<strong>Notes</strong>:
+					</span>
+				</p>
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;margin-left:20px;">
+					1. Teacher engagement activation cost is as per utilization, and engagement offered is for a
+					Subject and a Grade, till the end of the academic year. Drop or change within the year
+					will be backfilled without any additional cost.
+					
+				</p>
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;margin-left:20px;">
+					2. One volunteer teacher conducts sessions for one offering in a school. For example, 6th
+					Maths is an offering, 7th Science is an offering.
+				</p>
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;margin-left:20px;">
+					3. One volunteer teacher will conduct 2 sessions in a week for one hour each. In a month, a
+					teacher conducts 8 sessions(hours).
+				</p>
+				<p class="western" align="justify" style="font-family: 'Times New Roman', serif;">
+					This Scope &amp; Budget Plan does not supersede the MOU which defines the terms and conditions
+					of business between eVean Foundation and PARTNER. This Scope &amp; Budget Plan is simply an
+					appendix to the MOU covering specifics for the particular engagement. Should there be any
+					conflict between the MOU and this Scope &amp; Budget Plan, the terms of the MOU shall govern.
+				</p>
+				<p class="western" align="justify"><br /> </p>
+				<p class="western" align="justify"><br /> </p>
+				<p class="western" align="justify">&nbsp;</p>
+				<p class="western">&nbsp;</p>
+			</div>
+			<div class="page">
+				<p class="western" align="center" style="font-family: 'Times New Roman', serif; font-size: medium;">
+					<strong>Exhibit 2 - Terms of Engagement</strong>
+				</p>
+				<h1 class="header_color font_style font_size_lg font_color">General Information</h1>
+				<h2 class="subheader_color font_style font_size_med font_color" align="justify">Purpose:</h2>      <p align="justify">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				  eVean Foundation is committed to providing quality education to the children in the rural
+				  villages of our motherland.
+				</p>
+				<p align="justify">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					This exhibit contains details of the operational arrangements eVean Foundation makes with <strong>{{mou_form.partner_org_name}}</strong> (hereafter referred to PARTNER) as by way of a partnership to achieve this
+					goal - to provide quality education to the children in the rural schools.
+				</p>
+				<h2 class="subheader_color font_style font_size_med font_color" align="justify">Program Scope</h2>
+				<p align="justify">eVidyaloka targets to extend educational services:</p>
+				<p align="justify" style="position: relative; left:30px;">
+				  In Maths, Science and English </p>
+				<p align="justify" style="position: relative; left:60px;">
+				  For Class V to VIII based on local State Board curriculum</p>
+				<p align="justify" style="position: relative; left:90px;">
+				  Through set up of Digital Classroom &amp; web conference online teaching</p>
+				<p align="justify" style="position: relative; left:120px;">
+				  With the support of teacher volunteers and partnering organizations</p>
+				<h2 align="justify" class="subheader_color font_style font_size_med font_color">Roles &amp; Responsibilities:</h2>
+				<p ">PARTNER will,</span></p>
+				<ul>
+					<li><strong>1. </strong>ensure that the PARTNER’s services are aligned with the Schools’ needs and objectives
+						of the program</li>
+					<li><strong>2. </strong>ensure that it meets all the regulatory requirements and all its licenses/certifications
+						etc. for carrying out the activities and are valid and current</li>
+					<li><strong>3. </strong>provide access to eVean Foundation’s and/or their authorized representatives to the
+						locations or centres where PARTNER is conducting its activities, for the effective
+						functioning of the program</li>
+					<li><strong>4. </strong>ensure that their agreements with contractors, school authorities or any third party
+						working along with the PARTNER contains proper anti-corruption and
+						confidentiality/data protection provisions (specifically complying with FCRA laws) and
+						the responsibility in ensuring compliance with applicable laws of the land.</li>
+				</ul>
+				<p align="justify" style="position: relative; left:30px;">
+					eVean Foundation has a commitment to comply with a policy on Data Protection and Privacy.
+					Therefore it is required that PARTNER appreciates the sensitivity on all data on eVidyaloka
+					including eVidyaloka staff, Volunteers, Donors, Schools and Students. PARTNER agrees to
+					comply with Data Protection and Privacy Policy as given in Exhibit 3.
+				</p>
+				<br/>
+				<p align="justify" style="position: relative;;">
+					eVidyaloka Education for All Network Foundation will,
+				</p>
+				<ul style="position: relative; left:40px;">
+				  <li><strong>1. </strong>Ensure that all eVean Foundation personnel comply with policy and systems in place at
+					  Schools, as shared by the PARTNER.</li>
+				  <li><strong>2. </strong>Provide required data and information on the program to PARTNER/Schools
+					  participating in the program.</li>
+				  <li><strong>3. </strong>Will maintain strict confidentiality of all information about Schools/students received
+					  under this MOU.</li>
+				  <li><strong>4. </strong>Train the identified Class Coordinator(s), Partner coordinator(s).</li>
+				  <li><strong>5. </strong>Maintain the technology platform and provide the necessary support needed for the
+					  remote class delivery operations</li>
+				  <li><strong>6. </strong>Identify volunteer teachers for selected class levels and subjects, as mutually agreed.</li>
+				</ul>
+				<br/>
+				<h1 class="header_color font_style font_size_lg font_color" align="justify">Infrastructure</h1>
+				<h2 class="subheader_color font_style font_size_med font_color" align="justify">Digital Classroom setup</h2>
+				<p align="justify" style="position: relative; left:30px;">A typical eVidyaloka digital classroom consists of the following. However, the setup can vary and be
+					different, which would still ensure, enablement of online classes.</p>
+					<ol style="position: relative; left:40px;">
+					  <li><strong>1. </strong>Computer (CPU)</li>
+					  <li><strong>2. </strong>LED TV</li>
+					  <li><strong>3. </strong>Webcam (with in-built Microphone)</li>
+					  <li><strong>4. </strong>Cables to connect</li>
+					  <li><strong>5. </strong>Internet Dongle</li>
+					  <li><strong>6. </strong>Electrical utilities and Inverter systems</li>
+					  <li><strong>7. </strong>A soft board</li>
+					  <li><strong>8. </strong>Speaker Assembly</li>
+					</ol>
+					<br/>
+				<p align="justify">PARTNER will identify the students (school/academic class level/subject) and work with the concerned
+					school administration to ensure the availability of classroom, the essential furniture for the classroom,
+					and infrastructure as above.</p>
+				<p align="justify">PARTNER will work with concerned school administration for maintenance and safe upkeep of the
+					classroom and will ensure that the assets are in working condition.</p>
+				<p align="justify">PARTNER will inform eVean Foundation for disruptions owing to any reason.</p>
+			  </div> 
+			  <div class="page">
+				<p align="justify">PARTNER will be responsible for the availability of the Internet through wired Broadband or Wi-Fi during
+					the class hours.</p>
+				<p align="justify">PARTNER will ensure Power &amp; Backup as necessary for the conduct of classes.</p>
+				<br/>
+				<h1 class="header_color font_style font_size_lg font_color" align="justify">Operations</h1>
+				<h2 class="subheader_color font_style font_size_med font_color">Training</h2>
+				<p align="justify">eVean Foundation’s Academy team will coordinate and deliver the identified and agreed training and
+					development requirements of the engagement, as per the agreed scope and budget.</p>
+				<h2 class="subheader_color font_style font_size_med font_color">Jupiter Platform Support</h2>
+				<p align="justify">Setup and Maintenance of the platform: Jupiter will be hosted in cloud servers and will be maintained by
+					eVidyaloka. eVidyaloka will also ensure system uptime and resolve issues that would be encountered, from time to time.</p>
+				<p align="justify">Any additional capabilities/features/feedback requested/provided will be taken up separately and considered for 
+					implementation as per the platform roadmap and discretion of eVean Foundation.</p>
+				<h2 class="subheader_color font_style font_size_med font_color">Volunteer Support</h2>
+				<p align="justify">eVidyaloka will onboard and work with the volunteers mobilized by the PARTNER. Volunteer allocation will be 
+					taken up as per scope and budget after the volunteers have registered online with eVidyaloka and have been recommended to teach by eVidyaloka.</p>
+				<h2 class="subheader_color font_style font_size_med font_color">Dispute Resolution/Arbitration:</h2>
+				<p align="justify">All disputes and differences arising out of or in connection with this MOU, including any question
+					regarding its existence, validity or termination, shall be referred to and finally resolved by arbitration in
+					Bangalore in accordance with the Arbitration and Conciliation Act, 1996 for the time being in force at
+					the commencement of the arbitration, which rules are deemed to be incorporated by reference in this
+					clause.</p>
+				<p align="justify">The Tribunal shall consist of three (3) arbitrators, two arbitrators nominated by each of the party and
+					the two arbitrators, in turn, appointing the presiding arbitrator.</p>
+				<p align="justify">The award of the Arbitrator shall be final, conclusive and binding on both the parties to this MOU.</p>
+				<h2 class="subheader_color font_style font_size_med font_color">Force Majeure</h2>
+				<p align="justify">This agreement is subject to Force Majeure clause. Neither party is deemed to have violated the
+					contractual obligation if impacted by the Force Majeure events such as Acts of God, Acts of War, Acts of
+					Government and local bodies, blockades, strikes, civil commotion, riots and the like. The party affected
+					by Force Majeure shall give notice within a period of 15 days from the date of occurrence of Force
+					Majeure indicating its cause and the period for which it is likely to last or affect execution.</p>
+				<h1 class="header_color font_style font_size_lg font_color" align="justify">FINANCIALS</h1>
+				<h2 class="subheader_color font_style font_size_med font_color">Budget/Planning</h2>
+				<p align=="justify">eVean Foundation and PARTNER will develop and enter into one or more Scope & Budget Plan as applicable.</p>
+				<p align="justify">All anticipated expenses and therefore the budget must be documented in a Scope & Budget Plan and executed by the parties. </p>
+				<h2 class="subheader_color font_style font_size_med font_color">CONFIDENTIALITY:</h2>
+				<p align="justify">PARTNER shall regard and preserve as confidential all information that may be obtained from any source
+					or may be developed in the course of this cooperation, by any means, during the period of the program
+					or otherwise and is related either to the digital classroom activities of eVidyaloka, its clients, consultants
+					or other entities with whom eVidyaloka does CSR activities; information relating to its employees; or
+					such other information that may be considered confidential by its very nature</p>
+				<p align="justify">PARTNER shall not use any time the name, logo or tagline of eVidyaloka in publicity releases,
+					promotional materials, announcements, client listings, testimonials or advertising without the prior
+					written consent of eVidyaloka.</p>
+				<p align="justify">eVean Foundation shall be entitled to use the name and trademarks of PARTNER in its statutory reports,
+					promotional material etc. with prior consent from PARTNER.</p>
+					
+				<p align="justify"><br /> </p>
+				<p>&nbsp;</p></div>
+				<div class="page">
+					<p class="western" align="center" style="font-family: 'Times New Roman', serif; font-size: medium;">
+				<strong>Exhibit 3</strong>
+				<p class="western" align="center" style="font-family: 'Times New Roman', serif; font-size: medium;">Organization name:{{mou_form.partner_org_name}}</p>
+				<p align="justify">For the attention of Representative</p>
+				<p align="justify">After compliments.</p>
+				<p align="justify">Subject: <strong>Compliance with the General Data Protection Regulation</strong>  </p>
+				<p align="justify">Our (eVidyaloka’s) Data Policy complies with the European General Data Protection Regulation (GDPR) and therefore has a specific
+					obligation with regard to our vendor relationships. The GDPR requires companies to conduct appropriate due diligence on processors and to have contracts
+					requiring each party to comply with all applicable laws.</p>
+				<p align="justify">This document is your assurance to us that you have implemented appropriate technical and organizational measures in such a manner that your
+					processing of Personal Data will meet the requirements of the GDPR and ensure the protection of the rights of the data subjects. </p>
+				<p align="justify">You shall not engage any Subprocessor without our prior specific or general written authorization. If done your contract with the Subprocessor
+					shall contain sufficient guarantees that the processing will meet the requirements of the GDPR.  </p>
+				<p align="justify">Further, </p>
+				<p align="justify">(a) You shall process the Personal Data only </p>
+				<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(i) As needed to provide the Services, </p>
+				<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ii) In accordance with the specific instructions that it has received from us, 
+					including with &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					regard to any Transfers, and </p>
+				<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(iii) As needed to comply with the law (in which case, you shall provide prior notice to us 
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of such legal requirement, unless that law prohibits this disclosure); </p>
+				<p align="justify">(b) You shall ensure that persons authorized to process the Personal Data have committed themselves to confidentiality or are under an appropriate statutory obligation of 
+				confidentiality; </p>
+				<p align="justify">(c) You shall implement appropriate technical and organizational measures to ensure a level of security appropriate to the risk, including the ability to restore the availability 
+				and access to Personal Data in a timely manner in the event of a physical or technical incident. </p>
+				<p align="justify">In assessing the appropriate level of security account shall be taken in particular of the risks that are presented by processing, in particular from accidental or unlawful destruction, 
+				loss, alteration, unauthorized disclosure of, or access to Personal Data transmitted, stored or otherwise processed.</p>
+				<p align="justify">(f) At our discretion, you shall delete or return all the Personal Data to us after the end of the provision of services relating to Processing, and delete existing copies </p>
+				<p align="justify">(g) You shall provide us with all information necessary to demonstrate compliance with the obligations laid down in the GDPR, and allow for and contribute to audits, including inspections, 
+				conducted by us or another auditor mandated by us.</p>
+				<p align="justify">(h). You shall not transfer any Personal Data without our prior consent. </p>
+				<p align="justify">(i). You will promptly and thoroughly investigate all allegations of unauthorized access to, use or disclosure of the Personal Data. You will notify us without undue delay in the event of any 
+				Personal Data Breach. </p>
+				<br>
+				<br>
+				<p align="justify">e request you to please sign this letter in duplicate and return the same to us as your agreement and compliance to the data protection and privacy as above.</p>
+				<p align="justify">Thanking you.</p>
+				<p align="justify"><strong>Education for All Network Foundation</strong> </p>
+
+
+
+
+
+				</div>
+  		</div>
+	</div>
+<script>
+	// Firefox 1.0+
+    var isFirefox = typeof InstallTrigger !== 'undefined';
+
+	$(document).ready(function() {
+		$(".question").each(function() {
+			$(this).click(function(e) {
+				var $span = $(this).children();
+				if($span.hasClass("glyphicon glyphicon-play")) {
+					$span.removeClass("glyphicon glyphicon-play");
+					$span.addClass("glyphicon glyphicon-triangle-bottom");
+				}
+				else {
+					$span.removeClass("glyphicon glyphicon-triangle-bottom");
+					$span.addClass("glyphicon glyphicon-play");
+				}
+				var $ans = $(this).next();
+				$ans.slideToggle();
+				e.stopPropagation();
+			});
+        });
+
+		$(".answer a").click(function(e){
+			e.stopPropagation();
+		});
+
+		if ( !isFirefox ) {
+			$("#id_available_from").css("line-height", "33px");
+		}
+	});
+  $('#submitBtn').click(function () {
+    /* when the button in the form, display the entered values in the modal */
+    var available_from_date = new Date(document.getElementById('id_available_from').value);
+    var option = {year: 'numeric',
+                month: 'long', day: 'numeric' };
+    if (available_from_date) {
+      $('.available_from').html((available_from_date.toLocaleDateString('de-US', option).toString().replace('.', '')));
+    } else {
+      message = 'For preview number of school, number of coordinator and no of volunteer fields are mandatory.'
+    //   $('#alert_placeholder').html("<div><span style='color:white;text-aligh:center'>"+"........"+"<span style='color:red;text-aligh:center'>"+ message + "</span></div>" )
+    }
+    $('#typ').text($('#id_author').val());
+    $('#dat').html($('#id_no_coordinator').val());
+    $('#pdat').html($('#id_no_volunteer').val());
+    $('#remark').html($('#id_').val());
+    $('#mou').html($('#id_mou_value').val());
+    $('#partner_auth_sign').html($('#id_author').val());
+  });
+
+  $(document).ready(function () {
+    $(function () {
+      $('#from').datepicker({
+        changeMonth: true,
+        minDate: new Date(2013, 3, 1),
+        dateFormat: "dd-mm-yy"
+      });
+    });
+  });
+
+
+  function checkCheckBoxes(theForm) {
+    no_of_coordinator = Number(document.getElementById('id_no_of_coordinator').value);
+	no_of_school = Number(document.getElementById('id_no_of_school').value);
+	if($(document.activeElement).val() != 'Draft') {
+		if (theForm.CHECKBOX_1.checked == false) {
+			console.log("entering amit testing .........................................")
+			message = 'Please click on the checkbox.'
+			$('#alert_placeholder1').html("<div><span style='color:white;text-aligh:center'>"+"........"+"<span style='color:red;text-aligh:center'>"+ message + "</span></div>" )
+			return false;
+		} else {
+			return true;
+		}
+	} else {
+		return true;
+	}
+  }
+
+  function open_modal() {
+    var no_of_school = Number(document.getElementById('id_no_of_school').value);
+    var no_of_coordinator = Number(document.getElementById('id_no_of_coordinator').value);
+    var no_of_volunteer = Number(document.getElementById('id_no_of_volunteer').value);
+    var available_from = new Date(document.getElementById('id_available_from').value);
+	var rate_of_volunteer = Number(document.getElementById('rate_of_volunteer').value);
+    var rate_of_coordinator = Number(document.getElementById('rate_of_coordinator').value);
+    if((no_of_coordinator || no_of_coordinator ==0) && no_of_school && no_of_volunteer && available_from.toString() != 'Invalid Date') {
+      $('#confirm-submit').modal('show');
+    } else {
+      message = "Number of school, No of coordinator, number of volunteer and created date is required for preview document."
+    //   $('#alert_placeholder').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>')
+    }
+  }
+  $('.alphaonly').bind('keyup blur', function () {
+	
+	var node = $(this);
+	// alert("calling")
+    node.val(node.val().replace(/[0-9!@#$%^&*(),.?":{}|<>';/~`|/]/g,'') ); 
+  });
+
+  function removeRequired(form) {
+    $.each(form, function (key, value) {
+      if (value.hasAttribute("required")) {
+        document.getElementById("id_author").required = false;
+        document.getElementById("id_author_evd").required = false;
+      }
+    });
+  }
+
+  function hideBoth()  
+{  
+   document.getElementById("agreement").style.visibility="hidden";  
+}
+
+// function myFunction() {
+//   var x = document.getElementById("id_no_of_school").value;
+//   var no_of_school = Number(document.getElementById('id_no_of_school').value);
+//   var no_of_coordinator = Number(document.getElementById('id_no_of_coordinator').value);
+//   if (no_of_coordinator>= no_of_school ){
+  
+//   }
+//   else {
+// 	document.getElementById("agreement").style.visibility="hidden";
+//   }
+// }
+</script>
+{% endblock %}
+

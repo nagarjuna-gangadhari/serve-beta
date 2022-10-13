@@ -1,0 +1,724 @@
+{% extends "base.html" %} {% block head_styles %} {{ block.super }}
+{% endblock %} {% block head_scripts %} {{ block.super }}
+
+<link href="/static/css/select2.min.css" rel="stylesheet">
+<script src="/static/js/select.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.6.2/standard/ckeditor.js"></script>   
+<script type="text/javascript" src="/static/js/bootstrap-datepicker.min.js"></script>
+
+<style>
+
+.btn-primary{
+background: #337ab7 !important;
+}
+a{
+color: #337ab7; !important;
+}
+a:hover{
+color: #23527c; !important;
+}
+
+.btn-primary:hover, .btn:focus, .btn.focus {
+    color: #333;
+    text-decoration: none;
+}
+</style>
+<style>
+.rowCss {
+            margin-right: 0px !important;
+               margin-left: 0px !important;
+               padding: 20px; 
+                 }
+.input-group-addon{
+            color: white; background-color: #337ab7;
+        }
+.input-group-addon:hover {
+   background-color: #337ab7;
+} 
+.tile_count {
+    margin-bottom: 2px;
+    margin-top: 2px;
+}
+.chart {
+    width: 100%;
+    height: 290px;
+    border-radius: 4px;
+    margin-top: 10px;
+    padding: 20px;
+    position: relative;
+}
+
+.count {
+    font-size: 10px;
+}
+
+.count1 {
+    font-size: 14px;
+    margin-left: 0px;
+}
+
+.chartBoxCss {
+    height: 370px;
+}
+.btnCss {       
+    margin-top: 23px;  
+}
+/* .container {
+  width: 100%;
+  padding: 0
+} */
+.inner {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+.navbar-default {
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+.tile_count {
+    margin-top: 0px !important;
+}
+</style>
+{% endblock %} {% block body_container %}
+
+<div class="container-fluid " style = " margin-left: 25px;margin-top: 20px;">
+    <div class="row rowCSS">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="panel panel-default">
+                                            <div id="messageBoxDiv"></div>
+                            <div class="row rowCss">
+                                {% if task.taskType == "SYSTEM" %}
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+
+                                    <h3>Perform On</h3>
+
+                                </div>
+                                {% else %}
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <h3>Edit Task</h3>
+                                </div>
+                                {% endif %}
+                                <div class="col-md-2 col-xs-12"></div>
+                                </div>
+
+                                            {% if task.taskType == "SYSTEM" %}
+
+
+                            <div class="row rowCss" style="margin-bottom: -40px;">
+                                <div class="col-xs-4">
+                                    <label>First Name :</label> <input type="text" name="firstname"
+                                    value="{{system_user.first_name}}" readonly="readonly"  style="border: 0;display:inline-block;">
+                        </div>
+                                <div class="col-xs-4">
+                                    <label>Last Name :</label> <input type="text"
+                                    name="firstname" value="{{system_user.last_name}}" readonly="readonly" style="border: 0;display:inline-block;">
+                                </div>
+                                <div class="col-xs-4">
+                                    <label>Username :</label> <input type="text"
+                                    name="username" value="{{system_user.username}}" readonly="readonly" style="border: 0;display:inline-block;">
+                                </div>
+                            </div>
+                            <div class="row rowCss" style="margin-bottom: -40px;">
+                                <div class="col-xs-4">
+                                    <label>Phone No. :</label> <input type="text" name="phone"
+                                    value="{{system_user.userprofile.phone}}" readonly="readonly" style="border: 0;display:inline-block;">
+                                </div>
+                                <div class="col-xs-4">
+                                    <label>City :</label> <input type="text" name="city"
+                                    value="{{system_user.userprofile.city}}" readonly="readonly" style="border: 0;display:inline-block;">
+                                </div>
+                                <div class="col-xs-4" id="newRole">
+                                    <label>Role :</label><span id="roleDataId">
+                                    {% if pref_roles %}
+                                        {% for role in pref_roles %}
+                                            {% if role == pref_roles|last %}
+                                                {{role}}
+                                            {% else %}
+                                                {{role}},
+                                            {% endif %} 
+                                        {% endfor%}
+                                    {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                            <br />
+                        <div class="row">
+                            <div class ="col-md-3 col-sm-2 col-xs-2">
+                               <label><b>Select any one from given checklist</b></label>
+                            </div>
+                            <div class ="col-md-2 col-sm-2 col-xs-2">
+                                <div class="input checkbox  ">
+                                    <input type="checkbox" class="checkBox" name="interested_in" id="interested_in" onclick="changeRole()" /><label for="interested_in" style="padding-left: 30px; float: left; font-size: 14px; margin-bottom: 10px; display: inline; margin-top: 20px;">Interested in other role</label><br>
+                                    <br>
+                                    <input type="checkbox" class="checkBox" name="not_interested" id="not_interested" onclick="hideRole()" style="margin-left:100px" /><label for="not_interested" style=" font-size: 14px; margin-bottom: 10px; display: inline; margin-top: 20px;">Not Intrested</label>
+                                    <br>
+                                    <input type="checkbox" class="checkBox" name="complete_TSD" id="complete_TSD" onclick="completeTsd()" style="margin-left:100px" /><label for="complete_TSD" style=" font-size: 14px; margin-bottom: 10px; display: inline; margin-top: 20px;">Book TSD Slot</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-2 col-xs-2">
+                                    <label id="roleLabel" style="margin-bottom:-10px;display :inline" ><span style="color: red;">*</span>Select Role</label>
+                                        <select id="role_id" name="role_id" class="form-control" style="margin-top: 6px;">
+                                        <option value="">Select Role</option>
+                                        {% if roles%}
+                                            {% for role in roles %}
+                                                <option value="{{role.name}}">{{role.name}}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                        </select>
+                            </div>
+                            <div class="col-md-2" style="margin-top:26px;">
+                                <button type="submit" class="btn btn-primary btnCSS" id="updateRole" onclick="updateRole()">Update Role</button>
+                                <button type="submit" class="btn btn-primary btnCSS" id="updateStatus" onclick="update_user_status();" style="margin-top: 50px;margin-left: -210px;">Update Status</button>
+<!--                                 <a href="/book_sd_slots/?teacher&id={{task.id}}&uid={{task.performedOn_userId}}&tab={{tabName}}"><button type="submit" class="btn btn-primary btnCSS" id="completeTSD" style="margin-top: 95px;margin-left: -210px;"> -->
+                                    <a href="#"><button type="submit" class="btn btn-primary btnCSS" id="completeTSD" style="margin-top: 95px;margin-left: -210px;">
+                                    Save
+                                </button></a>
+                                <input type="hidden" id="userProfile_id" value="{{task.performedOn_userId}}" /> 
+                            </div>
+                            <div class="col-md-3 col-sm-2 col-xs-2">
+                                    
+                                        
+                                    </div>
+                        </div>
+                    {% endif %}
+
+                                <form action="/updateTask/" id="formId" method="post" onsubmit="return validateMyForm();">
+                                    {% csrf_token %}
+                                            <input type="hidden"  value="{{task.id}}" name="taskId" id="tsk_id" />
+                                            <input type="hidden"  value="{{message}}" name="message" />
+                                            <input type="hidden"  value="{{task.taskType}}" name="task_type" />
+                                            <input type="hidden"  value="{{tabName}}" name="tabName" id="tabNameId" />
+                                            <input type="hidden" value="{{vol_co_ordinator_role}}" id="vol_co_ordinator_role_id"/>
+                                            <input type="hidden"  value="{{isSuperuser}}"  id="is_superuser" />
+                                            <input type="hidden"  value="{{booking_flag}}"  id="booking_flag" />
+                                            <input type="hidden" id="createdBy_id" name="createdById" class="form-control" value="{{task.taskCreatedBy_userId}}">
+                                <div class="row rowCss">
+                                       <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <div class="input-group" style="margin-top:25px;">
+                                               <div class="input-group-addon"><i class="fa fa-bars "></i></div>
+                                                  <label class="input-group-addon">Task Information</label>
+                                       </div>
+                                </div>
+                            </div>
+                            <div class="row rowCss" >
+                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                    <label><span style="color: red;">*</span>Task Name</label>
+                                    <input type="text" id="taskid" name="taskName" class="form-control" value="{{task.subject}}" placeholder="Enter Task Name" required="required"/>
+                                </div>
+                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                    <label><span style="color: red;">*</span>Due Date</label>
+                                    <div class="col-md-12 input-group">
+                                        <input type="hidden" value="{{task.dueDate|date:'d-m-Y'}}" id="due_date"  />
+                                        <input type="text" id="due_dateId" value="{{task.dueDate|date:'d-m-Y'}}" name="dueDate" class="form-control"  required="required" placeholder="Select Date"  />
+                                        <label class="input-group-addon btn" for="due_dateId" title="Select Due Date" style="cursor: default !important;"> <span class="fa fa-calendar" title="Select Due Date" style="cursor: default !important;"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                <input type="hidden" value="{{task.taskType}}" id="taskTypeValue"/>
+                                <label>Task Type</label> 
+                                <select name="type" id="task_type" class="form-control" {% if not user.is_superuser %} disabled="true" {% endif %}{% if not user.is_superuser and task.taskType == "SYSTEM"  %} disabled="true" {% endif %}>
+                                        <option value="MANUAL" {% if task.taskType == 'MANUAL'%} selected="selected" {% endif %}>Internal</option>
+                                        <option value="OTHER" {% if task.taskType == 'OTHER'%} selected="selected" {% endif %}>Other Opportunity</option>
+                                        {% if task.taskType == "HELP" %}
+                                        	<option value="HELP" selected="selected">Help Request</option>
+                                        {% endif %}
+                                        {% if task.taskType == "ISSUE" %}
+                                        	<option value="ISSUE" selected="selected">Issue</option>
+                                        {% endif %}
+                                        {% if task.taskType == "FEEDBACK" %}
+                                        	<option value="FEEDBACK" selected="selected">Feedback</option>
+                                        {% endif %}
+                                        {% if task.taskType == "SYSTEM" %}
+                                        <option value="SYSTEM" selected="selected">System</option>
+                                        {% endif %}
+                                </select>
+                            </div>
+                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div id="performedOn_div">
+                                 <label>Performed On</label>
+                                   <input type="hidden" name="prfm_name" id="prfm_name_id" value="{{task.performedOn_name}}"/>
+                                    <input type="hidden" name="prfm_id" id="prfm_id" value="{{task.performedOn_userId}}" />
+                                    <input type="text" value="{{task.performedOn_name}}" id="prfm_text" class="form-control" title="Enter 4 or more character" placeholder="Enter 4 or more character" />
+                                </div>
+                                <div id="category_div">
+                                  <label>Category</label>
+                                  <input type="hidden" value="{{task.category}}" id="category"/>
+                                        <select  id="category_id" name="categoryId" class="form-control" value="{{task.category}}" style="width: 253px;">
+                                            <option value="MARKETING" {% if task.category == 'MARKETING'%} selected="selected" {% endif %}>Marketing</option>
+                                         <option value="ADMIN" {% if task.category == 'ADMIN'%} selected="selected" {% endif %}>Admin</option>
+                                         <option value="IT" {% if task.category == 'IT'%} selected="selected" {% endif %}>IT</option>
+                                         <option value="REPORTING" {% if task.category == 'REPORTING'%} selected="selected" {% endif %}>Reporting</option>
+                                        </select>
+                                </div> 
+                                </div>
+                                    
+                            </div>
+                            <div class="row rowCss">
+                                <div class="adjoined-bottom col-xs-12 col-sm-12 col-md-12">
+                                    <label>Comments :</label>
+                                      <input type="hidden" name="" id="editor2" />
+                                     <textarea name="editor1">
+                                           {{task.comment}}
+                                        </textarea>
+                                       <script>
+                                        CKEDITOR.replace( 'editor1' );
+                                        CKEDITOR.config.autoParagraph = false;
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="row rowCss"><div class="col-md-2 col-sm-6 col-xs-12"></div></div>
+                            <div class="row rowCss">
+                                   <div class="col-md-2 col-sm-6 col-xs-12">
+                                    <div class="input-group">
+                                           <div class="input-group-addon"><i class="fa fa-bars"></i></div>
+                                              <label class="input-group-addon" >Additional Information</label>
+                                       </div>
+                                </div>
+                            </div>
+                            <div class="row rowCss">
+                                 <div class="col-md-4 col-sm-4 col-xs-6">
+                                    <label ><span style="color: red;">*</span>Status</label>
+                                    <input type="hidden" value="{{task.taskStatus}}" id="status_ids"/>
+                                    <select id="status_id" name="statusId" class="form-control" value="{{task.taskStatus}}" required="required" >
+                                        <option value="Open" >Open</option>
+                                        <option value="WIP" >WIP</option>
+                                        <option value="Closed" >Closed</option>
+                                        <option value="Resolved" >Resolved</option>
+                                         
+                                    </select>
+                                </div> 
+                                    
+                                <div class="col-md-4 col-sm-4 col-xs-6">
+                                    <label ><span style="color: red;">*</span>Priority</label>
+                                    <input type="hidden" value="{{task.priority}}" id="pri_id"/>
+                                    <select id="priority_id" name="priorityId" class="form-control" value="{{task.priority}}" required="required">
+                                        <option value="Normal">Normal</option>
+                                        <option value="High" >High</option>
+                                        <option value="Urgent" >Urgent</option>
+                                        <option value="Immediate" >Immediate</option> 
+                                       </select>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12" id="assignto_div">
+                                    <label ><span style="color: red;">*</span>Assign To</label>
+                                    <input type="hidden" id="setassignedTo_id" value="{{task.assignedTo}}"/>
+                                    <input type="hidden" name="assign_name_id" id="assign_name_id" value="{{task.assignedTo}}"/>
+                                    <input type="hidden" id="assign_nameId" value="{{task.assignedTo}}-{{assignedId}}"/>
+                                    <input type="text" name="assignId" class="form-control" id="assign_id" title="Enter 4 or more character" {% if task.assignedTo %} value="{{task.assignedTo}}-{{assignedId}}" {% else %} value="{{logged_in_username}}" {% endif %} placeholder="Enter 4 or more character" />
+                                   <!--  <select id="assign_id" name ="assignId" class="select2_multiple form-control" required="required" >
+                                     
+                                       </select> -->
+                                </div>
+                            </div>
+                        <div class="row rowCss row-center" align="center" style="    margin-bottom: 10px;">
+                            <button type="submit" class="btn btn-primary btnCSS" >Update</button>
+                            <button type="button" class="btn btnCSS" onclick="cancel_page()">Cancel</button>
+                        </div>
+                                </form>
+                    </div>
+            </div>
+    </div>
+ <div class="modal fade" id="error_model">
+     <div class="modal-content">
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+  </div>
+
+</div>
+
+
+<script>
+$(document).ready(function(){
+	$("#prfm_text").autocomplete({
+	    source: "/v2/ajax/get_users?action=performed_on",
+	    minLength: 4,
+	    select: function(event, ui) {
+	        $("#prfm_name_id").val(ui.item.value)
+	        $("#prfm_id").val(ui.item.id)
+	    }
+	});
+	$("#assign_id").autocomplete({
+	    source: "/v2/ajax/get_users?action=assigned_to",
+	    minLength: 4,
+	    select: function(event, ui) {
+	        $("#assign_id").val(ui.item.value)
+	        $("#assign_name_id").val(ui.item.name)
+	        $("#assign_nameId").val(ui.item.value)
+	    }
+	});
+	checkTaskType(); 
+});
+</script>
+
+
+ <script type="text/javascript">
+    $(document).ready(function(){
+        var task_type_value = $("#taskTypeValue").val();
+        if (task_type_value!=null && task_type_value!='' && task_type_value!='undefined'){
+            $("#task_type").val(task_type_value);
+        }
+        var vol_co_ordinator_role = $("#vol_co_ordinator_role_id").val();
+      if (vol_co_ordinator_role == 'True'){
+          $("#prfm_text").attr("disabled","disabled");
+          $("#category_id").attr("disabled","disabled");
+          $("#category").attr("name","categoryId");
+          $("#setPerformedOn_id").attr("name","performedId");
+          $("#setassignedTo_id").attr("name","assignId");
+          $("#taskid").attr('readonly','readonly');
+          $("#priority_id").attr('readonly','readonly');
+          $('#priority_id').attr("disabled", true); 
+          $("#due_dateId").attr('readonly','readonly');
+          $('#due_dateId').attr("disabled", true);
+          $("#pri_id").attr("name","priorityId");
+          
+          $("#due_date").attr("name","dueDate");
+          $("#assign_id").attr("disabled","disabled");
+         
+      }
+});
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(
+        function(){
+            $("#messageBoxDiv").empty();
+            var value2=$("#status_ids").val();
+            $("#status_id").val(value2);
+            var value3=$("#pri_id").val();
+            $("#priority_id").val(value3);
+    });
+    $("#task_type").change(function(){
+        checkTaskType();
+    });
+       
+    function checkTaskType(){
+        var taskType = $("#task_type").val();
+        var isSuperuser = $("#is_superuser").val();
+        if(taskType!=null && taskType!='' && taskType!='undefined'){
+            if(taskType=='MANUAL' || taskType=='SYSTEM' || taskType=='HELP' || taskType=='ISSUE' || taskType=='FEEDBACK'){
+                if(isSuperuser=='True'){
+                $("#prfm_text").removeAttr("disabled");
+                $("#assign_id").removeAttr("disabled");
+                }
+                $("#performedOn_div").show();
+                $("#assignto_div").show();
+                $("#category_div").hide();
+            }
+            else if(taskType=='OTHER'){
+                $("#prfm_text").attr("disabled",true);
+                $("#assign_id").attr("disabled",true);
+                $("#performedOn_div").hide();
+                $("#assignto_div").hide();
+                $("#category_div").show();
+            }
+         } 
+     }
+</script>
+<script>
+    $(".readonly").keydown(function(e) {
+        e.preventDefault();
+    });
+    $(document).ready(
+            function() {
+            	var booking_flag = $('#booking_flag').val();
+        		if(booking_flag == 'true'){
+        			$("#complete_TSD").val('on');
+        			$("#complete_TSD").attr('checked','checked');
+        			completeTsd();
+        		}
+                 $("#messageBoxDiv").empty();
+                var date_input = $('input[id="due_dateId"]');
+                var container = $('.bootstrap-iso form').length > 0 ? $(
+                        '.bootstrap-iso form').parent() : "body";
+                var options = {
+                    format : 'dd-mm-yyyy',
+                    container : container,
+                    todayHighlight : true,
+                    autoclose : true,
+                    /* startDate :'0d', */
+                };
+                date_input.datepicker(options).on('changeDate',
+                        function(selected) {
+                    var dueDateVar = new Date(selected.date.valueOf());
+                    $('#due_date').datepicker('setDate', dueDateVar);
+                    $('#due_date').datepicker( {dateFormat: 'yyyy-mm-dd'});
+                });            
+            });
+    $(".select2_multiple").select2({
+        maximumSelectionLength : 1000
+    });
+
+    $(".select2_multiple").select2({
+        maximumSelectionLength : 1000
+    });
+    $('.checkBox').click(function() {
+        $(this).siblings('input:checkbox').prop('checked', false);
+    });
+    
+    
+</script>
+<script>
+   function cancel_page(){
+       var value = $("#tabNameId").val();
+       if(value != null && value != '' && value !='undefined' && value != 'None'){
+            window.location = "/task_list/?tab={{tabName}}";
+       }else{
+           window.location = "/task_list";           
+       }
+   }
+   </script>
+   <script type="text/javascript">
+   $("#succes").hide();
+   $('#role_id').hide();
+   $('#updateRole').hide();
+   $('#roleLabel').hide();
+   $('#updateStatus').hide();
+   $('#error_message').hide();
+   $('#completeTSD').hide();
+       
+    $("#performed_id").change(function(){
+        var performed_on_select = $("#performed_id option:selected").text();
+        $('#ufl_name_id').val(performed_on_select);
+    });
+   </script>
+   <script>
+  function validateMyForm(){
+       var date_input = $('input[id="due_dateId"]');
+        var interested = $("#interested_in").val();
+       var selectRole = $('#role_id').val();
+       if ($("#prfm_name_id").val()!=$("#prfm_text").val()){
+    	   $("#prfm_name_id").val('');
+    	   $("#prfm_text").val('');
+    	   $("#prfm_id").val('');
+       }
+       if ($("#assign_nameId").val()!=$("#assign_id").val()){
+    	   $("#assign_name_id").val('');
+    	   $("#assign_nameId").val('');
+    	   $("#assign_id").val('');
+       }
+       if(date_input.val() == '' | (interested == 'off' & selectRole == '')){
+    	   var message = '';
+    	   message = "Please Enter All Mandatory(*) Fields";
+    	   errorMessage(message);
+           return false;
+       }
+       return true;
+      
+   }
+  function errorMessage(data){
+	   if (data!=null && data!='' && data!='undefined'){
+          var message = data;
+         $("#error_model .modal-body").html(message);
+            $("#error_model").modal();
+		}
+  }
+   function changeRole(){
+       var interested = $("#interested_in").val();
+       if(interested == 'on'){
+           $('#role_id').show();
+           $('#roleLabel').show();
+//           $("#role_id").attr('required','required');
+           $('#updateRole').show();
+           $('#updateStatus').hide();
+           $("#interested_in").attr('value','off');
+           $("#not_interested").attr('value','on');
+//            $("#not_interested").removeAttr('required','required');
+//            $("#interested_in").attr('required','required');
+           $('#completeTSD').hide();
+           $('#complete_TSD').attr('value','on');
+//            $('#complete_TSD').removeAttr('required','required');
+
+       }else{
+           $('#role_id').hide();
+           $('#roleLabel').hide();
+//           $("#role_id").removeAttr('required','required');
+           $('#updateRole').hide();
+           $('#updateStatus').hide();
+           $("#interested_in").attr('value','on');
+//            $("#not_interested").removeAttr('required','required');
+           $('#completeTSD').hide();
+           $('#complete_TSD').attr('value','on');
+//            $('#complete_TSD').removeAttr('required','required');
+       }
+
+   }
+   function hideRole(){
+       var notInterested = $("#not_interested").val();
+       if(notInterested =='on'){
+           $('#role_id').hide();
+           $('#roleLabel').hide();
+//           $("#role_id").removeAttr('required','required');
+           $('#updateRole').hide();
+           $('#updateStatus').show();
+           $("#not_interested").attr('value','off');
+           $("#interested_in").attr('value','on');
+//            $("#interested_in").removeAttr('required','required');
+//            $("#not_interested").attr('required','required');
+           $('#completeTSD').hide();
+           $('#complete_TSD').attr('value','on');
+//            $('#complete_TSD').removeAttr('required','required');
+           $("#role_id option").attr("selected", True);
+
+       }else{
+           $('#role_id').hide();
+//           $("#role_id").removeAttr('required','required');
+           $('#roleLabel').hide();
+           $('#updateRole').hide();
+           $('#updateStatus').hide();
+           $("#not_interested").attr('value','on');
+//            $("#interested_in").removeAttr('required','required');
+           $('#completeTSD').hide();
+           $('#complete_TSD').attr('value','on');
+//           $('#complete_TSD').removeAttr('required','required');
+       }
+        
+   }
+   function completeTsd(){
+        var complete_TSD = $("#complete_TSD").val();
+        if(complete_TSD =='on'){
+            $('#completeTSD').show();
+           $("#complete_TSD").attr('value','off');
+//           $('#complete_TSD').attr('required','required');
+           $('#role_id').hide();
+//           $("#role_id").removeAttr('required','required');
+           $('#roleLabel').hide();
+           $('#updateRole').hide();
+           $('#updateStatus').hide();
+           $("#not_interested").attr('value','on');
+           $("#interested_in").attr('value','on');
+//           $("#interested_in").removeAttr('required','required');
+
+        }else{
+            $('#role_id').hide();
+//           $("#role_id").removeAttr('required','required');
+           $('#roleLabel').hide();
+           $('#updateRole').hide();
+           $('#updateStatus').hide();
+//           $("#interested_in").removeAttr('required','required');
+           $('#completeTSD').hide();
+           $('#complete_TSD').attr('value','on');
+//           $('#complete_TSD').removeAttr('required','required');
+        }
+         
+    }
+
+</script>
+<script>
+    function updateRole(){
+        $("#messageBoxDiv").empty();
+        var roleName = $("#role_id").val();
+           var user_id = $("#userProfile_id").val();
+           var messageBox = '<div class="alert alert-danger Box alert-dismissable" style="line-height: 0;">';
+            messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+            messageBox += '<span id="errorMessage"></span></div>';
+           if (user_id!=null && user_id!='' && user_id!='undefined'){
+               if (roleName!=null && roleName!='' && roleName!='undefined'){
+                   ajaxUrl = '/ajax/update_role_or_status/?role='+roleName+'&id='+user_id;
+                     $.ajax({
+                       url : ajaxUrl,
+                       success: function (data) {
+                       if(data != null && data!='' && data!='undefined'){
+                         messageBox = '<div class="alert alert-';
+                            if (data['status']=='success'){
+                                messageBox +=    'success';
+                            }
+                            else{
+                                messageBox +=    'danger';
+                            }
+                            messageBox += ' Box alert-dismissable" style="line-height: 0;">';
+                            messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+                            messageBox += data['message']+'</div>';
+                            $("#messageBoxDiv").append(messageBox);
+                            $("#roleDataId").empty();
+                            $("#roleDataId").append(data['role']);
+                            
+                       }
+                   },
+                   error: function() {
+                      }
+                   });
+               }
+               else{
+                   $("#messageBoxDiv").empty();
+                   $("#errorMessage").empty();
+                   $("#messageBoxDiv").append(messageBox);
+                   $("#errorMessage").append('Role can not be null');
+               }
+           }
+   }
+    
+function update_user_status(){
+    $("#messageBoxDiv").empty();
+       var user_id=$("#userProfile_id").val();
+       var messageBox = '<div class="alert alert-danger Box alert-dismissable" style="line-height: 0;">';
+        messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+        messageBox += '<span id="errorMessage"></span></div>';
+       if (user_id!=null && user_id!='' && user_id!='undefined'){
+           ajaxUrl = '/ajax/update_role_or_status/?id='+user_id+'&status=true';
+              $.ajax({
+            url : ajaxUrl,
+            success: function (data) {
+                if(data != null && data!='' && data!='undefined'){
+                     messageBox = '<div class="alert alert-';
+                        if (data['status']=='success'){
+                            messageBox +=    'success';
+                        }
+                        else{
+                            messageBox +=    'danger';
+                        }
+                        messageBox += ' Box alert-dismissable" style="line-height: 0;">';
+                        messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+                        messageBox += data['message']+'</div>';
+                        $("#messageBoxDiv").append(messageBox);
+                    }
+                },
+                error: function() {
+                   }
+          });
+       }
+       else{
+            $("#messageBoxDiv").empty();
+            $("#errorMessage").empty();
+            $("#messageBoxDiv").append(messageBox);
+            $("#errorMessage").append('UserId can not be null');
+        }
+ 
+
+   }
+   
+
+</script>
+<script>
+$("#completeTSD").click(function(){
+    user_id = $("#userProfile_id").val();
+    if (user_id!=null && user_id!='' && user_id!='undefined'){
+        var ajaxUrl = '/ajax/verifyUserForTSD?userId='+user_id;
+        $.ajax({
+            url : ajaxUrl,
+            success : function(data){
+                if (data['message']=='success'){
+                    window.location = '/book_sd_slots/?teacher&id={{task.id}}&uid={{task.performedOn_userId}}&tab={{tabName}}';
+                }
+                else{
+                    alert(data['message']);
+                }
+            },
+            error : function(){
+//                 alert("error");
+            }
+        })
+    }
+    else{
+        alert("User does not found!");
+    }
+});
+</script>
+
+{% endblock %} {% block scripts %} {% endblock %}

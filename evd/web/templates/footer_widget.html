@@ -1,0 +1,17 @@
+<div class="list-filters clearfix">
+    <ul id="footer-subjects-list" class="list-loc">
+    {% for subject in subjects %}
+      <li style=
+      "background: transparent url('/static/images/subject_maths.png') top left no-repeat">
+      <a href="/schools?subject={{ subject }}" class="tag">{{ subject }}</a></li>
+    {% endfor %}
+    </ul>
+    <ul id="footer-centers-list" class="list-cat clearfix">
+    {% for state in states %}
+      <li><a href="/schools?location={{ state }}" class=
+      "tag int-athletics">{{ state }}</a></li>
+    {% endfor %}
+    </ul>
+
+</div>
+

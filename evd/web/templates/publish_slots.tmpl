@@ -1,0 +1,281 @@
+<!-- Manage Slots Modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="publish_slots_modal" role="dialog">
+    <div class="">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Manage Slots</h4>
+            </div>
+            <div class="modal-body">
+                <div class="well" style="padding:1px">
+
+                    <h5 style="text-align:center">Add Slots</h5>
+
+
+                    <form id="add_publish_slot_form" action="javascript:add_publish_slots();">
+                        <div class="row" style="margin-left: 216px;">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id='slots' value="slots" name="slots"class='slots' style=' left: -23px;height: 13px;' onclick='group_slots()'>
+                                    Group Slots Publish
+                                    </label>
+
+                            </div>
+                        </div>
+                        <div class="row" style="display:none;margin-left: 8px;" id="group_slot">
+                            <div class="col-md-7" style="margin-left:0px;">Number of slots to be publised per day :</div>
+                            <div class="col-md-2">
+                                {% if tsd_panel_member %}
+
+                                <input type="number" id='slots_count' value="2" name="slots_count" style="width:85px" min="2" max="10" oninput="validity.valid||(value='');"> {% else %}
+                                <input type="number" id='slots_count' value="2" name="slots_count" style="width:85px" min="2" max="10" oninput="validity.valid||(value='');"> {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 slot_days">
+                                <p style="text-align:center">Day
+                                    <a href="#" data-toggle="popover" class="error_pop" style="opacity: 0;" data-content="Select atleast one day">day</a></p>
+                                <div class="checkbox">
+                                    <label>
+                                                <input type="checkbox" value="Monday" name="day">
+                                                Monday
+                                              </label>
+                                </div>
+
+                                <div class="checkbox">
+                                    <label>
+                                                <input type="checkbox" name="day" value="Tuesday">
+                                                Tuesday
+                                              </label>
+                                </div>
+
+                                <div class="checkbox">
+                                    <label>
+                                                <input type="checkbox" name="day" value="Wednesday">
+                                                Wednesday
+                                              </label>
+                                </div>
+
+                                <div class="checkbox">
+                                    <label>
+                                                <input type="checkbox" name="day" value="Thursday">
+                                                Thursday
+                                              </label>
+                                </div>
+
+                                <div class="checkbox">
+                                    <label>
+                                                <input type="checkbox" name="day" value="Friday">
+                                                Friday
+                                              </label>
+                                </div>
+
+                                <div class="checkbox">
+                                    <label>
+                                                <input type="checkbox" name="day" value="Saturday">
+                                                Saturday
+                                              </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                                <input type="checkbox" name="day" value="Sunday">
+                                                Sunday
+                                              </label>
+                                </div>
+
+                            </div>
+                            <!--col-->
+
+                            <div class="col-md-8">
+
+                                <!--<p>Start Date : <input type="text" class="startdate form-control"></p>
+                                            <p>End Date : <input type="text" class="startdate form-control"></p>-->
+                                <p style="text-align:center">Date</p>
+                                <input id="from_date" type="text" class="" autocomplete="off" required>
+                                <p style="float:left"> &nbsp;To&nbsp; </p>
+                                <input id="to_date" type="text" class="" autocomplete="off" required>
+                                <br/>
+                                <p style="text-align:center">Time</p>
+                                <input id="slot_time_from" type="text" class="time ui-timepicker-input" autocomplete="off" required>
+                                <p style="float:left"> &nbsp;To&nbsp; </p>
+                                <input id="slot_time_to" type="text" class="time ui-timepicker-input" autocomplete="off" required>
+                            </div>
+                            <!--col-->
+
+                        </div>
+                        <!-- row -->
+                        <div class="row" style="text-align: center;">
+                            <button type="submit" class="btn btn-xs btn-success" style="margin-bottom: 4px;">Add Slot</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- well -->
+                <div class="added_slots">
+                    <div style='height: 150px;overflow-y: scroll;border-bottom: 1px solid;'>
+                        <h5 style='text-align:center'>Existing Slots</h5>
+                        <div class='row head_cols'>
+                            <div class='col-md-3'>
+                                <h6>Day</h6>
+                            </div>
+                            <div class='col-md-3'>
+                                <h6>Slot</h6>
+                            </div>
+                            <div class='col-md-2'>
+                                <h6>Status</h6>
+                            </div>
+                            <div class='col-md-2'>
+                                <h6>Role</h6>
+                            </div>
+                            <div class='col-md-2'>
+                                <a href="#" data-toggle="popover" data-trigger="hover" data-placement="left" data-content="Delete selected slots">
+                                    <p class="delete_publish_slot"><img alt='Delete Icon' src="/static/images/delete_icon.svg" /></p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="publish_slot_append">
+                            <% _.each(resp , function (obj) { %>
+                                <div class='row'>
+                                    <div class='col-md-3'>
+                                        <p>
+                                            <%= obj.start_date %>
+                                        </p>
+                                    </div>
+                                    <div class='col-md-3' style='text-align:center;'>
+                                        <p>
+                                            <%= obj.start_time %> to
+                                                <%= obj.end_time %>
+                                        </p>
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <p>
+                                            <%= obj.status %>
+                                        </p>
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <p>
+                                            <% if(obj.role != "17"){%>Teacher
+                                                <% }else{ %> Content Developer
+                                                    <% } %>
+                                        </p>
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <% if(obj.status != "Booked"){%>
+                                            <input type="checkbox" data-id="<%= obj.id %>" class="add_to_delete_publish" name="" data-day="<%= obj.start_date %>" data-time="<%= obj.start_time %> to<%= obj.end_time %>" value="" style="position:relative;left: 35%;height:30px;width:30%;" />
+                                            <% }else{ %>
+                                                <p>Booked</p>
+                                                <!--<input type="checkbox" class=""style="position:relative;left: 35%;height:30px;width:30%;"/>-->
+                                                <% } %>
+                                    </div>
+                                </div>
+                                <% }) %>
+                        </div>
+                    </div>
+                    <!--<div class='row' style='text-align: center;margin-top:10px'>
+                                    <button type='' class='btn btn-xs btn-success save_slots' style='margin-bottom: 4px;'>Save Slot</button>
+                                </div>-->
+
+
+
+                </div>
+                <!-- div -->
+            </div>
+            <!-- modal body -->
+            <div id="evd-notification" class="save_success alert alert-warning hide" style="">
+                <div>
+                    <a type="button" class="close reload_on_save">X</a>
+                    <p class="msg-body add_slot_success_msg_publish"></p>
+                </div>
+            </div>
+
+            <div id="evd-notification" class="alert alert-warning publish_delete_select hidden" style="">
+                <div>
+                    <a type="button" class="close close_msg">X</a>
+                    <p class="msg-body selcet_to_delete">Please select slots to delete</p>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .slot_days>.checkbox input[type="checkbox"] {
+        position: relative;
+        margin-left: 10px;
+        left: -10px;
+        width: 15px;
+        height: 13px;
+    }
+    
+    .radio input[type="radio"] {
+        width: 20%;
+        height: 50%;
+    }
+    
+    input#slot_time_from,
+    input#slot_time_to {
+        width: 40%;
+        float: left;
+    }
+    
+    form#add_publish_slot_form {
+        border: none;
+        padding: 0;
+    }
+    
+    #publish_slots_modal {
+        top: 35%;
+    }
+    
+    form#add_publish_slot_form button {
+        height: 25px;
+    }
+    
+    .added_slots {
+        text-align: center;
+        border: 1px solid black;
+    }
+    
+    .added_slots .col-md-4,
+    .added_slots .col-md-3,
+    .added_slots .col-md-2 {
+        border-right: 1px solid;
+        border-top: 1px solid;
+    }
+    
+    p.delete_publish_slot img {
+        position: relative;
+        top: 4px;
+    }
+    
+    p.delete_publish_slot img:hover {
+        -moz-transform: scale(1.1);
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+    
+    div.head_cols [class*='col-md-'] {
+        height: 36px;
+    }
+    
+    #from_date,
+    #to_date,
+    #slot_time_from,
+    #slot_time_to {
+        width: 46% !important;
+        margin: 0;
+    }
+    
+    #from_date {
+        float: left;
+    }
+</style>

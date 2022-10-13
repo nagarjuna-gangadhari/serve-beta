@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+
+    <style>
+        .myRoleDiv {
+            background-color:#ffffff;
+            padding : 15px 20px 20px 30px;
+        }
+        thead{
+            background-color: #525A99 !important;
+            color: white;
+        }
+        thead th{
+            border-bottom: 1px solid #111;
+            font-weight: bold !important;
+        }
+        .tableCaption{
+            padding: 20px;
+            text-align: center;
+            font-size: 23px;
+            font-weight: bold;
+            background-color: #27A3E2;
+            color: white;
+        }
+        table th {
+            font-weight:bold;
+        }
+        .row a {
+            font-family: 'sans-sarif' !important;
+        }
+    </style>
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_container %}
+    {{ block.super }}
+
+
+
+<div class="row" style="min-height: 450px !important;">
+    <div class="col-md-12 col-sm-12 myRoleDiv" >
+        <div style="overflow-x:auto;">
+            {% if view_flag %}
+                <div>
+                    <div class="col-sm-12">
+                        <h3>Role - {{role.name}}</h3>
+                        <hr/>
+                    </div>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th>Role Name</th>
+                                <td>{{role.name}}</td>
+                                <th>Role Type</th>
+                                <td>{{role.type}}</td>
+                            </tr>
+                            <tr>
+                                <th>Description</th>
+                                <td colspan="3">{{role.description}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row" style="overflow-x:auto;">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="col-sm-8">
+                            <h4>Role Specific Settings</h4>
+                        </div>
+                        <div class="col-sm-4">
+                            <a href="/config/role/settings/{{role.id}}/" class="btn btn-info pull-right" title="Role Settngs">{% if rolesettings|length > 0 %}Update{% else %}Add{% endif %}</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        {% if rolesettings.count > 0 %}
+                            <table class="col-md-12 col-sm-12 table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Group Name</th>
+                                        <th>Type Name</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for role in rolesettings %}
+                                        <tr >
+                                            <td nowrap>{{role.settings_grp_items.settings_group.group_title}}</td>
+                                            <td nowrap>{{role.settings_grp_items.input_label}}</td>
+                                            <td nowrap>{{role.values}}</td>
+                                            <!--<td><button type="button" id="otherJsondata" class="btn btn-info btn-sm" data-toggle="modal" data-target="#statusUpdateModal">View</button></td>-->
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p style="margin-left:3%" >No Notification details found.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <table class="table table-bordered" id="myTable">
+                    <caption class="tableCaption">Roles</caption>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Type</th>
+                            <th>View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for role in roles %}
+                            <tr>
+                                <td>{{role.name}}</td>
+                                <td>{{role.description}}</td>
+                                <td>{{role.type}}</td>
+                                <td><a href="/config/roles/{{role.id}}/">View</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block bottom_scripts %}
+    {{ block.super }}
+
+    <script type="text/javascript">
+
+        $(document).ready( function () {
+            $(".inner.clearfix").css("width","85%");
+        });
+
+    </script>
+
+{% endblock %}

@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!-- SITE TITTLE -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EvPlus - Evidyaloka</title>
+
+
+
+<!-- PLUGINS CSS STYLE -->
+<link href="/static/css_new/jquery-ui.css" rel="stylesheet">
+<link href="/static/css_new/bootstrap.min.css" rel="stylesheet">
+<link href="/static/css_new/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css"
+	href="/static/rubaru18/plugins/rs-plugin/css/settings.css"
+	media="screen">
+<link rel="stylesheet" type="text/css"
+	href="/static/rubaru18/plugins/selectbox/select_option1.css">
+<link rel="stylesheet" type="text/css"
+	href="/static/rubaru18/plugins/owl-carousel/owl.carousel.css"
+	media="screen">
+<link rel="stylesheet" type="text/css"
+	href="/static/rubaru18/plugins/isotope/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css"
+	href="/static/rubaru18/plugins/isotope/isotope.css">
+
+
+<!-- GOOGLE FONT -->
+<link
+	href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700'
+	rel='stylesheet' type='text/css'>
+<link
+	href='https://fonts.googleapis.com/css?family=Dosis:400,300,600,700'
+	rel='stylesheet' type='text/css'>
+
+<!-- CUSTOM CSS -->
+<link href="/static/rubaru18/plugins/css/style.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/rubaru18/plugins/css/default.css"
+	id="option_color">
+
+<!-- Icons -->
+<link rel="shortcut icon" href="img/favicon.png">
+
+<style type="text/css">
+
+
+
+
+
+.clearfix {
+    zoom: 1;
+}
+.registernow-btnmtm {
+    position: absolute;
+    right: 116px;
+    margin-top: 132px;
+}
+
+.registration-tble th {
+    text-transform: uppercase;
+    font-family: 'sapisrg_';
+    border: .1em solid #fff;
+    text-align: center;
+    text-align: left;
+    padding: 13px 8px 13px 20px;
+    font-size: 16px;
+    color: #000;
+    color: #fff;
+}
+.registration-tble td:first-child {
+    color: #000;
+    background: #e8c4c9;
+    font-size: 16px;
+    text-transform: uppercase;
+    width: 37%;
+}
+.registration-tble td {
+    text-transform: uppercase;
+    font-family: 'sapisrg_';
+    font-size: 16px;
+    color: #000;
+    border: .1em solid #fff;
+    text-align: center;
+    padding: 13px 8px;
+    background: url(https://www.nasscom.in/disummit/images/xtd-bg.jpg.pagespeed.ic.gaHFUzeBye.webp) repeat;
+}
+.discount-table.registration-tble th {
+    text-align: center;
+    color: #bc2252;
+    font-family: 'sapisrg_';
+    font-weight: bold;
+    font-size: 24px;
+    padding: 8px 8px 8px 20px;
+    border: 0;
+    border-bottom: 1px solid #c3c3c3;
+}
+.discount-table.registration-tble td span, .discount-table.registration-tble td:first-child span {
+    font-weight: normal;
+    display: block;
+    font-size: 14px;
+}
+.discount-table.registration-tble td, .discount-table.registration-tble td:first-child {
+    color: #4d4d4d;
+    font-size: 16px;
+    font-family: 'sapisrg_';
+    font-weight: bold;
+    padding: 0;
+    text-align: left;
+    width: 50%;
+    background: none;
+    border: 0;
+    border-right: 1px solid #c3c3c3;
+    padding-left: 15px;
+}
+.registernow-btnmtm a {
+    background: #b00c27;
+    border-radius: 30px;
+    color: #fff;
+    display: inline-block;
+    font-family: "sapism_";
+    font-size: 18px;
+    padding: 16px 25px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: all ease 0.5s;
+}
+.registration .btn.focus, .btn:focus, .btn:hover {
+    color: transparent;
+    text-decoration: none;
+}
+
+.agendaitem {
+    padding: 0 0 0 0;
+    border: dashed 1px #E5DEC5;
+    width: 100%;
+    text-align: center;
+    color: #2a2a2a;
+    -moz-box-shadow: inset 0 0 4px #F7EFDC;
+    -webkit-box-shadow: inset 0 0 4px #F7EFDC;
+    box-shadow: inset 0 0 4px #F7EFDC;
+    margin-bottom: 40px;
+    background-color: #fff;
+}
+.agendadaydate {
+    padding: 20px 0 20px 0;
+    margin-bottom: 20px;
+    text-align: center;
+    background-color: #A9001E;
+    position: relative;
+}
+.session {
+    margin-bottom: 0px;
+    padding: 20px;
+    border-bottom: dashed 1px #E5DEC5;
+    background-color: #fff;
+}
+.agendaitem .time {
+    font-size: 19px;
+    font-style: italic;
+    font-family: "gentium book basic";
+    margin-bottom: 15px;
+}
+.agendaitem p {
+    font-size: 18px;
+    line-height: 25px;
+}
+ .session h3 {
+    color: #A9001E;
+    text-transform: capitalize;
+    margin-bottom: 5px;
+    font-size: 20px;
+}
+.agendadaydate .bignumber {
+    font-size: 90px;
+    color: #fff;
+    font-weight: 900;
+    line-height: 70px;
+    position: relative;
+    z-index: 12;
+}.agendadaydate .month {
+    font-size: 26px;
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #fff;
+    position: relative;
+    z-index: 12;
+}
+.schoolInfo p {
+	color: #222222;
+	margin-bottom: 25px;
+	font-size: 18px;
+	line-height: 25px;
+}
+
+.owl-stage{
+transform: translate3d(0px, 0px, 0px);
+    transition: all 0s ease 0s;
+    
+}
+@media only screen and (max-width: 480px) and (min-width: 0px)  {
+    #about{
+margin-top: 64px;
+}
+.reg-row{
+    margin-top: -54px;
+    margin-right: -15px;
+}
+    .registration{
+    margin-top: -31px !important;
+    }
+    .registration a{
+   margin-left: 0%;
+    height: 0px !IMPORTANT;
+    border-radius: 45px;
+    text-transform: none;
+    font-size: 6px !important;
+    padding-left: 9px;
+    color: transparent;
+    background-color: transparent;
+    WIDTH: 58PX;
+    padding-top: 3px;
+    }
+    .registration-row{
+        margin-left: 7px;
+        margin-top: 26px;
+    }
+    .register {
+   margin-right: 51px;
+    margin-bottom: 17px;
+    width: 83%;
+    margin-left: 47px;
+}
+    .registration-title{
+        margin-right: 4px;
+    }
+    .registration-tble{
+    margin-left: 28px;
+    
+    
+    /* position: relative;
+	z-index: 2;
+        margin-top: -20px;
+    float: left;
+    margin: 38px 0 0;
+    padding: 3px;
+    width: 545px;
+    margin-right: 19px; */
+    }
+    .registration-lable{
+    width: 150px;
+    }
+    .form-control {
+    width: auto !important;
+}
+.description {
+    border: 1px solid #654545;
+    background-color: #dedede;
+    padding-bottom: 10px;
+}
+.design{
+       cursor: pointer;
+    margin-bottom: 4%;
+        width: 76.4%;
+}
+.viewprofile a{font-size: 10px;
+    text-transform: none;
+    height: 35px;
+    padding-top: 10px;
+}
+
+.viewprofile{
+padding-top: 6px;
+}
+.registeration-container{
+width: 96%;
+margin-right: 11px;
+}
+.gallery-img-2{
+width: 84%;
+margin-top: 41px;
+}
+.gallery-img-3{
+    height: 305px;
+    width: 278px;
+    margin-left: -2px;
+    margin-top: 46px;
+}
+
+.gallery-img-5{
+
+width: 278px;
+    height: 267px;
+    margin-left: 3px;
+    margin-top: 36px;
+}
+.gallery-img-6{
+width: 284px;
+    height: 219px;
+    margin-left: 4px;
+    margin-top: 33px;
+
+}
+.nsic-rutr{
+    width: 190px;
+    height: 151px;
+    margin-top: -179px;
+}
+#register_for_event{
+width: 100px;
+    margin-right: 91px;
+    margin-top: 14px;
+    font-size: 12px;
+    text-transform: none;
+}
+::-webkit-input-placeholder {
+   text-align: center;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   text-align: center;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   text-align: center;  
+}
+
+:-ms-input-placeholder {  
+   text-align: center; 
+}
+.register-menu-a {
+margin-left: -29px;
+}
+.jury-menu-a{
+    margin-left: -9px;
+}
+.rubaru-menu-a{
+margin-left: -6.15px;
+}
+.nsic-finalists-div{
+width: 125%;
+    height: 34%;
+    border-radius: 12%;
+    margin-top: -16px;
+    margin-bottom: 11px;
+}
+.nsic-des{
+margin-top: 83px !important;
+}
+.vca-finalists-div{
+
+    width: 125%;
+    height: 34%;
+    border-radius: 12%;
+    margin-top: -213px;
+}
+.vca-row{
+margin-top: 14px;
+}
+}
+@media only screen and (min-width: 1024px)  {
+
+.vca-finalists-div{
+    width: 125%;
+    height: 34%;
+    border-radius: 12%;
+    margin-top: -214px;
+}
+.nsic-des{
+margin-top: 67px !important;
+}
+.nsic-finalists-div{
+width: 125%;
+    height: 34%;
+    border-radius: 12%;
+    margin-top: -57px;
+}
+
+.gallery-img-6{
+    width: 315px;
+    height: 219px;
+    margin-left: 70px;
+}
+.gallery-img-5{
+    width: 258px;
+    height: 224px;
+    margin-left: 25px;
+
+}
+.gallery-img-3{
+height: 305px;
+    width: 318px;
+    margin-left: 71px;
+}
+.gallery-img-2{
+width: 111%;
+}
+.registration-tble {
+	position: relative;
+	z-index: 2;
+        margin-top: -20px;
+    float: left;
+    margin: 38px 0 0;
+    padding: 3px;
+    width: 545px;
+    margin-right: 19px;
+}
+.nsic-div{
+margin-left: 55px; 
+}
+.nsic-row {
+    margin-left: 5%; 
+    margin-bottom: -3%;
+}
+#about{
+margin-top: 64px;
+}
+
+.reg-row{
+       margin-top: -14.57%;
+    margin-right: -15px;
+}
+ .registration{
+    margin-top: -100px !important;
+    }
+    .registration a {
+   
+  
+    height: 44px;
+    border-radius: 80px;
+    text-transform: none;
+    padding-top: 1%;
+    display: inline-block;
+    color: transparent;
+    width: 281px;
+    box-shadow: none;
+    
+
+}
+.registration  .btn.focus, .btn:focus, .btn:hover {
+    color: transparent;
+    text-decoration: none;
+    box-shadow: none !important;
+}
+.register {
+margin-bottom: 23px;
+    margin-left: -90px;
+}
+.owl-stage
+{
+width:auto !important;
+}
+.menu-div{
+width: 110%;
+}
+.description {
+border: 1px solid #654545;
+background-color: #dedede;
+padding-bottom: 10px;
+width: auto;
+height: 154px;
+}
+.viewprofile {
+padding-top: 6px;
+}
+.viewprofile a{
+font-size: 10px;
+text-transform: none;
+}
+.viewprofile .btn:hover {
+
+    color: white;
+}
+
+.run-upto-rubaru a{
+
+width: 192px;
+    height: 158px;
+}
+
+.run-upto-rubaru{
+
+width: 127%;
+    height: 106%;
+    border-radius: 12%;
+    margin-top: -158px;
+}
+
+
+
+}
+
+@media only screen and (max-width: 360px)  {
+.nic{
+    margin-left: -53px;
+}
+
+.img-mob{
+    margin-left: -13px;
+}
+}
+
+.description h5{
+padding-top: 7px;
+}
+.nsic-finalists-btn:hover{
+    color: white !important;
+    text-decoration: none;
+    box-shadow: none !important;
+}
+.vca-finalists-div{
+    width: 125%;
+    height: 34%;
+    border-radius: 12%;
+    margin-top: -214px;
+}
+.move_right>p{
+    padding-left:50px;
+}
+</style>
+
+</head>
+
+<body class="body-wrapper">
+	<div class="main-wrapper bg-color-7">
+		<!-- HEADER -->
+		<header id="pageTop" class="header-wrapper">
+			<!-- NAVBAR -->
+			<nav id="menuBar" class="navbar navbar-default lightHeader"
+				role="navigation">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse"
+							data-target=".navbar-ex1-collapse">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="/?home=true"><img
+							src="/static/images/evidyalogo.jpg" alt="eVidyaloka"></a>
+					</div>
+					<div class="collapse navbar-collapse navbar-ex1-collapse menu-div">
+						<div style="position: absolute; left: 0; top: 4px;">
+							<a href="/?home=true"> <img
+								src="/static/images/evidyalogo.jpg" style="border-radius: 100%;"
+								width="55px" height="55px">
+							</a>
+						</div>
+                        <div style="position: absolute; left:75px; top: 4px;">
+                            <h2>eVidyaloka - An Online Teaching-Learning Platform</h2>
+                        </div>
+					</div>
+				</div>
+			</nav>
+		</header>
+		<section
+			class="whiteSection full-width clearfix testimonialArea padding-top50"
+			id="about">
+			<div class="container">
+				
+				<div class="row">
+                    <div class="row" style="text-align:center">
+                        <img src=" /static/rubaru18/images/evplus_1.png" class="img-rounded" alt="Springboard_logo" width="100%">
+                    </div>
+                    <br>
+					<div class="col-sm-12 col-xs-12 schoolInfo">
+						<p>eVidyaloka empowering communities & organizations that are committed towards the cause of quality education. By partnering with eVidyaloka, you get to initiate online teaching for the children in your community. eVidyaloka enables the stakeholders with necessary processes, tools & resources thereby offering effective remote teachinglearning platform for the future generation of India</p> 
+    				</div>
+                    <br>
+                    <div class="row" style="text-align:center">
+                        <img src=" /static/rubaru18/images/evplus_2.png" class="img-rounded" alt="Springboard_logo" width="100%">
+                    </div>
+				</div>
+			</div>
+		</section>
+		
+	<section class="whiteSection full-width clearfix padding-bottom0"
+        id="contact" style="background-color: lightgoldenrodyellow;margin-top: 39px;">
+
+        <div class="container">
+            <div class="sectionTitle text-center">
+                <h2>
+                    <span class="shape shape-left bg-color-4"></span> <span>Contact</span>
+                    <span class="shape shape-right bg-color-4"></span>
+                </h2>
+            </div>
+            <div class="row" style="text-align:center">
+                <h3>Where we are : Andhra Pradesh , Karnataka, Tamil Nadu , Uttarakhand</h3>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <div class="media servicesStyle alt">
+                        <span class="media-left bg-color-2"> <i
+                            class="fa fa-volume-control-phone" aria-hidden="true"></i>
+                        </span> <span>+91 - 9902926149</span>
+                    </div>
+
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <div class="media servicesStyle alt">
+                        <span class="media-left bg-color-2"> <i
+                            class="fa fa-envelope-o" aria-hidden="true"></i>
+
+                        </span> <span>evplus@evidyaloka.org</span>
+
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <div class="media servicesStyle alt">
+                        <span class="media-left bg-color-2"> <i class="fa fa-globe"></i>
+
+                        </span> <span> www.evidyaloka.org</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+	</div>
+
+	<footer>
+		<div class="copyRight clearfix" style="padding: 0">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-5 col-sm-push-7 col-xs-12"></div>
+					<div class="col-sm-7 col-sm-pull-5 col-xs-12">
+						<div class="copyRightText">
+							<p>eVidyaloka</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<div class="scrolling">
+		<a href="#pageTop"
+			class="backToTop btn-social btn-dribbble-filled btn-circle"
+			id="backToTop"><i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+	</div>
+	
+    <script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="/static/js_new/jquery-ui.js"></script>
+	<script src="/static/js_new/bootstrap.min.js"></script>
+	<script
+		src="/static/rubaru18/plugins/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
+	<script
+		src="/static/rubaru18/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
+	<script
+		src="/static/rubaru18/plugins/selectbox/jquery.selectbox-0.1.3.min.js"></script>
+	<script src="/static/rubaru18/plugins/owl-carousel/owl.carousel.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
+	<script
+		src="/static/rubaru18/plugins/counter-up/jquery.counterup.min.js"></script>
+	<script src="/static/rubaru18/plugins/isotope/isotope.min.js"></script>
+	<script src="/static/rubaru18/plugins/isotope/jquery.fancybox.pack.js"></script>
+	<script src="/static/rubaru18/plugins/isotope/isotope-triger.js"></script>
+	<script src="/static/rubaru18/plugins/counter-up/jquery.syotimer.js"></script>
+	<script src="/static/rubaru18/plugins/js/velocity.min.js"></script>
+	<script src="/static/rubaru18/plugins/js/SmoothScroll.js"></script>
+	<script src="/static/rubaru18/plugins/js/custom.js"></script>
+
+
+	<script>
+		$(document).ready(function() {
+			$("#part_schools_sectionId").hide();
+		});
+
+		$("#home").on('click', function() {
+			$("#backToTop").trigger('click');
+		});
+
+		$("#part_joc_hostId").on('click', function() {
+			$("#part_joc_hostId").addClass('btn-google-filled');
+			$("#part_schoolsId").removeClass('btn-google-filled');
+			$("#part_joc_sectionId").show();
+			$("#part_schools_sectionId").hide();
+		});
+
+		$("#part_schoolsId").on('click', function() {
+			$("#part_joc_hostId").removeClass('btn-google-filled');
+			$("#part_schoolsId").addClass('btn-google-filled');
+			$("#part_joc_sectionId").hide();
+			$("#part_schools_sectionId").show();
+		});
+
+		$("#vca_id").on('click', function() {
+			$("#vca_id").addClass('btn-google-filled');
+			$("#nsic_id").removeClass('btn-google-filled');
+			$("#vca_img_holder").show();
+			$("#nsic_img_holder").hide();
+		});
+
+		$("#nsic_id").on('click', function() {
+			$("#nsic_id").addClass('btn-google-filled');
+			$("#vca_id").removeClass('btn-google-filled');
+			$("#nsic_img_holder").show();
+			$("#vca_img_holder").hide();
+		});
+
+		function clickfilter() {
+			document.getElementById("nsicId").click();
+			document.getElementById("part_joc_hostId").click();
+		}
+		window.onload = clickfilter;
+		$("#register_for_event").on('click',function(){
+			$.get("/v2/save_rubaru_even_data/", {'name':$("#name").val(),'designation':$("#designation").val(),
+				'email':$('#email').val(),'organization':$("#organization").val(),
+				'allergies':$("#allergies").val(),'comment':$("#comment").val()}, function(resp){
+	            alert(resp)
+	        });
+			
+		});
+	</script>
+</body>
+</html>

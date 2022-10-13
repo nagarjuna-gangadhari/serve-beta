@@ -1,0 +1,301 @@
+{% extends "base_generic.html" %}{% load filters %} {% block title %}Book Slot | eVidyaloka{% endblock %} {% block head %} {% endblock %} {% block body %}
+<div class="w-full flex flex-row">
+    <div class="w-2/12 h-screen flex flex-col border-r-2">
+        <div class="w-full h-10 text-white font-bold bg-gray-900 flex justify-center items-center">Roles</div>
+        <div id="roles" class="w-full py-2"></div>
+    </div>
+    <div id="t2" class="w-10/12 h-screen overflow-y-scroll">
+        <div class="w-full text-center text-2xl font-bold py-4">Book an appointment</div>
+        <div class="py-4 space-y-4 px-4">
+            <div id="slots_month" class="grid grid-cols-5 gap-2 text-center"></div>
+            <div id="slots_days" class="grid grid-cols-12 gap-4 text-center"></div>
+            <div class="flex flex-col space-y-2">
+                <div class="flex space-x-2">
+                    <div class="font-bold">Slots:</div>
+                    <div class="text-sm">*All the timings are Indian Standard Time</div>
+                </div>
+                <div id="slots_slots" class="grid grid-cols-6 gap-4 text-center"></div>
+            </div>
+            <div id="book_wraper" class="w-full flex flex-col justify-center items-center bg-gray-200">
+                <div x-data class="w-full flex justify-around items-center bg-gray-200">
+                    <div class="p-2 border flex space-x-2">
+                        <div>You have selected appointment slot:</div>
+                        <div id="book_slot_decription" data-slot="" class="text-blue-800 font-bold text-lg"></div>
+                    </div>
+                    <div x-show="$store.is_superuser.off" onclick="book_slot(false)" class="px-10 py-2 rounded-lg bg-blue-500 hover:scale-105 font-bold text-xl cursor-pointer">Book</div>
+                    <div x-show="$store.is_superuser.on" class="p-2 border flex space-x-2">
+                        <div class="p-2">Book For:</div>
+                        <input id="book_for_userid" type="text" placeholder="user id">
+                        <div onclick="book_slot(true)" class="px-10 py-2 rounded-lg bg-blue-500 hover:scale-105 font-bold text-xl cursor-pointer">Book</div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="release_wraper">
+                <div class="hidden w-full flex justify-around bg-gray-200">
+                    <div class="p-2 border flex space-x-2">
+                        <div>Your Appointment at:</div>
+                        <div id="release_slot_decription" data-slot="" class="text-blue-800 font-bold text-lg">
+
+                        </div>
+                    </div>
+                    <div onclick="release_slot()" class="px-10 py-2 rounded-lg bg-red-500 hover:scale-105 font-bold text-xl cursor-pointer">Cancle Appointment</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="t3" class="w-10/12 h-screen flex justify-center items-center hidden">
+        <div class="text-4xl font-bold text-center">Sorry, No Appointment Slots Available</div>
+    </div>
+</div>
+{% endblock %} {% block scripts %} {{ data|json_script:"data" }} {{ slots|json_script:"slots" }}
+<script>
+    const template_data = JSON.parse(document.getElementById('data').textContent);
+    const slots_map = JSON.parse(JSON.parse(document.getElementById('slots').textContent));
+    var slots = {};
+    const user_roles = template_data.user_roles;
+    var selected_role = 0;
+    console.log(template_data);
+    console.log(slots_map);
+
+
+    $(document).on("click", '.role_button', function(event) {
+        $('.role_button').removeClass('bg-green-400');
+        $(this).addClass('bg-green-400');
+        selected_role = $(this).attr('data-roleid');
+        console.log('-selected role ----', selected_role);
+        if ([1, 20].includes(parseInt(selected_role))) { // change the slots by role
+            slots = slots_map.teacher_slots;
+        } else if (parseInt(selected_role) == 3) {
+            slots = slots_map.content_slots;
+        }
+
+        get_months();
+        clicks();
+        $('#book_slot_decription').html('No slot selected');
+        $('#book_slot_decription').attr('data-slot', '');
+        if (is_superuser == false) {
+            check_slot()
+        }
+
+    });
+
+    $(document).on("click", '.month', function(event) {
+        $('.month').removeClass('bg-green-400');
+        $(this).addClass('bg-green-400');
+        let date = $(this).attr('data-month').split(',');
+        get_days(parseInt(date[0]), parseInt(date[1]));
+        $("#slots_days div:first-child").click()
+        $('#book_slot_decription').html('No slot selected');
+        $('#book_slot_decription').attr('data-slot', '');
+    });
+
+    $(document).on("click", '.day', function(event) {
+        $('.day').removeClass('bg-green-400');
+        $(this).addClass('bg-green-400');
+        let date = $(this).attr('data-day').split(',');
+        get_slots(date[0], date[1], date[2]);
+        $('#book_slot_decription').html('No slot selected');
+        $('#book_slot_decription').attr('data-slot', '');
+
+
+    });
+
+    $(document).on("click", '.slot', function(event) {
+        $('.slot').removeClass('bg-green-400');
+        $(this).addClass('bg-green-400');
+        let slotId = $(this).attr('data-slot');
+        $('#book_slot_decription').html($(this).attr('data-date') + ' - ' + $('#' + slotId).html());
+        $('#book_slot_decription').attr('data-slot', slotId);
+        console.log(slotId);
+    });
+
+    function get_months() {
+        // populate months
+        $('#slots_month div').remove();
+        $('#slots_days div').remove();
+        $('#slots_slots div').remove();
+        for (slot in slots) {
+            let date = new Date(slot.split(',')[1], slot.split(',')[0]-1, 01); // 2009-11-10
+            let month = date.toLocaleString('default', {
+                month: 'long'
+            });
+            $('#slots_month').append(`<div class="cursor-pointer hover:bg-green-200 border border-gray-400 font-bold p-2 rounded-lg month" data-month="${slot}">${month}-${slot.split(',')[1]}</div>`);
+        }
+    }
+
+    function get_days(month, year) {
+        $('#slots_days div').remove();
+        for (slot in slots) {
+            let mydate = new Date(slot.split(',')[1], slot.split(',')[0], 01);
+            if (mydate.getMonth() == month && mydate.getFullYear() == year) {
+                for (day in slots[slot]) {
+                    let data_day = parseInt(day) + ',' + month + ',' + year;
+                    $('#slots_days').append(`<div class="cursor-pointer hover:bg-green-200 border border-gray-400 text-black font-bold py-2 px-6 rounded-md day" data-day="${data_day}">${day}</div>`);
+                }
+            }
+        }
+    }
+
+    function get_slots(day, month, year) {
+        $('#slots_slots div').remove();
+        for (slot in slots) {
+            let mydate = new Date(slot.split(',')[1], slot.split(',')[0], 01);
+            if (mydate.getMonth() == month && mydate.getFullYear() == year) {
+                for (myday in slots[slot]) {
+                    if (myday == day) {
+                        for (myslot in slots[slot][myday]) {
+                            let slot_data = slots[slot][myday][myslot];
+                            let d1 = new Date(slot_data['start_time'].split(' ')[0] + "T" + slot_data['start_time'].split(' ')[1]);
+                            let d2 = new Date(slot_data['start_time'].split(' ')[0] + "T" + slot_data['end_time']);
+                            $('#slots_slots').append(`<div class="cursor-pointer hover:bg-green-200 border border-gray-400 text-black font-bold py-2 px-6 rounded-md slot" data-date="${slot_data['start_time'].split(' ')[0]}" data-slot="${slot_data['id']}" id="${slot_data['id']}">${d1.getHours()}:${(d1.getMinutes() < 10 ? '0' : '') + d1.getMinutes()}-${d2.getHours()}:${(d2.getMinutes() < 10 ? '0' : '') + d2.getMinutes()}</div>`);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function book_slot(val) {
+        if ($('#book_slot_decription').attr('data-slot') == '') {
+            alert('Please select a slot', 'danger');
+            return;
+        }
+        let user_id = '';
+
+        if (val) {
+            if ($('#book_for_userid').val() == '') {
+                alert('missing user id', 'danger');
+                return;
+            } else {
+                user_id = $('#book_for_userid').val();
+
+            }
+        }
+
+
+        progressBar(6);
+        let data = {
+            'slot_id': $('#book_slot_decription').attr('data-slot'),
+            'role_id': selected_role,
+            'user_id': user_id,
+            'bookfor': val
+        };
+        $.ajax({
+            url: "/v2/book-slots/", // the endpoint
+            type: "PUT", // http method
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                console.log(response)
+                alert('Booked Slot successfully', 'success')
+                location.reload();
+
+            },
+
+            error: function(xhr, errmsg, err) {
+                if (JSON.parse(xhr.responseText).error.message.split(',').includes('kCustomErrorMsg')) {
+                    alert(JSON.parse(xhr.responseText).error.message.split(',')[1], 'danger');
+                } else {
+                    alert('Opps! error: Please try again or contact support', 'danger');
+                }
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    }
+
+    function release_slot(id) {
+        progressBar(6);
+        let data = {
+            'slotId': id,
+        };
+        console.log(data);
+        $.ajax({
+            url: "/v2/book-slots/?slotId=" + id, // the endpoint
+            method: 'DELETE',
+            contentType: 'application/json',
+            success: function(response) {
+                console.log(response)
+                alert('Released Slot successfully', 'success')
+                location.reload();
+
+            },
+
+            error: function(xhr, errmsg, err) {
+                alert('Oops! We have encountered an error: ', 'danger'); // provide a bit more info about the error to the console
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    }
+
+    function check_slot() {
+        progressBar(6);
+        let data = {
+            'role_id': selected_role
+        };
+        $.ajax({
+            url: "/v2/book-slots/", // the endpoint
+            type: "POST", // http method
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                $('#release_wraper div').remove()
+                console.log(response)
+                if (response.data.is_booked) {
+                    if (response.data.data.length > 0) {
+                        $('#book_wraper').addClass('hidden');
+                        $('#release_wraper').removeClass('hidden');
+                        for (slot in response.data.data) {
+                            if (response.data.data[slot].outcome == "Assigned") {
+                                $('#release_wraper').append(`<div class="w-full flex justify-around bg-gray-200">\
+                                    <div class="p-2 border flex space-x-2">\
+                                        <div>Your Appointment at:</div>\
+                                        <div class="text-blue-800 font-bold text-lg">${response.data.data[slot].startTime} - ${response.data.data[slot].endTime}</div>\
+                                    </div>\
+                                    <div onclick="release_slot(${response.data.data[slot].slotId})" data-slot="${response.data.data[slot].slotId}" class="px-10 py-2 rounded-lg bg-red-500 hover:scale-105 font-bold text-xl cursor-pointer">Cancel Appointment</div>\
+                                </div>`)
+                            } else if (response.data.data[slot].outcome == "Completed") {
+                                $('#release_wraper').append(`<div class="w-full flex justify-around items-center bg-gray-200">\
+                                    <div class="p-2 border flex space-x-2">\
+                                        <div>You have completed your discussion at:</div>\
+                                        <div class="text-blue-800 font-bold text-lg">${response.data.data[slot].startTime} - ${response.data.data[slot].endTime}</div>\
+                                    </div>\
+                                    <div><a href="/v2/demand/" class="bg-green-500 rounded-lg font-bold text-white p-3 hover:bg-green-600">
+                                        Browse Opportunities
+                                    </a></div>\
+                                </div>`)
+
+                            }
+                        }
+                    }
+                } else {
+                    $('#book_wraper').removeClass('hidden');
+                    $('#release_wraper').addClass('hidden');
+                }
+            },
+            error: function(xhr, errmsg, err) {
+                alert('Oops! We have encountered an error: ', 'danger'); // provide a bit more info about the error to the console
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    }
+
+    function clicks() {
+        $("#slots_month div:first-child").click()
+        $("#slots_days div:first-child").click()
+    }
+
+    $(document).ready(function() {
+        // populate roles
+        $('#roles div').remove();
+        for (let i = 0; i < user_roles.length; i++) {
+            $('#roles').append(`<div class="p-3  border-b hover:bg-green-200 cursor-pointer role_button" data-roleId="${user_roles[i]['id']}">${user_roles[i]['name']}</div>`);
+        }
+        $("#roles div:first-child").click()
+        clicks()
+    });
+</script>
+
+
+{% endblock %}

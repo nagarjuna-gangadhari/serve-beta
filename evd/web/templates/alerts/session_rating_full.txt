@@ -1,0 +1,14 @@
+Dear {{ user_id }} {{ first_name }} {{ last_name }},
+
+We thank you for your contribution by supporting this cause!!
+
+As you know, we started this program in order to equip children with knowledge, skills and values to pursue their goals and to make a better living.
+
+Please share your valuable experience with us about your teaching sessions.
+
+{{link}}
+
+Thanks again for your generosity and support.
+
+eVidyaloka Team.
+

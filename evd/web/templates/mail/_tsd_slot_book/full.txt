@@ -1,0 +1,20 @@
+Dear {{user.first_name}} {{ user.last_name }},<br/><br/>
+
+Thank you for progressing with the on-boarding process to start volunteering.<br/><br/>
+
+Your <strong>{{type}}</strong> for Selection Discussion is confirmed:<br/><br/>
+
+    &nbsp;&nbsp;&nbsp;&nbsp;{{slot}}<br/><br/>
+
+{% if type == "Booking" %}
+
+    We will have our Panel member awaiting online on Skype on the booked time. Please do accept the Skype contact request from the concerned panel member. The discussion will be for a duration for 20 mins.<br/><br/>
+
+{% endif %}
+
+For any change of booking, please do log in and visit  http://www.evidyaloka.org/role_onboarding/{{role}} and Change your discussion slot by taking Step 2 of Onboarding process.<br/><br/>
+
+For any queries, please do write back to discussions@evidyaloka.org<br/><br/>
+
+Regards,<br/>
+eVidyaloka Onboarding Team

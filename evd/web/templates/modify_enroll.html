@@ -1,0 +1,257 @@
+<html>
+<head>
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+
+{% block head_title %}Modify Enrollment{% endblock %}
+{% block head_styles %}
+
+<style>
+#uvTab{
+display:none;
+}div.scrollmenu {
+  overflow: auto;
+  white-space: nowrap;
+}
+
+
+div.scrollmenu a:hover {
+  background-color: #777;
+}
+
+</style>
+
+        <link rel='stylesheet' type='text/css' href='/static/css/calendar/fullcalendar.1.5.3.min.css'/>
+            <link rel="stylesheet" type="text/css" href="/static/css/calendar/theme.css" />
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+                <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+                    <link rel="stylesheet" href="/static/css/centeradmin.css" />
+                    {% endblock %}
+
+{% block top_bar %}{% endblock %}
+{% block breadcrumb %}{% endblock %}
+{% block head_scripts %}
+{{ block.super }}
+{% endblock %}
+{% block body_container %}
+</head>
+<body style="background-color:#FFFFA6;margin-left:60px;">
+{% block user_info %}
+{% endblock %}
+
+<div class="row" style="background-color:#F15A22; margin-left:-60px; margin-top:-80px">
+
+<strong><P style="padding-top:5px; padding-left:10px; color:white;">Modify Enrollment</p></strong>
+
+</div>
+
+<div class="container" style="position:absolute;padding-top:5px;">
+
+<form id="form-modify-course" style="margin-top:10px;"  method="POST">
+     {% csrf_token %}
+     <div class="row">
+     
+     
+    
+     
+     
+<center><h4 style="">Center : {{center.name}}</h4></center>
+
+
+ <a class="clos" 
+				style="padding-left: 764px; font-size: 25px; margin-top: 100px;"><span
+				id="menuClose" class="glyphicon glyphicon-remove-circle"
+				style="background-color: ##a7905b00; color: black;"></span></a>
+     
+
+<center><h5 style="" > Course :  {{offering.course.board_name}} {{offering.course.grade}}  {{offering.course.subject}}</h5></center>
+
+     <input type = "hidden" name="center_id" value="{{center.id}}"/>
+     <input type = "hidden" name="offering_id" value="{{offering.id}}"/> 
+     </div>
+     <div class="row">
+
+     <div class="col-sm-3" style="margin-left:-50px;"> 
+     <p><b>Master List ({{ students_master|length }})</b></p>
+     <div class="scrollmenu"> 
+       <select multiple="multiple" id = "masterlist" name="masterlist1[]" style="width:350px; height:300px;">
+       {% for stud in students_master %}
+       <option value='{{stud.id}}' > {{stud.name}} {% if stud.school_rollno %}({{stud.school_rollno}}){%else%}(NA){%endif%}</option>
+       {% endfor %}
+      </select>
+    </div>
+</div>
+
+
+    <div class="col-sm-1" style="margin-top:160px;margin-right:60px;margin-left:20px;float:left;">
+         <div type='button' class="btn btn-default" id='btnRight'>Enroll<span class="glyphicon glyphicon-chevron-right"></span></div>
+
+     </div>
+
+      <div class="col-sm-3"style="">
+       <p style="margin-left:11px;"><b> Enroll list ({{ students_enroll|length }})</b> </p>
+       <div class="scrollmenu"> 
+        <select multiple="multiple" id ="enrolllist" name="enrolllist1[]" style="width:350px; color:green; margin-left:10px; height:300px;">
+
+       {% for stud1 in students_enroll %}
+        <option  value='{{stud1.id}}'> {{stud1.name}} {% if stud1.school_rollno %}({{stud1.school_rollno}}){%else%}(NA){%endif%}</option>
+
+       {% endfor %}
+      </select>
+    </div>
+</div>
+
+    <div class="col-sm-1" style="margin-top:160px; margin-right:10px;margin-left:-10px">
+            <div type='button' class="btn btn-default" id='btnRight1' >Remove<span class="glyphicon glyphicon-chevron-right"></span></div>
+     <br/><div type='button' class="btn btn-default" id='btnLeft1' style="padding-right:22px;" ><span class="glyphicon glyphicon-chevron-left"></span>Revert</div>
+     </div>
+
+      <div class="col-sm-3"style=" float:right">
+     <p><b> Deletion list</b> </p>
+     <div class="scrollmenu"> 
+          <select multiple="multiple" id = "derolllist" name="derolllist1[]" style="width:350px;color:red; height:300px;">
+          </select>
+        </div>
+    </div>
+
+     </div>
+     <div style="text-align:right; margin-right:-40px;" >
+     <input type="submit" id="onsubmit" style="padding-left:10px; padding-right:10px; margin-top:20px;" class="btn btn-Danger" style="padding:6px 6px 6px 6px; margin-top:20px;" value="Modify" formtarget="_self"  formaction="/modify_student_enroll/" >  
+
+     </div>
+ 
+
+</form>
+</div>
+
+
+{% endblock %}
+{% block footer %}
+{% endblock %}
+</body>
+{% block bottom_scripts %}
+  <script>
+        window.center_id = {{ center.id }};
+ </script>
+    <script>
+    
+$(document).ready(function() {
+
+    
+
+    
+    $('#btnRight').click(function(e) {
+        temp=[];
+        var selectedOpts =  $('#masterlist option:selected');
+        var optsin_enroll=$('#enrolllist option').each(function(){temp.push($(this).val())});
+        var optsin_enroll1=$('#derolllist option').each(function(){temp.push($(this).val())});
+        optstoappend=[];
+        if (selectedOpts.length == 0) {
+            alert("Nothing to move.");
+            e.preventDefault();
+        }
+       for(i=0;i<selectedOpts.length;i++){
+           if(jQuery.inArray(selectedOpts[i].value,temp)==-1){
+              optstoappend.push(selectedOpts[i]);
+         }}
+       $('#enrolllist').append($(optstoappend).clone());
+    
+       e.preventDefault();
+
+     });
+     $('#onsubmit').click(function(){
+        var en_count= $('#enrolllist option').length;
+        var msg = "Are you sure? you want to enroll " +en_count +" number of students."
+        var r= confirm(msg);
+        if (r== true){
+        $('#derolllist option').prop('selected', true);
+        $('#enrolllist option').prop('selected', true);
+        }
+        else{
+        return false;
+        }
+        
+});
+
+
+   $('#btnLeft').click(function(e) {
+         temp=[];
+         optstoappend=[];
+         var selectedOpts = $('#enrolllist option:selected');
+         var optsin_master=$('#masterlist option').each(function(){temp.push($(this).val())});
+         if (selectedOpts.length == 0) {
+            alert("Nothing to move.");
+             e.preventDefault();
+         }
+         for(i=0;i<selectedOpts.length;i++){
+           if(jQuery.inArray(selectedOpts[i].value,temp)==-1){
+              optstoappend.push(selectedOpts[i]);
+         }}
+
+         $('#masterlist').append($(optstoappend).clone());
+         $(selectedOpts).remove();
+         e.preventDefault();
+     });
+
+
+   $('#btnRight1').click(function(e) {
+        var selectedOpts = $('#enrolllist option:selected');
+        if (selectedOpts.length == 0) {
+            alert("Nothing to move.");
+            e.preventDefault();
+        }
+        $('#derolllist').append($(selectedOpts).clone());
+        $(selectedOpts).remove();
+        e.preventDefault();
+    });
+    $('#btnLeft1').click(function(e) {
+        var selectedOpts = $('#derolllist option:selected');
+        if (selectedOpts.length == 0) {
+            alert("Nothing to move.");
+            e.preventDefault();
+        }
+        $('#enrolllist').append($(selectedOpts).clone());
+        $(selectedOpts).remove();
+        e.preventDefault();
+    });
+
+ 
+    
+
+    $("#menuClose").click(function(){
+    	
+    	$(".clos").click(function() {
+    		parent.$.fn.colorbox.close()
+    	});
+    });
+
+    
+
+
+});
+
+
+
+
+    </script>
+
+
+
+<style>
+.mylivechat_inline * {
+    
+    display: none;
+}
+
+</style>
+
+
+
+
+
+{% endblock %}
+
+
+</html>

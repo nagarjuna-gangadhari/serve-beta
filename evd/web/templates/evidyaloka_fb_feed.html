@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <script src='/static/js/underscore_1.5.2.min.js' type='text/javascript' ></script>
+    <link href='/static/css_new/fb_feed/fb_feed.css' rel='stylesheet'></link>
+    <script src='/static/js_new/fb_feed/fb_feed.min.js' type='text/javascript' ></script>
+
+<style>
+    .fbpost{
+        padding : 20px 20px;
+    }
+    .fbpost:hover{
+        box-shadow: 1px 1px 7px 1px #888;
+    }
+    .feed-container{
+        padding : 10px 0px;
+    }
+    .fbpost{
+        padding:20px 20px;
+    }
+    .fbpost a *{
+        color : black;
+        font-family : 'open sans' ;
+    }
+    .hide_btn {
+        display:none;
+    }
+    .fbpost:hover .hide_btn {
+        display:block;
+    }
+    .fbpost button{
+        color:white;
+        font-family:'sans-serif';
+        text-shadow:none;
+    }
+</style>
+
+<script>
+    $(document).ready(function(){
+        var template = $('#feed_div').html();
+        $('.render_feed').evdFacebook({
+            id:'100011607874861',
+            template : template,
+            member_token : '{{ member_token }}'
+        });
+        
+    });
+    $("body").on("click", '.user_creation', function(){
+            $.get('/workplace/create_user/').done(function(data) {
+            console.log(data);
+            if (data.data == 'login_required') {
+                window.location = "/?next=/engage/&show_popup=True";
+            }
+            else {
+                $(".user_checking").html(data.data);
+                $("#contact_modal").modal().show();
+                console.log(data);
+            }
+            });
+        });
+</script>
+<script id='feed_div' type='javascript/template'>
+    <% _.forEach(fb_glob.posts,function(u,i){  %>
+       <div class='row standard_row fbpost' >
+            <div class='col-sm-1' >
+                <img src='<%= fb_glob.user.picture.data.url %>' class='img img-responsive img-circle' style='position:relative;height:40px;'>
+            </div>
+            <div class='col-sm-9'>
+                <h4 style='padding-left:0px;'><%= fb_glob.user.name %></h4>
+                <p style='font-size:12px;color:#d1cfcf;line-height:4px;'><%= u.created_time %>&nbsp <i class='fa fa-briefcase' aria-hidden='true'></i></p>
+            </div>
+            {% if fb_id %}
+            <div class="col-sm-2 hide_btn">
+                <a href='http://evidyaloka.facebook.com' target='_blank'>
+                    <button class="btn btn-success">Visit Community</button>
+                </a>
+            </div>
+            {% else %}
+            <div class="col-sm-2 hide_btn">
+                <a href='#' >
+                    <button class="btn btn-success user_creation" id='user_creation'>Join Community</button>
+                </a>
+            </div>
+            {% endif %}
+            <div class='col-sm-offset-1 <% if(u.picture) { %> col-sm-7 <% }else{ %> col-sm-11  <% } %>' >
+                <p style='font-size:14px;margin-top : 15px;'><%= u.message %></p>
+            </div>
+            <% if(u.picture){ %>
+                <div class='col-sm-4 col-centered'>
+                     <img src='<%= u.picture %>' style='margin-left: auto; margin-right:auto;display:block;'  >
+                </div>
+            <% } %>
+            <div class='row standard_row' style='width:80%;float:right;'>
+                <p style='float:right;font-size:12px;color:#888'><%= u.story %>.</p>
+            </div>
+           <div class='row standard_row' style='text-align:center;margin-top:60px;height:20px;'>
+                    <hr style='width:100%;margin: 0 2%;' >
+           </div>
+        </div>
+    <% }) %>
+
+</script>
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+    {% if not user.is_authenticated %}
+        <p style='height:80px;visibility:hidden'></p>
+    {% endif %}
+    <div class='feed-container'>
+        <div class='row standard_row'>
+            <div class='col-sm-12'>
+               <div class='render_feed'>
+               </div>
+            </div>
+        </div>
+    </div>
+
+<div id="contact_modal" class="modal fade" role="dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" >
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" style="font-size:30px">&times;</button>
+            <h4 class="modal-title">Contact</h4>
+        </div>
+        <div class="modal-body">
+            <div class='alert alert-warning'>
+                <div class='row standard_row'>
+                    <p class='user_checking'></p>
+                    <p>Please send your request to Join the Community to Rini Jose, email : <a href='mailto:rini.jose@evidyaloka.org'>rini.jose@evidyaloka.org</a></p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+

@@ -1,0 +1,113 @@
+
+
+{% extends "base.html" %}
+{% load tags %}
+{% block head_styles %}
+{{ block.super }}
+
+   
+
+    <link rel="stylesheet" href="/static/css/colorbox.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+
+<style>
+    .label{
+        font-family: sans-serif!important;
+    }
+</style>
+
+
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+    <h1 style="text-align: center;"><b>REPORTS</b></h1>
+    {% if messages %}
+    <div class="alert alert-success" id="success_alert" role="alert">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {% for messages in messages %}
+        {{messages}}
+        {% endfor %}
+      </div>
+    {% endif %}
+    <div class="row" style="margin-top: 50px; background-color: white;height: 115px;border-color: black;border-style: solid;" >
+       
+    <form method=get action="/v2/report_load/">   
+        <div class="col-md-12" style="margin-top: 25px;">
+    <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
+        <label style=" font-family: sans-serif!important;    font-size: 14px;" >Select Report:</label>
+        <select name="reports" id="reports_id">
+
+    {% if is_orgUnit or is_delivery_coordinator or is_vol_admin or is_superuser %}
+    <option value="Class_completion_report">Class completion report</option>
+    {% endif %}
+    {% if is_vol_coordinator or is_superuser%}
+    <option value="teacher_report">Teacher Report</option>
+    {% endif %}
+    {% if is_vol_admin or is_pam or is_superuser %}
+    <option value="offering_report">Offering Report</option>
+    {% endif %}
+    {% if is_orgUnit or is_superuser %}
+    <option value="partner_school_report">Partner School Report</option>
+    {% endif %}
+  </select>
+</div>
+<!-- <div class="col-md-5 col-sm-5 col-lg-5 col-xs-5">
+    <label  style=" font-family: sans-serif!important;    font-size: 14px;" >Select Report Duration</label> -->
+    <!-- <select name="reports_time" id="reports_time_id">
+      
+        <option>Weekly</option>
+        <option>Monthly</option>
+        <option>Year</option>
+    </select> -->
+    <div class="col-md-1 col-sm-1 col-lg-1 col-xs-1" style="text-align:center ; margin-left: -25px;"><label  style=" font-family: sans-serif!important;    font-size: 14px; margin-left: 30px;">
+    AY</label><select id="AY_id" name="AY_id">
+        <option>Ay-13-14</option>
+        <option>Ay-14-15</option>
+        <option>Ay-15-16</option>
+        <option>Ay-16-17</option>
+        <option>Ay-17-18</option>
+        <option>Ay-18-19</option>
+        <option>Ay-19-20</option>
+        <option>Ay-20-21</option>
+    </select>
+</div>
+    <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3" style="float: left;text-align:center ;margin-left: 28px;"><label  style=" font-family: sans-serif!important;    font-size: 14px;">
+        From &nbsp;</label><input type="date" style='width: 187px; padding-left:20px;' value ="{{start_date}}" id="from" name='from' required>
+</div>
+<div class="col-md-3 col-sm-3 col-lg-3 col-xs-3" style="float: left;text-align:center;margin-left:-25px;"><label  style=" font-family: sans-serif!important;    font-size: 14px;">
+        To </label><input type="date" id="to" style='width: 187px;padding-left:20px;position:relative;left:16px;' value="{{end_date}}" name='to' required>
+</div>
+<!-- </div> -->
+<div class="col-md-2 col-sm-2 col-lg-2 col-xs-2"> 
+    <button class="btn btn-success" title="Generate" style="margin-top: 23px;">Generate</button>
+                            
+</div>
+</div>
+</form>
+
+</div>
+   {% endblock %}
+
+
+{% block bottom_scripts %}
+    {{ block.super }}
+
+    <script type="text/javascript" src="/static/js/jquery.colorbox.min.js"></script>
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tab.min.js"></script>
+
+
+<!--    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"/>-->
+<!--    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"/>
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<!--    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
+
+
+
+
+
+
+{% endblock %}

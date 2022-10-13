@@ -1,0 +1,8 @@
+Dear {{ first_name }} {{ last_name }},
+
+The panel has conducted a detailed review of the current role requirements in the context of your experience & background, While the immediate fitment for the {{ role }} may not be fully aligned (due to multiple factors including non-suitability of timings, skills, interests, role requirements, etc), the panel would look forward to your participation in one of the alternate volunteering opportunities that are available with eVidyaloka.
+
+We would invite you to login at www.evidyaloka.org and explore other roles of volunteering, and look forward to your active participation and contributions.
+
+Regards,
+eVidyaloka On-boarding Team

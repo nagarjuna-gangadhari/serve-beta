@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block head_title %}eVidyaLoka - Teacher dashboard{% endblock %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <link rel='stylesheet' type='text/css' href='/static/css/calendar/fullcalendar.1.5.3.min.css'/>
+    <link rel="stylesheet" type="text/css" href="/static/css/calendar/theme.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/teacherdash.css" />
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+    window.evd.pre_submission = function(){
+        var q = "";
+        var $att_form = $($(this).attr("href"));
+        var stu_len = $att_form.find("input.student").length;
+        $att_form.find("input.student").each(function(index, val){
+            stu_name = $(this).attr("value");
+            q += stu_name + ((index < stu_len-1) ? ";" : "");
+        });
+        $att_form.find("input[name='student']").val(q);
+        q="";
+        var attend_len = $att_form.find("input.attend").not(":checked").length;
+        $att_form.find("input.attend").not(":checked").each(function(index,val){
+            attend = parseInt($(this).val());
+            q += attend + (( index < attend_len - 1) ? ";" : "");
+        });
+        $att_form.find("input[name='attend']").val(q);
+    }
+     window.evd.closemodal = function() {
+        $(this).parents(".modal").modal("hide");
+        evd.show_msg("Attendance has been submitted for this session");
+    }
+
+    window.evd.pre_feedback = function(){
+        var $form = $($(this).attr("href"));
+        var len = $form.find("input[type='checkbox'].feedback").filter(":checked").length;
+        var $topic_ids = $form.find("input[name='topic_ids']");
+        var q = "";
+        /*$(this).parent().find("input[type='checkbox'].feedback").filter(":checked").each(function(index,val){
+             q += $(this).val() + (index < (len-1) ? ";" : "") ;
+        });*/
+        q = $(this).parent().find("select.topics").children(":selected").attr("data-topic-id");
+        $topic_ids.val(q);
+        var comment = $form.find("textarea").val().trim();
+        if(comment == ""){
+            alert("Feedback cannot be empty");
+            return false;
+        }
+        var stat = $(this).parent().find('#status').val(),
+            reasoncode = $(this).parent().find('.reason-code').find("select[name='reason']").val();
+        if(stat === 'Cancelled' || stat === 'Rescheduled'){
+            if(!reasoncode){
+                alert("You should select a Reason code");
+                return false;
+            }
+        }
+
+    }
+    window.evd.fd_calback = function(){
+        $(this).parent().children("textarea").val("");
+        $(".feedback-modal").modal("hide");
+        evd.show_msg("Your feedback has been submitted for this session");
+         render_event(window.last_clicked_day.attr("data-event-id"), window.dte);
+    }
+
+    var accept =  "";
+    evd.pre_response = function(){
+        accept = $(this).children("span").text();
+    }
+    evd.response_cb = function(resp){
+        if(resp == "success"){
+            var notification = $(this).parents("li").attr("data-notification");
+            var center = $("li[data-notification='"+ notification +"']").children("p:first").text().split(",")[1].split("-")[0];
+            $("li[data-notification='"+ notification +"']").remove();
+            $("#my-notifications").children(":first-child").appendTo($("#my-notifications").next("ul"));
+            $("#my-notifications").children(":first-child").addClass("active"); 
+            if(accept == "accept")
+                evd.show_msg("Thankyou for accepting the offer. Our " + center + " centeradmin will contact you soon");    
+            else
+                evd.show_msg("Thanks for the reply. We will get back to you with future requirements");
+        }
+    }
+    $("ul.custom-select li").toggle(function(){
+        $("ul.custom-select > li.focus-f").not($(this)).trigger("click");
+        $(this).addClass("focus-f");
+    },function(){
+        $(this).removeClass("focus-f");
+    });
+    $("html").click(function(){
+        $("ul.custom-select li.focus-f").trigger("click");
+    });
+    $("ul.custom-select li span.dropdown a").click(function(){
+        $(this).parent("span.dropdown").prev().text($(this).text());
+    });
+
+{% endblock %}
+
+{% block body_container %}
+
+            {% if not new_centeradmin %}
+            <div class="dashboard-inner-container">
+                <div class="dashboard-notifications-container" style="width:560px;min-height:500px;float:left;padding-right:10px">
+                    {% if stack %}
+                    <div class="notification note-box">
+                       <h3>Notifications <div class="pagination"><i rel="#my-notifications" data-step="1" class="prev icon"></i><i rel="#my-notifications" data-step="1" class="next icon"></i></div></h3>
+                       <ul id="my-notifications" class="cycle">
+                            {% for notification in stack %}
+                                <li data-notification="notification-{{ forloop.counter }}" class="{% if forloop.counter == 1 %} active{% endif %}">
+                                    <p style="text-align:center">{{ notification.grade }} {{ notification.subject }}, {{ notification.center }} - {{ notification.date }} to {{ notification.end_date }}</p>
+                                    <p style="text-align:center;width:235px;margin-top:10px;margin-left:auto;margin-right:auto;overflow:hidden">
+                                        <a class="btn" rel="ajax-link" pre-call="pre_response" callback="response_cb" href="/response/?reply=accept&offering={{ notification.id }}" style="width:100px;float:left">
+                                            <span class="ajax-button-label">accept</span>
+                                        </a>
+                                        <a class="btn" rel="ajax-link" pre-call="pre_response" callback="response_cb" href="/response/?reply=reject&offering={{ notification.id }}" style="width:100px;float:left;margin-left:10px">
+                                            <span class="ajax-button-label">reject</span>
+                                        </a>
+
+                                    </p>
+                                </li>
+                            {% endfor %}
+                       </ul>
+                       <ul>
+                            {% for notification in stack %}
+                                {% if forloop.counter == 1 %}
+                                <li data-notification="notification-1">
+                                    <p style="text-align:center">{{ notification.grade }} {{ notification.subject }}, {{ notification.center }} - {{ notification.date }} to {{ notification.end_date }}</p>
+                                    <p style="text-align:center;width:235px;margin-top:10px;margin-left:auto;margin-right:auto;overflow:hidden">
+                                        <a class="btn" rel="ajax-link" pre-call="pre_response" callback="response_cb" href="/response/?reply=accept&offering={{ notification.id }}" style="width:100px;float:left">
+                                            <span class="ajax-button-label">accept</span>
+                                        </a>
+                                        <a class="btn" rel="ajax-link" pre-call="pre_response" callback="response_cb" href="/response/?reply=reject&offering={{ notification.id }}" style="width:100px;float:left;margin-left:10px">
+                                            <span class="ajax-button-label">reject</span>
+                                        </a>
+                                    </p>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                       </ul>
+                    </div>
+                    {% endif %}
+                    {% if sessions %}
+                    <div class="my-classes note-box">
+                       <h3>Next Class <div class="pagination"><i rel="#my-classes" data-step="1" class="prev icon"></i><i rel="#my-classes" data-step="1" class="next icon"></i></div></h3>
+                       <ul id="my-classes" class="cycle">
+                            {% for session in sessions %}
+                                <li {% if forloop.counter == 1 %}class="active"{% endif %}>
+                                    <p style="text-align:center;margin-top:20px">{{ session.grade }} {{ session.subject }}, {{ session.center}} - <i>{{ session.date }} {{ session.start }}</i></p>
+                                    <p style="text-align:center;margin-top:10px"><a class="tag" href="http://en.wikipedia.org/wiki/{{ session.subject }}">wiki</a></p>
+
+                                </li>
+                            {% endfor %}
+                       </ul>
+                       <ul>
+                            {% for session in sessions %}
+                                {% if forloop.counter == 1 %}
+                                <li>
+                                    <p style="text-align:center;margin-top:20px">{{ session.grade }} {{ session.subject }}, {{ session.center}} - <i>{{ session.date }} {{ session.start }}</i></p>
+                                    <p style="text-align:center;margin-top:10px"><a class="tag" target="_blank" href="http://en.wikipedia.org/wiki/{{ session.subject }}">wiki</a></p>
+                                    
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                       </ul>
+                    </div>
+                    {% endif %}
+                    {% if my_offering %}
+                    <div class="note-box">
+                        <h3>My Classroom</h3>
+                        <a id="comments" href="#Comments-modal" rel="tooltip" data-title="Comments" style="float:right;margin:13px 5px">
+                            <img src='/static/images/comments.png'/>
+                        </a>
+                        <div id='attendence-board' class="select-box select-pin attendence-board" style="margin:10px;font-size:14px;">
+                            <select name='my_offerings' style='border-radius: 7px;background: whitesmoke;width:330px!important;'>
+                                {% for offering in my_offering%}
+                                <option value={{ offering.id }}>
+                                        {{ offering.grade }} {{ offering.subject }}, {{ offering.center }} - {{ offering.date }} {{ offering.start }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <select name="my_students" style='border-radius: 7px;background: whitesmoke;min-width:175px;max-width:185px !important'>
+                                <option></option>
+                                {%for offering in my_offering%}
+                                    {% if forloop.counter == 1%}
+                                        {% for stu in offering.students%}
+                                            <option data-offering-id={{ offering.id }} stu-name="{{ stu.name }}" value={{ stu.id}}>{{ stu.name }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <div class="student_options hide">
+                                {%for offering in my_offering%}
+                                    <select name="{{ offering.id }}">
+                                        <option></option>
+                                        {% for stu in offering.students%}
+                                            <option data-offering-id={{ offering.id }} stu-name="{{ stu.name }}" value={{ stu.id}}>{{ stu.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endfor %}
+                            </div>
+                            <div class="student_info hide" style="margin:5px;margin-top:10px;line-height:1.6em">
+                                <table style="width: 100%;text-align: left">
+                                    <thead>
+                                        <tr>
+                                            <th><h3>Subject</h3></th>
+                                            <th><h3>Present</h3></th>
+                                            <th><h3>Absent</h3></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="note-box">
+                        <h3>Things you can do</h3>
+                        <ul>
+                            <li>Join one of the Orientation events <a href= http://www.facebook.com/evidyaloka/events>here</a></li>
+                            <li>Know more about <a href="/intro/">eVidyaloka</a></li>
+                            <li>Know more about <a href="/centers/">our centers</a></li>
+                            <li>Check your <a href="/user_profile/?readiness">readiness</a> to start contributing</li>
+                        </ul>
+                    </div>
+                    <div class="pref-courses note-box">
+                       <h3>My Courses <div class="pagination"><i rel="#my-courses" data-step="3" class="prev icon"></i><i rel="#my-courses" data-step="3"  class="next icon"></i></div></h3>
+                       {% if assigned_offerings %}
+                       <ul id="my-courses" class="cycle">
+                            {% for offering in assigned_offerings %}
+                                <li {% if forloop.counter < 4 %}class="active"{% endif %}>{{ offering.course_offered }} {{ offering.center }} -<i> {{ offering.start_date }}</i></li>
+                            {% endfor %}
+                       </ul>
+                       <ul>
+                            {% for offering in assigned_offerings %}
+                                {% if forloop.counter < 4 %}
+                                <li>{{ offering.course_offered }} {{ offering.center }} -<i> {{ offering.start_date }} to {{ offering.end_date }}</i></li>
+                                {% endif %}
+                            {% endfor %}
+                       </ul>
+                       {% else %}
+                           <p style="text-align:center;margin-top:40px">Please select courses from <a href="/user_profile/">My Profile</a> to start teaching</p>
+                       {% endif %}
+                    </div>
+                    <div class="pref-courses note-box">
+                       <h3>Preferred Courses <div class="pagination"><i rel="#preferred-courses" data-step="3" class="prev icon"></i><i rel="#preferred-courses" data-step="3"  class="next icon"></i></div></h3>
+                       {% if user_pref_offerings %}
+                       <ul id="preferred-courses" class="cycle">
+                            {% for offering in user_pref_offerings %}
+                                <li {% if forloop.counter < 4 %}class="active"{% endif %}>{{ offering.grade }} {{offering.subject}} {{ offering.center }} -<i> {{ offering.start }}</i></li>
+                            {% endfor %}
+                       </ul>
+                       <ul>
+                            {% for offering in user_pref_offerings %}
+                                {% if forloop.counter < 4 %}
+                                <li>{{ offering.grade }} {{offering.subject}} {{ offering.center }} <i> {% if offering.start and offering.end %} - {{ offering.start }} to {{ offering.end }}{% endif %}</i></li>
+                                {% endif %}
+                            {% endfor %}
+                       </ul>
+                       {% else %}
+                           <p style="text-align:center;margin-top:40px">Please select courses from <a href="/user_profile/">My Profile</a> to start teaching</p>
+                       {% endif %}
+                    </div>
+
+                </div>
+                {% else %}
+                    <p>You will have admin features when evidyaloka administrator assigns you a center</p>
+                {% endif %}
+                <div class="dashboard-calendar-container" style="width:370px;min-height:500px;float:left">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+{% endblock %}
+
+{% block bottom_scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='/static/js/calendar/fullcalendar.js'></script>
+    <script type="text/javascript" src="/static/js/calendar/jquery-ui-1.8.17.custom.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="/static/js/teacherdash.js"></script>
+{% endblock %}

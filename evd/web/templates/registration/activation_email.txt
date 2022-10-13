@@ -1,0 +1,16 @@
+Hi,
+
+Thank You for Creating an Account with evidyaloka!
+
+There are few more steps before you can start volunteering. You need to activate your evidyaloka account. To activate your account, click the below.
+
+http://{{ site }}/accounts/activate/{{ activation_key }}/
+
+The link will expire in {{ expiration_days }} days.
+
+If the link above is not clickable just copy it and paste into your browser and navigate.
+
+After you activate your account, you can choose any of the preferred role evidyaloka offers. You will be receiving occasional emails as you progress or other information.
+
+Waiting to see you there,
+eVidyaloka Community

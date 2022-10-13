@@ -1,0 +1,196 @@
+{% extends 'new_base_temp.html' %} 
+
+{% block content %}
+    <section class=" container section-content section-isotope" id="projects" style="margin-top:70px">
+    <div class='row'
+		style="background-color: #ffffff; box-shadow: 1px 1px 1px 1px darkgray;">
+		<!-- <h3 style='margin: 35px 0px 15px 15px;'>&nbsp;&nbsp;&nbsp;Choose an online volunteering opportunity based on your skills/interests</h3> -->
+		<h1 style='text-align: center;'>eVidyaloka wall of Fame</h1>
+        <h2 style='text-align: center;'>Celebrating long serving volunteers</h2>
+	</div>
+        <script src="/static/js_new/jquery-1.10.2.min.js"></script>
+        <link rel="stylesheet" href="/static/css_new/jquery-ui-minified.css">
+        <script src="/static/js_new/jquery-ui.js"></script>
+        <div id="tab" class="tabs-team button-group text-center">
+            <ul >
+                
+            </ul>
+            
+
+
+    <!-- carousel
+    ================================================== -->
+   <section id="testimonials" class="detail_modal">
+
+      <div class="container margin_caro" style="margin-left: -10px;">
+
+        <div class='row'>
+          <div class='col-md-12'>
+           <div class="carousel slide" data-ride="carousel" id="quote-carous">
+
+              <!-- Carousel Slides / Quotes -->
+              <div class="carousel-inner">
+                <div>
+                <input type="hidden" id="userDetailsId" value="{{usersForFiveYearVol}}"/>
+                <input type="hidden" id="userForFourYear" value="{{usersForFourYearVol}}"/>
+                <input type="hidden" id="userForThreeYear" value="{{usersForThreeYearVol}}"/>
+                     <div id="" class="grid cs-style-1">
+                      <h2 style="margin-left: -2%;color:orange;">Volunteers Serving Since <b>5</b> years</h2>
+                        <div class="row" id="teacher_row1">
+                         </div>
+                         <div class="row" id="teacher_row2">
+                          <h2 style="margin-left: -2%;color:orange;">Volunteers Serving Since <b>4</b> Years</h2>
+						</div>
+						<div class="row" id="teacher_row3">
+                           <h2 style="margin-left: -2%;color:orange;">Volunteers Serving Since <b>3</b> Years</h2>
+						</div>
+					</div>
+						</div>
+					</div>
+					</div>
+					</div>
+					</div>
+			</div>
+		</section>
+
+			</div>
+		</section>
+
+<style>
+.history_btn:hover{
+    background: rgb(22, 9, 82) !important;
+}
+</style>
+<script>
+	$(document)
+			.ready(
+					function() {
+						var user_json_data = $("#userDetailsId").val();
+						var user_json_fourYear = $("#userForFourYear").val();
+						var user_json_threeYear = $("#userForThreeYear").val();
+						if (user_json_data != null && user_json_data != ''
+								&& user_json_data != 'undefined') {
+							var jsonObjects = JSON.parse(user_json_data);
+							var count = 1;
+							var count_div = 1;
+							var thumb_array = new Array();
+							var flag = true;
+							for (i = 0; i < jsonObjects.length; i++) {
+								var obj = jsonObjects[i];
+								var div_data = '';
+								div_data += '<div class="grid cs-style-1">';
+								div_data += '<div class="col-sm-6 col-md-2 portfolio-item design">';
+								div_data += '<figure>';
+								if (obj['picture'] != null && obj['picture'] != '' && obj['picture'] != "undefined") {
+									div_data += '<div class="info"style="bottom:-110px">';
+									div_data += '<a id="8" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>'
+											+ obj['name'] + '</span></a></div>';
+									div_data += '<img src="'+obj['picture']+'" alt="'+obj['name']+'"  class="team_img">';
+									div_data += '<figcaption> </figcaption>';
+								}else {
+									div_data += '<div style="height: 155px;width: 150px;">';
+									div_data += '<img src="" alt="'+obj['name']+'"  class="team_img" style="background: rgb(82,164,112) none repeat scroll 0% 0%;font-size: 18px;text-align: center;line-height: 155px;letter-spacing: -1px;">';
+									div_data += '</div>';
+								}
+								div_data += '</figure></div></div>';
+								thumb_array.push(div_data);
+								if (count <= 4){
+									$("#teacher_row1").append(thumb_array[i]);
+									count++;
+								}else{
+									count_div++;
+									count = 1;
+									$("#teacher_row1").append(thumb_array[i]);
+									count++;
+								 }
+							}
+						} else {
+							thumbs_data = 'No Data Found!';
+						}
+						if (user_json_fourYear != null && user_json_fourYear != ''
+							&& user_json_fourYear != 'undefined') {
+						var jsonObjects = JSON.parse(user_json_fourYear);
+						var count = 1;
+						var count_div = 1;
+						var thumb_array = new Array();
+						var flag = true;
+						for (i = 0; i < jsonObjects.length; i++) {
+							var obj = jsonObjects[i];
+							var div_data = '';
+							div_data += '<div id="" class="grid cs-style-1">';
+							div_data += '<div class="col-sm-6 col-md-2 portfolio-item design">';
+							div_data += '<figure>';
+							if (obj['picture'] != null
+									&& obj['picture'] != ''
+									&& obj['picture'] != "undefined") {
+								div_data += '<div class="info"style="bottom:-110px">';
+								div_data += '<a id="8" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>'
+										+ obj['name'] + '</span></a></div>';
+								div_data += '<img src="'+obj['picture']+'" alt="'+obj['name']+'"  class="team_img">';
+								div_data += '<figcaption> </figcaption>';
+							} else {
+								div_data += '<div style="height: 155px;width: 150px;">';
+								if (obj['name'] == "Saisireesha Tirumalasetty"){
+								div_data += '<img src="" alt="'+obj['name']+'"  class="team_img" style="background: rgb(82,164,112) none repeat scroll 0% 0%;font-size: 18px;text-align: center;line-height: 60px;letter-spacing: -1px;">';
+								}else{
+									div_data += '<img src="" alt="'+obj['name']+'"  class="team_img" style="background: rgb(82,164,112) none repeat scroll 0% 0%;font-size: 18px;text-align: center;line-height: 155px;letter-spacing: -1px;">';
+								}
+								div_data += '</div>';
+							}
+							div_data += '</figure></div></div> ';
+							thumb_array.push(div_data);
+							if (count <= 4) {
+								$("#teacher_row2").append(thumb_array[i]);
+								count++;
+							} else {
+								count = 1;
+								$("#teacher_row2").append(thumb_array[i]);
+								count++;
+							}
+						}
+					} else {
+						thumbs_data = 'No Data Found!';
+					}
+						if (user_json_threeYear != null && user_json_threeYear != ''
+							&& user_json_threeYear != 'undefined') {
+						var jsonObjects = JSON.parse(user_json_threeYear);
+						var count = 1;
+						var count_div = 1;
+						var thumb_array = new Array();
+						var flag = true;
+						for (i = 0; i < jsonObjects.length; i++) {
+							var obj = jsonObjects[i];
+							var div_data = '';
+							div_data += '<div id="" class="grid cs-style-1">';
+							div_data += '<div class="col-sm-6 col-md-2 portfolio-item design">';
+							div_data += '<figure>';
+							if (obj['picture'] != null
+									&& obj['picture'] != ''
+									&& obj['picture'] != "undefined") {
+								div_data += '<div class="info"style="bottom:-110px">';
+								div_data += '<a id="8" data-toggle="modal" data-target="#detail" style="text-decoration:none"><span>'
+										+ obj['name'] + '</span></a></div>';
+								div_data += '<img src="'+obj['picture']+'" alt="'+obj['name']+'"  class="team_img">';
+								div_data += '<figcaption> </figcaption>';
+							} else {
+								div_data += '<div style="height: 155px;width: 150px;">';
+								if (obj['name'] == "Meenakshi Ashok Kumar" || obj['name'] == "Priyadarshini Krishnaswamy" || obj['name'] == "Bavany Muralikrishna" ||  obj['name'] == "Srividya Srinivasaraghavan" ||  obj['name'] == "Krithika Ramakrishnan" ||  obj['name'] == "Chitra Venkataraman" ||  obj['name'] == "Pavithra Swamynathan"){
+									div_data += '<img src="" alt="'+obj['name']+'"  class="team_img" style="background: rgb(82,164,112) none repeat scroll 0% 0%;font-size: 18px;text-align: center;line-height: 86px;letter-spacing: -1px;">';
+								}else{
+									div_data += '<img src="" alt="'+obj['name']+'"  class="team_img" style="background: rgb(82,164,112) none repeat scroll 0% 0%;font-size: 18px;text-align: center;line-height: 155px;letter-spacing: -1px;">';
+								}
+								div_data += '</div>';
+							}
+							div_data += '</figure></div></div> ';
+							
+							thumb_array.push(div_data);
+							$("#teacher_row3").append(thumb_array[i]);
+						}
+					} else {
+						thumbs_data = 'No Data Found!';
+					}
+					
+					});
+</script>
+
+{% endblock content %}

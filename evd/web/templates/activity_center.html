@@ -1,0 +1,17 @@
+<div class="dropdown role_change">
+      <div class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="width:264%;">Activity Center <i class="fa fa-cogs" aria-hidden="true"></i>
+      <span class="caret"></span></div>
+      <ul class="dropdown-menu">
+            <li class="dropdown-header">Switch Role:</li>
+            {% for role in role_list %}
+                {% if role.status == 100 %}
+                    <li><a href="/dashboard/{{ role.short_name }}/">{{ role.name }} <span class="label label-success">{{ role.status}} %</span></a></li>
+                {% else %}
+                    <li><a  href="/dashboard/{{ role.short_name }}" >{{ role.name }}
+                        <span class="label {% if role.status == 0 %}label-danger{%else%} label-warning {% endif %}">{{ role.status}} %</span></a></li>
+                {% endif %}
+            {% endfor %}
+      </ul>
+</div>
+
+

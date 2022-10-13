@@ -1,0 +1,6 @@
+Dear {{user.first_name}} {{ user.last_name }},<br/><br/>
+
+Thank you for completing the preliminary steps. Our content coordinator will reach out to you shortly and explain the next steps.<br/><br/>
+
+Regards,<br/>
+eVidyaloka Content Team

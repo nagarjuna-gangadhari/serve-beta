@@ -1,0 +1,1067 @@
+{% extends "base.html" %}
+
+{% block head_styles %}
+    {{ block.super }}
+    <style>
+        p.amount {
+            margin: 0 25px 0 0;
+        }
+        span.amount {
+            font-size: 18px;
+            color: #f15a22;
+        }
+        .num-pledgers {
+            color: #f15a22;
+            text-align: center;
+            font-size: 25px !important;
+        }
+        h2 {
+            float: left;
+            text-align: center;
+            margin-bottom: 20px !important;
+        }
+        .faq-menu b{
+            font-weight: bold;
+        }
+        .segment {
+            overflow: hidden;
+            padding: 27px 27px 27px 40px !important;
+        }
+        .donate-row {
+            clear: both;
+            overflow: hidden;
+        }
+        .donate-row > div {
+            overflow: hidden;
+            float: left;
+        }
+        .donate-row > div:first-child {
+            margin-right: 30px;
+        }
+        .border-box {
+
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -o-box-sizing: border-box;
+        }
+        .donate-box {
+            overflow: hidden;
+            width: 280px;
+            float: left;
+            margin-bottom: 20px;
+            background: #9bbb59;
+            border-radius: 15px;
+            -moz-border-radius: 15px;
+            -webkit-border-radius: 15px;
+            color: white;
+            padding: 10px;
+            min-height: 183px;
+        }
+        .donate-box img {
+            float: left;
+            box-shadow: inset 0px 0px 5px #000;
+            border-radius: 15px;
+            -webkit-border-radius: 15px;
+            -moz-border-radius: 15px;
+            margin-right: 10px;
+            width: 100px;
+            height: 100px;
+        }
+        .donate-box > div.info {
+            float: left;
+            width: 170px;
+        }
+        .donate-box > div > div {
+            height: 120px;
+        }
+        .title {
+            font-weight: bold;
+            font-size: 15px !important;
+        }
+        span.bold {
+            font-weight: 600;
+        }
+        .center-classroom {
+            overflow: hidden;
+            padding-top: 15px;
+        }
+        .center-classroom > div {
+            float: left;
+            width: 280px;
+            text-align: center;
+        }
+        .center-classroom a {
+            font-size: 14px;
+        }
+        .sponsor-center {
+            clear: both;
+            border: 2px solid #9bbb59;
+            border-radius:15px;
+            -webkit-border-radius: 15px;
+            -moz-border-radius: 15px;
+            padding: 0px;
+            margin: 10px;
+            overflow: hidden;
+        }
+        .sponsor-center > div {
+            float: left;
+            margin-left: 40px;
+        }
+        .sponsor-center img {
+            width: 75px;
+            height: 75px;
+            float: left;
+            background: white;
+            margin-right: 10px;
+            border-radius: 15px;
+            -webkit-border-radius: 15px;
+            -moz-border-radius: 15px;
+        }
+        .sponsor-center h3 {
+            font-weight: bold;
+        }
+        .sponsor-center p.title {
+            text-align: center;
+        }
+        a.sponsor, a.sponsor:hover,a.g-sponsor, a.g-sponsor:hover {
+            float: right;
+            width: 100px;
+            color: #9bbb59;
+            background: white;
+            text-shadow: none;
+            border: 1px solid #7C9F38;
+            height: 20px;
+            line-height: 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .details {
+            width: 278px;
+            border: 1px solid #11beee;
+            border-radius: 15px;
+            -webkit-border-radius: 15px;
+            -moz-border-radius: 15px;
+            padding: 10px;
+            min-height: 145px;
+        }
+        .details .title {
+            text-align: center;
+            font-size: 17px !important;
+            margin-left:0px;
+        }
+        .details p {
+            margin-bottom: 5px !important;
+            font-size: 14px !important;
+        }
+        #donate-modal {
+            width: 650px;
+            left: 46%;
+        }
+        #donate-modal a.close {
+            cursor: pointer;
+            padding:0px;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+        #donate-modal .control-group {
+            clear: both;
+            overflow: hidden;
+            padding: 0 10px 0 15px;
+        }
+        #donate-modal .input {
+            float: left;
+        }
+        #donate-modal input, #donate-modal textarea {
+            width: 165px !important;
+        }
+        #donate-modal label {
+            float: left;
+            width: 110px;
+            margin-top: 5px;
+        }
+        #donate-modal label.right {
+            margin-left: 20px;
+        }
+        #donate-modal a.submit-btn {
+            clear: both;
+            width: 150px;
+            float: right;
+            margin: 0 15px 15px 0;
+        }
+        .up-arrow {
+            background-position:0 -130px;
+            float:left;
+            width:5px;
+            height:11px;
+            margin-top:3px;
+            margin-right:5px;
+            position: absolute;
+            left:0px;
+        }
+        .icon-down-arrow {
+            background-position:-4px -52px;
+            float:left;
+            width:14px;
+            height:6px;
+            margin-top:7px;
+            margin-right:5px;
+            position: absolute;
+            left: -4px;
+        }
+        ul.collapsable li.question {
+            font-size: 12px;
+            font-family: 'PlutoCondMedium';
+            position: relative;
+            padding-left: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        ul.answer li {
+            color: #4A4A4A;
+            font-size: 12px;
+            padding-left: 10px;
+            margin-bottom: 8px;
+        }
+        #donation {
+            background: #EEEBE8;
+            overflow: hidden;
+        }
+        #donation .content-left {
+            margin-right: 0px !important;
+        }
+        #donation .sidebar-right {
+            padding: 10px;
+        }
+        .d-b-t {
+            padding-top: 0px !important;
+        }
+        #donation .donate-box select {
+            background: #ddd url(/static/images/dk_arrow.png) no-repeat 94% 50% !important;
+            padding: 0 15px 0 0;
+            min-width: 40px;
+            border-radius: 0px;
+            margin: 0;
+            height: 20px;
+            -webkit-appearance: scrollbarbutton-down !important;
+            -moz-appearance: "scrollbarbutton-down" !important;
+        }
+        .segment li {
+            list-style:disc;
+        }
+        .segment ul {
+            margin-left:16px;
+        }
+        .donate-field {
+            padding: 10px;
+            border: 2px solid #9bbb59;
+            border-radius: 5px;
+            background: #9bbb59;
+            color: white;
+        }
+        .donate-field > label {
+            float: left;
+            margin: 3px 10px 0px 10px;
+        }
+
+        .control-group > .input.text > label.switch {
+            float: left;
+            margin: 5px 0px 0px 18px;
+            font-size: 13px;
+            color: green;
+            width: 290px !important;
+        }
+        .control-group > .input.text > .hide {
+            display: none !important; 
+        }
+        .control-group > .res_status {
+            width:475px;
+        }
+        .control-group > .input.text > select {
+            float: left;
+            width: 185px;
+            margin-top: 5px;
+       }
+       #tabs li > a {
+            padding: 5px 15px;
+            font-size: 14px;
+            font-family: serif;
+            border-radius: 0px;
+       }
+       .modal-body {
+            max-height: 550px;
+            overflow-y: auto;
+       }
+       .modal {
+        top: 40% !important;
+      }
+      input.sponsor {
+
+        margin-top: 10px;
+        float: right;
+        cursor: pointer;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+    </style>
+    <!--[if lte IE 9]>
+    <style>
+         #donation select {
+            background-image: none !important;
+            padding: 0px;
+         }
+    </style>
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <style>
+        .donate-row {
+            margin-bottom:20px;
+        }
+        p.amount {
+            margin-bottom: 10px;
+        }
+
+    </style>
+    <![endif]-->
+{% endblock %}
+
+{% block doc_ready %}
+    {{ block.super }}
+    window.evd.pre_send_mail = function(){
+        var $form = $($(this).attr("href"));
+        var valid = true;
+        $(this).parent().find("input").each(function(){
+
+            if($(this).val() == ""){
+                //$(this).attr({"rel":"tooltip", "data-placement":"right", "data-title": "This field is required"}).tooltip("show");
+                valid = false;
+            }
+            else{
+                var name = $(this).attr("name");
+                $form.find("input[name='"+name+"']").val($(this).val());
+            }
+        });
+        var channel = $(this).parent().find("select").children(":selected").val();
+        $form.find("input[name='channel']").val(channel);
+        return valid;
+    }
+    window.evd.after_mail_sent = function(){
+        $("#donate-modal").modal("hide");
+        evd.show_msg("ThankYou, eVidyaloka admin will contact you soon");
+    }
+
+     window.evd.is_valid = function(that){
+        var amount_val = $(that).parent().find("input[name='amount']").val(),
+            valid = true,
+            patt = /^\d+$/;
+
+        if ((amount_val && amount_val < 99) || !(patt.test(amount_val)) ){
+            valid = false;
+            alert("Please enter an amount greater than Rs. 100");
+            //$(this).parent().find("input[name='amount']").attr({"rel":"tooltip", "data-placement":"right", "data-title": "This field is required"}).tooltip("show");
+            return false;
+        }
+
+        if(!(amount_val)){
+            alert("Please enter an amount greater than Rs. 100");
+            return false;
+        }
+
+        return valid;
+
+
+    };
+    window.evd.pre_send_donations = function(){
+        var amount_val = $(this).parent().find("input[name='amount']").val(),
+            valid = true;
+            patt = /^\d+$/;
+        if ((amount_val && amount_val < 99) || !(patt.test(amount_val)) ){
+            valid = false;
+            alert("Please enter an amount greater than Rs. 100");
+            //$(this).parent().find("input[name='amount']").attr({"rel":"tooltip", "data-placement":"right", "data-title": "This field is required"}).tooltip("show");
+            return false;
+        }
+        if(!(amount_val)){
+            alert("Please enter an amount greater than Rs. 100");
+            return false;
+        }
+
+        return valid;
+    }
+{% endblock %}
+
+{% block head_scripts %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function(){
+            $("#evd-notification .close").click(function(){
+                window.location = window.location.href;
+            });
+        });
+    </script>
+    {% if not request.user.is_authenticated %}
+       <script>
+            $(document).ready(function(){
+
+                if(typeof String.prototype.trim !== 'function') {
+                    String.prototype.trim = function() {
+                        return this.replace(/^\s+|\s+$/g, '');
+                    }
+                }
+
+                $("a.sponsor").click(function(){
+
+                    var $form = $(this).parent();
+                    $("#donate-modal a.submit-btn").attr("href", "#"+$form.attr("id"));
+                });
+                $("#donate-modal").on("hide", function(){
+                    $("#donate-modal input").val("");
+                    $("[rel='tooltip']").tooltip("destroy");
+                });
+
+                $(".g-sponsor").click(function(e){
+                    var is_valid_value = evd.is_valid($(this));
+                    if(is_valid_value){
+                        $("#g-sponsor").trigger("click");
+                        var $form = $(this).parent();
+                        $("#donate-modal a.submit-btn").attr("href", "#"+$form.attr("id"));
+
+                        return;
+                    }
+
+                });
+
+                $(".login-trigger").click(function(){
+                    $("#login-trigger").trigger("click");
+                    $("input[name='next']").val("/sponsor/");
+                });
+
+            });
+        </script>
+    {% else %}
+        <script>
+            $(document).ready(function(){
+                $(".login-trigger").click(function(){
+                    $("#donate-modal").trigger("click");
+                });
+                $(".control-group > .input.text > select").change(function(){
+                    var val = $(this).val();
+                    $(this).parent('div').children("label").addClass("hide");
+                    val = "#" + val.replace(" ", '').replace(" ", '');
+                    $(val).removeClass('hide');
+                });
+            });
+        </script>
+    {% endif %}
+{% endblock %}
+
+{% block body_container %}
+<img src="/static/img/vidyadiya.png" alt="Vidya Diya" style="position: fixed; left: 0px; bottom: 0px; z-index:100; width: 130px; height: 126px"/>
+<div id="donation">
+    <div class="content-left standard-form">
+        <div class="ruled-bg">
+            <div class="ruled-bg-inner">
+                <div class="segment">
+                    <div style="width:210px;float:none;margin:auto;display: block;">
+                        <h2>Share the Joy</h2>
+                        <img src="/static/images/smiley.png" style="margin-left: 10px;width:35px;height:35px;margin-top:-6px;" />
+                    </div>
+                    <!--
+                    <ul>
+                        <li><p style="clear: both;">All sponsorships are towards the Academic Year 2014-15 and will be processed from April 1st onwards.</p></li>
+                        <li><p>On Pledge, we will be reaching out to you.</p></li>
+                    </ul>
+                    -->
+                    <div class="donate-row">
+                        <div>
+                            <div class="donate-box">
+                                <p style="margin-bottom: 5px;" class="title">Children waiting for Academic Year 2015-16:</p>
+                                <div style="float: left;width:110px;">
+                                    <img src="/static/images/child_waiting.jpg" />
+                                </div>
+                                <div class="info">
+                                     <p style="margin-bottom: 5px;"><span class="bold">By June 30th&nbsp;&nbsp;: 360 Children</span></p>
+                                      <p style="margin-bottom: 5px;"><span class="bold">By July 31st&nbsp;&nbsp;: 360 Children</span></p>
+                                     <p><span class="bold">By August 31st&nbsp;: 400 Children</span></p>
+                                     <p><span class="bold">(45 Students per Center)</span></p>
+
+
+                                   <!-- <p style="margin-bottom: 5px;"><span class="bold">By August 31st&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 900 Students</span></p>
+                                    <p><span class="bold">By October 31st&nbsp;: 400 Students</span></p>
+                                    <p><span class="bold">(45 Students per Center)</span></p>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="donate-box" rel="tooltip" title="15 students, makes it a Full class" data-placement="right">
+                                <form class="donate-box-form" action="/sponsor/payment_details/" method="POST">
+                                    {% csrf_token %}
+                                    <div class="clearfix">
+                                        <div style="float: left;width:110px;">
+                                            <img src="/static/images/child_edu.png" />
+                                            <p style="text-align: center;margin:0px;">
+                                                <span class="num-pledgers">{{ child_edu }}</span> <br/>Pledges</p>
+                                        </div>
+                                        <div class="info">
+                                            <div>
+                                                <p class="title">Sponsor a Child's Education</p>
+                                                <p style="margin-bottom:5px;">Choose nuber of students</p>
+                                                <p style="margin-bottom: 0px;">
+                                                    <input type="hidden" name="num_subjects" value="3"/>
+                                                    <select class="child-edu num-children" name="children">
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+                                                        <option value="7">7</option>
+                                                        <option value="8">8</option>
+                                                        <option value-"9">9</option>
+                                                        <option value="10">10</option>
+                                                        <option value="11">11</option>
+                                                        <option value="12">12</option>
+                                                        <option value="13">13</option>
+                                                        <option value="14">14</option>
+                                                        <option value="15">15</option>
+                                                    </select>
+                                                    Student for a year
+                                                </p>
+                                                <p class="amount" style="margin:15px 25px 0 0;float:right;">
+                                                    <span class="bold amount" data-amount="3500">Rs.3,500</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix">
+                                            <input type='hidden' name='amount' value='3500'  />
+                                            <input type="hidden" name='donation_type' value="Sponsor a Child Education"/>
+                                            <input type="submit" class="btn sponsor" value="Sponsor"/>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="donate-row">
+                        <div>
+                            <div class="donate-box">
+                                <p style="margin-bottom: 5px;" class="title">Classrooms reqd. for Academic Year 2015-16:</p>
+                                <div style="float:left;width:110px;">
+                                    <img src="/static/images/class_reqd.jpg" />
+                                </div>
+                                <div class="info">
+                                    <p style="margin-bottom: 5px;"><span class="bold">By June 30th&nbsp;&nbsp;: 8 Centers</span></p>
+                                    <p style="margin-bottom: 5px;"><span class="bold">By July 31st&nbsp;&nbsp;: 8 Centers</span></p>
+                                    <p><span class="bold">By August 31st&nbsp;: 9 Centers</span></p>
+
+                                   <!-- <p style="margin-bottom: 5px;"><span class="bold">By August 31st&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 19 Centers</span></p>
+                                    <p><span class="bold">By October 31st&nbsp;: 6 Centers</span></p>
+                                    <p>(19 Centers are already operational)</p>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <form class="donate-box-form" action="/sponsor/payment_details/" method="POST">
+                                {% csrf_token %}
+                                <div class="donate-box" rel="tooltip" title='Computer, 32" LCD TV, Webcam, Inverter' data-placement="right">
+                                    <div class="clearfix">
+                                        <div style="float:left;width:110px;">
+                                            <img src="/static/images/digital_class.jpg" />
+                                            <p style="text-align: center;margin:0px;">
+                                                <span class="num-pledgers">{{ digital_class }}</span><br/>Pledges</p>
+                                        </div>
+                                        <div class="info">
+                                            <div>
+                                                <p class="title">Adopt a Digital Classroom</p>
+                                                <p>
+                                                    <select class="num-donate" name="number">
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+                                                        <option value="8">7</option>
+                                                        <option value="9">9</option>
+                                                        <option value="10">10</option>
+                                                        <option value="11">11</option>
+                                                        <option value="12">12</option>
+                                                        <option value="13">13</option>
+                                                        <option value="14">14</option>
+                                                        <option value="15">15</option>
+                                                    </select>
+                                                    Classroom
+                                                </p>
+                                                <p style="margin:20px 10px 0 0;float:right;">
+                                                    <span class="bold amount" data-amount="53000">Rs. 53,000</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix" style="margin-top: 20px">
+                                        <input type='hidden' name='amount' value='53000'  />
+                                        <input type="hidden" name='donation_type' value="Adopt Digital Classroom"/>
+                                        <input type="submit" class="btn sponsor" value="Sponsor"/>
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="donate-box border-box" style="width: 100%; min-height: 141px">
+                            <h3>Sponsor a Full Center - 2 Lakhs</h3>
+                            <p><span class="bold">(Digital Class Room, Monthly Class Operations for 45 Children)</span></p>
+                            <form action="/sponsor/payment_details/"
+                                  method="POST"
+                                  class="donate-box-form"
+                                  id="donate-fullcenter">
+                                {% csrf_token %}
+
+                                <div class="info">
+
+                                    <div class="clearfix">
+                                        <p style="float: left; margin: 0px">
+                                            <span class="num-pledgers">{{ full_center }}</span><br/>Pledges</p>
+                                        <p style="float: left; margin: 0px; margin-left: 10px">
+                                            <span class="bold amount" data-amount="200000">Rs. 200000</span>
+                                        </p>
+                                        <p style="margin-bottom: 0px; float: left; margin-left: 10px">
+                                            <select class="num-donate" name="centres">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                            Centers
+                                        </p>
+                                        <div class="clearfix" style="float: right">
+                                            <input type='hidden' name='amount' value='200000'/>
+                                            <input type="hidden" name='donation_type' value="Sponsor a Full Center"/>
+                                            <input type="submit" class="btn sponsor" value="Sponsor"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="dontate-box border-box" style="width: 100%">
+                            <div class='donate-field clearfix'>
+                                 <h5 style="float:left; width: 100%">Make a General Contribution</h5>
+                                 <form action="/sponsor/payment_details/"
+                                      method="POST"
+                                      class="donate-box-form"
+                                      id="general-contrib-form">
+                                        {% csrf_token %}
+                                        <input type='text' style="float: left; width: 100%" name='amount' value='100' />
+                                        <input type="hidden" name='donation_type' value="General Contribution"/>
+                                        <input type="submit" style="float: right" class="btn sponsor" value="Sponsor"/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='center-classroom'>
+                        <div><p><a href="/centers/" target="_blank">Know more about our current centers</a></p></div>
+                        <div style="float: right">
+                            <p><a href="http://www.youtube.com/watch?v=THyfdA8rttQ" target="_blank">Experience a Digital Classroom</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal hide" id="donate-modal">
+            <form action="#" id="donate-form">
+                <div class="header">
+                    <p style='margin:5px;'>Please submit your details</p>
+                    <div class='amount text' style='float:right;margin-right:25px;'>
+                        <p style="margin: 5px;">Amount:</p>
+                        <input type='number' value='' min='100' data-title="Amount"
+                               name='amount' style="margin-bottom: 0px"/>
+                    </div>
+                    <a class="close" data-dismiss="modal">X</a>
+                </div>
+                <div class='modal-body'>
+                    <div class="control-group" style="margin-top: 15px;">
+                        <label class='lable'>First Name:</label>
+                        <div class="input text">
+                            <input type="text" name="name" data-validate="true"
+                            data-title="First Name"
+                            data-field-type="not_empty" data-show-tooltip="true"
+                            rel="tooltip" data-placement="left" value='{{ request.user.first_name }}'/>
+                        </div>
+                        <label class='right'>Last Name:</label>
+                        <div class="input text">
+                            <input type="text" name="name" data-validate="true"
+                            data-title="Last Name"
+                            data-field-type="not_empty" data-show-tooltip="true"
+                            rel="tooltip" data-placement="left" value='{{ request.user.last_name }}'/>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Email:</label>
+                        <div class="input text">
+                            <input type="text" name="email" data-validate="true"
+                            data-title="Email"
+                            data-field-type="not_empty" data-show-tooltip="true"
+                            rel="tooltip" data-placement="left" value='{{ request.user.email }}'/>
+                        </div>
+                       <label class='right'>Contact Number:</label>
+                        <div class="input text">
+                            <input type="text" name="phone" data-validate="true"
+                            data-title="Contact Number"
+                            data-field-type="not_empty" data-show-tooltip="true"
+                            rel="tooltip" data-placement="left" value='{{ user_details.phone }}'/>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Address Line1:</label>
+                        <div class="input text">
+                            <textarea type="textarea" name="address1" data-validate="true"
+                            data-title="Address"
+                            data-field-type="not_empty" data-show-tooltip="true"
+                            rel="tooltip" data-placement="left" ></textarea>
+                        </div>
+                       <label class='right'>Address Line2:</label>
+                        <div class="input text">
+                            <textarea type="textarea" name="address2" data-validate="true"
+                            data-show-tooltip="true" rel="tooltip"
+                            data-placement="left" ></textarea>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>City:</label>
+                        <div class="input text">
+                            <input type="text" name="city" data-validate="true"
+                            data-title="City"
+                            data-field-type="not_empty" data-show-tooltip="true"
+                            rel="tooltip" data-placement="left" value='{{ user_details.city }}'/>
+                        </div>
+                       <label class='right'>State:</label>
+                        <div class="input text">
+                            <input type="text" name="phone" data-validate="true"
+                            data-title="State"
+                            data-field-type="not_empty" data-show-tooltip="true"
+                            rel="tooltip" data-placement="left"  value='{{ user_details.state }}'/>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Country:</label>
+                        <div class="input text">
+                            <input type="text" name="country" data-validate="true"
+                            data-title="Country"
+                            data-field-type="not_empty" data-show-tooltip="true"
+                            rel="tooltip" data-placement="left" value='{{ request.user_details.country}}'/>
+                        </div>
+                        <label class='right'>Pincode:</label>
+                        <div class="input text">
+                            <input type="text" name="pincode" data-validate="true"
+                            data-title="Pincode"
+                            data-field-type="not_empty" data-show-tooltip="true"
+                            rel="tooltip" data-placement="left"  value='{{ request.user_details.pincode}}'/>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Resedential Status</label>
+                        <div class="input text">
+                            <select name='res_status'>
+                                <option value='Resident Indian'>Resident Indian</option>
+                                <option value='Non Resident Indian'>Non Resident Indian</option>
+                                <option value='Other Passport'>Other Passport</option>
+                            </select>
+                            <label class='right switch' id="ResidentIndian">*Please Provide your pannumber</label>
+                            <label class='right switch hide' id="NonResidentIndian">*Please Provide your Passport number</label>
+                            <label class='right switch hide' id="OtherPassport">*Other than Indian passport or pan holders not applicable. you can contact contact@evidyaloka.org</label>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Pan number:</label>
+                        <div class="input text">
+                            <input type="text" name="pan" data-validate="true"
+                            data-title="Pan number"
+                            data-field-type="not_empty" data-show-tooltip="true"
+                            rel="tooltip" data-placement="left" value='{{ request.user_details.pannumber}}'/>
+                        </div>
+                        <label class='right'>Passport:</label>
+                        <div class="input text">
+                            <input type="text" name="passport"
+                            data-field-type="not_empty" data-title="Passport"
+                            data-show-tooltip="true"
+                            rel="tooltip" data-placement="left" />
+                        </div>
+                    </div>
+
+                    <div class="sponsor-center">
+                        <p class="title" style="margin-bottom: 0px;">How to Share?</p>
+                        <p class="title">(Online, Cheque and Neft)</p>
+                        <div>
+                            <p style="font-size:14px;"><span class="bold">Name :</span> eVidyaloka Trust</p>
+                            <p style="font-size:14px;"><span class="bold">Current Account No :</span> 31682441993</p>
+                        </div>
+                        <div style="float: right; margin-right: 55px;">
+                            <p style="font-size:14px;"><span class="bold">Bank :</span> State Bank of India</p>
+                            <p style="font-size: 14px;"><span class="bold">IFSC Code :</span> SBIN0030495</p>
+                        </div>
+                    </div>
+
+                    <div id="tabs">
+                        <ul>
+                            <li><a href="#tabs-1">Cheque</a></li>
+                            <li><a href="#tabs-2">NEFT</a></li>
+                            <li><a href="#tabs-3">Online</a></li>
+                        </ul>
+                        <div id="tabs-3">
+                            <div class='online'>
+                                <p>*Please Note limited amount through online is 54000</p>
+                            </div>
+                        </div>
+                        <div id="tabs-1">
+                            <div class='neft-details'>
+                                <div class="control-group">
+                                    <label>Cheque Number:</label>
+                                    <div class='input text'>
+                                        <input type='text' name='chequenumber'/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label>Date On Cheque:</label>
+                                    <div class='input text'>
+                                        <input type='text' name='check_date'/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label>Bank Drawn:</label>
+                                    <div class='input text'>
+                                        <input type='text' name='ch_bankname'/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label>Deposit Date:</label>
+                                    <div class='input text'>
+                                        <input type='text' name='ch_deposit_date'/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label>Credited Date:</label>
+                                    <div class='input text'>
+                                        <input type='text' name='ch_credited_date'/>
+                                    </div>
+                                </div>
+                                <div class="control-group"></div>
+                            </div>
+                        </div>
+                        <div id="tabs-2">
+                            <div class='neft-details'>
+                                <div class="control-group">
+                                    <label>Your Bank Name:</label>
+                                    <div class='input text'>
+                                        <input type='text' name='neft_bankname'/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label>Transaction Date:</label>
+                                    <div class='input text'>
+                                        <input type='text' name='trans_date'/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label>Credited Date:</label>
+                                    <div class='input text'>
+                                        <input type='text' name='credited_date'/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn submit-btn" type="submit" href="#">
+                    <span class="ajax-button-label" data-loading="please wait">Donate</a>
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="sidebar-right">
+        <div class="indent-left">
+            <h2>Frequently Asked Questions</h2>
+            <ul class="faq-menu collapsable" style="clear:both;">
+                <li class="question">
+                    <span class="icon icon-arrow up-arrow"></span>
+                    Are my donations, eligible for Income Tax exemptions ?
+                </li>
+                <ul class="answer hide">
+                    <li>Yes, donations made to eVidyaloka Trust are eligble for tax exemptions under Section 80g of Income Tax act</p>
+                </ul>
+                <li class="question">
+                    <span class="icon icon-arrow up-arrow"></span>
+                     How does money transfer <br/>happen ?
+                </li>
+                <ul class="answer hide">
+                    <li>Once you make your pledge here, a eVidyaloka representative will work with you offline, to help with the physical transfer of funds</li>
+                </ul>
+                <li class="question">
+                    <span class="icon icon-arrow up-arrow"></span>
+                    Do I get receipts for the Sponsorships made and when ?
+                </li>
+                <ul class="answer hide">
+                    <li>Soft copies of Donations receipts will be issued within 1 working day on receipt of funds. And physical copy will be posted the same day to preferred Address.</li>
+                </ul>
+                <li class="question">
+                    <span class="icon icon-arrow up-arrow"></span>
+                    Do you accept donations in USD ?
+                </li>
+                <ul class="answer hide">
+                    <li>No, eVidyaloka at this moment can accept donations only in Indian Rupees.</li>
+                </ul>
+                <li class="question">
+                    <span class="icon icon-arrow up-arrow"></span>
+                    For Digital classroom adoption: Will I know the specific centre details ?
+                </li>
+                <ul class="answer hide">
+                    <li>Yes, We are shortlisting the centre locations and you will be communicated the specific Centre information, once the engagement is finalized. You will also receive period updates regarding the Centre.</li>
+                </ul>
+                <li class="question">
+                    <span class="icon icon-arrow up-arrow"></span>
+                    For Child sponsorships: Will I know the specific Child(ren) details ?
+                </li>
+                <ul class="answer hide">
+                    <li>eVidyaloka targets an optimal strength of 45 students per Centre. As we work with Govt. School children, We may not be able to share specific child details, as this is the generic class room operating cost, for this classroom strength.</li>
+                    <li>However, if your sponsorship is for a Full class (15 children), we will communicate to you, the associated Centre details.</li>
+                </ul>
+                <li class="question">
+                    <span class="icon icon-arrow up-arrow"></span>
+                     What is Rs. 3500 is used for ?
+                </li>
+                <ul class="answer hide">
+                    <li>Children in the villages, gets additional learning opporutnities, taught by high quality teachers from all over the world through eVidyaloka. This is the operating cost at eVidyaloka, to enable this quality education throughout the year.</li>
+                </ul>
+                <li class="question">
+                    <span class="icon icon-arrow up-arrow"></span>
+                    Where can I know more about eVidyaloka model details ?
+                </li>
+                <ul class="answer hide">
+                    <li><p>Please do visit our General <a href="/faq/" style="color:#F15A22;display:inline;width:auto">FAQ</a></p> to know more.</li>
+                </ul>
+                <li class="question">
+                    <span class="icon icon-arrow up-arrow"></span>
+                    What are eVidyaloka Bank Account details?
+                </li>
+                <ul class="answer hide">
+                    <li>
+                        <p>Payee Name: <b>eVidyaloka trust</b>,<br/>
+                           Current Account no: <b>31682441993</b>,<br/>
+                           Bank Name: <b>State Bank of India</b>,<br/>
+                           IFSC code: <b>SBIN0030495</b>
+                        </p>
+                    </li>
+                </ul>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="login-trigger"></div>
+
+<!--Donor Chat - purechat.com -->
+<script type='text/javascript'>(function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript'; script.src = 'https://widget.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({ c: 'f219c359-b086-4a69-ae90-ac22a3bd6d6a', f: true }); done = true; } }; })();</script>
+
+<!--Closed purechat code -->
+
+
+<script>
+    $(document).ready(function(){
+
+        $(".btn.sponsor").on("click", function () {
+
+            var amount = $(this).prev().val();
+
+            $("#donate-modal").find("input[name=amount]").val(parseInt(amount));
+        });
+
+        $("#general-contrib-form").on("submit", function (e) {
+
+            var $amount = $(this).find("input[name=amount]"),
+                amount = parseInt($amount.val());
+
+            if (!$.isNumeric(amount) || amount < 100){
+
+                alert("Please enter valid amount, minimum of Rs. 100");
+                e.preventDefault();
+            }
+        });
+
+        $(".question").each(function() {
+            $(this).click(function(e) {
+                var $span = $(this).children();
+                if($span.hasClass("up-arrow")) {
+                    $span.removeClass("up-arrow");
+                    $span.addClass("icon-down-arrow");
+                }
+                else {
+                    $span.removeClass("icon-down-arrow");
+                    $span.addClass("up-arrow");
+                }
+                var $ans = $(this).next();
+                $ans.slideToggle();
+                e.stopPropagation();
+            });
+        });
+
+        $(".answer a").click(function(e){
+            e.stopPropagation();
+        });
+
+        $("select.num-donate").change(function(){
+            var $parents = $(this).parents(".info");
+
+            var num = Number($(this).children(":selected").val());
+            var amount = Number($parents.find("span.amount").attr("data-amount"));
+            var total_amount = num * amount;
+            $parents.find("span.amount").text("Rs. " + total_amount);
+
+            $(this).parents("div").nextAll("form").find("input[name='amount']").val(total_amount);
+            $(this).parents("div").nextAll("form").find("input[name='number']").val(num);
+            $(this).parents("div").nextAll("form").find("input[name='centres']").val(num);
+
+        });
+
+        $("a[data-donate-type='General Contribution']").on("click", function (e){
+
+            e.preventDefault();
+
+            var amount_val = $(this).parent().find("input[name='amount']").val(),
+                valid = true;
+                patt = /^\d+$/;
+            if ((amount_val && amount_val < 100) || !(patt.test(amount_val)) ){
+                valid = false;
+                alert("Please enter valid amount, minimum Rs. 100");
+                //$(this).parent().find("input[name='amount']").attr({"rel":"tooltip", "data-placement":"right", "data-title": "This field is required"}).tooltip("show");
+            }
+            else if(!(amount_val)){
+                alert("Please enter valid amount, minimum Rs. 100");
+                valid = false;
+            }
+
+            if(valid) {
+
+                $("#donate-modal").modal("show").find("input[name=amount]").val(amount_val);
+            }
+        });
+        $("select.child-edu").change(function(){
+            var $parents = $(this).parents(".info");
+            var num_children = Number($("select.num-children").children(":selected").val());
+            var amount = Number($parents.find("span.amount").attr("data-amount"));
+            var total_amount = num_children * amount;
+            $parents.find("span.amount").text("Rs. " + total_amount);
+            $(this).parents("div").nextAll("form").find("input[name='amount']").val(total_amount);
+            $(this).parents("div").nextAll("form").find("input[name='num_children']").val(num_children);
+        });
+        $("[rel=tooltip]").tooltip();
+        $( "#tabs" ).tabs();
+
+    });
+</script>
+
+{% endblock %}

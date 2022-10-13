@@ -1,0 +1,18 @@
+
+
+Hello {{name}}, <br/>
+
+Greetings! Welcome to eVidyaLoka platform.<br/>
+
+Your login credentials are as below.<br/><br/>
+    Username: {{username}}<br/>
+    Password: {{password}}<br/><br/>
+
+Thanks for joining your hands with us for a great cause and efforts to educate every child.<br/>
+
+<br/>You can check the schools you have added in your profile page under option 'My Schools'.<br/>
+
+<br/>For any clarification, please write to us at jupiter-support@evidyaloka.org<br/>
+
+Thanks & Regards,<br/>
+eVidyaloka

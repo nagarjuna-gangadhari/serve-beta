@@ -1,0 +1,993 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load filters %}
+
+{% block head_scripts %}
+    {{ block.super }}
+   <style>
+.tab-content>div:last-child {
+    display: block !important;
+}
+
+.btn-pref .btn {
+    -webkit-border-radius: 0 !important;
+}
+
+.input-group {
+    position: relative;
+    display: block;
+    border-collapse: separate;
+    padding-bottom:0;
+}
+
+.input-group-addon {
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: red;
+    display: block;
+    text-align: left;
+}
+</style>
+<style>
+
+a.btn:hover {
+    background-color: red;
+}
+
+.glyphicon.glyphicon-pencil {
+    font-size: 10px;
+}
+
+.rowCss {
+    margin: 20px 0px;
+}
+
+.size {
+    width: 150px;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: lightblue;
+}
+/* .alert{
+    color: white;
+    background-color: #c22b28;
+} */
+</style>
+
+
+<!-- <link rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+    src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+     -->
+     <style>
+
+.btn-primary{
+background: #337ab7 !important;
+}
+a{
+color: #337ab7; !important;
+}
+a:hover{
+color: #23527c; !important;
+}
+
+.btn-primary:hover, .btn:focus, .btn.focus {
+    color: #333;
+    text-decoration: none;
+}
+</style>
+
+
+   
+{% endblock %}
+
+
+{% block body_container %}
+    {{ block.super }}
+    {% include "code_conduct_modal.html" %}
+<head>
+</head>
+<div class="container-fluid new_dash_container">
+    <div class='row my_profile' style="position: relative">
+        <div class='basic_profile col-xs-12 col-sm-12 col-md-12'>
+            <div class="row">
+                <div class="col-sm-11 col-md-11">
+                    <ul class="nav nav-tabs">
+                        <li id="myTaskId"><a data-toggle="tab" href="#mytask">My Task</a></li>
+                        <li id="taskByMeId"><a data-toggle="tab" href="#taskbyme">Task Assigned By Me</a></li>
+                        {% if user.is_superuser  %}
+                        <li id="allTaskId"><a data-toggle="tab" href="#alltask">All Task</a></li>
+                        {% endif %}
+                        {% if is_allocate_role %}
+                        <li id="allocateId"><a data-toggle="tab" href="#allocateTask">Allocate</a></li>
+                        {% endif %}
+                        {% if user.is_superuser %}
+                        <li id="otherId"><a data-toggle="tab" href="#otherId">Other Opportunity</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                 {% if user.is_superuser or is_pam  %}
+				<div class="col-sm-1 col-md-1 pull-right">
+					<a onclick="create_task()">
+						<button class="btn btn-primary" style="color: white; height: 40px;">Create Task</button>
+					</a>
+				</div>
+				  {% endif %}
+			</div>
+			<br>
+			<div id="messageDiv"></div>
+			<div id="messageBoxDiv"></div>
+            <br />
+            <input type="hidden" value="{{message}}" name="msg" id="messageId"/>
+            <input type="hidden" id="msgFromUrlId"/>
+            <input type="hidden" value="{{vol_coordinatordata}}" name="rahul" id="coordinators"/>
+            <input type="hidden" name="rahulray" id="allocate_data_id"/>
+            <input type="hidden" name="dfafda" id="tabNameId" value="{{tabName}}"/>
+            <input type="hidden"  id="searchId1" />
+            <input type="hidden"  id="searchId2" />
+			<input type="hidden"  id="searchId3" />
+			<input type="hidden"  id="searchId4" />
+			<input type="hidden"  id="searchId5" />
+			<input type="hidden"  id="filterId1" />
+            <input type="hidden"  id="filterId2" />
+			<input type="hidden"  id="filterId3" />
+			<input type="hidden"  id="filterId4" />
+			<input type="hidden"  id="filterId5" />
+			<input type="hidden" id="searched_data_id" />
+			<input type="hidden" id="searched_tab_id" />	
+			<input type="hidden" id="demandFlag" value="{{demand_flag}}" />	
+					
+            <div class="row">
+                <div class="input-group col-md-4" style="margin-left:16px">
+                    <input value="" type="text" class="form-control" placeholder="Enter Text here.." id="searchBoxId"  title="Enter Text here"/> <span class="input-group-btn">
+					</span>
+				</div>
+				<div class="col-sm-1" style="margin-left: -15px;">
+					<button class="btn btn-success" title="Search"
+						onclick="searchTask()"
+						style="margin-bottom: 10%; border-bottom-right-radius: 12%; border-top-right-radius: 12%;">
+						<span class="fa fa-search"></span>
+					</button>
+				</div>
+				<div class="col-sm-1" style="margin-left: -64px;">
+					<button class="btn btn-primary" title="Refresh"
+						onclick="refreshTask()"
+						style="margin-bottom: 10%; border-bottom-left-radius: 12%; border-top-left-radius: 12%; margin-left: 20%;">
+						<span class="fa fa-refresh"></span>
+					</button>
+				</div>
+			</div>
+                <br/>
+                <div class="row" style="background-color: #ddd; margin-left: 2px;">
+                    <div class="col-sm-3" style="margin-left: -17px; postion: absolute">
+                        <div class="btn-group">
+                            <button type="button" class=" btn btn-primary">
+                                <span class="fa fa-bars"></span>
+                            </button>
+                            <button style="text-align: center; width: 120px" type="button"
+                                class=" btn btn-primary size">Task</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-9" style="top: 0px; left: 32px;">
+                        <form class="navbar-search pull-right">
+                            <div>
+                                <select class="form-control " onchange="filter()" id="filter" name="">
+                                
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <br/><br/>
+                <div class="row">
+                	<div class="col-sm-12 col-md-12">
+                		<table id="table_id" class="table table-hover table-striped table-condensed">
+						</table>
+                	</div>
+                </div>
+                <br />
+                <div class="row " align="center" id="all_task_update_btn_div">
+						
+				</div>
+        </div>
+    </div>
+    </div>
+    <div id='ajax_loader' style="position: fixed; left: 48%; top: 48%; display:none; z-index: 999;">
+	<img src="/static/img_new/ajax-loader.gif" />
+	</div>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    
+<script>
+ $(document).ready(function() {
+
+}); 
+</script>   
+        
+<script>
+$(document).ready(function(){
+	$("#msgFromUrlId").removeAttr('value');
+	$("#messageBoxDiv").empty();
+	$("#messageDiv").empty();
+	$("#all_task_update_btn_div").empty();
+	$("#searchBoxId").val('');
+	$("#myTaskId").addClass("active");
+	 var url=window.location.href;
+     if (url!=null && url!='' && url!='undefined'){
+	 	split_url=url.split('=');
+	 	if (split_url.length==3){
+			var tab=split_url[2];
+			if (tab!='Open'){
+				var msg = split_url[1];
+				split_url_forMessage = msg.split('&');
+		    	if (tab != null && tab != '' && tab !='undefined' && tab != 'None'){
+		   			$("#taskByMeId").removeClass("active");
+		    		$("#allTaskId").removeClass("active");
+		    		$("#allocateId").removeClass("active");
+		    		$("#myTaskId").removeClass("active");
+		    		$("#otherId").removeClass("active");
+		    		$("#tabNameId").val(tab);
+		    		if($("#tabNameId").val() != 'allocateTask'){
+		    			$("#"+$("#tabNameId").val()+"Id").addClass("active");
+		    		}else{
+		    			$("#allocateId").addClass("active");
+		    		}
+					
+					if($("#"+$("#tabNameId").val()+"Id").hasClass('active')){
+						$("#msgFromUrlId").val(split_url_forMessage[0]);
+					}else{
+						$("#msgFromUrlId").val(split_url_forMessage[0]);
+					}
+		 		}
+			}else{
+				$("#tabNameId").val('taskByMe');
+				$("#allocateId").removeClass("active");
+	    		$("#allTaskId").removeClass("active");
+	    		$("#allocateId").removeClass("active");
+	    		$("#myTaskId").removeClass("active");
+	    		$("#otherId").removeClass("active");
+				$("#taskByMeId").addClass("active");
+				$('select[id="filter"]').find('option[value="Open"]').attr("selected",true);
+			}
+			
+   		}
+   	}
+    loadMyTaskFilter();
+	getTaskListData(null);
+	var value = $("#tabNameId").val();
+    if(value != null && value != '' && value !='undefined'){
+     	if(value == 'myTask'){
+     		loadMyTaskFilter();
+     	    $("#taskByMeId").removeClass("active");
+     	    $("#allTaskId").removeClass("active");
+     	    $("#allocateId").removeClass("active");
+     	   	$("#otherId").removeClass("active");
+     	    $("#myTaskId").addClass("active");
+     	   	getTaskListData(null);
+     	}else if( value == 'taskByMe'){
+     		loadTaskByMeFilter();
+     		$("#myTaskId").removeClass("active");
+     	    $("#allTaskId").removeClass("active");
+     	    $("#allocateId").removeClass("active");
+     	   	$("#otherId").removeClass("active");
+     		$("#taskByMeId").addClass("active");
+     		getTaskListData(null);
+     	}else if(value == 'allTask'){
+     		loadAllTaskFilter();
+     		$("#myTaskId").removeClass("active");
+     	    $("#taskByMeId").removeClass("active");
+     	    $("#allocateId").removeClass("active");
+     	   	$("#otherId").removeClass("active");
+     		$("#allTaskId").addClass("active");
+     		getTaskListData(null);
+     	}else if(value == 'allocateTask'){
+     		loadAllocateTaskFilter();
+     		$("#myTaskId").removeClass("active");
+     	    $("#taskByMeId").removeClass("active");
+     	    $("#otherId").removeClass("active");
+     	   	$("#allTaskId").removeClass("active");
+     		$("#allocateId").addClass("active");
+     		getTaskListData(null);
+     	}else if(value == 'other'){
+     		loadAllTaskFilter();
+     		$("#myTaskId").removeClass("active");
+     	    $("#taskByMeId").removeClass("active");
+     	    $("#allocateId").removeClass("active");
+     	   	$("#allTaskId").removeClass("active");
+     		$("#otherId").addClass("active");
+     		getTaskListData(null);
+     	}
+     	else{
+     		loadMyTaskFilter();
+     	    $("#taskByMeId").removeClass("active");
+     	    $("#allTaskId").removeClass("active");
+     	    $("#allocateId").removeClass("active");
+     	   	$("#otherId").removeClass("active");
+     	    $("#myTaskId").addClass("active");
+     	   	getTaskListData(null);
+     	}
+    }
+});
+
+function loadMyTaskFilter(){
+    $("#filter").empty();
+    var option = '<option value="today" selected="selected">Today</option>';
+    option += '<option value="overdue">Overdue</option>';
+    option += '<option value="overdueToday">Overdue & Today</option>';
+    option += '<option value="tommorrow">Tomorrow</option>';
+    option += '<option value="Open">My Open Task</option>';
+    option += '<option value="Resolved">All Resolved Task</option>';
+    option += '<option value="Closed">All Closed Task</option>';
+    {% if not user.is_superuser  %}
+   		option += '<option value="allTask">All Task</option>';
+    {% endif %}
+    $("#filter").append(option);
+}
+
+function loadTaskByMeFilter(){
+    $("#filter").empty();
+    var demand_filter = $("#demandFlag").val();
+    if (demand_filter!=null && demand_filter !='' && demand_filter!='undefined'){
+    	 var option = '<option value="today">Today</option>';
+    }else{
+    	var option = '<option value="today" selected="selected">Today</option>';
+    }
+    var option = '<option value="today" selected="selected">Today</option>';
+    option += '<option value="overdue">Overdue</option>';
+    option += '<option value="overdueToday">Overdue & Today</option>';
+    option += '<option value="tommorrow">Tomorrow</option>';
+    if (demand_filter!=null && demand_filter !='' && demand_filter!='undefined'){
+    	option += '<option value="Open" selected="selected">All Open Task</option>';
+   }else{
+	   option += '<option value="Open">All Open Task</option>';
+   }
+    
+    option += '<option value="Resolved">All Resolved Task</option>';
+    option += '<option value="Closed">All Closed Task</option>';
+    {% if not user.is_superuser  %}
+		option += '<option value="allTask">All Task</option>';
+	{% endif %}
+    $("#filter").append(option);
+}
+
+function loadAllTaskFilter(){
+    $("#filter").empty();
+    var option = '<option value="today" selected="selected">Today</option>';
+    option += '<option value="overdue">Overdue</option>';
+    option += '<option value="overdueToday">Overdue & Today</option>';
+    option += '<option value="tommorrow">Tomorrow</option>';
+    option += '<option value="Open">All Open Task</option>';
+    option += '<option value="Resolved">All Resolved Task</option>';
+    option += '<option value="Closed">All Closed Task</option>';
+    $("#filter").append(option);
+}
+
+function loadAllocateTaskFilter(){
+    $("#filter").empty();
+    var option = '<option value="today" selected="selected">Today</option>';
+    option += '<option value="overdue">Overdue</option>';
+    option += '<option value="yesterday">Yesterday</option>';
+    option += '<option value="Open">All Open Task</option>';
+    option += '<option value="lastSevenDays">Last Seven Days</option>';
+    $("#filter").append(option);
+}
+
+</script>
+<script>
+function refreshTask(){
+	$("#all_task_update_btn_div").empty();
+	var ajaxUrl = '/ajax/task_list?flag=true';
+	var selectedTab = '';
+	var message = $("#messageId").val()
+	if ($("#myTaskId").hasClass("active")){
+		selectedTab = 'myTask';
+	}
+	else if ($("#taskByMeId").hasClass("active")){
+		selectedTab = 'taskByMe';
+	}
+	else if ($("#allTaskId").hasClass("active")){
+		selectedTab = 'allTask';
+	}
+	else if ($("#allocateId").hasClass("active")){
+		selectedTab = 'allocateTask';
+	}
+	else if ($("#otherId").hasClass("active")){
+		selectedTab = 'other';
+	}
+	if (selectedTab != null && selectedTab != '' && selectedTab !='undefined'){
+		ajaxUrl += '&selectedTab='+selectedTab;
+	}
+	var filterParam = $("#filter").val();
+	if (filterParam != null && filterParam != '' && filterParam !='undefined'){
+		ajaxUrl += '&filterParam='+filterParam;
+	}
+	if (message != null && message != '' && message !='undefined'){
+		ajaxUrl += '&message='+message;
+	}
+	var searchParam = $("#searchBoxId").val("");
+	$.ajax({
+		url : ajaxUrl,
+		success : function (data){
+				loadTableUsingData(data, selectedTab);
+		},
+		error : function(){
+// 			alert("Error");
+		}
+	});
+}
+
+$("#myTaskId").click(function(){
+	if ($("#taskByMeId").hasClass("active")){
+		$("#searchId2").val($("#searchBoxId").val());
+		$("#filterId2").val($("#filter").val());
+	}
+	else if ($("#allTaskId").hasClass("active")){
+		$("#searchId3").val($("#searchBoxId").val());
+		$("#filterId3").val($("#filter").val());
+	}
+	else if ($("#allocateId").hasClass("active")){
+		$("#searchId4").val($("#searchBoxId").val());
+		$("#filterId4").val($("#filter").val());
+	}
+	else if ($("#otherId").hasClass("active")){
+		$("#searchId5").val($("#searchBoxId").val());
+		$("#filterId5").val($("#filter").val());
+	}
+	else{
+		$("#searchId1").val($("#searchBoxId").val());
+		$("#filterId1").val($("#filter").val());
+	}
+    $("#taskByMeId").removeClass("active");
+    $("#allTaskId").removeClass("active");
+    $("#allocateId").removeClass("active");
+    $("#otherId").removeClass("active");
+    $("#myTaskId").addClass("active");
+    $("#searchBoxId").val($("#searchId1").val());
+    loadMyTaskFilter();
+    if($("#filterId1").val()  != null && $("#filterId1").val() != '' && $("#filterId1").val() !='undefined'){
+    	$("#filter").val($("#filterId1").val());
+    }
+	getTaskListData(null);
+});
+
+$("#taskByMeId").click(function(){
+	if ($("#myTaskId").hasClass("active")){
+		$("#searchId1").val($("#searchBoxId").val());
+		$("#filterId1").val($("#filter").val());
+	}
+	else if ($("#allTaskId").hasClass("active")){
+		$("#searchId3").val($("#searchBoxId").val());
+		$("#filterId3").val($("#filter").val());
+	}
+	else if ($("#allocateId").hasClass("active")){
+		$("#searchId4").val($("#searchBoxId").val());
+		$("#filterId4").val($("#filter").val());
+	}
+	else if ($("#otherId").hasClass("active")){
+		$("#searchId5").val($("#searchBoxId").val());
+		$("#filterId5").val($("#filter").val());
+	}
+	else{
+		$("#searchId2").val($("#searchBoxId").val());
+		$("#filterId2").val($("#filter").val());
+	}
+ 	$("#myTaskId").removeClass("active");
+    $("#allTaskId").removeClass("active");
+    $("#allocateId").removeClass("active");
+    $("#otherId").removeClass("active");
+	$("#taskByMeId").addClass("active");
+	$("#searchBoxId").val($("#searchId2").val());
+	loadTaskByMeFilter();
+	if($("#filterId2").val()  != null && $("#filterId2").val() != '' && $("#filterId2").val() !='undefined'){
+		$("#filter").val($("#filterId2").val());
+    }
+	getTaskListData(null);
+});
+
+$("#allTaskId").click(function(){
+	if ($("#myTaskId").hasClass("active")){
+		$("#searchId1").val($("#searchBoxId").val());
+		$("#filterId1").val($("#filter").val());
+	}
+	else if ($("#taskByMeId").hasClass("active")){
+		$("#searchId2").val($("#searchBoxId").val());
+		$("#filterId2").val($("#filter").val());
+	}
+	else if ($("#allocateId").hasClass("active")){
+		$("#searchId4").val($("#searchBoxId").val());
+		$("#filterId4").val($("#filter").val());
+	}
+	else if ($("#otherId").hasClass("active")){
+		$("#searchId5").val($("#searchBoxId").val());
+		$("#filterId5").val($("#filter").val());
+	}
+	else{
+		$("#searchId3").val($("#searchBoxId").val());
+		$("#filterId3").val($("#filter").val());
+	}
+	$("#myTaskId").removeClass("active");
+    $("#taskByMeId").removeClass("active");
+    $("#allocateId").removeClass("active");
+    $("#otherId").removeClass("active");
+	$("#allTaskId").addClass("active");
+	$("#searchBoxId").val($("#searchId3").val());
+	loadAllTaskFilter();
+	if($("#filterId3").val()  != null && $("#filterId3").val() != '' && $("#filterId3").val() !='undefined'){
+		 $("#filter").val($("#filterId3").val());
+	}
+	getTaskListData(null);
+});
+
+$("#allocateId").click(function(){
+	if ($("#myTaskId").hasClass("active")){
+		$("#searchId1").val($("#searchBoxId").val());
+		$("#filterId1").val($("#filter").val());
+	}
+	else if ($("#taskByMeId").hasClass("active")){
+		$("#searchId2").val($("#searchBoxId").val());
+		$("#filterId2").val($("#filter").val());
+	}
+	else if ($("#allTaskId").hasClass("active")){
+		$("#searchId3").val($("#searchBoxId").val());
+		$("#filterId3").val($("#filter").val());
+	}
+	else if ($("#otherId").hasClass("active")){
+		$("#searchId5").val($("#searchBoxId").val());
+		$("#filterId5").val($("#filter").val());
+	}
+	else{
+		$("#searchId4").val($("#searchBoxId").val());
+		$("#filterId4").val($("#filter").val());
+	}
+	$("#myTaskId").removeClass("active");
+    $("#taskByMeId").removeClass("active");
+    $("#allTaskId").removeClass("active");
+    $("#otherId").removeClass("active");
+	$("#allocateId").addClass("active");
+	$("#searchBoxId").val($("#searchId4").val());
+	loadAllocateTaskFilter();
+	if($("#filterId4").val()  != null && $("#filterId4").val() != '' && $("#filterId4").val() !='undefined'){
+		$("#filter").val($("#filterId4").val());
+	}
+	getTaskListData(null);
+});
+$("#otherId").click(function(){
+	if ($("#myTaskId").hasClass("active")){
+		$("#searchId1").val($("#searchBoxId").val());
+		$("#filterId1").val($("#filter").val());
+	}
+	else if ($("#taskByMeId").hasClass("active")){
+		$("#searchId2").val($("#searchBoxId").val());
+		$("#filterId2").val($("#filter").val());
+	}
+	else if ($("#allTaskId").hasClass("active")){
+		$("#searchId3").val($("#searchBoxId").val());
+		$("#filterId3").val($("#filter").val());
+	}
+	else if ($("#allocateId").hasClass("active")){
+		$("#searchId4").val($("#searchBoxId").val());
+		$("#filterId4").val($("#filter").val());
+	}
+	else{
+		$("#searchId5").val($("#searchBoxId").val());
+		$("#filterId5").val($("#filter").val());
+	}
+	$("#myTaskId").removeClass("active");
+    $("#taskByMeId").removeClass("active");
+    $("#allocateId").removeClass("active");
+    $("#allTaskId").removeClass("active");
+	$("#otherId").addClass("active");
+	$("#searchBoxId").val($("#searchId5").val());
+	loadAllTaskFilter();
+	if($("#filterId5").val()  != null && $("#filterId5").val() != '' && $("#filterId5").val() !='undefined'){
+		 $("#filter").val($("#filterId5").val());
+	}
+	getTaskListData(null);
+});
+
+$('#filter').change(function () {
+	getTaskListData(null);
+});
+</script>
+<script>
+function getTaskListData(paramValue){
+	$("#all_task_update_btn_div").empty();
+	var tabFromUrl = $("#tabNameId").val();
+	var ajaxUrl = '/ajax/task_list?flag=true';
+	var selectedTab = '';
+	var searchParam = '';
+	var message = $("#messageId").val();
+	if ($("#myTaskId").hasClass("active")){
+		selectedTab = 'myTask';
+	}
+	else if ($("#taskByMeId").hasClass("active")){
+		selectedTab = 'taskByMe';
+	}
+	else if ($("#allTaskId").hasClass("active")){
+		selectedTab = 'allTask';
+	}
+	else if ($("#allocateId").hasClass("active")){
+		selectedTab = 'allocateTask';
+	}
+	else if ($("#otherId").hasClass("active")){
+		selectedTab = 'other';
+	}
+	
+	var demandfilter = $("#demandFlag").val();
+	if (demandfilter !=null && demandfilter!='' && demandfilter!='undefined'){
+		ajaxUrl += '&selectedTab=taskByMe';
+		ajaxUrl += '&filterParam='+demandfilter;
+		
+	}else{
+		var filterParam = $("#filter").val();
+		if (selectedTab != null && selectedTab != '' && selectedTab !='undefined'){
+			ajaxUrl += '&selectedTab='+selectedTab;
+		}
+		if (filterParam != null && filterParam != '' && filterParam !='undefined'){
+			ajaxUrl += '&filterParam='+filterParam;
+		}
+	}
+	
+	searchParam = $("#searchBoxId").val();
+	if(paramValue!=null && paramValue=='autoRefresh'){
+		var searchNewVal=$("#searched_data_id").val();
+		var searchPreVal=$("#searchBoxId").val();
+		var searchTabVal=$("#searched_tab_id").val();
+		if(searchNewVal==searchPreVal && searchTabVal==selectedTab){
+			searchParam=searchNewVal;
+		}
+		else{
+			searchParam = '';
+		}
+		
+	}
+	if (searchParam != null && searchParam != '' && searchParam !='undefined'){
+		ajaxUrl += '&searchParam='+searchParam;
+	}	
+	if (selectedTab == tabFromUrl){
+		message = $("#msgFromUrlId").val();
+	}
+	if (message != null && message != '' && message !='undefined'){
+		ajaxUrl += '&message='+message;
+	}
+	$.ajax({
+		url : ajaxUrl,
+		success : function (data){
+				loadTableUsingData(data, selectedTab);
+		},
+		error : function(){
+// 			alert("Error");
+		}
+	});
+}
+
+
+</script>
+<script>
+function loadTableUsingData(data, selectedTab){
+	$("#messageDiv").empty();
+	$("#allocate_data_id").val('');
+	var tableData = '';
+	var thead = '<thead>';
+	var tbody = '<tbody>';
+	if(selectedTab != null && selectedTab != '' && selectedTab !='undefined'){
+		if(selectedTab!='allocateTask'){
+			if(selectedTab!='other'){
+				thead += '<tr><th width="10%">Due Date</th><th width="17%">Task Name</th><th width="17%">Assigned To</th>';
+				if(selectedTab!='other'){
+					thead += '<th width="25%">Performed On</th>';					
+				}else{
+					thead += '<th width="25%">Category</th>';
+				}
+				thead += '<th width="8%">Priority</th><th width="8%">Status</th><th width="15%">Created By</th><th width="10%">Action</th></tr>';
+				thead += '</thead>';
+			}else{
+				thead += '<tr><th width="10%">Due Date</th><th width="17%">Task Name</th><th width="17%">Assigned To</th><th width="25%">Category</th><th width="8%">Priority</th><th width="8%">Status</th><th width="15%">Created By</th><th width="10%">Action</th></tr>';
+				thead += '</thead>';
+			}
+			
+		}
+		else{
+			thead += '<tr><th width="10%">Due Date</th><th width="17%">Task Name</th><th width="17%">Assigned To</th><th width="8%">Priority</th><th width="8%">Status</th><th width="10%">Action</th></tr>';
+			thead += '</thead>';
+		}
+	}
+	if(data != null && data != '' && data !='undefined'){
+		var messageDiv ='';
+		if(selectedTab != null && selectedTab != '' && selectedTab !='undefined'){
+			if(selectedTab!='allocateTask'){
+				if (data.allTask.length>0){
+					for (i=0;i<data.allTask.length;i++){
+						jsonObj = data.allTask[i];
+						var only_date = jsonObj['dueDate'].substring(0, 11);
+						var dates = only_date.split("-");
+						only_date = dates[2].trim()+'-'+dates[1]+'-'+dates[0];
+						var subject = jsonObj['subject'];
+						subject = subject.replace("<", "&lt;");
+						subject = subject.replace(">", "&gt;");
+						tbody += '<tr>';
+						tbody += '<td>'+only_date+'</td>';
+						tbody += '<td>'+subject+'</td>';
+						if ('{{user.is_superuser}}'=='False' && selectedTab == 'taskByMe'){
+							tbody += '<td>'+jsonObj['assignedTo']+'</td>';
+							tbody += '<td>'+jsonObj['performedOn_name']+'</td>';
+						}else{
+							tbody += '<td><a href="/activities?ass_username='+jsonObj['assignedTo']+'&set_flag=true"><u>'+jsonObj['assignedTo']+'</u></a></td>';
+							if(selectedTab!='other'){
+								tbody += '<td><a href="/activities?user_id='+jsonObj['performedOn_userId']+'&set_flag=false"><u>'+jsonObj['performedOn_name']+'</u></a></td>';
+							}else{
+									tbody += '<td >'+category_formatting(jsonObj['category'])+'</td>';
+							}
+						}
+						tbody += '<td>'+jsonObj['priority']+'</td>';
+						tbody += '<td>'+jsonObj['taskStatus']+'</td>';
+						tbody += '<td>'+jsonObj['taskCreatedBy_userId']+'</td>';
+						if ('{{user.is_superuser}}'=='False' && selectedTab == 'taskByMe'){
+							tbody += '<td></td>';
+						} 
+						else{
+							tbody += '<td><a href="/edit_task/?id='+jsonObj['id']+ '&tab='+selectedTab+'">&nbsp;&nbsp;Edit</a></td>';
+						}
+						tbody += '</tr>';
+					}
+				}
+				
+			}
+			else{
+				if (data.allTask.length>0){
+					var ids = [];
+					for (i=0;i<data.allTask.length;i++){
+						jsonObj = data.allTask[i];
+						var only_date = jsonObj['dueDate'].substring(0, 11);
+						var dates = only_date.split("-");
+						only_date = dates[2].trim()+'-'+dates[1]+'-'+dates[0];
+						tbody += '<tr>';
+						var subject = jsonObj['subject'];
+						subject = subject.replace("<", "&lt;");
+						subject = subject.replace(">", "&gt;");
+						tbody += '<td>'+only_date+'</td>';
+						tbody += '<td>'+subject+'</td>';
+						tbody += '<td><select id="'+jsonObj['id']+'" name="assignee" class="form-control"><option value = "" selected="selected">Select Assignee</option>';
+						var coordinators = $("#coordinators").val();
+						if (coordinators!=null && coordinators!='' && coordinators!='undefined'){
+							var jsonObjects = jQuery.parseJSON(coordinators);
+							if (jsonObjects.length>0){
+								for(j=0;j<jsonObjects.length;j++){
+									tbody += '<option value="'+jsonObjects[j]['id']+'">'+jsonObjects[j]['username']+'</option>';
+								}
+							}
+						}
+						tbody += '</select></td>';
+						tbody += '<td>'+jsonObj['priority']+'</td>';
+						tbody += '<td>'+jsonObj['taskStatus']+'</td>';
+						tbody += '<td><a href="/edit_task/?id='+jsonObj['id']+'&tab='+selectedTab+'">Not Listed</a>&nbsp;&nbsp;<a href="#"  onclick="updateTask('+jsonObj['id']+')">Update</a></td>';
+						tbody += '</tr>';
+						ids.push(jsonObj['id']);
+					}
+					$("#all_task_update_btn_div").empty();
+					$("#all_task_update_btn_div").append('<button type="submit" class="btn btn-primary btnCSS" id="updateTask" onclick="return updateAllTask();">Update All Task</button>');
+					$("#allocate_data_id").val(ids);
+				}
+			}
+		}
+		if(data.message != null && data.message != '' && data.message !='undefined'){
+		var messageDiv = '<div class="alert alert-success alert-dismissable" style="line-height: 0;">';
+		messageDiv += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+		messageDiv += data['message']+'</div>';
+		}
+		$("#messageDiv").empty();
+		$("#messageId").removeAttr('value');
+		$("#messageDiv").append(messageDiv);
+	}
+	tbody += '</tbody>';
+	tableData = thead+''+tbody;
+	if ($.fn.dataTable.isDataTable('#table_id')) {
+			$('#table_id').dataTable().fnDestroy();
+			} 
+		$("#table_id").html(tableData);
+			$('#table_id').dataTable({
+			"lengthMenu" : false,
+			"bLengthChange" : false,
+			"bFilter" : false,
+			"pageLength" : 20,
+			"aaSorting" : [],
+			"bStateSave" : false
+			});
+	
+}
+</script>
+<script>
+function updateTask(taskId){
+	$("#messageBoxDiv").empty();
+	var messageBox = '<div class="alert alert-danger Box alert-dismissable" style="line-height: 0;">';
+	messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+	messageBox += '<span id="errorMessage"></span></div>';
+	if (taskId!=null && taskId!='' && taskId!='undefined'){
+		var assigneeId = $("#"+taskId).val();
+		if (assigneeId!=null && assigneeId!='' && assigneeId!='undefined'){
+			ajaxUrl = '/ajax/update_assignee?id='+taskId+'&assigneeId='+assigneeId;
+			$.ajax({
+	        	url : ajaxUrl,
+	        	success: function (data) {
+	        		if(data != null && data!='' && data!='undefined'){
+	        			messageBox = '<br /><div class="alert alert-';
+						if (data['status']=='success'){
+							messageBox +=	'success';
+						}
+						else{
+							messageBox +=	'danger';
+						}
+						messageBox += ' Box alert-dismissable" style="line-height: 0;">';
+						messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+						messageBox += data['message']+'</div>';
+						$("#messageBoxDiv").append(messageBox);
+		        	}
+	        		getTaskListData(null);
+	        	},
+	        	error: function() {
+// 	        		alert("error");
+	           	}
+    		});
+		}
+		else{
+			$("#messageBoxDiv").empty();
+			$("#errorMessage").empty();
+			$("#messageBoxDiv").append(messageBox);
+			$("#errorMessage").append('Select Assignee');
+		}
+	}
+	
+}
+
+function updateAllTask(){
+	$("#messageBoxDiv").empty();
+	var allocate_data = $("#allocate_data_id").val();
+	var ids = allocate_data.split(",");
+ 	var data='[';
+ 	for (k=0;k<ids.length;k++){
+ 	var taskId=ids[k];
+ 	var taskData ='';
+ 	 if ($("#"+taskId).val() !=null && $("#"+taskId).val()!='' && $("#"+taskId).val()!='undefined'){
+ 		taskData += '{"id":'+taskId+',"assignee":'+$("#"+taskId).val()+'}';
+ 		data += taskData;
+ 		data = data.replace('}{','},{');
+ 	} 
+ 	}
+	data +=']';
+ 	if(data == '[]'){
+ 		return false;
+	}
+	if (data!=null && data!='' && data!='undefined'){
+		ajaxUrl = '/ajax/update_assignee?data='+data;
+		$.ajax({
+   			url : ajaxUrl,
+   		    success: function (data) {
+   		    		if(data != null && data!='' && data!='undefined'){
+						messageBox = '<br /><div class="alert alert-';
+	    				if (data['status']=='success'){
+    						messageBox +=	'success';
+    					}
+    					else{
+    						messageBox +=	'danger';
+    					}
+    					messageBox += ' Box alert-dismissable" style="line-height: 0;">';
+    					messageBox += '<a href="#" data-dismiss="alert" class="close" style="font-size: x-large ;top: -22px;">&times;</a>';
+    					messageBox += data['message']+'</div>';
+    					$("#messageBoxDiv").append(messageBox);
+		        	}
+   		    		getTaskListData(null);
+	        	},
+	        	error: function() {
+//   		        		alert("error");
+	           	}
+   		});
+	  	return true;
+	}
+	else{
+		$("#messageBoxDiv").empty();
+		$("#errorMessage").empty();
+		$("#messageBoxDiv").append(messageBox);
+		$("#errorMessage").append('Select Assignee');
+	}
+
+}
+
+</script>
+<script>
+$(document).ready(function() {
+	jQuery(function($) {
+		$(document).ajaxStop(function() {
+			$("#overlay").remove();
+			$("#ajax_loader").hide();
+		});
+		$(document).ajaxStart(function() {
+			$("body").append('<div id="overlay" style="background-color:rgba(192,192,192,0.4);position:absolute;top:0;left:0;height:100%;width:100%;z-index:100"></div>');
+			$("#ajax_loader").show();
+		});
+	});
+});
+
+ 
+function create_task(){
+	var selectedTab = '';
+	if ($("#myTaskId").hasClass("active")){
+		selectedTab = 'myTask';
+	}
+	else if ($("#taskByMeId").hasClass("active")){
+		selectedTab = 'taskByMe';
+	}
+	else if ($("#allTaskId").hasClass("active")){
+		selectedTab = 'allTask';
+	}
+	else if ($("#allocateId").hasClass("active")){
+		selectedTab = 'allocateTask';
+	}
+	else if ($("#otherId").hasClass("active")){
+		selectedTab = 'other';
+	}
+	if(selectedTab != null && selectedTab != '' && selectedTab !='undefined' && selectedTab != 'None'){
+			window.location = "/create_task?tab="+selectedTab;
+	}else{
+		   window.location = "/task_list";		   
+	}
+}
+
+function searchTask(){
+	$("#searched_data_id").val($("#searchBoxId").val());
+	if ($("#myTaskId").hasClass("active")){
+		$("#searched_tab_id").val('myTask');
+	}
+	else if ($("#taskByMeId").hasClass("active")){
+		$("#searched_tab_id").val('taskByMe');
+	}
+	else if ($("#allTaskId").hasClass("active")){
+		$("#searched_tab_id").val('allTask');
+	}
+	else if ($("#allocateId").hasClass("active")){
+		$("#searched_tab_id").val('allocateTask');
+	}
+	else if ($("#otherId").hasClass("active")){
+		$("#searched_tab_id").val('other');
+	}
+	getTaskListData(null);
+}
+$('#searchBoxId').keypress(function(e){
+    if(e.which == 13){//Enter key pressed
+    	searchTask();
+    }
+});
+
+</script>
+<script>
+    var requiredRefreshTime=5*60*1000;
+    window.setInterval(function(){
+    	getTaskListData("autoRefresh");
+    	}, requiredRefreshTime);
+</script>
+<script>
+function category_formatting(category){
+	if(category == 'MARKETING'){
+		category = 'Marketing';
+	}else if(category == "REPORTING"){
+		category = 'Reporting'
+	}else if(category == 'ADMIN'){
+		category = 'Admin';
+	}
+	return category
+}
+</script>
+    {% endblock %}

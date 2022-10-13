@@ -1,0 +1,36 @@
+{% extends 'new_base_temp.html' %}
+{% block content %}
+
+<style>
+    .form-control{
+        width : 24%;
+        margin-left : 485px;
+    }
+</style>
+
+<form id="signup" name="signup" style="margin-top : 100px;" method="post">
+        <input name="name" class="form-control" placeholder = "Name" type="text" required="" />
+        <input name="organization" class="form-control" placeholder = "Organization" type="text" required=""/>
+        <select name="role" class="roles form-control" required="">
+            <option value="">Select Role</option>
+            <option value="Founder/Owner" selected="selected">Founder/Owner</option>
+            <option value="C-Level/SVP">C-Level/SVP</option>
+            <option value="VP/Director">VP/Director</option>
+            <option value="Manager">Manager</option>
+            <option value="Researcher">Researcher</option>
+        </select>
+        <br>
+        <input type='email' class="form-control" name='email' placeholder="Business Email" type="text" required=""/>
+        <input type='phone' class="form-control" name='phone' placeholder="Phone" type="text" required=""/>
+        <select name="partnership_type" class="partnership type form-control" required="">
+            <option value="">Select Partnership Type</option>
+            <option value="Delivery Partner" selected="selected">Delivery Partner</option>
+            <option value="Volunteering Partner">Volunteering Partner</option>
+            <option value="Funding Partner">Funding Partner</option>
+        </select>
+        <br>
+        <input class="btn btn-success" type="submit" style="margin-bottom:5px; width:24%; margin-left:485px;" value="Sign Up" />
+        <br>
+</form>
+
+{% endblock content %}
