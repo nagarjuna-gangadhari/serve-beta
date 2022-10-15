@@ -1,0 +1,273 @@
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
+}
+body {
+  font-family: 'Noto Sans';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.nav {
+  will-change: transform;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  background: #1a1a1a;
+  -webkit-transform: translateY(-100%);
+          transform: translateY(-100%);
+  -webkit-transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.nav--active {
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+}
+.nav__list {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.nav__item {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  position: relative;
+  -webkit-transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.nav__item:hover {
+  opacity: 0.75;
+}
+.nav__thumb {
+  display: block;
+  height: 120px;
+  background: #dc143c;
+  -webkit-transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.nav__thumb:before {
+  content: attr(data-letter);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  font-size: 70px;
+  text-transform: uppercase;
+  opacity: 0.15;
+}
+.nav__label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #1a1a1a;
+  margin: 0;
+}
+@media (max-width: 850px) {
+  .nav__label {
+    font-size: 14px;
+  }
+}
+@media (max-width: 720px) {
+  .nav__label {
+    display: none;
+  }
+  .nav__thumb {
+    height: 90px;
+  }
+  .nav__thumb:before {
+    font-size: 32px;
+    opacity: 0.7;
+  }
+}
+.page_tab {
+  height: 60vh;
+  will-change: transform;
+  -webkit-perspective: 400px;
+          perspective: 400px;
+  overflow: hidden;
+  -webkit-transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.section {
+  will-change: transform;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: 60vh;
+  overflow: hidden;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+  background: #fff;
+  -webkit-transform: translateX(100%);
+          transform: translateX(100%);
+  -webkit-transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.section--hidden {
+  -webkit-transform: translateX(-100%);
+          transform: translateX(-100%);
+}
+.section--active {
+  -webkit-transform: translateX(0) rotateY(0);
+          transform: translateX(0) rotateY(0);
+  z-index: 2;
+}
+.section:before {
+  content: attr(data-letter);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  font-size: 75vh;
+  text-transform: uppercase;
+  opacity: 0.15;
+  z-index: -1;
+}
+.section__wrapper {
+  width: 100%;
+  max-width: 800px;
+  padding: 0 8vw;
+}
+.section__title {
+  margin: 0 0 25px 0;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+.section p {
+  margin: 0 0 25px 0;
+  font-family: 'Georgia';
+  font-size: 20px;
+}
+.section p:last-child {
+  margin-bottom: 0;
+}
+.color1 {
+    background: #E5F413;
+  //background: #1abc9c;
+}
+.color2 {
+  background: #95B01A;
+  //background: #e74c3c;
+}
+.color3 {
+    background: #CFBE18;
+  //background: #3498db;
+}
+.color4 {
+  background: #f4d03f;
+}
+.color5 {
+  background: #9b59b6;
+}
+.color6 {
+  background: #bdc3c7;
+}
+.logo {
+  position: fixed;
+  top: 195px;
+  right: 7px;
+  z-index: 2;
+}
+@media (max-width: 720px) {
+  .logo {
+    top: 160px;
+  }
+}
+ .evd_logo{
+    height:0px !important;
+}
+.about_sec_1{
+    background:url("/static/images/school.jpg")no-repeat;
+    background-size:100%;
+    height:455px;
+}
+.about_bg{
+    /*background: url("/static/images/about_bg.jpg")no-repeat;*/
+    background-color:rgb(242, 250, 250);
+    background-size: cover;
+}
+.tab_img img{
+    width:100px !important;
+    height:50px;
+    padding-top:15px;
+}
+.ui-helper-reset{
+    line-height:3 !important;
+}
+/* button effects */
+.btn-history:hover {
+  border: 1px solid;
+  box-shadow: inset 0 0 20px rgba(186, 197, 30, 1), 0 0 20px rgba(178, 81, 24, 1);
+  outline-color: rgba(172, 250, 13, 1);
+  outline-offset: 15px;
+  text-shadow: 1px 1px 2px #55831A;
+}
+.btn-explore:hover{
+   border: 1px solid;
+   box-shadow: inset 0 0 20px rgba(184, 36, 120, 1), 0 0 20px rgba(187, 12, 52, 1);
+   outline-color: rgba(173, 7, 25, 1);
+   outline-offset: 15px;
+   text-shadow: 1px 1px 2px rgba(244, 241, 237, 0.04);
+}
+.btn-volunteer:hover{
+    border: 1px solid;
+    box-shadow: inset 0 0 20px rgba(10, 4, 0, 1), 0 0 20px rgba(10, 0, 2, 1);
+    outline-color: rgba(6, 0, 1, 1);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
+}
+.btn-donate:hover{
+    border: 1px solid;
+    box-shadow: inset 0 0 20px rgba(4, 132, 55, 1), 0 0 20px rgba(8, 247, 47, 1);
+    outline-color: rgba(12, 190, 28, 1);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px rgba(7, 40, 8, 1);
+}
+.btn-5:hover {
+  border: 1px solid;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
+  outline-color: rgba(255, 255, 255, 0);
+  outline-offset: 15px;
+  text-shadow: 1px 1px 2px #427388;
+}
+
+.tab_style.ui-state-focus, .tab_style.ui-state-default, .tab_style.ui-corner-top, .tab_style.ui-state-hover, .tab_style.ui-state-active, .tab_style.ui-state-focus{
+    border: none;
+    background:transparent;
+}
+
+/*.team_tab.ui-state-active,.team_tab.ui-state-default{
+    border:none;
+}*/

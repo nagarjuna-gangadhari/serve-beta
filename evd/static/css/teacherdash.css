@@ -1,0 +1,591 @@
+div.user_sessions,
+div.other_sessions,
+div.single_sessions {
+    width: 305px;
+    overflow: hidden;
+    margin: 10px auto;
+}
+
+div.user_session {
+    min-height: 52px !important;
+}
+
+.current_session_table .add-timing {
+    height: 20px;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+table.current_session_table {
+    width: 99%;
+}
+
+table.current_session_table thead tr {
+    border-bottom: 1px solid #ccc;
+}
+
+table.current_session_table tr th,
+table.current_session_table tr td {
+    text-align: center;
+    padding-bottom: 5px;
+    font-size: 15px !important;
+}
+
+table.current_session_table tr td {
+    padding-bottom: 20px;
+}
+
+table.current_session_table tr:first-child td {
+    padding-top: 5px;
+}
+
+#mystudents input {
+    width: 150px;
+}
+
+#mytopics-list li {
+    margin-bottom: 10px;
+}
+
+.modify-btn {
+    width: 120px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 18px;
+    margin-right: 5px;
+    float: right;
+}
+
+#calendar {
+    width: 368px;
+    font-size: 10px;
+    float: left;
+    background: #f5f5f5;
+    border: 1px solid #BDBDBD;
+}
+
+#calendar>div.fc-content {
+    margin-bottom: 10px;
+}
+
+#calendar>div.classroom {
+    width: 368px;
+    font-size: 15px;
+    color: #F15A22;
+    background: #f5f5f5;
+    border-top: 1px solid #BDBDBD;
+}
+
+.date1-header {
+    border-top: 1px solid #f5f5f5;
+    font-size: 13px;
+    color: #000000;
+    padding-left: 4px;
+    padding-bottom: 4px;
+    font-weight: normal;
+    border-bottom: 1px solid #BDBDBD;
+}
+
+.fc-header-title h2 {
+    font-size: 18px;
+    margin-top: -10px;
+    white-space: normal !important;
+    font-weight: bold;
+}
+
+.fc-view-month .fc-event,
+.fc-view-agendaWeek .fc-event {
+    font-size: 10px;
+    overflow: hidden;
+    height: 15px;
+}
+
+.fc-view-agendaWeek .fc-event-vert {
+    font-size: 10px;
+    overflow: hidden;
+    width: 25px !important;
+}
+
+.fc-agenda-axis {
+    width: 20px !important;
+    font-size: .7em;
+}
+
+.fc-button-content {
+    padding: 0;
+}
+
+.fc-widget-header,
+.fc-widget-content {
+    border: none !important;
+}
+
+.fc-widget-content>div {
+    position: relative !important;
+}
+
+.fc-border-separate th,
+.fc-border-separate td {
+    border-left: 1px solid #DDD !important;
+    border-bottom: 1px solid #DDD !important;
+}
+
+.fc-border-separate td {
+    width: 26px;
+    height: 26px;
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+
+.fc-border-separate th.fc-first,
+.fc-border-separate td.fc-first {
+    border-left: 0px !important;
+}
+
+.fc-widget-content>div>.fc-day-number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -9px;
+    margin-top: -5px;
+}
+
+table.fc-border-separate {
+    width: 305px !important;
+    margin: 10px auto 0px auto;
+    font-size: 12px;
+    font-weight: bold;
+    color: #bcbcbc;
+}
+
+table.fc-border-separate td.fc-first>div {
+    min-height: 30px !important;
+}
+
+th.fc-widget-header>div,
+td.fc-widget-content>div {
+    width: 42px;
+    height: 25px;
+    cursor: pointer;
+}
+
+table.fc-header {
+    background: transparent url('/static/images/cal_header.png') top left no-repeat;
+    height: 83px;
+    background-position: -3px 0px;
+}
+
+td.fc-header-left>span.fc-button-prev,
+td.fc-header-right>span.fc-button-next {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)" !important;
+    filter: alpha(opacity=0) !important;
+    -moz-opacity: 0 !important;
+    -khtml-opacity: 0 !important;
+    opacity: 0 !important;
+    width: 27px;
+    height: 27px;
+}
+
+td.fc-header-left>span.fc-button-prev {
+    margin-left: 19px;
+    margin-top: 23px;
+}
+
+td.fc-header-right>span.fc-button-next {
+    margin-right: 16px;
+    margin-top: 22px;
+}
+
+td.fc-header-left>span.fc-button-prev>span.fc-button-inner>span.fc-button-content {
+    width: 28px;
+    height: 25px;
+    background: black !important;
+}
+
+.fc-header-title {
+    padding-top: 38px;
+    color: white;
+}
+
+div.user_sessions,
+div.other_sessions,
+div.single_sessions {
+    width: 305px;
+    margin: 10px auto;
+}
+
+div.single_sessions.user_session,
+div.single_sessions.other_session {
+    padding-left: 15px;
+}
+
+div.single_sessions.user_session {
+    background: transparent url(/static/images/green_dot.png) top left no-repeat;
+}
+
+div.single_sessions.other_session {
+    background: transparent url(/static/images/red_dot.png) top left no-repeat;
+}
+
+table.fc-border-separate>tbody>tr>td.fc-today {
+    background: transparent;
+    color: #555;
+}
+
+table.fc-border-separate>thead>tr>th {
+    padding-bottom: 10px;
+    color: #F15A22;
+    width: 26px !important;
+}
+
+div.user_sessions>p,
+div.other_sessions>p {
+    margin-bottom: 10px;
+    color: #F15A22;
+    font-size: 12px;
+}
+
+div.user_sessions>ul>li,
+div.other_sessions>ul>li {
+    padding: 5px 5px 5px 15px;
+    background-position: 0 50%;
+    font-size: 12px;
+    font-style: italic;
+}
+
+div.user_sessions>ul>li {
+    background: transparent url('/static/images/green_dot.png') top left no-repeat;
+    background-position: 0 50%;
+}
+
+div.other_sessions>ul>li {
+    background: transparent url('/static/images/red_dot.png') top left no-repeat;
+    background-position: 0 50%;
+}
+
+div.single_sessions>p.event-name {
+    margin-bottom: 10px;
+    color: #F15A22;
+    font-size: 12px;
+    float: left;
+}
+
+div.single_sessions>p.event-by {
+    float: left;
+    margin-left: 10px;
+    font-size: 10px;
+}
+
+div.note-box {
+    margin: 10px 0px;
+    background: #f9f9f9;
+    border-radius: 4px;
+    border: 1px solid #bdbdbd;
+    min-height: 150px;
+}
+
+td.fc-today {
+    background: transparent;
+    color: #777;
+}
+
+div.dashboard-notifications-container {
+    margin-top: -10px;
+}
+
+div.note-box>h3 {
+    border-bottom: 1px solid #F3D6CB;
+    padding: 10px 5px;
+    font-weight: bold;
+}
+
+div.note-box {
+    position: relative;
+}
+
+div.note-box a.btn {
+    font-weight: normal;
+    font-size: 12px;
+    padding: 0px 5px;
+    cursor: pointer;
+}
+
+div.note-box>ul {
+    width: 558px;
+    margin: 5px 0px 5px 10px;
+}
+
+div.note-box .icon {
+    background-color: transparent;
+    background-image: url("/static/img/glyphicons-halflings.png");
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+}
+
+.icon.prev {
+    background-position: -432px -72px;
+    float: left;
+}
+
+.icon.next {
+    background-position: -456px -72px;
+    float: right;
+}
+
+div.note-box div.pagination {
+    float: right;
+    height: 16px;
+    overflow: hidden;
+    width: 40px;
+}
+
+div.note-box div.upcoming-class>p {
+    margin-top: 10px;
+}
+
+div.note-box ul>li {
+    font-size: 14px;
+    padding: 10px 0px;
+}
+
+a.btn.disabled {
+    background: #f15a22;
+}
+
+ul.cycle>li {
+    display: none;
+}
+
+.prev,
+.next {
+    cursor: pointer;
+}
+
+#mystudents a.btn {
+    width: 110px;
+    height: 25px;
+    line-height: 27px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.select-box .icon {
+    left: 4px !important;
+}
+
+.select-box .custom-select li {
+    padding: 5px 0px 5px 20px !important;
+}
+
+ul.custom-select>li>span.dropdown {
+    display: none;
+}
+
+ul.custom-select>li.focus-f>span.dropdown {
+    display: inline;
+}
+
+#filter-top .select-box {
+    margin-left: 7px;
+}
+
+#filter-top {
+    padding-top: 10px;
+}
+
+.select-box .custom-select li {
+    width: 459px;
+}
+
+.select-box .dropdown {
+    width: 479px;
+}
+
+.select-box .dropdown a:hover {
+    width: 470px;
+}
+
+.dk_options a,
+.select-box .dropdown a {
+    width: 459px;
+    padding: 0px 0px 0px 10px;
+}
+
+#students_list {
+    margin: 10px 0px 0px 30px;
+    list-style: disc;
+    max-height: 500px;
+}
+
+#students_list li {
+    padding-bottom: 5px;
+}
+
+.feedback-modal a.close,
+.attendance-modal a.close {
+    padding: 0px;
+}
+
+.feedback-modal h1,
+.attendance-modal h1 {
+    font-size: 19px;
+    padding-bottom: 12px;
+}
+
+.feedback-modal textarea {
+    width: 577px;
+}
+
+.feedback-table {
+    width: 97%;
+    margin-left: 8px;
+    font-size: 15px !important;
+}
+
+.feedback-table thead {
+    border-bottom: 1px solid #ccc;
+}
+
+.feedback-table tbody tr td {
+    padding-top: 5px;
+}
+
+.feedback-table tbody tr:last-child td,
+.feedback-table thead tr th {
+    padding-bottom: 5px;
+}
+
+.feedback-table tbody tr td input {
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.attendance-modal h1 {
+    padding-left: 10px;
+}
+
+.attendance_form {
+    display: block;
+    clear: both;
+    overflow-y: auto;
+    max-height: 450px;
+}
+
+.attendance-modal a#submit-attendance {
+    width: 145px;
+    font-size: 15px;
+    margin-left: 8px;
+}
+
+#students-table {
+    width: 97%;
+    margin: 10px;
+}
+
+#students-table thead {
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+}
+
+#students-table thead tr th,
+#students-table tbody tr td {
+    padding-bottom: 5px;
+}
+
+#students-table tbody tr td,
+#students-table tbody tr td input {
+    cursor: pointer;
+}
+
+#students-table tbody tr:first-child td {
+    padding-top: 5px;
+}
+
+p.incomplete_progress {
+    /*background: repeating-linear-gradient(45deg, rgb(36, 184, 8), white 10px, white 10px);*/
+    background: green;
+    height: 28px;
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    line-height: 1.4;
+}
+
+p.completed_progress {
+    background: green;
+    height: 28px;
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    line-height: 1.4;
+}
+
+div.progress-bar {
+    position: relative;
+    width: 745px;
+    height: 28px;
+    background: 50% #FFFFFF;
+}
+
+div.dashboard-inner-container>div.top.clearfix {
+    border-bottom: none !important;
+}
+
+#mytag a.btn:hover {
+    text-decoration: none;
+    color: blue;
+    background: #A5C57F;
+}
+
+.clas-img {
+    background: url('/static/images/MyClass3.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.enter {
+    background: #fc815b;
+    background-image: -webkit-linear-gradient(top, #fc815b, #fa3e05);
+    background-image: -moz-linear-gradient(top, #fc815b, #fa3e05);
+    background-image: -ms-linear-gradient(top, #fc815b, #fa3e05);
+    background-image: -o-linear-gradient(top, #fc815b, #fa3e05);
+    background-image: linear-gradient(to bottom, #fc815b, #fa3e05);
+    -webkit-border-radius: 6;
+    -moz-border-radius: 6;
+    border-radius: 6px;
+    text-shadow: 1px 1px 3px #666666;
+    -webkit-box-shadow: 3px 10px 3px #666666;
+    -moz-box-shadow: 3px 10px 3px #666666;
+    box-shadow: 3px 10px 3px #666666;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 16px;
+    padding: 10px 40px 10px 40px;
+    border: solid #f0f0f0 2px;
+    text-decoration: none;
+}
+
+.enter:hover {
+    background: #ff5100;
+    background-image: -webkit-linear-gradient(top, #ff5100, #cc5721);
+    background-image: -moz-linear-gradient(top, #ff5100, #cc5721);
+    background-image: -ms-linear-gradient(top, #ff5100, #cc5721);
+    background-image: -o-linear-gradient(top, #ff5100, #cc5721);
+    background-image: linear-gradient(to bottom, #ff5100, #cc5721);
+    text-decoration: none;
+}
+
+.can_do {
+    margin-left: 30px;
+    font-size: 13px;
+    list-style-type: circle;
+}
+
+.can_do li {
+    padding: 10px 0px;
+}

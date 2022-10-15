@@ -1,0 +1,69 @@
+    .select-box .dropdown {
+        width: 212px !important;
+    }
+    .dk_options a, .select-box .dropdown a {
+        width: 143px; !important
+        padding: 0px 0px 0px 10px;
+    }
+    .select-box .dropdown a:hover {
+        width: 143px !important;
+    }
+    ul.custom-select > li > span.dropdown {
+        display: none;
+    }
+    ul.custom-select > li.focus-f > span.dropdown {
+        display: inline;
+    }
+    .select-box .custom-select li {
+        width: 192px !important;
+    }
+    .ellipsis {
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    .ellipsis.multiline {
+        white-space: normal;
+    }
+    .label, .badge {
+        font-size: 10.998px;
+        font-weight: bold;
+        line-height: 14px;
+        color: white;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+        white-space: nowrap;
+        vertical-align: baseline;
+        background-color: #999;
+        cursor: pointer;
+    }
+    .label {
+        padding: 1px 4px 2px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        /*{% if not is_teacher %}display:none {% endif %}*/
+    }
+    .label-success, .badge-success {
+        background-color: #468847;
+    }
+    .label-success.disabled, .badge-success.disabled {
+        background-color: #97C997;
+        cursor: text;
+    }
+    .label-success.disabled {
+        color:#505050;
+    }
+    .generalinfo {
+        padding-top: 10px;
+    }
+    .generalinfo p {
+        padding-top:5px;
+        font-size:13px;
+    }
+    .generalinfo p.title {
+        color: #f15a22;
+        float:left;
+    }
+    a.donors-list:hover {
+        color: #f15a22 !important;
+    }
+

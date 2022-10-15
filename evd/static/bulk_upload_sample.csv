@@ -1,0 +1,11 @@
+Sl no,name,dob,gender,grade,father_occupation,mother_occupation,strengths,weakness,Phone No,school_rollno,Observation,guardianName,relatioshipType,kyc_doc_type,kyc_number
+,,,,,,,,,,,,,,1,123abc
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,doc_type,type,,,
+,,,,,,,,,,,1,adhar,,,
+,,,,,,,,,,,2,passport,,,
+,,,,,,,,,,,3,ration card,,,
+,,,,,,,,,,,4,other,,,

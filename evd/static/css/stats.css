@@ -1,0 +1,167 @@
+div.stats-container {
+    width: 100%;
+    overflow: hidden;
+    margin-top: -15px;
+    margin-left: 5px;
+}
+h2.stats-title {
+    font-size: 1.6em;
+    text-align: center;
+    margin-top: -12px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #cdd7be;
+    color: #F15A22;
+    padding-bottom: 10px;
+    text-shadow: 1px 1px 0px #E2E2E2;
+}
+div.stats {
+    height: 325px;
+    width: 300px;
+    background-color: #27a3e2;
+    position: relative;
+    float: left;
+    margin:10px 10px 10px 0px;
+    position: relative;
+}
+
+
+
+.headerDivider {
+     border-left:1px solid #38546d; 
+     border-right:1px solid #16222c; 
+     height:80px;
+     position:absolute;
+     right:249px;
+     top:10px; 
+     
+}
+
+div.title{
+    height: 50px;
+    width: 100%;
+    position: relative;  
+    text-align : center;
+    background-color: #27a3e2;
+    margin-bottom: 10px;   
+    /* box-shadow: 10px 10px 5px #888888; */
+}
+div.title> h1 { padding-top: 5px;font-size:30px; color:white;}
+
+
+div#extend.stats {
+    height: 80px;
+    width: 923px;
+    background-color: #27a3e2;
+    position: relative;
+    float: left;
+    margin:10px 10px 10px 0px;
+    position: relative;
+    cursor: pointer;
+}
+
+div.course_btn{margin-top:20px;}
+
+div.barstats {
+    height: 300px;
+    width: 454px;
+    background-color: #cdd7be;
+    position: relative;
+    float: left;
+    margin:10px 10px 10px 0px;
+    position: relative;
+    cursor: pointer;
+}
+
+div.barstats p {
+    font-size: 14px;
+    line-height: 1.4em;
+    text-align: center;
+    padding-top: 10px;
+    color: #636B51;
+}
+
+
+div.grstats {
+    height: 300px;
+    width: 930px;
+    background-color: #cdd7be;
+    position: relative;
+    margin: -5px;
+   
+    
+    
+}
+
+
+
+
+div.grstats p {
+    font-size: 14px;
+    line-height: 1.4em;
+    text-align: center;
+    padding-top: 10px;
+    color: #636B51;
+}
+
+
+
+
+div.stats p {
+    font-size: 14px;
+    line-height: 1.4em;
+    text-align: center;
+    padding-top: 10px;
+    color: #636B51;
+}
+div.grstats > div.stats-body {
+    position: absolute;
+    width: 100%;
+    padding-bottom: 10px ;
+}
+div.stats > div.stats-body {
+    position: absolute;
+    width: 100%;
+    padding-bottom: 20px ;
+}
+div.stats > div.stats-body > center > h3.stat-value{
+    color: #F15A22;
+     
+}
+div.stats > div.stats-body > center > h2.stat-value{
+    color: #F15A22;
+}
+div.stats > div.stats-body > h2.stat-value > span.divider {
+    color: #666;
+}
+div.stats > div.stats-body small.stats-label {
+    font-size: 0.5em;
+    display: inline;
+    color: #666;
+    font-style: italic;
+}
+div.head_box {
+    height:34px;
+    border-bottom:1px solid #C9C9C7;
+}
+.stats > .head_box,.barstats > .head_box,
+.teach_speech .head_box {
+    padding-bottom:5px;
+}
+div.stats h2 {
+    text-align: center !important;
+    font-size: 32px !important;
+}
+div.stats h2 > span.stats-active {
+
+    font-size: 19px !important;
+    color: #f69206 !important;
+}
+/*div.stats > div > h2:last-child {
+    margin-top:5px; 
+}*/
+div.stats h2 span.stats-total {
+    font-size: 32px !important;
+    margin-left: 0px;
+    color: #f69206 !important;
+}
+#ui-datepicker-div {display: none;}

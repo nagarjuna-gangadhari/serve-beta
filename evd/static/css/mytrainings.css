@@ -1,0 +1,127 @@
+#horiz ul li p{
+ display:inline;
+ }
+
+ #title
+{
+    padding:10px;
+    background-color: white;
+    border: 0px solid black;
+    text-align:center;
+    border-bottom-left-radius:40px;
+    border-bottom-right-radius:40px;
+    opacity:0.8;
+    filter:alpha(opacity=60); /* For IE8 and earlier */
+    margin-bottom : 20px;
+  }
+
+#main-content
+{
+    background-color: white;
+    padding:20px;
+background: repeating-linear-gradient(
+  to right,
+  #5d9634,
+  #5d9634 10px,
+  #538c2b 10px,
+  #538c2b  20px
+);
+}
+h11{  font-size : 20px;  }
+h10{  font-size : 18px; margin-left:20px; }
+h2{ margin-top:10px; color:white; font-size:15px;   }
+.training_hdr{ 
+    border-top-left-radius:15px;
+    border-bottom-left-radius:15px;
+    text-align:left;
+    padding:5px;
+    color:white;
+background-image: -webkit-gradient(
+    linear,
+    right top,
+    left top,
+    color-stop(0, #FFCEB8),
+    color-stop(1, #FF642B)
+);
+background-image: -o-linear-gradient(left, #FFCEB8 0%, #FF642B 100%);
+background-image: -moz-linear-gradient(left, #FFCEB8 0%, #FF642B 100%);
+background-image: -webkit-linear-gradient(left, #FFCEB8 0%, #FF642B 100%);
+background-image: -ms-linear-gradient(left, #FFCEB8 0%, #FF642B 100%);
+background-image: linear-gradient(to left, #FFCEB8 0%, #FF642B 100%);
+}
+
+.thumb{ 
+    display:inline-block;
+    height:250px;
+    width:180px;
+    background-color:#446CB3;
+    text-align:center;
+    margin-top:20px;
+    margin-left:40px;
+    margin-bottom :20px;
+    position:relative;
+    box-shadow: 10px 10px 5px #538C2B;
+
+}
+
+.thumb>.btn {   
+    font-size:12px;
+    width:40%;
+    display:inline-block;
+    margin-top:20px;
+}
+#colorbox #cboxClose
+{
+top: 0;
+right: 0;
+visibility:hidden;
+}
+#cboxLoadedContent{
+margin-top:28px;
+margin-bottom:0;
+}
+.thumb:hover{  background-color:#4183D7;  }
+
+
+.thumb>img{  
+   width:91%; 
+   height: 60%;
+   border-bottom-right-radius:80px;
+       -webkit-transition: all 0.2s linear;
+       -moz-transition: all 0.2s linear;
+        -ms-transition: all 0.2s linear;
+         -o-transition: all 0.2s linear;
+            transition: all 0.2s linear;
+}
+.thumb>img#tag{  
+   width:40%; 
+   height: 40%;
+   top:0;
+   left:0;
+   position:absolute;
+
+}
+.thumb:hover img#tag{ 
+
+opacity: 1;
+
+}
+
+.thumb:hover img{ 
+
+opacity: 0.7;
+
+}
+
+.flag{
+
+    border-top:20px solid red;
+    border-bottom:none;
+
+}
+
+.resize{
+
+    color : white;
+
+}

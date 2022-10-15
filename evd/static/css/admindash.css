@@ -1,0 +1,270 @@
+        ul.custom-select > li > span.dropdown {
+            display: none;
+        }
+        ul.custom-select > li.focus-f > span.dropdown {
+            display: inline;
+            z-index: 1000;
+        }
+        div.single_sessions.user_session {
+            background: transparent url(/static/images/green_dot.png) top left no-repeat;
+        }
+        div.single_sessions.user_session, div.single_sessions.other_session {
+            padding-left: 15px;
+        }
+        #calendar {
+                width: 368px;
+                font-size: 10px;
+                float: left;
+                background: #f5f5f5;
+                border: 1px solid #BDBDBD;
+            }
+        #calendar > div.fc-content {
+            margin-bottom: 10px;
+        }
+        #calendar > div.classroom {
+                     width: 368px;
+                     font-size: 15px;
+                     color: #F15A22;
+                     background: #f5f5f5;
+                     border-top: 1px solid #BDBDBD;
+                     font-weight: bold;
+        }
+        .date1-header {
+                                    border-top: 1px solid #f5f5f5;
+                                     font-size: 13px;
+                                      color: #000000;
+                                      padding-left: 4px;
+                                       padding-bottom: 4px;
+                                        font-weight: normal;
+                                          border-bottom: 1px solid #BDBDBD;
+                
+                      }
+
+
+        .ui-datepicker {
+            //display: none !important;
+        }
+        .fc-header-title h2 {
+                font-size: 18px;
+                margin-top: -10px;
+                white-space: normal !important;
+                font-weight: bold;
+           }
+        .fc-view-month .fc-event, .fc-view-agendaWeek .fc-event {
+                font-size: 10px;
+                overflow: hidden;
+                height: 15px;
+           }
+        .fc-view-agendaWeek .fc-event-vert {
+                font-size: 10px;
+                overflow: hidden;
+                width: 25px !important;
+          }
+        .fc-agenda-axis {
+                width: 20px !important;
+                font-size: .7em;
+          }
+        .fc-button-content {
+                padding: 0;
+          }
+        .fc-widget-header, .fc-widget-content {
+            border: none !important;
+        }
+        .fc-widget-content > div {
+            position: relative !important;
+        }
+        .fc-border-separate th, .fc-border-separate td {
+            border-left: 1px solid #DDD !important;
+            border-bottom: 1px solid #DDD !important;
+        }
+        .fc-border-separate td {
+            width: 26px;
+            height: 26px;
+            border-spacing: 0px;
+            border-collapse: collapse;
+        }
+        .fc-border-separate th.fc-first, .fc-border-separate td.fc-first {
+            border-left: 0px !important;
+        }
+
+        .fc-widget-content > div > .fc-day-number{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -9px;
+            margin-top: -5px;
+        }
+        table.fc-border-separate {
+            width: 305px !important;
+            margin: 10px auto 0px auto;
+            font-size: 12px;
+            font-weight: bold;
+            color: #bcbcbc;
+        }
+        table.fc-border-separate td.fc-first > div{
+            min-height: 30px !important;
+        }
+        th.fc-widget-header > div, td.fc-widget-content > div {
+            width: 42px;
+            height: 25px;
+            cursor: pointer;
+        }
+        table.fc-header {
+            background: transparent url('/static/images/cal_header.png') top left no-repeat;
+            height: 83px;
+            background-position: -3px 0px;
+        }
+        td.fc-header-left > span.fc-button-prev, td.fc-header-right > span.fc-button-next {
+            -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)" !important;
+            filter: alpha(opacity=0) !important;
+            -moz-opacity:0 !important;
+            -khtml-opacity: 0 !important;
+            opacity: 0 !important;
+            width: 27px;
+            height: 27px;
+        }
+        td.fc-header-left > span.fc-button-prev {
+            margin-left: 19px;
+            margin-top: 23px;
+        }
+        td.fc-header-right > span.fc-button-next {
+            margin-right: 16px;
+            margin-top: 22px;
+        }
+        td.fc-header-left > span.fc-button-prev > span.fc-button-inner > span.fc-button-content{
+            width: 28px;
+            height: 25px;
+            background: black !important;
+        }
+        .fc-header-title {
+            padding-top:38px;
+            color:white;
+        }
+        div.user_sessions, div.other_sessions, div.single_sessions {
+            width: 305px;
+            overflow:hidden;
+            margin: 10px auto;
+        }
+        table.fc-border-separate > tbody > tr > td.fc-today {
+            background: transparent;
+            color: #555;
+        }
+        table.fc-border-separate > thead > tr > th {
+            padding-bottom: 10px;
+            color: #F15A22;
+            width: 26px !important;
+        }
+        div.user_sessions > p, div.other_sessions > p {
+            margin-bottom: 10px;
+            color: #F15A22;
+            font-size: 12px;
+        }
+        div.user_sessions > ul > li, div.other_sessions > ul > li {
+            padding: 5px 5px 5px 15px;
+            background-position: 0 50%;
+            font-size: 12px;
+            font-style: italic;
+        }
+        div.user_sessions > ul > li {
+            background: transparent url('/static/images/green_dot.png') top left no-repeat;
+            background-position: 0 50%;
+        }
+        div.other_sessions > ul > li {
+            background: transparent url('/static/images/red_dot.png') top left no-repeat;
+            background-position: 0 50%;
+        }
+        div.single_sessions > p.event-name {
+            margin-bottom: 10px;
+            color: #F15A22;
+            font-size: 12px;
+            float: left;
+        }
+        div.single_sessions > p.event-by {
+            float:left;
+            margin-left: 10px;
+            font-size: 10px;
+        }
+        div.note-box {
+            margin: 10px 0px;
+            background: #f9f9f9;
+            border-radius: 4px;
+            border: 1px solid #bdbdbd;
+            min-height: 150px;
+        }
+        div.note-box.notification {
+            margin-bottom:10px;
+        }
+        div.note-box.notification, div.note-box.next-class {
+            margin-top: 0px;
+        }
+        td.fc-today {
+            background: transparent;
+            color: #777;
+        }
+        div.note-box > h3 {
+            border-bottom: 1px solid #F3D6CB;
+            font-size: 14px;
+            padding:10px 5px;
+            font-weight: bold;
+            color: #f15a22;
+        }
+        div.note-box {
+            position: relative;
+        }
+        div.note-box  a.btn {
+            font-weight: normal;
+            font-size: 12px;
+            padding: 0px 5px;
+            cursor: pointer;
+        }
+        div.note-box div.upcoming-class {
+            width: 558px;
+            position: absolute;
+            margin-top: -15px;
+            top: 50%;
+        }
+        div.note-box .icon {
+            background-color: transparent;
+            background-image: url("/static/img/glyphicons-halflings.png");
+            background-repeat: no-repeat;
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+        }
+        .icon.prev {
+            background-position: -432px -72px;
+            float:left;
+        }
+        .icon.next {
+            background-position: -456px -72px;
+            float: right;
+        }
+        div.note-box div.pagination {
+            float:right;
+            height: 16px;
+            overflow:hidden;
+            width: 40px;
+        }
+        div.note-box ul {
+            width: 558px;
+        }
+        a.btn.disabled {
+            background: #f15a22;
+        }
+        ul.cycle > li {
+            display: none;
+        }
+        .prev, .next {
+            cursor: pointer;
+        }
+        .assign-btn {
+        font-size: 15px;
+        height: 20px;
+        line-height: 0px;
+        margin: 10px 0px 10px 0px;
+        }
+
+        select.make-admin {
+            border:1px solid #505050;
+            border-radius:0px;
+        }

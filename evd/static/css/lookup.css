@@ -1,0 +1,137 @@
+    .select-int .icon {
+        left:8px !important;
+    }
+    .select-box .icon {
+        left:4px !important;
+    }
+    ul.custom-select > li > span.dropdown {
+        display: none;
+    }
+    ul.custom-select > li.focus-f > span.dropdown {
+        display: inline;
+        z-index: 1;
+    }
+    #filter-top .select-box {
+        margin-left:7px;
+    }
+    .select-box .custom-select li {
+        width: 114px;
+        padding:5px 0px 5px 20px !important;
+    }
+    .select-box .dropdown {
+        width: 134px;
+    }
+    .dk_options a, .select-box .dropdown a {
+        width:122px;
+        padding:0px 0px 0px 12px;
+    }
+    .ellipsis {
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    .ellipsis.multiline {
+        white-space: normal;
+    }
+    .label, .badge {
+        font-size: 10.998px;
+        font-weight: bold;
+        line-height: 14px;
+        color: white;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+        white-space: nowrap;
+        vertical-align: baseline;
+        background-color: #999;
+    }
+    .label {
+        padding: 1px 4px 2px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+    }
+    .label-success, .badge-success {
+        background-color: #468847;
+    }
+    div.general-information > p, div.preferences > p{
+        font-size: 12px;
+        margin: 5px 0px;
+    }
+    div.general-information {
+        padding: 0px 10px;
+        float: left;
+        width: 340px;
+    }
+    div.user-block textarea {
+        width: 350px !important;
+        border-radius: 0px !important;
+        font-size: 12px !important;
+        margin-bottom: 0px !important;
+    }
+    div.user-block div.info {
+        overflow: hidden;
+        clear:both;
+        width: 440px;
+        /*text-align: center;*/
+        padding: 10px 10px 0px 0px;
+    }
+    div.user-block div.general_info {
+        width: 440px;
+        overflow:hidden;
+        padding: 0px 10px;
+    }
+    div.user-block div.info > p.email {
+        font-size:14px;
+        width:265px;
+    }
+    div.user-block div.info > p.hours {
+        width: 170px;
+        font-size:14px;
+        position:absolute;
+        right:50px;
+    }
+    div.user-block div.info > p.skypeid {
+              width: 265px;
+               font-size:14px;
+               position:relative;
+               top:1px;
+            }
+    div.user-block div.info > p.phone {
+                   width: 265px;
+                    font-size:14px;
+                    position:relative;
+                    top:3px;
+                 }
+
+
+    div.user-block div.info > p.email label, div.user-block div.info > p.phone label,div.user-block div.info > p.skypeid label,div.user-block div.info > p.hours label {
+        font-size: 13px !important;
+    }
+    div.user-block div.info > p {
+        width: 200px;
+        float:left;
+        word-wrap:break-word;
+    }
+    div.general-information > p {
+        width: 150px;
+        word-wrap: break-word;
+        float: left;
+    }
+    div.general-information > p.username {
+        width: 180px;
+        font-size: 16px;
+        font-weight: bold;
+        margin: 10px 0px 0px 0px;
+        color: #f15a22;
+    }
+    div.user-block label {
+        font-family: 'PlutoCondRegular' !important;
+        display: inline;
+        color: #f15a02;
+        font-weight: normal;
+    }
+    div.user-block > div {
+        background: white;
+    }
+    .tooltip-inner {
+        word-wrap: break-word !important;
+    }
+

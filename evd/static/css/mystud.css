@@ -1,0 +1,91 @@
+.nos {
+  -webkit-border-radius: 11;
+  -moz-border-radius: 11;
+  border-radius: 11px;
+  -webkit-box-shadow: 9px 11px 6px #666666;
+  -moz-box-shadow: 9px 11px 6px #666666;
+  box-shadow: 9px 11px 6px #666666;
+  font-family: Arial;
+  color: #ffdf0d;
+  font-size: 20px;
+  background: #ff330f;
+  padding: 10px 20px 10px 20px;
+  border: solid #ffffff 4px;
+  text-decoration: none;
+}
+
+.nos:hover {
+  background: #f51111;
+  text-decoration: none;
+}
+
+.thumb{
+    transition: 0.3s ease;
+    max-height:100px;
+
+}
+
+.thumb:hover{
+    position:fixed;
+    z-index:999;
+    max-height:500px;
+   transform: scale(1.5, 1.5) 
+    
+}
+
+.extt {
+  -webkit-border-radius: 7;
+  -moz-border-radius: 7;
+  border-radius: 7px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 16px;
+  background: #d9534f;
+  padding: 10px 40px 10px 40px;
+  text-decoration: none;
+}
+
+.extt:hover {
+  background: #c9302c;
+  text-decoration: none;
+
+}
+
+.btn-danger{
+  width:100px;
+}
+
+.award_item{
+    background: #168e94;
+    width: 230px;
+    padding: 0;
+    margin: 10px 10px 10px 23px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 50px;
+    color: #FFF;
+    border-radius: 5px;
+    transition: all 0.2s;
+    margin-bottom: 35px;
+}
+.award_item_selected, .award_item:hover{
+    background: #0a6284 url("/static/images/check_mark.svg")no-repeat bottom right;
+    box-shadow: 0px 0px 0px 5px #2286ad;
+}
+.award_list{
+    height: 310px;
+    overflow-x: auto;
+}
+.nominate{
+    #margin-top: 12%;
+    #margin-left: 33%;
+    width: 50%;
+    margin-left: 20%;
+    margin-top: 12%;
+}
+.arena10{
+    display: block;
+    background: rgba(128, 128, 128, 0.247059);
+    padding: 35px 0px;
+    margin-top: -20px;
+}

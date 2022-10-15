@@ -1,0 +1,6 @@
+./cbpAnimatedHeader.min.js
+./custom.js
+jquery.mixitup.min.js
+./login_modal.js
+progressbar.min.js
+./scrollReveal.js

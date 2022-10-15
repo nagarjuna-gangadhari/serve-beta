@@ -1,0 +1,350 @@
+html {
+    line-height: 1
+}
+ol,
+ul {
+    list-style: none
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+caption,
+th,
+td {
+    text-align: left;
+    font-weight: normal;
+    vertical-align: middle
+}
+q,
+blockquote {
+    quotes: none
+}
+q:before,
+q:after,
+blockquote:before,
+blockquote:after {
+    content: "";
+    content: none
+}
+a img {
+    border: none
+}
+#universe {
+    min-height: 100%;
+    position: relative
+}
+html,
+body {
+    height: 100%;
+    min-height: 100%;
+    min-width: 1094px
+}
+body.index.page .new-hero {
+    position: relative;
+    background: url(//d3w52z135jkm97.cloudfront.net/assets/v2/pages/page/index/intro-hero-61fa80be7bda4fabb67fdc4a9cf08315.jpg) no-repeat center top;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    -webkit-background-size: cover;
+    background-size: cover
+}
+blockquote.standard {
+    margin-top: 36px;
+    text-align: center
+}
+blockquote.standard p {
+    font-style: italic;
+    line-height: 30px
+}
+blockquote.standard footer {
+    margin-top: 48px
+}
+blockquote.standard cite {
+    font-size: 12px;
+    line-height: 18px;
+    text-transform: uppercase
+}
+blockquote.standard cite a,
+blockquote.standard cite .date {
+    display: inline-block
+}
+blockquote.standard cite a {
+    color: #ffc627
+}
+blockquote.standard cite a:hover {
+    color: #ffe18d
+}
+blockquote.standard cite .date:before {
+    content: "•";
+    display: inline-block;
+    margin: 0 14px
+}
+nav.standard.absolute {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+.span4 {
+    width: 154px
+}
+.span20 {
+    width: 858px
+}
+.light_theme nav.standard h1 a.svg,
+.light_theme nav.standard h1 span.svg {
+    background-image: url(//d3w52z135jkm97.cloudfront.net/assets/v2/watsi-logo-white-ec81ac55e02e5190e19323d6400f1fb4.svg)
+}
+
+.light_theme nav.standard ul.global_nav>li.donor>a:after,
+.blue_theme nav.standard ul.global_nav>li.donor>a:after,
+.tooltip:after,
+.ui-tooltip:before {
+    background-image: url(//d3w52z135jkm97.cloudfront.net/assets/v2/components-s1a43733b4a-e59bbdf850eb8023b34a454738bfa62d.png);
+    background-repeat: no-repeat
+}
+.light_theme nav.standard h1 a,
+.light_theme nav.standard h1 span {
+    text-indent: -119988px;
+    overflow: hidden;
+    text-align: left;
+    text-transform: capitalize;
+    background-image: url(//d3w52z135jkm97.cloudfront.net/assets/v2/watsi-logo-white-6cc0ff24f293b83c72e52c79cc4511a7.png);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    width: 85px;
+    height: 28px
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (-moz-min-device-pixel-ratio: 2),
+only screen and (-o-min-device-pixel-ratio: 2),
+only screen and (min-device-pixel-ratio: 2),
+only screen and (min-resolution: 192dpi),
+only screen and (min-resolution: 2dppx) {
+    .light_theme nav.standard h1 a,
+    .light_theme nav.standard h1 span {
+        background-image: url(//d3w52z135jkm97.cloudfront.net/assets/v2/watsi-logo-white@2x-0527291223c99ac87ddfa3b433bc6f34.png);
+        -moz-background-size: 85px, auto;
+        -o-background-size: 85px, auto;
+        -webkit-background-size: 85px, auto;
+        background-size: 85px, auto
+    }
+}
+.light_theme nav.standard h1 a.svg,
+.light_theme nav.standard h1 span.svg {
+    background-image: url(//d3w52z135jkm97.cloudfront.net/assets/v2/watsi-logo-white-ec81ac55e02e5190e19323d6400f1fb4.svg)
+}
+.light_theme nav.standard h1 a.svg.valentines,
+.light_theme nav.standard h1 span.svg.valentines {
+    background-image: url(//d3w52z135jkm97.cloudfront.net/assets/v2/watsi-logo-white_heart-c5623053e9b4270a0c830e4c5cd4ab46.svg)
+}
+.static .light_theme nav.standard h1 a,
+.static .light_theme nav.standard h1 span {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFUAAAAcCAYAAAAQovP+AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDIxIDc5LjE1NDkxMSwgMjAxMy8xMC8yOS0xMTo0NzoxNiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OThFRTYzNjlGMDExMTFFM0JBQUI5NkQyMzM3QUMxNTgiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OThFRTYzNjhGMDExMTFFM0JBQUI5NkQyMzM3QUMxNTgiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OEJGM0I3NkZFMkRBMTFFMzk4RTQ4ODY3NkJCMDkwQzYiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OEJGM0I3NzBFMkRBMTFFMzk4RTQ4ODY3NkJCMDkwQzYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6Gpu2xAAAE5klEQVR42uyaa0wUVxTHF0RFUg0Yg6Y2qEW/VOOrKiTlg/iIJj4qpprAh/qOjzRNPzRGbUtbidFETUiNrUYTpVBEDVRUKNb4jE9EjYpYQqliW4uPCLY+C7j+j/2PvV7vzO66S2KcPckvu3vPvWdmzpxz7p27E+H1ej0+JBKkgnEgCSSCzqAZNIJqcAjsAqc9YfFEODg1CswBi0CCn/bOgKWgOOzUF6Uf+AH0f0m7u8FMcDPs1P9kItgCYoK0fQ2MBRfc7lRxaBFoEyL7t8AItzlWdWpfUB6CCNXlMhgE7rjFqZH8lMjMawWHivQC2a/o9Q8BElUfh8BWIXikOlVm+YGtePLTwNBX0KnR/AxFMNWAU5ZThYWtXWa4NHudRa4vxXLqcKaoJTdAdzoiGJK1g04AXWxO6Gfwo41uJ8gytMeDk5pOrmcUWA+OgQpQyvSO1sYvAxv5/SP2reCDjCqdQCY4QJu5YApop/VbAY48/YaJapX3efkTRMkEFiQJ3hcl3aZvAfUDtPZhbL8DojXdfOpmKW1fsa0F1IIL4G+2nQEdlb7LwC/U/QEqyCGlTww4zz7Xwe/KtVSBSKXvbrY/depRw8VPBbIyuGjQZVAnY1ca9DkOum9snDqO+uVa+2pl7GRNJxf/AHRS2hLBYvCm0tZBsZOp2Uhh+yKb85pN/ZfKNceDL3gDPXZOvWG4+OPsOEdrr2MUT2FUSTQ2aX0GgTdAg8Fuqc3JRzESapWTj2RknAMPwTalf3dGY4GfWSP2b4MTATr1a+rT/DjGM6dKDYoz1KtkkscFvCVruJGymFzlw4IlB8FZMAPEGuzG2dRNsVkA3lZWCe+Bt8AG1kXZ0OlI3VTWzzzNjtS5WeAoz/suqAeH2T8+wMlnD2gB20AZmMtzchZ4ttlrlkLegSz+/gfEgtH83cR0G6qMmcgIq7GxedzhTg9hn9X8/S2PIen2gVJ6RHeSkd1Wi8bDSkYVge8ZQdWM7LoAI1VIBfvBY/aVzzLwTqDpbxX73qAruK/Uw72GGnmA9VdS932vvZT6SKEqpnw7Ou0npS7KhLMT9OKF6fXZcvwmbQKxOP+STrXoxnK4j8f/i2XOmP41Dk9bshS5DjaDVeBdLlksmc1lUjaRp5NPHBLjVx+Jk8f0+pypms/2B2AHGAPmccmWq43tw09J1ceGbcyuQa5D61mKRoK1oJvtLp42w+pipXwM78ZWQ59MRkY0JyknyfARDT2YIVKS7mlLoLFK2blkGJtG/Q6tLLQH65SyoI7pp0S36XzWg3yel0eZQEs5LtEu/Uf4cMSnAaxNcxzs/Au6+GHjIPtvt1khiHxmGNdGGSslZAsoZnlrZgnTnSoOqmQ672N5qVL0xbQn48t5w2rZlu9UU8Xwbw7OqFMi1Yme4JGDnUI/b8yH7D/BoMvmMXrYjJVsWcJFfTOXUeKoZE6SVYYxUqNLmBmNIFfTj+YNuspl4iUeo63WT4Lgrny3tv6kTn3nUE8aHJZDlsgOTXu7RQaXaOVu2k+N4g5La+1U5YDp4U3q0MkVblI3um2TWuQiSOcTRKjkFv+icY1Ddada22yTwf0Q2L7mxv+nTE61HJsUpDNKwGA3OtTOqSKVdMoCbpr4K/IyxSQwnk9irpSIAF77Ge/5/7WfONZeWWpVcxdIIjz82g/kiQADACAhr/q7K3/2AAAAAElFTkSuQmCC")
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (-moz-min-device-pixel-ratio: 2),
+only screen and (-o-min-device-pixel-ratio: 2),
+only screen and (min-device-pixel-ratio: 2),
+only screen and (min-resolution: 192dpi),
+only screen and (min-resolution: 2dppx) {
+    .static .light_theme nav.standard h1 a,
+    .static .light_theme nav.standard h1 span {
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAAA4CAYAAABt2GPKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpBOUQxOERBN0U5NDUxMUUzQkNDMUNBMTVBQzM4RjM0QiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpBOUQxOERBOEU5NDUxMUUzQkNDMUNBMTVBQzM4RjM0QiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjA2MTY1NkU4RTk0NDExRTNCQ0MxQ0ExNUFDMzhGMzRCIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkE5RDE4REE2RTk0NTExRTNCQ0MxQ0ExNUFDMzhGMzRCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+fIhdzQAACvhJREFUeNrsXQmQ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");
+        -moz-background-size: 85px, auto;
+        -o-background-size: 85px, auto;
+        -webkit-background-size: 85px, auto;
+        background-size: 85px, auto
+    }
+}
+.static .light_theme nav.standard h1 a.svg,
+.static .light_theme nav.standard h1 span.svg {
+    background-image: url(//d3w52z135jkm97.cloudfront.net/assets/v2/watsi-logo-white-ec81ac55e02e5190e19323d6400f1fb4.svg)
+}
+.static .light_theme nav.standard h1 a.svg.valentines,
+.static .light_theme nav.standard h1 span.svg.valentines {
+    background-image: url(//d3w52z135jkm97.cloudfront.net/assets/v2/watsi-logo-white_heart-c5623053e9b4270a0c830e4c5cd4ab46.svg)
+}
+.light_theme nav.standard ul.global_nav>li>a {
+    color: #fff
+}
+.light_theme nav.standard ul.global_nav>li>a:hover {
+    color: #fff
+}
+.light_theme nav.standard ul.global_nav>li>a.active span,
+.light_theme nav.standard ul.global_nav>li>a:hover span {
+    border-bottom-color: #fff
+}
+.light_theme nav.standard ul.global_nav>li.donor>a:after {
+    background-position: 0 -1337px
+}
+
+.blue_theme nav.standard h1 a,
+.blue_theme nav.standard h1 span {
+    text-indent: -119988px;
+    overflow: hidden;
+    text-align: left;
+    text-transform: capitalize;
+    background-image: url(//d3w52z135jkm97.cloudfront.net/assets/v2/watsi-logo-blue-4bd042ab83dea15c2dfc9a39df1d29b7.png);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    width: 85px;
+    height: 28px
+}
+.new-hero {
+    height: 600px;
+    text-align: center;
+    color: #f4f7f8
+}
+.new-hero h1 {
+    font-size: 42px;
+    line-height: 78px;
+    height: 78px;
+    margin-top: 204px
+}
+.new-hero h1.with_input_field {
+    margin-top: 168px
+}
+.new-hero h2 {
+    font-size: 21px;
+    line-height: 30px;
+    font-weight: lighter;
+    color: #dddddd;
+    margin-bottom: 30px;
+    color: #eee
+}
+.new-hero h2 strong {
+    color: #FFFFFF;
+    font-weight: normal
+}
+.new-hero.small {
+    height: 378px
+}
+.new-hero.small h1 {
+    margin-top: 126px
+}
+.new-hero .caption {
+    font-style: italic;
+    font-size: 12px;
+    position: absolute;
+    bottom: 0;
+    right: 0
+}
+.new-hero .caption a {
+    color: #d8d8d8;
+    display: block;
+    padding: 6px 38px 24px 6px
+}
+.new-hero .caption a {
+    color: #d8d8d8
+}
+section.how_it_works {
+    overflow: hidden;
+    *zoom: 1;
+    background-color: #fcd15c;
+    color: #4b5c66;
+    text-align: center
+}
+.button-highlight-primary,
+a.button.primary,
+section.patients .meet_all_patients a.primary,
+section.universal_fund_hero a.primary.learn_more_link,
+.view_more_container a.primary.view_more_patients,
+body.team.show section.stats .team_cta a.join_button,
+body.team.show section.stats .team_cta a.invite_button,
+body.team.show section.stats .team_cta a.switch_button,
+button.button.primary,
+section.universal_fund_hero button.primary.learn_more_link,
+body.team.show section.stats .team_cta button.join_button,
+body.team.show section.stats .team_cta button.invite_button,
+body.team.show section.stats .team_cta button.switch_button,
+input.button.primary,
+section.universal_fund_hero input.primary.learn_more_link,
+body.team.show section.stats .team_cta input.join_button,
+body.team.show section.stats .team_cta input.invite_button,
+body.team.show section.stats .team_cta input.switch_button,
+.connected_inputs>button,
+.donation_form .donation_field>button,
+form.gift_card_lookup_form .gift_card_lookup_field>button,
+body.gift_card_campaigns.show form .email_field>button,
+.connected_inputs>input[type="submit"],
+.donation_form .donation_field>input[type="submit"],
+form.gift_card_lookup_form .gift_card_lookup_field>input[type="submit"],
+body.gift_card_campaigns.show form .email_field>input[type="submit"],
+.button-highlight-secondary,
+a.button.secondary,
+section.patients .meet_all_patients a,
+section.universal_fund_hero a.secondary.learn_more_link,
+.view_more_container a.view_more_patients,
+body.team.show section.stats .team_cta a.secondary.join_button,
+body.team.show section.stats .team_cta section.patients .meet_all_patients a.join_button,
+section.patients .meet_all_patients body.team.show section.stats .team_cta a.join_button,
+body.team.show section.stats .team_cta .view_more_container a.join_button.view_more_patients,
+.view_more_container body.team.show section.stats .team_cta a.join_button.view_more_patients,
+body.team.show section.stats .team_cta a.secondary.invite_button,
+body.team.show section.stats .team_cta section.patients .meet_all_patients a.invite_button,
+section.patients .meet_all_patients body.team.show section.stats .team_cta a.invite_button,
+body.team.show section.stats .team_cta .view_more_container a.invite_button.view_more_patients,
+.view_more_container body.team.show section.stats .team_cta a.invite_button.view_more_patients,
+body.team.show section.stats .team_cta a.secondary.switch_button,
+body.team.show section.stats .team_cta section.patients .meet_all_patients a.switch_button,
+section.patients .meet_all_patients body.team.show section.stats .team_cta a.switch_button,
+body.team.show section.stats .team_cta .view_more_container a.switch_button.view_more_patients,
+.view_more_container body.team.show section.stats .team_cta a.switch_button.view_more_patients,
+button.button.secondary,
+section.universal_fund_hero button.secondary.learn_more_link,
+body.team.show section.stats .team_cta button.secondary.join_button,
+body.team.show section.stats .team_cta button.secondary.invite_button,
+body.team.show section.stats .team_cta button.secondary.switch_button,
+input.button.secondary,
+section.universal_fund_hero input.secondary.learn_more_link,
+body.team.show section.stats .team_cta input.secondary.join_button,
+body.team.show section.stats .team_cta input.secondary.invite_button,
+body.team.show section.stats .team_cta input.secondary.switch_button,
+.button-highlight-secondary-white,
+a.button.secondary-white,
+section.patients .meet_all_patients a.secondary-white,
+section.universal_fund_hero a.learn_more_link,
+.view_more_container a.secondary-white.view_more_patients,
+body.team.show section.stats .team_cta a.secondary-white.join_button,
+body.team.show section.stats .team_cta section.universal_fund_hero a.join_button.learn_more_link,
+section.universal_fund_hero body.team.show section.stats .team_cta a.join_button.learn_more_link,
+body.team.show section.stats .team_cta a.secondary-white.invite_button,
+body.team.show section.stats .team_cta section.universal_fund_hero a.invite_button.learn_more_link,
+section.universal_fund_hero body.team.show section.stats .team_cta a.invite_button.learn_more_link,
+body.team.show section.stats .team_cta a.secondary-white.switch_button,
+body.team.show section.stats .team_cta section.universal_fund_hero a.switch_button.learn_more_link,
+section.universal_fund_hero body.team.show section.stats .team_cta a.switch_button.learn_more_link,
+button.button.secondary-white,
+section.universal_fund_hero button.learn_more_link,
+body.team.show section.stats .team_cta button.secondary-white.join_button,
+body.team.show section.stats .team_cta section.universal_fund_hero button.join_button.learn_more_link,
+section.universal_fund_hero body.team.show section.stats .team_cta button.join_button.learn_more_link,
+body.team.show section.stats .team_cta button.secondary-white.invite_button,
+body.team.show section.stats .team_cta section.universal_fund_hero button.invite_button.learn_more_link,
+section.universal_fund_hero body.team.show section.stats .team_cta button.invite_button.learn_more_link,
+body.team.show section.stats .team_cta button.secondary-white.switch_button,
+body.team.show section.stats .team_cta section.universal_fund_hero button.switch_button.learn_more_link,
+section.universal_fund_hero body.team.show section.stats .team_cta button.switch_button.learn_more_link,
+input.button.secondary-white,
+section.universal_fund_hero input.learn_more_link,
+body.team.show section.stats .team_cta input.secondary-white.join_button,
+body.team.show section.stats .team_cta section.universal_fund_hero input.join_button.learn_more_link,
+section.universal_fund_hero body.team.show section.stats .team_cta input.join_button.learn_more_link,
+body.team.show section.stats .team_cta input.secondary-white.invite_button,
+body.team.show section.stats .team_cta section.universal_fund_hero input.invite_button.learn_more_link,
+section.universal_fund_hero body.team.show section.stats .team_cta input.invite_button.learn_more_link,
+body.team.show section.stats .team_cta input.secondary-white.switch_button,
+body.team.show section.stats .team_cta section.universal_fund_hero input.switch_button.learn_more_link,
+section.universal_fund_hero body.team.show section.stats .team_cta input.switch_button.learn_more_link,
+.share,
+.facebook-login {
+    -moz-transition: background 0.3s ease-in-out, border 0.3s ease-in-out, padding 0.2s ease;
+    -o-transition: background 0.3s ease-in-out, border 0.3s ease-in-out, padding 0.2s ease;
+    -webkit-transition: background 0.3s ease-in-out, border 0.3s ease-in-out, padding 0.2s ease;
+    transition: background 0.3s ease-in-out, border 0.3s ease-in-out, padding 0.2s ease;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    border-radius: 50px
+}
+

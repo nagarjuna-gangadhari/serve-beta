@@ -1,0 +1,79 @@
+@media screen and (min-width: 800px){
+.header{
+    padding : 0px 10px;
+}
+
+.header > p{
+    margin : 0px;
+}
+
+.dashboard-breadcrumb{
+    width : 135%;
+    margin-left : -17%;
+    background : white !important;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    box-shadow: 1px 1px 5px #f5f5ef;
+}
+
+.dashboard-inner-container{
+    margin-top: 2%; 
+
+}
+
+.about-container{
+    padding: 0px 0px 0px 0px;
+    /*box-shadow: 0.5px 0.5px 1px;*/
+}
+
+.modal{
+    bottom : auto !important;
+    padding-right : 0px !important;
+}
+
+#add-course-modal{
+    overflow : hidden;
+    left: 41%;
+    width: 55%;
+}
+
+.add_course_dj, .add_topic_dj{
+    margin-left:5px;
+    width:20px;
+    padding : 0px;
+    height:20px;
+    line-height:18px;
+    float:left;
+}
+
+.select-box .custom-select li {
+    width: 45%;
+    height: 100%;
+}
+.dashboard-calendar-container{
+    display : inline-block;
+    float : left !important;
+}
+
+.dropdown > .dropdown-menu{
+    margin : 0px !important;
+}
+}
+nav.breadcrumb_css {
+    padding:0;
+}
+nav.breadcrumb_css ul.dashboard-breadcrumb{
+    width:100% !important;
+    margin-left:0 !important;
+}
+nav.breadcrumb_css ul.dashboard-breadcrumb li{
+    padding-left:0;
+}
+nav.breadcrumb_css ul.dashboard-breadcrumb li a{
+   padding:0;
+
+}
+
