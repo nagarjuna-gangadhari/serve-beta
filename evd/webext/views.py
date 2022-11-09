@@ -10117,9 +10117,6 @@ class OnlineDemand(View):
                         if partner_center_ids:
                             partner_center_ids = [str(i) for i in partner_center_ids]
                             partner_centers = "AND web_center.id in ('{lang}') ".format(lang="','".join(partner_center_ids))
-                            partner_details['name'] = contactperson.get_full_name()
-                            partner_details['phone'] = contactperson.userprofile.phone
-                            partner_details['email'] = contactperson.email
                             partner_details['org'] = request.user.userprofile.referencechannel.partner.name_of_organization
 
                     
@@ -10438,9 +10435,6 @@ class FtDemand(View):
                             print(partner_center_ids)
                             partner_center_ids = [str(i) for i in partner_center_ids]
                             partner_centers = " AND web_center.id in ('{lang}') ".format(lang="','".join(partner_center_ids))
-                            partner_details['name'] = contactperson.get_full_name()
-                            partner_details['phone'] = contactperson.userprofile.phone
-                            partner_details['email'] = contactperson.email
                             partner_details['org'] = request.user.userprofile.referencechannel.partner.name_of_organization
                             
             print(partner_details)
