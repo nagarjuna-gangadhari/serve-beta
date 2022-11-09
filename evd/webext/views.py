@@ -10103,11 +10103,22 @@ class OnlineDemand(View):
         try:
             user_details = {'is_teacher': None, 'profile_status': None, 'preferred_language': []}
             known_languages_string = ''
+            partner_centers = ''
+            partner_details = {}
             avoid_test_ceters = ' AND web_center.is_test=0'
             if request.user.is_authenticated():
                 known_languages_json = UserProfile.objects.get(user=request.user).languages_known
                 known_languages = [str(i['lang']) for i in ast.literal_eval(known_languages_json)]
                 known_languages_string = "AND web_center.language in ('{lang}') AND genutilities_language.name in ('English','{lang}')".format(lang="','".join(known_languages))
+                if request.user.userprofile.referencechannel:
+                    contactperson = request.user.userprofile.referencechannel.partner.contactperson
+                    if RolePreference.objects.filter(role_id=12, userprofile=contactperson.userprofile):
+                        partner_center_ids = Center.objects.filter(delivery_partner=request.user.userprofile.referencechannel.partner).values_list('id', flat=True)
+                        if partner_center_ids:
+                            partner_center_ids = [str(i) for i in partner_center_ids]
+                            partner_centers = "AND web_center.id in ('{lang}') ".format(lang="','".join(partner_center_ids))
+                            partner_details['org'] = request.user.userprofile.referencechannel.partner.name_of_organization
+
                     
                 user_details = {
                     'is_teacher': has_pref_role(request.user.userprofile, "Teacher"),
@@ -10126,11 +10137,11 @@ class OnlineDemand(View):
                     (select count(id) from web_offering where course_id=web_course.id and active_teacher_id is null and status='running' AND web_offering.end_date > '{now_time}') as backfill
                     FROM web_course INNER JOIN web_offering ON web_course.id = web_offering.course_id LEFT JOIN web_center ON web_offering.center_id = web_center.id 
                     INNER JOIN genutilities_language ON web_course.language_id = genutilities_language.id LEFT JOIN web_demandslot ON web_center.id = web_demandslot.center_id 
-                    WHERE web_demandslot.start_time >= '09:00:00' AND web_demandslot.end_time <= '17:00:00' {known_languages_string} {avoid_test_ceters}
+                    WHERE web_demandslot.start_time >= '09:00:00' AND web_demandslot.end_time <= '17:00:00' {known_languages_string} {avoid_test_ceters} {partner_centers}
                     AND web_offering.end_date > '{now_time}' and web_course.status = 'active'  AND web_offering.active_teacher_id is null AND web_center.digital_school_id IS NULL 
                     AND web_offering.status IN ('running', 'pending') AND web_demandslot.status = 'Unallocated' AND web_demandslot.status != 'Booked'  AND web_center.status != 'Closed' 
                     AND (CASE WHEN (select count(id) from web_demandslot wd where wd.offering_id=web_offering.id)>0 THEN web_demandslot.offering_id=web_offering.id ELSE web_demandslot.offering_id is null END)
-                    group by web_course.grade, web_course.subject, genutilities_language.name'''.format(now_time=now_time, known_languages_string=known_languages_string, avoid_test_ceters=avoid_test_ceters)
+                    group by web_course.grade, web_course.subject, genutilities_language.name'''.format(now_time=now_time, known_languages_string=known_languages_string, avoid_test_ceters=avoid_test_ceters, partner_centers=partner_centers)
 
             db = MySQLdb.connect(host=settings.DATABASES['default']['HOST'], user=settings.DATABASES['default']['USER'],
                                  passwd=settings.DATABASES['default']['PASSWORD'], db=settings.DATABASES['default']['NAME'], charset="utf8", use_unicode=True)
@@ -10161,7 +10172,7 @@ class OnlineDemand(View):
                     previous_booking['slots'] = list(booked_demadslot)
                 if has_role_preference(self.request.user, "Center Admin") or has_role_preference(self.request.user, "Delivery co-ordinator") or self.request.user.is_superuser:
                     is_book_for_others = True
-            return render(self.request, 'demand_online.html', {'flt_data': simplejson.dumps(data), 'user_details': user_details, 'previous_booking': simplejson.dumps(previous_booking, default=str), 'is_book_for_others': is_book_for_others})
+            return render(self.request, 'demand_online.html', {'flt_data': simplejson.dumps(data), 'user_details': user_details, 'previous_booking': simplejson.dumps(previous_booking, default=str), 'is_book_for_others': is_book_for_others, 'partner_details':partner_details})
         except Exception as e:
             logService.logException("OnlineDemand GET Exception error", e.message)
             return genUtility.error_404(request, e.message)
@@ -10403,6 +10414,8 @@ class FtDemand(View):
             user_details = {'is_content_developer': None,
                             'profile_status': None, 'preferred_language': []}
             known_languages_string = ""
+            partner_centers = ''
+            partner_details = {}
             if request.user.is_authenticated():
                 known_languages_json = UserProfile.objects.get(user=request.user).languages_known
                 known_languages = [i['lang'] for i in ast.literal_eval(known_languages_json)]
@@ -10412,11 +10425,24 @@ class FtDemand(View):
                     'profile_status': True if request.user.userprofile.profile_completion_status else False,
                     'preferred_language': known_languages
                 }
+                
+                if request.user.userprofile.referencechannel:
+                    contactperson = request.user.userprofile.referencechannel.partner.contactperson
+                    print(contactperson.id)
+                    if RolePreference.objects.filter(role_id=12, userprofile=contactperson.userprofile):
+                        partner_center_ids = Center.objects.filter(delivery_partner=request.user.userprofile.referencechannel.partner).values_list('id', flat=True)
+                        if partner_center_ids:
+                            print(partner_center_ids)
+                            partner_center_ids = [str(i) for i in partner_center_ids]
+                            partner_centers = " AND web_center.id in ('{lang}') ".format(lang="','".join(partner_center_ids))
+                            partner_details['org'] = request.user.userprofile.referencechannel.partner.name_of_organization
+                            
+            print(partner_details)
 
             query = "SELECT web_center.name as centerName, group_concat(distinct(web_center.id)) as centerId, web_offering.id as offeringId, web_course.subject, web_course.id as courseId, web_course.grade, group_concat(web_demandslot.day) as days, genutilities_language.name as language, min(web_demandslot.start_time) as start_time, max(web_demandslot.end_time) as end_time,\
                     (select count(distinct(id)) from web_offering where course_id=web_course.id and active_teacher_id is not null and status='running') as teaching, count(distinct(web_offering.id)) as required, web_center.district as district\
                     FROM web_course INNER JOIN web_offering ON web_course.id = web_offering.course_id INNER JOIN web_center ON web_offering.center_id = web_center.id INNER JOIN genutilities_language ON web_course.language_id = genutilities_language.id\
-                    INNER JOIN web_demandslot ON web_center.id = web_demandslot.center_id WHERE web_course.status = 'active' " + known_languages_string + "\
+                    INNER JOIN web_demandslot ON web_center.id = web_demandslot.center_id WHERE web_course.status = 'active' " + known_languages_string + partner_centers +"\
                     AND web_offering.end_date > '" + now_time + "' AND web_offering.active_teacher_id is null AND web_center.digital_school_id IS NOT NULL \
                     AND (CASE WHEN (select count(id) from web_demandslot wd where wd.offering_id=web_offering.id)>0 THEN web_demandslot.offering_id=web_offering.id ELSE web_demandslot.offering_id is null END)\
                     AND web_offering.status IN ('running', 'pending') AND web_demandslot.status = 'Unallocated'  AND web_center.status != 'Closed' group by web_course.grade, web_course.subject, genutilities_language.name"
@@ -10450,7 +10476,7 @@ class FtDemand(View):
                     previous_booking['slots'] = list(booked_demadslot)
                 if has_role(self.request.user.userprofile, "Center Admin") or has_pref_role(self.request.user.userprofile, "Center Admin") or self.request.user.is_superuser:
                     is_book_for_others = True
-            return render(self.request, 'demand_ft.html', {'flt_data': simplejson.dumps(data), 'user_details': user_details, 'previous_booking': simplejson.dumps(previous_booking, default=str), 'is_book_for_others': is_book_for_others})
+            return render(self.request, 'demand_ft.html', {'flt_data': simplejson.dumps(data), 'user_details': user_details, 'previous_booking': simplejson.dumps(previous_booking, default=str), 'is_book_for_others': is_book_for_others, 'partner_details':partner_details})
         except Exception as e:
             logService.logException("FtDemand GET Exception error", e.message)
             return genUtility.error_404(request, e.message)
@@ -10459,6 +10485,7 @@ class FtDemand(View):
     def post(self, request,  *args, **kwargs):
         try:
             requestParams = json.loads(self.request.body)
+            print(requestParams)
             subjects = requestParams.get('subjects', None)
             grades = requestParams.get('grades', None)
             days = requestParams.get('days', None)
